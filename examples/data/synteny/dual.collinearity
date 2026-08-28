@@ -1,0 +1,7 @@
+## Alignment 0: score=123 e_value=1e-20 N=3 1&2 plus
+1	gene1	1000	5000
+1	gene2	6000	10000
+1	gene3	11000	15000
+2	geneA	2000	6000
+2	geneB	7000	11000
+2	geneC	12000	16000

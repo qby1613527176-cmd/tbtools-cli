@@ -1,0 +1,3 @@
+GeneA1	GeneB1
+GeneA2	GeneB2
+GeneA3	GeneB3

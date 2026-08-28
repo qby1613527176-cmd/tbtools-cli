@@ -1,0 +1,6 @@
+LG03	TBtools	gene	1000	5000	.	+	.	ID=Gene1
+LG03	TBtools	mRNA	1000	5000	.	+	.	ID=Gene1.mRNA1;Parent=Gene1
+LG03	TBtools	gene	6000	10000	.	+	.	ID=Gene2
+LG03	TBtools	mRNA	6000	10000	.	+	.	ID=Gene2.mRNA1;Parent=Gene2
+LG03	TBtools	gene	11000	15000	.	+	.	ID=Gene3
+LG03	TBtools	mRNA	11000	15000	.	+	.	ID=Gene3.mRNA1;Parent=Gene3

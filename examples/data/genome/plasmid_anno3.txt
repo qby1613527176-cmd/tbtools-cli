@@ -1,0 +1,3 @@
+100	900	geneA	+	CDS
+1100	2000	geneB	+	RNA
+2500	4000	geneC	-	CDS

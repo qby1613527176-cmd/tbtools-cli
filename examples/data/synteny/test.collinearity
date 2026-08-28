@@ -1,0 +1,7 @@
+## Alignment 0: score=123 e_value=1e-20 N=3 LG03&chr08 plus
+LG03	Gene1	1000	5000
+LG03	Gene2	6000	10000
+LG03	Gene3	11000	15000
+chr08	GeneA	2000	6000
+chr08	GeneB	7000	11000
+chr08	GeneC	12000	16000

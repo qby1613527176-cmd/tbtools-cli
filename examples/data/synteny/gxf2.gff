@@ -1,0 +1,6 @@
+chr08	TBtools	gene	2000	6000	.	+	.	ID=GeneA
+chr08	TBtools	mRNA	2000	6000	.	+	.	ID=GeneA.mRNA1;Parent=GeneA
+chr08	TBtools	gene	7000	11000	.	+	.	ID=GeneB
+chr08	TBtools	mRNA	7000	11000	.	+	.	ID=GeneB.mRNA1;Parent=GeneB
+chr08	TBtools	gene	12000	16000	.	+	.	ID=GeneC
+chr08	TBtools	mRNA	12000	16000	.	+	.	ID=GeneC.mRNA1;Parent=GeneC

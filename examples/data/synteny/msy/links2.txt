@@ -1,0 +1,3 @@
+A_Chr1	B_Chr1
+A_Chr1	B_Chr1
+A_Chr1	B_Chr1

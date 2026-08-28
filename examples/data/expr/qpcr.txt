@@ -1,0 +1,4 @@
+Control	1.0	0.2
+Treatment1	2.5	0.4
+Treatment2	3.8	0.5
+Treatment3	1.8	0.3

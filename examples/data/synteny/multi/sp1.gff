@@ -1,0 +1,6 @@
+1	TBtools	gene	1000	5000	.	+	.	ID=Gene1_1
+1	TBtools	mRNA	1000	5000	.	+	.	ID=Gene1_1.mRNA1;Parent=Gene1_1
+1	TBtools	gene	6000	10000	.	+	.	ID=Gene1_2
+1	TBtools	mRNA	6000	10000	.	+	.	ID=Gene1_2.mRNA1;Parent=Gene1_2
+1	TBtools	gene	11000	15000	.	+	.	ID=Gene1_3
+1	TBtools	mRNA	11000	15000	.	+	.	ID=Gene1_3.mRNA1;Parent=Gene1_3
