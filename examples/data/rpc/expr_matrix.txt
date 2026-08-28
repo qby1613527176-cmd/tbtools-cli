@@ -1,0 +1,7 @@
+GeneID	Sample_A	Sample_B	Sample_C
+gras_gene1	12.5	45.2	78.3
+gras_gene2	3.2	5.1	4.8
+gras_gene3	89.1	12.4	67.2
+gras_gene4	56.7	44.5	88.9
+gras_gene5	23.4	67.8	11.2
+gras_gene6	98.7	56.3	34.5

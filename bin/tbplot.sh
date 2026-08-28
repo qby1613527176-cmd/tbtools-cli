@@ -270,6 +270,19 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/VizGFACli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VizGFACli "$@"
     ;;
+  pafcomp)
+    # 用法: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Query|None] [--size N] [--minLen N]
+    #   PAF 基因组比较图（⚠️ 入口是 main1 非 main）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/PafGC.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PafGC "$@"
+    ;;
+  pafref)
+    # 用法: pafref --inPaf <paf> --outTab <out.tsv>
+    #   PAF 参考碱基覆盖计算（minimap2 -c --cs 输出）
+    shift
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc "$@"
+    ;;
   dehist)
     # 用法: dehist <deg.txt> <out> [width] [height]
     #   deg.txt: 每行至少 3 列（tab）：任意ID\t值1\t值2（值1/值2 两样本数值，比较大小分左右直方图）

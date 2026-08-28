@@ -1465,3 +1465,19 @@
     - inputPath: string (required) - input VCF path
     - outputPath: string (required) - output VCF path
   -> returns: ok (boolean), validated (boolean), message (string), inputPath (string), outputPath (string), variantLineCount (integer)
+
+## 08/29 实测状态（子任务 D，真实基因家族数据）
+
+| 方法 | 状态 | 说明 |
+|:-----|:-----|:-----|
+| FastaStat.process | ✅ | 序列统计；getLengthOnly 模式可用 |
+| FastaExtract.process | ✅ | 按 ID 提取 + Filter 反向模式 |
+| CdsToProtein.process | ✅ | CDS→蛋白翻译（6 条验证）|
+| FastaSsrMiner.process | ✅ | SSR 搜索；⚠️ ssrPattern 参数关键，默认(1-10;2-6;3-5;4-5;5-5;6-5)对短 CDS 常 0 命中，敏感模式(2-4;3-3;4-3;5-3;6-3)可找到 |
+| BatchStringReplace.process | ✅ | 批量替换（tab 分隔映射文件）|
+| TableTools.melt | ✅ | 宽表转长表 |
+| TableTools.transpose | ✅ | 转置 |
+| TableTools.selectRows | ✅ | 按值筛选 |
+| TableTools.sortByColumns | ⚠️ RPC bug | 数组参数被 JSON 强转 float([1]→[1.0]) 报错——RPC 层类型转换 bug |
+| TableTools.mergeByKey* | ⚠️ 待测 | 标量 int 可能可用 |
+| FastaRepeatStater / Sequence2Feature / GCContentStater / RemoveRedundantSeq / Enrichment | ❌ 未暴露 | RPC 无此方法（非 RPC 覆盖）|

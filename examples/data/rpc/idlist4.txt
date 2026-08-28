@@ -1,0 +1,6 @@
+augustus_masked-HiC_scaffold_1-processed-gene-1847.4
+augustus_masked-HiC_scaffold_10-processed-gene-1877.13
+augustus_masked-HiC_scaffold_11-processed-gene-1792.1
+augustus_masked-HiC_scaffold_12-processed-gene-1094.34
+augustus_masked-HiC_scaffold_12-processed-gene-425.52
+augustus_masked-HiC_scaffold_12-processed-gene-587.28

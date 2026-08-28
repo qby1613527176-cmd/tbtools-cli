@@ -1,0 +1,2 @@
+augustus_masked	aug
+HiC	hi
