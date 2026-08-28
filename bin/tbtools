@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+# ============================================================
+# tbtools — TBtools-II 全功能 CLI 统一入口（GitHub 发布版）
+# ============================================================
+# 覆盖四层能力：
+#   1. RPC 数据工具（188 方法）— rpc/methods/server
+#   2. 绘图引擎（33 个）— genestructure/motif/.../venn6/multisyn
+#   3. 命令行工具（30 个）— tool
+#   4. 任意引擎反射 — engine
+#
+# 依赖：TBtools_JRE1.6.jar（详见 README）
+# ============================================================
+set -e
+
+# ---------- 定位项目根 ----------
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(dirname "$SCRIPT_DIR")"
+
+# ---------- 加载配置 ----------
+# shellcheck disable=SC1091
+source "$ROOT/config/config.sh"
+
+# ---------- 转发函数 ----------
+run_plot() {
+    bash "$ROOT/bin/tbplot.sh" "$@"
+}
+run_rpc() {
+    bash "$ROOT/bin/tbtools_rpc.sh" "$@"
+}
+run_tool() {
+    python3 "$ROOT/bin/tbcli.py" "$@"
+}
+run_engine() {
+    bash "$ROOT/bin/tbengine.sh" "$@"
+}
+
+usage() {
+    cat <<'EOF'
+tbtools — TBtools-II 全功能 CLI
+================================
+绘图引擎（33 个）:
+  tbplot.sh genestructure|motif|volcano|genelocation|dotplot|circos
+  tbplot.sh upset|msa|genelocgff|tree|heatmap2|supercircos|barplot
+  tbplot.sh pafviz|admixture|groupedbar|layoutheatmap|cubeheatmap
+  tbplot.sh circlegene|seqlogo|peaktss|peakdist|dehist|msy|venn2-6
+  tbplot.sh microsyn|multisyn|generic|hclust|qpcr|pca
+  tbplot.sh help          # 查看全部绘图命令
+
+RPC 数据工具（188 方法）:
+  tbtools rpc <method> '<json>'      # 调用任意 RPC
+  tbtools methods                    # 列出 188 方法
+  tbtools server start|stop          # RPC 服务器管理
+  tbtools heatmap <matrix> <out> [group]  # 热图快捷
+
+命令行工具（30 个）:
+  tbtools tool <名称> [参数...]       # 见: tbtools list tools
+
+任意引擎反射（万能兜底）:
+  tbtools engine <引擎类> key=value [--call 方法]
+
+环境变量:
+  TBTOOLS_JAR     TBtools jar 路径（必需）
+  TBTOOLS_JAVA    java 可执行（默认 JAVA_HOME/bin/java）
+  TBTOOLS_RPC_PORT RPC 端口（默认 8765）
+EOF
+}
+
+case "${1:-}" in
+  # ======== RPC 层 ========
+  rpc) shift; run_rpc call "$@";;
+  methods) run_rpc methods;;
+  server) shift; run_rpc "$@";;
+  heatmap) shift; run_rpc heatmap "$@";;
+
+  # ======== 命令行工具 ========
+  tool) shift; run_tool tool "$@";;
+  list) shift; run_tool list "$@";;
+
+  # ======== 任意引擎反射 ========
+  engine) shift; run_engine "$@";;
+
+  # ======== 绘图引擎（全部 33 个） ========
+  genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
+  upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
+  groupedbar|layoutheatmap|cubeheatmap|circlegene|seqlogo|peaktss|peakdist|\
+  dehist|msy|venn5|venn6|microsyn|multisyn|generic)
+    CMD="$1"; shift
+    run_plot "$CMD" "$@"
+    ;;
+
+  help|-h|--help) usage;;
+  *)
+    if [ -z "${1:-}" ]; then usage; else
+      echo "❌ 未知命令: $1" >&2; usage; exit 1
+    fi
+    ;;
+esac

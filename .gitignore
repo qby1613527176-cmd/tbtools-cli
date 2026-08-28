@@ -1,0 +1,27 @@
+# Build artifacts
+build/
+*.class
+
+# TBtools jar (too large, user downloads separately)
+lib/TBtools_JRE1.6.jar
+*.jar
+
+# Output examples
+examples/output/
+*.svg
+*.png
+*.pdf
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Logs
+*.log

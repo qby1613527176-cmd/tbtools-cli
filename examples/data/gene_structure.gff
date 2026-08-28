@@ -1,0 +1,13 @@
+Chr1	example	gene	1000	5000	.	+	.	ID=Gene1
+Chr1	example	mRNA	1000	5000	.	+	.	ID=Gene1.mRNA1;Parent=Gene1
+Chr1	example	CDS	1000	1800	.	+	0	Parent=Gene1.mRNA1
+Chr1	example	CDS	2200	3000	.	+	2	Parent=Gene1.mRNA1
+Chr1	example	CDS	4000	5000	.	+	0	Parent=Gene1.mRNA1
+Chr1	example	gene	8000	12000	.	-	.	ID=Gene2
+Chr1	example	mRNA	8000	12000	.	-	.	ID=Gene2.mRNA1;Parent=Gene2
+Chr1	example	CDS	8000	9000	.	-	0	Parent=Gene2.mRNA1
+Chr1	example	CDS	9500	11000	.	-	2	Parent=Gene2.mRNA1
+Chr2	example	gene	2000	6000	.	+	.	ID=Gene3
+Chr2	example	mRNA	2000	6000	.	+	.	ID=Gene3.mRNA1;Parent=Gene3
+Chr2	example	CDS	2000	3500	.	+	0	Parent=Gene3.mRNA1
+Chr2	example	CDS	4000	5000	.	+	1	Parent=Gene3.mRNA1

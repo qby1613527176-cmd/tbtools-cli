@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""
+tbcli — TBtools-II 2.535 全功能 CLI 统一入口（完整版）
+======================================================
+覆盖三层：
+  1. RPC 层（188 方法）→ 127.0.0.1:8765 JSON-RPC（主干，全部可调用）
+  2. 命令行注册工具（54 个）→ java -jar jar <工具名> 或映射类名
+  3. JIGplot 绘图引擎（26+ 枚举 + 任意类 tbengine 反射）
+
+用法：
+  tbcli list rpc              # 188 个 RPC 方法
+  tbcli list tools            # 命令行工具
+  tbcli list plots            # 绘图功能
+  tbcli rpc <method> '<json>' # 调用任意 RPC（全功能主干）
+  tbcli tool <名称> [参数...]   # 命令行工具
+  tbcli plot <图名> [参数...]   # 绘图引擎
+  tbcli engine <类名> [k=v...] # 任意引擎反射调用（tbengine.sh）
+  tbcli server start|stop     # RPC 服务器管理
+"""
+import subprocess, sys, json, os, urllib.request
+
+JAR = os.environ.get("TBTOOLS_JAR", "")
+RPC = "http://127.0.0.1:8765/rpc"
+HOME = os.path.expanduser("~")
+# 项目根目录：脚本在 <root>/bin/，向上两级
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(SCRIPT_DIR)
+SCRIPTS = os.path.join(ROOT, "bin")
+
+# 若环境变量未设置，尝试从 config.sh 读取默认值
+if not JAR:
+    try:
+        with open(os.path.join(ROOT, "config", "config.sh")) as f:
+            for line in f:
+                if line.startswith("TBTOOLS_JAR=") and '"$HOME' not in line:
+                    v = line.split("=", 1)[1].strip().strip('"')
+                    if os.path.exists(v):
+                        JAR = v
+    except Exception:
+        pass
+
+if not JAR or not os.path.exists(JAR):
+    print("❌ 未找到 TBtools jar。请设置环境变量 TBTOOLS_JAR 指向 TBtools_JRE1.6.jar", file=sys.stderr)
+    sys.exit(1)
+
+CLI_TOOLS = {
+    "DecodeIlluminaFqPool": "biocjava.bioDoer.Fastq.DecodeIlluminaFqPool",
+    "rpkmCal": "biocjava.bioDoer.ExpressionLevelCalculator.RPKMcalculator",
+    "autoMakeBlastDb": "biocjava.bioDoer.BLAST.makeblastdb",
+    "autoRemoteBlast": "biocjava.bioDoer.BLAST.remoteblast",
+    "GoCompareBar": "biocjava.bioDoer.GeneOntology.Grapher.GoCompare",
+    "plotRNAfoldloci": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold",
+    "getLongestCompleteORF": "biocjava.bioIO.ORF.ORF",
+    "ExtractFeaturefromGFF3andGenome": "biocjava.bioIO.GFF.ExtractFeaturefromGFF3andGenome",
+    "Fasta36m10toTable": "biocjava.bioIO.FastaAligner.Fasta36m10toTable",
+    "FastaIDRenamer": "biocjava.bioIO.FastX.FastaIndex.FastaIDRenamer",
+    "FastaIDSimplifier": "biocjava.bioIO.FastX.FastaIndex.FastaIDSimplifier",
+    "FastaLongestRepresentater": "biocjava.bioIO.FastX.FastaIndex.FastaLongestRepresentater",
+    "FoldStructureStater": "biocjava.bioIO.RNAfold.FoldStructureStater",
+    "GXFOverlaper": "biocjava.bioDoer.GXFUtils.GXFOverlaper",
+    "NCBITaxonomy": "biocjava.bioWeb.NCBITaxonomy.NCBITaxonomy",
+    "OneStepMirGraph": "biocjava.bioIO.RNAfold.OneStepMirGraph",
+    "OverlapGeneModels": "biocjava.bioIO.GXF.gxfTree.OverlapGeneModels",
+    "PredictMirSTAR": "biocjava.bioIO.RNAfold.PredictMirSTAR",
+    "RNAplotAdvance": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.RNAplotAdvance",
+    "ReciprocalBlast": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
+    "RegionGXFOverlapAnnotation": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
+    "TableCast": "biocjava.bioDoer.Table.TableCast",
+    "TableColSelector": "biocjava.bioDoer.Table.TableColSelector",
+    "TableMelt": "biocjava.bioDoer.Table.TableMelt",
+    "downLoadNCBIFasta": "biocjava.bioWeb.DownLoadNCBIFasta",
+    "extractFasta": "biocjava.bioDoer.Fasta.ExtractFasta",
+    "extractFastaSub": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
+    "geneOnGenome": "biocjava.bioDoer.JJplot2Toolkit.GeneOnGenomeCommandLine",
+    "keggEnrichment": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
+    "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta"
+}
+
+PLOTS = {
+    "circos": "biocjava.bioDoer.JIGplotToolkit.Circos.JIGCircosAdvanced",
+    "circos_simple": "biocjava.bioDoer.JIGplotToolkit.Circos.AmazingSimpleCircos",
+    "dotplot": "biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot",
+    "enrichment_bubble": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
+    "genelocation": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation",
+    "genelocation_gff": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocationControlFromGff3AndIdList",
+    "genestructure": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawGeneStructureFromGXFfile",
+    "gfa_viz": "biocjava.bioDoer.JIGplotToolkit.Network.VizGFA",
+    "hclust": "biocjava.bioDoer.JIGplotToolkit.Hclust.Hclust",
+    "heatmap": "biocjava.bioDoer.JIGplotToolkit.HeatMap.HeatmapControl",
+    "heatmap_cube": "biocjava.bioDoer.JIGplotToolkit.HeatMap.CubeHeatMap",
+    "heatmap_layout": "biocjava.bioDoer.JIGplotToolkit.HeatMap.LayoutHeatmap",
+    "mirna_graph": "biocjava.bioIO.RNAfold.OneStepMirGraph",
+    "motif_cdd": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawMotifPatternFromCDDResult",
+    "motif_meme": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawMotifPatternFromMEMEResult",
+    "motif_pfam": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawMotifPatternFromPfamResult",
+    "motif_stack": "biocjava.bioDoer.JIGplotToolkit.MotifStack.stackMotif",
+    "msa_viewer": "biocjava.bioDoer.JIGplotToolkit.MSA.MSAviewer",
+    "pca": "biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis",
+    "qpcr_bar": "biocjava.bioDoer.JIGplotToolkit.qPCRBarPlot.barPlotWithErrorBar",
+    "rnafold_plot": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.RNAplotAdvance",
+    "seqlogo": "biocjava.bioDoer.seqLogo.makeSeqLogo",
+    "supercircos": "biocjava.bioDoer.JIGplotToolkit.Circos.SuperCircos.AmazingSuperCircos",
+    "unrooted_tree": "biocjava.bioDoer.JIGplotToolkit.UnrootedTreeViz.UnrootedTreeViz",
+    "upset": "biocjava.bioDoer.JIGplotToolkit.UpSetPloter.UpSetPlot",
+    "volcano": "biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot"
+}
+
+def rpc_call(method, params=None):
+    body = json.dumps({"jsonrpc": "2.0", "method": method, "params": params or {}}).encode()
+    req = urllib.request.Request(RPC, data=body, headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=300) as resp:
+        return json.loads(resp.read())
+
+def server_running():
+    try:
+        with urllib.request.urlopen("http://127.0.0.1:8765/health", timeout=2) as r:
+            return b"OK" in r.read()
+    except Exception:
+        return False
+
+def start_server():
+    if server_running():
+        print("✅ RPC 服务器已在运行"); return
+    print("🚀 启动 RPC 服务器...")
+    subprocess.Popen(["java", "-Xmx4g", "-cp", JAR, "biocjava.rpc.RpcServer"],
+                     stdout=open("/tmp/tbtools_rpc_server.log", "w"), stderr=subprocess.STDOUT)
+    import time
+    for _ in range(25):
+        time.sleep(1)
+        if server_running(): print("✅ 就绪: 127.0.0.1:8765"); return
+    print("❌ 启动超时")
+
+def stop_server():
+    os.system("ps aux | grep '[R]pcServer' | awk '{print $2}' | xargs -r kill")
+    print("✅ 已停止")
+
+def cmd_list(kind):
+    if kind == "rpc":
+        if not server_running(): start_server()
+        m = rpc_call("system.listMethods").get("result", {}).get("methods", [])
+        print(f"RPC 方法: {len(m)}"); [print(f"  {x}") for x in m]
+    elif kind == "tools":
+        print(f"命令行工具: {len(CLI_TOOLS)}"); [print(f"  {k} -> {v}") for k, v in sorted(CLI_TOOLS.items())]
+    elif kind == "plots":
+        print(f"绘图: {len(PLOTS)}"); [print(f"  {k} -> {v}") for k, v in sorted(PLOTS.items())]
+    elif kind == "all":
+        cmd_list("rpc"); cmd_list("tools"); cmd_list("plots")
+
+def cmd_rpc(method, params_json):
+    if not server_running(): start_server()
+    params = json.loads(params_json) if params_json else {}
+    print(json.dumps(rpc_call(method, params), ensure_ascii=False, indent=2))
+
+def cmd_tool(name, args):
+    cls = CLI_TOOLS.get(name)
+    if cls:
+        # 有映射: 直接 java -cp 调类
+        print(f"▶ {name} -> {cls}")
+        os.system(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}")
+    else:
+        # 无映射: 用 TBtools 官方 Arg 模式搜索执行 (java -jar jar <工具名>)
+        print(f"▶ {name} -> 官方 Arg 模式 (java -jar jar {name})")
+        os.system(f"java -Xmx4g -jar {JAR} {name} {' '.join(args)}")
+
+def cmd_plot(name, args):
+    if name == "genestructure":
+        # 基因结构图（走 tbplot.sh 桥）
+        os.system(f"bash {SCRIPTS}/tbplot.sh genestructure {' '.join(args)}")
+        return
+    cls = PLOTS.get(name)
+    if not cls:
+        print(f"❌ 未知绘图 {name}（tbcli list plots）; 尝试 tbengine 反射:"); cls = name
+    os.system(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}")
+
+def cmd_engine(cls, kvs):
+    os.system(f"bash {SCRIPTS}/tbengine.sh {cls} {' '.join(kvs)}")
+
+def usage():
+    print(__doc__.split("用法：")[1])
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2: usage(); sys.exit(0)
+    c = sys.argv[1]
+    if c == "list" and len(sys.argv) >= 3: cmd_list(sys.argv[2])
+    elif c == "rpc" and len(sys.argv) >= 3: cmd_rpc(sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None)
+    elif c == "tool" and len(sys.argv) >= 3: cmd_tool(sys.argv[2], sys.argv[3:])
+    elif c == "plot" and len(sys.argv) >= 3: cmd_plot(sys.argv[2], sys.argv[3:])
+    elif c == "engine" and len(sys.argv) >= 3: cmd_engine(sys.argv[2], sys.argv[3:])
+    elif c == "server" and len(sys.argv) >= 3: (start_server if sys.argv[2] == "start" else stop_server)()
+    else: usage()
