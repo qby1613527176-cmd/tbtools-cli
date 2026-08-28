@@ -73,7 +73,9 @@ CLI_TOOLS = {
     "extractFastaSub": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
     "geneOnGenome": "biocjava.bioDoer.JJplot2Toolkit.GeneOnGenomeCommandLine",
     "keggEnrichment": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
-    "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta"
+    "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
+    "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
+    "vcfAddID": "biocjava.bioDoer.GWAS.VCFAddID"
 }
 
 PLOTS = {
