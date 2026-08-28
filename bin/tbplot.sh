@@ -11,9 +11,14 @@ JAR="${TBTOOLS_JAR}"
 TBCLI_DIR="$ROOT/build"
 # 确保桥源码副本在 build/（含编译产物，防源目录污染）
 mkdir -p "$TBCLI_DIR"
-if [ "$(ls "$TBCLI_DIR"/*.java 2>/dev/null | wc -l)" != "$(ls "$ROOT"/bridges/*.java 2>/dev/null | wc -l)" ]; then
-    cp -f "$ROOT"/bridges/*.java "$TBCLI_DIR"/ 2>/dev/null || true
-fi
+# 同步桥源码：bridges/ 比 build/ 新或缺失则复制（增量同步，新增桥立即生效）
+for _src in "$ROOT"/bridges/*.java; do
+    [ -f "$_src" ] || continue
+    _name="$(basename "$_src")"
+    if [ ! -f "$TBCLI_DIR/$_name" ] || [ "$_src" -nt "$TBCLI_DIR/$_name" ]; then
+        cp -f "$_src" "$TBCLI_DIR/"
+    fi
+done
 # jar 检查
 tbtools_check_jar || exit 1
 
@@ -225,6 +230,45 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--width W --height H]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/PeakDistCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PeakDistCli "$@"
+    ;;
+  peakanno)
+    # 用法: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]
+    #   macs2_peak.xls: MACS2 标准 peak 格式（chr start end length abs_summit ...）
+    #   引擎: peakAnno（自带 ArgsParser，开箱即用；peak 坐标列必须标准 MACS2 格式）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno --inGXF "$1" --peakInfo "$2" --outTab "$3" "${@:4}"
+    ;;
+  microgenome)
+    # 用法: microgenome <inGBK> <anno.tsv> <out> [micro|macro]
+    #   inGBK: GenBank 质体/质粒基因组文件
+    #   anno.tsv: 注释 5 列（startPos\tendPos\tname\t[+|-]\ttype）
+    #     ⚠️ type 至少 2 种不同类型（CDS/RNA/tRNA）——单类型触发引擎 ColorMapper middleColor null NPE
+    #   引擎: MicroGenomeAnnotationCircosPlot（自带 ArgsParser，质体基因组环形图+GC轨道）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh microgenome <inGBK> <anno.tsv> <out> [micro|macro]"; exit 1; fi
+    INGBK="$1"; INANNO="$2"; OUTGRAPH="$3"; GTYPE="micro"
+    [ $# -ge 4 ] && GTYPE="$4"
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot --inGBK "$INGBK" --inAnno "$INANNO" --graphType "$GTYPE" --outGraph "$OUTGRAPH"
+    ;;
+  gel)
+    # 用法: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>
+    #   FragmentRangeArr: 分号分隔泳道/逗号分隔片段，如 "798;1233,228;1688,1598"
+    #   LaneLabels: 泳道标签，如 "DL2000,Cultivar_1,Cultivar_2,Cultivar_3"
+    #   MarkerRange: marker 范围，如 "2000,1500,1000,750,500,250,100"
+    #   引擎: GelImage.Marker（自带 ArgsParser，PCR 产物虚拟凝胶电泳图）
+    shift
+    if [ $# -lt 4 ]; then echo "用法: tbplot.sh gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.GelImage.Marker --FragmentRangeArr "$1" --LaneLabels "$2" --MarkerRange "$3" --outGraph "$4"
+    ;;
+  gfa)
+    # 用法: gfa <in.gfa> <out> [width] [height]
+    #   GFA 格式: S 行=节点（S\tname\tseq），L 行=边（L\tfrom\tstrand\tto\tstrand\toverlap）
+    #   引擎: VizGFA（GFAGraphLayout + VizGFA.visualize，组装图可视化）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gfa <in.gfa> <out> [w] [h]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/VizGFACli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VizGFACli "$@"
     ;;
   dehist)
     # 用法: dehist <deg.txt> <out> [width] [height]
