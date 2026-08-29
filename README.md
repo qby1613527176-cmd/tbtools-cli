@@ -192,6 +192,12 @@ tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
 # Needleman-Wunsch global alignment (all-vs-all, pure Java, EMBOSS format)
 tbtools nwAlign <inSeq1.txt> <inSeq2.txt> <out>
 
+# Contig allele grouping from miniprot GFF (assembly helper chaining raw reads → groups)
+tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>
+
+# Homoeologous conflict partitioning (phasing; chains after ctgGroup)
+tbtools homoPhase <inContigGrpMap> <outPhasedMap>
+
 # GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
 tbtools gxfStat <in.gff3> <outStat.xls>
 

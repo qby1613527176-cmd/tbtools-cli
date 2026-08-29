@@ -1,0 +1,9 @@
+##gff-version 3
+##PAF	pro_A	53	0	53	+	ctg2	163	1	160	153	159	0	AS:i:239	ms:i:239	np:i:51	fs:i:0	st:i:0	da:i:-1	do:i:0	cg:Z:53M	cs:Z:*tgcM:1*aaaT:50
+ctg2	miniprot	mRNA	2	163	239	+	.	ID=MP000001;Rank=1;Identity=0.9623;Positive=0.9623;Target=pro_A 1 53
+ctg2	miniprot	CDS	2	160	239	+	0	Parent=MP000001;Rank=1;Identity=0.9623;Target=pro_A 1 53
+ctg2	miniprot	stop_codon	161	163	0	+	0	Parent=MP000001;Rank=1
+##PAF	pro_A	53	0	53	+	ctg1	163	1	160	153	159	0	AS:i:239	ms:i:239	np:i:51	fs:i:0	st:i:0	da:i:-1	do:i:0	cg:Z:53M	cs:Z:*tgcM:1*aaaT:50
+ctg1	miniprot	mRNA	2	163	239	+	.	ID=MP000002;Rank=2;Identity=0.9623;Positive=0.9623;Target=pro_A 1 53
+ctg1	miniprot	CDS	2	160	239	+	0	Parent=MP000002;Rank=2;Identity=0.9623;Target=pro_A 1 53
+ctg1	miniprot	stop_codon	161	163	0	+	0	Parent=MP000002;Rank=2

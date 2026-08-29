@@ -110,6 +110,21 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess --inFile_1 "$1" --inFile_2 "$2" --outFile "$3"
     ;;
+  ctgGroup)
+    # 用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>
+    #   in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/CtgGroupCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" CtgGroupCli "$@"
+    ;;
+  homoPhase)
+    # 用法: homoPhase <inContigGrpMap> <outPhasedMap>
+    #   同源冲突分区（多倍体相位分离）——组装辅助链第二环（第73引擎）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh homoPhase <inContigGrpMap> <outPhasedMap>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition --inContigGrpMap "$1" --outPhasedMap "$2"
+    ;;
   gxfRename)
     # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
     #   renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
@@ -675,6 +690,8 @@ case "$1" in
   echo "  tbplot.sh fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]                 # FASTQ固定长度修剪"
   echo "  tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>                          # GFF ID重命名(Parent同步)"
   echo "  tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>                                  # Needleman-Wunsch全局比对"
+  echo "  tbplot.sh ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>                        # contig等位分组(miniprot)"
+  echo "  tbplot.sh homoPhase <inContigGrpMap> <outPhasedMap>                                # 同源冲突分区(多倍体相位)"
   echo "  tbplot.sh gxfStat <in.gff3> <outStat.xls>                                             # GFF统计"
   echo "  tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>                                     # GFF ID加前缀"
   echo "  tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]                     # GFF→基因位置(喂genelocation)"
