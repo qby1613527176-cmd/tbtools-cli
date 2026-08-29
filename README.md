@@ -363,6 +363,8 @@ tbtools microgenome <in.gbk> <anno.tsv> <out.svg> [micro|macro]
 
 # Pseudo-synteny block search across two genomes (real-data verified: Camellia Chr06 ↔ tea Chr01)
 tbtools findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
+# MCScanX collinearity -> region file (engine 104; chr1 s1 e1 chr2 s2 e2 genePairInfo)
+tbtools collinearRegion <in.collinearity> <simGff> <out.txt>
 
 # Multi-genome pseudo-synteny blocks (1 query + N subjects)
 tbtools findblockmultiple <qGenome.fa> <q.gff> <qId> <out.txt> <s1Genome.fa> <s1.gff> [<s2Genome.fa> <s2.gff> ...]
