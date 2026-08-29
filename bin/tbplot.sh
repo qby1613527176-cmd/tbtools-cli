@@ -283,6 +283,50 @@ case "$1" in
     shift
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc "$@"
     ;;
+  colorscheme)
+    # 用法: colorscheme <inTab> <outTab> <refColIndex>
+    #   inTab: tab 分隔表；refColIndex: 从 0 开始，取该列做配色 key（去重）
+    #   outTab: 输出颜色代码表（第41引擎）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh colorscheme <inTab> <outTab> <refColIndex>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/ColorSchemeCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" ColorSchemeCli "$@"
+    ;;
+  distance)
+    # 用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>
+    #   in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；输出两列数值的距离/相关系数（第42引擎）
+    shift
+    if [ $# -lt 4 ]; then echo "用法: tbplot.sh distance <in.tsv> <col1> <col2> <method>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/DistanceCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" DistanceCli "$@"
+    ;;
+  mountain)
+    # 用法: mountain <fold.txt> <out.tsv>
+    #   fold.txt: RNA 二级结构折叠字符串（() 和 .）；输出每碱基山峰高度（第43引擎）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh mountain <fold.txt> <out.tsv>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/MountainPlotCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" MountainPlotCli "$@"
+    ;;
+  pileup)
+    # 用法: pileup <blast.xml> <out.svg> [--query NAME]
+    #   blast.xml: BLAST+ XML 输出（-outfmt 5）；画 query 的 hits pile-up 图（第44引擎）
+    #   ⚠️ 绕过了引擎 GUI 弹窗，自动选第一个 query
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh pileup <blast.xml> <out.svg> [--query NAME]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/PileUpCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PileUpCli "$@"
+    ;;
+  plotrna)
+    # 用法: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]
+    #   region: 'chr:startPos-endPos'；SAM: 比对 reads；画基因组区域覆盖度+RNA结构图（第45引擎）
+    #   ⚠️ 只支持 PDF 输出（--directPDF）；不带该参数会弹窗
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]"; exit 1; fi
+    GENOME="$1"; REGION="$2"; SAMFILE="$3"; shift 3
+    [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
+    ;;
   dehist)
     # 用法: dehist <deg.txt> <out> [width] [height]
     #   deg.txt: 每行至少 3 列（tab）：任意ID\t值1\t值2（值1/值2 两样本数值，比较大小分左右直方图）
