@@ -238,6 +238,9 @@ tbtools twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp] [--thread 
 # Reciprocal (bidirectional) BLAST for gene family identification (engine 106; wraps makeblastdb+blastp both directions)
 # ⚠️ FASTA IDs >50 chars rejected by makeblastdb (GRAS IDs are 59 chars) — shorten IDs first
 tbtools recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp] [--evalue 1e-5] [--minId 0.3] [--thread 2]
+# Filter BLAST tab6 by C-score (engine 107; distinguishes ortholog vs paralog candidates)
+# Input: standard BLAST outfmt 6 tabular; keeps high-confidence ortholog hits (median identity 97% vs 35% raw)
+tbtools filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]
 
 # Contig allele grouping from miniprot GFF (assembly helper chaining raw reads → groups)
 tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>

@@ -321,6 +321,22 @@ case "$1" in
     xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast --querySeqFile "$Q" --subjectSeqFile "$S" $QID_ARG --outDirAndPrefix "$O" --NumOfthreads "$TH" --evalue "$EVAL" --minIdentityPercent "$MINID" --forseQueryBlastType "$PROG" --forseSubjectBlastType "$PROG"
     echo "[tbplot] 双向 BLAST 完成，见 ${O}_*"
     ;;
+  filterCScore)
+    # 用法: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]
+    #   BLAST tab6 按 C-score 过滤（第107引擎，FilterBlastResultByCScore）——区分直系/旁系同源候选
+    #   C-score 过滤低 identity 旁系同源（paralog），保留高 confidence 直系同源（ortholog）候选
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]"; exit 1; fi
+    IN="$1"; OUT="$2"; CSCORE="0.5"; shift 2
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --cscore) CSCORE="$2";;
+      esac
+      shift 2
+    done
+    java -Xmx1g -cp "$JAR" biocjava.bioDoer.BLAST.FilterBlastResultByCScore --inBlastTab6 "$IN" --outBlastTab "$OUT" --cscore "$CSCORE"
+    echo "[tbplot] C-score 过滤完成: $(wc -l < "$IN") 行 → $(wc -l < "$OUT") 行"
+    ;;
   ctgGroup)
     # 用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>
     #   in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎）
