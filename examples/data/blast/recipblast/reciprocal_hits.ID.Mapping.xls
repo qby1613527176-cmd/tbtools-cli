@@ -1,0 +1,12 @@
+Query_ID	Subject_Rank	Subject_ID	Backward_Rank	Backward_Query_ID	Status	Subject_Evalue	Subject_IdentityPercent	Subject_BitScore	Subject_WeightedCov	Backward_Query_Evalue	Backward_Query_IdentityPercent	Query_BitScore	Backward_Query_WeightedCov
+Q1	1	S1	1	Q1	Hit	0.0	1.0	1224.54	1.0	0.0	1.0	1224.54	1.0
+Q2	1	S2	1	Q2	Hit	0.0	1.0	1165.21	1.0	0.0	1.0	1165.21	1.0
+Q3	1	S3	1	Q3	Hit	0.0	1.0	1218.76	1.0	0.0	1.0	1218.76	1.0
+Q4	1	S4	1	Q4	Hit	0.0	1.0	1226.46	1.0	0.0	1.0	1226.46	1.0
+Q5	1	S5	1	Q5	Hit	0.0	1.0	1214.91	1.0	0.0	1.0	1214.91	1.0
+Q6	1	S6	1	Q6	Hit	0.0	1.0	1215.68	1.0	0.0	1.0	1215.68	1.0
+Q7	1	S7	1	Q7	Hit	0.0	1.0	1143.64	1.0	0.0	1.0	1143.64	1.0
+Q8	1	S8	1	Q8	Hit	0.0	1.0	1251.5	1.0	0.0	1.0	1251.5	1.0
+Q9	1	S9	1	Q9	Hit	0.0	1.0	1171.76	1.0	0.0	1.0	1171.76	1.0
+Q10	1	S10	1	Q10	Hit	0.0	1.0	1310.05	1.0	0.0	1.0	1310.05	1.0
+Q11	1	S41	1	Q11	Hit	0.0	0.3743961352657005	1863.58	1.0	0.0	0.3753280839895013	1863.58	1.0

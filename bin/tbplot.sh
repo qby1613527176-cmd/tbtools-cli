@@ -299,6 +299,28 @@ case "$1" in
     done
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.BLAST.CompareTwoSeqSet --query "$Q" --subject "$S" --specifiedBlastProg "$PROG" --outBlastResult "$O" --outFmt "$FMT" --thread "$TH"
     ;;
+  recipBlast)
+    # 用法: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp|blastn|tblastn] [--evalue 1e-5] [--minId 0.3] [--thread N]
+    #   双向 BLAST 基因家族鉴定（第106引擎，ReciprocalBlast）——封装 makeblastdb+blast 双方向
+    #   输出: <outPrefix>_<query>_and_<subject>.ID.Mapping.Result.xls（双向最佳命中表）+ 正反向 TBtools.table.xls + xml
+    #   ⚠️ 坑: FASTA ID 超 50 字符会被 makeblastdb 拒绝（GRAS 59 字符 ID 需先短 ID 重写）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp] [--evalue 1e-5] [--minId 0.3] [--thread 2]"; exit 1; fi
+    Q="$1"; S="$2"; O="$3"; PROG="blastp"; EVAL="1e-5"; MINID="0.3"; TH="2"; QID=""; shift 3
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --queryIds) QID="$2";;
+        --prog) PROG="$2";;
+        --evalue) EVAL="$2";;
+        --minId) MINID="$2";;
+        --thread) TH="$2";;
+      esac
+      shift 2
+    done
+    if [ -n "$QID" ]; then QID_ARG="--queryIdListFile $QID"; else QID_ARG=""; fi
+    xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast --querySeqFile "$Q" --subjectSeqFile "$S" $QID_ARG --outDirAndPrefix "$O" --NumOfthreads "$TH" --evalue "$EVAL" --minIdentityPercent "$MINID" --forseQueryBlastType "$PROG" --forseSubjectBlastType "$PROG"
+    echo "[tbplot] 双向 BLAST 完成，见 ${O}_*"
+    ;;
   ctgGroup)
     # 用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>
     #   in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎）

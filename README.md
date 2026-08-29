@@ -235,6 +235,9 @@ tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
 tbtools nwAlign <inSeq1.txt> <inSeq2.txt> <out>
 # Pairwise BLAST between two sequence sets (engine 105; wraps makeblastdb+blastp/n/tblastn)
 tbtools twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp] [--thread N]
+# Reciprocal (bidirectional) BLAST for gene family identification (engine 106; wraps makeblastdb+blastp both directions)
+# ⚠️ FASTA IDs >50 chars rejected by makeblastdb (GRAS IDs are 59 chars) — shorten IDs first
+tbtools recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp] [--evalue 1e-5] [--minId 0.3] [--thread 2]
 
 # Contig allele grouping from miniprot GFF (assembly helper chaining raw reads → groups)
 tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>
