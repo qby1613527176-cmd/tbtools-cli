@@ -192,6 +192,53 @@ case "$1" in
     done
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRegionSummary --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
     ;;
+  gxfOverlap)
+    # 用法: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
+    #   region.txt: chr\tstrand\tstart\tend （strand 敏感！第2列是链 +/-）
+    #   区域重叠过滤（第79引擎，GXFOverlaper）——与 gxfRegion 区别：这里 region 必带 strand
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]"; exit 1; fi
+    IGNS="false"; EXTL="2000"; ARGS=("$@")
+    for a in "${ARGS[@]}"; do [ "$a" = "--ignoreStrand" ] && IGNS="true"; done
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--extendLen" ] && EXTL="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFOverlaper --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
+    ;;
+  gxfRepIDs)
+    # 用法: gxfRepIDs <in.gff3> <out.txt>
+    #   代表转录本映射：mRNA ID → gene ID + 长度（第80引擎，GXFToRepresentativeIDs）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfRepIDs <in.gff3> <out.txt>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs --inGXF "$1" --outRepresentative "$2"
+    ;;
+  gxfMatch)
+    # 用法: gxfMatch <in.gff3> <inGenome.fa>
+    #   GFF 与基因组 seqid 匹配检查（第81引擎，GxfGenomeMatch）→ Yes/No + Intersection Size
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfMatch <in.gff3> <inGenome.fa>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GxfGenomeMatch --inGXF "$1" --inGenome "$2"
+    ;;
+  gxfRecall)
+    # 用法: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，RecallmRNAFeature）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfRecall <in.gff3> <out.gff3>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.RecallmRNAFeature --in "$1" --out "$2"
+    ;;
+  regionAnno)
+    # 用法: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePattern P]
+    #   region.txt: id\tchr\tstart\tend （任意第1列！chr 在第2列 index1）
+    #   区域重叠注释：输出 Genic/Intergenic + 重叠基因（第83引擎，RegionGXFOverlapAnnotation）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N]"; exit 1; fi
+    FLANK="10000"; PAT="gene"
+    ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--flankLen" ] && FLANK="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--targetFeaturePattern" ] && PAT="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation --inGxf "$1" --region "$2" --outTab "$3" --flankLen "$FLANK" --targetFeaturePattern "$PAT"
+    ;;
   gxfFix)
     # 用法: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dangling mRNA/排序）
     #   修复 CDS phase 记录分离到 <out>_phase_corrected/problematic.gff3

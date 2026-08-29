@@ -222,6 +222,18 @@ tbtools gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]
 # Region-based GFF filtering (keep features overlapping regions)
 tbtools gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
 
+# GXFUtils suite (engines 79-83, all verified with real Camellia GFF)
+# Region overlap filter, strand-sensitive (region.txt: chr tab strand tab start tab end)
+tbtools gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
+# Representative transcript map: mRNA ID → gene ID + length
+tbtools gxfRepIDs <in.gff3> <out.txt>
+# GFF vs genome FASTA seqid match check → Yes/No + Intersection Size
+tbtools gxfMatch <in.gff3> <inGenome.fa>
+# Recover mRNA features from gene lines
+tbtools gxfRecall <in.gff3> <out.gff3>
+# Region overlap annotation → Genic/Intergenic + overlapping gene (region.txt: id tab chr tab start tab end!)
+tbtools regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePattern P]
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 
