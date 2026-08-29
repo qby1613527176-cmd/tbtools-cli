@@ -204,6 +204,9 @@ tbtools sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
 # BAM merge by region coverage (select best sample per region; output merged.bam + region stats)
 tbtools bamMerge <gtf> <bamDir> <outDir>
 
+# HiC restriction enzyme prediction (MboI/DpnII | MseI | HindIII | NcoI | Arima; samples N reads)
+tbtools hicEnzyme <inHiC.fastq> [--numOfRecords N]
+
 # GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
 tbtools gxfStat <in.gff3> <outStat.xls>
 
