@@ -168,6 +168,12 @@ tbtools bamstate <out.tsv> <gff3> <bam1> [bam2 ...]
 # qPCR relative quantification (2^-ΔΔCt; input: gene\tcontrolCt\tExprCt)
 tbtools qpcrExp <in.qpcr.tab> <out.xls>
 
+# Tissue-specificity tau index (0=ubiquitous, 1=tissue-specific)
+tbtools tauIndex <inExpTab> <outTAU>
+
+# Sample expression correlation matrix (Pearson, for co-expression/clustering)
+tbtools exprCorr <inFPKM> <outCorrMat>
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 

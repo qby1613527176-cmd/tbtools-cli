@@ -71,6 +71,22 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli "$@"
     ;;
+  tauIndex)
+    # 用法: tauIndex <inExpTab> <outTAU>
+    #   inExpTab: 表达矩阵（首列基因名 + 样本列）；outTAU: τ 指数表（0=均匀 1=完全组织特异）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh tauIndex <inExpTab> <outTAU>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/TauCalcCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TauCalcCli "$@"
+    ;;
+  exprCorr)
+    # 用法: exprCorr <inFPKM> <outCorrMat>
+    #   样本间 Pearson 相关矩阵（共表达/聚类分析输入）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh exprCorr <inFPKM> <outCorrMat>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/ExprCorrCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" ExprCorrCli "$@"
+    ;;
   qpcrExp)
     # 用法: qpcrExp <in.qpcr.tab> <out.xls>
     #   in.qpcr.tab: tab 分隔 3 列（基因名\t对照Ct\t实验Ct），同名多行取平均
@@ -558,6 +574,8 @@ case "$1" in
   echo "  tbplot.sh preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF> # 多物种数据准备(ID加前缀)"
   echo "  tbplot.sh bamstate <out.tsv> <gff3> <bam1> [bam2...]                         # BAM覆盖状态评估"
   echo "  tbplot.sh qpcrExp <in.qpcr.tab> <out.xls>                                      # qPCR相对定量(ΔΔCt)"
+  echo "  tbplot.sh tauIndex <inExpTab> <outTAU>                                          # 组织特异性τ指数"
+  echo "  tbplot.sh exprCorr <inFPKM> <outCorrMat>                                        # 表达相关矩阵(Pearson)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"
