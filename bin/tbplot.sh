@@ -777,6 +777,24 @@ case "$1" in
     rm -f "$M10"
     echo "[tbplot] miRNA 靶标预测完成: $OUT"
     ;;
+  mirnaTarget2)
+    # 用法: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false] [--fragment true|false] [--threads N]
+    #   Target2TablePipe 完整管线：miRNA + 基因组/转录本 → 全量靶标表（含比对行，未过滤低分）
+    #   与 mirnatarget 区别：直接用官方完整封装（ssearch36 内置），输出含全部命中+比对列
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false]"; exit 1; fi
+    MIRA="$1"; TGTA="$2"; OUTA="$3"; REV="true"; FRAG="false"; TH="4"; shift 3
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --revCom) REV="$2";;
+        --fragment) FRAG="$2";;
+        --threads) TH="$2";;
+      esac
+      shift 2
+    done
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.miRNA.Target2TablePipe --inMIRfa "$MIRA" --inGenomeFa "$TGTA" --outTable "$OUTA" --searchRevCom "$REV" --isFragment "$FRAG" --maxThreadNum "$TH" 2>/dev/null
+    echo "[tbplot] miRNA 靶标管线完成: $OUTA"
+    ;;
   mirnaIdentify)
     # 用法: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxMatureAsy N] [--maxStarAsy N] [--maxBulge N]
     #   genome.fa: 基因组（FAindex 索引，染色体名须与靶标表第2列一致）

@@ -275,6 +275,8 @@ tbtools regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeatu
 
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
+# Full-pipeline miRNA target table (engine 101, Target2TablePipe; all hits incl. low-scoring + alignment cols)
+tbtools mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false] [--fragment true|false] [--threads N]
 
 # miRNA precursor identification (engine 78: FAindex genome + RNAfold structure check + ARM screen)
 #   targetSo.tsv col2 = chromosome name, col4/5 = genome coordinates (positionRecover required)
