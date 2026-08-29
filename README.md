@@ -180,6 +180,9 @@ tbtools groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Mean]
 # Batch string replace (pattern map: old\tnew; --partial for substring mode)
 tbtools batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
 
+# GO slim level counts (LevelDoer, engine 85; gene2Go: geneIDs(comma) tab goIDs(comma); needs go-basic.obo/goslim obo)
+tbtools levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]
+
 # Collapse table rows by key column (merge values with ;)
 tbtools tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]
 

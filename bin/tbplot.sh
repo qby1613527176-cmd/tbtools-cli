@@ -80,6 +80,17 @@ case "$1" in
     [ "$1" = "--partial" ] && FULL="false"
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.BatchStringReplace --inFile "$INBR" --outFile "$OUTBR" --patternMap "$MAPBR" --fullWordMatch "$FULL"
     ;;
+  levelGo)
+    # 用法: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]
+    #   gene2Go.txt: 第1列基因ID(逗号分隔)\t第2列GO ID(逗号分隔)；oboFile: go-basic.obo 或 goslim_plant.obo
+    #   outTable: GO slim 图层级统计表（第85引擎，LevelDoer 表格模式）
+    #   ⚠️ --doGraph 1（SVG 图）模式不稳定（LevelGrapher 布局 GUI 依赖），默认表格模式
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]"; exit 1; fi
+    INLG="$1"; OUTLG="$2"; OBOFILE="$3"; LEVEL="2"; shift 3
+    [ $# -ge 2 ] && [ "$1" = "--level" ] && LEVEL="$2"
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.Grapher.LevelDoer --oboFile "$OBOFILE" --gene2GoFile "$INLG" --outTable "$OUTLG" --level "$LEVEL" --doGraph 0
+    ;;
   tableCollapse)
     # 用法: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader true|false]
     #   按键折叠（同键行合并，值用 ; 连接）
