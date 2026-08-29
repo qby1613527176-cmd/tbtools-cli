@@ -202,6 +202,11 @@ tbtools tableCast <inLong.txt> <outMatrix>
 # FASTQ fixed-length trimming (5'/3' ends)
 tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 
+# GFA assembly graph → FASTA (engine 91)
+tbtools gfa2fa <in.gfa> <out.fa>
+# Extract FASTA subsequences by coordinates (engine 92; pos: GeneId\tChrId\tStart\tEnd)
+tbtools fastaSubseq <in.fa> <pos.txt> <out.fa>
+
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
 

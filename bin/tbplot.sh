@@ -160,6 +160,19 @@ case "$1" in
     done
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fastq.FastqParallelTrimmer --inFq "$INFQ" --outFq "$OUTFQ" --NumOfThread "$TH" --NumOfBases5 "$B5" --NumOfBases3 "$B3"
     ;;
+  gfa2fa)
+    # 用法: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFasta）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gfa2fa <in.gfa> <out.fa>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.Tools.GFAtoFasta --inGFA "$1" --outFa "$2"
+    ;;
+  fastaSubseq)
+    # 用法: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，ExtractFastaSubseq）
+    #   pos.txt: GeneId\tChrId\tStart\tEnd（4列 BED 风格，ChrId 须匹配 fasta 头）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh fastaSubseq <in.fa> <pos.txt> <out.fa>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFastaSubseq --inFastaFile "$1" --inIDs "$2" --outFastaFile "$3"
+    ;;
   nwAlign)
     # 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
     #   inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）
