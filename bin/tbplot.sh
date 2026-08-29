@@ -145,6 +145,62 @@ case "$1" in
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableCast <inLong.txt> <outMatrix>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableCast --inFile "$1" --outFile "$2"
     ;;
+  tableUniq)
+    # 用法: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|false] [--sortByFreq true|false]
+    #   按列去重（第94引擎，TableUniq）；--showFreq 输出频率
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableUniq <inTab> <outFile> [--colIndex N] [--showFreq]"; exit 1; fi
+    COL="0"; FREQ="false"; SORTF="false"; ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--colIndex" ] && COL="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--showFreq" ] && FREQ="true"
+      [ "${ARGS[$i]}" = "--sortByFreq" ] && SORTF="true"
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableUniq --inTab "$1" --outFile "$2" --colIndex "$COL" --showFreq "$FREQ" --sortByFreq "$SORTF"
+    ;;
+  tableTranspose)
+    # 用法: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTransposer）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableTranspose <inTable> <outTable>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableTransposer --inTable "$1" --outTable "$2"
+    ;;
+  tableSplit)
+    # 用法: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]
+    #   按列值拆分为多个文件（第96引擎，TableSplitByCol）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]"; exit 1; fi
+    COL="0"; SUF=".txt"; ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--colIndex" ] && COL="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--suffix" ] && SUF="${ARGS[$((i+1))]}"
+    done
+    mkdir -p "$2"
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableSplitByCol --inTab "$1" --outDir "$2" --colIndex "$COL" --suffix "$SUF"
+    ;;
+  tableMerge)
+    # 用法: tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0...] [--appendOnly true|false] [--rmKey]
+    #   多表按关键列合并（第97引擎，TableMerger）；--appendOnly 不合并纯追加；--rmKey 去掉关键列
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0]"; exit 1; fi
+    OUTM="$1"; shift
+    FILES=""; KEYS=""; APPEND="false"; RMKEY="false"
+    ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--keyCols" ] && KEYS="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--appendOnly" ] && APPEND="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--rmKey" ] && RMKEY="true"
+    done
+    # 收集 inFileArr（非 -- 开头的参数）
+    for a in "$@"; do
+      case "$a" in
+        --*) continue;;
+        *) [ -z "$FILES" ] && FILES="$a" || FILES="$FILES,$a";;
+      esac
+    done
+    N=$(echo "$FILES" | tr ',' '\n' | wc -l)
+    [ -z "$KEYS" ] && KEYS=$(yes 0 | head -n $N | tr '\n' ',' | sed 's/,$//')
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableMerger --inFileArr "$FILES" --outTable "$OUTM" --inColIndexArr "$KEYS" --appendOnly "$APPEND" --rmKeyColumns "$RMKEY"
+    ;;
   fqTrim)
     # 用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
     #   5'/3' 端固定长度修剪（默认 5'剪6 3'剪6；--b3 0 不剪）

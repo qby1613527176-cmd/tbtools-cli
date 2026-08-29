@@ -198,6 +198,14 @@ tbtools tableMelt <inTable> <outTable>
 tbtools tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain]
 # Long → wide matrix (3 cols: row tab col tab value); inverse of tableMelt
 tbtools tableCast <inLong.txt> <outMatrix>
+# Deduplicate table by column (engine 94; --showFreq for counts)
+tbtools tableUniq <inTab> <outFile> [--colIndex N] [--showFreq]
+# Transpose table (engine 95)
+tbtools tableTranspose <inTable> <outTable>
+# Split table into multiple files by column value (engine 96; auto-mkdir outDir)
+tbtools tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]
+# Merge multiple tables by key columns (engine 97)
+tbtools tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0]
 
 # FASTQ fixed-length trimming (5'/3' ends)
 tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
