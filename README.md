@@ -206,6 +206,8 @@ tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 tbtools gfa2fa <in.gfa> <out.fa>
 # Extract FASTA subsequences by coordinates (engine 92; pos: GeneId\tChrId\tStart\tEnd)
 tbtools fastaSubseq <in.fa> <pos.txt> <out.fa>
+# Extract/filter FASTA records by ID list (engine 93; Match|Contain x Extract|Filter)
+tbtools fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]
 
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>

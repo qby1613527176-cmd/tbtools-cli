@@ -173,6 +173,19 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh fastaSubseq <in.fa> <pos.txt> <out.fa>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFastaSubseq --inFastaFile "$1" --inIDs "$2" --outFastaFile "$3"
     ;;
+  fastaExtract)
+    # 用法: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]
+    #   按 ID 列表提取/过滤整条序列（第93引擎，ExtractFasta）
+    #   Extract=保留列表中的；Filter=排除列表中的；Match=全等 ID，Contain=子串匹配
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]"; exit 1; fi
+    MODE="Match"; PROC="Extract"; ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--mode" ] && MODE="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--process" ] && PROC="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFasta --inFa "$1" --inIDList "$2" --outFa "$3" --matchMode "$MODE" --processMode "$PROC" --caseInSensitive false
+    ;;
   nwAlign)
     # 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
     #   inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）
