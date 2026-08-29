@@ -233,6 +233,8 @@ tbtools gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLe
 tbtools gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
 # Representative transcript map: mRNA ID → gene ID + length
 tbtools gxfRepIDs <in.gff3> <out.txt>
+# Representative transcript extraction (longest isoform per gene; needs gene-prefix mRNA IDs like TGY000001.t1)
+tbtools gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS]
 # GFF vs genome FASTA seqid match check → Yes/No + Intersection Size
 tbtools gxfMatch <in.gff3> <inGenome.fa>
 # Recover mRNA features from gene lines

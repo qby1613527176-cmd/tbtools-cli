@@ -43,7 +43,7 @@ tbtools — TBtools-II 全功能 CLI
   tbplot.sh upset|msa|genelocgff|tree|heatmap2|supercircos|barplot
   tbplot.sh pafviz|admixture|groupedbar|layoutheatmap|cubeheatmap
   tbplot.sh circlegene|seqlogo|peaktss|peakdist|dehist|msy|venn2-6
-  tbplot.sh microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaIdentify|nwAlign|ctgGroup|homoPhase|sepChr|bamMerge|hicEnzyme|virusRecomb|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfMatch|gxfRecall|regionAnno|tableColSelect|generic|hclust|qpcr|pca
+  tbplot.sh microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaIdentify|nwAlign|ctgGroup|homoPhase|sepChr|bamMerge|hicEnzyme|virusRecomb|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfRepGXF|gxfMatch|gxfRecall|regionAnno|tableColSelect|generic|hclust|qpcr|pca
   tbplot.sh help          # 查看全部绘图命令
 
 RPC 数据工具（188 方法）:
@@ -83,7 +83,7 @@ case "${1:-}" in
   genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
   upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
   groupedbar|layoutheatmap|cubeheatmap|circlegene|seqlogo|peaktss|peakdist|\
-  dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaIdentify|preparespecies|bamstate|bamMerge|hicEnzyme|virusRecomb|qpcrExp|tauIndex|exprCorr|groupCol|batchReplace|levelGo|tableCollapse|tableColSelect|fqTrim|nwAlign|ctgGroup|homoPhase|sepChr|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfMatch|gxfRecall|regionAnno|generic)
+  dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaIdentify|preparespecies|bamstate|bamMerge|hicEnzyme|virusRecomb|qpcrExp|tauIndex|exprCorr|groupCol|batchReplace|levelGo|tableCollapse|tableColSelect|fqTrim|nwAlign|ctgGroup|homoPhase|sepChr|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfRepGXF|gxfMatch|gxfRecall|regionAnno|generic)
     CMD="$1"; shift
     run_plot "$CMD" "$@"
     ;;

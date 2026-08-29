@@ -231,6 +231,20 @@ case "$1" in
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfRepIDs <in.gff3> <out.txt>"; exit 1; fi
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs --inGXF "$1" --outRepresentative "$2"
     ;;
+  gxfRepGXF)
+    # 用法: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID 'pattern']
+    #   代表转录本提取（第86引擎，GXFToRepresentativeGXF）：每 gene 保留最长转录本，去冗余 isoform
+    #   ⚠️ 命名要求：mRNA ID 须以 gene ID 开头（如 TGY000001.t1 Parent=TGY000001）；EVM 命名（evm.model ≠ evm.TU 前缀）不兼容
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS]"; exit 1; fi
+    FEAT="CDS"; ATTACH="(.*exon.*)|(.*UTR.*)"
+    ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--featureID" ] && FEAT="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--attachID" ] && ATTACH="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeGXF --inGXF "$1" --outRepresentativeGff3 "$2" --featureID "$FEAT" --attachID "$ATTACH"
+    ;;
   gxfMatch)
     # 用法: gxfMatch <in.gff3> <inGenome.fa>
     #   GFF 与基因组 seqid 匹配检查（第81引擎，GxfGenomeMatch）→ Yes/No + Intersection Size
