@@ -230,6 +230,12 @@ tbtools microgenome <in.gbk> <anno.tsv> <out.svg> [micro|macro]
 # Pseudo-synteny block search across two genomes (real-data verified: Camellia Chr06 ↔ tea Chr01)
 tbtools findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
 
+# Multi-genome pseudo-synteny blocks (1 query + N subjects)
+tbtools findblockmultiple <qGenome.fa> <q.gff> <qId> <out.txt> <s1Genome.fa> <s1.gff> [<s2Genome.fa> <s2.gff> ...]
+
+# Visualize pseudo-synteny blocks (PDF; input = findblockdual/multiple output)
+tbtools visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]
+
 # Generic reflection bridge (drive ANY TBtools engine)
 tbtools generic <engineClass> <method> <out.svg> [--set field value ...] [--width W] [--height H]
 ```

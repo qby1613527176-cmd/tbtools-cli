@@ -327,13 +327,32 @@ case "$1" in
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
+  findblockmultiple)
+    # 用法: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <out.txt> <sub1Genome.fa> <sub1.gff> [<sub2Genome.fa> <sub2.gff> ...] [--leftEdge N --rightEdge N --expand N --threads N]
+    #   多基因组伪共线性区块（第52引擎）：1 query + N subject
+    #   ⚠️ 大数据引擎：必须 -Djava.io.tmpdir=<磁盘>（/tmp tmpfs 16G 会被 3GB 基因组撑爆）
+    shift
+    if [ $# -lt 7 ]; then echo "用法: tbplot.sh findblockmultiple <qGenome.fa> <q.gff> <qId> <out> <s1Genome.fa> <s1.gff> [更多subject对] [options]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/FindBlockMultipleCli.java" 2>/dev/null
+    xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx6g -cp "$TBCLI_DIR:$JAR" FindBlockMultipleCli "$@"
+    ;;
   findblockdual)
     # 用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
     #   ⚠️ 内部 blastp 找同源，需真实双基因组数据验证（第50引擎）
     shift
     if [ $# -lt 6 ]; then echo "用法: tbplot.sh findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [options]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/FindBlockDualCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
+    xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
+    ;;
+  visualizeblock)
+    # 用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]
+    #   inBlockOut: FindBlockDual 输出（findblockdual 命令产物）
+    #   out.pdf: 输出 PDF（引擎只支持 PDF）
+    #   --labels: 每行基因组标签（默认 Genome1/Genome2/...）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh visualizeblock <inBlockOut> <out.pdf> [--labels \"G1,G2\"]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/VisualizeCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VisualizeCli "$@"
     ;;
   treeRooting)
     # 用法: treeRooting <in.nwk> <out.nwk>
@@ -454,6 +473,8 @@ case "$1" in
   echo "  tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args]  # 标记设计(0-1矩阵)"
   echo "  tbplot.sh treeRooting <in.nwk> <out.nwk>                                  # MAD系统发育定根"
   echo "  tbplot.sh findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out> [opts]  # 伪共线性区块(需真实数据)"
+  echo "  tbplot.sh visualizeblock <inBlockOut> <out.pdf> [--labels \"G1,G2\"]               # 区块可视化PDF"
+  echo "  tbplot.sh findblockmultiple <qGenome.fa> <q.gff> <qId> <out> <s1Genome.fa> <s1.gff> [more pairs]  # 多基因组伪共线性区块"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"
