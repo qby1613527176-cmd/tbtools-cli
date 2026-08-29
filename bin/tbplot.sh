@@ -242,6 +242,20 @@ case "$1" in
     done
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFasta --inFa "$1" --inIDList "$2" --outFa "$3" --matchMode "$MODE" --processMode "$PROC" --caseInSensitive false
     ;;
+  fqfaConv)
+    # 用法: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第98引擎，FastqAndFasta）
+    #   fq2fa 去质量行；fa2fq 生成假质量（IIIIIII）——兼容其他工具的占位质量
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh fqfaConv <input> <output> <fq2fa|fa2fq>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.FastqAndFasta --input "$1" --output "$2" --mode "$3"
+    ;;
+  hmmExtract)
+    # 用法: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAME 提取（第99引擎，hmmInfoExtracter）
+    #   idList.txt 每行一个 NAME；只保留匹配的 HMM 模型
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh hmmExtract <in.hmm> <idList.txt> <out.hmm>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.hmmInfoExtracter --inHmmFile "$1" --idListFile "$2" --outHmmFile "$3"
+    ;;
   nwAlign)
     # 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
     #   inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）

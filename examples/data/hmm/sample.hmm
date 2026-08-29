@@ -1,0 +1,12 @@
+HMMER3/f [3.1b2 | Feb 2015]
+NAME  hmm1
+LENG  10
+HMM          A         C         G         T
+ 1  0.5  0.2  0.2  0.1
+//
+HMMER3/f [3.1b2 | Feb 2015]
+NAME  hmm2
+LENG  10
+HMM          A         C         G         T
+ 1  0.1  0.1  0.2  0.6
+//

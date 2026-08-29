@@ -216,6 +216,10 @@ tbtools gfa2fa <in.gfa> <out.fa>
 tbtools fastaSubseq <in.fa> <pos.txt> <out.fa>
 # Extract/filter FASTA records by ID list (engine 93; Match|Contain x Extract|Filter)
 tbtools fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]
+# FASTQ ↔ FASTA conversion (engine 98; fq2fa drops quality, fa2fq adds placeholder)
+tbtools fqfaConv <input> <output> <fq2fa|fa2fq>
+# Extract HMM models by NAME list (engine 99)
+tbtools hmmExtract <in.hmm> <idList.txt> <out.hmm>
 
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
