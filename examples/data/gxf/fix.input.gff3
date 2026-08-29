@@ -1,0 +1,5 @@
+##gff-version 3
+chr1	TB	gene	100	500	.	+	.	ID=gene1:gene1:AT1G1;Name=gene1
+chr1	TB	mRNA	100	500	.	+	.	ID=trans1|trans1;Parent=gene1:gene1:AT1G1
+chr1	TB	CDS	100	400	.	+	0	Parent=trans1|trans1
+chr1	TB	exon	100	400	.	+	.	Parent=trans1|trans1

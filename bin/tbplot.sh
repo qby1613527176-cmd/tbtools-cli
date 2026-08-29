@@ -103,6 +103,13 @@ case "$1" in
     done
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fastq.FastqParallelTrimmer --inFq "$INFQ" --outFq "$OUTFQ" --NumOfThread "$TH" --NumOfBases5 "$B5" --NumOfBases3 "$B3"
     ;;
+  nwAlign)
+    # 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
+    #   inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess --inFile_1 "$1" --inFile_2 "$2" --outFile "$3"
+    ;;
   gxfRename)
     # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
     #   renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
@@ -140,6 +147,13 @@ case "$1" in
       [ "${ARGS[$i]}" = "--extendLen" ] && EXTL="${ARGS[$((i+1))]}"
     done
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRegionSummary --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
+    ;;
+  gxfFix)
+    # 用法: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dangling mRNA/排序）
+    #   修复 CDS phase 记录分离到 <out>_phase_corrected/problematic.gff3
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfFix <in.gff3> <out.gff3>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix --inGXF "$1" --outGff3 "$2"
     ;;
   groupCol)
     # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
@@ -660,6 +674,7 @@ case "$1" in
   echo "  tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]           # 表格按键折叠"
   echo "  tbplot.sh fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]                 # FASTQ固定长度修剪"
   echo "  tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>                          # GFF ID重命名(Parent同步)"
+  echo "  tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>                                  # Needleman-Wunsch全局比对"
   echo "  tbplot.sh gxfStat <in.gff3> <outStat.xls>                                             # GFF统计"
   echo "  tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>                                     # GFF ID加前缀"
   echo "  tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]                     # GFF→基因位置(喂genelocation)"

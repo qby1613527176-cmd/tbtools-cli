@@ -189,6 +189,9 @@ tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
 
+# Needleman-Wunsch global alignment (all-vs-all, pure Java, EMBOSS format)
+tbtools nwAlign <inSeq1.txt> <inSeq2.txt> <out>
+
 # GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
 tbtools gxfStat <in.gff3> <outStat.xls>
 

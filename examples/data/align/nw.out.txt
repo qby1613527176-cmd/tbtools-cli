@@ -1,0 +1,16 @@
+#      Score: 48.0
+#  Align Len: 12
+#   Identity: 8/12 (66.67%)
+# Similarity: 8/12 (66.67%)
+#  Gap Count: 4/12 (33.33%)
+   Query     1 ----ACGTACGT 8    
+                   ||||||||
+ Subject     1 ACGTACGTACGT 12   
+#      Score: 21.0
+#  Align Len: 13
+#   Identity: 5/13 (38.46%)
+# Similarity: 5/13 (38.46%)
+#  Gap Count: 6/13 (46.15%)
+   Query     1 ----ACG-TACGT 8    
+                   ||. |||. 
+ Subject     1 GATTACATTACA- 12   
