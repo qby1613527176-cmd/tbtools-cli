@@ -201,6 +201,9 @@ tbtools homoPhase <inContigGrpMap> <outPhasedMap>
 # Allelic contig → chromosome assignment (gene2chr uses PROTEIN names, not mRNA IDs; chains after homoPhase)
 tbtools sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
 
+# BAM merge by region coverage (select best sample per region; output merged.bam + region stats)
+tbtools bamMerge <gtf> <bamDir> <outDir>
+
 # GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
 tbtools gxfStat <in.gff3> <outStat.xls>
 

@@ -133,6 +133,13 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles --inGene2ChrMap "$1" --inMiniprotGff "$2" --outMap "$3"
     ;;
+  bamMerge)
+    # 用法: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）
+    #   输出: merged.bam + merged_sorted.bam(.bai) + merged_region.txt（第75引擎）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh bamMerge <gtf> <bamDir> <outDir>"; exit 1; fi
+    xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage "$1" "$2" "$3"
+    ;;
   gxfRename)
     # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
     #   renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
@@ -701,6 +708,7 @@ case "$1" in
   echo "  tbplot.sh ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>                        # contig等位分组(miniprot)"
   echo "  tbplot.sh homoPhase <inContigGrpMap> <outPhasedMap>                                # 同源冲突分区(多倍体相位)"
   echo "  tbplot.sh sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>                          # 等位contig→染色体分配"
+  echo "  tbplot.sh bamMerge <gtf> <bamDir> <outDir>                                          # 按区域合并BAM(覆盖择优)"
   echo "  tbplot.sh gxfStat <in.gff3> <outStat.xls>                                             # GFF统计"
   echo "  tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>                                     # GFF ID加前缀"
   echo "  tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]                     # GFF→基因位置(喂genelocation)"
