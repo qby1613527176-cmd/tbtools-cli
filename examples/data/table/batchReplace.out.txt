@@ -1,0 +1,3 @@
+CAM_gene1	500
+CAM_gene2	300
+CAM_gene3	200

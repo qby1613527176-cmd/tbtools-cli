@@ -177,6 +177,12 @@ tbtools exprCorr <inFPKM> <outCorrMat>
 # Collapse expression matrix samples by group (Sum|Mean|Max|Min|Var|Std)
 tbtools groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Mean]
 
+# Batch string replace (pattern map: old\tnew; --partial for substring mode)
+tbtools batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
+
+# Collapse table rows by key column (merge values with ;)
+tbtools tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 

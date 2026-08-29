@@ -83,7 +83,7 @@ case "${1:-}" in
   genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
   upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
   groupedbar|layoutheatmap|cubeheatmap|circlegene|seqlogo|peaktss|peakdist|\
-  dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|preparespecies|bamstate|qpcrExp|tauIndex|exprCorr|groupCol|generic)
+  dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|preparespecies|bamstate|qpcrExp|tauIndex|exprCorr|groupCol|batchReplace|tableCollapse|generic)
     CMD="$1"; shift
     run_plot "$CMD" "$@"
     ;;

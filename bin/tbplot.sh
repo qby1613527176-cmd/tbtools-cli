@@ -71,6 +71,23 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli "$@"
     ;;
+  batchReplace)
+    # 用法: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
+    #   patternMap.tsv: 模式\t替换（tab 分隔）；默认全词匹配，--partial 则子串替换
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]"; exit 1; fi
+    INBR="$1"; OUTBR="$2"; MAPBR="$3"; FULL="true"; shift 3
+    [ "$1" = "--partial" ] && FULL="false"
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.BatchStringReplace --inFile "$INBR" --outFile "$OUTBR" --patternMap "$MAPBR" --fullWordMatch "$FULL"
+    ;;
+  tableCollapse)
+    # 用法: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader true|false]
+    #   按键折叠（同键行合并，值用 ; 连接）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/TableCollapseCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableCollapseCli "$@"
+    ;;
   groupCol)
     # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
     #   inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头）
@@ -586,6 +603,8 @@ case "$1" in
   echo "  tbplot.sh qpcrExp <in.qpcr.tab> <out.xls>                                      # qPCR相对定量(ΔΔCt)"
   echo "  tbplot.sh tauIndex <inExpTab> <outTAU>                                          # 组织特异性τ指数"
   echo "  tbplot.sh groupCol <inTable> <inGrpInfo> <outTable> [Sum|Mean|Max|Min|Var|Std]   # 表达样本按组折叠"
+  echo "  tbplot.sh batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]          # 批量ID替换"
+  echo "  tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]           # 表格按键折叠"
   echo "  tbplot.sh exprCorr <inFPKM> <outCorrMat>                                        # 表达相关矩阵(Pearson)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
