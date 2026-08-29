@@ -225,6 +225,10 @@ tbtools gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLe
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 
+# miRNA precursor identification (engine 78: FAindex genome + RNAfold structure check + ARM screen)
+#   targetSo.tsv col2 = chromosome name, col4/5 = genome coordinates (positionRecover required)
+tbtools mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE]
+
 # Dual-genome micro-synteny
 tbtools microsyn <gxf1> <gxf2> <collinearity> <out.svg> [--chr1 C --start1 S --end1 E ...]
 

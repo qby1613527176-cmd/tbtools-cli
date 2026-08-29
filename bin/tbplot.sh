@@ -548,6 +548,32 @@ case "$1" in
     rm -f "$M10"
     echo "[tbplot] miRNA 靶标预测完成: $OUT"
     ;;
+  mirnaIdentify)
+    # 用法: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxMatureAsy N] [--maxStarAsy N] [--maxBulge N]
+    #   genome.fa: 基因组（FAindex 索引，染色体名须与靶标表第2列一致）
+    #   targetSo.tsv: TargetSo 输出（第2列=染色体名，第4/5列=基因组坐标）——mirnatarget 输出后用 positionRecover 转换坐标
+    #   outPredict.txt: 预测前体表；outChecklog.txt: 结构检查日志（maxBulge/ARM 过滤原因）
+    #   ⚠️ MIRidentifier 第78引擎：miRNA 前体鉴定（RNAfold 结构检查 + ARM 判定）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE]"; exit 1; fi
+    GENOME="$1"; INTSV="$2"; OUTP="$3"; shift 3
+    OUTL="${OUTP%.txt}.checklog.txt"
+    CHECKARM="BOTH"; MAXASY="1"; MAXMAT="1"; MAXSTAR="0"; MAXBULGE="2"
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --checkARM) CHECKARM="$2";;
+        --maxAsy) MAXASY="$2";;
+        --maxMatureAsy) MAXMAT="$2";;
+        --maxStarAsy) MAXSTAR="$2";;
+        --maxBulge) MAXBULGE="$2";;
+        *) OUTL="$1";;
+      esac
+      shift 2
+    done
+    javac -cp "$JAR" "$TBCLI_DIR/MirIdentifyCli.java" 2>/dev/null
+    xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_TB:-/tmp}" -Xmx8g -cp "$TBCLI_DIR:$JAR" MirIdentifyCli "$GENOME" "$INTSV" "$OUTP" "$OUTL" --checkARM "$CHECKARM" --maxAsy "$MAXASY" --maxMatureAsy "$MAXMAT" --maxStarAsy "$MAXSTAR" --maxBulge "$MAXBULGE"
+    echo "[tbplot] miRNA 前体鉴定完成: $OUTP"
+    ;;
   conflictpaf)
     # 用法: conflictpaf <in.paf> <out.tsv> [binSize]
     #   in.paf: 基因组比对 PAF（minimap2/minigraph）
