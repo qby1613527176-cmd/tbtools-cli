@@ -189,6 +189,18 @@ tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
 
+# GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
+tbtools gxfStat <in.gff3> <outStat.xls>
+
+# GFF ID prefix append (seqid + ID)
+tbtools gxfAppend <in.gff3> <out.gff3> <prefix>
+
+# GFF → gene-position + chr-length (feeds genelocation plot)
+tbtools gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]
+
+# Region-based GFF filtering (keep features overlapping regions)
+tbtools gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 

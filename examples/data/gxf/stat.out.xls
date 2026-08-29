@@ -1,0 +1,5 @@
+# Chr  Num:1
+# Gene Num:1
+# mRNA Num:1
+GeneID	Chr ID	Gene Range	Num of mRNA	mRNA ID	mRNA Range	Num of Exon	Exon Range	Num of Intron	Intron Range	Num of CDS	CDS Range	Num of UTR	UTR Range
+gene1	chr1	100:500	1	trans1	100:500	1	100:300	0		0		0	

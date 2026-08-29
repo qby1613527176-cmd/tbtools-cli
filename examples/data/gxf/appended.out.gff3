@@ -1,0 +1,5 @@
+CAMchr1	TB	gene	100	500	.	+	.	ID=CAMgene1;Name=gene1
+CAMchr1	TB	mRNA	100	500	.	+	.	ID=CAMtrans1;Parent=CAMgene1
+CAMchr1	TB	exon	100	300	.	+	.	Parent=CAMtrans1
+CAMchr1	TB	gene	700	900	.	-	.	ID=CAMgene2;Name=gene2
+CAMchr1	TB	mRNA	700	900	.	-	.	ID=CAMtrans2;Parent=CAMgene2

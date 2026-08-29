@@ -110,6 +110,37 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRenamer --inGXF "$1" --outGXF "$2" --renameMap "$3"
     ;;
+  gxfStat)
+    # 用法: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/CDS/UTR 明细）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfStat <in.gff3> <outStat.xls>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat --inGXF "$1" --outStat "$2"
+    ;;
+  gxfAppend)
+    # 用法: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GxfIDAppender --inGff "$1" --outGff "$2" --prefix "$3"
+    ;;
+  gxfGenepos)
+    # 用法: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # GFF→基因位置+染色体长度（喂 genelocation）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]"; exit 1; fi
+    FEAT="exon"; [ $# -ge 4 ] && FEAT="$4"
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToGenePosFile --inGXF "$1" --outGenePos "$2" --outChrLen "$3" --feature "$FEAT"
+    ;;
+  gxfRegion)
+    # 用法: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
+    #   region.txt: chr\tstrand\tstart\tend\tinfo；按区域保留 GFF
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]"; exit 1; fi
+    IGNS="false"; EXTL="0"; ARGS=("$@")
+    for a in "${ARGS[@]}"; do [ "$a" = "--ignoreStrand" ] && IGNS="true"; done
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--extendLen" ] && EXTL="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRegionSummary --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
+    ;;
   groupCol)
     # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
     #   inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头）
@@ -629,6 +660,10 @@ case "$1" in
   echo "  tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]           # 表格按键折叠"
   echo "  tbplot.sh fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]                 # FASTQ固定长度修剪"
   echo "  tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>                          # GFF ID重命名(Parent同步)"
+  echo "  tbplot.sh gxfStat <in.gff3> <outStat.xls>                                             # GFF统计"
+  echo "  tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>                                     # GFF ID加前缀"
+  echo "  tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]                     # GFF→基因位置(喂genelocation)"
+  echo "  tbplot.sh gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N] # 区域筛选GFF"
   echo "  tbplot.sh exprCorr <inFPKM> <outCorrMat>                                        # 表达相关矩阵(Pearson)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
