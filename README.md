@@ -165,6 +165,9 @@ tbtools preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>
 # BAM coverage/depth state assessment (RNA-seq/genome BAM vs GFF genes)
 tbtools bamstate <out.tsv> <gff3> <bam1> [bam2 ...]
 
+# qPCR relative quantification (2^-ΔΔCt; input: gene\tcontrolCt\tExprCt)
+tbtools qpcrExp <in.qpcr.tab> <out.xls>
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 

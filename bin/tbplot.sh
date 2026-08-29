@@ -71,6 +71,15 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli "$@"
     ;;
+  qpcrExp)
+    # 用法: qpcrExp <in.qpcr.tab> <out.xls>
+    #   in.qpcr.tab: tab 分隔 3 列（基因名\t对照Ct\t实验Ct），同名多行取平均
+    #   out.xls: 相对表达量 Mean/Stdev（2^-ΔΔCt 法）（第58引擎）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh qpcrExp <in.qpcr.tab> <out.xls>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/QpcrDdctCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" QpcrDdctCli "$@"
+    ;;
   qpcr)
     # 用法: qpcr <data.txt> <out> [w] [h]   (data: name\tmean\tsd)
     shift
@@ -548,6 +557,7 @@ case "$1" in
   echo "  tbplot.sh mirnatarget <mirna.fa> <target.fa> <out.tsv>                         # miRNA靶标预测(ssearch36→TargetSo)"
   echo "  tbplot.sh preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF> # 多物种数据准备(ID加前缀)"
   echo "  tbplot.sh bamstate <out.tsv> <gff3> <bam1> [bam2...]                         # BAM覆盖状态评估"
+  echo "  tbplot.sh qpcrExp <in.qpcr.tab> <out.xls>                                      # qPCR相对定量(ΔΔCt)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"
