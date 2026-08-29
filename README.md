@@ -183,6 +183,9 @@ tbtools batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
 # Collapse table rows by key column (merge values with ;)
 tbtools tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]
 
+# Select columns by header names (TableColManipulator, engine 84)
+tbtools tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false]
+
 # FASTQ fixed-length trimming (5'/3' ends)
 tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 

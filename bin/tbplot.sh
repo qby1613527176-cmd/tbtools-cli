@@ -88,6 +88,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/TableCollapseCli.java" 2>/dev/null
     xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableCollapseCli "$@"
     ;;
+  tableColSelect)
+    # 用法: tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false] [--caseSensitive true|false]
+    #   按列名选择列输出（第84引擎，TableColManipulator）——注意输出不含行标识列（除非也选上）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableColSelect <inTable> <outTable> <colName1> [colName2...]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/TableColManipCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableColManipCli "$@"
+    ;;
   fqTrim)
     # 用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
     #   5'/3' 端固定长度修剪（默认 5'剪6 3'剪6；--b3 0 不剪）
