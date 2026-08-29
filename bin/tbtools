@@ -82,7 +82,7 @@ case "${1:-}" in
   # ======== 绘图引擎（全部 33 个） ========
   genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
   upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
-  groupedbar|layoutheatmap|cubeheatmap|circlegene|seqlogo|peaktss|peakdist|\
+  groupedbar|layoutheatmap|cubeheatmap|efpHeat|circlegene|seqlogo|peaktss|peakdist|\
   dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaIdentify|preparespecies|bamstate|bamMerge|hicEnzyme|virusRecomb|qpcrExp|tauIndex|exprCorr|groupCol|batchReplace|levelGo|tableCollapse|tableColSelect|tableAppend|tableMelt|tableColSel|tableCast|tableUniq|tableTranspose|tableSplit|tableMerge|fqTrim|gfa2fa|fastaSubseq|fastaExtract|fqfaConv|hmmExtract|nwAlign|ctgGroup|homoPhase|sepChr|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfRepGXF|gxfMatch|gxfRecall|regionAnno|generic)
     CMD="$1"; shift
     run_plot "$CMD" "$@"

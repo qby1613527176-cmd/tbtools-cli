@@ -104,6 +104,8 @@ tbtools heatmap2 <expr.matrix.tsv> <out.svg> [--log2 --rowScale --clusterRow --c
 
 # 3D cube heatmap (3 tissues × 3 stages)
 tbtools cubeheatmap <expr.tsv> <group.tsv> <out.svg> [--log10]
+# eFP-style tissue expression heatmap (engine 100; TGA background + sample-color map; needs TrueColor TGA)
+tbtools efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
 
 # Layout heatmap (sample position matrix)
 tbtools layoutheatmap <layout.tsv> <expr.tsv> <out.svg> [--cellWidth N ...]

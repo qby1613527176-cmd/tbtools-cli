@@ -564,6 +564,21 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/CubeHeatmapCli.java" 2>/dev/null
     xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" CubeHeatmapCli "$@"
     ;;
+  efpHeat)
+    # 用法: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
+    #   eFP 浏览器风格组织表达热图（第100引擎，generateSuperHeatMap）——TGA 植物示意图上叠加表达
+    #   inTGA: 底图（植物/组织示意图，必须 TrueColor RGB 非灰度）；sample2cc: SampleName\tRGB 映射
+    #   expMat: 首列基因名 + 样本列；geneId: 要可视化的基因；out: .svg/.pdf/.png
+    #   ⚠️ 需 fake DatatypeConverter（build/javax/xml/bind/，JDK9+ 移除 jaxb 的兼容 hack）
+    shift
+    if [ $# -lt 5 ]; then echo "用法: tbplot.sh efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg>"; exit 1; fi
+    W="0"; H="0"; ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--imageWidth" ] && W="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--imageHeight" ] && H="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap --inTGA "$1" --inSample2CC "$2" --expMat "$3" --geneId "$4" --outImg "$5" --imageWidth "$W" --imageHeight "$H"
+    ;;
   circlegene)
     # 用法: circlegene <gff> <geneID.txt> <out> [--rename f --link f --rankedChr f --allChr --graphSize N --startAngle N --endAngle N --chrFill r,g,b --chrLabelColor r,g,b]
     #   geneID.txt: mRNA ID 每行一个（可第二列 1/0 控制颜色）
