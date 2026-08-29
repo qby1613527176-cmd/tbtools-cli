@@ -233,6 +233,8 @@ tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
 
 # Needleman-Wunsch global alignment (all-vs-all, pure Java, EMBOSS format)
 tbtools nwAlign <inSeq1.txt> <inSeq2.txt> <out>
+# Pairwise BLAST between two sequence sets (engine 105; wraps makeblastdb+blastp/n/tblastn)
+tbtools twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp] [--thread N]
 
 # Contig allele grouping from miniprot GFF (assembly helper chaining raw reads → groups)
 tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>

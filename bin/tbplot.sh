@@ -282,6 +282,23 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess --inFile_1 "$1" --inFile_2 "$2" --outFile "$3"
     ;;
+  twoSeqBlast)
+    # 用法: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp|blastn|tblastn] [--thread N] [--fmt 6|XML]
+    #   双序列集 BLAST 比对（第105引擎，CompareTwoSeqSet）——封装 makeblastdb+blast
+    #   需要 blast+ 在 PATH（makeblastdb/blastp）；输出标准 BLAST tabular (fmt 6)
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp]"; exit 1; fi
+    Q="$1"; S="$2"; O="$3"; PROG="blastp"; TH="2"; FMT="6"; shift 3
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --prog) PROG="$2";;
+        --thread) TH="$2";;
+        --fmt) FMT="$2";;
+      esac
+      shift 2
+    done
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.BLAST.CompareTwoSeqSet --query "$Q" --subject "$S" --specifiedBlastProg "$PROG" --outBlastResult "$O" --outFmt "$FMT" --thread "$TH"
+    ;;
   ctgGroup)
     # 用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>
     #   in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎）
