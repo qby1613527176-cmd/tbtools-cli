@@ -207,6 +207,9 @@ tbtools bamMerge <gtf> <bamDir> <outDir>
 # HiC restriction enzyme prediction (MboI/DpnII | MseI | HindIII | NcoI | Arima; samples N reads)
 tbtools hicEnzyme <inHiC.fastq> [--numOfRecords N]
 
+# Virus recombination analysis (query contigs vs virus DB → Top-hit recombination PDF)
+tbtools virusRecomb <inDB.fa> <inContig.fa> <outDir>
+
 # GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
 tbtools gxfStat <in.gff3> <outStat.xls>
 
