@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Method;
 
 /**
@@ -8,7 +10,12 @@ import java.lang.reflect.Method;
  *   engineClass: MarkerDist|MarkerFilter|SampleDist（biocjava.bioDoer.markerDesign 下）
  *   inMarker: 标记 0-1 矩阵（tab 分隔）
  *   --maxPoint: MarkerDist 专用（最大点数）
- *   引擎: setInMarker + process() 返回 String（分析结果）
+ *
+ * ⚠️ 引擎输出模式差异（08/29 反编译确认，统一兼容）：
+ *   - MarkerDist:   process() 返回结果字符串（result 非空）→ 直接写文件
+ *   - MarkerFilter: process() 返回 null，结果走 System.err.println
+ *   - SampleDist:   process() 返回 ""，结果走 System.err.println
+ *   桥在 process() 期间重定向 System.err 到缓冲，若返回字符串为空则把捕获的 stderr 写入文件。
  */
 public class MarkerDesignCli {
     public static void main(String[] args) throws Exception {
@@ -31,9 +38,23 @@ public class MarkerDesignCli {
             catch (NoSuchMethodException e) { /* engine doesn't have setMaxPoint */ }
         }
         Method process = obj.getClass().getMethod("process");
-        String result = (String) process.invoke(obj);
+
+        // 重定向 System.err 捕获引擎结果输出
+        PrintStream origErr = System.err;
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        PrintStream capture = new PrintStream(buf, true);
+        String result;
+        try {
+            System.setErr(capture);
+            result = (String) process.invoke(obj);
+        } finally {
+            System.setErr(origErr);
+            capture.flush();
+        }
+        // 返回字符串为空 → 用捕获的 stderr 内容
+        String content = (result == null || result.trim().isEmpty()) ? buf.toString() : result;
         java.io.FileWriter fw = new java.io.FileWriter(out);
-        fw.write(result == null ? "" : result);
+        fw.write(content == null ? "" : content);
         fw.close();
         System.err.println("[tbplot] 已保存: " + out);
         System.exit(0);

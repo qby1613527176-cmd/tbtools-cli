@@ -27,7 +27,19 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(SCRIPT_DIR)
 SCRIPTS = os.path.join(ROOT, "bin")
 
-# 若环境变量未设置，尝试从 config.sh 读取默认值
+# 若环境变量未设置，尝试从 config.sh 读取默认值（bash source 解析，兼容 $cand 变量）
+if not JAR:
+    try:
+        import subprocess as _sp
+        out = _sp.check_output(
+            ["bash", "-c", f"source {os.path.join(ROOT, 'config', 'config.sh')} 2>/dev/null; echo \"$TBTOOLS_JAR\""],
+            text=True, timeout=10)
+        v = out.strip().splitlines()[-1] if out.strip() else ""
+        if v and os.path.exists(v):
+            JAR = v
+    except Exception:
+        pass
+
 if not JAR:
     try:
         with open(os.path.join(ROOT, "config", "config.sh")) as f:
@@ -46,6 +58,9 @@ if not JAR or not os.path.exists(JAR):
 CLI_TOOLS = {
     "DecodeIlluminaFqPool": "biocjava.bioDoer.Fastq.DecodeIlluminaFqPool",
     "rpkmCal": "biocjava.bioDoer.ExpressionLevelCalculator.RPKMcalculator",
+    "fpkmToTpm": "biocjava.bioDoer.ExpressionLevelCalculator.FPKMtoTPM",
+    "tpmCalc": "biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator",
+    "mimicVqsr": "biocjava.bioDoer.GWAS.MimicVqsrCutoffFind",
     "autoMakeBlastDb": "biocjava.bioDoer.BLAST.makeblastdb",
     "autoRemoteBlast": "biocjava.bioDoer.BLAST.remoteblast",
     "GoCompareBar": "biocjava.bioDoer.GeneOntology.Grapher.GoCompare",
@@ -75,7 +90,8 @@ CLI_TOOLS = {
     "keggEnrichment": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
-    "vcfAddID": "biocjava.bioDoer.GWAS.VCFAddID"
+    "vcfAddID": "biocjava.bioDoer.GWAS.VCFAddID",
+    "bigMarkerRandomDesign": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign"
 }
 
 PLOTS = {

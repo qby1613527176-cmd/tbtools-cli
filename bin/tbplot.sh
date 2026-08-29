@@ -327,6 +327,23 @@ case "$1" in
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
+  marker)
+    # 用法: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]
+    #   inMarker: 标记 0-1 矩阵（行=locus，列=样本，tab 分隔，首行列名/首列 locus 名）
+    #   MarkerDist   : 找最大判别力 marker 组合 [--maxPoint N]
+    #   MarkerFilter : 每样本 marker 计数（结果写 out）
+    #   SampleDist   : marker 间成对距离（结果写 out）
+    #   BigMarkerRandomDesign: 随机抽样找标记组合 [--targetMarkerNum N --numberOfTest N --batchSize N --numberOfThreads N]
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]"; exit 1; fi
+    ENG="$1"; INM="$2"; OUTM="$3"; shift 3
+    if [ "$ENG" = "BigMarkerRandomDesign" ]; then
+        xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.markerDesign.BigMarkerRandomDesign --inMakerStatus "$INM" "$@"
+    else
+        javac -cp "$JAR" "$TBCLI_DIR/MarkerDesignCli.java" 2>/dev/null
+        xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" MarkerDesignCli "$ENG" "$INM" "$OUTM" "$@"
+    fi
+    ;;
   dehist)
     # 用法: dehist <deg.txt> <out> [width] [height]
     #   deg.txt: 每行至少 3 列（tab）：任意ID\t值1\t值2（值1/值2 两样本数值，比较大小分左右直方图）
@@ -413,6 +430,7 @@ case "$1" in
   echo "  tbplot.sh peaktss <gxf> <macs2_peak.xls> <out> [--dist N]                     # Peak-TSS热图(ChIP-seq,开箱即用)"
   echo "  tbplot.sh peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--width W --height H] # Peak染色体分布图(ChIP-seq)"
   echo "  tbplot.sh dehist <deg.txt> <out> [w] [h]                                     # 差异表达双直方图"
+  echo "  tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args]  # 标记设计(0-1矩阵)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"

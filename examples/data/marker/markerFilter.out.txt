@@ -1,0 +1,10 @@
+SampleA	3.0
+SampleB	3.0
+SampleC	4.0
+SampleD	4.0
+SampleE	3.0
+SampleF	3.0
+SampleG	4.0
+SampleH	3.0
+SampleI	4.0
+SampleJ	4.0

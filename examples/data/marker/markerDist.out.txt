@@ -1,0 +1,1 @@
+[SampleA, SampleB, SampleC, SampleG, SampleE, SampleJ, SampleF, SampleI, SampleH, SampleD] => 8

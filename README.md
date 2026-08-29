@@ -1,7 +1,7 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **33 个绘图引擎 + 188 个 RPC 数据工具 + 30 个命令行工具 + 任意引擎反射**，全部实测出图。
+> **48+ 个绘图引擎 + 188 个 RPC 数据工具 + 36 个命令行工具 + 任意引擎反射**，全部实测出图。
 
 <div align="center">
 
@@ -15,9 +15,9 @@
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 33 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图等） | `tbtools <plotName>` |
+| 🎨 **绘图引擎** | 48+ 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计等） | `tbtools <plotName>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
-| 🛠️ **命令行工具** | 30 个（extractFasta/statFasta/cdsTranslater 等） | `tbtools tool <name>` |
+| 🛠️ **命令行工具** | 36 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
 
 All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Verified with real biological data (oil-Camellia GRAS gene family etc).
@@ -60,7 +60,7 @@ tbtools help
 
 ---
 
-## 🎨 Plotting Engines (33)
+## 🎨 Plotting Engines (48+)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
@@ -78,6 +78,20 @@ tbtools seqlogo <seqs.fa> <out.svg> [--scaleIC true --showPos false ...]
 ```bash
 # Volcano plot (DEG: GeneID Log2FC pvalue)
 tbtools volcano <deg.txt> <out.svg> [pvalCutoff] [fcCutoff] [w] [h]
+
+# Expression level calculators (counts+len → RPKM/TPM; FPKM → TPM)
+tbtools tool rpkmCal    --countsTable counts.tsv --lenInfo gene_len.tsv --outTable RPKM.out.tsv
+tbtools tool tpmCalc    --countsTable counts.tsv --lenInfo gene_len.tsv --outTable TPM.out.tsv
+tbtools tool fpkmToTpm  --fpkmTable RPKM.out.tsv --tpmTable TPM2.out.tsv
+
+# GWAS VQSR mimic: VCF → QD/MQ/FS/SOR quality metrics table
+tbtools tool mimicVqsr  --inFile sample.vcf --outFile vqsr.txt
+
+# Marker design (0-1 matrix: rows=locus, cols=sample)
+tbtools marker MarkerDist   markers_0-1.tsv out.txt [--maxPoint N]   # max-discrimination marker combo
+tbtools marker MarkerFilter markers_0-1.tsv out.txt                   # per-sample marker count
+tbtools marker SampleDist   markers_0-1.tsv out.txt                   # marker pairwise distance
+tbtools marker BigMarkerRandomDesign markers_0-1.tsv --targetMarkerNum 10 --numberOfTest 200  # random marker combo search
 
 # Heatmap (engine-level: clustering / grouping / tree)
 tbtools heatmap2 <expr.matrix.tsv> <out.svg> [--log2 --rowScale --clusterRow --clusterCol ...]
@@ -283,9 +297,9 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 
 | 层 | 能力 | 入口 |
 |:---|:-----|:-----|
-| 🎨 **绘图引擎** | 33 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图等） | `tbtools <图名>` |
+| 🎨 **绘图引擎** | 48+ 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计等） | `tbtools <图名>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <方法> '<json>'` |
-| 🛠️ **命令行工具** | 30 个（extractFasta/statFasta/cdsTranslater 等） | `tbtools tool <名称>` |
+| 🛠️ **命令行工具** | 36 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <类名> key=value` |
 
 所有引擎在 Linux/WSL 下 **headless 运行**（xvfb），无需 GUI。已用真实生物数据验证（油茶 GRAS 基因家族等）。
