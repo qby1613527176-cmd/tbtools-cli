@@ -333,13 +333,16 @@ case "$1" in
     #   MarkerDist   : 找最大判别力 marker 组合 [--maxPoint N]
     #   MarkerFilter : 每样本 marker 计数（结果写 out）
     #   SampleDist   : marker 间成对距离（结果写 out）
-    #   BigMarkerRandomDesign: 随机抽样找标记组合 [--targetMarkerNum N --numberOfTest N --batchSize N --numberOfThreads N]
+    #   BigMarkerRandomDesign: 随机抽样找标记组合（无 out，直接打印到 stdout）
+    #     [--targetMarkerNum N --numberOfTest N --batchSize N --numberOfThreads N]
     shift
-    if [ $# -lt 3 ]; then echo "用法: tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]"; exit 1; fi
-    ENG="$1"; INM="$2"; OUTM="$3"; shift 3
+    ENG="$1"; INM="$2"; shift 2
     if [ "$ENG" = "BigMarkerRandomDesign" ]; then
+        [ -z "$INM" ] && { echo "用法: tbplot.sh marker BigMarkerRandomDesign <inMarker> [--targetMarkerNum N ...]"; exit 1; }
         xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.markerDesign.BigMarkerRandomDesign --inMakerStatus "$INM" "$@"
     else
+        if [ $# -lt 1 ]; then echo "用法: tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist> <inMarker> <out> [args...]"; exit 1; fi
+        OUTM="$1"; shift
         javac -cp "$JAR" "$TBCLI_DIR/MarkerDesignCli.java" 2>/dev/null
         xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" MarkerDesignCli "$ENG" "$INM" "$OUTM" "$@"
     fi

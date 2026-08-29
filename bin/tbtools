@@ -38,12 +38,12 @@ usage() {
     cat <<'EOF'
 tbtools — TBtools-II 全功能 CLI
 ================================
-绘图引擎（33 个）:
+绘图引擎（48+ 个）:
   tbplot.sh genestructure|motif|volcano|genelocation|dotplot|circos
   tbplot.sh upset|msa|genelocgff|tree|heatmap2|supercircos|barplot
   tbplot.sh pafviz|admixture|groupedbar|layoutheatmap|cubeheatmap
   tbplot.sh circlegene|seqlogo|peaktss|peakdist|dehist|msy|venn2-6
-  tbplot.sh microsyn|multisyn|generic|hclust|qpcr|pca
+  tbplot.sh microsyn|multisyn|marker|generic|hclust|qpcr|pca
   tbplot.sh help          # 查看全部绘图命令
 
 RPC 数据工具（188 方法）:
@@ -52,7 +52,7 @@ RPC 数据工具（188 方法）:
   tbtools server start|stop          # RPC 服务器管理
   tbtools heatmap <matrix> <out> [group]  # 热图快捷
 
-命令行工具（30 个）:
+命令行工具（36 个）:
   tbtools tool <名称> [参数...]       # 见: tbtools list tools
 
 任意引擎反射（万能兜底）:
@@ -83,7 +83,7 @@ case "${1:-}" in
   genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
   upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
   groupedbar|layoutheatmap|cubeheatmap|circlegene|seqlogo|peaktss|peakdist|\
-  dehist|msy|venn5|venn6|microsyn|multisyn|generic)
+  dehist|msy|venn5|venn6|microsyn|multisyn|marker|generic)
     CMD="$1"; shift
     run_plot "$CMD" "$@"
     ;;
