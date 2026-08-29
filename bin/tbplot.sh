@@ -107,6 +107,44 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/TableColManipCli.java" 2>/dev/null
     xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableColManipCli "$@"
     ;;
+  tableAppend)
+    # 用法: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   # 按指定列合并两表（第87引擎）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]"; exit 1; fi
+    C1="0"; C2="0"; ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--c1" ] && C1="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--c2" ] && C2="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableAppend --inTab1 "$1" --inTab2 "$2" --inColIndex1 "$C1" --inColIndex2 "$C2" --outTab "$3"
+    ;;
+  tableMelt)
+    # 用法: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableMelt <inTable> <outTable>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableMelt --inFile "$1" --outFile "$2"
+    ;;
+  tableColSel)
+    # 用法: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain] [--caseSensitive true|false] [--sortByIDList true|false]
+    #   按 idList 正则选列（第89引擎，TableColSelector）；idList 每行一个模式；Match=精确,Contain=正则包含
+    #   表头匹配列；--sortByIDList true 按 idList 顺序排序输出列
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain]"; exit 1; fi
+    MODE="Match"; CS="true"; SORT="true"; ARGS=("$@")
+    for i in $(seq 0 $((${#ARGS[@]}-1))); do
+      [ "${ARGS[$i]}" = "--mode" ] && MODE="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--caseSensitive" ] && CS="${ARGS[$((i+1))]}"
+      [ "${ARGS[$i]}" = "--sortByIDList" ] && SORT="${ARGS[$((i+1))]}"
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableColSelector --inTable "$1" --outTable "$2" --idList "$3" --selectionMode "$MODE" --caseSensitive "$CS" --sortByIDList "$SORT"
+    ;;
+  tableCast)
+    # 用法: tableCast <inLong.txt> <outMatrix>
+    #   长表转宽矩阵（第90引擎）；输入 3 列: 行名\t列名\t值；与 tableMelt 互逆
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableCast <inLong.txt> <outMatrix>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableCast --inFile "$1" --outFile "$2"
+    ;;
   fqTrim)
     # 用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
     #   5'/3' 端固定长度修剪（默认 5'剪6 3'剪6；--b3 0 不剪）

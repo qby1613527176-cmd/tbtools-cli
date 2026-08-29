@@ -189,6 +189,16 @@ tbtools tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]
 # Select columns by header names (TableColManipulator, engine 84)
 tbtools tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false]
 
+# Table reshape suite (engines 87-90)
+# Merge two tables by key column
+itbtools tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]
+# Wide → long (melt)
+tbtools tableMelt <inTable> <outTable>
+# Select columns by ID-list regex (Match|Contain), optional sort-by-ID-list
+tbtools tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain]
+# Long → wide matrix (3 cols: row tab col tab value); inverse of tableMelt
+tbtools tableCast <inLong.txt> <outMatrix>
+
 # FASTQ fixed-length trimming (5'/3' ends)
 tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 
