@@ -28,3 +28,4 @@ __pycache__/
 *.ps
 *.pdf
 *.TBtools.fa*
+*.TBtoolsDB.*
