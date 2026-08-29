@@ -141,13 +141,11 @@ case "$1" in
     xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage "$1" "$2" "$3"
     ;;
   hicEnzyme)
-    # 用法: hicEnzyme <inHiC.fastq> [--numOfRecords N]   # HiC 限制酶预测（第76引擎）
-    #   从 HiC FastQ 预测酶切类型（MboI/DpnII|MseI|HindIII|NcoI|Arima）；默认抽样 1000 条
+    # 用法: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）
+    #   从 HiC FastQ 预测酶切类型（MboI/DpnII|MseI|HindIII|NcoI|Arima）；引擎内部抽样 1000 条
     shift
-    if [ $# -lt 1 ]; then echo "用法: tbplot.sh hicEnzyme <inHiC.fastq> [--numOfRecords N]"; exit 1; fi
-    INFQ="$1"; NUMR="1000"; shift
-    while [ $# -ge 2 ]; do [ "$1" = "--numOfRecords" ] && NUMR="$2"; shift 2; done
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HiCRestrictionEnzymePrediction --inFq "$INFQ" --numOfRecords "$NUMR"
+    if [ $# -lt 1 ]; then echo "用法: tbplot.sh hicEnzyme <inHiC.fastq>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HiCRestrictionEnzymePrediction --inFq "$1"
     ;;
   gxfRename)
     # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
