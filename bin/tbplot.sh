@@ -327,6 +327,16 @@ case "$1" in
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
+  conflictpaf)
+    # 用法: conflictpaf <in.paf> <out.tsv> [binSize]
+    #   in.paf: 基因组比对 PAF（minimap2/minigraph）
+    #   out.tsv: contig 对冲突计数（query target bin冲突数）——组装冲突检测（第53引擎）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh conflictpaf <in.paf> <out.tsv> [binSize]"; exit 1; fi
+    INPAF="$1"; OUTC="$2"; BIN="10000"; shift 2
+    [ $# -ge 1 ] && BIN="$1"
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF --inPAF "$INPAF" --outFile "$OUTC" --binSize "$BIN"
+    ;;
   findblockmultiple)
     # 用法: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <out.txt> <sub1Genome.fa> <sub1.gff> [<sub2Genome.fa> <sub2.gff> ...] [--leftEdge N --rightEdge N --expand N --threads N]
     #   多基因组伪共线性区块（第52引擎）：1 query + N subject
@@ -475,6 +485,7 @@ case "$1" in
   echo "  tbplot.sh findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out> [opts]  # 伪共线性区块(需真实数据)"
   echo "  tbplot.sh visualizeblock <inBlockOut> <out.pdf> [--labels \"G1,G2\"]               # 区块可视化PDF"
   echo "  tbplot.sh findblockmultiple <qGenome.fa> <q.gff> <qId> <out> <s1Genome.fa> <s1.gff> [more pairs]  # 多基因组伪共线性区块"
+  echo "  tbplot.sh conflictpaf <in.paf> <out.tsv> [binSize]                           # PAF冲突检测(组装冲突)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"

@@ -153,6 +153,9 @@ tbtools pafcomp --inPaf <in.paf> --outGraph <out.svg> [--colorMode Target|Query|
 # PAF reference-base coverage calc
 tbtools pafref --inPaf <in.paf> --outTab <out.tsv>
 
+# PAF conflict detection (assembly conflict bins, GenomeAssembly module)
+tbtools conflictpaf <in.paf> <out.tsv> [binSize]
+
 # Dual-genome micro-synteny
 tbtools microsyn <gxf1> <gxf2> <collinearity> <out.svg> [--chr1 C --start1 S --end1 E ...]
 
