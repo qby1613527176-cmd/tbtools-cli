@@ -83,7 +83,7 @@ case "${1:-}" in
   genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
   upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
   groupedbar|layoutheatmap|cubeheatmap|efpHeat|circlegene|seqlogo|peaktss|peakdist|\
-  dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaTarget2|mirnaIdentify|preparespecies|bamstate|bamMerge|hicEnzyme|virusRecomb|qpcrExp|tauIndex|exprCorr|groupCol|batchReplace|levelGo|tableCollapse|tableColSelect|tableAppend|tableMelt|tableColSel|tableCast|tableUniq|tableTranspose|tableSplit|tableMerge|fqTrim|gfa2fa|fastaSubseq|fastaExtract|fqfaConv|hmmExtract|mastExtract|nwAlign|ctgGroup|homoPhase|sepChr|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfRepGXF|gxfMatch|gxfRecall|regionAnno|generic)
+  dehist|msy|venn5|venn6|microsyn|multisyn|marker|treeRooting|findblockdual|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaTarget2|mirnaIdentify|preparespecies|bamstate|bamMerge|hicEnzyme|virusRecomb|qpcrExp|tauIndex|exprCorr|groupCol|batchReplace|levelGo|goParse|tableCollapse|tableColSelect|tableAppend|tableMelt|tableColSel|tableCast|tableUniq|tableTranspose|tableSplit|tableMerge|fqTrim|gfa2fa|fastaSubseq|fastaExtract|fqfaConv|hmmExtract|mastExtract|nwAlign|ctgGroup|homoPhase|sepChr|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfRepGXF|gxfMatch|gxfRecall|regionAnno|generic)
     CMD="$1"; shift
     run_plot "$CMD" "$@"
     ;;

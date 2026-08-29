@@ -91,6 +91,17 @@ case "$1" in
     [ $# -ge 2 ] && [ "$1" = "--level" ] && LEVEL="$2"
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.Grapher.LevelDoer --oboFile "$OBOFILE" --gene2GoFile "$INLG" --outTable "$OUTLG" --level "$LEVEL" --doGraph 0
     ;;
+  goParse)
+    # 用法: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103引擎，GOtermParser）
+    #   gene2Go.txt: 第1列基因ID(逗号分隔)\t第2列GO ID(逗号分隔)；oboFile: go-basic.obo 或 goslim_plant.obo
+    #   自动生成 3 个文件（当前目录）: <input>.TBtools.Parsed.Gene2Go.xls / Go2Gene.xls / Go2Gene.Level<N>.xls
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh goParse <gene2Go.txt> <oboFile> [--level N]"; exit 1; fi
+    INGP="$1"; OBOGP="$2"; LEVELGP="2"; shift 2
+    [ $# -ge 2 ] && [ "$1" = "--level" ] && LEVELGP="$2"
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.littleTools.GOtermParser --oboFile "$OBOGP" --gene2Go "$INGP" --level "$LEVELGP"
+    echo "[tbplot] GO 词典解析完成: ${INGP}.TBtools.Parsed.*"
+    ;;
   tableCollapse)
     # 用法: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader true|false]
     #   按键折叠（同键行合并，值用 ; 连接）
