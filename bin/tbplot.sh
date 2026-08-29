@@ -125,6 +125,14 @@ case "$1" in
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh homoPhase <inContigGrpMap> <outPhasedMap>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition --inContigGrpMap "$1" --outPhasedMap "$2"
     ;;
+  sepChr)
+    # 用法: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
+    #   gene2chr.tsv: 蛋白名\t染色体（注意：用蛋白名不是 mRNA ID！引擎读 ##PAF 行 info[1]=蛋白名）
+    #   等位 contig → 染色体分配——组装辅助链第三环（第74引擎）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles --inGene2ChrMap "$1" --inMiniprotGff "$2" --outMap "$3"
+    ;;
   gxfRename)
     # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
     #   renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
