@@ -57,6 +57,7 @@ if not JAR or not os.path.exists(JAR):
 
 CLI_TOOLS = {
     "DecodeIlluminaFqPool": "biocjava.bioDoer.Fastq.DecodeIlluminaFqPool",
+    "fastaIDAppender": "biocjava.bioIO.FastX.FastaIndex.FastaIDAppender",
     "rpkmCal": "biocjava.bioDoer.ExpressionLevelCalculator.RPKMcalculator",
     "fpkmToTpm": "biocjava.bioDoer.ExpressionLevelCalculator.FPKMtoTPM",
     "tpmCalc": "biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator",

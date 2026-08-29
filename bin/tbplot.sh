@@ -327,6 +327,24 @@ case "$1" in
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
+  findblockdual)
+    # 用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
+    #   ⚠️ 内部 blastp 找同源，需真实双基因组数据验证（第50引擎）
+    shift
+    if [ $# -lt 6 ]; then echo "用法: tbplot.sh findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [options]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/FindBlockDualCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
+    ;;
+  treeRooting)
+    # 用法: treeRooting <in.nwk> <out.nwk>
+    #   in.nwk: 未定根 NEWICK 树（单树）
+    #   out.nwk: MAD 定根后的 NEWICK 树（Tria et al. 2017, MAD rooting）
+    #   ⚠️ MAD.main() 硬编码输入路径，改调公开静态入口 quickMadRoot()
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh treeRooting <in.nwk> <out.nwk>"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/TreeRootingCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TreeRootingCli "$@"
+    ;;
   marker)
     # 用法: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]
     #   inMarker: 标记 0-1 矩阵（行=locus，列=样本，tab 分隔，首行列名/首列 locus 名）
@@ -434,6 +452,8 @@ case "$1" in
   echo "  tbplot.sh peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--width W --height H] # Peak染色体分布图(ChIP-seq)"
   echo "  tbplot.sh dehist <deg.txt> <out> [w] [h]                                     # 差异表达双直方图"
   echo "  tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args]  # 标记设计(0-1矩阵)"
+  echo "  tbplot.sh treeRooting <in.nwk> <out.nwk>                                  # MAD系统发育定根"
+  echo "  tbplot.sh findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out> [opts]  # 伪共线性区块(需真实数据)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"
