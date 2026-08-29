@@ -256,6 +256,14 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh hmmExtract <in.hmm> <idList.txt> <out.hmm>"; exit 1; fi
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.hmmInfoExtracter --inHmmFile "$1" --idListFile "$2" --outHmmFile "$3"
     ;;
+  mastExtract)
+    # 用法: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中序列（第102引擎，ExtractSeqFromMastXML）
+    #   mast.xml: MEME 套件 MAST 输出（root→sequences→sequence(name length)→seg→hit(pos idx match rc)）
+    #   out.txt: 序列名\t全序列\t命中子序列\t正/反链
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh mastExtract <in.fa> <mast.xml> <out.txt>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML --inFastaFile "$1" --inMastXML "$2" --outTable "$3"
+    ;;
   nwAlign)
     # 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
     #   inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）

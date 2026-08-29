@@ -223,6 +223,8 @@ tbtools fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--pro
 tbtools fqfaConv <input> <output> <fq2fa|fa2fq>
 # Extract HMM models by NAME list (engine 99)
 tbtools hmmExtract <in.hmm> <idList.txt> <out.hmm>
+# Extract hit sequences from MAST XML output (engine 102; MEME suite; sequences→seg→hit structure)
+tbtools mastExtract <in.fa> <mast.xml> <out.txt>
 
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
