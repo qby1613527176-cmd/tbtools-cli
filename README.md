@@ -147,6 +147,12 @@ tbtools dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph
 # PAF dot-plot (minimap2 output)
 tbtools pafviz <in.paf> <out.svg> [graphSize] [colorMode]
 
+# PAF genome-comparison plot (13-col PAF required)
+tbtools pafcomp --inPaf <in.paf> --outGraph <out.svg> [--colorMode Target|Query|None]
+
+# PAF reference-base coverage calc
+tbtools pafref --inPaf <in.paf> --outTab <out.tsv>
+
 # Dual-genome micro-synteny
 tbtools microsyn <gxf1> <gxf2> <collinearity> <out.svg> [--chr1 C --start1 S --end1 E ...]
 
@@ -182,17 +188,47 @@ tbtools peaktss <gxf> <macs2_peak.xls> <out.svg> [--dist N]
 # Peak chromosome distribution
 tbtools peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --height H]
 
+# Peak annotation to genes
+tbtools peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]
+
 # Differential expression dual histogram
 tbtools dehist <deg.txt> <out.svg> [w] [h]
 
 # Enrichment bar plot
 tbtools barplot <enrichment.tsv> <out.svg> <termCol> <pvalCol> [classCol] [maxTerms]
 
+# Color scheme generator (from a table column)
+tbtools colorscheme <inTab> <outTab> <refColIndex>
+
+# Distance / correlation between two columns
+tbtools distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>
+
+# RNA mountain plot (secondary-structure heights)
+tbtools mountain <fold.txt> <out.tsv>
+
+# BLAST XML pile-up (per-query hit coverage)
+tbtools pileup <blast.xml> <out.svg> [--query NAME]
+
+# Genome-coverage + RNA structure (PDF output)
+tbtools plotrna <genomeFA> <region> <SAM> --directPDF out.pdf
+
 # ADMIXTURE Q-matrix stacked plot
 tbtools admixture <qFiles.lst> <out.svg> [sampleIDFile] [groupFile] [sortMode]
 
 # MSA alignment viewer
 tbtools msa <aligned.fasta> <out.svg> [padding]
+
+# Virtual gel electrophoresis (PCR fragments)
+tbtools gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out.svg>
+
+# GFA assembly graph viz
+ntbtools gfa <in.gfa> <out.svg> [w] [h]
+
+# Plastome circular map (GenBank → annotation)
+tbtools microgenome <in.gbk> <anno.tsv> <out.svg> [micro|macro]
+
+# Pseudo-synteny block search across two genomes (real-data verified: Camellia Chr06 ↔ tea Chr01)
+tbtools findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
 
 # Generic reflection bridge (drive ANY TBtools engine)
 tbtools generic <engineClass> <method> <out.svg> [--set field value ...] [--width W] [--height H]
