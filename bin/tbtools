@@ -4,8 +4,8 @@
 # ============================================================
 # 覆盖四层能力：
 #   1. RPC 数据工具（188 方法）— rpc/methods/server
-#   2. 绘图引擎（33 个）— genestructure/motif/.../venn6/multisyn
-#   3. 命令行工具（30 个）— tool
+#   2. 绘图引擎（97 个）— genestructure/motif/.../venn6/multisyn/efpHeat
+#   3. 命令行工具（37 个）— tool
 #   4. 任意引擎反射 — engine
 #
 # 依赖：TBtools_JRE1.6.jar（详见 README）
@@ -38,7 +38,7 @@ usage() {
     cat <<'EOF'
 tbtools — TBtools-II 全功能 CLI
 ================================
-绘图引擎（48+ 个）:
+绘图引擎（97 个）:
   tbplot.sh genestructure|motif|volcano|genelocation|dotplot|circos
   tbplot.sh upset|msa|genelocgff|tree|heatmap2|supercircos|barplot
   tbplot.sh pafviz|admixture|groupedbar|layoutheatmap|cubeheatmap
@@ -52,7 +52,7 @@ RPC 数据工具（188 方法）:
   tbtools server start|stop          # RPC 服务器管理
   tbtools heatmap <matrix> <out> [group]  # 热图快捷
 
-命令行工具（36 个）:
+命令行工具（37 个）:
   tbtools tool <名称> [参数...]       # 见: tbtools list tools
 
 任意引擎反射（万能兜底）:
@@ -79,7 +79,7 @@ case "${1:-}" in
   # ======== 任意引擎反射 ========
   engine) shift; run_engine "$@";;
 
-  # ======== 绘图引擎（全部 33 个） ========
+  # ======== 绘图引擎（全部 97 个） ========
   genestructure|motif|volcano|genelocation|dotplot|circos|hclust|qpcr|pca|\
   upset|msa|genelocgff|tree|heatmap2|supercircos|barplot|pafviz|admixture|\
   groupedbar|layoutheatmap|cubeheatmap|efpHeat|circlegene|seqlogo|peaktss|peakdist|\
