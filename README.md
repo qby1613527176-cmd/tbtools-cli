@@ -241,6 +241,10 @@ tbtools recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--pr
 # Filter BLAST tab6 by C-score (engine 107; distinguishes ortholog vs paralog candidates)
 # Input: standard BLAST outfmt 6 tabular; keeps high-confidence ortholog hits (median identity 97% vs 35% raw)
 tbtools filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]
+# Quick gene family identification (engine 108; reference family members → find homologs in query proteome)
+# Flow: family ID extraction → optional AutoFill iteration → query BLAST → family member list + sequences
+# ⚠️ AutoFill(default 2) needs full proteome (>20000 proteins); small ref tests use --autoFill 0
+tbtools quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N] [--thread N] [--diamond true]
 
 # Contig allele grouping from miniprot GFF (assembly helper chaining raw reads → groups)
 tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>

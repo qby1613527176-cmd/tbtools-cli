@@ -337,6 +337,26 @@ case "$1" in
     java -Xmx1g -cp "$JAR" biocjava.bioDoer.BLAST.FilterBlastResultByCScore --inBlastTab6 "$IN" --outBlastTab "$OUT" --cscore "$CSCORE"
     echo "[tbplot] C-score 过滤完成: $(wc -l < "$IN") 行 → $(wc -l < "$OUT") 行"
     ;;
+  quickFamily)
+    # 用法: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N] [--thread N] [--diamond true|false]
+    #   快速基因家族鉴定（第108引擎，QuickGeneFamilyIdentification）——用参考家族成员从查询蛋白组找同源成员
+    #   流程: 家族ID提取→参考蛋白集自比对(可选AutoFill迭代扩展)→query BLAST→输出家族成员
+    #   输出: <outPrefix>.final.IDset.txt（成员ID）+ <outPrefix>.final.Seq.fasta（成员序列）
+    #   ⚠️ AutoFill(默认2) 需要完整蛋白组(>20000)作参考集；小参考集测试用 --autoFill 0
+    shift
+    if [ $# -lt 4 ]; then echo "用法: tbplot.sh quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N] [--thread N] [--diamond true|false]"; exit 1; fi
+    REF="$1"; FID="$2"; Q="$3"; O="$4"; AF="2"; TH="2"; DM="true"; shift 4
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --autoFill) AF="$2";;
+        --thread) TH="$2";;
+        --diamond) DM="$2";;
+      esac
+      shift 2
+    done
+    java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification --ReferencePepSet "$REF" --ReferenceFamilyId "$FID" --QueryPepSet "$Q" --OutFilePrefix "$O" --NumOfThreads "$TH" --UseDiamond "$DM" --AutoCompleteRefSet "$AF"
+    echo "[tbplot] 基因家族鉴定完成: $(wc -l < ${O}.final.IDset.txt 2>/dev/null || echo 0) 个成员 → ${O}.final.IDset.txt + ${O}.final.Seq.fasta"
+    ;;
   ctgGroup)
     # 用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>
     #   in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎）
