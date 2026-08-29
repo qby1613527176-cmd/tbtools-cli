@@ -88,6 +88,21 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/TableCollapseCli.java" 2>/dev/null
     xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableCollapseCli "$@"
     ;;
+  fqTrim)
+    # 用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
+    #   5'/3' 端固定长度修剪（默认 5'剪6 3'剪6；--b3 0 不剪）
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]"; exit 1; fi
+    INFQ="$1"; OUTFQ="$2"; B5="6"; B3="6"; TH="2"; shift 2
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --b5) B5="$2";; --b3) B3="$2";; --threads) TH="$2";;
+        *) echo "未知选项: $1"; exit 1;;
+      esac
+      shift 2
+    done
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fastq.FastqParallelTrimmer --inFq "$INFQ" --outFq "$OUTFQ" --NumOfThread "$TH" --NumOfBases5 "$B5" --NumOfBases3 "$B3"
+    ;;
   groupCol)
     # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
     #   inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头）
@@ -605,6 +620,7 @@ case "$1" in
   echo "  tbplot.sh groupCol <inTable> <inGrpInfo> <outTable> [Sum|Mean|Max|Min|Var|Std]   # 表达样本按组折叠"
   echo "  tbplot.sh batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]          # 批量ID替换"
   echo "  tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]           # 表格按键折叠"
+  echo "  tbplot.sh fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]                 # FASTQ固定长度修剪"
   echo "  tbplot.sh exprCorr <inFPKM> <outCorrMat>                                        # 表达相关矩阵(Pearson)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
