@@ -1,0 +1,16 @@
+CRchr1	TB	mRNA	1	813	.	+	.	ID=CRchr1_chr1_geneA_p0;Name=chr1_chr1_geneA_p0
+CRchr1	TB	CDS	1	813	.	+	0	Parent=CRchr1_chr1_geneA_p0
+CRchr1	TB	mRNA	1014	1826	.	+	.	ID=CRchr1_chr1_geneA_p1;Name=chr1_chr1_geneA_p1
+CRchr1	TB	CDS	1014	1826	.	+	0	Parent=CRchr1_chr1_geneA_p1
+CRchr1	TB	mRNA	2027	2839	.	+	.	ID=CRchr1_chr1_geneA_p2;Name=chr1_chr1_geneA_p2
+CRchr1	TB	CDS	2027	2839	.	+	0	Parent=CRchr1_chr1_geneA_p2
+CRchr1	TB	mRNA	3040	3852	.	+	.	ID=CRchr1_chr1_geneA;Name=chr1_chr1_geneA
+CRchr1	TB	CDS	3040	3852	.	+	0	Parent=CRchr1_chr1_geneA
+CRchr1	TB	mRNA	4053	4745	.	+	.	ID=CRchr1_chr1_geneB_p0;Name=chr1_chr1_geneB_p0
+CRchr1	TB	CDS	4053	4745	.	+	0	Parent=CRchr1_chr1_geneB_p0
+CRchr1	TB	mRNA	4946	5638	.	+	.	ID=CRchr1_chr1_geneB_p1;Name=chr1_chr1_geneB_p1
+CRchr1	TB	CDS	4946	5638	.	+	0	Parent=CRchr1_chr1_geneB_p1
+CRchr1	TB	mRNA	5839	6531	.	+	.	ID=CRchr1_chr1_geneB_p2;Name=chr1_chr1_geneB_p2
+CRchr1	TB	CDS	5839	6531	.	+	0	Parent=CRchr1_chr1_geneB_p2
+CRchr1	TB	mRNA	6732	7424	.	+	.	ID=CRchr1_chr1_geneB;Name=chr1_chr1_geneB
+CRchr1	TB	CDS	6732	7424	.	+	0	Parent=CRchr1_chr1_geneB

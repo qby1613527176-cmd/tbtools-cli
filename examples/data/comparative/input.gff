@@ -1,0 +1,18 @@
+##gff-version 3
+##sequence-region chr1 1 7624
+chr1	TB	mRNA	1	813	.	+	.	ID=chr1_chr1_geneA_p0;Name=chr1_chr1_geneA_p0
+chr1	TB	CDS	1	813	.	+	0	Parent=chr1_chr1_geneA_p0
+chr1	TB	mRNA	1014	1826	.	+	.	ID=chr1_chr1_geneA_p1;Name=chr1_chr1_geneA_p1
+chr1	TB	CDS	1014	1826	.	+	0	Parent=chr1_chr1_geneA_p1
+chr1	TB	mRNA	2027	2839	.	+	.	ID=chr1_chr1_geneA_p2;Name=chr1_chr1_geneA_p2
+chr1	TB	CDS	2027	2839	.	+	0	Parent=chr1_chr1_geneA_p2
+chr1	TB	mRNA	3040	3852	.	+	.	ID=chr1_chr1_geneA;Name=chr1_chr1_geneA
+chr1	TB	CDS	3040	3852	.	+	0	Parent=chr1_chr1_geneA
+chr1	TB	mRNA	4053	4745	.	+	.	ID=chr1_chr1_geneB_p0;Name=chr1_chr1_geneB_p0
+chr1	TB	CDS	4053	4745	.	+	0	Parent=chr1_chr1_geneB_p0
+chr1	TB	mRNA	4946	5638	.	+	.	ID=chr1_chr1_geneB_p1;Name=chr1_chr1_geneB_p1
+chr1	TB	CDS	4946	5638	.	+	0	Parent=chr1_chr1_geneB_p1
+chr1	TB	mRNA	5839	6531	.	+	.	ID=chr1_chr1_geneB_p2;Name=chr1_chr1_geneB_p2
+chr1	TB	CDS	5839	6531	.	+	0	Parent=chr1_chr1_geneB_p2
+chr1	TB	mRNA	6732	7424	.	+	.	ID=chr1_chr1_geneB;Name=chr1_chr1_geneB
+chr1	TB	CDS	6732	7424	.	+	0	Parent=chr1_chr1_geneB

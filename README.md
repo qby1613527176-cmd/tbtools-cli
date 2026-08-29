@@ -159,6 +159,9 @@ tbtools conflictpaf <in.paf> <out.tsv> [binSize]
 # Assembly conflict partitioning (polyploid group clustering, chains after conflictpaf)
 tbtools partitionconflict <inConflict.tsv> <polyPoid> <outCluster>
 
+# Multi-species data prep (add species prefix to genome+GFF IDs — feed into findblockdual/multiple)
+tbtools preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 

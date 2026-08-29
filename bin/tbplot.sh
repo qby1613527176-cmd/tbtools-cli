@@ -327,6 +327,15 @@ case "$1" in
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
+  preparespecies)
+    # 用法: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>
+    #   给基因组+GFF 加物种前缀（seqid + ID）——TBtools 多物种比较数据准备（第56引擎）
+    #   工作流: preparespecies → findblockdual/multiple → visualizeblock
+    #   ⚠️ 大数据基因组全量重写耗时（3GB 级约 10-20 分钟）
+    shift
+    if [ $# -lt 5 ]; then echo "用法: tbplot.sh preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>"; exit 1; fi
+    xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.ComparativeGenomics.PrepareSpecies --prefix "$1" --inGenomeFa "$2" --inGXF "$3" --outGenomeFa "$4" --outGXF "$5"
+    ;;
   partitionconflict)
     # 用法: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluster>
     #   inConflictFreq.tsv: conflictpaf 输出（contigA\tcontigB\tcount）
@@ -526,6 +535,7 @@ case "$1" in
   echo "  tbplot.sh conflictpaf <in.paf> <out.tsv> [binSize]                           # PAF冲突检测(组装冲突)"
   echo "  tbplot.sh partitionconflict <inConflict.tsv> <polyPoid> <outCluster>           # 冲突分区(多倍体同源群)"
   echo "  tbplot.sh mirnatarget <mirna.fa> <target.fa> <out.tsv>                         # miRNA靶标预测(ssearch36→TargetSo)"
+  echo "  tbplot.sh preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF> # 多物种数据准备(ID加前缀)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"
