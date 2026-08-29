@@ -1,0 +1,73 @@
+# ssearch36 -w 100 -W 25 -E 100 -m 10 -T 1 -i -U q2.fa t2.fa
+SSEARCH performs a Smith-Waterman search
+ version 36.3.8i Nov, 2022
+Please cite:
+ T. F. Smith and M. S. Waterman, (1981) J. Mol. Biol. 147:195-197; 
+ W.R. Pearson (1991) Genomics 11:635-650
+
+Query: q2.fa
+  1>>>ath-miR166 - 21 nt (reverse complement)
+Library: t2.fa
+      141 residues in     1 sequences
+
+Statistics: (shuffled [500]) MLE statistics: Lambda= 0.3884;  K= 4.771
+ statistics sampled from 1 (1) to 500 sequences
+Algorithm: Smith-Waterman (SSE2, Michael Farrar 2006) (7.2 Nov 2010/SIMDe Nov 2020)
+Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+ Scan time:  0.000
+
+The best scores are:                                                                              s-w bits E(1)
+AT_TARGET                                                                              ( 141) [r]  105 56.6 2.8e-14
+
+>>>ath-miR166-, 21 nt vs t2.fa library
+; pg_name: ssearch36
+; pg_ver: 36.3.8i Nov, 2022
+; pg_argv:  ssearch36 -w 100 -W 25 -E 100 -m 10 -T 1 -i -U q2.fa t2.fa; pg_name_alg: Smith-Waterman (SSE2, Michael Farrar 2006)
+; pg_ver_rel: 7.2 Nov 2010/SIMDe Nov 2020
+; pg_matrix: +5/-4 (5:-4)
+; pg_open-ext: -12 -4
+; mp_extrap: 60000 500
+; mp_stats: (shuffled [500]) MLE statistics: Lambda= 0.3884;  K= 4.771
+; mp_KS: -0.0000 (N=0) at   0
+; mp_Algorithm: Smith-Waterman (SSE2, Michael Farrar 2006) (7.2 Nov 2010/SIMDe Nov 2020)
+; mp_Parameters: +5/-4 matrix (5:-4), open/ext: -12/-4
+>>AT_TARGET
+; sw_frame: r
+; sw_s-w opt: 105
+; sw_z-score: 288.9
+; sw_bits: 56.6
+; sw_expect: 2.8e-14
+; sw_score: 105
+; sw_ident: 1.000
+; sw_sim: 1.000
+; sw_overlap: 21
+>ath-miR166 ..
+; sq_len: 21
+; sq_offset: 22
+; sq_type: D
+; al_start: 21
+; al_stop: 1
+; al_display_start: 21
+-------------------------GGGGAAUGAAGCCUGGUCCGA
+>AT_TARGET ..
+; sq_len: 141
+; sq_offset: 1
+; sq_type: D
+; al_start: 61
+; al_stop: 81
+; al_display_start: 36
+AAAAAAAAAAAAAAAAAAAAAAAAAGGGGAAUGAAGCCUGGUCCGAAAAA
+AAAAAAAAAAAAAAAAAAAAA
+; al_cons:
+                         :::::::::::::::::::::
+
+>>><<<
+>>>///
+
+21 residues in 1 query   sequences
+141 residues in 1 library sequences
+ Tcomplib [36.3.8i Nov, 2022] (1 proc in memory [0G])
+ start: Sat Aug 29 11:49:36 2026 done: Sat Aug 29 11:49:36 2026
+ Total Scan time:  0.000 Total Display time:  0.000
+
+Function used was SSEARCH [36.3.8i Nov, 2022]

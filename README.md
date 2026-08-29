@@ -156,6 +156,12 @@ tbtools pafref --inPaf <in.paf> --outTab <out.tsv>
 # PAF conflict detection (assembly conflict bins, GenomeAssembly module)
 tbtools conflictpaf <in.paf> <out.tsv> [binSize]
 
+# Assembly conflict partitioning (polyploid group clustering, chains after conflictpaf)
+tbtools partitionconflict <inConflict.tsv> <polyPoid> <outCluster>
+
+# miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
+tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
+
 # Dual-genome micro-synteny
 tbtools microsyn <gxf1> <gxf2> <collinearity> <out.svg> [--chr1 C --start1 S --end1 E ...]
 

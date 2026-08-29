@@ -327,6 +327,44 @@ case "$1" in
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
+  partitionconflict)
+    # 用法: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluster>
+    #   inConflictFreq.tsv: conflictpaf 输出（contigA\tcontigB\tcount）
+    #   polyPoid: 目标倍性；outCluster: 同源群分区（第54引擎）
+    #   链式: conflictpaf → partitionconflict（冲突检测 → 多倍体同源群分区）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh partitionconflict <inConflict.tsv> <polyPoid> <outCluster>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.ParititionByConflictFreq --inConflictFreq "$1" --polyPoid "$2" --outCluster "$3"
+    ;;
+  mirnatarget)
+    # 用法: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [--threads N] [--scoreCutOff N] [--maxMismatch N]
+    #   mirna.fa: miRNA 序列（建议每轮一条或一族）；target.fa: 转录本/基因组靶标
+    #   out.tsv: 靶标表（miRNA target strand beg end score miRNAseq targetseq E bits）
+    #   完整管线: ssearch36 -i -m 10 → TargetSoEngine（TBtools 官方参数）
+    #   ⚠️ 需 ssearch36 在 PATH（apt install fasta 或本地编译）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [--threads N]"; exit 1; fi
+    MIR="$1"; TGT="$2"; OUT="$3"; shift 3
+    EVAL="1"; THREADS="1"; SCORE="5.0"; MISMATCH="6"
+    while [ $# -ge 2 ]; do
+      case "$1" in
+        --evalue) EVAL="$2";;
+        --threads) THREADS="$2";;
+        --scoreCutOff) SCORE="$2";;
+        --maxMismatch) MISMATCH="$2";;
+        *) echo "未知选项: $1"; exit 1;;
+      esac
+      shift 2
+    done
+    # Step 1: ssearch36 官方参数
+    M10="${OUT}.m10.tmp"
+    ssearch36 -w 100 -W 25 -E "$EVAL" -m 10 -T "$THREADS" -i -U "$MIR" "$TGT" > "$M10" 2>/dev/null || { echo "❌ ssearch36 失败（确认已安装）"; exit 1; }
+    # Step 2: TargetSoEngine 打分
+    javac -cp "$JAR" "$TBCLI_DIR/TargetScoreCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" TargetScoreCli "$M10" "$OUT" --scoreCutOff "$SCORE" --maxMismatch "$MISMATCH" 2>/dev/null
+    rm -f "$M10"
+    echo "[tbplot] miRNA 靶标预测完成: $OUT"
+    ;;
   conflictpaf)
     # 用法: conflictpaf <in.paf> <out.tsv> [binSize]
     #   in.paf: 基因组比对 PAF（minimap2/minigraph）
@@ -486,6 +524,8 @@ case "$1" in
   echo "  tbplot.sh visualizeblock <inBlockOut> <out.pdf> [--labels \"G1,G2\"]               # 区块可视化PDF"
   echo "  tbplot.sh findblockmultiple <qGenome.fa> <q.gff> <qId> <out> <s1Genome.fa> <s1.gff> [more pairs]  # 多基因组伪共线性区块"
   echo "  tbplot.sh conflictpaf <in.paf> <out.tsv> [binSize]                           # PAF冲突检测(组装冲突)"
+  echo "  tbplot.sh partitionconflict <inConflict.tsv> <polyPoid> <outCluster>           # 冲突分区(多倍体同源群)"
+  echo "  tbplot.sh mirnatarget <mirna.fa> <target.fa> <out.tsv>                         # miRNA靶标预测(ssearch36→TargetSo)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"
   echo "  tbplot.sh venn5 <out> <5 sets> [labels]                                      # 五集合韦恩图"
