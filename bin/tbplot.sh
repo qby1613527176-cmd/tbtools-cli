@@ -867,6 +867,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/FindBlockDualCli.java" 2>/dev/null
     xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
     ;;
+  collinearRegion)
+    # 用法: collinearRegion <in.collinearity> <simGff> <out.txt>
+    #   MCScanX 共线性→区域文件（第104引擎，CollinearityToRegion）
+    #   输出: chr1 start1 end1 chr2 start2 end2 genePairInfo——供共线性区块分析/可视化
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh collinearRegion <in.collinearity> <simGff> <out.txt>"; exit 1; fi
+    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion --inCollinearity "$1" --inSimGff "$2" --outTab "$3"
+    ;;
   visualizeblock)
     # 用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]
     #   inBlockOut: FindBlockDual 输出（findblockdual 命令产物）
