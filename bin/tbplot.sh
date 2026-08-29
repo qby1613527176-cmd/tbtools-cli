@@ -103,6 +103,13 @@ case "$1" in
     done
     xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fastq.FastqParallelTrimmer --inFq "$INFQ" --outFq "$OUTFQ" --NumOfThread "$TH" --NumOfBases5 "$B5" --NumOfBases3 "$B3"
     ;;
+  gxfRename)
+    # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
+    #   renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>"; exit 1; fi
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRenamer --inGXF "$1" --outGXF "$2" --renameMap "$3"
+    ;;
   groupCol)
     # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
     #   inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头）
@@ -621,6 +628,7 @@ case "$1" in
   echo "  tbplot.sh batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]          # 批量ID替换"
   echo "  tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]           # 表格按键折叠"
   echo "  tbplot.sh fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]                 # FASTQ固定长度修剪"
+  echo "  tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>                          # GFF ID重命名(Parent同步)"
   echo "  tbplot.sh exprCorr <inFPKM> <outCorrMat>                                        # 表达相关矩阵(Pearson)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"

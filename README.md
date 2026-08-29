@@ -186,6 +186,9 @@ tbtools tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]
 # FASTQ fixed-length trimming (5'/3' ends)
 tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
 
+# GFF ID renaming (ID/Parent synced via rename map: old\tnew)
+tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 
