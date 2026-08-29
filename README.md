@@ -162,6 +162,9 @@ tbtools partitionconflict <inConflict.tsv> <polyPoid> <outCluster>
 # Multi-species data prep (add species prefix to genome+GFF IDs — feed into findblockdual/multiple)
 tbtools preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>
 
+# BAM coverage/depth state assessment (RNA-seq/genome BAM vs GFF genes)
+tbtools bamstate <out.tsv> <gff3> <bam1> [bam2 ...]
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 
