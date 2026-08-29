@@ -71,6 +71,16 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli "$@"
     ;;
+  groupCol)
+    # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
+    #   inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头）
+    #   outTable: 样本按组折叠后的矩阵（默认 Mean）——表达分组分析（第61引擎）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh groupCol <inTable> <inGrpInfo> <outTable> [Sum|Mean|Max|Min|Var|Std]"; exit 1; fi
+    INTAB="$1"; INGRP="$2"; OUTTAB="$3"; COLTYPE="Mean"; shift 3
+    [ $# -ge 1 ] && COLTYPE="$1"
+    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableColCollaspe --inTable "$INTAB" --inGrpInfo "$INGRP" --outTable "$OUTTAB" --ColType "$COLTYPE"
+    ;;
   tauIndex)
     # 用法: tauIndex <inExpTab> <outTAU>
     #   inExpTab: 表达矩阵（首列基因名 + 样本列）；outTAU: τ 指数表（0=均匀 1=完全组织特异）
@@ -575,6 +585,7 @@ case "$1" in
   echo "  tbplot.sh bamstate <out.tsv> <gff3> <bam1> [bam2...]                         # BAM覆盖状态评估"
   echo "  tbplot.sh qpcrExp <in.qpcr.tab> <out.xls>                                      # qPCR相对定量(ΔΔCt)"
   echo "  tbplot.sh tauIndex <inExpTab> <outTAU>                                          # 组织特异性τ指数"
+  echo "  tbplot.sh groupCol <inTable> <inGrpInfo> <outTable> [Sum|Mean|Max|Min|Var|Std]   # 表达样本按组折叠"
   echo "  tbplot.sh exprCorr <inFPKM> <outCorrMat>                                        # 表达相关矩阵(Pearson)"
   echo "  tbplot.sh msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]  # 多物种微共线性图"
   echo "  tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..] # 双基因组微共线性图"

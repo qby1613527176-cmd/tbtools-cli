@@ -174,6 +174,9 @@ tbtools tauIndex <inExpTab> <outTAU>
 # Sample expression correlation matrix (Pearson, for co-expression/clustering)
 tbtools exprCorr <inFPKM> <outCorrMat>
 
+# Collapse expression matrix samples by group (Sum|Mean|Max|Min|Var|Std)
+tbtools groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Mean]
+
 # miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
 tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
 
