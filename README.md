@@ -198,6 +198,9 @@ tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>
 # Homoeologous conflict partitioning (phasing; chains after ctgGroup)
 tbtools homoPhase <inContigGrpMap> <outPhasedMap>
 
+# Allelic contig → chromosome assignment (gene2chr uses PROTEIN names, not mRNA IDs; chains after homoPhase)
+tbtools sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
+
 # GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
 tbtools gxfStat <in.gff3> <outStat.xls>
 

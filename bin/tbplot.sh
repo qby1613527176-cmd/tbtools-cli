@@ -692,6 +692,7 @@ case "$1" in
   echo "  tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>                                  # Needleman-Wunsch全局比对"
   echo "  tbplot.sh ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>                        # contig等位分组(miniprot)"
   echo "  tbplot.sh homoPhase <inContigGrpMap> <outPhasedMap>                                # 同源冲突分区(多倍体相位)"
+  echo "  tbplot.sh sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>                          # 等位contig→染色体分配"
   echo "  tbplot.sh gxfStat <in.gff3> <outStat.xls>                                             # GFF统计"
   echo "  tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>                                     # GFF ID加前缀"
   echo "  tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]                     # GFF→基因位置(喂genelocation)"

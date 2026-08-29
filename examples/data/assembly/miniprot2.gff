@@ -1,0 +1,13 @@
+##gff-version 3
+##PAF	pro_A	53	0	53	+	ctg2	159	0	159	159	159	0	AS:i:251	ms:i:251	np:i:53	fs:i:0	st:i:0	da:i:0	do:i:-1	cg:Z:53M	cs:Z::53
+ctg2	miniprot	mRNA	1	159	251	+	.	ID=MP000001;Rank=1;Identity=1.0000;Positive=1.0000;Target=pro_A 1 53
+ctg2	miniprot	CDS	1	159	251	+	0	Parent=MP000001;Rank=1;Identity=1.0000;Target=pro_A 1 53
+##PAF	pro_A	53	0	53	+	ctg1	159	0	159	159	159	0	AS:i:251	ms:i:251	np:i:53	fs:i:0	st:i:0	da:i:0	do:i:-1	cg:Z:53M	cs:Z::53
+ctg1	miniprot	mRNA	1	159	251	+	.	ID=MP000002;Rank=2;Identity=1.0000;Positive=1.0000;Target=pro_A 1 53
+ctg1	miniprot	CDS	1	159	251	+	0	Parent=MP000002;Rank=2;Identity=1.0000;Target=pro_A 1 53
+##PAF	pro_B	49	0	49	+	ctg4	147	0	147	147	147	0	AS:i:255	ms:i:255	np:i:49	fs:i:0	st:i:0	da:i:0	do:i:-1	cg:Z:49M	cs:Z::49
+ctg4	miniprot	mRNA	1	147	255	+	.	ID=MP000003;Rank=1;Identity=1.0000;Positive=1.0000;Target=pro_B 1 49
+ctg4	miniprot	CDS	1	147	255	+	0	Parent=MP000003;Rank=1;Identity=1.0000;Target=pro_B 1 49
+##PAF	pro_B	49	0	49	+	ctg3	147	0	147	147	147	0	AS:i:255	ms:i:255	np:i:49	fs:i:0	st:i:0	da:i:0	do:i:-1	cg:Z:49M	cs:Z::49
+ctg3	miniprot	mRNA	1	147	255	+	.	ID=MP000004;Rank=2;Identity=1.0000;Positive=1.0000;Target=pro_B 1 49
+ctg3	miniprot	CDS	1	147	255	+	0	Parent=MP000004;Rank=2;Identity=1.0000;Target=pro_B 1 49
