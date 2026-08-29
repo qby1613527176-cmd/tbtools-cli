@@ -230,6 +230,8 @@ tbtools mastExtract <in.fa> <mast.xml> <out.txt>
 
 # GFF ID renaming (ID/Parent synced via rename map: old\tnew)
 tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
+# GFF repair: dedup ID prefixes, CDS phase check, dangling mRNA separation, sort (engine 70)
+tbtools gxfFix <in.gff3> <out.gff3> [--noFixRepeatedIdPrefix]
 
 # Needleman-Wunsch global alignment (all-vs-all, pure Java, EMBOSS format)
 tbtools nwAlign <inSeq1.txt> <inSeq2.txt> <out>
