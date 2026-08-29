@@ -17,7 +17,7 @@ tbcli — TBtools-II 2.535 全功能 CLI 统一入口（完整版）
   tbcli engine <类名> [k=v...] # 任意引擎反射调用（tbengine.sh）
   tbcli server start|stop     # RPC 服务器管理
 """
-import subprocess, sys, json, os, urllib.request
+import subprocess, sys, json, os, re, urllib.request
 
 JAR = os.environ.get("TBTOOLS_JAR", "")
 RPC = "http://127.0.0.1:8765/rpc"
@@ -87,7 +87,6 @@ CLI_TOOLS = {
     "downLoadNCBIFasta": "biocjava.bioWeb.DownLoadNCBIFasta",
     "extractFasta": "biocjava.bioDoer.Fasta.ExtractFasta",
     "extractFastaSub": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
-    "geneOnGenome": "biocjava.bioDoer.JJplot2Toolkit.GeneOnGenomeCommandLine",
     "keggEnrichment": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
@@ -95,34 +94,6 @@ CLI_TOOLS = {
     "bigMarkerRandomDesign": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign"
 }
 
-PLOTS = {
-    "circos": "biocjava.bioDoer.JIGplotToolkit.Circos.JIGCircosAdvanced",
-    "circos_simple": "biocjava.bioDoer.JIGplotToolkit.Circos.AmazingSimpleCircos",
-    "dotplot": "biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot",
-    "enrichment_bubble": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
-    "genelocation": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation",
-    "genelocation_gff": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocationControlFromGff3AndIdList",
-    "genestructure": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawGeneStructureFromGXFfile",
-    "gfa_viz": "biocjava.bioDoer.JIGplotToolkit.Network.VizGFA",
-    "hclust": "biocjava.bioDoer.JIGplotToolkit.Hclust.Hclust",
-    "heatmap": "biocjava.bioDoer.JIGplotToolkit.HeatMap.HeatmapControl",
-    "heatmap_cube": "biocjava.bioDoer.JIGplotToolkit.HeatMap.CubeHeatMap",
-    "heatmap_layout": "biocjava.bioDoer.JIGplotToolkit.HeatMap.LayoutHeatmap",
-    "mirna_graph": "biocjava.bioIO.RNAfold.OneStepMirGraph",
-    "motif_cdd": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawMotifPatternFromCDDResult",
-    "motif_meme": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawMotifPatternFromMEMEResult",
-    "motif_pfam": "biocjava.bioDoer.MEME.DrawMotifPattern.DrawMotifPatternFromPfamResult",
-    "motif_stack": "biocjava.bioDoer.JIGplotToolkit.MotifStack.stackMotif",
-    "msa_viewer": "biocjava.bioDoer.JIGplotToolkit.MSA.MSAviewer",
-    "pca": "biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis",
-    "qpcr_bar": "biocjava.bioDoer.JIGplotToolkit.qPCRBarPlot.barPlotWithErrorBar",
-    "rnafold_plot": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.RNAplotAdvance",
-    "seqlogo": "biocjava.bioDoer.seqLogo.makeSeqLogo",
-    "supercircos": "biocjava.bioDoer.JIGplotToolkit.Circos.SuperCircos.AmazingSuperCircos",
-    "unrooted_tree": "biocjava.bioDoer.JIGplotToolkit.UnrootedTreeViz.UnrootedTreeViz",
-    "upset": "biocjava.bioDoer.JIGplotToolkit.UpSetPloter.UpSetPlot",
-    "volcano": "biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot"
-}
 
 def rpc_call(method, params=None):
     body = json.dumps({"jsonrpc": "2.0", "method": method, "params": params or {}}).encode()
@@ -161,7 +132,15 @@ def cmd_list(kind):
     elif kind == "tools":
         print(f"命令行工具: {len(CLI_TOOLS)}"); [print(f"  {k} -> {v}") for k, v in sorted(CLI_TOOLS.items())]
     elif kind == "plots":
-        print(f"绘图: {len(PLOTS)}"); [print(f"  {k} -> {v}") for k, v in sorted(PLOTS.items())]
+        # 绘图命令列表来自 tbplot.sh（真实可用入口）
+        try:
+            cmds = []
+            for line in open(os.path.join(SCRIPTS, "tbplot.sh")):
+                mo = re.match(r"^  ([a-zA-Z][a-zA-Z0-9]+)\)", line)
+                if mo: cmds.append(mo.group(1))
+            print(f"绘图: {len(cmds)} 个（tbplot.sh）"); [print(f"  {x}") for x in sorted(cmds)]
+        except Exception as e:
+            print(f"⚠️ 无法读取 tbplot.sh: {e}")
     elif kind == "all":
         cmd_list("rpc"); cmd_list("tools"); cmd_list("plots")
 
@@ -182,14 +161,8 @@ def cmd_tool(name, args):
         os.system(f"java -Xmx4g -jar {JAR} {name} {' '.join(args)}")
 
 def cmd_plot(name, args):
-    if name == "genestructure":
-        # 基因结构图（走 tbplot.sh 桥）
-        os.system(f"bash {SCRIPTS}/tbplot.sh genestructure {' '.join(args)}")
-        return
-    cls = PLOTS.get(name)
-    if not cls:
-        print(f"❌ 未知绘图 {name}（tbcli list plots）; 尝试 tbengine 反射:"); cls = name
-    os.system(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}")
+    # 绘图引擎统一走 tbplot.sh 桥（绘图类无 main，必须经桥 headless 化）
+    os.system(f"bash {SCRIPTS}/tbplot.sh {name} {' '.join(args)}")
 
 def cmd_engine(cls, kvs):
     os.system(f"bash {SCRIPTS}/tbengine.sh {cls} {' '.join(kvs)}")

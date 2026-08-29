@@ -38,13 +38,15 @@ usage() {
     cat <<'EOF'
 tbtools — TBtools-II 全功能 CLI
 ================================
-绘图引擎（97 个）:
+绘图命令（104 个）:
   tbplot.sh genestructure|motif|volcano|genelocation|dotplot|circos
   tbplot.sh upset|msa|genelocgff|tree|heatmap2|supercircos|barplot
   tbplot.sh pafviz|admixture|groupedbar|layoutheatmap|cubeheatmap
   tbplot.sh circlegene|seqlogo|peaktss|peakdist|dehist|msy|venn2-6
   tbplot.sh microsyn|multisyn|marker|treeRooting|findblockdual|collinearRegion|findblockmultiple|visualizeblock|conflictpaf|partitionconflict|mirnatarget|mirnaTarget2|mirnaIdentify|nwAlign|recipBlast|filterCScore|quickFamily|ctgGroup|homoPhase|sepChr|bamMerge|hicEnzyme|virusRecomb|gxfRename|gxfStat|gxfAppend|gxfGenepos|gxfRegion|gxfFix|gxfOverlap|gxfRepIDs|gxfRepGXF|gxfMatch|gxfRecall|regionAnno|tableColSelect|generic|hclust|qpcr|pca
-  tbplot.sh help          # 查看全部绘图命令
+  tbtools plot <命令> [参数...]   # 绘图统一入口（转发 tbplot.sh）
+  tbtools list plots              # 列出全部绘图命令
+  tbplot.sh help                  # 查看全部绘图命令
 
 RPC 数据工具（188 方法）:
   tbtools rpc <method> '<json>'      # 调用任意 RPC
@@ -52,7 +54,7 @@ RPC 数据工具（188 方法）:
   tbtools server start|stop          # RPC 服务器管理
   tbtools heatmap <matrix> <out> [group]  # 热图快捷
 
-命令行工具（37 个）:
+命令行工具（36 个）:
   tbtools tool <名称> [参数...]       # 见: tbtools list tools
 
 任意引擎反射（万能兜底）:
@@ -75,6 +77,9 @@ case "${1:-}" in
   # ======== 命令行工具 ========
   tool) shift; run_tool tool "$@";;
   list) shift; run_tool list "$@";;
+
+  # ======== 绘图（转发 tbplot.sh，经 tbcli.py cmd_plot） ========
+  plot) shift; run_tool plot "$@";;
 
   # ======== 任意引擎反射 ========
   engine) shift; run_engine "$@";;
