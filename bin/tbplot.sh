@@ -1040,6 +1040,16 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/MicroSynCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MicroSynCli "$@"
     ;;
+  dualsyn)
+    # 用法: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] [--chr2 "3,4"] [--rows N] [--gap N]
+    #   simplifiedGff: Chr\tGeneName\tStart\tEnd（染色体名必须数字）
+    #   collinearity: MCScanX 输出（*.collinearity）
+    #   引擎: DualSyntenyPlotterAdvance（旧 JJplot2 框架，反射扫描窗口树提取 GUI 实例保存）
+    shift
+    if [ $# -lt 3 ]; then echo "用法: tbplot.sh dualsyn <simplifiedGff> <collinearity> <out> [--chr1 ..] [--chr2 ..]"; exit 1; fi
+    javac -cp "$JAR" "$TBCLI_DIR/DualSynCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" DualSynCli "$@"
+    ;;
   multisyn)
     # 用法: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt]
     #   gxf.lst: 每行一个 GXF/GFF 注释（染色体名须数字）
