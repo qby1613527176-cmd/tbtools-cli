@@ -612,6 +612,13 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/StructAnnoCompareCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" StructAnnoCompareCli "$@"
     ;;
+  genedensity)
+    # 用法: genedensity <in.gff3> <out.tsv> [binSize]
+    #   基因密度谱：按窗口统计每染色体/contig 基因数（基因组轨道/密度分析）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/GeneDensityCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneDensityCli "$@"
+    ;;
   heatmap2)
     # 用法: heatmap2 <expr.matrix.tsv> <out> [options]
     #   矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等）
