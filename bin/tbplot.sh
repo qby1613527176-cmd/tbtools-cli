@@ -596,6 +596,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/TreeCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" TreeCli "$@"
     ;;
+  phylotree)
+    # 用法: phylotree <in.nwk> <out> [vertical] [width] [height]
+    #   PhyloTreeView 系统发育树视图（08/31 攻下，纠正「需 TreeTab」误判）
+    #   build() 直接吃 newick，内部自动算坐标；支持枝长/Cladogram 自动降级/坐标轴
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/PhyloTreeCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PhyloTreeCli "$@"
+    ;;
   heatmap2)
     # 用法: heatmap2 <expr.matrix.tsv> <out> [options]
     #   矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等）
