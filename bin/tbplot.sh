@@ -682,6 +682,15 @@ case "$1" in
     javac -cp "build:$JAR" "$TBCLI_DIR/RNAplotCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" RNAplotCli "$@"
     ;;
+  calcRepeat)
+    # 用法: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--minFreq N] [--threads N]
+    #   重复序列得分计算（工具39，calcRepeatScore，需 jellyfish）
+    #   ⚠️ 内部默认 60 线程 jellyfish count 易挂 → 桥预生成 .jf（合理线程数）+ process() 复用
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh calcRepeat <genome.fa> <out> [--kmerSize N]"; exit 1; fi
+    javac -cp "build:$JAR" "$TBCLI_DIR/CalcRepeatCli.java" 2>/dev/null
+    java -Xmx2g -cp "$TBCLI_DIR:build:$JAR" CalcRepeatCli "$@"
+    ;;
   multiEfp)
     # 用法: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidth N] [--imageHeight N]
     #   多矩阵组织表达热图（第110引擎，generateMultipleSuperHeatMap）——TGA 底图 + 多表达矩阵叠加
