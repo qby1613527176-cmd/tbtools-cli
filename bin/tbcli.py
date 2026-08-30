@@ -93,6 +93,7 @@ CLI_TOOLS = {
     "dnDsCalculate": "biocjava.bioIO.KaKs.DnDsCalculate",
     "ssrMiner": "biocjava.bioIO.FastX.FastaIndex.SSRminer",
     "checkPrimer": "biocjava.bioIO.Primer.CheckPrimer",
+    "quickLocateSeqPattern": "biocjava.bioIO.FastX.QuickLocateSeqPattern",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
