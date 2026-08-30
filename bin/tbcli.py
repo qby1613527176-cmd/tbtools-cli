@@ -90,6 +90,8 @@ CLI_TOOLS = {
     "extractFastaSub": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
     "keggEnrichment": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
     "goAnnoPipe": "biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe",
+    "dnDsCalculate": "biocjava.bioIO.KaKs.DnDsCalculate",
+    "ssrMiner": "biocjava.bioIO.FastX.FastaIndex.SSRminer",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
