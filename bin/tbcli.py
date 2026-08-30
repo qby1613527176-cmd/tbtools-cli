@@ -89,6 +89,7 @@ CLI_TOOLS = {
     "extractFasta": "biocjava.bioDoer.Fasta.ExtractFasta",
     "extractFastaSub": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
     "keggEnrichment": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
+    "goAnnoPipe": "biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
     "vcfAddID": "biocjava.bioDoer.GWAS.VCFAddID",
