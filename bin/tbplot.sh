@@ -673,6 +673,15 @@ case "$1" in
     done
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap --inTGA "$1" --inSample2CC "$2" --expMat "$3" --geneId "$4" --outImg "$5" --imageWidth "$W" --imageHeight "$H"
     ;;
+  rnaplot)
+    # 用法: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R,G,B"] [--interactive false]
+    #   RNA 二级结构图（第111引擎，RNAplotAdvance，需 RNAfold/RNAplot 可执行）
+    #   ⚠️ 本机 RNAplot 2.7 不读 stdin 管道（generatePlotPsFile 失败）→ 桥自己 RNAplot -i 生成 EPS + transformat 解析
+    shift
+    if [ $# -lt 2 ]; then echo "用法: tbplot.sh rnaplot <seq> <out> [--colorMap ..]"; exit 1; fi
+    javac -cp "build:$JAR" "$TBCLI_DIR/RNAplotCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" RNAplotCli "$@"
+    ;;
   multiEfp)
     # 用法: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidth N] [--imageHeight N]
     #   多矩阵组织表达热图（第110引擎，generateMultipleSuperHeatMap）——TGA 底图 + 多表达矩阵叠加

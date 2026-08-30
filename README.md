@@ -1,8 +1,8 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **110 个绘图/分析引擎 + 188 个 RPC 数据工具 + 36 个命令行工具 + 任意引擎反射**，全部实测出图。
-> 2026-08-29 达成 110 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），47 个 Java 桥，150+ 命令。
+> **111 个绘图/分析引擎 + 188 个 RPC 数据工具 + 36 个命令行工具 + 任意引擎反射**，全部实测出图。
+> 2026-08-29 达成 111 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），47 个 Java 桥，150+ 命令。
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 110 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
+| 🎨 **绘图引擎** | 111 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
 | 🛠️ **命令行工具** | 36 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
@@ -61,7 +61,7 @@ tbtools help
 
 ---
 
-## 🎨 Plotting Engines (110)
+## 🎨 Plotting Engines (111)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
@@ -110,6 +110,9 @@ tbtools efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--image
 
 # Multi-matrix tissue expression heatmap (engine 110; multiple exp matrices overlaid on TGA; bypasses hardcoded main)
 tbtools multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
+
+# RNA secondary structure plot (engine 111; needs RNAfold/RNAplot; bypasses stdin-pipe bug via RNAplot -i + EPS parse)
+tbtools rnaplot <seq.fa|rawSeq> <out.svg> [--colorMap "seq1=R,G,B;..."] [--interactive false]
 
 # Layout heatmap (sample position matrix)
 tbtools layoutheatmap <layout.tsv> <expr.tsv> <out.svg> [--cellWidth N ...]
@@ -520,7 +523,6 @@ tbtools-cli/
 
 | Engine | Status |
 |:-------|:-------|
-| RNAplotAdvance | needs RNAfold |
 | MicroGenomeViz | doesn't handle `join(complement(...))` |
 | UnrootedTreeViz | hardcoded demo main |
 | geneOnGenome CLI | jar compile-level bug |
@@ -547,7 +549,7 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 
 | 层 | 能力 | 入口 |
 |:---|:-----|:-----|
-| 🎨 **绘图引擎** | 110 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
+| 🎨 **绘图引擎** | 111 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <方法> '<json>'` |
 | 🛠️ **命令行工具** | 36 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <类名> key=value` |
