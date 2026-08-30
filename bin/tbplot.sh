@@ -619,6 +619,20 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GeneDensityCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneDensityCli "$@"
     ;;
+  seqconvert)
+    # 用法: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>
+    #   序列格式转换（main1 入口；fmt: fasta|clustal|MEGA|nexus|PAML|phylip）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/SeqConverterCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" SeqConverterCli "$@"
+    ;;
+  trimmsa)
+    # 用法: trimmsa <in.aln.fa> <out.aln.fa> [ratio]
+    #   MSA 修剪（按列保留率），main 硬编码 → 桥 setter+process
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/TrimMSACli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" TrimMSACli "$@"
+    ;;
   heatmap2)
     # 用法: heatmap2 <expr.matrix.tsv> <out> [options]
     #   矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等）
