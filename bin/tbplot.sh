@@ -604,6 +604,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/PhyloTreeCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PhyloTreeCli "$@"
     ;;
+  annocompare)
+    # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
+    #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
+    #   Curation 图 + ABCD 四图（PNG/PDF/SVG）+ 单物种 ABCD 表（08/31 攻下）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/StructAnnoCompareCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" StructAnnoCompareCli "$@"
+    ;;
   heatmap2)
     # 用法: heatmap2 <expr.matrix.tsv> <out> [options]
     #   矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等）
