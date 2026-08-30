@@ -92,6 +92,7 @@ CLI_TOOLS = {
     "goAnnoPipe": "biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe",
     "dnDsCalculate": "biocjava.bioIO.KaKs.DnDsCalculate",
     "ssrMiner": "biocjava.bioIO.FastX.FastaIndex.SSRminer",
+    "checkPrimer": "biocjava.bioIO.Primer.CheckPrimer",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
