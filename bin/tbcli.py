@@ -79,6 +79,7 @@ CLI_TOOLS = {
     "OverlapGeneModels": "biocjava.bioIO.GXF.gxfTree.OverlapGeneModels",
     "PredictMirSTAR": "biocjava.bioIO.RNAfold.PredictMirSTAR",
     "RNAplotAdvance": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.RNAplotAdvance",
+    "MIRPrediionResultStat": "biocjava.bioDoer.miRNA.MIRPrediionResultStat",
     "ReciprocalBlast": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
     "RegionGXFOverlapAnnotation": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
     "TableCast": "biocjava.bioDoer.Table.TableCast",
