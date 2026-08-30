@@ -673,6 +673,15 @@ case "$1" in
     done
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap --inTGA "$1" --inSample2CC "$2" --expMat "$3" --geneId "$4" --outImg "$5" --imageWidth "$W" --imageHeight "$H"
     ;;
+  multiEfp)
+    # 用法: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidth N] [--imageHeight N]
+    #   多矩阵组织表达热图（第110引擎，generateMultipleSuperHeatMap）——TGA 底图 + 多表达矩阵叠加
+    #   ⚠️ main 硬编码第二矩阵路径 → 走桥（setter+反射 initExp+showHeatMapOf→JIGBasePanel）；需 fake DatatypeConverter
+    shift
+    if [ $# -lt 5 ]; then echo "用法: tbplot.sh multiEfp <inTGA> <sample2cc> <expMat> <geneId> <out> [--imageWidth N]"; exit 1; fi
+    javac -cp "build:$JAR" "$TBCLI_DIR/MultiSuperHeatCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" MultiSuperHeatCli "$@"
+    ;;
   circlegene)
     # 用法: circlegene <gff> <geneID.txt> <out> [--rename f --link f --rankedChr f --allChr --graphSize N --startAngle N --endAngle N --chrFill r,g,b --chrLabelColor r,g,b]
     #   geneID.txt: mRNA ID 每行一个（可第二列 1/0 控制颜色）
