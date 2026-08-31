@@ -677,6 +677,13 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/BamSortCli.java" 2>/dev/null
     xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamSortCli "$@"
     ;;
+  onesteptree)
+    # 用法: onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean true|false]
+    #   一步法 ML 系统发育树（引擎 119，OneStepMLTree——pep→muscle→trimal→IQ-TREE MFP+UFboot）
+    #   需系统 muscle+iqtree；⚠️ --bbTime ≥1000（iqtree 限制）；序列需 ≥4 条唯一
+    shift
+    xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioIO.BioSoftPipeServer.OneStepMLTree "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
