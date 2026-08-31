@@ -716,6 +716,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/MarkerToolsCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MarkerToolsCli "$@"
     ;;
+  amazingmeta)
+    # 用法: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [seqLen.txt] [geneRename.txt]
+    #   Amazing Meta Plot（引擎 120，DrawAmazingMetaPlot——进化树+Motif模式+基因结构+蛋白域组合图）
+    #   ⚠️ plot() 内部 JFrame 显示 → Window 反射提取 JIGBasePanel 后 save2SVG/PNG/PDF
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/AmazingMetaCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" AmazingMetaCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
