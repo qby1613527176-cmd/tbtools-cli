@@ -782,6 +782,15 @@ case "$1" in
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" FileSplitCli "$@"
     ;;
 
+  memerun)
+    # 用法: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--maxW N] [--evalue X] [--mode ...]
+    #   一步法 MEME motif 发现（工具 100，QuickRunMEME——调系统 meme）
+    #   ⚠️ 输出在 workingDir/meme_out/meme.xml
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/MemeRunCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MemeRunCli "$@"
+    ;;
+
   gsadiag)
     # 用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]
     #   基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查）
