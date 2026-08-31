@@ -38,7 +38,7 @@ usage() {
     cat <<'EOF'
 tbtools — TBtools-II 全功能 CLI
 ================================
-绘图命令（120 个）:
+绘图命令（122 个）:
   tbplot.sh genestructure|motif|volcano|genelocation|dotplot|circos
   tbplot.sh upset|msa|genelocgff|tree|phylotree|unrooted|violin|barplotter|heatmap2|supercircos|barplot|annocompare|genedensity|seqconvert|trimmsa
   tbplot.sh pafviz|admixture|groupedbar|layoutheatmap|cubeheatmap

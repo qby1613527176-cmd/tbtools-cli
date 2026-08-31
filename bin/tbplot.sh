@@ -662,6 +662,21 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/SamBamCovCli.java" 2>/dev/null
     xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SamBamCovCli "$@"
     ;;
+  bamindex)
+    # 用法: bamindex <in.sorted.bam> [out.bai]
+    #   BAM 索引创建（工具 75，BAMIndexCreater.process——main 硬编码演示）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/BamIndexCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamIndexCli "$@"
+    ;;
+  bamsort)
+    # 用法: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]
+    #   BAM 排序（工具 76，SAMBAMSorter.process——main 硬编码演示）
+    #   sortOrder: coordinate|queryname|unsorted|duplicate（默认 coordinate）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/BamSortCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamSortCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
