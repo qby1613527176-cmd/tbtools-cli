@@ -116,6 +116,7 @@ CLI_TOOLS = {
     "mirIdentifierBasedOnTargetSo": "biocjava.bioDoer.miRNA.MIRidentifierBasedOnTargetSoResult",
     "regionBlast": "biocjava.bioDoer.BLAST.wholeGenomeBlastN.regionBlast",
     "findBestHomologyBatch": "biocjava.bioIO.BioSoftPipeServer.FindBestHomologyBatch",
+    "collinearityToRegion": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
     "sRNAseqAdaperRemover": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
