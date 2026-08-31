@@ -781,6 +781,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GxfSortCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfSortCli "$@"
     ;;
+  gxffilter)
+    # 用法: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>
+    #   GFF 按 ID 列表过滤（工具 96，GXFfilter.setIDList+process——基因家族子注释提取刚需）
+    #   保留 ID 列表中基因/转录本及其子特征；真实 GRAS 3 基因→10 特征行验证
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/GxfFilterCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfFilterCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
