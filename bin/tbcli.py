@@ -113,6 +113,8 @@ CLI_TOOLS = {
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
     "sRNAseqAdaperRemover": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
+    "fastqParallelTrimmer": "biocjava.bioDoer.Fastq.FastqParallelTrimmer",
+    "fastqParallelSubBest": "biocjava.bioDoer.Fastq.FastqParallelSubBest",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
