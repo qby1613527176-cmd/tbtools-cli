@@ -700,6 +700,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/ColorSchemeCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" ColorSchemeCli "$@"
     ;;
+  regiondepth)
+    # 用法: regiondepth <in.sam> <region> <out.depth> [scaleFactor]
+    #   SAM 区域覆盖深度（工具 88，CalcRegionDepth.init+processRegion——main 硬编码演示）
+    #   region: ChrID:Start-End；输出每碱基覆盖深度
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/RegionDepthCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" RegionDepthCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
