@@ -773,6 +773,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/GsaDiagCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GsaDiagCli "$@"
     ;;
+  gxfsort)
+    # 用法: gxfsort <in.gff3|gtf> <out.sorted>
+    #   GFF 按染色体+坐标排序（工具 95，GXFSort.sortByPretty——注释预处理刚需）
+    #   真实 GRAS GFF 385 行排序验证（HiC_scaffold_3→1）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/GxfSortCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfSortCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
