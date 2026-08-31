@@ -23,6 +23,23 @@
 
 All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Verified with real biological data (oil-Camellia GRAS gene family etc).
 
+## 📖 Documentation
+
+> **每次调用前先查 `docs/COMMAND_REFERENCE.md`**（命令参考手册，2153 行）——每个命令的输入格式、参数、示例、已知坑都在里面。
+
+| 文档 | 内容 |
+|:-----|:-----|
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：88 个绘图命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 80 个桥 Javadoc（输入格式权威来源）+ 28 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值，89KB） |
+
+```bash
+# 快速查用法（不用翻手册）：
+tbplot.sh help              # 绘图命令一屏预览
+tbtools list tools          # CLI 工具列表
+tbtools methods             # RPC 方法列表
+java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参数表（含默认值）
+```
+
 ---
 
 ## 📦 Installation
@@ -540,6 +557,8 @@ tbtools-cli/
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
 ├── examples/              # example data + scripts
 ├── docs/                  # detailed documentation
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（88 命令+82 工具+80 桥+坑位）
+│   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md
 ```

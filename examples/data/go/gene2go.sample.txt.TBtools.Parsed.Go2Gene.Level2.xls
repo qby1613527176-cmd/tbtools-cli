@@ -1,0 +1,8 @@
+GoId	GoNameSpace	GoName	GeneId
+GO:0003824	molecular_function	catalytic activity	g4
+GO:0003824	molecular_function	catalytic activity	g5
+GO:0003824	molecular_function	catalytic activity	g6
+GO:0009987	biological_process	cellular process	g1
+GO:0009987	biological_process	cellular process	g2
+GO:0009987	biological_process	cellular process	g3
+GO:0009987	biological_process	cellular process	g6
