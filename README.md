@@ -1,7 +1,7 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **116 个绘图/分析引擎 + 188 个 RPC 数据工具 + 71 个命令行工具 + 任意引擎反射**，全部实测出图。
+> **117 个绘图/分析引擎 + 188 个 RPC 数据工具 + 71 个命令行工具 + 任意引擎反射**，全部实测出图。
 > 2026-08-29 达成 115 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），47 个 Java 桥，150+ 命令。
 
 <div align="center">
@@ -61,7 +61,7 @@ tbtools help
 
 ---
 
-## 🎨 Plotting Engines (116)
+## 🎨 Plotting Engines (117)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
@@ -143,6 +143,9 @@ tbtools unrooted <in.nwk> <out.svg> [layout] [width] [height] [iterations]
 
 # Violin plot (engine 116; standalone ViolinPlot, SVG/PDF only)
 tbtools violin <in.tsv> <out.svg> [width] [height]
+
+# Synthetic collinearity bar plot (engine 117; bar_plotter.main1 — main is dead code)
+tbtools barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>
 
 # Annotation version comparison (engine 113; before/after GFF → change summary + BED + Curation/ABCD figures)
 tbtools annocompare <before.gff3> <after.gff3> <outDir> [runName]

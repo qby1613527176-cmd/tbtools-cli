@@ -620,6 +620,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/ViolinCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" ViolinCli "$@"
     ;;
+  barplotter)
+    # 用法: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>
+    #   合成共线性柱状图（引擎 117，bar_plotter.main1——main 是死代码）
+    #   gff: chr\tgene\tend；synteny: MCScanX 式 collinearity；ctl: 4 行 xdim/ydim/xchr/ychr
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/BarPlotterCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" BarPlotterCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
