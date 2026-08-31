@@ -774,6 +774,14 @@ case "$1" in
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrProcCli "$@"
     ;;
 
+  filesplit)
+    # 用法: filesplit <inFile> <numParts>
+    #   文件按份数分割（工具 99，FileLineSplit.Split 静态方法）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/FileSplitCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" FileSplitCli "$@"
+    ;;
+
   gsadiag)
     # 用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]
     #   基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查）
