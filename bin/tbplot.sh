@@ -708,6 +708,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/RegionDepthCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" RegionDepthCli "$@"
     ;;
+  markertools)
+    # 用法: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoint]
+    #   分子标记分析组（工具 89：MarkerFilter minor allele / MarkerDist / SampleDist——main 均硬编码）
+    #   in.marker.tab: 0/1 标记矩阵（行=样本，列=标记，首行列名+首列行名）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/MarkerToolsCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MarkerToolsCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
