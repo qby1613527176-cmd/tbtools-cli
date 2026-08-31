@@ -636,6 +636,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/FindPathCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindPathCli "$@"
     ;;
+  mcscanx)
+    # 用法: mcscanx <gff> <blast> <outPrefix> [--html]
+    #   纯 Java MCScanX 共线性检测（工具 72，org.mcscanx.api.MCScanXAPI）——无需外部 MCScanX 二进制
+    #   ⚠️ 与外部 MCScanX 输出 100% 一致验证（GRAS Co_wgd：334 blocks cmp 全同）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/MCScanXCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx6g -cp "$TBCLI_DIR:$JAR" MCScanXCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
