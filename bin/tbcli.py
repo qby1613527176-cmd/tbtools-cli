@@ -117,6 +117,7 @@ CLI_TOOLS = {
     "regionBlast": "biocjava.bioDoer.BLAST.wholeGenomeBlastN.regionBlast",
     "findBestHomologyBatch": "biocjava.bioIO.BioSoftPipeServer.FindBestHomologyBatch",
     "collinearityToRegion": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
+    "pairWiseKaKsCalculator": "biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator",
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
     "sRNAseqAdaperRemover": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
