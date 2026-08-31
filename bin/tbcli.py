@@ -120,6 +120,7 @@ CLI_TOOLS = {
     "pairWiseKaKsCalculator": "biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator",
     "simpleBatchProcess": "biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess",
     "quickGeneFamilyIdentification": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
+    "gffCdsPhaseCorrector": "biocjava.bioDoer.GXFUtils.GffCdsPhase.GffCdsPhaseCorrector",
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
     "sRNAseqAdaperRemover": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
