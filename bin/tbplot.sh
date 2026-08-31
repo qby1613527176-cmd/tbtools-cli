@@ -684,6 +684,14 @@ case "$1" in
     shift
     xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioIO.BioSoftPipeServer.OneStepMLTree "$@"
     ;;
+  simplehmmscan)
+    # 用法: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt>
+    #   Pfam 域快速扫描（工具 83，simpleHmmscan——main 硬编码演示 → setter+process，调系统 hmmsearch）
+    #   ⚠️ 需 Pfam-A.hmm 数据库（本地 ~/.eggnog-mapper/data/pfam/）；idList 每行一个 Pfam NAME（如 GRAS）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/SimpleHmmscanCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SimpleHmmscanCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
