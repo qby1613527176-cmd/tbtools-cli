@@ -749,6 +749,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/PfamMotifCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PfamMotifCli "$@"
     ;;
+  pep2codon)
+    # 用法: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>
+    #   蛋白比对回译密码子比对（工具 91，pepAln2CodonAln.transformat 静态方法——Ka/Ks 刚需）
+    #   ⚠️ CDS ID 需与 pep.aln 一致；gap 正确回译为 --- 密码子
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/Pep2CodonCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Pep2CodonCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
