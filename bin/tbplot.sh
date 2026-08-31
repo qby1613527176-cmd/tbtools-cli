@@ -628,6 +628,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/BarPlotterCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" BarPlotterCli "$@"
     ;;
+  findpath)
+    # 用法: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --inRegion <geneID> [--flankGeneNum N] [--highlightGene ID] --outGraph <out>
+    #   共线性基因块进化路径（引擎 118，FindPathBySynteny.main1；main 硬编码演示）
+    #   gff 需简化格式 chr\tgene\tstart\tend\tstrand；genepairs 每行 geneA\tgeneB
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/FindPathCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindPathCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
