@@ -791,6 +791,15 @@ case "$1" in
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MemeRunCli "$@"
     ;;
 
+  mastrun)
+    # 用法: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--seqEvalue X] [--motifPvalue X] [--other "..."]
+    #   一步法 MAST motif 扫描（工具 101，QuickRunMAST——调系统 mast；与 memerun 配套）
+    #   输出 workingDir/mast_out/mast.{txt,html,xml}
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/MastRunCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MastRunCli "$@"
+    ;;
+
   gsadiag)
     # 用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]
     #   基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查）
