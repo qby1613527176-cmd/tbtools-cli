@@ -16,7 +16,7 @@
 
 | 层 | 入口 | 用途 | 数量 |
 |:---|:-----|:-----|:----:|
-| 绘图/分析引擎 | `tbplot.sh <命令>` | 出图类引擎（SVG/PNG/PDF） | 88 命令 / 123 引擎 |
+| 绘图/分析引擎 | `tbplot.sh <命令>` | 出图类引擎+数据工具（SVG/PNG/PDF） | 140 命令 / 123 引擎 |
 | 命令行工具 | `tbtools tool <名称>` | 数据处理类工具（自带 ArgsParser） | 82 |
 | 通用反射 | `tbtools engine <类> key=value` | 任意 TBtools 引擎万能兜底 | 任意 |
 | RPC 数据工具 | `tbtools rpc <方法> '<json>'` | 188 个数据方法 | 188 |
@@ -29,100 +29,152 @@ tbtools methods            # RPC 方法
 tbplot.sh help             # 绘图命令 + 用法一屏
 ```
 
-## 二、绘图引擎 tbplot.sh 命令（88）
+## 二、tbplot.sh 命令（140，绘图引擎+数据工具封装）
 
-统一格式：`tbplot.sh <命令> [参数...]`。输出以 `.svg/.png/.pdf` 后缀指定，自动走 xvfb（headless）。
+统一格式：`tbplot.sh <命令> [参数...]`。输出以 `.svg/.png/.pdf` 后缀指定，自动走 xvfb（headless）。`tbplot.sh help <命令>` 可在终端直接查任意命令详细用法。
 
 | # | 命令 | 用法 | 说明 |
 |:--|:-----|:-----|:-----|
 | 1 | `motif` | `用法: motif <meme.xml> <idList.txt> <outFile> [width] [height]` |  |
 | 2 | `genelocation` | `用法: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph <out> [--FeatureColor <map>]` |  |
-| 3 | `dotplot` | `用法: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>` | 简化GFF: Chr\tGene\tStart\tEnd\tStrand ; chrLayout: Genome: Chr1 Chr2... |
+| 3 | `dotplot` | `用法: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>` | 简化GFF: Chr\tGene\tStart\tEnd\tStrand |
 | 4 | `circos` | `用法: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [h]` | link.txt/genePos.txt 可空文件 |
 | 5 | `pca` | `用法: pca <expr.matrix.tsv> <out> [row|col] [scale] [w] [h]` | 通用反射桥 GenericCli 驱动 PCAanalysis（doPCA+postGraph） |
 | 6 | `generic` | `用法: generic <engineClass> <method[+method2]> <out> [--set field value ...] [--width N] [--height N]` | 通用反射桥：驱动任意 TBtools 引擎（setter + plot/process/postGraph + save2Graph） |
-| 7 | `gfa2fa` | `用法: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFasta）` |  |
-| 8 | `qpcr` | `用法: qpcr <data.txt> <out> [w] [h]   (data: name\tmean\tsd)` |  |
-| 9 | `hclust` | `用法: hclust <expr.matrix.tsv> <out.nwk> [distMethod] [clusterMethod]` |  |
-| 10 | `volcano` | `用法: volcano <deg.txt> <outFile> [pvalCutoff] [fcCutoff] [w] [h]` | deg.txt: GeneID\tLog2FC\tpvalue |
-| 11 | `upset` | `用法: upset <sets.txt> <outFile> [w] [h]` | sets.txt: 每行 "集合名\t成员1\t成员2..."（tab 分隔） |
-| 12 | `msa` | `用法: msa <aligned.fasta> <outFile> [padding]` | 尺寸按子面板自动计算，勿传 w/h |
-| 13 | `genelocgff` | `用法: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--rename r.tsv] [--pairs p.tsv] [--color c.tsv] [--rankedChr list] [--onlyMapped true|false] [--showLabel true|false]` |  |
-| 14 | `tree` | `用法: tree <treeMeta.config> <out> [pad]` | 配置格式见 TreeCli.java 注释（[TYPE]:Tree + [NEWICK] + [setting] + 可选 [TYPE]:TextAnno/HeatMap/BarPlot/... 轨道） |
-| 15 | `phylotree` | `用法: phylotree <in.nwk> <out> [vertical] [width] [height]` | PhyloTreeView 系统发育树视图（08/31 攻下，纠正「需 TreeTab」误判） |
-| 16 | `unrooted` | `用法: unrooted <in.nwk> <out> [layout] [width] [height] [iterations]` | 无根树可视化（引擎 115，unrootedtree 独立引擎，非 UnrootedTreeViz） |
-| 17 | `violin` | `用法: violin <in.tsv> <out> [width] [height]` | 独立小提琴图（引擎 116，ViolinPlot.generate()；仅 SVG/PDF） |
-| 18 | `barplotter` | `用法: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>` | 合成共线性柱状图（引擎 117，bar_plotter.main1——main 是死代码） |
-| 19 | `findpath` | `用法: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --inRegion <geneID> [--flankGeneNum N] [--highlightGene ID] --outGraph <out>` | 共线性基因块进化路径（引擎 118，FindPathBySynteny.main1；main 硬编码演示） |
-| 20 | `mcscanx` | `用法: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测` | mcscanx classify <gff> <blast> <outPrefix>  # 重复基因分类（WGD/tandem/proximal/dispersed/singleton） |
-| 21 | `degramdom` | `用法: degramdom <in.tsv> [out.nwk]` | 亲子表构建 Newick 树（工具 73，BuildDegramdomFromTable.process；main 硬编码演示） |
-| 22 | `sambamcov` | `用法: sambamcov <in.bam> <out.tsv> [binSize] [countMode]` | BAM bin 覆盖统计（工具 74，SamBamBINCov.process——main 硬编码演示） |
-| 23 | `bamindex` | `用法: bamindex <in.sorted.bam> [out.bai]` | BAM 索引创建（工具 75，BAMIndexCreater.process——main 硬编码演示） |
-| 24 | `bamsort` | `用法: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]` | BAM 排序（工具 76，SAMBAMSorter.process——main 硬编码演示） |
-| 25 | `onesteptree` | `用法: onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean true|false]` | 一步法 ML 系统发育树（引擎 119，OneStepMLTree——pep→muscle→trimal→IQ-TREE MFP+UFboot） |
-| 26 | `simplehmmscan` | `用法: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt>` | Pfam 域快速扫描（工具 83，simpleHmmscan——main 硬编码演示 → setter+process，调系统 hmmsearch） |
-| 27 | `colorscheme` | `用法: colorscheme <in.tab> <out.tab> <refColIndex(1-based)>` | 表格分组着色（工具 86，ColorSchemeGenerator.process——main 硬编码演示） |
-| 28 | `regiondepth` | `用法: regiondepth <in.sam> <region> <out.depth> [scaleFactor]` | SAM 区域覆盖深度（工具 88，CalcRegionDepth.init+processRegion——main 硬编码演示） |
-| 29 | `markertools` | `用法: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoint]` | 分子标记分析组（工具 89：MarkerFilter minor allele / MarkerDist / SampleDist——main 均硬编码） |
-| 30 | `amazingmeta` | `用法: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [seqLen.txt] [geneRename.txt]` | Amazing Meta Plot（引擎 120，DrawAmazingMetaPlot——进化树+Motif模式+基因结构+蛋白域组合图） |
-| 31 | `cddmotif` | `用法: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]` | CDD 保守域模式图（引擎 121，DrawMotifPatternFromCDDResult.postGraph——GRAS hitdata 真实验证 56 基因全匹配） |
-| 32 | `seqlentrack` | `用法: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]` | 序列长度骨架图（引擎 122，DrawSequenceFromSeqLenInfo——AmazingMetaPlot CDD 面板底层） |
-| 33 | `pfammotif` | `用法: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]` | Pfam 保守域模式图（引擎 123，DrawMotifPatternFromPfamResult——委托 PfamDomainHitsTableParser） |
-| 34 | `pep2codon` | `用法: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>` | 蛋白比对回译密码子比对（工具 91，pepAln2CodonAln.transformat 静态方法——Ka/Ks 刚需） |
-| 35 | `mast2tab` | `用法: mast2tab <mast|meme.xml> <out.tab>` | MEME Suite XML→表格（工具 93，MEMESuiteXMLtoTab——main 全硬编码 → setter+process） |
-| 36 | `qpcrproc` | `用法: qpcrproc <in.qpcr.tab> <out.xls>` | qPCR 相对表达分析（工具 97，SimpleQPCRProcessser——2^-ΔΔCt，Sample\tRefCt\tExpCt） |
-| 37 | `filesplit` | `用法: filesplit <inFile> <numParts>` | 文件按份数分割（工具 99，FileLineSplit.Split 静态方法） |
-| 38 | `memerun` | `用法: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--maxW N] [--evalue X] [--mode ...]` | 一步法 MEME motif 发现（工具 100，QuickRunMEME——调系统 meme） |
-| 39 | `mastrun` | `用法: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--seqEvalue X] [--motifPvalue X] [--other "..."]` | 一步法 MAST motif 扫描（工具 101，QuickRunMAST——调系统 mast；与 memerun 配套） |
-| 40 | `mggxf` | `用法: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.LinkedRegion> [GenePair|BlastTab6]` | 多 GFF 视图格式转换（工具 103，FormatTranformerForMultipleGffViewer——GenePair/BlastTab6→LinkedRegion） |
-| 41 | `gsadiag` | `用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]` | 基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查） |
-| 42 | `gxfsort` | `用法: gxfsort <in.gff3|gtf> <out.sorted>` | GFF 按染色体+坐标排序（工具 95，GXFSort.sortByPretty——注释预处理刚需） |
-| 43 | `gxffilter` | `用法: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>` | GFF 按 ID 列表过滤（工具 96，GXFfilter.setIDList+process——基因家族子注释提取刚需） |
-| 44 | `annocompare` | `用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]` | 注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED + |
-| 45 | `genedensity` | `用法: genedensity <in.gff3> <out.tsv> [binSize]` | 基因密度谱：按窗口统计每染色体/contig 基因数（基因组轨道/密度分析） |
-| 46 | `seqconvert` | `用法: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>` | 序列格式转换（main1 入口；fmt: fasta|clustal|MEGA|nexus|PAML|phylip） |
-| 47 | `trimmsa` | `用法: trimmsa <in.aln.fa> <out.aln.fa> [ratio]` | MSA 修剪（按列保留率），main 硬编码 → 桥 setter+process |
-| 48 | `heatmap2` | `用法: heatmap2 <expr.matrix.tsv> <out> [options]` | 矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等） |
-| 49 | `supercircos` | `用法: supercircos <config.cfg> <out> [width] [height]` | 配置格式见 SuperCircosCli.java 注释（[chrLen] [link] [gene] [track] 等行导向配置） |
-| 50 | `barplot` | `用法: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol] [maxTerms] [xlab] [ylab] [mode]` | mode: Normal|TextOnLeft|BarOnLeft |
-| 51 | `pafviz` | `用法: pafviz <in.paf> <out> [graphSize] [colorMode] [switchQT] [minAlnLen] [rcColor]` | colorMode: Target|Query|None |
-| 52 | `admixture` | `用法: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sortMode] [width] [height] [panelInterval]` | sortMode: Qraito|Lexical|None |
-| 53 | `groupedbar` | `用法: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title] [--options]` | plotType: BAR_ERROR|BOXPLOT|VIOLIN|SWARM |
-| 54 | `layoutheatmap` | `用法: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]` | layout.tsv: 样本名矩阵（TSV，空格用 NA） |
-| 55 | `cubeheatmap` | `用法: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor r,g,b --midColor r,g,b --maxColor r,g,b]` | expr.tsv: 表达矩阵（首列基因名 + 样本名表头） |
-| 56 | `rnaplot` | `用法: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R,G,B"] [--interactive false]` | RNA 二级结构图（第111引擎，RNAplotAdvance，需 RNAfold/RNAplot 可执行） |
-| 57 | `circlegene` | `用法: circlegene <gff> <geneID.txt> <out> [--rename f --link f --rankedChr f --allChr --graphSize N --startAngle N --endAngle N --chrFill r,g,b --chrLabelColor r,g,b]` | geneID.txt: mRNA ID 每行一个（可第二列 1/0 控制颜色） |
-| 58 | `genestructure` | `用法: genestructure <input.gff> <idList.txt> <outFile> [genome.fa] [width] [height]` |  |
-| 59 | `seqlogo` | `用法: seqlogo <seq.fa|seq.txt> <out.svg/png> [--scaleIC true|false] [--showPos] [--startPos N] [--borderColor R,G,B] [--borderSize N] [--onlyBorder] [--xInterval N] [--yInterval N]` | seq 输入: FASTA 或 纯文本（每行一条序列，等长已比对） |
-| 60 | `peaktss` | `用法: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--bin N] [--color]` | gxf: 基因注释（GFF/GXF，mRNA 行定义 TSS） |
-| 61 | `peakdist` | `用法: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H] [--topLenRank N] [--width W] [--height H]` | chrLen.tsv: Chr\tLength（染色体长度） |
-| 62 | `peakanno` | `用法: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]` | macs2_peak.xls: MACS2 标准 peak 格式（chr start end length abs_summit ...） |
-| 63 | `microgenome` | `用法: microgenome <inGBK> <anno.tsv> <out> [micro|macro]` | inGBK: GenBank 质体/质粒基因组文件 |
-| 64 | `gel` | `用法: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>` | FragmentRangeArr: 分号分隔泳道/逗号分隔片段，如 "798;1233,228;1688,1598" |
-| 65 | `gfa` | `用法: gfa <in.gfa> <out> [width] [height]` | GFA 格式: S 行=节点（S\tname\tseq），L 行=边（L\tfrom\tstrand\tto\tstrand\toverlap） |
-| 66 | `pafcomp` | `用法: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Query|None] [--size N] [--minLen N]` | PAF 基因组比较图（⚠️ 入口是 main1 非 main） |
-| 67 | `pafref` | `用法: pafref --inPaf <paf> --outTab <out.tsv>` | PAF 参考碱基覆盖计算（minimap2 -c --cs 输出） |
-| 68 | `colorscheme` | `用法: colorscheme <inTab> <outTab> <refColIndex>` | inTab: tab 分隔表；refColIndex: 从 0 开始，取该列做配色 key（去重） |
-| 69 | `distance` | `用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>` | in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；输出两列数值的距离/相关系数（第42引擎） |
-| 70 | `mountain` | `用法: mountain <fold.txt> <out.tsv>` | fold.txt: RNA 二级结构折叠字符串（() 和 .）；输出每碱基山峰高度（第43引擎） |
-| 71 | `pileup` | `用法: pileup <blast.xml> <out.svg> [--query NAME]` | blast.xml: BLAST+ XML 输出（-outfmt 5）；画 query 的 hits pile-up 图（第44引擎） |
-| 72 | `plotrna` | `用法: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]` | region: 'chr:startPos-endPos'；SAM: 比对 reads；画基因组区域覆盖度+RNA结构图（第45引擎） |
-| 73 | `bamstate` | `用法: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]` | gff3: 标准 GFF3（gene/mRNA 特征）；bam: 比对 BAM（需 samtools 建索引） |
-| 74 | `preparespecies` | `用法: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>` | 给基因组+GFF 加物种前缀（seqid + ID）——TBtools 多物种比较数据准备（第56引擎） |
-| 75 | `partitionconflict` | `用法: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluster>` | inConflictFreq.tsv: conflictpaf 输出（contigA\tcontigB\tcount） |
-| 76 | `mirnatarget` | `用法: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [--threads N] [--scoreCutOff N] [--maxMismatch N]` | mirna.fa: miRNA 序列（建议每轮一条或一族）；target.fa: 转录本/基因组靶标 |
-| 77 | `conflictpaf` | `用法: conflictpaf <in.paf> <out.tsv> [binSize]` | in.paf: 基因组比对 PAF（minimap2/minigraph） |
-| 78 | `findblockmultiple` | `用法: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <out.txt> <sub1Genome.fa> <sub1.gff> [<sub2Genome.fa> <sub2.gff> ...] [--leftEdge N --rightEdge N --expand N --threads N]` | 多基因组伪共线性区块（第52引擎）：1 query + N subject |
-| 79 | `findblockdual` | `用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]` | ⚠️ 内部 blastp 找同源，需真实双基因组数据验证（第50引擎） |
-| 80 | `visualizeblock` | `用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]` | inBlockOut: FindBlockDual 输出（findblockdual 命令产物） |
-| 81 | `marker` | `用法: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]` | inMarker: 标记 0-1 矩阵（行=locus，列=样本，tab 分隔，首行列名/首列 locus 名） |
-| 82 | `dehist` | `用法: dehist <deg.txt> <out> [width] [height]` | deg.txt: 每行至少 3 列（tab）：任意ID\t值1\t值2（值1/值2 两样本数值，比较大小分左右直方图） |
-| 83 | `msy` | `用法: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [width] [height]` | simplifiedGff.pos: Chr\tGeneName\tStart\tEnd\t[displayChr]\t[displayName]（多物种共线性区域/基因） |
-| 84 | `venn5` | `用法: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labelA-E]` | 每个 setN.txt: 每行一个成员 ID |
-| 85 | `venn6` | `用法: venn6 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> <setF.txt> [labelA-F]` | 引擎: Venn6（setInArrA~F + setOutGraph + getVennGraph） |
-| 86 | `microsyn` | `用法: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --start1 S --end1 E] [--chr2 C --start2 S --end2 E] [--highlight1 c:s:e] [--highlight2 c:s:e]` | gxf1/gxf2: 两物种 GFF/GXF 注释 |
-| 87 | `dualsyn` | `用法: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] [--chr2 "3,4"] [--rows N] [--gap N]` | simplifiedGff: Chr\tGeneName\tStart\tEnd（染色体名必须数字） |
-| 88 | `multisyn` | `用法: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt]` | gxf.lst: 每行一个 GXF/GFF 注释（染色体名须数字） |
+| 7 | `batchReplace` | `用法: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]` | patternMap.tsv: 模式\t替换（tab 分隔）；默认全词匹配，--partial 则子串替换 |
+| 8 | `levelGo` | `用法: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]` | gene2Go.txt: 第1列基因ID(逗号分隔)\t第2列GO ID(逗号分隔)；oboFile: go-basic.obo 或 goslim_plant.obo |
+| 9 | `goParse` | `用法: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103引擎，GOtermParser）` | gene2Go.txt: 第1列基因ID(逗号分隔)\t第2列GO ID(逗号分隔)；oboFile: go-basic.obo 或 goslim_plant.obo |
+| 10 | `tableCollapse` | `用法: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader true|false]` | 按键折叠（同键行合并，值用 ; 连接） |
+| 11 | `tableColSelect` | `用法: tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false] [--caseSensitive true|false]` | 按列名选择列输出（第84引擎，TableColManipulator）——注意输出不含行标识列（除非也选上） |
+| 12 | `tableAppend` | `用法: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   # 按指定列合并两表（第87引擎）` |  |
+| 13 | `tableMelt` | `用法: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）` |  |
+| 14 | `tableColSel` | `用法: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain] [--caseSensitive true|false] [--sortByIDList true|false]` | 按 idList 正则选列（第89引擎，TableColSelector）；idList 每行一个模式；Match=精确,Contain=正则包含 |
+| 15 | `tableCast` | `用法: tableCast <inLong.txt> <outMatrix>` | 长表转宽矩阵（第90引擎）；输入 3 列: 行名\t列名\t值；与 tableMelt 互逆 |
+| 16 | `tableUniq` | `用法: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|false] [--sortByFreq true|false]` | 按列去重（第94引擎，TableUniq）；--showFreq 输出频率 |
+| 17 | `tableTranspose` | `用法: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTransposer）` |  |
+| 18 | `tableSplit` | `用法: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]` | 按列值拆分为多个文件（第96引擎，TableSplitByCol） |
+| 19 | `tableMerge` | `用法: tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0...] [--appendOnly true|false] [--rmKey]` | 多表按关键列合并（第97引擎，TableMerger）；--appendOnly 不合并纯追加；--rmKey 去掉关键列 |
+| 20 | `fqTrim` | `用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]` | 5'/3' 端固定长度修剪（默认 5'剪6 3'剪6；--b3 0 不剪） |
+| 21 | `gfa2fa` | `用法: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFasta）` |  |
+| 22 | `fastaSubseq` | `用法: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，ExtractFastaSubseq）` | pos.txt: GeneId\tChrId\tStart\tEnd（4列 BED 风格，ChrId 须匹配 fasta 头） |
+| 23 | `fastaExtract` | `用法: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]` | 按 ID 列表提取/过滤整条序列（第93引擎，ExtractFasta） |
+| 24 | `fqfaConv` | `用法: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第98引擎，FastqAndFasta）` | fq2fa 去质量行；fa2fq 生成假质量（IIIIIII）——兼容其他工具的占位质量 |
+| 25 | `hmmExtract` | `用法: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAME 提取（第99引擎，hmmInfoExtracter）` | idList.txt 每行一个 NAME；只保留匹配的 HMM 模型 |
+| 26 | `mastExtract` | `用法: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中序列（第102引擎，ExtractSeqFromMastXML）` | mast.xml: MEME 套件 MAST 输出（root→sequences→sequence(name length)→seg→hit(pos idx match rc)） |
+| 27 | `nwAlign` | `用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）` | inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖） |
+| 28 | `twoSeqBlast` | `用法: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp|blastn|tblastn] [--thread N] [--fmt 6|XML]` | 双序列集 BLAST 比对（第105引擎，CompareTwoSeqSet）——封装 makeblastdb+blast |
+| 29 | `recipBlast` | `用法: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp|blastn|tblastn] [--evalue 1e-5] [--minId 0.3] [--thread N]` | 双向 BLAST 基因家族鉴定（第106引擎，ReciprocalBlast）——封装 makeblastdb+blast 双方向 |
+| 30 | `filterCScore` | `用法: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]` | BLAST tab6 按 C-score 过滤（第107引擎，FilterBlastResultByCScore）——区分直系/旁系同源候选 |
+| 31 | `quickFamily` | `用法: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N] [--thread N] [--diamond true|false]` | 快速基因家族鉴定（第108引擎，QuickGeneFamilyIdentification）——用参考家族成员从查询蛋白组找同源成员 |
+| 32 | `ctgGroup` | `用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>` | in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎） |
+| 33 | `homoPhase` | `用法: homoPhase <inContigGrpMap> <outPhasedMap>` | 同源冲突分区（多倍体相位分离）——组装辅助链第二环（第73引擎） |
+| 34 | `sepChr` | `用法: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>` | gene2chr.tsv: 蛋白名\t染色体（注意：用蛋白名不是 mRNA ID！引擎读 ##PAF 行 info[1]=蛋白名） |
+| 35 | `bamMerge` | `用法: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）` | 输出: merged.bam + merged_sorted.bam(.bai) + merged_region.txt（第75引擎） |
+| 36 | `hicEnzyme` | `用法: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）` | 从 HiC FastQ 预测酶切类型（MboI/DpnII|MseI|HindIII|NcoI|Arima）；引擎内部抽样 1000 条 |
+| 37 | `virusRecomb` | `用法: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引擎）` | inDB.fa: 病毒参考库；inContig.fa: 待查 contig；输出 Top hit 重组 PDF |
+| 38 | `gxfRename` | `用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>` | renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新 |
+| 39 | `gxfStat` | `用法: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/CDS/UTR 明细）` |  |
+| 40 | `gxfAppend` | `用法: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀` |  |
+| 41 | `gxfGenepos` | `用法: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # GFF→基因位置+染色体长度（喂 genelocation）` |  |
+| 42 | `gxfRegion` | `用法: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]` | region.txt: chr\tstrand\tstart\tend\tinfo；按区域保留 GFF |
+| 43 | `gxfOverlap` | `用法: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]` | region.txt: chr\tstrand\tstart\tend （strand 敏感！第2列是链 +/-） |
+| 44 | `gxfRepIDs` | `用法: gxfRepIDs <in.gff3> <out.txt>` | 代表转录本映射：mRNA ID → gene ID + 长度（第80引擎，GXFToRepresentativeIDs） |
+| 45 | `gxfRepGXF` | `用法: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID 'pattern']` | 代表转录本提取（第86引擎，GXFToRepresentativeGXF）：每 gene 保留最长转录本，去冗余 isoform |
+| 46 | `gxfMatch` | `用法: gxfMatch <in.gff3> <inGenome.fa>` | GFF 与基因组 seqid 匹配检查（第81引擎，GxfGenomeMatch）→ Yes/No + Intersection Size |
+| 47 | `gxfRecall` | `用法: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，RecallmRNAFeature）` |  |
+| 48 | `regionAnno` | `用法: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePattern P]` | region.txt: id\tchr\tstart\tend （任意第1列！chr 在第2列 index1） |
+| 49 | `gxfFix` | `用法: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dangling mRNA/排序）` | 修复 CDS phase 记录分离到 <out>_phase_corrected/problematic.gff3 |
+| 50 | `groupCol` | `用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]` | inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头） |
+| 51 | `tauIndex` | `用法: tauIndex <inExpTab> <outTAU>` | inExpTab: 表达矩阵（首列基因名 + 样本列）；outTAU: τ 指数表（0=均匀 1=完全组织特异） |
+| 52 | `exprCorr` | `用法: exprCorr <inFPKM> <outCorrMat>` | 样本间 Pearson 相关矩阵（共表达/聚类分析输入） |
+| 53 | `qpcrExp` | `用法: qpcrExp <in.qpcr.tab> <out.xls>` | in.qpcr.tab: tab 分隔 3 列（基因名\t对照Ct\t实验Ct），同名多行取平均 |
+| 54 | `qpcr` | `用法: qpcr <data.txt> <out> [w] [h]   (data: name\tmean\tsd)` |  |
+| 55 | `hclust` | `用法: hclust <dist3.tsv> <out.nwk> [distMethod] [clusterMethod]` | ⚠️ 输入是三列距离文件 GeneA\tGeneB\tdist（不是表达矩阵！矩阵喂进去 NPE） |
+| 56 | `volcano` | `用法: volcano <deg.txt> <outFile> [pvalCutoff] [fcCutoff] [w] [h]` | deg.txt: GeneID\tLog2FC\tpvalue |
+| 57 | `upset` | `用法: upset <sets.txt> <outFile> [w] [h]` | sets.txt: 每行 "集合名\t成员1\t成员2..."（tab 分隔） |
+| 58 | `msa` | `用法: msa <aligned.fasta> <outFile> [padding]` | 尺寸按子面板自动计算，勿传 w/h |
+| 59 | `genelocgff` | `用法: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--rename r.tsv] [--pairs p.tsv] [--color c.tsv] [--rankedChr list] [--onlyMapped true|false] [--showLabel true|false]` |  |
+| 60 | `tree` | `用法: tree <treeMeta.config> <out> [pad]` | 配置格式见 TreeCli.java 注释（[TYPE]:Tree + [NEWICK] + [setting] + 可选 [TYPE]:TextAnno/HeatMap/BarPlot/... 轨道） |
+| 61 | `phylotree` | `用法: phylotree <in.nwk> <out> [vertical] [width] [height]` | PhyloTreeView 系统发育树视图（08/31 攻下，纠正「需 TreeTab」误判） |
+| 62 | `unrooted` | `用法: unrooted <in.nwk> <out> [layout] [width] [height] [iterations]` | 无根树可视化（引擎 115，unrootedtree 独立引擎，非 UnrootedTreeViz） |
+| 63 | `violin` | `用法: violin <in.tsv> <out> [width] [height]` | 独立小提琴图（引擎 116，ViolinPlot.generate()；仅 SVG/PDF） |
+| 64 | `barplotter` | `用法: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>` | 合成共线性柱状图（引擎 117，bar_plotter.main1——main 是死代码） |
+| 65 | `findpath` | `用法: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --inRegion <geneID> [--flankGeneNum N] [--highlightGene ID] --outGraph <out>` | 共线性基因块进化路径（引擎 118，FindPathBySynteny.main1；main 硬编码演示） |
+| 66 | `mcscanx` | `用法: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测` | mcscanx classify <gff> <blast> <outPrefix>  # 重复基因分类（WGD/tandem/proximal/dispersed/singleton） |
+| 67 | `degramdom` | `用法: degramdom <in.tsv> [out.nwk]` | 亲子表构建 Newick 树（工具 73，BuildDegramdomFromTable.process；main 硬编码演示） |
+| 68 | `sambamcov` | `用法: sambamcov <in.bam> <out.tsv> [binSize] [countMode]` | BAM bin 覆盖统计（工具 74，SamBamBINCov.process——main 硬编码演示） |
+| 69 | `bamindex` | `用法: bamindex <in.sorted.bam> [out.bai]` | BAM 索引创建（工具 75，BAMIndexCreater.process——main 硬编码演示） |
+| 70 | `bamsort` | `用法: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]` | BAM 排序（工具 76，SAMBAMSorter.process——main 硬编码演示） |
+| 71 | `onesteptree` | `用法: onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean true|false]` | 一步法 ML 系统发育树（引擎 119，OneStepMLTree——pep→muscle→trimal→IQ-TREE MFP+UFboot） |
+| 72 | `simplehmmscan` | `用法: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt>` | Pfam 域快速扫描（工具 83，simpleHmmscan——main 硬编码演示 → setter+process，调系统 hmmsearch） |
+| 73 | `regiondepth` | `用法: regiondepth <in.sam> <region> <out.depth> [scaleFactor]` | SAM 区域覆盖深度（工具 88，CalcRegionDepth.init+processRegion——main 硬编码演示） |
+| 74 | `markertools` | `用法: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoint]` | 分子标记分析组（工具 89：MarkerFilter minor allele / MarkerDist / SampleDist——main 均硬编码） |
+| 75 | `amazingmeta` | `用法: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [seqLen.txt] [geneRename.txt]` | Amazing Meta Plot（引擎 120，DrawAmazingMetaPlot——进化树+Motif模式+基因结构+蛋白域组合图） |
+| 76 | `cddmotif` | `用法: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]` | CDD 保守域模式图（引擎 121，DrawMotifPatternFromCDDResult.postGraph——GRAS hitdata 真实验证 56 基因全匹配） |
+| 77 | `seqlentrack` | `用法: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]` | 序列长度骨架图（引擎 122，DrawSequenceFromSeqLenInfo——AmazingMetaPlot CDD 面板底层） |
+| 78 | `pfammotif` | `用法: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]` | Pfam 保守域模式图（引擎 123，DrawMotifPatternFromPfamResult——委托 PfamDomainHitsTableParser） |
+| 79 | `pep2codon` | `用法: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>` | 蛋白比对回译密码子比对（工具 91，pepAln2CodonAln.transformat 静态方法——Ka/Ks 刚需） |
+| 80 | `mast2tab` | `用法: mast2tab <mast|meme.xml> <out.tab>` | MEME Suite XML→表格（工具 93，MEMESuiteXMLtoTab——main 全硬编码 → setter+process） |
+| 81 | `qpcrproc` | `用法: qpcrproc <in.qpcr.tab> <out.xls>` | qPCR 相对表达分析（工具 97，SimpleQPCRProcessser——2^-ΔΔCt，Sample\tRefCt\tExpCt） |
+| 82 | `filesplit` | `用法: filesplit <inFile> <numParts>` | 文件按份数分割（工具 99，FileLineSplit.Split 静态方法） |
+| 83 | `memerun` | `用法: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--maxW N] [--evalue X] [--mode ...]` | 一步法 MEME motif 发现（工具 100，QuickRunMEME——调系统 meme） |
+| 84 | `mastrun` | `用法: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--seqEvalue X] [--motifPvalue X] [--other "..."]` | 一步法 MAST motif 扫描（工具 101，QuickRunMAST——调系统 mast；与 memerun 配套） |
+| 85 | `mggxf` | `用法: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.LinkedRegion> [GenePair|BlastTab6]` | 多 GFF 视图格式转换（工具 103，FormatTranformerForMultipleGffViewer——GenePair/BlastTab6→LinkedRegion） |
+| 86 | `gsadiag` | `用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]` | 基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查） |
+| 87 | `gxfsort` | `用法: gxfsort <in.gff3|gtf> <out.sorted>` | GFF 按染色体+坐标排序（工具 95，GXFSort.sortByPretty——注释预处理刚需） |
+| 88 | `gxffilter` | `用法: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>` | GFF 按 ID 列表过滤（工具 96，GXFfilter.setIDList+process——基因家族子注释提取刚需） |
+| 89 | `annocompare` | `用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]` | 注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED + |
+| 90 | `genedensity` | `用法: genedensity <in.gff3> <out.tsv> [binSize]` | 基因密度谱：按窗口统计每染色体/contig 基因数（基因组轨道/密度分析） |
+| 91 | `seqconvert` | `用法: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>` | 序列格式转换（main1 入口；fmt: fasta|clustal|MEGA|nexus|PAML|phylip） |
+| 92 | `trimmsa` | `用法: trimmsa <in.aln.fa> <out.aln.fa> [ratio]` | MSA 修剪（按列保留率），main 硬编码 → 桥 setter+process |
+| 93 | `heatmap2` | `用法: heatmap2 <expr.matrix.tsv> <out> [options]` | 矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等） |
+| 94 | `supercircos` | `用法: supercircos <config.cfg> <out> [width] [height]` | 配置格式见 SuperCircosCli.java 注释（[chrLen] [link] [gene] [track] 等行导向配置） |
+| 95 | `barplot` | `用法: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol] [maxTerms] [xlab] [ylab] [mode]` | ⚠️ termCol/pvalCol 是列名（如 Term/Pvalue）不是列索引！ |
+| 96 | `pafviz` | `用法: pafviz <in.paf> <out> [graphSize] [colorMode] [switchQT] [minAlnLen] [rcColor]` | colorMode: Target|Query|None |
+| 97 | `admixture` | `用法: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sortMode] [width] [height] [panelInterval]` | sortMode: Qraito|Lexical|None |
+| 98 | `groupedbar` | `用法: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title] [--options]` | plotType: BAR_ERROR|BOXPLOT|VIOLIN|SWARM |
+| 99 | `layoutheatmap` | `用法: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]` | layout.tsv: 样本名矩阵（TSV，空格用 NA） |
+| 100 | `cubeheatmap` | `用法: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor r,g,b --midColor r,g,b --maxColor r,g,b]` | expr.tsv: 表达矩阵（首列基因名 + 样本名表头） |
+| 101 | `efpHeat` | `用法: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]` | eFP 浏览器风格组织表达热图（第100引擎，generateSuperHeatMap）——TGA 植物示意图上叠加表达 |
+| 102 | `rnaplot` | `用法: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R,G,B"] [--interactive false]` | RNA 二级结构图（第111引擎，RNAplotAdvance，需 RNAfold/RNAplot 可执行） |
+| 103 | `calcRepeat` | `用法: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--minFreq N] [--threads N]` | 重复序列得分计算（工具39，calcRepeatScore，需 jellyfish） |
+| 104 | `multiEfp` | `用法: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidth N] [--imageHeight N]` | 多矩阵组织表达热图（第110引擎，generateMultipleSuperHeatMap）——TGA 底图 + 多表达矩阵叠加 |
+| 105 | `circlegene` | `用法: circlegene <gff> <geneID.txt> <out> [--rename f --link f --rankedChr f --allChr --graphSize N --startAngle N --endAngle N --chrFill r,g,b --chrLabelColor r,g,b]` | geneID.txt: mRNA ID 每行一个（可第二列 1/0 控制颜色） |
+| 106 | `genestructure` | `用法: genestructure <input.gff> <idList.txt> <outFile> [genome.fa] [width] [height]` |  |
+| 107 | `seqlogo` | `用法: seqlogo <seq.fa|seq.txt> <out.svg/png> [--scaleIC true|false] [--showPos] [--startPos N] [--borderColor R,G,B] [--borderSize N] [--onlyBorder] [--xInterval N] [--yInterval N]` | seq 输入: FASTA 或 纯文本（每行一条序列，等长已比对） |
+| 108 | `peaktss` | `用法: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--bin N] [--color]` | gxf: 基因注释（GFF/GXF，mRNA 行定义 TSS） |
+| 109 | `peakdist` | `用法: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H] [--topLenRank N] [--width W] [--height H]` | chrLen.tsv: Chr\tLength（染色体长度） |
+| 110 | `peakanno` | `用法: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]` | macs2_peak.xls: MACS2 标准 peak 格式（chr start end length abs_summit ...） |
+| 111 | `microgenome` | `用法: microgenome <inGBK> <anno.tsv> <out> [micro|macro]` | inGBK: GenBank 质体/质粒基因组文件 |
+| 112 | `gel` | `用法: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>` | FragmentRangeArr: 分号分隔泳道/逗号分隔片段，如 "798;1233,228;1688,1598" |
+| 113 | `gfa` | `用法: gfa <in.gfa> <out> [width] [height]` | GFA 格式: S 行=节点（S\tname\tseq），L 行=边（L\tfrom\tstrand\tto\tstrand\toverlap） |
+| 114 | `pafcomp` | `用法: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Query|None] [--size N] [--minLen N]` | PAF 基因组比较图（⚠️ 入口是 main1 非 main） |
+| 115 | `pafref` | `用法: pafref --inPaf <paf> --outTab <out.tsv>` | PAF 参考碱基覆盖计算（minimap2 -c --cs 输出） |
+| 116 | `colorscheme` | `用法: colorscheme <inTab> <outTab> <refColIndex>` | inTab: tab 分隔表；refColIndex: 从 0 开始，取该列做配色 key（去重） |
+| 117 | `distance` | `用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>` | in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；方法小写 euclidean|pearson|pearsonDist |
+| 118 | `mountain` | `用法: mountain <fold.txt> <out.tsv>` | fold.txt: RNA 二级结构折叠字符串（() 和 .）；输出每碱基山峰高度（第43引擎） |
+| 119 | `pileup` | `用法: pileup <blast.xml> <out.svg> [--query NAME]` | blast.xml: BLAST+ XML 输出（-outfmt 5）；画 query 的 hits pile-up 图（第44引擎） |
+| 120 | `plotrna` | `用法: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]` | region: 'chr:startPos-endPos'；SAM: 比对 reads；画基因组区域覆盖度+RNA结构图（第45引擎） |
+| 121 | `bamstate` | `用法: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]` | gff3: 标准 GFF3（gene/mRNA 特征）；bam: 比对 BAM（需 samtools 建索引） |
+| 122 | `preparespecies` | `用法: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>` | 给基因组+GFF 加物种前缀（seqid + ID）——TBtools 多物种比较数据准备（第56引擎） |
+| 123 | `partitionconflict` | `用法: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluster>` | inConflictFreq.tsv: conflictpaf 输出（contigA\tcontigB\tcount） |
+| 124 | `mirnatarget` | `用法: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [--threads N] [--scoreCutOff N] [--maxMismatch N]` | mirna.fa: miRNA 序列（建议每轮一条或一族）；target.fa: 转录本/基因组靶标 |
+| 125 | `mirnaTarget2` | `用法: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false] [--fragment true|false] [--threads N]` | Target2TablePipe 完整管线：miRNA + 基因组/转录本 → 全量靶标表（含比对行，未过滤低分） |
+| 126 | `mirnaIdentify` | `用法: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxMatureAsy N] [--maxStarAsy N] [--maxBulge N]` | genome.fa: 基因组（FAindex 索引，染色体名须与靶标表第2列一致） |
+| 127 | `conflictpaf` | `用法: conflictpaf <in.paf> <out.tsv> [binSize]` | in.paf: 基因组比对 PAF（minimap2/minigraph） |
+| 128 | `findblockmultiple` | `用法: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <out.txt> <sub1Genome.fa> <sub1.gff> [<sub2Genome.fa> <sub2.gff> ...] [--leftEdge N --rightEdge N --expand N --threads N]` | 多基因组伪共线性区块（第52引擎）：1 query + N subject |
+| 129 | `findblockdual` | `用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]` | ⚠️ 内部 blastp 找同源，需真实双基因组数据验证（第50引擎） |
+| 130 | `collinearRegion` | `用法: collinearRegion <in.collinearity> <simGff> <out.txt>` | MCScanX 共线性→区域文件（第104引擎，CollinearityToRegion） |
+| 131 | `visualizeblock` | `用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]` | inBlockOut: FindBlockDual 输出（findblockdual 命令产物） |
+| 132 | `treeRooting` | `用法: treeRooting <in.nwk> <out.nwk>` | in.nwk: 未定根 NEWICK 树（单树） |
+| 133 | `marker` | `用法: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]` | inMarker: 标记 0-1 矩阵（行=locus，列=样本，tab 分隔，首行列名/首列 locus 名） |
+| 134 | `dehist` | `用法: dehist <deg.txt> <out> [width] [height]` | deg.txt: 每行至少 3 列（tab）：任意ID\t值1\t值2（值1/值2 两样本数值，比较大小分左右直方图） |
+| 135 | `msy` | `用法: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [width] [height]` | simplifiedGff.pos: Chr\tGeneName\tStart\tEnd\t[displayChr]\t[displayName]（多物种共线性区域/基因） |
+| 136 | `venn5` | `用法: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labelA-E]` | 每个 setN.txt: 每行一个成员 ID |
+| 137 | `venn6` | `用法: venn6 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> <setF.txt> [labelA-F]` | 引擎: Venn6（setInArrA~F + setOutGraph + getVennGraph） |
+| 138 | `microsyn` | `用法: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --start1 S --end1 E] [--chr2 C --start2 S --end2 E] [--highlight1 c:s:e] [--highlight2 c:s:e]` | gxf1/gxf2: 两物种 GFF/GXF 注释 |
+| 139 | `dualsyn` | `用法: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] [--chr2 "3,4"] [--rows N] [--gap N]` | simplifiedGff: Chr\tGeneName\tStart\tEnd（染色体名必须数字） |
+| 140 | `multisyn` | `用法: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt]` | gxf.lst: 每行一个 GXF/GFF 注释（染色体名须数字） |
 
 ### 各命令详细注释
 
@@ -137,7 +189,8 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 #### `dotplot`
 
 - 用法: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>
-- 简化GFF: Chr\tGene\tStart\tEnd\tStrand ; chrLayout: Genome: Chr1 Chr2...
+- 简化GFF: Chr\tGene\tStart\tEnd\tStrand
+- ⚠️ --chrLayout 传文件路径（文件内容: Genome: Chr1 Chr2...），不是内联字符串
 
 #### `circos`
 
@@ -155,9 +208,252 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 - 通用反射桥：驱动任意 TBtools 引擎（setter + plot/process/postGraph + save2Graph）
 - 例: generic biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis doPCA+postGraph out.svg --set inTabFile expr.tsv --set rowName true --set colName true --set processDirect Rows
 
+#### `batchReplace`
+
+- 用法: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
+- patternMap.tsv: 模式\t替换（tab 分隔）；默认全词匹配，--partial 则子串替换
+
+#### `levelGo`
+
+- 用法: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]
+- gene2Go.txt: 第1列基因ID(逗号分隔)\t第2列GO ID(逗号分隔)；oboFile: go-basic.obo 或 goslim_plant.obo
+- outTable: GO slim 图层级统计表（第85引擎，LevelDoer 表格模式）
+- ⚠️ --doGraph 1（SVG 图）模式不稳定（LevelGrapher 布局 GUI 依赖），默认表格模式
+
+#### `goParse`
+
+- 用法: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103引擎，GOtermParser）
+- gene2Go.txt: 第1列基因ID(逗号分隔)\t第2列GO ID(逗号分隔)；oboFile: go-basic.obo 或 goslim_plant.obo
+- 自动生成 3 个文件（当前目录）: <input>.TBtools.Parsed.Gene2Go.xls / Go2Gene.xls / Go2Gene.Level<N>.xls
+
+#### `tableCollapse`
+
+- 用法: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader true|false]
+- 按键折叠（同键行合并，值用 ; 连接）
+
+#### `tableColSelect`
+
+- 用法: tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false] [--caseSensitive true|false]
+- 按列名选择列输出（第84引擎，TableColManipulator）——注意输出不含行标识列（除非也选上）
+
+#### `tableAppend`
+
+- 用法: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   # 按指定列合并两表（第87引擎）
+
+#### `tableMelt`
+
+- 用法: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）
+
+#### `tableColSel`
+
+- 用法: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain] [--caseSensitive true|false] [--sortByIDList true|false]
+- 按 idList 正则选列（第89引擎，TableColSelector）；idList 每行一个模式；Match=精确,Contain=正则包含
+- 表头匹配列；--sortByIDList true 按 idList 顺序排序输出列
+
+#### `tableCast`
+
+- 用法: tableCast <inLong.txt> <outMatrix>
+- 长表转宽矩阵（第90引擎）；输入 3 列: 行名\t列名\t值；与 tableMelt 互逆
+
+#### `tableUniq`
+
+- 用法: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|false] [--sortByFreq true|false]
+- 按列去重（第94引擎，TableUniq）；--showFreq 输出频率
+
+#### `tableTranspose`
+
+- 用法: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTransposer）
+
+#### `tableSplit`
+
+- 用法: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]
+- 按列值拆分为多个文件（第96引擎，TableSplitByCol）
+
+#### `tableMerge`
+
+- 用法: tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0...] [--appendOnly true|false] [--rmKey]
+- 多表按关键列合并（第97引擎，TableMerger）；--appendOnly 不合并纯追加；--rmKey 去掉关键列
+- 收集 inFileArr（非 -- 开头的参数）
+
+#### `fqTrim`
+
+- 用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
+- 5'/3' 端固定长度修剪（默认 5'剪6 3'剪6；--b3 0 不剪）
+
 #### `gfa2fa`
 
 - 用法: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFasta）
+
+#### `fastaSubseq`
+
+- 用法: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，ExtractFastaSubseq）
+- pos.txt: GeneId\tChrId\tStart\tEnd（4列 BED 风格，ChrId 须匹配 fasta 头）
+
+#### `fastaExtract`
+
+- 用法: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]
+- 按 ID 列表提取/过滤整条序列（第93引擎，ExtractFasta）
+- Extract=保留列表中的；Filter=排除列表中的；Match=全等 ID，Contain=子串匹配
+
+#### `fqfaConv`
+
+- 用法: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第98引擎，FastqAndFasta）
+- fq2fa 去质量行；fa2fq 生成假质量（IIIIIII）——兼容其他工具的占位质量
+
+#### `hmmExtract`
+
+- 用法: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAME 提取（第99引擎，hmmInfoExtracter）
+- idList.txt 每行一个 NAME；只保留匹配的 HMM 模型
+
+#### `mastExtract`
+
+- 用法: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中序列（第102引擎，ExtractSeqFromMastXML）
+- mast.xml: MEME 套件 MAST 输出（root→sequences→sequence(name length)→seg→hit(pos idx match rc)）
+- out.txt: 序列名\t全序列\t命中子序列\t正/反链
+
+#### `nwAlign`
+
+- 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
+- inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）
+
+#### `twoSeqBlast`
+
+- 用法: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp|blastn|tblastn] [--thread N] [--fmt 6|XML]
+- 双序列集 BLAST 比对（第105引擎，CompareTwoSeqSet）——封装 makeblastdb+blast
+- 需要 blast+ 在 PATH（makeblastdb/blastp）；输出标准 BLAST tabular (fmt 6)
+
+#### `recipBlast`
+
+- 用法: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp|blastn|tblastn] [--evalue 1e-5] [--minId 0.3] [--thread N]
+- 双向 BLAST 基因家族鉴定（第106引擎，ReciprocalBlast）——封装 makeblastdb+blast 双方向
+- 输出: <outPrefix>_<query>_and_<subject>.ID.Mapping.Result.xls（双向最佳命中表）+ 正反向 TBtools.table.xls + xml
+- ⚠️ 坑: FASTA ID 超 50 字符会被 makeblastdb 拒绝（GRAS 59 字符 ID 需先短 ID 重写）
+
+#### `filterCScore`
+
+- 用法: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]
+- BLAST tab6 按 C-score 过滤（第107引擎，FilterBlastResultByCScore）——区分直系/旁系同源候选
+- C-score 过滤低 identity 旁系同源（paralog），保留高 confidence 直系同源（ortholog）候选
+
+#### `quickFamily`
+
+- 用法: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N] [--thread N] [--diamond true|false]
+- 快速基因家族鉴定（第108引擎，QuickGeneFamilyIdentification）——用参考家族成员从查询蛋白组找同源成员
+- 流程: 家族ID提取→参考蛋白集自比对(可选AutoFill迭代扩展)→query BLAST→输出家族成员
+- 输出: <outPrefix>.final.IDset.txt（成员ID）+ <outPrefix>.final.Seq.fasta（成员序列）
+- ⚠️ AutoFill(默认2) 需要完整蛋白组(>20000)作参考集；小参考集测试用 --autoFill 0
+
+#### `ctgGroup`
+
+- 用法: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>
+- in.miniprot.gff: miniprot --gff 输出（蛋白→contigs 比对）；组装辅助链第一环（第72引擎）
+
+#### `homoPhase`
+
+- 用法: homoPhase <inContigGrpMap> <outPhasedMap>
+- 同源冲突分区（多倍体相位分离）——组装辅助链第二环（第73引擎）
+
+#### `sepChr`
+
+- 用法: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
+- gene2chr.tsv: 蛋白名\t染色体（注意：用蛋白名不是 mRNA ID！引擎读 ##PAF 行 info[1]=蛋白名）
+- 等位 contig → 染色体分配——组装辅助链第三环（第74引擎）
+
+#### `bamMerge`
+
+- 用法: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）
+- 输出: merged.bam + merged_sorted.bam(.bai) + merged_region.txt（第75引擎）
+
+#### `hicEnzyme`
+
+- 用法: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）
+- 从 HiC FastQ 预测酶切类型（MboI/DpnII|MseI|HindIII|NcoI|Arima）；引擎内部抽样 1000 条
+
+#### `virusRecomb`
+
+- 用法: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引擎）
+- inDB.fa: 病毒参考库；inContig.fa: 待查 contig；输出 Top hit 重组 PDF
+
+#### `gxfRename`
+
+- 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
+- renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
+
+#### `gxfStat`
+
+- 用法: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/CDS/UTR 明细）
+
+#### `gxfAppend`
+
+- 用法: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀
+
+#### `gxfGenepos`
+
+- 用法: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # GFF→基因位置+染色体长度（喂 genelocation）
+
+#### `gxfRegion`
+
+- 用法: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
+- region.txt: chr\tstrand\tstart\tend\tinfo；按区域保留 GFF
+
+#### `gxfOverlap`
+
+- 用法: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
+- region.txt: chr\tstrand\tstart\tend （strand 敏感！第2列是链 +/-）
+- 区域重叠过滤（第79引擎，GXFOverlaper）——与 gxfRegion 区别：这里 region 必带 strand
+
+#### `gxfRepIDs`
+
+- 用法: gxfRepIDs <in.gff3> <out.txt>
+- 代表转录本映射：mRNA ID → gene ID + 长度（第80引擎，GXFToRepresentativeIDs）
+
+#### `gxfRepGXF`
+
+- 用法: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID 'pattern']
+- 代表转录本提取（第86引擎，GXFToRepresentativeGXF）：每 gene 保留最长转录本，去冗余 isoform
+- ⚠️ 命名要求：mRNA ID 须以 gene ID 开头（如 TGY000001.t1 Parent=TGY000001）；EVM 命名（evm.model ≠ evm.TU 前缀）不兼容
+
+#### `gxfMatch`
+
+- 用法: gxfMatch <in.gff3> <inGenome.fa>
+- GFF 与基因组 seqid 匹配检查（第81引擎，GxfGenomeMatch）→ Yes/No + Intersection Size
+
+#### `gxfRecall`
+
+- 用法: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，RecallmRNAFeature）
+
+#### `regionAnno`
+
+- 用法: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePattern P]
+- region.txt: id\tchr\tstart\tend （任意第1列！chr 在第2列 index1）
+- 区域重叠注释：输出 Genic/Intergenic + 重叠基因（第83引擎，RegionGXFOverlapAnnotation）
+
+#### `gxfFix`
+
+- 用法: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dangling mRNA/排序）
+- 修复 CDS phase 记录分离到 <out>_phase_corrected/problematic.gff3
+
+#### `groupCol`
+
+- 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
+- inTable: 表达矩阵（首列基因名+样本列）；inGrpInfo: Sample\tGroup（无表头）
+- outTable: 样本按组折叠后的矩阵（默认 Mean）——表达分组分析（第61引擎）
+
+#### `tauIndex`
+
+- 用法: tauIndex <inExpTab> <outTAU>
+- inExpTab: 表达矩阵（首列基因名 + 样本列）；outTAU: τ 指数表（0=均匀 1=完全组织特异）
+
+#### `exprCorr`
+
+- 用法: exprCorr <inFPKM> <outCorrMat>
+- 样本间 Pearson 相关矩阵（共表达/聚类分析输入）
+
+#### `qpcrExp`
+
+- 用法: qpcrExp <in.qpcr.tab> <out.xls>
+- in.qpcr.tab: tab 分隔 3 列（基因名\t对照Ct\t实验Ct），同名多行取平均
+- out.xls: 相对表达量 Mean/Stdev（2^-ΔΔCt 法）（第58引擎）
 
 #### `qpcr`
 
@@ -165,7 +461,8 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 
 #### `hclust`
 
-- 用法: hclust <expr.matrix.tsv> <out.nwk> [distMethod] [clusterMethod]
+- 用法: hclust <dist3.tsv> <out.nwk> [distMethod] [clusterMethod]
+- ⚠️ 输入是三列距离文件 GeneA\tGeneB\tdist（不是表达矩阵！矩阵喂进去 NPE）
 
 #### `volcano`
 
@@ -264,12 +561,6 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 - 用法: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt>
 - Pfam 域快速扫描（工具 83，simpleHmmscan——main 硬编码演示 → setter+process，调系统 hmmsearch）
 - ⚠️ 需 Pfam-A.hmm 数据库（本地 ~/.eggnog-mapper/data/pfam/）；idList 每行一个 Pfam NAME（如 GRAS）
-
-#### `colorscheme`
-
-- 用法: colorscheme <in.tab> <out.tab> <refColIndex(1-based)>
-- 表格分组着色（工具 86，ColorSchemeGenerator.process——main 硬编码演示）
-- 输出 = 原表 + RGB 颜色列（分组键相同者同色组标记）
 
 #### `regiondepth`
 
@@ -401,6 +692,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 #### `barplot`
 
 - 用法: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol] [maxTerms] [xlab] [ylab] [mode]
+- ⚠️ termCol/pvalCol 是列名（如 Term/Pvalue）不是列索引！
 - mode: Normal|TextOnLeft|BarOnLeft
 
 #### `pafviz`
@@ -433,11 +725,31 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 - expr.tsv: 表达矩阵（首列基因名 + 样本名表头）
 - group.tsv: Sample\tFirstDim\tSecondDim（三面立方体热图）
 
+#### `efpHeat`
+
+- 用法: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
+- eFP 浏览器风格组织表达热图（第100引擎，generateSuperHeatMap）——TGA 植物示意图上叠加表达
+- inTGA: 底图（植物/组织示意图，必须 TrueColor RGB 非灰度）；sample2cc: SampleName\tRGB 映射
+- expMat: 首列基因名 + 样本列；geneId: 要可视化的基因；out: .svg/.pdf/.png
+- ⚠️ 需 fake DatatypeConverter（build/javax/xml/bind/，JDK9+ 移除 jaxb 的兼容 hack）
+
 #### `rnaplot`
 
 - 用法: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R,G,B"] [--interactive false]
 - RNA 二级结构图（第111引擎，RNAplotAdvance，需 RNAfold/RNAplot 可执行）
 - ⚠️ 本机 RNAplot 2.7 不读 stdin 管道（generatePlotPsFile 失败）→ 桥自己 RNAplot -i 生成 EPS + transformat 解析
+
+#### `calcRepeat`
+
+- 用法: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--minFreq N] [--threads N]
+- 重复序列得分计算（工具39，calcRepeatScore，需 jellyfish）
+- ⚠️ 内部默认 60 线程 jellyfish count 易挂 → 桥预生成 .jf（合理线程数）+ process() 复用
+
+#### `multiEfp`
+
+- 用法: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidth N] [--imageHeight N]
+- 多矩阵组织表达热图（第110引擎，generateMultipleSuperHeatMap）——TGA 底图 + 多表达矩阵叠加
+- ⚠️ main 硬编码第二矩阵路径 → 走桥（setter+反射 initExp+showHeatMapOf→JIGBasePanel）；需 fake DatatypeConverter
 
 #### `circlegene`
 
@@ -517,7 +829,8 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 #### `distance`
 
 - 用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>
-- in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；输出两列数值的距离/相关系数（第42引擎）
+- in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；方法小写 euclidean|pearson|pearsonDist
+- ⚠️ 结果输出到 stdout（CLI 行为，非文件）
 
 #### `mountain`
 
@@ -567,6 +880,20 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 - Step 1: ssearch36 官方参数
 - Step 2: TargetSoEngine 打分
 
+#### `mirnaTarget2`
+
+- 用法: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false] [--fragment true|false] [--threads N]
+- Target2TablePipe 完整管线：miRNA + 基因组/转录本 → 全量靶标表（含比对行，未过滤低分）
+- 与 mirnatarget 区别：直接用官方完整封装（ssearch36 内置），输出含全部命中+比对列
+
+#### `mirnaIdentify`
+
+- 用法: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxMatureAsy N] [--maxStarAsy N] [--maxBulge N]
+- genome.fa: 基因组（FAindex 索引，染色体名须与靶标表第2列一致）
+- targetSo.tsv: TargetSo 输出（第2列=染色体名，第4/5列=基因组坐标）——mirnatarget 输出后用 positionRecover 转换坐标
+- outPredict.txt: 预测前体表；outChecklog.txt: 结构检查日志（maxBulge/ARM 过滤原因）
+- ⚠️ MIRidentifier 第78引擎：miRNA 前体鉴定（RNAfold 结构检查 + ARM 判定）
+
 #### `conflictpaf`
 
 - 用法: conflictpaf <in.paf> <out.tsv> [binSize]
@@ -584,12 +911,25 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 - 用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
 - ⚠️ 内部 blastp 找同源，需真实双基因组数据验证（第50引擎）
 
+#### `collinearRegion`
+
+- 用法: collinearRegion <in.collinearity> <simGff> <out.txt>
+- MCScanX 共线性→区域文件（第104引擎，CollinearityToRegion）
+- 输出: chr1 start1 end1 chr2 start2 end2 genePairInfo——供共线性区块分析/可视化
+
 #### `visualizeblock`
 
 - 用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]
 - inBlockOut: FindBlockDual 输出（findblockdual 命令产物）
 - out.pdf: 输出 PDF（引擎只支持 PDF）
 - --labels: 每行基因组标签（默认 Genome1/Genome2/...）
+
+#### `treeRooting`
+
+- 用法: treeRooting <in.nwk> <out.nwk>
+- in.nwk: 未定根 NEWICK 树（单树）
+- out.nwk: MAD 定根后的 NEWICK 树（Tria et al. 2017, MAD rooting）
+- ⚠️ MAD.main() 硬编码输入路径，改调公开静态入口 quickMadRoot()
 
 #### `marker`
 

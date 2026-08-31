@@ -36,7 +36,8 @@ case "$1" in
     ;;
   dotplot)
     # 用法: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>
-    #   简化GFF: Chr\tGene\tStart\tEnd\tStrand ; chrLayout: Genome: Chr1 Chr2...
+    #   简化GFF: Chr\tGene\tStart\tEnd\tStrand
+    #   ⚠️ --chrLayout 传文件路径（文件内容: Genome: Chr1 Chr2...），不是内联字符串
     shift
     xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot "$@"
     ;;
@@ -549,7 +550,8 @@ case "$1" in
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrCli "$@"
     ;;
   hclust)
-    # 用法: hclust <expr.matrix.tsv> <out.nwk> [distMethod] [clusterMethod]
+    # 用法: hclust <dist3.tsv> <out.nwk> [distMethod] [clusterMethod]
+    #   ⚠️ 输入是三列距离文件 GeneA\tGeneB\tdist（不是表达矩阵！矩阵喂进去 NPE）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/HclustCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" HclustCli "$@"
@@ -691,14 +693,6 @@ case "$1" in
     shift
     javac -cp "$JAR" "$TBCLI_DIR/SimpleHmmscanCli.java" 2>/dev/null
     xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SimpleHmmscanCli "$@"
-    ;;
-  colorscheme)
-    # 用法: colorscheme <in.tab> <out.tab> <refColIndex(1-based)>
-    #   表格分组着色（工具 86，ColorSchemeGenerator.process——main 硬编码演示）
-    #   输出 = 原表 + RGB 颜色列（分组键相同者同色组标记）
-    shift
-    javac -cp "$JAR" "$TBCLI_DIR/ColorSchemeCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" ColorSchemeCli "$@"
     ;;
   regiondepth)
     # 用法: regiondepth <in.sam> <region> <out.depth> [scaleFactor]
@@ -878,6 +872,7 @@ case "$1" in
     ;;
   barplot)
     # 用法: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol] [maxTerms] [xlab] [ylab] [mode]
+    #   ⚠️ termCol/pvalCol 是列名（如 Term/Pvalue）不是列索引！
     #   mode: Normal|TextOnLeft|BarOnLeft
     shift
     javac -cp "$JAR" "$TBCLI_DIR/BarplotCli.java" 2>/dev/null
@@ -1072,7 +1067,8 @@ case "$1" in
     ;;
   distance)
     # 用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>
-    #   in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；输出两列数值的距离/相关系数（第42引擎）
+    #   in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；方法小写 euclidean|pearson|pearsonDist
+    #   ⚠️ 结果输出到 stdout（CLI 行为，非文件）
     shift
     if [ $# -lt 4 ]; then echo "用法: tbplot.sh distance <in.tsv> <col1> <col2> <method>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/DistanceCli.java" 2>/dev/null
@@ -1353,6 +1349,76 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/SeveralSpeciesCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeveralSpeciesCli "$@"
     ;;
+
+  help|-h|--help)
+    # 用法: tbplot.sh help [命令]   # 查看命令总览或某命令详细用法
+    if [ "$#" -ge 2 ]; then
+      # ---- help <命令>: 从源码提取该 case 的注释块（多行详细） ----
+      _CMD="$2"
+      if ! sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\))/\1/p' "$0" | grep -qx "$_CMD"; then
+        echo "❌ 未知命令: $_CMD"
+        echo "   tbplot.sh help           # 列出全部命令"
+        exit 1
+      fi
+      echo "==== tbplot.sh $_CMD 详细用法 ===="
+      echo ""
+      awk -v c="  $_CMD)" '
+        index($0, c) == 1 { inb=1; next }
+        inb && /^    ;;/ { exit }
+        inb && /^  [a-zA-Z][a-zA-Z0-9]*\)/ { if ($0 != c) exit }
+        inb && /^\s*#/ { sub(/^\s*#\s*/, ""); print "  • " $0 }
+      ' "$0"
+      echo ""
+      echo "  📖 详细手册: $ROOT/docs/COMMAND_REFERENCE.md（含输入格式/参数/坑位）"
+      echo "  🔍 桥 Javadoc: $ROOT/bridges/ 对应桥类（首次报错先读）"
+      echo ""
+      _PIT=$(grep -A1 "^- \*\*$_CMD\*\*" "$ROOT/docs/COMMAND_REFERENCE.md" 2>/dev/null | head -1)
+      if [ -n "$_PIT" ]; then
+        echo "  ⚠️ 已知坑: $_PIT"
+      fi
+    else
+      # ---- help: 总览 + 全部命令（自动提取，永远同步） ----
+      echo "================================================"
+      echo " TBtools 绘图/分析 CLI — tbplot.sh"
+      echo " 用法: tbplot.sh <命令> [参数...]"
+      echo "       tbplot.sh help          列出全部命令"
+      echo "       tbplot.sh help <命令>   查看某命令详细用法（多行）"
+      echo "================================================"
+      echo ""
+      echo "📖 完整手册: docs/COMMAND_REFERENCE.md（88 绘图命令 + 82 工具 + 80 桥 + 28 坑位）"
+      echo "   RPC 188 方法: docs/rpc_methods_reference.md"
+      echo ""
+      echo "全部命令（$(sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\))/\1/p' "$0" | sort -u | wc -l) 个):"
+      echo ""
+      echo "── 共线性/基因组 ──"
+      sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\)).*/\1/p' "$0" | sort -u | \
+        grep -E '^(circos|circlegene|dotplot|dualsyn|findblock|mcscanx|microgenome|microsyn|msy|multisyn|paf|visualize|syn)' | tr '\n' ' '
+      echo ""
+      echo "── 树/进化 ──"
+      sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\)).*/\1/p' "$0" | sort -u | \
+        grep -E '^(phylotree|tree|unrooted|onesteptree|treeRooting|degramdom|findpath|barplotter)' | tr '\n' ' '
+      echo ""
+      echo "── 热图/表达/统计 ──"
+      sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\)).*/\1/p' "$0" | sort -u | \
+        grep -E '^(heatmap|cubeheatmap|layoutheatmap|efp|pca|volcano|dehist|violin|qpcr|groupedbar|barplot|colorscheme|distance|mountain|exprCorr|tauIndex|groupCol)' | tr '\n' ' '
+      echo ""
+      echo "── 序列/结构/域 ──"
+      sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\)).*/\1/p' "$0" | sort -u | \
+        grep -E '^(seqlogo|msa|motif|amazingmeta|cddmotif|pfammotif|seqlentrack|mast|meme|gfa|gel|pileup|plotrna|rnaplot|simplehmmscan|pep2codon|mastrun|memerun)' | tr '\n' ' '
+      echo ""
+      echo "── ChIP-seq/注释 ──"
+      sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\)).*/\1/p' "$0" | sort -u | \
+        grep -E '^(peak|gxf|gff|gsadiag|annocompare|genedensity|genelocation|genelocgff|regiondepth|sambamcov)' | tr '\n' ' '
+      echo ""
+      echo "── 表格/文件/杂项 ──"
+      sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\)).*/\1/p' "$0" | sort -u | \
+        grep -vE '^(circos|circlegene|dotplot|dualsyn|findblock|mcscanx|microgenome|microsyn|msy|multisyn|paf|visualize|syn|phylotree|tree|unrooted|onesteptree|treeRooting|degramdom|findpath|barplotter|heatmap|cubeheatmap|layoutheatmap|efp|pca|volcano|dehist|violin|qpcr|groupedbar|barplot|colorscheme|distance|mountain|exprCorr|tauIndex|groupCol|seqlogo|msa|motif|amazingmeta|cddmotif|pfammotif|seqlentrack|mast|meme|gfa|gel|pileup|plotrna|rnaplot|simplehmmscan|pep2codon|mastrun|memerun|peak|gxf|gff|gsadiag|annocompare|genedensity|genelocation|genelocgff|regiondepth|sambamcov)' | tr '\n' ' '
+      echo ""
+      echo ""
+      echo "💡 查看详细: tbplot.sh help <命令>   （如: tbplot.sh help hclust）"
+    fi
+    ;;
+
   *)
     echo "用法:"
     echo "  tbplot.sh genestructure <gff> <ids(mRNA)> <out> [genome.fa] [w] [h]  # 基因结构图"

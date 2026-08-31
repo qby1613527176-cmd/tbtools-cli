@@ -16,7 +16,7 @@
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 114 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
+| 🎨 **绘图引擎** | 123 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
 | 🛠️ **命令行工具** | 103 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
@@ -29,7 +29,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 | 文档 | 内容 |
 |:-----|:-----|
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：88 个绘图命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 80 个桥 Javadoc（输入格式权威来源）+ 28 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：140 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 80 个桥 Javadoc（输入格式权威来源）+ 28 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值，89KB） |
 
 ```bash
@@ -557,7 +557,7 @@ tbtools-cli/
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
 ├── examples/              # example data + scripts
 ├── docs/                  # detailed documentation
-│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（88 命令+82 工具+80 桥+坑位）
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（140 命令+82 工具+80 桥+坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md
