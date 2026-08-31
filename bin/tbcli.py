@@ -109,6 +109,7 @@ CLI_TOOLS = {
     "genePairExpCorr": "biocjava.bioIO.BioSoftPipeServer.GenePairExpCorr",
     "slurmScriptPrepare": "biocjava.bioIO.BioSoftPipeServer.SlurmScriptPrepare",
     "geneExpFilter": "biocjava.bioIO.BioSoftPipeServer.GeneExpFilter",
+    "blastXmlToTable": "biocjava.bioIO.BlastXml.BlastXmlToSelfDefinedTable",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
