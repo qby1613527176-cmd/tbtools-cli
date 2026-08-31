@@ -637,9 +637,11 @@ case "$1" in
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindPathCli "$@"
     ;;
   mcscanx)
-    # 用法: mcscanx <gff> <blast> <outPrefix> [--html]
-    #   纯 Java MCScanX 共线性检测（工具 72，org.mcscanx.api.MCScanXAPI）——无需外部 MCScanX 二进制
-    #   ⚠️ 与外部 MCScanX 输出 100% 一致验证（GRAS Co_wgd：334 blocks cmp 全同）
+    # 用法: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测
+    #        mcscanx classify <gff> <blast> <outPrefix>  # 重复基因分类（WGD/tandem/proximal/dispersed/singleton）
+    #   纯 Java MCScanX（工具 72，org.mcscanx.api.MCScanXAPI）——无需外部 MCScanX 二进制
+    #   ⚠️ 与外部 MCScanX 输出 100% 一致验证（GRAS Co_wgd：334 blocks cmp 全同）；
+    #      classify 的 String API 有 bug（validate 需 collinearityFile）→ 桥用完整 InputFiles/OutputOptions API
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MCScanXCli.java" 2>/dev/null
     xvfb-run -a java -Xmx6g -cp "$TBCLI_DIR:$JAR" MCScanXCli "$@"
