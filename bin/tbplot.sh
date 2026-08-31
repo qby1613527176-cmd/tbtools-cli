@@ -757,6 +757,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/Pep2CodonCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Pep2CodonCli "$@"
     ;;
+  mast2tab)
+    # 用法: mast2tab <mast|meme.xml> <out.tab>
+    #   MEME Suite XML→表格（工具 93，MEMESuiteXMLtoTab——main 全硬编码 → setter+process）
+    #   真实拟南芥 mast.xml 554 行验证（SeqID/SeqLength/MotifId/Start/Length）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/Mast2TabCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Mast2TabCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
