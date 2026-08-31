@@ -119,6 +119,7 @@ CLI_TOOLS = {
     "extractFeatureFromGTF": "biocjava.bioIO.GTF.ExtractFeaturefromGTFandGenome",
     "sRNAseqCollasper": "biocjava.sRNA.Tools.sRNAseqCollasper",
     "generateMotifFromSequences": "biocjava.bioIO.BioSoftPipeServer.MEMEsuiteWrapper.GenerateMotifFromSequences",
+    "sRNAseqDeCollasper": "biocjava.sRNA.Tools.sRNAseqDeCollasper",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
