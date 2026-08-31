@@ -2491,3 +2491,34 @@ tbtools heatmap <matrix> <out.png> [group]   # 热图快捷
 ```
 
 完整方法参考（含参数/返回值）：**`docs/rpc_methods_reference.md`**（89KB，183+ 方法）。
+
+### RPC 抽查记录（2026-08-31，三轮 + 修正，覆盖 ~50 方法）
+
+> 全部通过 REST POST http://127.0.0.1:8765/rpc，JSON-RPC 2.0 格式实测。
+
+**一轮**（15 方法）：FastaStat / CdsToProtein / FastaExtract / FastaSubseqFromList / BatchStringReplace / GfaToFasta / GxfStat / ExpressionTau / ExpressionRpkm / FastaSsrMiner / GxfGeneDensity / GffExtractRegion / FastaToTable / TableToFasta / OrfSixFrameTranslate —— 全过（参数名修正后）
+
+**二轮**（28 方法）：AmazingFastaExtract / FastaMerge / FastaSeqManipulator / FastxIndex / GXFFix / GXFRenameByMap / GxfCat / GxfFilter / GxfGenomeMatch / GxfIdAppender / GxfSeqExtract / GxfRecallMrna / GxfRepresentativeGxf / GffCdsPhase / GffFeatureExtract / GffFeatureScan / GtfFeatureExtract / GtfFeatureScan / ExpressionCorrMatrix / GenePairCorr / GeneExpFilter / OrfBatchLongestComplete / OrfPredictMax / VcfAddId / CheckPrimer / MemeSuiteXmlToTab / TrimMsaSimple / FastaSplitByCount —— 除 CheckPrimer 外全过
+
+**实际输出需求（实测参数名）**：
+- FastaSubseqFromList → `regionsListPath`（不是 regionListPath）
+- BatchStringReplace → `patternMapPath`（不是 mapPath）
+- ExpressionRpkm/ExpressionTpm → `countTablePath` + `lengthTablePath`（不是 countsPath）
+- FastaSsrMiner → 必给 `maxLenKbases`（≥1）
+- GffExtractRegion → `gxfPath` + `regionListPath`（不是 inputPath）
+- FastaSplitByCount → `outputPrefix` + `maxNumInOneFasta`（写 prefix.1.fa...）
+- GxfToGenePos → 必给 `chrLenPath`（第二个输出）
+- TableRowManipulator → 必给 `selectedColumn`（列名或索引）+ `idListPath`
+- ExpressionFpkmToTpm → `fpkmTablePath`（不是 inputPath）
+- FastaWindowStat → 必给 `windowOverlap`；输出三个文件 `前缀.GCratio/.GCskew/.Nratio`
+- GenePairCorr → `inputExpPath` + `genePairPath`（pair 基因名必须在矩阵里，否则静默空输出）
+- GffFeatureExtract/GtfFeatureExtract → `gffPath/gtfPath` + `genomePath` + `feature` + `uniqId`（CDS 用 Parent）
+- GxfRepresentativeIds/GxfRepresentativeGxf → mRNA ID 须以 gene ID 开头（gene1.m1）+ 需 CDS 特征；`featurePattern` 默认 CDS
+
+### ⚠️ 已知 RPC 缺陷（2026-08-31 实测）
+
+- **CheckPrimer.process：输出文件恒为 0 字节**（ok=True 但 outputPath 空）。
+  - 引擎本身正常：CLI 直调 `java -cp JAR biocjava.bioIO.Primer.CheckPrimer --targetFasta t.fa --primerInfo p.txt --maxMismatch 0` 能输出引物匹配报告（stdout）。
+  - RPC handler（CheckPrimerHandler.process）调 `cp.check()` 写文件，但**结果没写进 outputPath**——重启 RPC 服务器后复现，确认为 RPC handler 缺陷。
+  - 对策：用 CLI 直调（stdout）或 `tbtools tool checkPrimer` 替代 RPC。
+- **RPC 服务器启动**：`tbtools_rpc.sh start` 会**误报超时**（进程实际活着）。更稳的方式：`nohup java -Xmx4g -cp $TBTOOLS_JAR biocjava.rpc.RpcServer > /tmp/rpc_server.log 2>&1 &`

@@ -1,0 +1,2 @@
+chr1	100	500	chr1	TB	gene	100	500	.	+	.	ID=gene1;Name=gene1chr1	TB	mRNA	100	500	.	+	.	ID=trans1;Parent=gene1chr1	TB	exon	100	300	.	+	.	Parent=trans1
+chr1	700	900	chr1	TB	gene	700	900	.	-	.	ID=gene2;Name=gene2chr1	TB	mRNA	700	900	.	-	.	ID=trans2;Parent=gene2
