@@ -732,6 +732,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/CddMotifCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" CddMotifCli "$@"
     ;;
+  seqlentrack)
+    # 用法: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]
+    #   序列长度骨架图（引擎 122，DrawSequenceFromSeqLenInfo——AmazingMetaPlot CDD 面板底层）
+    #   seqlen.txt: gene\tlength（# 跳过）；GRAS 53 基因验证
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/SeqLenTrackCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeqLenTrackCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
