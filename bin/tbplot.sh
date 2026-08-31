@@ -800,6 +800,14 @@ case "$1" in
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MastRunCli "$@"
     ;;
 
+  mggxf)
+    # 用法: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.LinkedRegion> [GenePair|BlastTab6]
+    #   多 GFF 视图格式转换（工具 103，FormatTranformerForMultipleGffViewer——GenePair/BlastTab6→LinkedRegion）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/MgGxfCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MgGxfCli "$@"
+    ;;
+
   gsadiag)
     # 用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]
     #   基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查）
