@@ -122,6 +122,7 @@ CLI_TOOLS = {
     "quickGeneFamilyIdentification": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
     "gffCdsPhaseCorrector": "biocjava.bioDoer.GXFUtils.GffCdsPhase.GffCdsPhaseCorrector",
     "parallelMD5Check": "biocjava.bioDoer.FileUtils.ParallelMD5Check",
+    "pafRefBaseCoverCalc": "biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc",
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
     "sRNAseqAdaperRemover": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
