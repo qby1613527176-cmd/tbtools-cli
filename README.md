@@ -141,6 +141,9 @@ tbtools phylotree <in.nwk> <out.svg> [vertical] [width] [height]
 # Unrooted tree (engine 115; 6 layouts Circular/Radial/Force-Directed/Equal Angle/N-Body/Equal-Daylight)
 tbtools unrooted <in.nwk> <out.svg> [layout] [width] [height] [iterations]
 
+# Violin plot (engine 116; standalone ViolinPlot, SVG/PDF only)
+tbtools violin <in.tsv> <out.svg> [width] [height]
+
 # Annotation version comparison (engine 113; before/after GFF → change summary + BED + Curation/ABCD figures)
 tbtools annocompare <before.gff3> <after.gff3> <outDir> [runName]
 
