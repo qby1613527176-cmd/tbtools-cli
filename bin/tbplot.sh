@@ -740,6 +740,15 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/SeqLenTrackCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeqLenTrackCli "$@"
     ;;
+  pfammotif)
+    # 用法: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]
+    #   Pfam 保守域模式图（引擎 123，DrawMotifPatternFromPfamResult——委托 PfamDomainHitsTableParser）
+    #   pfamscan.txt: PfamScan 16 列（seqid alnS alnE envS envE hmmAcc hmmName type hmmS hmmE hmmLen bitscore evalue ...）
+    #   ⚠️ 可用 hmmscan --domtblout 转 PfamScan 格式；fasta 需含全部基因
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/PfamMotifCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PfamMotifCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
