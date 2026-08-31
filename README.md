@@ -1,8 +1,8 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **114 个绘图/分析引擎 + 188 个 RPC 数据工具 + 71 个命令行工具 + 任意引擎反射**，全部实测出图。
-> 2026-08-29 达成 114 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），47 个 Java 桥，150+ 命令。
+> **115 个绘图/分析引擎 + 188 个 RPC 数据工具 + 71 个命令行工具 + 任意引擎反射**，全部实测出图。
+> 2026-08-29 达成 115 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），47 个 Java 桥，150+ 命令。
 
 <div align="center">
 
@@ -137,6 +137,9 @@ tbtools hclust <distance_matrix.tsv> <out.nwk>
 
 # PhyloTreeView phylogenetic tree view (engine 112; direct newick, auto branch-length/Cladogram + axis)
 tbtools phylotree <in.nwk> <out.svg> [vertical] [width] [height]
+
+# Unrooted tree (engine 115; 6 layouts Circular/Radial/Force-Directed/Equal Angle/N-Body/Equal-Daylight)
+tbtools unrooted <in.nwk> <out.svg> [layout] [width] [height] [iterations]
 
 # Annotation version comparison (engine 113; before/after GFF → change summary + BED + Curation/ABCD figures)
 tbtools annocompare <before.gff3> <after.gff3> <outDir> [runName]

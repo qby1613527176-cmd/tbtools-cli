@@ -604,6 +604,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/PhyloTreeCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PhyloTreeCli "$@"
     ;;
+  unrooted)
+    # 用法: unrooted <in.nwk> <out> [layout] [width] [height] [iterations]
+    #   无根树可视化（引擎 115，unrootedtree 独立引擎，非 UnrootedTreeViz）
+    #   layout: Circular|Radial|Force-Directed|Equal Angle|N-Body|Equal-Daylight（默认 Circular）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/UnrootedTreeCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" UnrootedTreeCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
