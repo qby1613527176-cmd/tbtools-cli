@@ -107,6 +107,7 @@ CLI_TOOLS = {
     "eggNogMapperResult": "biocjava.bioIO.BioSoftPipeServer.eggNogMapperResult",
     "tandemDupFinder": "biocjava.bioIO.BioSoftPipeServer.TandemDupFinder",
     "genePairExpCorr": "biocjava.bioIO.BioSoftPipeServer.GenePairExpCorr",
+    "slurmScriptPrepare": "biocjava.bioIO.BioSoftPipeServer.SlurmScriptPrepare",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
