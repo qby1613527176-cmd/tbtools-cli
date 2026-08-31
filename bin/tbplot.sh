@@ -692,6 +692,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/SimpleHmmscanCli.java" 2>/dev/null
     xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SimpleHmmscanCli "$@"
     ;;
+  colorscheme)
+    # 用法: colorscheme <in.tab> <out.tab> <refColIndex(1-based)>
+    #   表格分组着色（工具 86，ColorSchemeGenerator.process——main 硬编码演示）
+    #   输出 = 原表 + RGB 颜色列（分组键相同者同色组标记）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/ColorSchemeCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" ColorSchemeCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
