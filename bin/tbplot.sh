@@ -765,6 +765,15 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/Mast2TabCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Mast2TabCli "$@"
     ;;
+  qpcrproc)
+    # 用法: qpcrproc <in.qpcr.tab> <out.xls>
+    #   qPCR 相对表达分析（工具 97，SimpleQPCRProcessser——2^-ΔΔCt，Sample\tRefCt\tExpCt）
+    #   ⚠️ 输入格式: Sample\t内参Ct\t目标Ct；同样本多行求均值/SD
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/QpcrProcCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrProcCli "$@"
+    ;;
+
   gsadiag)
     # 用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]
     #   基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查）
