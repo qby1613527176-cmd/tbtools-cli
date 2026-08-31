@@ -106,6 +106,7 @@ CLI_TOOLS = {
     "fastaFragmenter": "biocjava.bioIO.FastX.FastaIndex.Fragment.FastaFragmenter",
     "eggNogMapperResult": "biocjava.bioIO.BioSoftPipeServer.eggNogMapperResult",
     "tandemDupFinder": "biocjava.bioIO.BioSoftPipeServer.TandemDupFinder",
+    "genePairExpCorr": "biocjava.bioIO.BioSoftPipeServer.GenePairExpCorr",
     "findBestForkerRootTree": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
     "statFasta": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
     "goEnrichMerge": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
