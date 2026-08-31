@@ -109,6 +109,7 @@ CLI_TOOLS = {
     "genePairExpCorr": "biocjava.bioIO.BioSoftPipeServer.GenePairExpCorr",
     "slurmScriptPrepare": "biocjava.bioIO.BioSoftPipeServer.SlurmScriptPrepare",
     "geneExpFilter": "biocjava.bioIO.BioSoftPipeServer.GeneExpFilter",
+    "prepareFileFromMCScanXtoTBtools": "biocjava.bioDoer.JIGplotToolkit.Synteny.PrepareFileFromMCScanXtoTBtools",
     "blastXmlToTable": "biocjava.bioIO.BlastXml.BlastXmlToSelfDefinedTable",
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
