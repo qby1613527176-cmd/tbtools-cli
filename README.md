@@ -61,7 +61,7 @@ tbtools help
 
 ---
 
-## 🎨 Plotting Engines (114)
+## 🎨 Plotting Engines (115)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
