@@ -612,6 +612,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/UnrootedTreeCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" UnrootedTreeCli "$@"
     ;;
+  violin)
+    # 用法: violin <in.tsv> <out> [width] [height]
+    #   独立小提琴图（引擎 116，ViolinPlot.generate()；仅 SVG/PDF）
+    #   in.tsv: 组别\t值（每行一个观测）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/ViolinCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" ViolinCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
