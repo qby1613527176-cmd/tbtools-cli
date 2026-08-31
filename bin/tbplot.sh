@@ -765,6 +765,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/Mast2TabCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Mast2TabCli "$@"
     ;;
+  gsadiag)
+    # 用法: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]
+    #   基因结构快速诊断（工具 94，GsaQuickDiagnosis——相位验证+长度异常+可选编码潜能检查）
+    #   真实 GRAS GFF 验证：0 注释问题；注释质控刚需
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/GsaDiagCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GsaDiagCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
