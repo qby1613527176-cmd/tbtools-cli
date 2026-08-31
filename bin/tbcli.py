@@ -119,6 +119,7 @@ CLI_TOOLS = {
     "collinearityToRegion": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
     "pairWiseKaKsCalculator": "biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator",
     "simpleBatchProcess": "biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess",
+    "quickGeneFamilyIdentification": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
     "sRNAseqReadLenStat": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
     "sRNAReadTrimmer": "biocjava.sRNA.Tools.sRNAReadTrimmer",
     "sRNAseqAdaperRemover": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
