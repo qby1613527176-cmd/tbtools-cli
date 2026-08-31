@@ -654,6 +654,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/DegramdomCli.java" 2>/dev/null
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" DegramdomCli "$@"
     ;;
+  sambamcov)
+    # 用法: sambamcov <in.bam> <out.tsv> [binSize] [countMode]
+    #   BAM bin 覆盖统计（工具 74，SamBamBINCov.process——main 硬编码演示）
+    #   binSize: 窗口 bp（默认 1000）；countMode: Overlap|StartPos|EndPos（默认 Overlap）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/SamBamCovCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SamBamCovCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
