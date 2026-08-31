@@ -724,6 +724,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/AmazingMetaCli.java" 2>/dev/null
     xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" AmazingMetaCli "$@"
     ;;
+  cddmotif)
+    # 用法: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]
+    #   CDD 保守域模式图（引擎 121，DrawMotifPatternFromCDDResult.postGraph——GRAS hitdata 真实验证 56 基因全匹配）
+    #   hitdata: NCBI Batch CD-search hitsConcise；⚠️ fasta 需含 hitdata 全部基因 ID（否则 NPE）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/CddMotifCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" CddMotifCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
