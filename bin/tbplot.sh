@@ -646,6 +646,14 @@ case "$1" in
     javac -cp "$JAR" "$TBCLI_DIR/MCScanXCli.java" 2>/dev/null
     xvfb-run -a java -Xmx6g -cp "$TBCLI_DIR:$JAR" MCScanXCli "$@"
     ;;
+  degramdom)
+    # 用法: degramdom <in.tsv> [out.nwk]
+    #   亲子表构建 Newick 树（工具 73，BuildDegramdomFromTable.process；main 硬编码演示）
+    #   in.tsv: 子节点\t父节点\t枝长（每行一个关系）
+    shift
+    javac -cp "$JAR" "$TBCLI_DIR/DegramdomCli.java" 2>/dev/null
+    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" DegramdomCli "$@"
+    ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
     #   注释版本对比管线：对比同一基因组前后两版注释，产 change_summary.csv/change_log.csv/BED +
