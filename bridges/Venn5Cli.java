@@ -39,6 +39,7 @@ public class Venn5Cli {
         v.setTitleD(labels[3]);
         v.setTitleE(labels[4]);
         v.setOutGraph(new File(outFile));
+        v.getOverlap(); // 必须先计算交集，否则 maskToSet 为空 → 全部计数 0（08/31 盲测 P0 bug）
         v.getVennGraph();
         System.err.println("[tbplot] 已保存: " + outFile);
         System.exit(0);

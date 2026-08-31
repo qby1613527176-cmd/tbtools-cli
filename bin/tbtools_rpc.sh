@@ -13,7 +13,9 @@ ROOT="$(dirname "$SCRIPT_DIR")"
 source "$ROOT/config/config.sh"
 TBTOOLS_JAR="${TBTOOLS_JAR}"
 RPC_URL="${TBTOOLS_RPC_URL:-http://127.0.0.1:8765/rpc}"
-HEALTH_URL="${TBTOOLS_RPC_URL:-http://127.0.0.1:8765/health}"
+# ⚠️ HEALTH_URL 不能直接用 TBTOOLS_RPC_URL（config.sh 导出的是 .../rpc，兜底永不生效→健康检查打到 /rpc 永远失败，08/31 盲测 P0 bug）
+# 正确：剥掉 /rpc 后缀拼 /health
+HEALTH_URL="${RPC_URL%/rpc}/health"
 RPC_PORT="${TBTOOLS_RPC_PORT:-8765}"
 
 # ---------- 工具函数 ----------
