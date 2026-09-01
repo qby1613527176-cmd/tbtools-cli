@@ -61,7 +61,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 | 24 | `fqfaConv` | `用法: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第98引擎，FastqAndFasta）` | fq2fa 去质量行；fa2fq 生成假质量（IIIIIII）——兼容其他工具的占位质量 |
 | 25 | `hmmExtract` | `用法: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAME 提取（第99引擎，hmmInfoExtracter）` | idList.txt 每行一个 NAME；只保留匹配的 HMM 模型 |
 | 26 | `mastExtract` | `用法: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中序列（第102引擎，ExtractSeqFromMastXML）` | mast.xml: MEME 套件 MAST 输出（root→sequences→sequence(name length)→seg→hit(pos idx match rc)） |
-| 27 | `nwAlign` | `用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）` | inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖） |
+| 27 | `nwAlign` | `用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）` | ⚠️ inSeqN.txt: 每行一条序列（**无 FASTA 头**！传 FASTA 会把 `>s1` 当序列比对） |
 | 28 | `twoSeqBlast` | `用法: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp|blastn|tblastn] [--thread N] [--fmt 6|XML]` | 双序列集 BLAST 比对（第105引擎，CompareTwoSeqSet）——封装 makeblastdb+blast |
 | 29 | `recipBlast` | `用法: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp|blastn|tblastn] [--evalue 1e-5] [--minId 0.3] [--thread N]` | 双向 BLAST 基因家族鉴定（第106引擎，ReciprocalBlast）——封装 makeblastdb+blast 双方向 |
 | 30 | `filterCScore` | `用法: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]` | BLAST tab6 按 C-score 过滤（第107引擎，FilterBlastResultByCScore）——区分直系/旁系同源候选 |
@@ -166,7 +166,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 | 129 | `findblockdual` | `用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]` | ⚠️ 内部 blastp 找同源，需真实双基因组数据验证（第50引擎） |
 | 130 | `collinearRegion` | `用法: collinearRegion <in.collinearity> <simGff> <out.txt>` | MCScanX 共线性→区域文件（第104引擎，CollinearityToRegion） |
 | 131 | `visualizeblock` | `用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]` | inBlockOut: FindBlockDual 输出（findblockdual 命令产物） |
-| 132 | `treeRooting` | `用法: treeRooting <in.nwk> <out.nwk>` | in.nwk: 未定根 NEWICK 树（单树） |
+| 132 | `treeRooting` | `用法: treeRooting <in.nwk> <out.nwk>` | ⚠️ in.nwk: 未定根 NEWICK 树（单树）**必须带枝长**（裸 NEWICK 报 Corrupt NEWICK format） |
 | 133 | `marker` | `用法: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]` | inMarker: 标记 0-1 矩阵（行=locus，列=样本，tab 分隔，首行列名/首列 locus 名） |
 | 134 | `dehist` | `用法: dehist <deg.txt> <out> [width] [height]` | deg.txt: 每行至少 3 列（tab）：任意ID\t值1\t值2（值1/值2 两样本数值，比较大小分左右直方图） |
 | 135 | `msy` | `用法: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [width] [height]` | simplifiedGff.pos: Chr\tGeneName\tStart\tEnd\t[displayChr]\t[displayName]（多物种共线性区域/基因） |
@@ -314,7 +314,8 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 #### `nwAlign`
 
 - 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
-- inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）
+- ⚠️ inSeqN.txt: 每行一条序列，**无 FASTA 头**（08/31 盲测实测：传 FASTA 会把 `>s1` 当序列字符参与比对）
+- 全对全两两比对（纯 Java，无外部依赖）
 
 #### `twoSeqBlast`
 
@@ -468,7 +469,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 
 - 用法: volcano <deg.txt> <outFile> [pvalCutoff] [fcCutoff] [w] [h]
 - deg.txt: GeneID\tLog2FC\tpvalue
-- 通用反射桥 GenericCli 驱动 vocanoPlot.show()
+- 通用反射桥 GenericCli 驱动 volcanoPlot.show()
 
 #### `upset`
 
@@ -927,7 +928,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 #### `treeRooting`
 
 - 用法: treeRooting <in.nwk> <out.nwk>
-- in.nwk: 未定根 NEWICK 树（单树）
+- ⚠️ in.nwk: 未定根 NEWICK 树（单树）**必须带枝长**（08/31 盲测实测：裸 NEWICK `((A,B),(C,D));` 报 `Corrupt NEWICK format` + Java 堆栈；加枝长后成功）
 - out.nwk: MAD 定根后的 NEWICK 树（Tria et al. 2017, MAD rooting）
 - ⚠️ MAD.main() 硬编码输入路径，改调公开静态入口 quickMadRoot()
 

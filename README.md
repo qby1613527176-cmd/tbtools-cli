@@ -1,8 +1,8 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **123 个绘图/分析引擎 + 188 个 RPC 数据工具 + 103 个命令行工具 + 任意引擎反射**，全部实测出图。
-> 2026-08-29 达成 115 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），47 个 Java 桥，150+ 命令。
+> **140 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 任意引擎反射**，全部实测出图。
+> 2026-08-29 达成 115 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），80 个 Java 桥，140+ 命令。
 
 <div align="center">
 
@@ -16,9 +16,9 @@
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 123 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
+| 🎨 **绘图引擎** | 140 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
-| 🛠️ **命令行工具** | 103 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
+| 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
 
 All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Verified with real biological data (oil-Camellia GRAS gene family etc).
@@ -78,7 +78,7 @@ tbtools help
 
 ---
 
-## 🎨 Plotting Engines (123)
+## 🎨 Plotting Engines (140)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
@@ -243,7 +243,7 @@ tbtools tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|
 
 # Table reshape suite (engines 87-90)
 # Merge two tables by key column
-itbtools tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]
+tbtools tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]
 # Wide → long (melt)
 tbtools tableMelt <inTable> <outTable>
 # Select columns by ID-list regex (Match|Contain), optional sort-by-ID-list
@@ -420,7 +420,7 @@ tbtools msa <aligned.fasta> <out.svg> [padding]
 tbtools gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out.svg>
 
 # GFA assembly graph viz
-ntbtools gfa <in.gfa> <out.svg> [w] [h]
+tbtools gfa <in.gfa> <out.svg> [w] [h]
 
 # Plastome circular map (GenBank → annotation)
 tbtools microgenome <in.gbk> <anno.tsv> <out.svg> [micro|macro]
@@ -595,9 +595,9 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 
 | 层 | 能力 | 入口 |
 |:---|:-----|:-----|
-| 🎨 **绘图引擎** | 112 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
+| 🎨 **绘图引擎** | 140 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <方法> '<json>'` |
-| 🛠️ **命令行工具** | 103 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
+| 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <类名> key=value` |
 
 所有引擎在 Linux/WSL 下 **headless 运行**（xvfb），无需 GUI。已用真实生物数据验证（油茶 GRAS 基因家族等）。
