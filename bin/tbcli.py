@@ -202,9 +202,24 @@ def cmd_tool(name, args):
         print(f"▶ {name} -> {cls}")
         os.system(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}")
     else:
-        # 无映射: 用 TBtools 官方 Arg 模式搜索执行 (java -jar jar <工具名>)
+        # 无映射: 先校验类在 jar 中真实存在，避免拼错名直接启动官方 jar 倾倒配置挂死（08/31 盲测 P1）
+        found = _class_in_jar(name)
+        if not found:
+            print(f"❌ 未知工具: {name}", file=sys.stderr)
+            print(f"请用 tbtools list tools 查看可用工具（{len(CLI_TOOLS)} 个）", file=sys.stderr)
+            sys.exit(1)
         print(f"▶ {name} -> 官方 Arg 模式 (java -jar jar {name})")
         os.system(f"java -Xmx4g -jar {JAR} {name} {' '.join(args)}")
+
+def _class_in_jar(name):
+    """校验工具名在 TBtools jar 中是否有对应类（避免拼错名启动官方 jar）"""
+    import subprocess
+    try:
+        r = subprocess.run(["unzip", "-l", JAR], capture_output=True, text=True, timeout=10)
+        return any(name.lower() in line.lower() for line in r.stdout.splitlines())
+    except Exception:
+        # unzip 不可用/异常时保守放行（保留原行为）
+        return True
 
 def cmd_plot(name, args):
     # 绘图引擎统一走 tbplot.sh 桥（绘图类无 main，必须经桥 headless 化）

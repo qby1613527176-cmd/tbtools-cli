@@ -95,7 +95,11 @@ case "${1:-}" in
 
   help|-h|--help) usage;;
   *)
-    if [ -z "${1:-}" ]; then usage; else
+    if [ -z "${1:-}" ]; then usage
+    elif grep -qE "^  ${1}\)" "$ROOT/bin/tbplot.sh"; then
+      # 命令存在于 tbplot.sh 但主入口未显式路由 → 自动降级转发（08/31 盲测 P1 修复）
+      run_plot "$@"
+    else
       echo "❌ 未知命令: $1" >&2; usage; exit 1
     fi
     ;;
