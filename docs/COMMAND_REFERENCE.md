@@ -2447,6 +2447,7 @@ VizGFACli — TBtools GFA 网络图 CLI（子任务 A 新增）
 - **peaktss**: 签名 `<gxf> <macs2_peak.xls> <out>`——**gxf 是必给第 1 参**，不给报用法错误
 - **peakanno**: peak 用 **MACS2 格式**，位置取**第 5 列 abs_summit**（info[4]）；GFF 坐标范围太小（<10kb）与 binSize=10000 索引冲突→用真实范围 GFF
 - **rpkmCal**: **不是 tbplot.sh 命令**，是 CLI 工具：`tbtools tool rpkmCal --countsTable x --lenInfo y --outTable z`
+- ⚠️ rpkmCal **无参赛跑撞硬编码默认路径**：`tbtools tool rpkmCal`（不传参）会先抛 `FileNotFoundException: C:\Users\CJ\Documents\BlastStationDB\gene.length`（TBtools 官方类内置缺陷）而非打印 usage——必须传全参数（--countsTable/--lenInfo/--outTable）（09/01 全量测试观测）
 - **distance**: 方法名小写 `euclidean|pearson|pearsonDist`；**结果输出到 stdout**（不是文件）
 - **goParse**: 产物写到**输入文件同目录**（`<输入名>.TBtools.Parsed.*` 三个文件），无独立输出参数
 - **levelGo / goParse**: 需要本地 obo 文件（如 GSEABase 的 goslim_plant.obo）
