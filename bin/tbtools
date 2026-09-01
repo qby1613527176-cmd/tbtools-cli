@@ -69,7 +69,13 @@ EOF
 
 case "${1:-}" in
   # ======== RPC 层 ========
-  rpc) shift; run_rpc call "$@";;
+  rpc) shift
+    # 兼容 tbtools rpc <method> '<json>'（文档形式，内部补 call）和 tbtools rpc call <method> '<json>'（直通）
+    case "${1:-}" in
+      call|describe|methods|list|start|stop|heatmap) run_rpc "$@";;
+      *) run_rpc call "$@";;
+    esac
+    ;;
   methods) run_rpc methods;;
   server) shift; run_rpc "$@";;
   heatmap) shift; run_rpc heatmap "$@";;

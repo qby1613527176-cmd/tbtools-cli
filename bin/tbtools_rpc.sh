@@ -21,7 +21,11 @@ RPC_PORT="${TBTOOLS_RPC_PORT:-8765}"
 # ---------- 工具函数 ----------
 rpc_call() {
     # 用法: rpc_call <method> <json-params>
-    local method="$1" params="${2:-{}}"
+    local method="$1"
+    # ⚠️ 不能写 "${2:-{}}"：bash 会把参数值多加一个 }，导致 JSON 畸形（09/01 全量测试发现）；
+    #    `${2:-}` 空默认无歧义，再显式补 {}
+    local params="${2:-}"
+    [ -z "$params" ] && params="{}"
     curl -s -X POST "$RPC_URL" \
         -H "Content-Type: application/json" \
         -d "{\"jsonrpc\":\"2.0\",\"method\":\"$method\",\"params\":$params}"
