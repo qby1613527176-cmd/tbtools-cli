@@ -248,6 +248,17 @@ def cmd_tool(name, args):
     if cls:
         # 有映射: 直接 java -cp 调类
         print(f"▶ {name} -> {cls}")
+        if not args:
+            # 无参数时先尝试 --help（ArgsParser 工具有 Usage）
+            r = subprocess.run(f"java -Xmx2g -cp {JAR} {cls} --help", 
+                             shell=True, capture_output=True, text=True, timeout=10)
+            if r.returncode != 0 or not r.stderr.strip():
+                # --help 不行就试无参（有些引擎有 ArgsParser 会自动报 Usage）
+                pass
+            else:
+                print(r.stderr, file=sys.stderr)
+                print(f"\n💡 上面是 {name} 的参数说明，或查看: docs/COMMAND_REFERENCE.md", file=sys.stderr)
+                sys.exit(1)
         sys.exit(_run_tool(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}", name))
     else:
         # 无映射: 先校验类在 jar 中真实存在，避免拼错名直接启动官方 jar 倾倒配置挂死（08/31 盲测 P1）
