@@ -1458,7 +1458,10 @@ case "$1" in
     ;;
 
   *)
-    echo "用法:"
+    echo "❌ 未知命令: $1"
+    echo ""
+    echo "用法: tbplot.sh <命令> [参数...]"
+    echo "或: tbplot.sh help  # 查看全部 140 个命令"
     echo "  tbplot.sh genestructure <gff> <ids(mRNA)> <out> [genome.fa] [w] [h]  # 基因结构图"
     echo "  tbplot.sh motif <meme.xml> <ids> <out> [w] [h]                       # Motif分布图"
     echo "  tbplot.sh volcano <deg.txt> <out> [pvalCut] [fcCut] [w] [h]         # 火山图"

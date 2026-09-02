@@ -110,4 +110,28 @@ public class TbEngineInvoke {
 JAVA
 
 javac -cp "$JAR" -d "$TBCLI_BUILD" "$TBCLI_BUILD/TbEngineInvoke.java" 2>&1 | head -5
-"$JAVA_BIN" -Xmx4g -cp "$TBCLI_BUILD:$JAR" TbEngineInvoke "$ENGINE_CLASS" "$@"
+# ---- 友好错误处理 ----
+_run_engine() {
+  local _err_file
+  _err_file=$(mktemp /tmp/tbtools_err.XXXXXX)
+  "$JAVA_BIN" -Xmx4g -cp "$TBCLI_BUILD:$JAR" TbEngineInvoke "$ENGINE_CLASS" "$@" 2>"$_err_file"
+  local _ec=$?
+  if [ $_ec -ne 0 ]; then
+    echo "" >&2
+    echo "❌ 执行失败（退出码 $_ec）" >&2
+    grep -E "^Exception in thread|^Caused by:|^Error:" "$_err_file" | head -3 | while IFS= read -r _line; do
+      echo "   $_line" >&2
+    done
+    echo "" >&2
+    echo "   💡 常见原因: 参数缺失/格式不对/文件路径错误/数据不匹配" >&2
+    echo "   📖 查看帮助: docs/COMMAND_REFERENCE.md" >&2
+    echo "   🔍 完整堆栈: $_err_file" >&2
+    echo "" >&2
+  else
+    cat "$_err_file" >&2
+  fi
+  rm -f "$_err_file"
+  return $_ec
+}
+
+_run_engine "$@"
