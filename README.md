@@ -65,7 +65,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 ```bash
 # 快速查用法（不用翻手册）：
-tbplot.sh help              # 绘图命令一屏预览
+tbtools --help              # 绘图命令一屏预览
 tbtools list tools          # CLI 工具列表
 tbtools methods             # RPC 方法列表
 java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参数表（含默认值）
@@ -108,7 +108,7 @@ export PATH="$PWD/bin:$PATH"
 bash run_examples.sh   # 一键验证（8 项核心功能）
 ```
 ```bash
-tbtools help
+tbtools --help
 ```
 
 ---
