@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-# tbtools2 — Python click 版 CLI 入口（实验性）
-# 旧入口 bin/tbtools 仍然可用（bash 版）
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-source "$ROOT/config/config.sh" 2>/dev/null
-exec python3 -m tbtools_cli.cli "$@"

@@ -505,12 +505,10 @@ def _load_dynamic_commands():
         content = f.read()
     cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.M))
     # 已迁移命令的原始名（不动态转发）——用 tbplot.sh 里的原始命令名
+    # 只排除真正有 @xxx.command 手动注册的命令 + group 名
     registered = {"seqlogo", "msa", "motif", "genestructure",  # seq
                   "volcano", "heatmap2", "pca", "hclust", "dehist",  # expr
                   "tree", "unrooted", "treeRooting", "onesteptree",  # tree
-                  "circos", "dotplot", "pafviz",  # syn
-                  "upset",  # sets
-                  "peaktss", "peakdist",  # chipseq
                   "version", "doctor", "examples", "seq", "expr", "tree", "tool",
                   "chipseq", "sets", "syn", "asm", "gxf", "mirna", "table",
                   "blast", "fastq", "hmm", "gwas", "engine"}
