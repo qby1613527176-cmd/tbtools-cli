@@ -13,7 +13,14 @@ echo " tbtools-cli 安装"
 echo "=============================================="
 
 # ---------- 1. 查找/设置 TBtools jar ----------
-JAR="${1:-}"
+JAR=""
+# 解析 --jar 参数
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --jar) JAR="$2"; shift 2;;
+        *) [ -z "$JAR" ] && [ -f "$1" ] && JAR="$1"; shift;;
+    esac
+done
 if [ -z "$JAR" ]; then
     JAR="${TBTOOLS_JAR:-}"
 fi
@@ -55,6 +62,16 @@ if command -v java >/dev/null 2>&1; then
 else
     echo "⚠️  未找到 java，请安装 JDK 11+"
 fi
+
+# ---------- 2b. 检查 xvfb-run（绘图必需）----------
+if ! command -v xvfb-run >/dev/null 2>&1; then
+    echo "⚠️  未找到 xvfb-run（绘图引擎需要），安装: sudo apt install xvfb"
+fi
+
+# ---------- 2c. 检查可选依赖 ----------
+for dep in samtools blastp muscle iqtree2 meme mast RNAfold minimap2; do
+    command -v "$dep" >/dev/null 2>&1 && echo "  ✅ $dep ($(command -v $dep))" || true
+done
 
 # ---------- 4. 测试 ----------
 echo ""
