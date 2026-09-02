@@ -577,6 +577,11 @@ tbtools-cli/
 | UnrootedTreeViz | hardcoded demo main |
 | geneOnGenome CLI | jar compile-level bug |
 | PhyloTreeView | needs TreeTab format (not pure Newick) |
+| DualSyn | old JJplot2 framework; `plot()` works but save limited (window traversal fails) |
+| FindBlockDual/Multiple | requires real genome data; synthetic small data triggers `ArrayList.get` OOB |
+| peakAnno | small coordinates (<10kb) trigger `GxFOverlapIndexer` bin boundary bug; use real genome scale |
+| MountainPlot/StackMotif | empty shell in TBtools jar (no implementation) |
+| DistanceAdvanced | pure calculation, no plotting (use `distance` command instead) |
 
 ---
 

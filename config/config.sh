@@ -25,8 +25,10 @@ if [ -z "${TBTOOLS_JAR:-}" ]; then
     for cand in \
         "$HOME/tbtools-cli/lib/TBtools_JRE1.6.jar" \
         "$HOME/TBtools/TBtools_JRE1.6.jar" \
-        "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar" \
+        "$HOME/Downloads/TBtools_JRE1.6.jar" \
+        "$HOME/下载/TBtools_JRE1.6.jar" \
         "/opt/TBtools/TBtools_JRE1.6.jar" \
+        "/usr/local/lib/TBtools_JRE1.6.jar" \
         ; do
         if [ -f "$cand" ]; then TBTOOLS_JAR="$cand"; break; fi
     done
