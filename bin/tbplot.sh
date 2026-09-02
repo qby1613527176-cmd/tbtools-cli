@@ -1471,6 +1471,12 @@ case "$1" in
     ;;
 
   *)
+    if [ -z "$1" ]; then
+      echo "用法: tbplot.sh <命令> [参数...]"
+      echo "      tbplot.sh help          # 查看全部 140 个命令"
+      echo "      tbplot.sh help <命令>   # 查看某命令详细用法"
+      exit 0
+    fi
     echo "❌ 未知命令: $1"
     echo ""
     echo "用法: tbplot.sh <命令> [参数...]"
