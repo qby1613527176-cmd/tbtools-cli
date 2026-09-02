@@ -226,26 +226,112 @@ def examples(command):
         click.echo("\n用法: tbtools examples <命令>")
 
 # ---- 动态加载剩余命令 ----
+# ---- 命令分类映射 ----
+CATEGORY_MAP = {
+    # 序列/结构/域
+    "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
+    "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
+    "mastrun": "seq", "mastExtract": "seq", "mast2tab": "seq", "pep2codon": "seq",
+    "simplehmmscan": "seq", "gel": "seq", "gfa": "seq", "gfa2fa": "seq",
+    # 表达/统计
+    "pca": "expr", "hclust": "expr", "qpcr": "expr", "qpcrExp": "expr",
+    "groupedbar": "expr", "dehist": "expr", "barplot": "expr", "barplotter": "expr",
+    "layoutheatmap": "expr", "cubeheatmap": "expr", "violin": "expr",
+    "colorscheme": "expr", "distance": "expr", "mountain": "expr",
+    "tauIndex": "expr", "exprCorr": "expr", "groupCol": "expr",
+    # 树/进化
+    "phylotree": "tree", "unrooted": "tree", "treeRooting": "tree",
+    "onesteptree": "tree", "degramdom": "tree", "findpath": "tree",
+    "nwAlign": "tree",
+    # 共线性/基因组
+    "circos": "syn", "supercircos": "syn", "circlegene": "syn", "dotplot": "syn",
+    "microsyn": "syn", "msy": "syn", "multisyn": "syn", "dualsyn": "syn",
+    "pafviz": "syn", "pafcomp": "syn", "pafref": "syn",
+    "mcscanx": "syn", "collinearRegion": "syn",
+    "findblockdual": "syn", "findblockmultiple": "syn", "visualizeblock": "syn",
+    "conflictpaf": "syn", "partitionconflict": "syn",
+    "microgenome": "syn",
+    # 集合/ChIP
+    "venn5": "sets", "venn6": "sets", "upset": "sets",
+    "peaktss": "chipseq", "peakdist": "chipseq", "peakanno": "chipseq",
+    "pileup": "chipseq",
+    # 组装/注释
+    "ctgGroup": "asm", "homoPhase": "asm", "sepChr": "asm",
+    "bamMerge": "asm", "bamindex": "asm", "bamsort": "asm", "bamstate": "asm",
+    "hicEnzyme": "asm", "virusRecomb": "asm", "preparespecies": "asm",
+    "gxfRename": "gxf", "gxfStat": "gxf", "gxfAppend": "gxf", "gxfGenepos": "gxf",
+    "gxfRegion": "gxf", "gxfFix": "gxf", "gxfOverlap": "gxf", "gxfRepIDs": "gxf",
+    "gxfRepGXF": "gxf", "gxfMatch": "gxf", "gxfRecall": "gxf",
+    "regionAnno": "gxf", "annocompare": "gxf", "genedensity": "gxf",
+    "genelocation": "gxf", "genelocgff": "gxf", "gxfSort": "gxf",
+    # miRNA
+    "mirnatarget": "mirna", "mirnaTarget2": "mirna", "mirnaIdentify": "mirna",
+    # GO/表格
+    "levelGo": "table", "goParse": "table", "batchReplace": "table",
+    "tableCollapse": "table", "tableColSelect": "table", "tableAppend": "table",
+    "tableMelt": "table", "tableColSel": "table", "tableCast": "table",
+    "tableUniq": "table", "tableTranspose": "table", "tableSplit": "table",
+    "tableMerge": "table",
+    # BLAST/比对
+    "recipBlast": "blast", "filterCScore": "blast", "quickFamily": "blast",
+    "twoSeqBlast": "blast",
+    # FASTQ
+    "fqTrim": "fastq", "fqfaConv": "fastq", "fastaSubseq": "fastq",
+    "fastaExtract": "fastq",
+    # HMM
+    "hmmExtract": "hmm",
+    # GWAS
+    "mimicVqsr": "gwas",
+    # 通用
+    "generic": "engine", "efpHeat": "expr", "multiEfp": "expr",
+    "plotrna": "seq", "rnaplot": "seq",
+}
+
+# 分组定义
+GROUPS = {
+    "seq": "序列/结构/域",
+    "expr": "表达/统计",
+    "tree": "树/进化",
+    "syn": "共线性/基因组",
+    "sets": "集合/韦恩",
+    "chipseq": "ChIP-seq",
+    "asm": "组装/注释",
+    "gxf": "GXF/表格",
+    "mirna": "miRNA",
+    "table": "GO/表格",
+    "blast": "BLAST/比对",
+    "fastq": "FASTQ/FASTA",
+    "hmm": "HMM",
+    "gwas": "GWAS",
+    "engine": "通用",
+}
+
+# 动态创建 group（用 click.Group 对象，不用装饰器）
+_groups = {}
+for key, desc in GROUPS.items():
+    g = click.Group(name=key, help=desc)
+    cli.add_command(g, name=key)
+    _groups[key] = g
+
 def _load_dynamic_commands():
-    """从 tbplot.sh 的 case 分支动态生成 click 命令（兼容旧 bash 路由）"""
+    """从 tbplot.sh 动态生成 click 命令，按分类注册到 group"""
     import re
     tbplot_sh = os.path.join(ROOT, "bin", "tbplot.sh")
     if not os.path.isfile(tbplot_sh):
         return
     with open(tbplot_sh) as f:
         content = f.read()
-    # 提取命令名
     cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.M))
-    # 已注册的命令不重复
-    registered = {"logo", "volcano", "heatmap", "draw", "stat-fasta", 
+    registered = {"logo", "volcano", "heatmap", "draw", "stat-fasta",
                   "version", "doctor", "examples", "seq", "expr", "tree", "tool"}
     for cmd_name in sorted(cmds - registered):
-        # 为每个未注册的命令生成一个转发命令
-        _make_passthrough(cmd_name)
+        cat = CATEGORY_MAP.get(cmd_name, "engine")
+        _make_passthrough(cmd_name, _groups[cat])
 
-def _make_passthrough(name):
+def _make_passthrough(name, group=None):
     """生成一个转发到 tbplot.sh 的命令"""
-    @cli.command(name=name, context_settings={"ignore_unknown_options": True, "allow_extra_args": True})
+    _target = group or cli
+    @_target.command(name=name, context_settings={"ignore_unknown_options": True, "allow_extra_args": True})
     @click.pass_context
     def _cmd(ctx, **kw):
         args = ["bash", os.path.join(ROOT, "bin", "tbplot.sh"), name] + ctx.args
