@@ -119,8 +119,11 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GenericCli")
     args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
-            "GenericCli", "biocjava.bioDoer.JIGplotToolkit.vocanoPlot",
-            output_file, "--set", "inTabFile", deg_file]
+            "GenericCli", "biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot", "show",
+            output_file, "--set", "inData", deg_file]
+    args += ["--set", "log2FoldChange", "true", "--set", "negLogPvalue", "true"]
+    args += ["--set", "pvalueCutOff", str(pval_cutoff), "--set", "foldChangeCutOff", str(fc_cutoff)]
+    args += ["--set", "normPointSize", "5.0", "--set", "showTopChangeNum", "5"]
     if width:
         args += ["--width", str(width)]
     if height:
@@ -481,12 +484,16 @@ GROUPS = {
     "engine": "通用",
 }
 
-# 动态创建 group（用 click.Group 对象，不用装饰器）
+# 获取已注册的 group 对象（与装饰器创建的是同一个）
 _groups = {}
 for key, desc in GROUPS.items():
-    g = click.Group(name=key, help=desc)
-    cli.add_command(g, name=key)
-    _groups[key] = g
+    if key in cli.commands:
+        _groups[key] = cli.commands[key]  # 复用装饰器创建的 group
+    else:
+        # 不存在则创建
+        g = click.Group(name=key, help=desc)
+        cli.add_command(g, name=key)
+        _groups[key] = g
 
 def _load_dynamic_commands():
     """从 tbplot.sh 动态生成 click 命令，按分类注册到 group"""
@@ -497,8 +504,16 @@ def _load_dynamic_commands():
     with open(tbplot_sh) as f:
         content = f.read()
     cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.M))
-    registered = {"logo", "volcano", "heatmap", "draw", "stat-fasta",
-                  "version", "doctor", "examples", "seq", "expr", "tree", "tool"}
+    # 已迁移命令的原始名（不动态转发）——用 tbplot.sh 里的原始命令名
+    registered = {"seqlogo", "msa", "motif", "genestructure",  # seq
+                  "volcano", "heatmap2", "pca", "hclust", "dehist",  # expr
+                  "tree", "unrooted", "treeRooting", "onesteptree",  # tree
+                  "circos", "dotplot", "pafviz",  # syn
+                  "upset",  # sets
+                  "peaktss", "peakdist",  # chipseq
+                  "version", "doctor", "examples", "seq", "expr", "tree", "tool",
+                  "chipseq", "sets", "syn", "asm", "gxf", "mirna", "table",
+                  "blast", "fastq", "hmm", "gwas", "engine"}
     for cmd_name in sorted(cmds - registered):
         cat = CATEGORY_MAP.get(cmd_name, "engine")
         _make_passthrough(cmd_name, _groups[cat])
