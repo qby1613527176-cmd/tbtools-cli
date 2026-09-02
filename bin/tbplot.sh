@@ -704,6 +704,7 @@ case "$1" in
     ;;
   markertools)
     # 用法: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoint]
+    #   ⚠️ 结果输出到 stderr（非 stdout），命令替换需 2>&1
     #   分子标记分析组（工具 89：MarkerFilter minor allele / MarkerDist / SampleDist——main 均硬编码）
     #   in.marker.tab: 0/1 标记矩阵（行=样本，列=标记，首行列名+首列行名）
     shift
@@ -1008,6 +1009,7 @@ case "$1" in
     # 用法: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]
     #   macs2_peak.xls: MACS2 标准 peak 格式（chr start end length abs_summit ...）
     #   引擎: peakAnno（自带 ArgsParser，开箱即用；peak 坐标列必须标准 MACS2 格式）
+    #   ⚠️ 小坐标（<10000）触发 GxFOverlapIndexer bin 边界 bug，须真实尺度坐标
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]"; exit 1; fi
     xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno --inGXF "$1" --peakInfo "$2" --outTab "$3" "${@:4}"
@@ -1051,6 +1053,7 @@ case "$1" in
     xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PafGC "$@"
     ;;
   pafref)
+    #   ⚠️ PAF 必须含 cg:Z: CIGAR 标签（否则 extractCigar null → NPE）
     # 用法: pafref --inPaf <paf> --outTab <out.tsv>
     #   PAF 参考碱基覆盖计算（minimap2 -c --cs 输出）
     shift
@@ -1322,7 +1325,7 @@ case "$1" in
     # 用法: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --start1 S --end1 E] [--chr2 C --start2 S --end2 E] [--highlight1 c:s:e] [--highlight2 c:s:e]
     #   gxf1/gxf2: 两物种 GFF/GXF 注释
     #   collinearity: MCScanX 输出（*.collinearity）
-    #   引擎: MicroSyntenicAdvance（窗口遍历方案）双基因组微共线性图
+    #   ⚠️ 必须指定 --chr1/--start1/--end1 和 --chr2/--start2/--end2（否则空 Region NPE）
     shift
     if [ $# -lt 4 ]; then echo "用法: tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/MicroSynCli.java" 2>/dev/null
@@ -1385,7 +1388,7 @@ case "$1" in
       echo "       tbplot.sh help <命令>   查看某命令详细用法（多行）"
       echo "================================================"
       echo ""
-      echo "📖 完整手册: docs/COMMAND_REFERENCE.md（88 绘图命令 + 82 工具 + 80 桥 + 28 坑位）"
+      echo "📖 完整手册: docs/COMMAND_REFERENCE.md（88 绘图命令 + 82 工具 + 80 桥 + 35 坑位）"
       echo "   RPC 188 方法: docs/rpc_methods_reference.md"
       echo ""
       echo "全部命令（$(sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\))/\1/p' "$0" | sort -u | wc -l) 个):"

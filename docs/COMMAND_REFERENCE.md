@@ -2443,12 +2443,17 @@ VizGFACli — TBtools GFA 网络图 CLI（子任务 A 新增）
 - **admixture**: 第一个参数是 qFiles.lst（**每行一个 Q 矩阵文件路径**），不是 Q 矩阵内容本身
 - **dotplot**: --chrLayout 传**文件路径**（文件内容 `Genome: Chr1 Chr2...`，冒号分隔），不是内联字符串；染色体名须匹配简化 GFF
 - **dualsyn**: 简化 GFF 染色体名**必须数字**（parseInt）；需显式 `--chr1/--chr2`；合成小数据时图尺寸小（引擎按元素边界定 SVG 尺寸）
-- **microsyn**: 给 `--chr1/--chr2` 区域参数更稳（自动取全基因区也行）；collinearity 用 MCScanX 输出
+- **microsyn**: **必须**指定 `--chr1/--start1/--end1` 和 `--chr2/--start2/--end2`（不指定→空 Region→ `ArrayIndexOutOfBoundsException: Index 0` at process:146）；collinearity 用 MCScanX 输出
 - **peaktss**: 签名 `<gxf> <macs2_peak.xls> <out>`——**gxf 是必给第 1 参**，不给报用法错误
-- **peakanno**: peak 用 **MACS2 格式**，位置取**第 5 列 abs_summit**（info[4]）；GFF 坐标范围太小（<10kb）与 binSize=10000 索引冲突→用真实范围 GFF
+- **peakanno**: peak 用 **MACS2 格式**，位置取**第 5 列 abs_summit**（info[4]）；⚠️ **小坐标（<binSize 10000）触发 GxFOverlapIndexer bin 边界 bug**（`fixed startBIN:1` 查空 bin→0 条→空输出），须用真实基因组尺度坐标（百万级 bp）
 - **rpkmCal**: **不是 tbplot.sh 命令**，是 CLI 工具：`tbtools tool rpkmCal --countsTable x --lenInfo y --outTable z`
 - ⚠️ rpkmCal **无参赛跑撞硬编码默认路径**：`tbtools tool rpkmCal`（不传参）会先抛 `FileNotFoundException: C:\Users\CJ\Documents\BlastStationDB\gene.length`（TBtools 官方类内置缺陷）而非打印 usage——必须传全参数（--countsTable/--lenInfo/--outTable）（09/01 全量测试观测）
 - **distance**: 方法名小写 `euclidean|pearson|pearsonDist`；**结果输出到 stdout**（不是文件）
+- **pafref**: PAF 必须含 **`cg:Z:` CIGAR 标签**（`extractCigar` 从 tags 提取，无 `cg:Z:` → null → `Pattern.matcher(null)` NPE）；标准 minimap2 `-c --cs` 输出自带
+- **markertools**: 结果输出到 **stderr**（非 stdout！）命令替换 `$(...)` 需 `2>&1` 捕获；子命令 filter/dist/sampledist
+- **colorscheme**: refColIndex 是 **1-based**（ColorSchemeCli 内部 `-1` 转 0-based），传 0 会 → IndexOutOfBounds(-1)
+- **pileup**: blast.xml 必须含 **`<Iteration_query-len>` 标签**（ncbiPileUpPlot 读 `getQueryLen()` → Double.parseDouble，空→ `NumberFormatException: empty String`）
+- **mirnatarget**: miRNA 和靶标序列**必须配套**（ath-miR166 配 osa-miR171a 阳性对照→0 命中=正常，非 bug）；输出空=无显著命中
 - **goParse**: 产物写到**输入文件同目录**（`<输入名>.TBtools.Parsed.*` 三个文件），无独立输出参数
 - **levelGo / goParse**: 需要本地 obo 文件（如 GSEABase 的 goslim_plant.obo）
 - **pep2codon**: 参数顺序 `<cds.fa> <pep.aln.fa> <out>`（先 CDS 后蛋白比对）
