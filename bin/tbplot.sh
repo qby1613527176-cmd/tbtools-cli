@@ -71,6 +71,12 @@ _run_java() {
   return $_ec2
 }
 
+# 子命令 -h/--help: tbplot.sh <命令> -h → 显示该命令的 help
+if [ $# -ge 2 ] && { [ "$2" = "-h" ] || [ "$2" = "--help" ]; }; then
+  $0 help "$1"
+  exit 0
+fi
+
 case "$1" in
   motif)
     # 用法: motif <meme.xml> <idList.txt> <outFile> [width] [height]
