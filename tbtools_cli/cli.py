@@ -157,6 +157,57 @@ def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col,
     ec = run_plot(args, verbose=verbose, quiet=quiet)
     sys.exit(ec)
 
+@expr_group.command("pca")
+@click.argument("matrix_file")
+@click.argument("output_file")
+@click.argument("direction", type=click.Choice(["row", "col"]), default="row")
+@click.option("--scale/--no-scale", default=False, help="标准化")
+@common_options
+def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, height, width, threads):
+    """PCA 图"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("GenericCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "GenericCli", "biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis",
+            "doPCA+postGraph", output_file,
+            "--set", "inTabFile", matrix_file,
+            "--set", "rowName", "true", "--set", "colName", "true",
+            "--set", "processDirect", direction]
+    if scale: args += ["--set", "scale", "true"]
+    args += ["--set", "pointSize", "8.0", "--set", "showLabel", "true"]
+    if width: args += ["--width", str(width)]
+    if height: args += ["--height", str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@expr_group.command("hclust")
+@click.argument("distance_file")
+@click.argument("output_file")
+@common_options
+def expr_hclust(distance_file, output_file, verbose, quiet, fmt, height, width, threads):
+    """层次聚类树（三列距离文件 GeneA\tGeneB\tdist）"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("HclustCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "HclustCli", distance_file, output_file]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@expr_group.command("dehist")
+@click.argument("deg_file")
+@click.argument("output_file")
+@common_options
+def expr_dehist(deg_file, output_file, verbose, quiet, fmt, height, width, threads):
+    """差异表达双直方图"""
+    output_file = resolve_output(output_file, fmt)
+    args = ["java", "-Xmx2g", "-cp", JAR,
+            "biocjava.bioDoer.JIGplotToolkit.DiffExp.DualHistPlot.DiffExpDualHistPlot",
+            deg_file, output_file]
+    if width: args += [str(width)]
+    if height: args += [str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
 # ---- 命令组：树/进化 ----
 @cli.group("tree")
 def tree_group():
@@ -242,6 +293,37 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, height, width,
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
             "--inFasta", input_file, "--outPutFile", output_file]
+    ec = run_java(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@tool_group.command("cds2protein")
+@click.argument("cds_fasta")
+@click.argument("output_file")
+@common_options
+def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, height, width, threads):
+    """CDS → 蛋白质翻译"""
+    if output_file == "-": output_file = "/dev/stdout"
+    args = ["java", "-Xmx2g", "-cp", JAR,
+            "biocjava.bioDoer.JIGplotToolkit.Protein.CdsToProtein",
+            cds_fasta, output_file]
+    ec = run_java(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@tool_group.command("fasta-extract")
+@click.argument("input_fasta")
+@click.argument("id_list")
+@click.argument("output_file")
+@common_options
+def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, height, width, threads):
+    """按 ID 列表提取 FASTA 序列"""
+    if input_fasta == "-":
+        import tempfile; tmp = tempfile.mktemp(suffix=".fa")
+        with open(tmp, "wb") as f: f.write(sys.stdin.buffer.read())
+        input_fasta = tmp
+    if output_file == "-": output_file = "/dev/stdout"
+    args = ["java", "-Xmx2g", "-cp", JAR,
+            "biocjava.bioIO.FastX.FastaIndex.ExtractFasta",
+            input_fasta, id_list, output_file]
     ec = run_java(args, verbose=verbose, quiet=quiet)
     sys.exit(ec)
 
