@@ -175,7 +175,7 @@ def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, he
             "doPCA+postGraph", output_file,
             "--set", "inTabFile", matrix_file,
             "--set", "rowName", "true", "--set", "colName", "true",
-            "--set", "processDirect", direction]
+            "--set", "processDirect", "Rows" if direction == "row" else "Columns"]
     if scale: args += ["--set", "scale", "true"]
     args += ["--set", "pointSize", "8.0", "--set", "showLabel", "true"]
     if width: args += ["--width", str(width)]
