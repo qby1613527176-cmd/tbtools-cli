@@ -2497,7 +2497,7 @@ tbtools methods               # 列出 188 方法
 tbtools heatmap <matrix> <out.png> [group]   # 热图快捷
 ```
 
-完整方法参考（含参数/返回值）：**`docs/rpc_methods_reference.md`**（89KB，183+ 方法）。
+完整方法参考（含参数/返回值）：**`docs/rpc_methods_reference.md`**（89KB，188 方法（含 5 个 system.* 标准方法））。
 
 ### RPC 抽查记录（2026-08-31，三轮 + 修正，覆盖 ~50 方法）
 
