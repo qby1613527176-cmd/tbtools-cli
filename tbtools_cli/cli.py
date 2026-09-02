@@ -1,0 +1,259 @@
+"""tbtools-cli 主入口 — Python click 重构版"""
+import click
+import os, sys, subprocess
+
+# ---- 配置 ----
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from tbtools_cli.core import JAR, run_java, run_plot, ensure_bridge, resolve_output, ROOT
+
+# ---- 通用选项 ----
+def common_options(f):
+    """通用选项装饰器：--verbose, --quiet, --format, --width, --height"""
+    f = click.option("--verbose", "-V", is_flag=True, default=False, help="显示完整堆栈（debug 模式）")(f)
+    f = click.option("--quiet", "-q", is_flag=True, default=False, help="静默模式（只显示错误）")(f)
+    f = click.option("--format", "-f", "fmt", default=None, help="输出格式: svg|png|pdf")(f)
+    f = click.option("--height", "-H", type=int, default=None, help="画布高度")(f)
+    f = click.option("--width", "-W", type=int, default=None, help="画布宽度")(f)
+    f = click.option("--threads", "-t", type=int, default=None, help="线程数")(f)
+    return f
+
+# ---- 主命令组 ----
+@click.group(invoke_without_command=True)
+@click.version_option("1.0.0", prog_name="tbtools-cli")
+@click.pass_context
+def cli(ctx):
+    """TBtools-II 全功能 CLI — 140 绘图命令 + 82 工具 + 188 RPC"""
+    if ctx.invoked_subcommand is None:
+        click.echo(ctx.get_help())
+
+# ---- 命令组：序列/结构 ----
+@cli.group("seq")
+def seq_group():
+    """序列/结构域命令"""
+    pass
+
+@seq_group.command("logo")
+@click.argument("input_file")
+@click.argument("output_file")
+@click.option("--scale-ic/--no-scale-ic", default=True, help="按信息含量缩放")
+@click.option("--show-pos/--no-show-pos", default=False, help="显示位置编号")
+@common_options
+def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, height, width, threads):
+    """序列 LOGO 图"""
+    output_file = resolve_output(output_file, fmt)
+    args = ["java", "-Xmx2g", "-cp", JAR,
+            "biocjava.bioDoer.seqLogo.makeSeqLogo",
+            "--inFile", input_file, "--OutGraph", output_file]
+    if not scale_ic:
+        args += ["--scaleIC=false"]
+    if show_pos:
+        args += ["--showPos=true"]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+# ---- 命令组：表达/统计 ----
+@cli.group("expr")
+def expr_group():
+    """表达/统计命令"""
+    pass
+
+@expr_group.command("volcano")
+@click.argument("deg_file")
+@click.argument("output_file")
+@click.option("--pval-cutoff", "-p", type=float, default=0.05, help="P值阈值")
+@click.option("--fc-cutoff", "-c", type=float, default=1.0, help="Log2FC 阈值")
+@common_options
+def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, height, width, threads):
+    """火山图（DEG: GeneID Log2FC pvalue）"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("GenericCli")
+    args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "GenericCli", "biocjava.bioDoer.JIGplotToolkit.vocanoPlot",
+            output_file, "--set", "inTabFile", deg_file]
+    if width:
+        args += ["--width", str(width)]
+    if height:
+        args += ["--height", str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@expr_group.command("heatmap")
+@click.argument("matrix_file")
+@click.argument("output_file")
+@click.option("--log2/--no-log2", default=False, help="log2 转换")
+@click.option("--row-scale/--no-row-scale", default=False, help="行标准化")
+@click.option("--cluster-row/--no-cluster-row", default=False, help="行聚类")
+@click.option("--cluster-col/--no-cluster-col", default=False, help="列聚类")
+@common_options
+def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col, verbose, quiet, fmt, height, width, threads):
+    """热图（表达矩阵）"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("HeatmapCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "HeatmapCli", matrix_file, output_file]
+    if log2:
+        args += ["--log2"]
+    if row_scale:
+        args += ["--rowScale"]
+    if cluster_row:
+        args += ["--clusterRow"]
+    if cluster_col:
+        args += ["--clusterCol"]
+    if width:
+        args += ["--width", str(width)]
+    if height:
+        args += ["--height", str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+# ---- 命令组：树/进化 ----
+@cli.group("tree")
+def tree_group():
+    """树/进化命令"""
+    pass
+
+@tree_group.command("draw")
+@click.argument("config_file")
+@click.argument("output_file")
+@common_options
+def tree_draw(config_file, output_file, verbose, quiet, fmt, height, width, threads):
+    """树+注释图（TreeTreeTree 多轨道）"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("TreeCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "TreeCli", config_file, output_file]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+# ---- 命令组：工具 ----
+@cli.group("tool")
+def tool_group():
+    """命令行工具（82 个）"""
+    pass
+
+@tool_group.command("stat-fasta")
+@click.argument("input_file")
+@click.argument("output_file")
+@common_options
+def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, height, width, threads):
+    """FASTA 序列统计"""
+    # stdin 管道支持
+    if input_file == "-":
+        import tempfile
+        tmp = tempfile.mktemp(suffix=".fa")
+        with open(tmp, "wb") as f:
+            f.write(sys.stdin.buffer.read())
+        input_file = tmp
+    if output_file == "-":
+        output_file = "/dev/stdout"
+    args = ["java", "-Xmx2g", "-cp", JAR,
+            "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
+            "--inFasta", input_file, "--outPutFile", output_file]
+    ec = run_java(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+# ---- 通用命令 ----
+@cli.command()
+def version():
+    """显示版本信息"""
+    click.echo(f"tbtools-cli v1.0.0")
+    click.echo(f"  140 绘图命令 + 82 CLI 工具 + 188 RPC 方法")
+    click.echo(f"  bridges: 80 | engines: 123 | 坑位: 35")
+    r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
+    java_ver = r.stderr.splitlines()[0] if r.stderr else "unknown"
+    click.echo(f"  Java: {java_ver}")
+    click.echo(f"  JAR: {JAR}" if JAR else "  JAR: ⚠️ 未配置")
+
+@cli.command()
+def doctor():
+    """环境诊断"""
+    import shutil
+    ok = warn = err = 0
+    checks = [
+        ("java", "Java", True),
+        ("javac", "javac", False),
+        ("xvfb-run", "xvfb-run（绘图必需）", True),
+    ]
+    for cmd_name, desc, required in checks:
+        if shutil.which(cmd_name):
+            click.echo(f"  ✅ {desc}: 可用")
+            ok += 1
+        elif required:
+            click.echo(f"  ❌ {desc}: 未安装")
+            err += 1
+        else:
+            click.echo(f"  ⚠️ {desc}: 未安装")
+            warn += 1
+    if JAR and os.path.isfile(JAR):
+        size_mb = os.path.getsize(JAR) / 1024 / 1024
+        click.echo(f"  ✅ JAR: {JAR} ({size_mb:.0f}MB)")
+        ok += 1
+    else:
+        click.echo("  ❌ JAR: 未找到")
+        err += 1
+    optional = {"samtools": "SAM/BAM", "blastp": "BLAST", "muscle": "MSA",
+                "iqtree2": "建树", "meme": "Motif", "RNAfold": "RNA"}
+    avail = [f"{d}({v})" for d, v in optional.items() if shutil.which(d)]
+    if avail:
+        click.echo(f"  ✅ 可选依赖: {', '.join(avail[:5])}")
+        ok += 1
+    click.echo(f"\n  汇总: ✅ {ok}  ⚠️ {warn}  ❌ {err}")
+    if err:
+        sys.exit(1)
+
+@cli.command()
+@click.argument("command", required=False)
+def examples(command):
+    """显示命令示例"""
+    EX = {
+        "seqlogo": ("序列 LOGO", "tbtools seq logo examples/data/phylogeny/msa.fa logo.svg"),
+        "volcano": ("火山图", "tbtools expr volcano examples/data/deg.txt volcano.svg"),
+        "heatmap": ("热图", "tbtools expr heatmap examples/data/expr/expr.tsv heatmap.svg --log2 --cluster-row"),
+        "tree": ("系统发育树", "tbtools tree draw test_reports/data_b5/tree.config tree.svg"),
+        "stat-fasta": ("FASTA 统计", "tbtools tool stat-fasta examples/data/rpc/gras6_pep.fa stat.xls"),
+    }
+    if command and command in EX:
+        click.echo(f"\n{command} 示例:")
+        click.echo(f"  {EX[command][0]}:")
+        click.echo(f"    {EX[command][1]}")
+    elif command:
+        click.echo(f"暂无 {command} 的示例。查看帮助: tbtools {command} --help")
+    else:
+        click.echo("tbtools-cli 命令示例")
+        for name, (desc, cmd) in EX.items():
+            click.echo(f"  {name}: {desc}")
+            click.echo(f"    {cmd}")
+        click.echo("\n用法: tbtools examples <命令>")
+
+# ---- 动态加载剩余命令 ----
+def _load_dynamic_commands():
+    """从 tbplot.sh 的 case 分支动态生成 click 命令（兼容旧 bash 路由）"""
+    import re
+    tbplot_sh = os.path.join(ROOT, "bin", "tbplot.sh")
+    if not os.path.isfile(tbplot_sh):
+        return
+    with open(tbplot_sh) as f:
+        content = f.read()
+    # 提取命令名
+    cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.M))
+    # 已注册的命令不重复
+    registered = {"logo", "volcano", "heatmap", "draw", "stat-fasta", 
+                  "version", "doctor", "examples", "seq", "expr", "tree", "tool"}
+    for cmd_name in sorted(cmds - registered):
+        # 为每个未注册的命令生成一个转发命令
+        _make_passthrough(cmd_name)
+
+def _make_passthrough(name):
+    """生成一个转发到 tbplot.sh 的命令"""
+    @cli.command(name=name, context_settings={"ignore_unknown_options": True, "allow_extra_args": True})
+    @click.pass_context
+    def _cmd(ctx, **kw):
+        args = ["bash", os.path.join(ROOT, "bin", "tbplot.sh"), name] + ctx.args
+        ec = subprocess.run(args).returncode
+        sys.exit(ec)
+    _cmd.__doc__ = f"转发到 tbplot.sh {name}"
+
+_load_dynamic_commands()
+
+if __name__ == "__main__":
+    cli()
