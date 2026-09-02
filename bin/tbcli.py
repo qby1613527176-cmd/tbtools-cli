@@ -17,6 +17,9 @@ tbcli — TBtools-II 2.535 全功能 CLI 统一入口（完整版）
   tbcli engine <类名> [k=v...] # 任意引擎反射调用（tbengine.sh）
   tbcli server start|stop     # RPC 服务器管理
 """
+
+VERSION = "1.0.0"
+
 import subprocess, sys, json, os, re, urllib.request
 
 JAR = os.environ.get("TBTOOLS_JAR", "")
@@ -287,6 +290,105 @@ def cmd_plot(name, args):
 def cmd_engine(cls, kvs):
     os.system(f"bash {SCRIPTS}/tbengine.sh {cls} {' '.join(kvs)}")
 
+def cmd_version():
+    print(f"tbtools-cli v{VERSION}")
+    print(f"  140 绘图命令 + 82 CLI 工具 + 188 RPC 方法")
+    print(f"  bridges: 80 | engines: 123 | 坑位: 35")
+    import subprocess
+    try:
+        r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
+        java_ver = r.stderr.split("\n")[0] if r.stderr else "unknown"
+        print(f"  Java: {java_ver}")
+    except: print("  Java: not found")
+    jar = os.environ.get("TBTOOLS_JAR", "")
+    if jar and os.path.isfile(jar):
+        print(f"  JAR: {jar}")
+    else:
+        print(f"  JAR: ⚠️ 未配置（运行 tbtools doctor 排查）")
+
+def cmd_doctor():
+    import subprocess, shutil
+    print("tbtools-cli 环境诊断")
+    print("=" * 40)
+    ok = 0; warn = 0; err = 0
+    
+    # Java
+    if shutil.which("java"):
+        r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
+        ver = r.stderr.split("\n")[0] if r.stderr else "?"
+        print(f"  ✅ Java: {ver}")
+        ok += 1
+    else:
+        print("  ❌ Java: 未安装（需要 JDK 11+）")
+        err += 1
+    
+    # javac
+    if shutil.which("javac"):
+        print("  ✅ javac: 可用")
+        ok += 1
+    else:
+        print("  ⚠️ javac: 未安装（编译桥需要）")
+        warn += 1
+    
+    # xvfb-run
+    if shutil.which("xvfb-run"):
+        print("  ✅ xvfb-run: 可用（绘图必需）")
+        ok += 1
+    else:
+        print("  ❌ xvfb-run: 未安装（绘图引擎需要，apt install xvfb）")
+        err += 1
+    
+    # JAR
+    jar = os.environ.get("TBTOOLS_JAR", "")
+    if jar and os.path.isfile(jar):
+        size_mb = os.path.getsize(jar) / 1024 / 1024
+        print(f"  ✅ JAR: {jar} ({size_mb:.0f}MB)")
+        ok += 1
+    else:
+        # 尝试常见位置
+        import os.path as op
+        cands = [
+            op.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar"),
+            op.expanduser("~/Downloads/TBtools_JRE1.6.jar"),
+            op.expanduser("~/下载/TBtools_JRE1.6.jar"),
+            "/opt/TBtools/TBtools_JRE1.6.jar",
+        ]
+        found = [c for c in cands if op.isfile(c)]
+        if found:
+            print(f"  ✅ JAR: {found[0]}（建议设置 TBTOOLS_JAR）")
+            ok += 1
+        else:
+            print("  ❌ JAR: 未找到（下载 TBtools_JRE1.6.jar）")
+            err += 1
+    
+    # 可选依赖
+    optional = {
+        "samtools": "SAM/BAM 处理", "blastp": "BLAST 比对", "muscle": "多序列比对",
+        "iqtree2": "系统发育建树", "meme": "Motif 发现", "mast": "Motif 扫描",
+        "RNAfold": "RNA 二级结构", "minimap2": "基因组比对",
+    }
+    avail = []
+    for dep, desc in optional.items():
+        path = shutil.which(dep)
+        if path:
+            avail.append(f"{dep}({desc})")
+    if avail:
+        print(f"  ✅ 可选依赖: {', '.join(avail[:5])}")
+        ok += 1
+    else:
+        print("  ℹ️ 可选依赖: 无（部分命令需要 samtools/blastp/muscle/iqtree2/meme 等）")
+    
+    print()
+    print(f"  汇总: ✅ {ok}  ⚠️ {warn}  ❌ {err}")
+    if err > 0:
+        print("  ❌ 有致命问题，请按上述提示修复。")
+        sys.exit(1)
+    elif warn > 0:
+        print("  ⚠️ 有警告，部分功能可能不可用。")
+    else:
+        print("  ✅ 环境完全就绪！")
+    sys.exit(0)
+
 def usage():
     print(__doc__.split("用法：")[1])
 
@@ -299,4 +401,6 @@ if __name__ == "__main__":
     elif c == "plot" and len(sys.argv) >= 3: cmd_plot(sys.argv[2], sys.argv[3:])
     elif c == "engine" and len(sys.argv) >= 3: cmd_engine(sys.argv[2], sys.argv[3:])
     elif c == "server" and len(sys.argv) >= 3: (start_server if sys.argv[2] == "start" else stop_server)()
+    elif c == "version" or c == "--version" or c == "-v": cmd_version()
+    elif c == "doctor": cmd_doctor()
     else: usage()

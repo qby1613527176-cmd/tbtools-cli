@@ -6,6 +6,7 @@
 #   1. RPC 数据工具（188 方法）— rpc/methods/server
 #   2. 绘图引擎（97 个）— genestructure/motif/.../venn6/multisyn/efpHeat
 #   3. 命令行工具（82 个）— tool
+#   5. 版本/诊断 — version/doctor
 #   4. 任意引擎反射 — engine
 #
 # 依赖：TBtools_JRE1.6.jar（详见 README）
@@ -70,6 +71,11 @@ RPC 数据工具（188 方法）:
   TBTOOLS_JAR     TBtools jar 路径（必需）
   TBTOOLS_JAVA    java 可执行（默认 JAVA_HOME/bin/java）
   TBTOOLS_RPC_PORT RPC 端口（默认 8765）
+
+其他:
+  tbtools version    # 查看版本
+  tbtools doctor     # 环境诊断
+  tbtools help       # 本帮助
 EOF
 }
 
@@ -105,6 +111,8 @@ case "${1:-}" in
     run_plot "$CMD" "$@"
     ;;
 
+  version|--version|-V) python3 "$ROOT/bin/tbcli.py" version;;
+  doctor) python3 "$ROOT/bin/tbcli.py" doctor;;
   help|-h|--help) usage;;
   *)
     if [ -z "${1:-}" ]; then usage

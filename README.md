@@ -12,6 +12,22 @@
 
 ---
 
+## 🚀 Quick Start
+
+```bash
+tbtools version          # 查看版本
+tbtools doctor           # 环境诊断（检查 Java/JAR/xvfb/依赖）
+bash run_examples.sh     # 一键验证（8 项核心功能）
+```
+
+### Bash Completion（tab 补全）
+
+```bash
+source completions/tbtools_completion.bash   # 临时启用
+# 或永久安装:
+cp completions/tbtools_completion.bash ~/.local/share/bash-completion/completions/tbtools
+```
+
 ## ✨ Features
 
 | Layer | Capability | Entry |
