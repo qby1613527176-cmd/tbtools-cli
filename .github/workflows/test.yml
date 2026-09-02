@@ -1,0 +1,52 @@
+name: tbtools-cli CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb samtools blast+ muscle iqtree2 mempickr meme
+      
+      - name: Download TBtools jar
+        run: |
+          # TBtools jar 需要用户手动下载
+          # CI 环境下用占位 JAR 跳过引擎测试
+          echo "⚠️ TBtools jar 不可用于 CI（需手动下载）"
+          echo "CI 只验证 Python click 框架 + bash 语法"
+      
+      - name: Verify click framework
+        run: |
+          python3 -c "import click; print(f'click {click.__version__}')"
+          python3 -c "import sys; sys.path.insert(0,'.'); from tbtools_cli.cli import cli; print(f'click CLI loaded: {len(cli.commands)} groups')"
+          python3 -c "import sys; sys.path.insert(0,'.'); from tbtools_cli.auto_commands import *; print('auto_commands loaded')"
+      
+      - name: Verify bash scripts
+        run: |
+          bash -n bin/tbplot.sh && echo "tbplot.sh 语法 OK"
+          bash -n bin/tbtools && echo "tbtools 语法 OK"
+          bash -n bin/tbengine.sh && echo "tbengine.sh 语法 OK"
+          bash -n install.sh && echo "install.sh 语法 OK"
+          bash -n run_examples.sh && echo "run_examples.sh 语法 OK"
+      
+      - name: Verify metadata
+        run: |
+          python3 -c "
+          import json
+          m = json.load(open('tbtools_cli/command_metadata.json'))
+          assert len(m) == 140, f'Expected 140 commands, got {len(m)}'
+          bridges = sum(1 for v in m.values() if v['mode'] == 'bridge')
+          directs = sum(1 for v in m.values() if v['mode'] == 'direct')
+          print(f'Commands: {len(m)} (bridges: {bridges}, direct: {directs})')
+          "
