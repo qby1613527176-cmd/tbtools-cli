@@ -2,7 +2,7 @@
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
 > **140 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 任意引擎反射**，全部实测出图。
-> 2026-08-29 达成 115 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），80 个 Java 桥，140+ 命令。
+> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），80 个 Java 桥，140 命令。10 批回归 162/162 PASS。
 
 <div align="center">
 
