@@ -473,7 +473,7 @@ tbtools heatmap matrix.tsv out.png [group.tsv]   # quick heatmap
 
 ---
 
-## 🛠️ CLI Tools (36)
+## 🛠️ CLI Tools (82)
 
 ```bash
 tbtools tool <name> [args...]      # run any CLI tool; full help: tbtools list tools

@@ -57,7 +57,11 @@ RPC 数据工具（188 方法）:
   tbtools heatmap <matrix> <out> [group]  # 热图快捷
 
 命令行工具（82 个）:
-  tbtools tool <名称> [参数...]       # 见: tbtools list tools
+  tbtools tool statFasta --inFasta x.fa --outPutFile y.xls    # FASTA 统计
+  tbtools tool rpkmCal --countsTable c.tsv --lenInfo l.tsv --outTable r.xls  # RPKM 计算
+  tbtools tool tpmCalc --countsTable c.tsv --lenInfo l.tsv --outTable t.xls  # TPM 计算
+  tbtools tool mimicVqsrCutoffFind ...                       # GWAS 质控
+  tbtools list tools                                          # 列出全部 82 个工具
 
 任意引擎反射（万能兜底）:
   tbtools engine <引擎类> key=value [--call 方法]
