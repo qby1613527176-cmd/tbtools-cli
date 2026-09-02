@@ -195,12 +195,49 @@ def cmd_rpc(method, params_json):
     params = json.loads(params_json) if params_json else {}
     print(json.dumps(rpc_call(method, params), ensure_ascii=False, indent=2))
 
+def _run_tool(java_cmd, tool_name):
+    """执行 java 工具命令，失败时输出友好错误提示"""
+    import subprocess, tempfile, os
+    _err_file = tempfile.mktemp(prefix="tbtools_err.")
+    r = subprocess.run(java_cmd, shell=True, stderr=open(_err_file, "w"))
+    if r.returncode != 0:
+        print("", file=sys.stderr)
+        print(f"❌ 执行失败（退出码 {r.returncode}）", file=sys.stderr)
+        # 提取异常关键行
+        import re
+        with open(_err_file) as f:
+            lines = f.readlines()
+        exc_lines = [l.rstrip() for l in lines if re.match(r'^(Exception in thread|Caused by:|Error:|\[Error\])', l)]
+        if exc_lines:
+            for l in exc_lines[:3]:
+                print(f"   {l}", file=sys.stderr)
+        else:
+            # 取最后 3 行非空
+            nonblank = [l.rstrip() for l in lines if l.strip()]
+            for l in nonblank[-3:]:
+                print(f"   {l}", file=sys.stderr)
+        print("", file=sys.stderr)
+        print("   💡 常见原因: 参数缺失/格式不对/文件路径错误/数据不匹配", file=sys.stderr)
+        print(f"   📖 查看帮助: tbtools list tools 或 docs/COMMAND_REFERENCE.md", file=sys.stderr)
+        print(f"   🔍 完整堆栈: {_err_file}", file=sys.stderr)
+        print("", file=sys.stderr)
+    else:
+        # 成功时输出引擎进度信息到 stderr
+        try:
+            with open(_err_file) as f:
+                import sys as _sys
+                _sys.stderr.write(f.read())
+        except: pass
+    try: os.unlink(_err_file)
+    except: pass
+    return r.returncode
+
 def cmd_tool(name, args):
     cls = CLI_TOOLS.get(name)
     if cls:
         # 有映射: 直接 java -cp 调类
         print(f"▶ {name} -> {cls}")
-        os.system(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}")
+        sys.exit(_run_tool(f"java -Xmx4g -cp {JAR} {cls} {' '.join(args)}", name))
     else:
         # 无映射: 先校验类在 jar 中真实存在，避免拼错名直接启动官方 jar 倾倒配置挂死（08/31 盲测 P1）
         found = _class_in_jar(name)
@@ -209,7 +246,7 @@ def cmd_tool(name, args):
             print(f"请用 tbtools list tools 查看可用工具（{len(CLI_TOOLS)} 个）", file=sys.stderr)
             sys.exit(1)
         print(f"▶ {name} -> 官方 Arg 模式 (java -jar jar {name})")
-        os.system(f"java -Xmx4g -jar {JAR} {name} {' '.join(args)}")
+        sys.exit(_run_tool(f"java -Xmx4g -jar {JAR} {name} {' '.join(args)}", name))
 
 def _class_in_jar(name):
     """校验工具名在 TBtools jar 中是否有对应类（避免拼错名启动官方 jar）"""

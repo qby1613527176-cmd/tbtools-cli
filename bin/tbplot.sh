@@ -22,31 +22,66 @@ done
 # jar 检查
 tbtools_check_jar || exit 1
 
+# ---- 友好错误处理 wrapper ----
+# 用法: _run_java xvfb-run -a java -Xmx4g -cp ... ClassName "$@"
+# 成功时: 正常输出（stderr 进度信息照常显示）
+# 失败时: 截取异常摘要 + 友好提示，不显示完整 Java 堆栈
+_run_java() {
+  local _err_file
+  _err_file=$(mktemp /tmp/tbtools_err.XXXXXX)
+  "$@" 2>"$_err_file"
+  local _ec=$?
+  if [ $_ec -ne 0 ]; then
+    echo "" >&2
+    echo "❌ 执行失败（退出码 $_ec）" >&2
+    # 提取异常类型+消息（最关键的 1-3 行）
+    grep -E "^Exception in thread|^Caused by:|^Error:" "$_err_file" | head -3 | while IFS= read -r _line; do
+      echo "   $_line" >&2
+    done
+    # 如果没有匹配到标准异常行，取最后 3 行非空 stderr
+    if ! grep -qE "^Exception in thread|^Caused by:|^Error:" "$_err_file"; then
+      grep -v "^$" "$_err_file" | tail -3 | while IFS= read -r _line; do
+        echo "   $_line" >&2
+      done
+    fi
+    echo "" >&2
+    echo "   💡 常见原因: 参数缺失/格式不对/文件路径错误/数据不匹配" >&2
+    echo "   📖 查看帮助: tbplot.sh help <命令>" >&2
+    echo "   🔍 完整堆栈: $_err_file（临时文件，重启后清除）" >&2
+    echo "" >&2
+  else
+    # 成功时输出引擎进度信息到 stderr（保持原始行为）
+    cat "$_err_file" >&2
+  fi
+  rm -f "$_err_file"
+  return $_ec
+}
+
 case "$1" in
   motif)
     # 用法: motif <meme.xml> <idList.txt> <outFile> [width] [height]
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MotifCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" MotifCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" MotifCli "$@"
     ;;
   genelocation)
     # 用法: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph <out> [--FeatureColor <map>]
     shift
-    xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation "$@"
     ;;
   dotplot)
     # 用法: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>
     #   简化GFF: Chr\tGene\tStart\tEnd\tStrand
     #   ⚠️ --chrLayout 传文件路径（文件内容: Genome: Chr1 Chr2...），不是内联字符串
     shift
-    xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot "$@"
     ;;
   circos)
     # 用法: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [h]
     #   link.txt/genePos.txt 可空文件
     shift
     javac -cp "$JAR" "$TBCLI_DIR/CircosCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" CircosCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" CircosCli "$@"
     ;;
   pca)
     # 用法: pca <expr.matrix.tsv> <out> [row|col] [scale] [w] [h]
@@ -61,7 +96,7 @@ case "$1" in
     [ $# -ge 1 ] && W="$1" && shift
     [ $# -ge 1 ] && H="$1" && shift
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" GenericCli biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis doPCA+postGraph "$OUT" --set inTabFile "$EXPR" --set rowName true --set colName true --set processDirect "$DIRECT" --set scale "$SCALE" --set pointSize 8.0 --set showLabel true --width "$W" --height "$H"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" GenericCli biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis doPCA+postGraph "$OUT" --set inTabFile "$EXPR" --set rowName true --set colName true --set processDirect "$DIRECT" --set scale "$SCALE" --set pointSize 8.0 --set showLabel true --width "$W" --height "$H"
     ;;
   generic)
     # 用法: generic <engineClass> <method[+method2]> <out> [--set field value ...] [--width N] [--height N]
@@ -70,7 +105,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh generic <engineClass> <method> <out> [--set field value ...]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli "$@"
     ;;
   batchReplace)
     # 用法: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
@@ -79,7 +114,7 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]"; exit 1; fi
     INBR="$1"; OUTBR="$2"; MAPBR="$3"; FULL="true"; shift 3
     [ "$1" = "--partial" ] && FULL="false"
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.BatchStringReplace --inFile "$INBR" --outFile "$OUTBR" --patternMap "$MAPBR" --fullWordMatch "$FULL"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.BatchStringReplace --inFile "$INBR" --outFile "$OUTBR" --patternMap "$MAPBR" --fullWordMatch "$FULL"
     ;;
   levelGo)
     # 用法: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]
@@ -90,7 +125,7 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]"; exit 1; fi
     INLG="$1"; OUTLG="$2"; OBOFILE="$3"; LEVEL="2"; shift 3
     [ $# -ge 2 ] && [ "$1" = "--level" ] && LEVEL="$2"
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.Grapher.LevelDoer --oboFile "$OBOFILE" --gene2GoFile "$INLG" --outTable "$OUTLG" --level "$LEVEL" --doGraph 0
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.Grapher.LevelDoer --oboFile "$OBOFILE" --gene2GoFile "$INLG" --outTable "$OUTLG" --level "$LEVEL" --doGraph 0
     ;;
   goParse)
     # 用法: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103引擎，GOtermParser）
@@ -100,7 +135,7 @@ case "$1" in
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh goParse <gene2Go.txt> <oboFile> [--level N]"; exit 1; fi
     INGP="$1"; OBOGP="$2"; LEVELGP="2"; shift 2
     [ $# -ge 2 ] && [ "$1" = "--level" ] && LEVELGP="$2"
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.littleTools.GOtermParser --oboFile "$OBOGP" --gene2Go "$INGP" --level "$LEVELGP"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GeneOntology.littleTools.GOtermParser --oboFile "$OBOGP" --gene2Go "$INGP" --level "$LEVELGP"
     echo "[tbplot] GO 词典解析完成: ${INGP}.TBtools.Parsed.*"
     ;;
   tableCollapse)
@@ -109,7 +144,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/TableCollapseCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableCollapseCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableCollapseCli "$@"
     ;;
   tableColSelect)
     # 用法: tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false] [--caseSensitive true|false]
@@ -117,7 +152,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh tableColSelect <inTable> <outTable> <colName1> [colName2...]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/TableColManipCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableColManipCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TableColManipCli "$@"
     ;;
   tableAppend)
     # 用法: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   # 按指定列合并两表（第87引擎）
@@ -128,13 +163,13 @@ case "$1" in
       [ "${ARGS[$i]}" = "--c1" ] && C1="${ARGS[$((i+1))]}"
       [ "${ARGS[$i]}" = "--c2" ] && C2="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableAppend --inTab1 "$1" --inTab2 "$2" --inColIndex1 "$C1" --inColIndex2 "$C2" --outTab "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableAppend --inTab1 "$1" --inTab2 "$2" --inColIndex1 "$C1" --inColIndex2 "$C2" --outTab "$3"
     ;;
   tableMelt)
     # 用法: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableMelt <inTable> <outTable>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableMelt --inFile "$1" --outFile "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableMelt --inFile "$1" --outFile "$2"
     ;;
   tableColSel)
     # 用法: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain] [--caseSensitive true|false] [--sortByIDList true|false]
@@ -148,14 +183,14 @@ case "$1" in
       [ "${ARGS[$i]}" = "--caseSensitive" ] && CS="${ARGS[$((i+1))]}"
       [ "${ARGS[$i]}" = "--sortByIDList" ] && SORT="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableColSelector --inTable "$1" --outTable "$2" --idList "$3" --selectionMode "$MODE" --caseSensitive "$CS" --sortByIDList "$SORT"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableColSelector --inTable "$1" --outTable "$2" --idList "$3" --selectionMode "$MODE" --caseSensitive "$CS" --sortByIDList "$SORT"
     ;;
   tableCast)
     # 用法: tableCast <inLong.txt> <outMatrix>
     #   长表转宽矩阵（第90引擎）；输入 3 列: 行名\t列名\t值；与 tableMelt 互逆
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableCast <inLong.txt> <outMatrix>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableCast --inFile "$1" --outFile "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableCast --inFile "$1" --outFile "$2"
     ;;
   tableUniq)
     # 用法: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|false] [--sortByFreq true|false]
@@ -168,13 +203,13 @@ case "$1" in
       [ "${ARGS[$i]}" = "--showFreq" ] && FREQ="true"
       [ "${ARGS[$i]}" = "--sortByFreq" ] && SORTF="true"
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableUniq --inTab "$1" --outFile "$2" --colIndex "$COL" --showFreq "$FREQ" --sortByFreq "$SORTF"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableUniq --inTab "$1" --outFile "$2" --colIndex "$COL" --showFreq "$FREQ" --sortByFreq "$SORTF"
     ;;
   tableTranspose)
     # 用法: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTransposer）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh tableTranspose <inTable> <outTable>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableTransposer --inTable "$1" --outTable "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableTransposer --inTable "$1" --outTable "$2"
     ;;
   tableSplit)
     # 用法: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]
@@ -187,7 +222,7 @@ case "$1" in
       [ "${ARGS[$i]}" = "--suffix" ] && SUF="${ARGS[$((i+1))]}"
     done
     mkdir -p "$2"
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableSplitByCol --inTab "$1" --outDir "$2" --colIndex "$COL" --suffix "$SUF"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableSplitByCol --inTab "$1" --outDir "$2" --colIndex "$COL" --suffix "$SUF"
     ;;
   tableMerge)
     # 用法: tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0...] [--appendOnly true|false] [--rmKey]
@@ -211,7 +246,7 @@ case "$1" in
     done
     N=$(echo "$FILES" | tr ',' '\n' | wc -l)
     [ -z "$KEYS" ] && KEYS=$(yes 0 | head -n $N | tr '\n' ',' | sed 's/,$//')
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableMerger --inFileArr "$FILES" --outTable "$OUTM" --inColIndexArr "$KEYS" --appendOnly "$APPEND" --rmKeyColumns "$RMKEY"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableMerger --inFileArr "$FILES" --outTable "$OUTM" --inColIndexArr "$KEYS" --appendOnly "$APPEND" --rmKeyColumns "$RMKEY"
     ;;
   fqTrim)
     # 用法: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
@@ -226,20 +261,20 @@ case "$1" in
       esac
       shift 2
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fastq.FastqParallelTrimmer --inFq "$INFQ" --outFq "$OUTFQ" --NumOfThread "$TH" --NumOfBases5 "$B5" --NumOfBases3 "$B3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fastq.FastqParallelTrimmer --inFq "$INFQ" --outFq "$OUTFQ" --NumOfThread "$TH" --NumOfBases5 "$B5" --NumOfBases3 "$B3"
     ;;
   gfa2fa)
     # 用法: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFasta）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gfa2fa <in.gfa> <out.fa>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.Tools.GFAtoFasta --inGFA "$1" --outFa "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.Tools.GFAtoFasta --inGFA "$1" --outFa "$2"
     ;;
   fastaSubseq)
     # 用法: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，ExtractFastaSubseq）
     #   pos.txt: GeneId\tChrId\tStart\tEnd（4列 BED 风格，ChrId 须匹配 fasta 头）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh fastaSubseq <in.fa> <pos.txt> <out.fa>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFastaSubseq --inFastaFile "$1" --inIDs "$2" --outFastaFile "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFastaSubseq --inFastaFile "$1" --inIDs "$2" --outFastaFile "$3"
     ;;
   fastaExtract)
     # 用法: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]
@@ -252,21 +287,21 @@ case "$1" in
       [ "${ARGS[$i]}" = "--mode" ] && MODE="${ARGS[$((i+1))]}"
       [ "${ARGS[$i]}" = "--process" ] && PROC="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFasta --inFa "$1" --inIDList "$2" --outFa "$3" --matchMode "$MODE" --processMode "$PROC" --caseInSensitive false
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Fasta.ExtractFasta --inFa "$1" --inIDList "$2" --outFa "$3" --matchMode "$MODE" --processMode "$PROC" --caseInSensitive false
     ;;
   fqfaConv)
     # 用法: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第98引擎，FastqAndFasta）
     #   fq2fa 去质量行；fa2fq 生成假质量（IIIIIII）——兼容其他工具的占位质量
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh fqfaConv <input> <output> <fq2fa|fa2fq>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.FastqAndFasta --input "$1" --output "$2" --mode "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.FastqAndFasta --input "$1" --output "$2" --mode "$3"
     ;;
   hmmExtract)
     # 用法: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAME 提取（第99引擎，hmmInfoExtracter）
     #   idList.txt 每行一个 NAME；只保留匹配的 HMM 模型
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh hmmExtract <in.hmm> <idList.txt> <out.hmm>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.hmmInfoExtracter --inHmmFile "$1" --idListFile "$2" --outHmmFile "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.LinuxPipe.hmmInfoExtracter --inHmmFile "$1" --idListFile "$2" --outHmmFile "$3"
     ;;
   mastExtract)
     # 用法: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中序列（第102引擎，ExtractSeqFromMastXML）
@@ -274,14 +309,14 @@ case "$1" in
     #   out.txt: 序列名\t全序列\t命中子序列\t正/反链
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh mastExtract <in.fa> <mast.xml> <out.txt>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML --inFastaFile "$1" --inMastXML "$2" --outTable "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML --inFastaFile "$1" --inMastXML "$2" --outTable "$3"
     ;;
   nwAlign)
     # 用法: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）
     #   inSeqN.txt: 每行一条序列；全对全两两比对（纯 Java，无外部依赖）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh nwAlign <inSeq1.txt> <inSeq2.txt> <out>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess --inFile_1 "$1" --inFile_2 "$2" --outFile "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess --inFile_1 "$1" --inFile_2 "$2" --outFile "$3"
     ;;
   twoSeqBlast)
     # 用法: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp|blastn|tblastn] [--thread N] [--fmt 6|XML]
@@ -298,7 +333,7 @@ case "$1" in
       esac
       shift 2
     done
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.BLAST.CompareTwoSeqSet --query "$Q" --subject "$S" --specifiedBlastProg "$PROG" --outBlastResult "$O" --outFmt "$FMT" --thread "$TH"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.BLAST.CompareTwoSeqSet --query "$Q" --subject "$S" --specifiedBlastProg "$PROG" --outBlastResult "$O" --outFmt "$FMT" --thread "$TH"
     ;;
   recipBlast)
     # 用法: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp|blastn|tblastn] [--evalue 1e-5] [--minId 0.3] [--thread N]
@@ -319,7 +354,7 @@ case "$1" in
       shift 2
     done
     if [ -n "$QID" ]; then QID_ARG="--queryIdListFile $QID"; else QID_ARG=""; fi
-    xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast --querySeqFile "$Q" --subjectSeqFile "$S" $QID_ARG --outDirAndPrefix "$O" --NumOfthreads "$TH" --evalue "$EVAL" --minIdentityPercent "$MINID" --forseQueryBlastType "$PROG" --forseSubjectBlastType "$PROG"
+    _run_java xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast --querySeqFile "$Q" --subjectSeqFile "$S" $QID_ARG --outDirAndPrefix "$O" --NumOfthreads "$TH" --evalue "$EVAL" --minIdentityPercent "$MINID" --forseQueryBlastType "$PROG" --forseSubjectBlastType "$PROG"
     echo "[tbplot] 双向 BLAST 完成，见 ${O}_*"
     ;;
   filterCScore)
@@ -335,7 +370,7 @@ case "$1" in
       esac
       shift 2
     done
-    java -Xmx1g -cp "$JAR" biocjava.bioDoer.BLAST.FilterBlastResultByCScore --inBlastTab6 "$IN" --outBlastTab "$OUT" --cscore "$CSCORE"
+    _run_java java -Xmx1g -cp "$JAR" biocjava.bioDoer.BLAST.FilterBlastResultByCScore --inBlastTab6 "$IN" --outBlastTab "$OUT" --cscore "$CSCORE"
     echo "[tbplot] C-score 过滤完成: $(wc -l < "$IN") 行 → $(wc -l < "$OUT") 行"
     ;;
   quickFamily)
@@ -355,7 +390,7 @@ case "$1" in
       esac
       shift 2
     done
-    java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification --ReferencePepSet "$REF" --ReferenceFamilyId "$FID" --QueryPepSet "$Q" --OutFilePrefix "$O" --NumOfThreads "$TH" --UseDiamond "$DM" --AutoCompleteRefSet "$AF"
+    _run_java java -Xmx3g -cp "$JAR" biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification --ReferencePepSet "$REF" --ReferenceFamilyId "$FID" --QueryPepSet "$Q" --OutFilePrefix "$O" --NumOfThreads "$TH" --UseDiamond "$DM" --AutoCompleteRefSet "$AF"
     echo "[tbplot] 基因家族鉴定完成: $(wc -l < ${O}.final.IDset.txt 2>/dev/null || echo 0) 个成员 → ${O}.final.IDset.txt + ${O}.final.Seq.fasta"
     ;;
   ctgGroup)
@@ -364,14 +399,14 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/CtgGroupCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" CtgGroupCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" CtgGroupCli "$@"
     ;;
   homoPhase)
     # 用法: homoPhase <inContigGrpMap> <outPhasedMap>
     #   同源冲突分区（多倍体相位分离）——组装辅助链第二环（第73引擎）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh homoPhase <inContigGrpMap> <outPhasedMap>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition --inContigGrpMap "$1" --outPhasedMap "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition --inContigGrpMap "$1" --outPhasedMap "$2"
     ;;
   sepChr)
     # 用法: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
@@ -379,54 +414,54 @@ case "$1" in
     #   等位 contig → 染色体分配——组装辅助链第三环（第74引擎）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles --inGene2ChrMap "$1" --inMiniprotGff "$2" --outMap "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles --inGene2ChrMap "$1" --inMiniprotGff "$2" --outMap "$3"
     ;;
   bamMerge)
     # 用法: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）
     #   输出: merged.bam + merged_sorted.bam(.bai) + merged_region.txt（第75引擎）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh bamMerge <gtf> <bamDir> <outDir>"; exit 1; fi
-    xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage "$1" "$2" "$3"
+    _run_java xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage "$1" "$2" "$3"
     ;;
   hicEnzyme)
     # 用法: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）
     #   从 HiC FastQ 预测酶切类型（MboI/DpnII|MseI|HindIII|NcoI|Arima）；引擎内部抽样 1000 条
     shift
     if [ $# -lt 1 ]; then echo "用法: tbplot.sh hicEnzyme <inHiC.fastq>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HiCRestrictionEnzymePrediction --inFq "$1"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.HiCRestrictionEnzymePrediction --inFq "$1"
     ;;
   virusRecomb)
     # 用法: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引擎）
     #   inDB.fa: 病毒参考库；inContig.fa: 待查 contig；输出 Top hit 重组 PDF
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh virusRecomb <inDB.fa> <inContig.fa> <outDir>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.VirusDetect.RecombinationAnalysis --inDB "$1" --inContig "$2" --outDir "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.VirusDetect.RecombinationAnalysis --inDB "$1" --inContig "$2" --outDir "$3"
     ;;
   gxfRename)
     # 用法: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
     #   renameMap.tsv: 旧ID\t新ID（gene/mRNA/transcript）；Parent/ID 关系同步更新
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfRename <in.gff3> <out.gff3> <renameMap.tsv>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRenamer --inGXF "$1" --outGXF "$2" --renameMap "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRenamer --inGXF "$1" --outGXF "$2" --renameMap "$3"
     ;;
   gxfStat)
     # 用法: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/CDS/UTR 明细）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfStat <in.gff3> <outStat.xls>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat --inGXF "$1" --outStat "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat --inGXF "$1" --outStat "$2"
     ;;
   gxfAppend)
     # 用法: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfAppend <in.gff3> <out.gff3> <prefix>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GxfIDAppender --inGff "$1" --outGff "$2" --prefix "$3"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GxfIDAppender --inGff "$1" --outGff "$2" --prefix "$3"
     ;;
   gxfGenepos)
     # 用法: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # GFF→基因位置+染色体长度（喂 genelocation）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]"; exit 1; fi
     FEAT="exon"; [ $# -ge 4 ] && FEAT="$4"
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToGenePosFile --inGXF "$1" --outGenePos "$2" --outChrLen "$3" --feature "$FEAT"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToGenePosFile --inGXF "$1" --outGenePos "$2" --outChrLen "$3" --feature "$FEAT"
     ;;
   gxfRegion)
     # 用法: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
@@ -438,7 +473,7 @@ case "$1" in
     for i in $(seq 0 $((${#ARGS[@]}-1))); do
       [ "${ARGS[$i]}" = "--extendLen" ] && EXTL="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRegionSummary --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFRegionSummary --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
     ;;
   gxfOverlap)
     # 用法: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
@@ -451,14 +486,14 @@ case "$1" in
     for i in $(seq 0 $((${#ARGS[@]}-1))); do
       [ "${ARGS[$i]}" = "--extendLen" ] && EXTL="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFOverlaper --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFOverlaper --inGxf "$1" --regionFile "$2" --outGxf "$3" --ignoreStrand "$IGNS" --extendLen "$EXTL"
     ;;
   gxfRepIDs)
     # 用法: gxfRepIDs <in.gff3> <out.txt>
     #   代表转录本映射：mRNA ID → gene ID + 长度（第80引擎，GXFToRepresentativeIDs）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfRepIDs <in.gff3> <out.txt>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs --inGXF "$1" --outRepresentative "$2"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs --inGXF "$1" --outRepresentative "$2"
     ;;
   gxfRepGXF)
     # 用法: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID 'pattern']
@@ -472,20 +507,20 @@ case "$1" in
       [ "${ARGS[$i]}" = "--featureID" ] && FEAT="${ARGS[$((i+1))]}"
       [ "${ARGS[$i]}" = "--attachID" ] && ATTACH="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeGXF --inGXF "$1" --outRepresentativeGff3 "$2" --featureID "$FEAT" --attachID "$ATTACH"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFToRepresentativeGXF --inGXF "$1" --outRepresentativeGff3 "$2" --featureID "$FEAT" --attachID "$ATTACH"
     ;;
   gxfMatch)
     # 用法: gxfMatch <in.gff3> <inGenome.fa>
     #   GFF 与基因组 seqid 匹配检查（第81引擎，GxfGenomeMatch）→ Yes/No + Intersection Size
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfMatch <in.gff3> <inGenome.fa>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GxfGenomeMatch --inGXF "$1" --inGenome "$2"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.GxfGenomeMatch --inGXF "$1" --inGenome "$2"
     ;;
   gxfRecall)
     # 用法: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，RecallmRNAFeature）
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfRecall <in.gff3> <out.gff3>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.RecallmRNAFeature --in "$1" --out "$2"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.RecallmRNAFeature --in "$1" --out "$2"
     ;;
   regionAnno)
     # 用法: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePattern P]
@@ -499,14 +534,14 @@ case "$1" in
       [ "${ARGS[$i]}" = "--flankLen" ] && FLANK="${ARGS[$((i+1))]}"
       [ "${ARGS[$i]}" = "--targetFeaturePattern" ] && PAT="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation --inGxf "$1" --region "$2" --outTab "$3" --flankLen "$FLANK" --targetFeaturePattern "$PAT"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation --inGxf "$1" --region "$2" --outTab "$3" --flankLen "$FLANK" --targetFeaturePattern "$PAT"
     ;;
   gxfFix)
     # 用法: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dangling mRNA/排序）
     #   修复 CDS phase 记录分离到 <out>_phase_corrected/problematic.gff3
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gxfFix <in.gff3> <out.gff3>"; exit 1; fi
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix --inGXF "$1" --outGff3 "$2"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix --inGXF "$1" --outGff3 "$2"
     ;;
   groupCol)
     # 用法: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]
@@ -516,7 +551,7 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh groupCol <inTable> <inGrpInfo> <outTable> [Sum|Mean|Max|Min|Var|Std]"; exit 1; fi
     INTAB="$1"; INGRP="$2"; OUTTAB="$3"; COLTYPE="Mean"; shift 3
     [ $# -ge 1 ] && COLTYPE="$1"
-    xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableColCollaspe --inTable "$INTAB" --inGrpInfo "$INGRP" --outTable "$OUTTAB" --ColType "$COLTYPE"
+    _run_java xvfb-run -a java -Xmx1g -cp "$JAR" biocjava.bioDoer.Table.TableColCollaspe --inTable "$INTAB" --inGrpInfo "$INGRP" --outTable "$OUTTAB" --ColType "$COLTYPE"
     ;;
   tauIndex)
     # 用法: tauIndex <inExpTab> <outTAU>
@@ -524,7 +559,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh tauIndex <inExpTab> <outTAU>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/TauCalcCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TauCalcCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TauCalcCli "$@"
     ;;
   exprCorr)
     # 用法: exprCorr <inFPKM> <outCorrMat>
@@ -532,7 +567,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh exprCorr <inFPKM> <outCorrMat>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/ExprCorrCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" ExprCorrCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" ExprCorrCli "$@"
     ;;
   qpcrExp)
     # 用法: qpcrExp <in.qpcr.tab> <out.xls>
@@ -541,20 +576,20 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh qpcrExp <in.qpcr.tab> <out.xls>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/QpcrDdctCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" QpcrDdctCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" QpcrDdctCli "$@"
     ;;
   qpcr)
     # 用法: qpcr <data.txt> <out> [w] [h]   (data: name\tmean\tsd)
     shift
     javac -cp "$JAR" "$TBCLI_DIR/QpcrCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrCli "$@"
     ;;
   hclust)
     # 用法: hclust <dist3.tsv> <out.nwk> [distMethod] [clusterMethod]
     #   ⚠️ 输入是三列距离文件 GeneA\tGeneB\tdist（不是表达矩阵！矩阵喂进去 NPE）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/HclustCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" HclustCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" HclustCli "$@"
     ;;
   volcano)
     # 用法: volcano <deg.txt> <outFile> [pvalCutoff] [fcCutoff] [w] [h]
@@ -569,34 +604,34 @@ case "$1" in
     [ $# -ge 1 ] && W="$1" && shift
     [ $# -ge 1 ] && H="$1" && shift
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" GenericCli biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot show "$OUT" --set inData "$DEG" --set log2FoldChange true --set negLogPvalue true --set pvalueCutOff "$P" --set foldChangeCutOff "$FC" --set normPointSize 5.0 --set showTopChangeNum 5 --width "$W" --height "$H"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" GenericCli biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot show "$OUT" --set inData "$DEG" --set log2FoldChange true --set negLogPvalue true --set pvalueCutOff "$P" --set foldChangeCutOff "$FC" --set normPointSize 5.0 --set showTopChangeNum 5 --width "$W" --height "$H"
     ;;
   upset)
     # 用法: upset <sets.txt> <outFile> [w] [h]
     #   sets.txt: 每行 "集合名\t成员1\t成员2..."（tab 分隔）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/UpSetCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" UpSetCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" UpSetCli "$@"
     ;;
   msa)
     # 用法: msa <aligned.fasta> <outFile> [padding]
     #   尺寸按子面板自动计算，勿传 w/h
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MSACli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MSACli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MSACli "$@"
     ;;
   genelocgff)
     # 用法: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--rename r.tsv] [--pairs p.tsv] [--color c.tsv] [--rankedChr list] [--onlyMapped true|false] [--showLabel true|false]
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GeneLocGffCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneLocGffCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneLocGffCli "$@"
     ;;
   tree)
     # 用法: tree <treeMeta.config> <out> [pad]
     #   配置格式见 TreeCli.java 注释（[TYPE]:Tree + [NEWICK] + [setting] + 可选 [TYPE]:TextAnno/HeatMap/BarPlot/... 轨道）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/TreeCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" TreeCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" TreeCli "$@"
     ;;
   phylotree)
     # 用法: phylotree <in.nwk> <out> [vertical] [width] [height]
@@ -604,7 +639,7 @@ case "$1" in
     #   build() 直接吃 newick，内部自动算坐标；支持枝长/Cladogram 自动降级/坐标轴
     shift
     javac -cp "$JAR" "$TBCLI_DIR/PhyloTreeCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PhyloTreeCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PhyloTreeCli "$@"
     ;;
   unrooted)
     # 用法: unrooted <in.nwk> <out> [layout] [width] [height] [iterations]
@@ -612,7 +647,7 @@ case "$1" in
     #   layout: Circular|Radial|Force-Directed|Equal Angle|N-Body|Equal-Daylight（默认 Circular）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/UnrootedTreeCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" UnrootedTreeCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" UnrootedTreeCli "$@"
     ;;
   violin)
     # 用法: violin <in.tsv> <out> [width] [height]
@@ -620,7 +655,7 @@ case "$1" in
     #   in.tsv: 组别\t值（每行一个观测）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/ViolinCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" ViolinCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" ViolinCli "$@"
     ;;
   barplotter)
     # 用法: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>
@@ -628,7 +663,7 @@ case "$1" in
     #   gff: chr\tgene\tend；synteny: MCScanX 式 collinearity；ctl: 4 行 xdim/ydim/xchr/ychr
     shift
     javac -cp "$JAR" "$TBCLI_DIR/BarPlotterCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" BarPlotterCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" BarPlotterCli "$@"
     ;;
   findpath)
     # 用法: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --inRegion <geneID> [--flankGeneNum N] [--highlightGene ID] --outGraph <out>
@@ -636,7 +671,7 @@ case "$1" in
     #   gff 需简化格式 chr\tgene\tstart\tend\tstrand；genepairs 每行 geneA\tgeneB
     shift
     javac -cp "$JAR" "$TBCLI_DIR/FindPathCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindPathCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" FindPathCli "$@"
     ;;
   mcscanx)
     # 用法: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测
@@ -646,7 +681,7 @@ case "$1" in
     #      classify 的 String API 有 bug（validate 需 collinearityFile）→ 桥用完整 InputFiles/OutputOptions API
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MCScanXCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx6g -cp "$TBCLI_DIR:$JAR" MCScanXCli "$@"
+    _run_java xvfb-run -a java -Xmx6g -cp "$TBCLI_DIR:$JAR" MCScanXCli "$@"
     ;;
   degramdom)
     # 用法: degramdom <in.tsv> [out.nwk]
@@ -654,7 +689,7 @@ case "$1" in
     #   in.tsv: 子节点\t父节点\t枝长（每行一个关系）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/DegramdomCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" DegramdomCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" DegramdomCli "$@"
     ;;
   sambamcov)
     # 用法: sambamcov <in.bam> <out.tsv> [binSize] [countMode]
@@ -662,14 +697,14 @@ case "$1" in
     #   binSize: 窗口 bp（默认 1000）；countMode: Overlap|StartPos|EndPos（默认 Overlap）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/SamBamCovCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SamBamCovCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SamBamCovCli "$@"
     ;;
   bamindex)
     # 用法: bamindex <in.sorted.bam> [out.bai]
     #   BAM 索引创建（工具 75，BAMIndexCreater.process——main 硬编码演示）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/BamIndexCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamIndexCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamIndexCli "$@"
     ;;
   bamsort)
     # 用法: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]
@@ -677,14 +712,14 @@ case "$1" in
     #   sortOrder: coordinate|queryname|unsorted|duplicate（默认 coordinate）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/BamSortCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamSortCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamSortCli "$@"
     ;;
   onesteptree)
     # 用法: onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean true|false]
     #   一步法 ML 系统发育树（引擎 119，OneStepMLTree——pep→muscle→trimal→IQ-TREE MFP+UFboot）
     #   需系统 muscle+iqtree；⚠️ --bbTime ≥1000（iqtree 限制）；序列需 ≥4 条唯一
     shift
-    xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioIO.BioSoftPipeServer.OneStepMLTree "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioIO.BioSoftPipeServer.OneStepMLTree "$@"
     ;;
   simplehmmscan)
     # 用法: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt>
@@ -692,7 +727,7 @@ case "$1" in
     #   ⚠️ 需 Pfam-A.hmm 数据库（本地 ~/.eggnog-mapper/data/pfam/）；idList 每行一个 Pfam NAME（如 GRAS）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/SimpleHmmscanCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SimpleHmmscanCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SimpleHmmscanCli "$@"
     ;;
   regiondepth)
     # 用法: regiondepth <in.sam> <region> <out.depth> [scaleFactor]
@@ -700,7 +735,7 @@ case "$1" in
     #   region: ChrID:Start-End；输出每碱基覆盖深度
     shift
     javac -cp "$JAR" "$TBCLI_DIR/RegionDepthCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" RegionDepthCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" RegionDepthCli "$@"
     ;;
   markertools)
     # 用法: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoint]
@@ -709,7 +744,7 @@ case "$1" in
     #   in.marker.tab: 0/1 标记矩阵（行=样本，列=标记，首行列名+首列行名）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MarkerToolsCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MarkerToolsCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MarkerToolsCli "$@"
     ;;
   amazingmeta)
     # 用法: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [seqLen.txt] [geneRename.txt]
@@ -717,7 +752,7 @@ case "$1" in
     #   ⚠️ plot() 内部 JFrame 显示 → Window 反射提取 JIGBasePanel 后 save2SVG/PNG/PDF
     shift
     javac -cp "$JAR" "$TBCLI_DIR/AmazingMetaCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" AmazingMetaCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" AmazingMetaCli "$@"
     ;;
   cddmotif)
     # 用法: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]
@@ -725,7 +760,7 @@ case "$1" in
     #   hitdata: NCBI Batch CD-search hitsConcise；⚠️ fasta 需含 hitdata 全部基因 ID（否则 NPE）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/CddMotifCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" CddMotifCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" CddMotifCli "$@"
     ;;
   seqlentrack)
     # 用法: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]
@@ -733,7 +768,7 @@ case "$1" in
     #   seqlen.txt: gene\tlength（# 跳过）；GRAS 53 基因验证
     shift
     javac -cp "$JAR" "$TBCLI_DIR/SeqLenTrackCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeqLenTrackCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeqLenTrackCli "$@"
     ;;
   pfammotif)
     # 用法: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]
@@ -742,7 +777,7 @@ case "$1" in
     #   ⚠️ 可用 hmmscan --domtblout 转 PfamScan 格式；fasta 需含全部基因
     shift
     javac -cp "$JAR" "$TBCLI_DIR/PfamMotifCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PfamMotifCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" PfamMotifCli "$@"
     ;;
   pep2codon)
     # 用法: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>
@@ -750,7 +785,7 @@ case "$1" in
     #   ⚠️ CDS ID 需与 pep.aln 一致；gap 正确回译为 --- 密码子
     shift
     javac -cp "$JAR" "$TBCLI_DIR/Pep2CodonCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Pep2CodonCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Pep2CodonCli "$@"
     ;;
   mast2tab)
     # 用法: mast2tab <mast|meme.xml> <out.tab>
@@ -758,7 +793,7 @@ case "$1" in
     #   真实拟南芥 mast.xml 554 行验证（SeqID/SeqLength/MotifId/Start/Length）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/Mast2TabCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Mast2TabCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Mast2TabCli "$@"
     ;;
   qpcrproc)
     # 用法: qpcrproc <in.qpcr.tab> <out.xls>
@@ -766,7 +801,7 @@ case "$1" in
     #   ⚠️ 输入格式: Sample\t内参Ct\t目标Ct；同样本多行求均值/SD
     shift
     javac -cp "$JAR" "$TBCLI_DIR/QpcrProcCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrProcCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" QpcrProcCli "$@"
     ;;
 
   filesplit)
@@ -774,7 +809,7 @@ case "$1" in
     #   文件按份数分割（工具 99，FileLineSplit.Split 静态方法）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/FileSplitCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" FileSplitCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" FileSplitCli "$@"
     ;;
 
   memerun)
@@ -783,7 +818,7 @@ case "$1" in
     #   ⚠️ 输出在 workingDir/meme_out/meme.xml
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MemeRunCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MemeRunCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MemeRunCli "$@"
     ;;
 
   mastrun)
@@ -792,7 +827,7 @@ case "$1" in
     #   输出 workingDir/mast_out/mast.{txt,html,xml}
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MastRunCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MastRunCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MastRunCli "$@"
     ;;
 
   mggxf)
@@ -800,7 +835,7 @@ case "$1" in
     #   多 GFF 视图格式转换（工具 103，FormatTranformerForMultipleGffViewer——GenePair/BlastTab6→LinkedRegion）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/MgGxfCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MgGxfCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MgGxfCli "$@"
     ;;
 
   gsadiag)
@@ -809,7 +844,7 @@ case "$1" in
     #   真实 GRAS GFF 验证：0 注释问题；注释质控刚需
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GsaDiagCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GsaDiagCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GsaDiagCli "$@"
     ;;
   gxfsort)
     # 用法: gxfsort <in.gff3|gtf> <out.sorted>
@@ -817,7 +852,7 @@ case "$1" in
     #   真实 GRAS GFF 385 行排序验证（HiC_scaffold_3→1）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GxfSortCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfSortCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfSortCli "$@"
     ;;
   gxffilter)
     # 用法: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>
@@ -825,7 +860,7 @@ case "$1" in
     #   保留 ID 列表中基因/转录本及其子特征；真实 GRAS 3 基因→10 特征行验证
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GxfFilterCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfFilterCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GxfFilterCli "$@"
     ;;
   annocompare)
     # 用法: annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [boundaryTol] [cdsChangePct] [utrChangePct] [geneScope] [overlapMode]
@@ -833,35 +868,35 @@ case "$1" in
     #   Curation 图 + ABCD 四图（PNG/PDF/SVG）+ 单物种 ABCD 表（08/31 攻下）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/StructAnnoCompareCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" StructAnnoCompareCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" StructAnnoCompareCli "$@"
     ;;
   genedensity)
     # 用法: genedensity <in.gff3> <out.tsv> [binSize]
     #   基因密度谱：按窗口统计每染色体/contig 基因数（基因组轨道/密度分析）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GeneDensityCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneDensityCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneDensityCli "$@"
     ;;
   seqconvert)
     # 用法: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>
     #   序列格式转换（main1 入口；fmt: fasta|clustal|MEGA|nexus|PAML|phylip）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/SeqConverterCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" SeqConverterCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" SeqConverterCli "$@"
     ;;
   trimmsa)
     # 用法: trimmsa <in.aln.fa> <out.aln.fa> [ratio]
     #   MSA 修剪（按列保留率），main 硬编码 → 桥 setter+process
     shift
     javac -cp "$JAR" "$TBCLI_DIR/TrimMSACli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" TrimMSACli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" TrimMSACli "$@"
     ;;
   heatmap2)
     # 用法: heatmap2 <expr.matrix.tsv> <out> [options]
     #   矩阵: 首列基因名 + 列名表头，其余数值。options 见 HeatmapCli.java 注释（--log2 --rowScale --clusterRow/Col --rowGroup/ColGroup --transpose 等）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/HeatmapCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" HeatmapCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" HeatmapCli "$@"
     ;;
   supercircos)
     # 用法: supercircos <config.cfg> <out> [width] [height]
@@ -869,7 +904,7 @@ case "$1" in
     #   track: [track] <Tile|Triangle|HeatMap|Point|Line|Bar|Arrow> <file> <startPos> <endPos> <c1> <c2> <c3> <binSize> [fillColor] [drawColor]
     shift
     javac -cp "$JAR" "$TBCLI_DIR/SuperCircosCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SuperCircosCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" SuperCircosCli "$@"
     ;;
   barplot)
     # 用法: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol] [maxTerms] [xlab] [ylab] [mode]
@@ -877,21 +912,21 @@ case "$1" in
     #   mode: Normal|TextOnLeft|BarOnLeft
     shift
     javac -cp "$JAR" "$TBCLI_DIR/BarplotCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" BarplotCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" BarplotCli "$@"
     ;;
   pafviz)
     # 用法: pafviz <in.paf> <out> [graphSize] [colorMode] [switchQT] [minAlnLen] [rcColor]
     #   colorMode: Target|Query|None
     shift
     javac -cp "$JAR" "$TBCLI_DIR/PafVizCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PafVizCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PafVizCli "$@"
     ;;
   admixture)
     # 用法: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sortMode] [width] [height] [panelInterval]
     #   sortMode: Qraito|Lexical|None
     shift
     javac -cp "$JAR" "$TBCLI_DIR/AdmixtureCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" AdmixtureCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" AdmixtureCli "$@"
     ;;
   groupedbar)
     # 用法: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title] [--options]
@@ -901,7 +936,7 @@ case "$1" in
     #   --options: --width --height --fontSize --barWidth --boxWidth --violinWidth --showOutliers --noOutliers --noNs --homoscedastic --yMin --yMax --pStar --pStar2 --pStar3 --color <i> <r,g,b> --order ALPHA
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GroupedBarCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" GroupedBarCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" GroupedBarCli "$@"
     ;;
   layoutheatmap)
     # 用法: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]
@@ -909,7 +944,7 @@ case "$1" in
     #   --options: --cellWidth --cellHeight --yGap --log2 --log10 --rowScale --minColor --midColor --maxColor --nanColor --noLegend --noValue --rename --topLeft
     shift
     javac -cp "$JAR" "$TBCLI_DIR/LayoutHeatmapCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" LayoutHeatmapCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" LayoutHeatmapCli "$@"
     ;;
   cubeheatmap)
     # 用法: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor r,g,b --midColor r,g,b --maxColor r,g,b]
@@ -917,7 +952,7 @@ case "$1" in
     #   group.tsv: Sample\tFirstDim\tSecondDim（三面立方体热图）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/CubeHeatmapCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" CubeHeatmapCli "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" CubeHeatmapCli "$@"
     ;;
   efpHeat)
     # 用法: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
@@ -932,7 +967,7 @@ case "$1" in
       [ "${ARGS[$i]}" = "--imageWidth" ] && W="${ARGS[$((i+1))]}"
       [ "${ARGS[$i]}" = "--imageHeight" ] && H="${ARGS[$((i+1))]}"
     done
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap --inTGA "$1" --inSample2CC "$2" --expMat "$3" --geneId "$4" --outImg "$5" --imageWidth "$W" --imageHeight "$H"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap --inTGA "$1" --inSample2CC "$2" --expMat "$3" --geneId "$4" --outImg "$5" --imageWidth "$W" --imageHeight "$H"
     ;;
   rnaplot)
     # 用法: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R,G,B"] [--interactive false]
@@ -941,7 +976,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh rnaplot <seq> <out> [--colorMap ..]"; exit 1; fi
     javac -cp "build:$JAR" "$TBCLI_DIR/RNAplotCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" RNAplotCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" RNAplotCli "$@"
     ;;
   calcRepeat)
     # 用法: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--minFreq N] [--threads N]
@@ -950,7 +985,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh calcRepeat <genome.fa> <out> [--kmerSize N]"; exit 1; fi
     javac -cp "build:$JAR" "$TBCLI_DIR/CalcRepeatCli.java" 2>/dev/null
-    java -Xmx2g -cp "$TBCLI_DIR:build:$JAR" CalcRepeatCli "$@"
+    _run_java java -Xmx2g -cp "$TBCLI_DIR:build:$JAR" CalcRepeatCli "$@"
     ;;
   multiEfp)
     # 用法: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidth N] [--imageHeight N]
@@ -959,7 +994,7 @@ case "$1" in
     shift
     if [ $# -lt 5 ]; then echo "用法: tbplot.sh multiEfp <inTGA> <sample2cc> <expMat> <geneId> <out> [--imageWidth N]"; exit 1; fi
     javac -cp "build:$JAR" "$TBCLI_DIR/MultiSuperHeatCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" MultiSuperHeatCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:build:$JAR" MultiSuperHeatCli "$@"
     ;;
   circlegene)
     # 用法: circlegene <gff> <geneID.txt> <out> [--rename f --link f --rankedChr f --allChr --graphSize N --startAngle N --endAngle N --chrFill r,g,b --chrLabelColor r,g,b]
@@ -967,13 +1002,13 @@ case "$1" in
     #   --link: 基因对文件 (GeneA\tGeneB\t[r,g,b]) 绘制共线性链接
     shift
     javac -cp "$JAR" "$TBCLI_DIR/CircleGeneViewerCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" CircleGeneViewerCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" CircleGeneViewerCli "$@"
     ;;
   genestructure)
     # 用法: genestructure <input.gff> <idList.txt> <outFile> [genome.fa] [width] [height]
     shift
     javac -cp "$JAR" "$TBCLI_DIR/GeneStructureCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneStructureCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GeneStructureCli "$@"
     ;;
   seqlogo)
     # 用法: seqlogo <seq.fa|seq.txt> <out.svg/png> [--scaleIC true|false] [--showPos] [--startPos N] [--borderColor R,G,B] [--borderSize N] [--onlyBorder] [--xInterval N] [--yInterval N]
@@ -982,7 +1017,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh seqlogo <seq.fa> <out> [--scaleIC true --showPos ...]"; exit 1; fi
     INFILE="$1"; OUTFILE="$2"; shift 2
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.seqLogo.makeSeqLogo --inFile "$INFILE" --OutGraph "$OUTFILE" "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.seqLogo.makeSeqLogo --inFile "$INFILE" --OutGraph "$OUTFILE" "$@"
     ;;
   peaktss)
     # 用法: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--bin N] [--color]
@@ -993,7 +1028,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh peaktss <gxf> <macs2_peak.xls> <out> [--dist N]"; exit 1; fi
     INGXF="$1"; INPEAK="$2"; OUTGRAPH="$3"; shift 3
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakTssHeatMap --inGxf "$INGXF" --inPeak "$INPEAK" --outGraph "$OUTGRAPH" "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakTssHeatMap --inGxf "$INGXF" --inPeak "$INPEAK" --outGraph "$OUTGRAPH" "$@"
     ;;
   peakdist)
     # 用法: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H] [--topLenRank N] [--width W] [--height H]
@@ -1003,7 +1038,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--width W --height H]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/PeakDistCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PeakDistCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PeakDistCli "$@"
     ;;
   peakanno)
     # 用法: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]
@@ -1012,7 +1047,7 @@ case "$1" in
     #   ⚠️ 小坐标（<10000）触发 GxFOverlapIndexer bin 边界 bug，须真实尺度坐标
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno --inGXF "$1" --peakInfo "$2" --outTab "$3" "${@:4}"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno --inGXF "$1" --peakInfo "$2" --outTab "$3" "${@:4}"
     ;;
   microgenome)
     # 用法: microgenome <inGBK> <anno.tsv> <out> [micro|macro]
@@ -1024,7 +1059,7 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh microgenome <inGBK> <anno.tsv> <out> [micro|macro]"; exit 1; fi
     INGBK="$1"; INANNO="$2"; OUTGRAPH="$3"; GTYPE="micro"
     [ $# -ge 4 ] && GTYPE="$4"
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot --inGBK "$INGBK" --inAnno "$INANNO" --graphType "$GTYPE" --outGraph "$OUTGRAPH"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot --inGBK "$INGBK" --inAnno "$INANNO" --graphType "$GTYPE" --outGraph "$OUTGRAPH"
     ;;
   gel)
     # 用法: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>
@@ -1034,7 +1069,7 @@ case "$1" in
     #   引擎: GelImage.Marker（自带 ArgsParser，PCR 产物虚拟凝胶电泳图）
     shift
     if [ $# -lt 4 ]; then echo "用法: tbplot.sh gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.GelImage.Marker --FragmentRangeArr "$1" --LaneLabels "$2" --MarkerRange "$3" --outGraph "$4"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.GelImage.Marker --FragmentRangeArr "$1" --LaneLabels "$2" --MarkerRange "$3" --outGraph "$4"
     ;;
   gfa)
     # 用法: gfa <in.gfa> <out> [width] [height]
@@ -1043,21 +1078,21 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh gfa <in.gfa> <out> [w] [h]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/VizGFACli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VizGFACli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VizGFACli "$@"
     ;;
   pafcomp)
     # 用法: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Query|None] [--size N] [--minLen N]
     #   PAF 基因组比较图（⚠️ 入口是 main1 非 main）
     shift
     javac -cp "$JAR" "$TBCLI_DIR/PafGC.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PafGC "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PafGC "$@"
     ;;
   pafref)
     #   ⚠️ PAF 必须含 cg:Z: CIGAR 标签（否则 extractCigar null → NPE）
     # 用法: pafref --inPaf <paf> --outTab <out.tsv>
     #   PAF 参考碱基覆盖计算（minimap2 -c --cs 输出）
     shift
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc "$@"
     ;;
   colorscheme)
     # 用法: colorscheme <inTab> <outTab> <refColIndex>
@@ -1066,7 +1101,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh colorscheme <inTab> <outTab> <refColIndex>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/ColorSchemeCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" ColorSchemeCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" ColorSchemeCli "$@"
     ;;
   distance)
     # 用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>
@@ -1075,7 +1110,7 @@ case "$1" in
     shift
     if [ $# -lt 4 ]; then echo "用法: tbplot.sh distance <in.tsv> <col1> <col2> <method>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/DistanceCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" DistanceCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" DistanceCli "$@"
     ;;
   mountain)
     # 用法: mountain <fold.txt> <out.tsv>
@@ -1083,7 +1118,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh mountain <fold.txt> <out.tsv>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/MountainPlotCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" MountainPlotCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" MountainPlotCli "$@"
     ;;
   pileup)
     # 用法: pileup <blast.xml> <out.svg> [--query NAME]
@@ -1092,7 +1127,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh pileup <blast.xml> <out.svg> [--query NAME]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/PileUpCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PileUpCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" PileUpCli "$@"
     ;;
   plotrna)
     # 用法: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]
@@ -1102,7 +1137,7 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]"; exit 1; fi
     GENOME="$1"; REGION="$2"; SAMFILE="$3"; shift 3
     [ $# -eq 0 ] && { echo "⚠️ 必须带 --directPDF <out.pdf>（否则引擎弹窗）"; exit 1; }
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold --genomeFA "$GENOME" --region "$REGION" --SAM "$SAMFILE" "$@"
     ;;
   bamstate)
     # 用法: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]
@@ -1113,7 +1148,7 @@ case "$1" in
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh bamstate <out.tsv> <gff3> <bam1> [bam2 ...]"; exit 1; fi
     OUTB="$1"; GFFB="$2"; shift 2
     javac -cp "$JAR" "$TBCLI_DIR/BamStateCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamStateCli "$GFFB" "$OUTB" "$@"
+    _run_java xvfb-run -a java -Xmx4g -cp "$TBCLI_DIR:$JAR" BamStateCli "$GFFB" "$OUTB" "$@"
     ;;
   preparespecies)
     # 用法: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>
@@ -1122,7 +1157,7 @@ case "$1" in
     #   ⚠️ 大数据基因组全量重写耗时（3GB 级约 10-20 分钟）
     shift
     if [ $# -lt 5 ]; then echo "用法: tbplot.sh preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>"; exit 1; fi
-    xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.ComparativeGenomics.PrepareSpecies --prefix "$1" --inGenomeFa "$2" --inGXF "$3" --outGenomeFa "$4" --outGXF "$5"
+    _run_java xvfb-run -a java -Xmx3g -cp "$JAR" biocjava.bioDoer.ComparativeGenomics.PrepareSpecies --prefix "$1" --inGenomeFa "$2" --inGXF "$3" --outGenomeFa "$4" --outGXF "$5"
     ;;
   partitionconflict)
     # 用法: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluster>
@@ -1131,7 +1166,7 @@ case "$1" in
     #   链式: conflictpaf → partitionconflict（冲突检测 → 多倍体同源群分区）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh partitionconflict <inConflict.tsv> <polyPoid> <outCluster>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.ParititionByConflictFreq --inConflictFreq "$1" --polyPoid "$2" --outCluster "$3"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.ParititionByConflictFreq --inConflictFreq "$1" --polyPoid "$2" --outCluster "$3"
     ;;
   mirnatarget)
     # 用法: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [--threads N] [--scoreCutOff N] [--maxMismatch N]
@@ -1158,7 +1193,7 @@ case "$1" in
     ssearch36 -w 100 -W 25 -E "$EVAL" -m 10 -T "$THREADS" -i -U "$MIR" "$TGT" > "$M10" 2>/dev/null || { echo "❌ ssearch36 失败（确认已安装）"; exit 1; }
     # Step 2: TargetSoEngine 打分
     javac -cp "$JAR" "$TBCLI_DIR/TargetScoreCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" TargetScoreCli "$M10" "$OUT" --scoreCutOff "$SCORE" --maxMismatch "$MISMATCH" 2>/dev/null
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" TargetScoreCli "$M10" "$OUT" --scoreCutOff "$SCORE" --maxMismatch "$MISMATCH" 2>/dev/null
     rm -f "$M10"
     echo "[tbplot] miRNA 靶标预测完成: $OUT"
     ;;
@@ -1177,7 +1212,7 @@ case "$1" in
       esac
       shift 2
     done
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.miRNA.Target2TablePipe --inMIRfa "$MIRA" --inGenomeFa "$TGTA" --outTable "$OUTA" --searchRevCom "$REV" --isFragment "$FRAG" --maxThreadNum "$TH" 2>/dev/null
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.miRNA.Target2TablePipe --inMIRfa "$MIRA" --inGenomeFa "$TGTA" --outTable "$OUTA" --searchRevCom "$REV" --isFragment "$FRAG" --maxThreadNum "$TH" 2>/dev/null
     echo "[tbplot] miRNA 靶标管线完成: $OUTA"
     ;;
   mirnaIdentify)
@@ -1203,7 +1238,7 @@ case "$1" in
       shift 2
     done
     javac -cp "$JAR" "$TBCLI_DIR/MirIdentifyCli.java" 2>/dev/null
-    xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_TB:-/tmp}" -Xmx8g -cp "$TBCLI_DIR:$JAR" MirIdentifyCli "$GENOME" "$INTSV" "$OUTP" "$OUTL" --checkARM "$CHECKARM" --maxAsy "$MAXASY" --maxMatureAsy "$MAXMAT" --maxStarAsy "$MAXSTAR" --maxBulge "$MAXBULGE"
+    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_TB:-/tmp}" -Xmx8g -cp "$TBCLI_DIR:$JAR" MirIdentifyCli "$GENOME" "$INTSV" "$OUTP" "$OUTL" --checkARM "$CHECKARM" --maxAsy "$MAXASY" --maxMatureAsy "$MAXMAT" --maxStarAsy "$MAXSTAR" --maxBulge "$MAXBULGE"
     echo "[tbplot] miRNA 前体鉴定完成: $OUTP"
     ;;
   conflictpaf)
@@ -1214,7 +1249,7 @@ case "$1" in
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh conflictpaf <in.paf> <out.tsv> [binSize]"; exit 1; fi
     INPAF="$1"; OUTC="$2"; BIN="10000"; shift 2
     [ $# -ge 1 ] && BIN="$1"
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF --inPAF "$INPAF" --outFile "$OUTC" --binSize "$BIN"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF --inPAF "$INPAF" --outFile "$OUTC" --binSize "$BIN"
     ;;
   findblockmultiple)
     # 用法: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <out.txt> <sub1Genome.fa> <sub1.gff> [<sub2Genome.fa> <sub2.gff> ...] [--leftEdge N --rightEdge N --expand N --threads N]
@@ -1223,7 +1258,7 @@ case "$1" in
     shift
     if [ $# -lt 7 ]; then echo "用法: tbplot.sh findblockmultiple <qGenome.fa> <q.gff> <qId> <out> <s1Genome.fa> <s1.gff> [更多subject对] [options]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/FindBlockMultipleCli.java" 2>/dev/null
-    xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx6g -cp "$TBCLI_DIR:$JAR" FindBlockMultipleCli "$@"
+    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx6g -cp "$TBCLI_DIR:$JAR" FindBlockMultipleCli "$@"
     ;;
   findblockdual)
     # 用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
@@ -1231,7 +1266,7 @@ case "$1" in
     shift
     if [ $# -lt 6 ]; then echo "用法: tbplot.sh findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [options]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/FindBlockDualCli.java" 2>/dev/null
-    xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
+    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
     ;;
   collinearRegion)
     # 用法: collinearRegion <in.collinearity> <simGff> <out.txt>
@@ -1239,7 +1274,7 @@ case "$1" in
     #   输出: chr1 start1 end1 chr2 start2 end2 genePairInfo——供共线性区块分析/可视化
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh collinearRegion <in.collinearity> <simGff> <out.txt>"; exit 1; fi
-    xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion --inCollinearity "$1" --inSimGff "$2" --outTab "$3"
+    _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion --inCollinearity "$1" --inSimGff "$2" --outTab "$3"
     ;;
   visualizeblock)
     # 用法: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]
@@ -1249,7 +1284,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh visualizeblock <inBlockOut> <out.pdf> [--labels \"G1,G2\"]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/VisualizeCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VisualizeCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" VisualizeCli "$@"
     ;;
   treeRooting)
     # 用法: treeRooting <in.nwk> <out.nwk>
@@ -1259,7 +1294,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh treeRooting <in.nwk> <out.nwk>"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/TreeRootingCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TreeRootingCli "$@"
+    _run_java xvfb-run -a java -Xmx1g -cp "$TBCLI_DIR:$JAR" TreeRootingCli "$@"
     ;;
   marker)
     # 用法: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <out> [args...]
@@ -1273,12 +1308,12 @@ case "$1" in
     ENG="$1"; INM="$2"; shift 2
     if [ "$ENG" = "BigMarkerRandomDesign" ]; then
         [ -z "$INM" ] && { echo "用法: tbplot.sh marker BigMarkerRandomDesign <inMarker> [--targetMarkerNum N ...]"; exit 1; }
-        xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.markerDesign.BigMarkerRandomDesign --inMakerStatus "$INM" "$@"
+        _run_java xvfb-run -a java -Xmx2g -cp "$JAR" biocjava.bioDoer.markerDesign.BigMarkerRandomDesign --inMakerStatus "$INM" "$@"
     else
         if [ $# -lt 1 ]; then echo "用法: tbplot.sh marker <MarkerDist|MarkerFilter|SampleDist> <inMarker> <out> [args...]"; exit 1; fi
         OUTM="$1"; shift
         javac -cp "$JAR" "$TBCLI_DIR/MarkerDesignCli.java" 2>/dev/null
-        xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" MarkerDesignCli "$ENG" "$INM" "$OUTM" "$@"
+        _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" MarkerDesignCli "$ENG" "$INM" "$OUTM" "$@"
     fi
     ;;
   dehist)
@@ -1289,7 +1324,7 @@ case "$1" in
     shift
     if [ $# -lt 2 ]; then echo "用法: tbplot.sh dehist <deg.txt> <out> [w] [h]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/DiffExpCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" DiffExpCli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" DiffExpCli "$@"
     ;;
   msy)
     # 用法: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [width] [height]
@@ -1302,7 +1337,7 @@ case "$1" in
     POS="$1"; LINKS="$2"; LAYOUT="$3"; OUT="$4"; shift 4
     W="1000"; H="800"; [ $# -ge 1 ] && W="$1" && shift; [ $# -ge 1 ] && H="$1" && shift
     javac -cp "$JAR" "$TBCLI_DIR/GenericCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli biocjava.bioDoer.JIGplotToolkit.Synteny.MultipleSpeciesSyteny plot "$OUT" --set inSimplifiedGff "$POS" --set genePairInfoFile "$LINKS" --set chrLayoutFile "$LAYOUT" --width "$W" --height "$H"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" GenericCli biocjava.bioDoer.JIGplotToolkit.Synteny.MultipleSpeciesSyteny plot "$OUT" --set inSimplifiedGff "$POS" --set genePairInfoFile "$LINKS" --set chrLayoutFile "$LAYOUT" --width "$W" --height "$H"
     ;;
   venn5)
     # 用法: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labelA-E]
@@ -1311,7 +1346,7 @@ case "$1" in
     shift
     if [ $# -lt 6 ]; then echo "用法: tbplot.sh venn5 <out> <setA> <setB> <setC> <setD> <setE> [labels]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/Venn5Cli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Venn5Cli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Venn5Cli "$@"
     ;;
   venn6)
     # 用法: venn6 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> <setF.txt> [labelA-F]
@@ -1319,7 +1354,7 @@ case "$1" in
     shift
     if [ $# -lt 7 ]; then echo "用法: tbplot.sh venn6 <out> <setA> <setB> <setC> <setD> <setE> <setF> [labels]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/Venn6Cli.java" 2>/dev/null
-    xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Venn6Cli "$@"
+    _run_java xvfb-run -a java -Xmx2g -cp "$TBCLI_DIR:$JAR" Venn6Cli "$@"
     ;;
   microsyn)
     # 用法: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --start1 S --end1 E] [--chr2 C --start2 S --end2 E] [--highlight1 c:s:e] [--highlight2 c:s:e]
@@ -1329,7 +1364,7 @@ case "$1" in
     shift
     if [ $# -lt 4 ]; then echo "用法: tbplot.sh microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 .. --start1 ..]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/MicroSynCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MicroSynCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" MicroSynCli "$@"
     ;;
   dualsyn)
     # 用法: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] [--chr2 "3,4"] [--rows N] [--gap N]
@@ -1339,7 +1374,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh dualsyn <simplifiedGff> <collinearity> <out> [--chr1 ..] [--chr2 ..]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/DualSynCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" DualSynCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" DualSynCli "$@"
     ;;
   multisyn)
     # 用法: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt]
@@ -1350,7 +1385,7 @@ case "$1" in
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh multisyn <gxf.lst> <collinear.lst> <out> [--genes f]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/SeveralSpeciesCli.java" 2>/dev/null
-    xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeveralSpeciesCli "$@"
+    _run_java xvfb-run -a java -Xmx3g -cp "$TBCLI_DIR:$JAR" SeveralSpeciesCli "$@"
     ;;
 
   help|-h|--help)
