@@ -1,0 +1,110 @@
+.TH TBTOOLS 1 "September 2026" "tbtools-cli v1.0.0" "TBtools-II CLI"
+.SH NAME
+tbtools \- TBtools-II full-featured command line wrapper
+.SH SYNOPSIS
+.B tbtools
+.RI [ command ] [ args... ]
+.SH DESCRIPTION
+TBtools-cli wraps all TBtools-II (v2.535+) functionality into command line:
+140 plotting/analysis commands + 82 CLI tools + 188 RPC data methods + universal engine reflection.
+All engines run headlessly (via xvfb on Linux/WSL), no GUI needed.
+.SH COMMANDS
+.TP
+.B version
+Display version, Java, and JAR info.
+.TP
+.B doctor
+Environment diagnosis: checks Java, javac, xvfb-run, JAR, and optional dependencies.
+.TP
+.B examples [\fIcommand\fR]
+Show runnable examples for a command, or list all examples.
+.TP
+.B help | -h | --help
+Show full usage with all commands listed by category.
+.TP
+.B list \fIplots|tools|rpc|all\fR
+List available plotting commands, CLI tools, or RPC methods.
+.TP
+.B tool \fIname\fR [args...]
+Run a CLI tool (82 available: statFasta, rpkmCal, tpmCalc, etc.)
+.TP
+.B plot \fIcommand\fR [args...]
+Run a plotting/analysis engine (140 available: genestructure, volcano, tree, etc.)
+.TP
+.B rpc \fImethod\fR '\fIjson\fR'
+Call an RPC data method (188 available).
+.TP
+.B engine \fIclass\fR key=value...
+Universal engine reflection (any TBtools engine class).
+.TP
+.B server start | stop
+Start/stop the RPC server (port 8765 by default).
+.SH PLOTTING CATEGORIES
+.TP
+Gene structure / Motif / Sequence
+genestructure, motif, seqlogo, msa, seqlentrack, cddmotif, pfammotif
+.TP
+Expression / Statistics
+volcano, pca, hclust, qpcr, heatmap2, layoutheatmap, cubeheatmap, groupedbar, violin, dehist
+.TP
+Phylogeny / Tree
+tree, phylotree, unrooted, treeRooting, onesteptree, degramdom
+.TP
+Genomic location / Circos / Synteny
+circos, supercircos, circlegene, dotplot, microsyn, msy, multisyn, dualsyn, pafviz, pafcomp, pafref
+.TP
+Venn / Sets
+venn2, venn3, venn4, venn5, venn6, upset
+.TP
+ChIP-seq / Others
+peaktss, peakdist, peakanno, pileup, gel, gfa, microgenome, virusRecomb, colorscheme, distance, mountain
+.SH GLOBAL OPTIONS
+.TP
+.B --verbose | -V
+Show full Java stack trace on errors (debug mode).
+.TP
+.B --quiet | -q
+Suppress engine progress messages (only show errors).
+.SH EXIT CODES
+0 = success, 1 = parameter error, 2 = file not found, 3 = data format error
+.SH ENVIRONMENT
+.TP
+.B TBTOOLS_JAR
+Path to TBtools_JRE1.6.jar (required).
+.TP
+.B TBTOOLS_JAVA
+Java executable (default: java).
+.TP
+.B TBTOOLS_RPC_PORT
+RPC server port (default: 8765).
+.TP
+.B TBTOOLS_VERBOSE
+Set to 1 for verbose mode (same as --verbose).
+.TP
+.B TBTOOLS_QUIET
+Set to 1 for quiet mode (same as --quiet).
+.SH FILES
+.TP
+.I config/config.sh
+Shared configuration (JAR path, Java path, RPC port).
+.TP
+.I docs/COMMAND_REFERENCE.md
+Full command reference (140 commands + 82 tools + 80 bridges + 35 pitfalls).
+.TP
+.I docs/rpc_methods_reference.md
+RPC 188 method reference (params/return values).
+.TP
+.I run_examples.sh
+Quick verification script (8 core features).
+.SH BASH COMPLETION
+.B source completions/tbtools_completion.bash
+.br
+Or: cp completions/tbtools_completion.bash ~/.local/share/bash-completion/completions/tbtools
+.SH SEE ALSO
+.BR tbplot.sh (1),
+.BR tbtools_rpc.sh (1),
+.BR tbengine.sh (1)
+.SH AUTHOR
+tbtools-cli contributors. TBtools-II by Chengjie Chen.
+.SH LICENSE
+MIT License. TBtools itself is also MIT-licensed.

@@ -28,6 +28,21 @@ source completions/tbtools_completion.bash   # 临时启用
 cp completions/tbtools_completion.bash ~/.local/share/bash-completion/completions/tbtools
 ```
 
+### Man Page
+
+```bash
+man -l man/tbtools.1              # 查看 man page
+# 或安装到系统:
+sudo cp man/tbtools.1 /usr/local/share/man/man1/
+```
+
+### stdin/stdout 管道（CLI 工具层）
+
+```bash
+cat seqs.fa | tbtools tool statFasta --inFasta - --outPutFile - | head
+tbtools tool statFasta --inFasta seqs.fa --outPutFile - | head
+```
+
 ## ✨ Features
 
 | Layer | Capability | Entry |

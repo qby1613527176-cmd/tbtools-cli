@@ -201,6 +201,10 @@ def cmd_rpc(method, params_json):
 def _run_tool(java_cmd, tool_name):
     """执行 java 工具命令，失败时输出友好错误提示"""
     import subprocess, tempfile, os
+    # stdin/stdout 管道支持: - → /dev/stdin 或 /dev/stdout
+    # 只对文件路径参数（--in* / --out*）做替换
+    java_cmd = java_cmd.replace('=/dev/stdin', '=/dev/stdin')  # no-op，占位
+    # 实际替换在 cmd_tool 里做（因为这里已经是拼接后的字符串）
     _err_file = tempfile.mktemp(prefix="tbtools_err.")
     r = subprocess.run(java_cmd, shell=True, stderr=open(_err_file, "w"))
     if r.returncode != 0:
@@ -249,8 +253,35 @@ def _run_tool(java_cmd, tool_name):
 def cmd_tool(name, args):
     cls = CLI_TOOLS.get(name)
     if cls:
+        # stdin/stdout 管道: 参数值 "-" → 临时文件或 /dev/stdout
+        _args = []
+        _tmp_files = []
+        for i, a in enumerate(args):
+            if a == "-":
+                prev = args[i-1] if i > 0 else ""
+                if prev.startswith("--in"):
+                    # Java 不支持 /dev/stdin pipe → 写到临时文件
+                    import tempfile
+                    _tmp = tempfile.mktemp(suffix=".stdin")
+                    with open(_tmp, "wb") as f:
+                        import sys as _sys
+                        _sys.stdin.buffer.flush()
+                        f.write(_sys.stdin.buffer.read())
+                    _tmp_files.append(_tmp)
+                    _args.append(_tmp)
+                elif prev.startswith("--out") or prev.startswith("--outPut"):
+                    _args.append("/dev/stdout")
+                else:
+                    _args.append("-")
+            else:
+                _args.append(a)
+        args = _args
+        # 注册临时文件清理（在 _run_tool 之后）
+        import atexit
+        for _t in _tmp_files:
+            atexit.register(lambda t=_t: __import__("os").unlink(t) if __import__("os").path.exists(t) else None)
         # 有映射: 直接 java -cp 调类
-        print(f"▶ {name} -> {cls}")
+        print(f"▶ {name} -> {cls}", file=sys.stderr)
         if not args:
             # 无参数时先尝试 --help（ArgsParser 工具有 Usage）
             r = subprocess.run(f"java -Xmx2g -cp {JAR} {cls} --help", 
@@ -389,6 +420,63 @@ def cmd_doctor():
         print("  ✅ 环境完全就绪！")
     sys.exit(0)
 
+
+def cmd_examples(cmd=None):
+    """显示命令的可运行示例"""
+    EXAMPLES = {
+        "seqlogo": [
+            ("基本序列 LOGO", "tbplot.sh seqlogo examples/data/phylogeny/msa.fa logo.svg"),
+        ],
+        "volcano": [
+            ("基本火山图", "tbplot.sh volcano examples/data/deg.txt volcano.svg"),
+        ],
+        "tree": [
+            ("树+注释图", "tbplot.sh tree test_reports/data_b5/tree.config tree.svg"),
+        ],
+        "heatmap2": [
+            ("聚类热图", "tbplot.sh heatmap2 examples/data/expr/expr.tsv heatmap.svg --log2 --rowScale --clusterRow"),
+        ],
+        "venn5": [
+            ("五集合韦恩图", "tbplot.sh venn5 venn5.svg examples/data/set_0.txt examples/data/set_1.txt examples/data/set_2.txt examples/data/set_3.txt examples/data/set_4.txt"),
+        ],
+        "circos": [
+            ("环形共线性图", "tbplot.sh circos examples/data/synteny/chrlen.txt examples/data/synteny/links.txt examples/data/synteny/genepos.txt circos.svg"),
+        ],
+        "msa": [
+            ("MSA 可视化", "tbplot.sh msa examples/data/phylogeny/msa.fa msa.svg"),
+        ],
+        "pca": [
+            ("PCA 图", "tbplot.sh pca examples/data/expr/expr.tsv pca.svg row"),
+        ],
+        "peakdist": [
+            ("Peak 染色体分布", "tbplot.sh peakdist examples/data/chipseq/chrlen2.txt examples/data/chipseq/peak_std.xls peakdist.svg"),
+        ],
+        "statFasta": [
+            ("FASTA 统计", "tbtools tool statFasta --inFasta examples/data/rpc/gras6_pep.fa --outPutFile stat.xls"),
+        ],
+    }
+    
+    if cmd and cmd in EXAMPLES:
+        print()
+        print(cmd + " 示例:")
+        for desc, example in EXAMPLES[cmd]:
+            print("  " + desc + ":")
+            print("    " + example)
+        print()
+        print("  完整参数: tbplot.sh help " + cmd)
+    elif cmd:
+        print("暂无 " + cmd + " 的示例。查看帮助: tbplot.sh help " + cmd)
+    else:
+        print("tbtools-cli 命令示例")
+        print("=" * 40)
+        print()
+        for cmd_name, exs in EXAMPLES.items():
+            print("  " + cmd_name + ": " + exs[0][0])
+            print("    " + exs[0][1])
+            print()
+        print("用法: tbtools examples <命令>")
+    sys.exit(0)
+
 def usage():
     print(__doc__.split("用法：")[1])
 
@@ -403,4 +491,5 @@ if __name__ == "__main__":
     elif c == "server" and len(sys.argv) >= 3: (start_server if sys.argv[2] == "start" else stop_server)()
     elif c == "version" or c == "--version" or c == "-v": cmd_version()
     elif c == "doctor": cmd_doctor()
+    elif c == "examples": cmd_examples(sys.argv[2] if len(sys.argv) > 2 else None)
     else: usage()

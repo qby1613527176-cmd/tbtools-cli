@@ -75,6 +75,7 @@ RPC 数据工具（188 方法）:
 其他:
   tbtools version    # 查看版本
   tbtools doctor     # 环境诊断
+  tbtools examples   # 命令示例
   tbtools help       # 本帮助
 EOF
 }
@@ -113,6 +114,7 @@ case "${1:-}" in
 
   version|--version|-V) python3 "$ROOT/bin/tbcli.py" version;;
   doctor) python3 "$ROOT/bin/tbcli.py" doctor;;
+  examples) python3 "$ROOT/bin/tbcli.py" examples "${@:2}";;
   help|-h|--help) usage;;
   *)
     if [ -z "${1:-}" ]; then usage

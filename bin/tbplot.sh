@@ -7,6 +7,19 @@ ROOT="$(dirname "$SCRIPT_DIR")"
 # shellcheck disable=SC1091
 source "$ROOT/config/config.sh"
 JAR="${TBTOOLS_JAR}"
+# ---- verbose/quiet 级别 ----
+# 默认: 显示引擎进度信息到 stderr
+# --quiet / TBTOOLS_QUIET=1: 只显示错误，不显示进度
+# --verbose / TBTOOLS_VERBOSE=1: 显示完整 Java 堆栈（debug 模式）
+VERBOSE="${TBTOOLS_VERBOSE:-0}"
+QUIET="${TBTOOLS_QUIET:-0}"
+# 命令行 --verbose/--quiet 覆盖环境变量
+for _arg in "$@"; do
+  case "$_arg" in
+    --verbose|-V) VERBOSE=1;;
+    --quiet|-q) QUIET=1;;
+  esac
+done
 # 桥源码目录（bridges/），javac 编译到 build/，java -cp 用 build/
 TBCLI_DIR="$ROOT/build"
 # 确保桥源码副本在 build/（含编译产物，防源目录污染）
@@ -61,11 +74,18 @@ _run_java() {
     fi
     echo "   💡 $_hint" >&2
     echo "   📖 查看帮助: tbplot.sh help <命令>" >&2
-    echo "   🔍 完整堆栈: $_err_file（临时文件，重启后清除）" >&2
+    if [ "$VERBOSE" = "1" ]; then
+      echo "   🔍 完整堆栈:" >&2
+      cat "$_err_file" >&2
+    else
+      echo "   🔍 完整堆栈: $_err_file（--verbose 显示，重启后清除）" >&2
+    fi
     echo "" >&2
   else
-    # 成功时输出引擎进度信息到 stderr（保持原始行为）
-    cat "$_err_file" >&2
+    # 成功时输出引擎进度信息到 stderr（quiet 模式跳过）
+    if [ "$QUIET" != "1" ]; then
+      cat "$_err_file" >&2
+    fi
   fi
   rm -f "$_err_file"
   return $_ec2
@@ -76,6 +96,16 @@ if [ $# -ge 2 ] && { [ "$2" = "-h" ] || [ "$2" = "--help" ]; }; then
   $0 help "$1"
   exit 0
 fi
+
+# 从参数列表移除全局 flag（--verbose/--quiet 不传给引擎）
+_ARGS=()
+for _a in "$@"; do
+  case "$_a" in
+    --verbose|-V|--quiet|-q) ;;  # 跳过，已在前面处理
+    *) _ARGS+=("$_a");;
+  esac
+done
+set -- "${_ARGS[@]}"
 
 case "$1" in
   motif)
