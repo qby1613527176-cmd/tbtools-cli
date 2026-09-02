@@ -51,6 +51,57 @@ def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, he
     ec = run_plot(args, verbose=verbose, quiet=quiet)
     sys.exit(ec)
 
+@seq_group.command("msa")
+@click.argument("aligned_fasta")
+@click.argument("output_file")
+@click.option("--padding", type=int, default=0, help="序列间填充")
+@common_options
+def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, height, width, threads):
+    """多序列比对可视化"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("MSACli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "MSACli", aligned_fasta, output_file]
+    if padding:
+        args += ["--padding", str(padding)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@seq_group.command("structure")
+@click.argument("gff_file")
+@click.argument("id_list")
+@click.argument("output_file")
+@click.option("--genome", "-g", default=None, help="基因组 FASTA（可选）")
+@common_options
+def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, height, width, threads):
+    """基因结构图（外显子/UTR 从 GFF）"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("GeneStructureCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "GeneStructureCli", gff_file, id_list, output_file]
+    if genome:
+        args += [genome]
+    if width: args += [str(width)]
+    if height: args += [str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@seq_group.command("motif")
+@click.argument("meme_xml")
+@click.argument("id_list")
+@click.argument("output_file")
+@common_options
+def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, height, width, threads):
+    """Motif 分布图（MEME XML）"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("MotifCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "MotifCli", meme_xml, id_list, output_file]
+    if width: args += [str(width)]
+    if height: args += [str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
 # ---- 命令组：表达/统计 ----
 @cli.group("expr")
 def expr_group():
@@ -123,6 +174,48 @@ def tree_draw(config_file, output_file, verbose, quiet, fmt, height, width, thre
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
             "TreeCli", config_file, output_file]
     ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@tree_group.command("unrooted")
+@click.argument("newick_file")
+@click.argument("output_file")
+@common_options
+def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, height, width, threads):
+    """无根树可视化"""
+    output_file = resolve_output(output_file, fmt)
+    ensure_bridge("UnrootedTreeCli")
+    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "UnrootedTreeCli", newick_file, output_file]
+    if width: args += ["--width", str(width)]
+    if height: args += ["--height", str(height)]
+    ec = run_plot(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@tree_group.command("rooting")
+@click.argument("input_nwk")
+@click.argument("output_nwk")
+@common_options
+def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, height, width, threads):
+    """MAD 系统发育定根"""
+    args = ["java", "-Xmx2g", "-cp", JAR,
+            "biocjava.bioDoer.JIGplotToolkit.newickParser.TreeTreeTree.TreeRootingByMAD",
+            input_nwk, output_nwk]
+    ec = run_java(args, verbose=verbose, quiet=quiet)
+    sys.exit(ec)
+
+@tree_group.command("one-step")
+@click.argument("pep_fasta")
+@click.argument("output_prefix")
+@click.option("--bb-time", "-b", type=int, default=1000, help="IQ-TREE bootstrap iterations")
+@common_options
+def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, height, width, threads):
+    """一步法 ML 树（muscle → trimal → IQ-TREE）"""
+    t = threads or 4
+    args = ["java", "-Xmx4g", "-cp", JAR,
+            "biocjava.bioDoer.JIGplotToolkit.Phylogenetics.OneStepTree",
+            "--inPepFie", pep_fasta, "--outFilePrefix", output_prefix,
+            "--bbTime", str(bb_time), "--threads", str(t)]
+    ec = run_java(args, verbose=verbose, quiet=quiet)
     sys.exit(ec)
 
 # ---- 命令组：工具 ----
