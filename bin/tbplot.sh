@@ -45,7 +45,20 @@ _run_java() {
       done
     fi
     echo "" >&2
-    echo "   💡 常见原因: 参数缺失/格式不对/文件路径错误/数据不匹配" >&2
+    # 根据异常类型给出针对性建议
+    local _hint="参数缺失/格式不对/文件路径错误/数据不匹配"
+    if grep -q "FileNotFoundException" "$_err_file"; then
+      _hint="文件不存在或路径错误，检查输入文件路径"
+    elif grep -q "NullPointerException" "$_err_file"; then
+      _hint="可能缺少必需参数或数据格式不匹配（如坐标<阈值触发引擎索引边界）"
+    elif grep -q "NumberFormatException" "$_err_file"; then
+      _hint="数据格式不匹配，检查输入文件列数/类型/分隔符"
+    elif grep -q "ArrayIndexOutOfBoundsException" "$_err_file"; then
+      _hint="可能缺少必需参数或输入数据行列数不足"
+    elif grep -q "IOException" "$_err_file" && ! grep -q "FileNotFound" "$_err_file"; then
+      _hint="IO 错误，检查文件权限/磁盘空间"
+    fi
+    echo "   💡 $_hint" >&2
     echo "   📖 查看帮助: tbplot.sh help <命令>" >&2
     echo "   🔍 完整堆栈: $_err_file（临时文件，重启后清除）" >&2
     echo "" >&2

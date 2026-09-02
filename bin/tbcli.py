@@ -217,7 +217,18 @@ def _run_tool(java_cmd, tool_name):
             for l in nonblank[-3:]:
                 print(f"   {l}", file=sys.stderr)
         print("", file=sys.stderr)
-        print("   💡 常见原因: 参数缺失/格式不对/文件路径错误/数据不匹配", file=sys.stderr)
+        # 智能异常分类
+        _hint = "参数缺失/格式不对/文件路径错误/数据不匹配"
+        _err_text = open(_err_file).read()
+        if "FileNotFoundException" in _err_text:
+            _hint = "文件不存在或路径错误，检查输入文件路径"
+        elif "NullPointerException" in _err_text:
+            _hint = "可能缺少必需参数或数据格式不匹配"
+        elif "NumberFormatException" in _err_text:
+            _hint = "数据格式不匹配，检查输入文件列数/类型/分隔符"
+        elif "ArrayIndexOutOfBoundsException" in _err_text:
+            _hint = "可能缺少必需参数或输入数据行列数不足"
+        print(f"   💡 {_hint}", file=sys.stderr)
         print(f"   📖 查看帮助: tbtools list tools 或 docs/COMMAND_REFERENCE.md", file=sys.stderr)
         print(f"   🔍 完整堆栈: {_err_file}", file=sys.stderr)
         print("", file=sys.stderr)
