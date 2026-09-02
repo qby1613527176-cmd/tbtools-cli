@@ -87,6 +87,8 @@ fi
 
 echo ""
 echo "完成。快速开始:"
+
+echo "  bash run_examples.sh       # 一键验证（8项核心功能）"
 echo "  tbtools help                # 查看全部命令"
 echo "  tbtools seqlogo seqs.fa logo.svg   # 序列 LOGO 图"
 echo "  tbtools server start        # 启动 RPC（数据工具）"

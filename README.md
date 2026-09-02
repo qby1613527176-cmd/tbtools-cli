@@ -155,7 +155,7 @@ tbtools hclust <distance_matrix.tsv> <out.nwk>
 # PhyloTreeView phylogenetic tree view (engine 112; direct newick, auto branch-length/Cladogram + axis)
 tbtools phylotree <in.nwk> <out.svg> [vertical] [width] [height]
 
-# Unrooted tree (engine 115; 6 layouts Circular/Radial/Force-Directed/Equal Angle/N-Body/Equal-Daylight)
+# Unrooted tree (engine 123; 6 layouts Circular/Radial/Force-Directed/Equal Angle/N-Body/Equal-Daylight)
 tbtools unrooted <in.nwk> <out.svg> [layout] [width] [height] [iterations]
 
 # Violin plot (engine 116; standalone ViolinPlot, SVG/PDF only)
