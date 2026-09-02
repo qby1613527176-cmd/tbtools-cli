@@ -527,6 +527,291 @@ def _make_passthrough(name, group=None):
         sys.exit(ec)
     _cmd.__doc__ = f"转发到 tbplot.sh {name}"
 
+
+# ---- 自动命令注册 ----
+from tbtools_cli.auto_commands import *
+
+def admixture(args, verbose=False, quiet=False):
+    return _admixture_impl(args, verbose=verbose, quiet=quiet)
+def amazingmeta(args, verbose=False, quiet=False):
+    return _amazingmeta_impl(args, verbose=verbose, quiet=quiet)
+def annocompare(args, verbose=False, quiet=False):
+    return _annocompare_impl(args, verbose=verbose, quiet=quiet)
+def bamMerge(args, verbose=False, quiet=False):
+    return _bamMerge_impl(args, verbose=verbose, quiet=quiet)
+def bamindex(args, verbose=False, quiet=False):
+    return _bamindex_impl(args, verbose=verbose, quiet=quiet)
+def bamsort(args, verbose=False, quiet=False):
+    return _bamsort_impl(args, verbose=verbose, quiet=quiet)
+def bamstate(args, verbose=False, quiet=False):
+    return _bamstate_impl(args, verbose=verbose, quiet=quiet)
+def barplot(args, verbose=False, quiet=False):
+    return _barplot_impl(args, verbose=verbose, quiet=quiet)
+def barplotter(args, verbose=False, quiet=False):
+    return _barplotter_impl(args, verbose=verbose, quiet=quiet)
+def batchReplace(args, verbose=False, quiet=False):
+    return _batchReplace_impl(args, verbose=verbose, quiet=quiet)
+def calcRepeat(args, verbose=False, quiet=False):
+    return _calcRepeat_impl(args, verbose=verbose, quiet=quiet)
+def cddmotif(args, verbose=False, quiet=False):
+    return _cddmotif_impl(args, verbose=verbose, quiet=quiet)
+def circlegene(args, verbose=False, quiet=False):
+    return _circlegene_impl(args, verbose=verbose, quiet=quiet)
+def circos(args, verbose=False, quiet=False):
+    return _circos_impl(args, verbose=verbose, quiet=quiet)
+def collinearRegion(args, verbose=False, quiet=False):
+    return _collinearRegion_impl(args, verbose=verbose, quiet=quiet)
+def colorscheme(args, verbose=False, quiet=False):
+    return _colorscheme_impl(args, verbose=verbose, quiet=quiet)
+def conflictpaf(args, verbose=False, quiet=False):
+    return _conflictpaf_impl(args, verbose=verbose, quiet=quiet)
+def ctgGroup(args, verbose=False, quiet=False):
+    return _ctgGroup_impl(args, verbose=verbose, quiet=quiet)
+def cubeheatmap(args, verbose=False, quiet=False):
+    return _cubeheatmap_impl(args, verbose=verbose, quiet=quiet)
+def degramdom(args, verbose=False, quiet=False):
+    return _degramdom_impl(args, verbose=verbose, quiet=quiet)
+def dehist(args, verbose=False, quiet=False):
+    return _dehist_impl(args, verbose=verbose, quiet=quiet)
+def distance(args, verbose=False, quiet=False):
+    return _distance_impl(args, verbose=verbose, quiet=quiet)
+def dotplot(args, verbose=False, quiet=False):
+    return _dotplot_impl(args, verbose=verbose, quiet=quiet)
+def dualsyn(args, verbose=False, quiet=False):
+    return _dualsyn_impl(args, verbose=verbose, quiet=quiet)
+def efpHeat(args, verbose=False, quiet=False):
+    return _efpHeat_impl(args, verbose=verbose, quiet=quiet)
+def exprCorr(args, verbose=False, quiet=False):
+    return _exprCorr_impl(args, verbose=verbose, quiet=quiet)
+def fastaExtract(args, verbose=False, quiet=False):
+    return _fastaExtract_impl(args, verbose=verbose, quiet=quiet)
+def fastaSubseq(args, verbose=False, quiet=False):
+    return _fastaSubseq_impl(args, verbose=verbose, quiet=quiet)
+def filesplit(args, verbose=False, quiet=False):
+    return _filesplit_impl(args, verbose=verbose, quiet=quiet)
+def filterCScore(args, verbose=False, quiet=False):
+    return _filterCScore_impl(args, verbose=verbose, quiet=quiet)
+def findblockdual(args, verbose=False, quiet=False):
+    return _findblockdual_impl(args, verbose=verbose, quiet=quiet)
+def findblockmultiple(args, verbose=False, quiet=False):
+    return _findblockmultiple_impl(args, verbose=verbose, quiet=quiet)
+def findpath(args, verbose=False, quiet=False):
+    return _findpath_impl(args, verbose=verbose, quiet=quiet)
+def fqTrim(args, verbose=False, quiet=False):
+    return _fqTrim_impl(args, verbose=verbose, quiet=quiet)
+def fqfaConv(args, verbose=False, quiet=False):
+    return _fqfaConv_impl(args, verbose=verbose, quiet=quiet)
+def gel(args, verbose=False, quiet=False):
+    return _gel_impl(args, verbose=verbose, quiet=quiet)
+def genedensity(args, verbose=False, quiet=False):
+    return _genedensity_impl(args, verbose=verbose, quiet=quiet)
+def genelocation(args, verbose=False, quiet=False):
+    return _genelocation_impl(args, verbose=verbose, quiet=quiet)
+def genelocgff(args, verbose=False, quiet=False):
+    return _genelocgff_impl(args, verbose=verbose, quiet=quiet)
+def generic(args, verbose=False, quiet=False):
+    return _generic_impl(args, verbose=verbose, quiet=quiet)
+def genestructure(args, verbose=False, quiet=False):
+    return _genestructure_impl(args, verbose=verbose, quiet=quiet)
+def gfa(args, verbose=False, quiet=False):
+    return _gfa_impl(args, verbose=verbose, quiet=quiet)
+def gfa2fa(args, verbose=False, quiet=False):
+    return _gfa2fa_impl(args, verbose=verbose, quiet=quiet)
+def goParse(args, verbose=False, quiet=False):
+    return _goParse_impl(args, verbose=verbose, quiet=quiet)
+def groupCol(args, verbose=False, quiet=False):
+    return _groupCol_impl(args, verbose=verbose, quiet=quiet)
+def groupedbar(args, verbose=False, quiet=False):
+    return _groupedbar_impl(args, verbose=verbose, quiet=quiet)
+def gsadiag(args, verbose=False, quiet=False):
+    return _gsadiag_impl(args, verbose=verbose, quiet=quiet)
+def gxfAppend(args, verbose=False, quiet=False):
+    return _gxfAppend_impl(args, verbose=verbose, quiet=quiet)
+def gxfFix(args, verbose=False, quiet=False):
+    return _gxfFix_impl(args, verbose=verbose, quiet=quiet)
+def gxfGenepos(args, verbose=False, quiet=False):
+    return _gxfGenepos_impl(args, verbose=verbose, quiet=quiet)
+def gxfMatch(args, verbose=False, quiet=False):
+    return _gxfMatch_impl(args, verbose=verbose, quiet=quiet)
+def gxfOverlap(args, verbose=False, quiet=False):
+    return _gxfOverlap_impl(args, verbose=verbose, quiet=quiet)
+def gxfRecall(args, verbose=False, quiet=False):
+    return _gxfRecall_impl(args, verbose=verbose, quiet=quiet)
+def gxfRegion(args, verbose=False, quiet=False):
+    return _gxfRegion_impl(args, verbose=verbose, quiet=quiet)
+def gxfRename(args, verbose=False, quiet=False):
+    return _gxfRename_impl(args, verbose=verbose, quiet=quiet)
+def gxfRepGXF(args, verbose=False, quiet=False):
+    return _gxfRepGXF_impl(args, verbose=verbose, quiet=quiet)
+def gxfRepIDs(args, verbose=False, quiet=False):
+    return _gxfRepIDs_impl(args, verbose=verbose, quiet=quiet)
+def gxfStat(args, verbose=False, quiet=False):
+    return _gxfStat_impl(args, verbose=verbose, quiet=quiet)
+def gxffilter(args, verbose=False, quiet=False):
+    return _gxffilter_impl(args, verbose=verbose, quiet=quiet)
+def gxfsort(args, verbose=False, quiet=False):
+    return _gxfsort_impl(args, verbose=verbose, quiet=quiet)
+def hclust(args, verbose=False, quiet=False):
+    return _hclust_impl(args, verbose=verbose, quiet=quiet)
+def heatmap2(args, verbose=False, quiet=False):
+    return _heatmap2_impl(args, verbose=verbose, quiet=quiet)
+def hicEnzyme(args, verbose=False, quiet=False):
+    return _hicEnzyme_impl(args, verbose=verbose, quiet=quiet)
+def hmmExtract(args, verbose=False, quiet=False):
+    return _hmmExtract_impl(args, verbose=verbose, quiet=quiet)
+def homoPhase(args, verbose=False, quiet=False):
+    return _homoPhase_impl(args, verbose=verbose, quiet=quiet)
+def layoutheatmap(args, verbose=False, quiet=False):
+    return _layoutheatmap_impl(args, verbose=verbose, quiet=quiet)
+def levelGo(args, verbose=False, quiet=False):
+    return _levelGo_impl(args, verbose=verbose, quiet=quiet)
+def marker(args, verbose=False, quiet=False):
+    return _marker_impl(args, verbose=verbose, quiet=quiet)
+def markertools(args, verbose=False, quiet=False):
+    return _markertools_impl(args, verbose=verbose, quiet=quiet)
+def mast2tab(args, verbose=False, quiet=False):
+    return _mast2tab_impl(args, verbose=verbose, quiet=quiet)
+def mastExtract(args, verbose=False, quiet=False):
+    return _mastExtract_impl(args, verbose=verbose, quiet=quiet)
+def mastrun(args, verbose=False, quiet=False):
+    return _mastrun_impl(args, verbose=verbose, quiet=quiet)
+def mcscanx(args, verbose=False, quiet=False):
+    return _mcscanx_impl(args, verbose=verbose, quiet=quiet)
+def memerun(args, verbose=False, quiet=False):
+    return _memerun_impl(args, verbose=verbose, quiet=quiet)
+def mggxf(args, verbose=False, quiet=False):
+    return _mggxf_impl(args, verbose=verbose, quiet=quiet)
+def microgenome(args, verbose=False, quiet=False):
+    return _microgenome_impl(args, verbose=verbose, quiet=quiet)
+def microsyn(args, verbose=False, quiet=False):
+    return _microsyn_impl(args, verbose=verbose, quiet=quiet)
+def mirnaIdentify(args, verbose=False, quiet=False):
+    return _mirnaIdentify_impl(args, verbose=verbose, quiet=quiet)
+def mirnaTarget2(args, verbose=False, quiet=False):
+    return _mirnaTarget2_impl(args, verbose=verbose, quiet=quiet)
+def mirnatarget(args, verbose=False, quiet=False):
+    return _mirnatarget_impl(args, verbose=verbose, quiet=quiet)
+def motif(args, verbose=False, quiet=False):
+    return _motif_impl(args, verbose=verbose, quiet=quiet)
+def mountain(args, verbose=False, quiet=False):
+    return _mountain_impl(args, verbose=verbose, quiet=quiet)
+def msa(args, verbose=False, quiet=False):
+    return _msa_impl(args, verbose=verbose, quiet=quiet)
+def msy(args, verbose=False, quiet=False):
+    return _msy_impl(args, verbose=verbose, quiet=quiet)
+def multiEfp(args, verbose=False, quiet=False):
+    return _multiEfp_impl(args, verbose=verbose, quiet=quiet)
+def multisyn(args, verbose=False, quiet=False):
+    return _multisyn_impl(args, verbose=verbose, quiet=quiet)
+def nwAlign(args, verbose=False, quiet=False):
+    return _nwAlign_impl(args, verbose=verbose, quiet=quiet)
+def onesteptree(args, verbose=False, quiet=False):
+    return _onesteptree_impl(args, verbose=verbose, quiet=quiet)
+def pafcomp(args, verbose=False, quiet=False):
+    return _pafcomp_impl(args, verbose=verbose, quiet=quiet)
+def pafref(args, verbose=False, quiet=False):
+    return _pafref_impl(args, verbose=verbose, quiet=quiet)
+def pafviz(args, verbose=False, quiet=False):
+    return _pafviz_impl(args, verbose=verbose, quiet=quiet)
+def partitionconflict(args, verbose=False, quiet=False):
+    return _partitionconflict_impl(args, verbose=verbose, quiet=quiet)
+def pca(args, verbose=False, quiet=False):
+    return _pca_impl(args, verbose=verbose, quiet=quiet)
+def peakanno(args, verbose=False, quiet=False):
+    return _peakanno_impl(args, verbose=verbose, quiet=quiet)
+def peakdist(args, verbose=False, quiet=False):
+    return _peakdist_impl(args, verbose=verbose, quiet=quiet)
+def peaktss(args, verbose=False, quiet=False):
+    return _peaktss_impl(args, verbose=verbose, quiet=quiet)
+def pep2codon(args, verbose=False, quiet=False):
+    return _pep2codon_impl(args, verbose=verbose, quiet=quiet)
+def pfammotif(args, verbose=False, quiet=False):
+    return _pfammotif_impl(args, verbose=verbose, quiet=quiet)
+def phylotree(args, verbose=False, quiet=False):
+    return _phylotree_impl(args, verbose=verbose, quiet=quiet)
+def pileup(args, verbose=False, quiet=False):
+    return _pileup_impl(args, verbose=verbose, quiet=quiet)
+def plotrna(args, verbose=False, quiet=False):
+    return _plotrna_impl(args, verbose=verbose, quiet=quiet)
+def preparespecies(args, verbose=False, quiet=False):
+    return _preparespecies_impl(args, verbose=verbose, quiet=quiet)
+def qpcr(args, verbose=False, quiet=False):
+    return _qpcr_impl(args, verbose=verbose, quiet=quiet)
+def qpcrExp(args, verbose=False, quiet=False):
+    return _qpcrExp_impl(args, verbose=verbose, quiet=quiet)
+def qpcrproc(args, verbose=False, quiet=False):
+    return _qpcrproc_impl(args, verbose=verbose, quiet=quiet)
+def quickFamily(args, verbose=False, quiet=False):
+    return _quickFamily_impl(args, verbose=verbose, quiet=quiet)
+def recipBlast(args, verbose=False, quiet=False):
+    return _recipBlast_impl(args, verbose=verbose, quiet=quiet)
+def regionAnno(args, verbose=False, quiet=False):
+    return _regionAnno_impl(args, verbose=verbose, quiet=quiet)
+def regiondepth(args, verbose=False, quiet=False):
+    return _regiondepth_impl(args, verbose=verbose, quiet=quiet)
+def rnaplot(args, verbose=False, quiet=False):
+    return _rnaplot_impl(args, verbose=verbose, quiet=quiet)
+def sambamcov(args, verbose=False, quiet=False):
+    return _sambamcov_impl(args, verbose=verbose, quiet=quiet)
+def sepChr(args, verbose=False, quiet=False):
+    return _sepChr_impl(args, verbose=verbose, quiet=quiet)
+def seqconvert(args, verbose=False, quiet=False):
+    return _seqconvert_impl(args, verbose=verbose, quiet=quiet)
+def seqlentrack(args, verbose=False, quiet=False):
+    return _seqlentrack_impl(args, verbose=verbose, quiet=quiet)
+def seqlogo(args, verbose=False, quiet=False):
+    return _seqlogo_impl(args, verbose=verbose, quiet=quiet)
+def simplehmmscan(args, verbose=False, quiet=False):
+    return _simplehmmscan_impl(args, verbose=verbose, quiet=quiet)
+def supercircos(args, verbose=False, quiet=False):
+    return _supercircos_impl(args, verbose=verbose, quiet=quiet)
+def tableAppend(args, verbose=False, quiet=False):
+    return _tableAppend_impl(args, verbose=verbose, quiet=quiet)
+def tableCast(args, verbose=False, quiet=False):
+    return _tableCast_impl(args, verbose=verbose, quiet=quiet)
+def tableColSel(args, verbose=False, quiet=False):
+    return _tableColSel_impl(args, verbose=verbose, quiet=quiet)
+def tableColSelect(args, verbose=False, quiet=False):
+    return _tableColSelect_impl(args, verbose=verbose, quiet=quiet)
+def tableCollapse(args, verbose=False, quiet=False):
+    return _tableCollapse_impl(args, verbose=verbose, quiet=quiet)
+def tableMelt(args, verbose=False, quiet=False):
+    return _tableMelt_impl(args, verbose=verbose, quiet=quiet)
+def tableMerge(args, verbose=False, quiet=False):
+    return _tableMerge_impl(args, verbose=verbose, quiet=quiet)
+def tableSplit(args, verbose=False, quiet=False):
+    return _tableSplit_impl(args, verbose=verbose, quiet=quiet)
+def tableTranspose(args, verbose=False, quiet=False):
+    return _tableTranspose_impl(args, verbose=verbose, quiet=quiet)
+def tableUniq(args, verbose=False, quiet=False):
+    return _tableUniq_impl(args, verbose=verbose, quiet=quiet)
+def tauIndex(args, verbose=False, quiet=False):
+    return _tauIndex_impl(args, verbose=verbose, quiet=quiet)
+def tree(args, verbose=False, quiet=False):
+    return _tree_impl(args, verbose=verbose, quiet=quiet)
+def treeRooting(args, verbose=False, quiet=False):
+    return _treeRooting_impl(args, verbose=verbose, quiet=quiet)
+def trimmsa(args, verbose=False, quiet=False):
+    return _trimmsa_impl(args, verbose=verbose, quiet=quiet)
+def twoSeqBlast(args, verbose=False, quiet=False):
+    return _twoSeqBlast_impl(args, verbose=verbose, quiet=quiet)
+def unrooted(args, verbose=False, quiet=False):
+    return _unrooted_impl(args, verbose=verbose, quiet=quiet)
+def upset(args, verbose=False, quiet=False):
+    return _upset_impl(args, verbose=verbose, quiet=quiet)
+def venn5(args, verbose=False, quiet=False):
+    return _venn5_impl(args, verbose=verbose, quiet=quiet)
+def venn6(args, verbose=False, quiet=False):
+    return _venn6_impl(args, verbose=verbose, quiet=quiet)
+def violin(args, verbose=False, quiet=False):
+    return _violin_impl(args, verbose=verbose, quiet=quiet)
+def virusRecomb(args, verbose=False, quiet=False):
+    return _virusRecomb_impl(args, verbose=verbose, quiet=quiet)
+def visualizeblock(args, verbose=False, quiet=False):
+    return _visualizeblock_impl(args, verbose=verbose, quiet=quiet)
+def volcano(args, verbose=False, quiet=False):
+    return _volcano_impl(args, verbose=verbose, quiet=quiet)
+
 _load_dynamic_commands()
 
 if __name__ == "__main__":

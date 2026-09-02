@@ -1,0 +1,1681 @@
+{
+  "motif": {
+    "name": "motif",
+    "mode": "bridge",
+    "class": "MotifCli",
+    "params": [
+      "<meme.xml>",
+      "<idList.txt>",
+      "<outFile>"
+    ],
+    "help": "motif <meme.xml> <idList.txt> <outFile> [width] [height]"
+  },
+  "genelocation": {
+    "name": "genelocation",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation",
+    "params": [
+      "--ChrLen",
+      "<chrlen>",
+      "--FeaturePos",
+      "<pos>",
+      "--OutGraph",
+      "<out>",
+      "--FeatureColor",
+      "<map>"
+    ],
+    "help": "genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph <out> [--FeatureCol"
+  },
+  "dotplot": {
+    "name": "dotplot",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot",
+    "params": [
+      "--inGff",
+      "<gff>",
+      "--genePair",
+      "<pairs>",
+      "--chrLayout",
+      "<layout>",
+      "--outGraph",
+      "<out>"
+    ],
+    "help": "dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>"
+  },
+  "circos": {
+    "name": "circos",
+    "mode": "bridge",
+    "class": "CircosCli",
+    "params": [
+      "<chrLen.txt>",
+      "<link.txt>",
+      "<genePos.txt>",
+      "<outFile>"
+    ],
+    "help": "circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [h]"
+  },
+  "pca": {
+    "name": "pca",
+    "mode": "bridge",
+    "class": "GenericCli",
+    "params": [
+      "<expr.matrix.tsv>",
+      "<out>"
+    ],
+    "help": "pca <expr.matrix.tsv> <out> [row|col] [scale] [w] [h]"
+  },
+  "generic": {
+    "name": "generic",
+    "mode": "bridge",
+    "class": "GenericCli",
+    "params": [
+      "<engineClass>",
+      "<method[+method2]>",
+      "<out>",
+      "--set",
+      "--width",
+      "--height"
+    ],
+    "help": "generic <engineClass> <method[+method2]> <out> [--set field value ...] [--width "
+  },
+  "batchReplace": {
+    "name": "batchReplace",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.BatchStringReplace",
+    "params": [
+      "<inFile>",
+      "<outFile>",
+      "<patternMap.tsv>",
+      "--partial"
+    ],
+    "help": "batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]"
+  },
+  "levelGo": {
+    "name": "levelGo",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GeneOntology.Grapher.LevelDoer",
+    "params": [
+      "<gene2Go.txt>",
+      "<outTable>",
+      "<oboFile>",
+      "--level"
+    ],
+    "help": "levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]"
+  },
+  "goParse": {
+    "name": "goParse",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GeneOntology.littleTools.GOtermParser",
+    "params": [
+      "<gene2Go.txt>",
+      "<oboFile>",
+      "--level"
+    ],
+    "help": "goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103引擎，GOtermParser）"
+  },
+  "tableCollapse": {
+    "name": "tableCollapse",
+    "mode": "bridge",
+    "class": "TableCollapseCli",
+    "params": [
+      "<inTable>",
+      "<keyColIndex>",
+      "<outTable>"
+    ],
+    "help": "tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader true|false]"
+  },
+  "tableColSelect": {
+    "name": "tableColSelect",
+    "mode": "bridge",
+    "class": "TableColManipCli",
+    "params": [
+      "<inTable>",
+      "<outTable>",
+      "<colName1>",
+      "--sep",
+      "--header",
+      "--caseSensitive"
+    ],
+    "help": "tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|sp"
+  },
+  "tableAppend": {
+    "name": "tableAppend",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableAppend",
+    "params": [
+      "<inTab1>",
+      "<inTab2>",
+      "<outTab>",
+      "--c1",
+      "--c2"
+    ],
+    "help": "tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   # 按指定列合并两表（第87引擎）"
+  },
+  "tableMelt": {
+    "name": "tableMelt",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableMelt",
+    "params": [
+      "<inTable>",
+      "<outTable>"
+    ],
+    "help": "tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）"
+  },
+  "tableColSel": {
+    "name": "tableColSel",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableColSelector",
+    "params": [
+      "<inTable>",
+      "<outTable>",
+      "<idList.txt>",
+      "--mode",
+      "--caseSensitive",
+      "--sortByIDList"
+    ],
+    "help": "tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain] [--caseSens"
+  },
+  "tableCast": {
+    "name": "tableCast",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableCast",
+    "params": [
+      "<inLong.txt>",
+      "<outMatrix>"
+    ],
+    "help": "tableCast <inLong.txt> <outMatrix>"
+  },
+  "tableUniq": {
+    "name": "tableUniq",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableUniq",
+    "params": [
+      "<inTab>",
+      "<outFile>",
+      "--colIndex",
+      "--showFreq",
+      "--sortByFreq"
+    ],
+    "help": "tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|false] [--sortByFreq"
+  },
+  "tableTranspose": {
+    "name": "tableTranspose",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableTransposer",
+    "params": [
+      "<inTable>",
+      "<outTable>"
+    ],
+    "help": "tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTransposer）"
+  },
+  "tableSplit": {
+    "name": "tableSplit",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableSplitByCol",
+    "params": [
+      "<inTab>",
+      "<outDir>",
+      "--colIndex",
+      "--suffix"
+    ],
+    "help": "tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]"
+  },
+  "tableMerge": {
+    "name": "tableMerge",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableMerger",
+    "params": [
+      "<outTable>",
+      "<inFile1>",
+      "<inFile2>",
+      "--keyCols",
+      "--appendOnly",
+      "--rmKey"
+    ],
+    "help": "tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0...] [--appendOnly "
+  },
+  "fqTrim": {
+    "name": "fqTrim",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Fastq.FastqParallelTrimmer",
+    "params": [
+      "<in.fq>",
+      "<out.fq>",
+      "--b5",
+      "--b3",
+      "--threads"
+    ],
+    "help": "fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]"
+  },
+  "gfa2fa": {
+    "name": "gfa2fa",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Fasta.Tools.GFAtoFasta",
+    "params": [
+      "<in.gfa>",
+      "<out.fa>"
+    ],
+    "help": "gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFasta）"
+  },
+  "fastaSubseq": {
+    "name": "fastaSubseq",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
+    "params": [
+      "<in.fa>",
+      "<pos.txt>",
+      "<out.fa>"
+    ],
+    "help": "fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，ExtractFastaSubseq）"
+  },
+  "fastaExtract": {
+    "name": "fastaExtract",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Fasta.ExtractFasta",
+    "params": [
+      "<in.fa>",
+      "<idList.txt>",
+      "<out.fa>",
+      "--mode",
+      "--process"
+    ],
+    "help": "fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Ext"
+  },
+  "fqfaConv": {
+    "name": "fqfaConv",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.LinuxPipe.FastqAndFasta",
+    "params": [
+      "<input>",
+      "<output>",
+      "<fq2fa|fa2fq>"
+    ],
+    "help": "fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第98引擎，FastqAndFasta）"
+  },
+  "hmmExtract": {
+    "name": "hmmExtract",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.LinuxPipe.hmmInfoExtracter",
+    "params": [
+      "<in.hmm>",
+      "<idList.txt>",
+      "<out.hmm>"
+    ],
+    "help": "hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAME 提取（第99引擎，hmmInfoEx"
+  },
+  "mastExtract": {
+    "name": "mastExtract",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML",
+    "params": [
+      "<in.fa>",
+      "<mast.xml>",
+      "<out.txt>"
+    ],
+    "help": "mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中序列（第102引擎，ExtractSeq"
+  },
+  "nwAlign": {
+    "name": "nwAlign",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess",
+    "params": [
+      "<inSeq1.txt>",
+      "<inSeq2.txt>",
+      "<out>"
+    ],
+    "help": "nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch 全局比对（EMBOSS 格式）"
+  },
+  "twoSeqBlast": {
+    "name": "twoSeqBlast",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.BLAST.CompareTwoSeqSet",
+    "params": [
+      "<query.fa>",
+      "<subject.fa>",
+      "<out.txt>",
+      "--prog",
+      "--thread",
+      "--fmt"
+    ],
+    "help": "twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp|blastn|tblastn] [--"
+  },
+  "recipBlast": {
+    "name": "recipBlast",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
+    "params": [
+      "<query.fa>",
+      "<subject.fa>",
+      "<outPrefix>",
+      "--queryIds",
+      "--prog",
+      "--evalue",
+      "--minId",
+      "--thread"
+    ],
+    "help": "recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blast"
+  },
+  "filterCScore": {
+    "name": "filterCScore",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.BLAST.FilterBlastResultByCScore",
+    "params": [
+      "<in.blast.tab6>",
+      "<out.tab6>",
+      "--cscore"
+    ],
+    "help": "filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]"
+  },
+  "quickFamily": {
+    "name": "quickFamily",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
+    "params": [
+      "<refPep.fa>",
+      "<familyIds.txt>",
+      "<queryPep.fa>",
+      "<outPrefix>",
+      "--autoFill",
+      "--thread",
+      "--diamond"
+    ],
+    "help": "quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N]"
+  },
+  "ctgGroup": {
+    "name": "ctgGroup",
+    "mode": "bridge",
+    "class": "CtgGroupCli",
+    "params": [
+      "<in.miniprot.gff>",
+      "<polyPoid>",
+      "<outContigGrpMap>"
+    ],
+    "help": "ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>"
+  },
+  "homoPhase": {
+    "name": "homoPhase",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition",
+    "params": [
+      "<inContigGrpMap>",
+      "<outPhasedMap>"
+    ],
+    "help": "homoPhase <inContigGrpMap> <outPhasedMap>"
+  },
+  "sepChr": {
+    "name": "sepChr",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles",
+    "params": [
+      "<gene2chr.tsv>",
+      "<in.miniprot.gff>",
+      "<outMap>"
+    ],
+    "help": "sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>"
+  },
+  "bamMerge": {
+    "name": "bamMerge",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage",
+    "params": [
+      "<gtf>",
+      "<bamDir>",
+      "<outDir>"
+    ],
+    "help": "bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）"
+  },
+  "hicEnzyme": {
+    "name": "hicEnzyme",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GenomeAssembly.HiCRestrictionEnzymePrediction",
+    "params": [
+      "<inHiC.fastq>"
+    ],
+    "help": "hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）"
+  },
+  "virusRecomb": {
+    "name": "virusRecomb",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.VirusDetect.RecombinationAnalysis",
+    "params": [
+      "<inDB.fa>",
+      "<inContig.fa>",
+      "<outDir>"
+    ],
+    "help": "virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引擎）"
+  },
+  "gxfRename": {
+    "name": "gxfRename",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFRenamer",
+    "params": [
+      "<in.gff3>",
+      "<out.gff3>",
+      "<renameMap.tsv>"
+    ],
+    "help": "gxfRename <in.gff3> <out.gff3> <renameMap.tsv>"
+  },
+  "gxfStat": {
+    "name": "gxfStat",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat",
+    "params": [
+      "<in.gff3>",
+      "<outStat.xls>"
+    ],
+    "help": "gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/CDS/UTR 明细）"
+  },
+  "gxfAppend": {
+    "name": "gxfAppend",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GxfIDAppender",
+    "params": [
+      "<in.gff3>",
+      "<out.gff3>",
+      "<prefix>"
+    ],
+    "help": "gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀"
+  },
+  "gxfGenepos": {
+    "name": "gxfGenepos",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFToGenePosFile",
+    "params": [
+      "<in.gff3>",
+      "<outGenepos>",
+      "<outChrLen>"
+    ],
+    "help": "gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # GFF→基因位置+染色体长度（喂 gene"
+  },
+  "gxfRegion": {
+    "name": "gxfRegion",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFRegionSummary",
+    "params": [
+      "<in.gff3>",
+      "<region.txt>",
+      "<out.gff3>",
+      "--ignoreStrand",
+      "--extendLen"
+    ],
+    "help": "gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]"
+  },
+  "gxfOverlap": {
+    "name": "gxfOverlap",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFOverlaper",
+    "params": [
+      "<in.gff3>",
+      "<region.txt>",
+      "<out.gff3>",
+      "--ignoreStrand",
+      "--extendLen"
+    ],
+    "help": "gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]"
+  },
+  "gxfRepIDs": {
+    "name": "gxfRepIDs",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs",
+    "params": [
+      "<in.gff3>",
+      "<out.txt>"
+    ],
+    "help": "gxfRepIDs <in.gff3> <out.txt>"
+  },
+  "gxfRepGXF": {
+    "name": "gxfRepGXF",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFToRepresentativeGXF",
+    "params": [
+      "<in.gff3>",
+      "<out.gff3>",
+      "--featureID",
+      "--attachID"
+    ],
+    "help": "gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID 'pattern']"
+  },
+  "gxfMatch": {
+    "name": "gxfMatch",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GxfGenomeMatch",
+    "params": [
+      "<in.gff3>",
+      "<inGenome.fa>"
+    ],
+    "help": "gxfMatch <in.gff3> <inGenome.fa>"
+  },
+  "gxfRecall": {
+    "name": "gxfRecall",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.RecallmRNAFeature",
+    "params": [
+      "<in.gff3>",
+      "<out.gff3>"
+    ],
+    "help": "gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，RecallmRNAFeature）"
+  },
+  "regionAnno": {
+    "name": "regionAnno",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
+    "params": [
+      "<in.gff3>",
+      "<region.txt>",
+      "<outTab>",
+      "--flankLen",
+      "--targetFeaturePattern"
+    ],
+    "help": "regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePatter"
+  },
+  "gxfFix": {
+    "name": "gxfFix",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix",
+    "params": [
+      "<in.gff3>",
+      "<out.gff3>"
+    ],
+    "help": "gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dangling mRNA/排序）"
+  },
+  "groupCol": {
+    "name": "groupCol",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.Table.TableColCollaspe",
+    "params": [
+      "<inTable.tsv>",
+      "<inGrpInfo.tsv>",
+      "<outTable>"
+    ],
+    "help": "groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|Max|Min|Var|Std]"
+  },
+  "tauIndex": {
+    "name": "tauIndex",
+    "mode": "bridge",
+    "class": "TauCalcCli",
+    "params": [
+      "<inExpTab>",
+      "<outTAU>"
+    ],
+    "help": "tauIndex <inExpTab> <outTAU>"
+  },
+  "exprCorr": {
+    "name": "exprCorr",
+    "mode": "bridge",
+    "class": "ExprCorrCli",
+    "params": [
+      "<inFPKM>",
+      "<outCorrMat>"
+    ],
+    "help": "exprCorr <inFPKM> <outCorrMat>"
+  },
+  "qpcrExp": {
+    "name": "qpcrExp",
+    "mode": "bridge",
+    "class": "QpcrDdctCli",
+    "params": [
+      "<in.qpcr.tab>",
+      "<out.xls>"
+    ],
+    "help": "qpcrExp <in.qpcr.tab> <out.xls>"
+  },
+  "qpcr": {
+    "name": "qpcr",
+    "mode": "bridge",
+    "class": "QpcrCli",
+    "params": [
+      "<data.txt>",
+      "<out>"
+    ],
+    "help": "qpcr <data.txt> <out> [w] [h]   (data: name\\tmean\\tsd)"
+  },
+  "hclust": {
+    "name": "hclust",
+    "mode": "bridge",
+    "class": "HclustCli",
+    "params": [
+      "<dist3.tsv>",
+      "<out.nwk>"
+    ],
+    "help": "hclust <dist3.tsv> <out.nwk> [distMethod] [clusterMethod]"
+  },
+  "volcano": {
+    "name": "volcano",
+    "mode": "bridge",
+    "class": "GenericCli",
+    "params": [
+      "<deg.txt>",
+      "<outFile>"
+    ],
+    "help": "volcano <deg.txt> <outFile> [pvalCutoff] [fcCutoff] [w] [h]"
+  },
+  "upset": {
+    "name": "upset",
+    "mode": "bridge",
+    "class": "UpSetCli",
+    "params": [
+      "<sets.txt>",
+      "<outFile>"
+    ],
+    "help": "upset <sets.txt> <outFile> [w] [h]"
+  },
+  "msa": {
+    "name": "msa",
+    "mode": "bridge",
+    "class": "MSACli",
+    "params": [
+      "<aligned.fasta>",
+      "<outFile>"
+    ],
+    "help": "msa <aligned.fasta> <outFile> [padding]"
+  },
+  "genelocgff": {
+    "name": "genelocgff",
+    "mode": "bridge",
+    "class": "GeneLocGffCli",
+    "params": [
+      "<gff3>",
+      "<idList>",
+      "<out>",
+      "--chrLen",
+      "--rename",
+      "--pairs",
+      "--color",
+      "--rankedChr",
+      "--onlyMapped",
+      "--showLabel"
+    ],
+    "help": "genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--rename r.tsv] [--pairs p."
+  },
+  "tree": {
+    "name": "tree",
+    "mode": "bridge",
+    "class": "TreeCli",
+    "params": [
+      "<treeMeta.config>",
+      "<out>"
+    ],
+    "help": "tree <treeMeta.config> <out> [pad]"
+  },
+  "phylotree": {
+    "name": "phylotree",
+    "mode": "bridge",
+    "class": "PhyloTreeCli",
+    "params": [
+      "<in.nwk>",
+      "<out>"
+    ],
+    "help": "phylotree <in.nwk> <out> [vertical] [width] [height]"
+  },
+  "unrooted": {
+    "name": "unrooted",
+    "mode": "bridge",
+    "class": "UnrootedTreeCli",
+    "params": [
+      "<in.nwk>",
+      "<out>"
+    ],
+    "help": "unrooted <in.nwk> <out> [layout] [width] [height] [iterations]"
+  },
+  "violin": {
+    "name": "violin",
+    "mode": "bridge",
+    "class": "ViolinCli",
+    "params": [
+      "<in.tsv>",
+      "<out>"
+    ],
+    "help": "violin <in.tsv> <out> [width] [height]"
+  },
+  "barplotter": {
+    "name": "barplotter",
+    "mode": "bridge",
+    "class": "BarPlotterCli",
+    "params": [
+      "<gff>",
+      "<synteny>",
+      "<ctl>",
+      "<out.png>"
+    ],
+    "help": "barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>"
+  },
+  "findpath": {
+    "name": "findpath",
+    "mode": "bridge",
+    "class": "FindPathCli",
+    "params": [
+      "--inGffArr",
+      "<gff1,gff2,...>",
+      "--inGenePairs",
+      "<pairs>",
+      "--inRegion",
+      "<geneID>",
+      "--flankGeneNum",
+      "--highlightGene",
+      "--outGraph",
+      "<out>"
+    ],
+    "help": "findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --inRegion <geneID> [-"
+  },
+  "mcscanx": {
+    "name": "mcscanx",
+    "mode": "bridge",
+    "class": "MCScanXCli",
+    "params": [
+      "<gff>",
+      "<blast>",
+      "<outPrefix>",
+      "--html"
+    ],
+    "help": "mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测"
+  },
+  "degramdom": {
+    "name": "degramdom",
+    "mode": "bridge",
+    "class": "DegramdomCli",
+    "params": [
+      "<in.tsv>"
+    ],
+    "help": "degramdom <in.tsv> [out.nwk]"
+  },
+  "sambamcov": {
+    "name": "sambamcov",
+    "mode": "bridge",
+    "class": "SamBamCovCli",
+    "params": [
+      "<in.bam>",
+      "<out.tsv>"
+    ],
+    "help": "sambamcov <in.bam> <out.tsv> [binSize] [countMode]"
+  },
+  "bamindex": {
+    "name": "bamindex",
+    "mode": "bridge",
+    "class": "BamIndexCli",
+    "params": [
+      "<in.sorted.bam>"
+    ],
+    "help": "bamindex <in.sorted.bam> [out.bai]"
+  },
+  "bamsort": {
+    "name": "bamsort",
+    "mode": "bridge",
+    "class": "BamSortCli",
+    "params": [
+      "<in.bam>",
+      "<out.bam>"
+    ],
+    "help": "bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]"
+  },
+  "onesteptree": {
+    "name": "onesteptree",
+    "mode": "direct",
+    "class": "biocjava.bioIO.BioSoftPipeServer.OneStepMLTree",
+    "params": [
+      "--inPepFie",
+      "<in.pep>",
+      "--outFilePrefix",
+      "<outDir>",
+      "--bbTime",
+      "--clean"
+    ],
+    "help": "onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean t"
+  },
+  "simplehmmscan": {
+    "name": "simplehmmscan",
+    "mode": "bridge",
+    "class": "SimpleHmmscanCli",
+    "params": [
+      "<pfamA.hmm>",
+      "<target.pep>",
+      "<idList.txt>",
+      "<out.txt>"
+    ],
+    "help": "simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt>"
+  },
+  "regiondepth": {
+    "name": "regiondepth",
+    "mode": "bridge",
+    "class": "RegionDepthCli",
+    "params": [
+      "<in.sam>",
+      "<region>",
+      "<out.depth>"
+    ],
+    "help": "regiondepth <in.sam> <region> <out.depth> [scaleFactor]"
+  },
+  "markertools": {
+    "name": "markertools",
+    "mode": "bridge",
+    "class": "MarkerToolsCli",
+    "params": [
+      "<filter|dist|sampledist>",
+      "<in.marker.tab>"
+    ],
+    "help": "markertools <filter|dist|sampledist> <in.marker.tab> [maxPoint]"
+  },
+  "amazingmeta": {
+    "name": "amazingmeta",
+    "mode": "bridge",
+    "class": "AmazingMetaCli",
+    "params": [
+      "<meme.xml>",
+      "<newick.treefile>",
+      "<out.svg|png|pdf>"
+    ],
+    "help": "amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [seqLen.txt] [geneRen"
+  },
+  "cddmotif": {
+    "name": "cddmotif",
+    "mode": "bridge",
+    "class": "CddMotifCli",
+    "params": [
+      "<cdd.hitdata.txt>",
+      "<in.fasta>",
+      "<out.svg|png|pdf>"
+    ],
+    "help": "cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]"
+  },
+  "seqlentrack": {
+    "name": "seqlentrack",
+    "mode": "bridge",
+    "class": "SeqLenTrackCli",
+    "params": [
+      "<seqlen.txt>",
+      "<out.svg|png|pdf>"
+    ],
+    "help": "seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]"
+  },
+  "pfammotif": {
+    "name": "pfammotif",
+    "mode": "bridge",
+    "class": "PfamMotifCli",
+    "params": [
+      "<pfamscan.txt>",
+      "<in.fasta>",
+      "<out.svg|png|pdf>"
+    ],
+    "help": "pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newick.treefile]"
+  },
+  "pep2codon": {
+    "name": "pep2codon",
+    "mode": "bridge",
+    "class": "Pep2CodonCli",
+    "params": [
+      "<cds.fa>",
+      "<pep.aln.fa>",
+      "<codon.aln.out>"
+    ],
+    "help": "pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>"
+  },
+  "mast2tab": {
+    "name": "mast2tab",
+    "mode": "bridge",
+    "class": "Mast2TabCli",
+    "params": [
+      "<mast|meme.xml>",
+      "<out.tab>"
+    ],
+    "help": "mast2tab <mast|meme.xml> <out.tab>"
+  },
+  "qpcrproc": {
+    "name": "qpcrproc",
+    "mode": "bridge",
+    "class": "QpcrProcCli",
+    "params": [
+      "<in.qpcr.tab>",
+      "<out.xls>"
+    ],
+    "help": "qpcrproc <in.qpcr.tab> <out.xls>"
+  },
+  "filesplit": {
+    "name": "filesplit",
+    "mode": "bridge",
+    "class": "FileSplitCli",
+    "params": [
+      "<inFile>",
+      "<numParts>"
+    ],
+    "help": "filesplit <inFile> <numParts>"
+  },
+  "memerun": {
+    "name": "memerun",
+    "mode": "bridge",
+    "class": "MemeRunCli",
+    "params": [
+      "<in.fasta>",
+      "<workingDir>",
+      "--motif",
+      "--minW",
+      "--maxW",
+      "--evalue",
+      "--mode"
+    ],
+    "help": "memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--maxW N] [--evalue X] ["
+  },
+  "mastrun": {
+    "name": "mastrun",
+    "mode": "bridge",
+    "class": "MastRunCli",
+    "params": [
+      "<meme.xml>",
+      "<seq.fasta>",
+      "<workingDir>",
+      "--motifs",
+      "--seqEvalue",
+      "--motifPvalue",
+      "--other"
+    ],
+    "help": "mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--seqEvalue X] [--moti"
+  },
+  "mggxf": {
+    "name": "mggxf",
+    "mode": "bridge",
+    "class": "MgGxfCli",
+    "params": [
+      "<inGenePair|blastTab6>",
+      "<in.simplified.gff>",
+      "<out.LinkedRegion>"
+    ],
+    "help": "mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.LinkedRegion> [GenePair|Bl"
+  },
+  "gsadiag": {
+    "name": "gsadiag",
+    "mode": "bridge",
+    "class": "GsaDiagCli",
+    "params": [
+      "<in.fixed.gff3>",
+      "<out.stat.xls>",
+      "--checkUTR"
+    ],
+    "help": "gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax] [--checkUTR]"
+  },
+  "gxfsort": {
+    "name": "gxfsort",
+    "mode": "bridge",
+    "class": "GxfSortCli",
+    "params": [
+      "<in.gff3|gtf>",
+      "<out.sorted>"
+    ],
+    "help": "gxfsort <in.gff3|gtf> <out.sorted>"
+  },
+  "gxffilter": {
+    "name": "gxffilter",
+    "mode": "bridge",
+    "class": "GxfFilterCli",
+    "params": [
+      "<in.gff3|gtf>",
+      "<idList.txt>",
+      "<out.gff3|gtf>"
+    ],
+    "help": "gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>"
+  },
+  "annocompare": {
+    "name": "annocompare",
+    "mode": "bridge",
+    "class": "StructAnnoCompareCli",
+    "params": [
+      "<before.gff3>",
+      "<after.gff3>",
+      "<outDir>"
+    ],
+    "help": "annocompare <before.gff3> <after.gff3> <outDir> [runName] [reciprocalOverlap] [b"
+  },
+  "genedensity": {
+    "name": "genedensity",
+    "mode": "bridge",
+    "class": "GeneDensityCli",
+    "params": [
+      "<in.gff3>",
+      "<out.tsv>"
+    ],
+    "help": "genedensity <in.gff3> <out.tsv> [binSize]"
+  },
+  "seqconvert": {
+    "name": "seqconvert",
+    "mode": "bridge",
+    "class": "SeqConverterCli",
+    "params": [
+      "<in>",
+      "<out>",
+      "<fmt>",
+      "<fmt>"
+    ],
+    "help": "seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>"
+  },
+  "trimmsa": {
+    "name": "trimmsa",
+    "mode": "bridge",
+    "class": "TrimMSACli",
+    "params": [
+      "<in.aln.fa>",
+      "<out.aln.fa>"
+    ],
+    "help": "trimmsa <in.aln.fa> <out.aln.fa> [ratio]"
+  },
+  "heatmap2": {
+    "name": "heatmap2",
+    "mode": "bridge",
+    "class": "HeatmapCli",
+    "params": [
+      "<expr.matrix.tsv>",
+      "<out>"
+    ],
+    "help": "heatmap2 <expr.matrix.tsv> <out> [options]"
+  },
+  "supercircos": {
+    "name": "supercircos",
+    "mode": "bridge",
+    "class": "SuperCircosCli",
+    "params": [
+      "<config.cfg>",
+      "<out>"
+    ],
+    "help": "supercircos <config.cfg> <out> [width] [height]"
+  },
+  "barplot": {
+    "name": "barplot",
+    "mode": "bridge",
+    "class": "BarplotCli",
+    "params": [
+      "<enrichment.tsv>",
+      "<out>",
+      "<termCol>",
+      "<pvalCol>"
+    ],
+    "help": "barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol] [maxTerms] [xlab] "
+  },
+  "pafviz": {
+    "name": "pafviz",
+    "mode": "bridge",
+    "class": "PafVizCli",
+    "params": [
+      "<in.paf>",
+      "<out>"
+    ],
+    "help": "pafviz <in.paf> <out> [graphSize] [colorMode] [switchQT] [minAlnLen] [rcColor]"
+  },
+  "admixture": {
+    "name": "admixture",
+    "mode": "bridge",
+    "class": "AdmixtureCli",
+    "params": [
+      "<qFiles.lst>",
+      "<out>"
+    ],
+    "help": "admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sortMode] [width] [heig"
+  },
+  "groupedbar": {
+    "name": "groupedbar",
+    "mode": "bridge",
+    "class": "GroupedBarCli",
+    "params": [
+      "<data.tsv>",
+      "<out>",
+      "--options"
+    ],
+    "help": "groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title] [--opt"
+  },
+  "layoutheatmap": {
+    "name": "layoutheatmap",
+    "mode": "bridge",
+    "class": "LayoutHeatmapCli",
+    "params": [
+      "<layout.tsv>",
+      "<expr.tsv>",
+      "<out>",
+      "--options"
+    ],
+    "help": "layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]"
+  },
+  "cubeheatmap": {
+    "name": "cubeheatmap",
+    "mode": "bridge",
+    "class": "CubeHeatmapCli",
+    "params": [
+      "<expr.tsv>",
+      "<group.tsv>",
+      "<out>",
+      "--log10",
+      "--minColor",
+      "--midColor",
+      "--maxColor"
+    ],
+    "help": "cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor r,g,b --midColor r,"
+  },
+  "efpHeat": {
+    "name": "efpHeat",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap",
+    "params": [
+      "<inTGA>",
+      "<sample2cc.txt>",
+      "<expMat.tsv>",
+      "<geneId>",
+      "<out.svg>",
+      "--imageWidth",
+      "--imageHeight"
+    ],
+    "help": "efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N]"
+  },
+  "rnaplot": {
+    "name": "rnaplot",
+    "mode": "bridge",
+    "class": "RNAplotCli",
+    "params": [
+      "<seq.fa|rawSeq>",
+      "<out>",
+      "--colorMap",
+      "--interactive"
+    ],
+    "help": "rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R,G,B\"] [--interactiv"
+  },
+  "calcRepeat": {
+    "name": "calcRepeat",
+    "mode": "bridge",
+    "class": "CalcRepeatCli",
+    "params": [
+      "<genome.fa>",
+      "<outRepeat.txt>",
+      "--kmerSize",
+      "--minFreq",
+      "--threads"
+    ],
+    "help": "calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--minFreq N] [--threads N"
+  },
+  "multiEfp": {
+    "name": "multiEfp",
+    "mode": "bridge",
+    "class": "MultiSuperHeatCli",
+    "params": [
+      "<inTGA>",
+      "<sample2cc>",
+      "<expMat1[,expMat2,...]>",
+      "<geneId>",
+      "<out>",
+      "--imageWidth",
+      "--imageHeight"
+    ],
+    "help": "multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out> [--imageWidt"
+  },
+  "circlegene": {
+    "name": "circlegene",
+    "mode": "bridge",
+    "class": "CircleGeneViewerCli",
+    "params": [
+      "<gff>",
+      "<geneID.txt>",
+      "<out>",
+      "--rename",
+      "--link",
+      "--rankedChr",
+      "--allChr",
+      "--graphSize",
+      "--startAngle",
+      "--endAngle",
+      "--chrFill",
+      "--chrLabelColor"
+    ],
+    "help": "circlegene <gff> <geneID.txt> <out> [--rename f --link f --rankedChr f --allChr "
+  },
+  "genestructure": {
+    "name": "genestructure",
+    "mode": "bridge",
+    "class": "GeneStructureCli",
+    "params": [
+      "<input.gff>",
+      "<idList.txt>",
+      "<outFile>"
+    ],
+    "help": "genestructure <input.gff> <idList.txt> <outFile> [genome.fa] [width] [height]"
+  },
+  "seqlogo": {
+    "name": "seqlogo",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.seqLogo.makeSeqLogo",
+    "params": [
+      "<seq.fa|seq.txt>",
+      "<out.svg/png>",
+      "--scaleIC",
+      "--showPos",
+      "--startPos",
+      "--borderColor",
+      "--borderSize",
+      "--onlyBorder",
+      "--xInterval",
+      "--yInterval"
+    ],
+    "help": "seqlogo <seq.fa|seq.txt> <out.svg/png> [--scaleIC true|false] [--showPos] [--sta"
+  },
+  "peaktss": {
+    "name": "peaktss",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakTssHeatMap",
+    "params": [
+      "<gxf>",
+      "<macs2_peak.xls>",
+      "<out.svg/png>",
+      "--dist",
+      "--bin",
+      "--color"
+    ],
+    "help": "peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--bin N] [--color]"
+  },
+  "peakdist": {
+    "name": "peakdist",
+    "mode": "bridge",
+    "class": "PeakDistCli",
+    "params": [
+      "<chrLen.tsv>",
+      "<macs2_peak.xls>",
+      "<out>",
+      "--chrHeight",
+      "--topLenRank",
+      "--width",
+      "--height"
+    ],
+    "help": "peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H] [--topLenRank N] [-"
+  },
+  "peakanno": {
+    "name": "peakanno",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno",
+    "params": [
+      "<gxf>",
+      "<macs2_peak.xls>",
+      "<out.tsv>",
+      "--dist"
+    ],
+    "help": "peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]"
+  },
+  "microgenome": {
+    "name": "microgenome",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot",
+    "params": [
+      "<inGBK>",
+      "<anno.tsv>",
+      "<out>"
+    ],
+    "help": "microgenome <inGBK> <anno.tsv> <out> [micro|macro]"
+  },
+  "gel": {
+    "name": "gel",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.GelImage.Marker",
+    "params": [
+      "<FragmentRangeArr>",
+      "<LaneLabels>",
+      "<MarkerRange>",
+      "<out>"
+    ],
+    "help": "gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>"
+  },
+  "gfa": {
+    "name": "gfa",
+    "mode": "bridge",
+    "class": "VizGFACli",
+    "params": [
+      "<in.gfa>",
+      "<out>"
+    ],
+    "help": "gfa <in.gfa> <out> [width] [height]"
+  },
+  "pafcomp": {
+    "name": "pafcomp",
+    "mode": "bridge",
+    "class": "PafGC",
+    "params": [
+      "--inPaf",
+      "<paf>",
+      "--outGraph",
+      "<out>",
+      "--colorMode",
+      "--size",
+      "--minLen"
+    ],
+    "help": "pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Query|None] [--size N"
+  },
+  "pafref": {
+    "name": "pafref",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc",
+    "params": [
+      "--inPaf",
+      "<paf>",
+      "--outTab",
+      "<out.tsv>"
+    ],
+    "help": "pafref --inPaf <paf> --outTab <out.tsv>"
+  },
+  "colorscheme": {
+    "name": "colorscheme",
+    "mode": "bridge",
+    "class": "ColorSchemeCli",
+    "params": [
+      "<inTab>",
+      "<outTab>",
+      "<refColIndex>"
+    ],
+    "help": "colorscheme <inTab> <outTab> <refColIndex>"
+  },
+  "distance": {
+    "name": "distance",
+    "mode": "bridge",
+    "class": "DistanceCli",
+    "params": [
+      "<in.tsv>",
+      "<col1>",
+      "<col2>",
+      "<euclidean|pearson|pearsonDist>"
+    ],
+    "help": "distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>"
+  },
+  "mountain": {
+    "name": "mountain",
+    "mode": "bridge",
+    "class": "MountainPlotCli",
+    "params": [
+      "<fold.txt>",
+      "<out.tsv>"
+    ],
+    "help": "mountain <fold.txt> <out.tsv>"
+  },
+  "pileup": {
+    "name": "pileup",
+    "mode": "bridge",
+    "class": "PileUpCli",
+    "params": [
+      "<blast.xml>",
+      "<out.svg>",
+      "--query"
+    ],
+    "help": "pileup <blast.xml> <out.svg> [--query NAME]"
+  },
+  "plotrna": {
+    "name": "plotrna",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold",
+    "params": [
+      "<genomeFA>",
+      "<region>",
+      "<SAM>",
+      "--directPDF"
+    ],
+    "help": "plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]"
+  },
+  "bamstate": {
+    "name": "bamstate",
+    "mode": "bridge",
+    "class": "BamStateCli",
+    "params": [
+      "<out.tsv>",
+      "<gff3>",
+      "<bam1>",
+      "<bam2>"
+    ],
+    "help": "bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]"
+  },
+  "preparespecies": {
+    "name": "preparespecies",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.ComparativeGenomics.PrepareSpecies",
+    "params": [
+      "<prefix>",
+      "<inGenome.fa>",
+      "<inGFF>",
+      "<outGenome.fa>",
+      "<outGFF>"
+    ],
+    "help": "preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>"
+  },
+  "partitionconflict": {
+    "name": "partitionconflict",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GenomeAssembly.ParititionByConflictFreq",
+    "params": [
+      "<inConflictFreq.tsv>",
+      "<polyPoid>",
+      "<outCluster>"
+    ],
+    "help": "partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluster>"
+  },
+  "mirnatarget": {
+    "name": "mirnatarget",
+    "mode": "bridge",
+    "class": "TargetScoreCli",
+    "params": [
+      "<mirna.fa>",
+      "<target.fa>",
+      "<out.tsv>",
+      "--evalue",
+      "--threads",
+      "--scoreCutOff",
+      "--maxMismatch"
+    ],
+    "help": "mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [--threads N] [--score"
+  },
+  "mirnaTarget2": {
+    "name": "mirnaTarget2",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.miRNA.Target2TablePipe",
+    "params": [
+      "<mirna.fa>",
+      "<target.fa>",
+      "<out.txt>",
+      "--revCom",
+      "--fragment",
+      "--threads"
+    ],
+    "help": "mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false] [--fragment "
+  },
+  "mirnaIdentify": {
+    "name": "mirnaIdentify",
+    "mode": "bridge",
+    "class": "MirIdentifyCli",
+    "params": [
+      "<genome.fa>",
+      "<targetSo.tsv>",
+      "<outPredict.txt>",
+      "--checkARM",
+      "--maxAsy",
+      "--maxMatureAsy",
+      "--maxStarAsy",
+      "--maxBulge"
+    ],
+    "help": "mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--c"
+  },
+  "conflictpaf": {
+    "name": "conflictpaf",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF",
+    "params": [
+      "<in.paf>",
+      "<out.tsv>"
+    ],
+    "help": "conflictpaf <in.paf> <out.tsv> [binSize]"
+  },
+  "findblockmultiple": {
+    "name": "findblockmultiple",
+    "mode": "bridge",
+    "class": "FindBlockMultipleCli",
+    "params": [
+      "<queryGenome.fa>",
+      "<query.gff>",
+      "<queryId>",
+      "<out.txt>",
+      "<sub1Genome.fa>",
+      "<sub1.gff>",
+      "<sub2Genome.fa>",
+      "<sub2.gff>",
+      "--leftEdge",
+      "--rightEdge",
+      "--expand",
+      "--threads"
+    ],
+    "help": "findblockmultiple <queryGenome.fa> <query.gff> <queryId> <out.txt> <sub1Genome.f"
+  },
+  "findblockdual": {
+    "name": "findblockdual",
+    "mode": "bridge",
+    "class": "FindBlockDualCli",
+    "params": [
+      "<queryGenome.fa>",
+      "<query.gff>",
+      "<subjectGenome.fa>",
+      "<subject.gff>",
+      "<queryId>",
+      "<out.txt>",
+      "--leftEdge",
+      "--rightEdge",
+      "--expand",
+      "--threads",
+      "--evalue",
+      "--minIdentity",
+      "--bestHit"
+    ],
+    "help": "findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <que"
+  },
+  "collinearRegion": {
+    "name": "collinearRegion",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
+    "params": [
+      "<in.collinearity>",
+      "<simGff>",
+      "<out.txt>"
+    ],
+    "help": "collinearRegion <in.collinearity> <simGff> <out.txt>"
+  },
+  "visualizeblock": {
+    "name": "visualizeblock",
+    "mode": "bridge",
+    "class": "VisualizeCli",
+    "params": [
+      "<inBlockOut>",
+      "<out.pdf>",
+      "--labels"
+    ],
+    "help": "visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Genome2\"]"
+  },
+  "treeRooting": {
+    "name": "treeRooting",
+    "mode": "bridge",
+    "class": "TreeRootingCli",
+    "params": [
+      "<in.nwk>",
+      "<out.nwk>"
+    ],
+    "help": "treeRooting <in.nwk> <out.nwk>"
+  },
+  "marker": {
+    "name": "marker",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign",
+    "params": [
+      "<MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign>",
+      "<inMarker>",
+      "<out>"
+    ],
+    "help": "marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign> <inMarker> <ou"
+  },
+  "dehist": {
+    "name": "dehist",
+    "mode": "bridge",
+    "class": "DiffExpCli",
+    "params": [
+      "<deg.txt>",
+      "<out>"
+    ],
+    "help": "dehist <deg.txt> <out> [width] [height]"
+  },
+  "msy": {
+    "name": "msy",
+    "mode": "bridge",
+    "class": "GenericCli",
+    "params": [
+      "<simplifiedGff.pos>",
+      "<links.txt>",
+      "<chrLayout.txt>",
+      "<out>"
+    ],
+    "help": "msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [width] [height]"
+  },
+  "venn5": {
+    "name": "venn5",
+    "mode": "bridge",
+    "class": "Venn5Cli",
+    "params": [
+      "<out>",
+      "<setA.txt>",
+      "<setB.txt>",
+      "<setC.txt>",
+      "<setD.txt>",
+      "<setE.txt>"
+    ],
+    "help": "venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labelA-E]"
+  },
+  "venn6": {
+    "name": "venn6",
+    "mode": "bridge",
+    "class": "Venn6Cli",
+    "params": [
+      "<out>",
+      "<setA.txt>",
+      "<setB.txt>",
+      "<setC.txt>",
+      "<setD.txt>",
+      "<setE.txt>",
+      "<setF.txt>"
+    ],
+    "help": "venn6 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> <setF.txt> [l"
+  },
+  "microsyn": {
+    "name": "microsyn",
+    "mode": "bridge",
+    "class": "MicroSynCli",
+    "params": [
+      "<gxf1>",
+      "<gxf2>",
+      "<collinearity>",
+      "<out>",
+      "--chr1",
+      "--start1",
+      "--end1",
+      "--chr2",
+      "--start2",
+      "--end2",
+      "--highlight1",
+      "--highlight2"
+    ],
+    "help": "microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --start1 S --end1 E] [--ch"
+  },
+  "dualsyn": {
+    "name": "dualsyn",
+    "mode": "bridge",
+    "class": "DualSynCli",
+    "params": [
+      "<simplifiedGff>",
+      "<collinearity>",
+      "<out>",
+      "--chr1",
+      "--chr2",
+      "--rows",
+      "--gap"
+    ],
+    "help": "dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] [--chr2 \"3,4\"] [--ro"
+  },
+  "multisyn": {
+    "name": "multisyn",
+    "mode": "bridge",
+    "class": "SeveralSpeciesCli",
+    "params": [
+      "<gxf.lst>",
+      "<collinear.lst>",
+      "<out>",
+      "--genes"
+    ],
+    "help": "multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt]"
+  }
+}
