@@ -150,7 +150,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 | 113 | `gfa` | `用法: gfa <in.gfa> <out> [width] [height]` | GFA 格式: S 行=节点（S\tname\tseq），L 行=边（L\tfrom\tstrand\tto\tstrand\toverlap） |
 | 114 | `pafcomp` | `用法: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Query|None] [--size N] [--minLen N]` | PAF 基因组比较图（⚠️ 入口是 main1 非 main） |
 | 115 | `pafref` | `用法: pafref --inPaf <paf> --outTab <out.tsv>` | PAF 参考碱基覆盖计算（minimap2 -c --cs 输出） |
-| 116 | `colorscheme` | `用法: colorscheme <inTab> <outTab> <refColIndex>` | inTab: tab 分隔表；refColIndex: 从 0 开始，取该列做配色 key（去重） |
+| 116 | `colorscheme` | `用法: colorscheme <inTab> <outTab> <refColIndex>` | inTab: tab 分隔表；refColIndex: 从 1 开始（CLI 内部-1 转 0-based） |
 | 117 | `distance` | `用法: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>` | in.tsv: tab 分隔表；col1/col2: 列索引（从0开始）；方法小写 euclidean|pearson|pearsonDist |
 | 118 | `mountain` | `用法: mountain <fold.txt> <out.tsv>` | fold.txt: RNA 二级结构折叠字符串（() 和 .）；输出每碱基山峰高度（第43引擎） |
 | 119 | `pileup` | `用法: pileup <blast.xml> <out.svg> [--query NAME]` | blast.xml: BLAST+ XML 输出（-outfmt 5）；画 query 的 hits pile-up 图（第44引擎） |
@@ -824,7 +824,7 @@ tbplot.sh help             # 绘图命令 + 用法一屏
 #### `colorscheme`
 
 - 用法: colorscheme <inTab> <outTab> <refColIndex>
-- inTab: tab 分隔表；refColIndex: 从 0 开始，取该列做配色 key（去重）
+- inTab: tab 分隔表；refColIndex: 从 1 开始（CLI 内部-1 转 0-based）
 - outTab: 输出颜色代码表（第41引擎）
 
 #### `distance`

@@ -1058,7 +1058,7 @@ case "$1" in
     ;;
   colorscheme)
     # 用法: colorscheme <inTab> <outTab> <refColIndex>
-    #   inTab: tab 分隔表；refColIndex: 从 0 开始，取该列做配色 key（去重）
+    #   inTab: tab 分隔表；⚠️ refColIndex 是 1-based（ColorSchemeCli 内部 -1），文档原写 0 系错
     #   outTab: 输出颜色代码表（第41引擎）
     shift
     if [ $# -lt 3 ]; then echo "用法: tbplot.sh colorscheme <inTab> <outTab> <refColIndex>"; exit 1; fi

@@ -1,0 +1,2 @@
+Gene1.mRNA1	GeneA.mRNA1
+Gene2.mRNA1	GeneB.mRNA1

@@ -1,0 +1,14 @@
+# 批10定义文件 — 发布审计 + 文档一致性 + 真实数据端到端
+# 格式: ID<TAB>DESC<TAB>EXPECT正则<TAB>CMD（每条命令必须单行，禁止跨行 heredoc）
+
+T1001	tbplot.sh 命令分支数=140	B10OK=M140	cd /home/elysia/tbtools-cli && n=$(grep -cE '^  [a-zA-Z0-9]+\)$' bin/tbplot.sh); [ "$n" = "140" ] && echo "B10OK=M140" || echo "B10OK=0_$n"
+T1002	CLI 工具数=82	B10OK=T82	cd /home/elysia/tbtools-cli && n=$(bin/tbtools list tools 2>/dev/null | grep -c " -> "); [ "$n" = "82" ] && echo "B10OK=T82" || echo "B10OK=0_$n"
+T1003	RPC methods=188	B10OK=R188	cd /home/elysia/tbtools-cli && n=$(timeout 60 bash bin/tbtools_rpc.sh methods 2>/dev/null | python3 -c "import json,sys;print(len(json.load(sys.stdin)['result']['methods']))" 2>/dev/null); [ "$n" = "188" ] && echo "B10OK=R188" || echo "B10OK=0_$n"
+T1004	140命令文档全覆盖	B10OK=DOCCMD	cd /home/elysia/tbtools-cli && python3 -c "import re;sh=open('bin/tbplot.sh').read();cmds=set(re.findall(r'^  ([a-zA-Z0-9]+)\$',sh,re.M));doc=open('docs/COMMAND_REFERENCE.md').read();doc_cmds=set(re.findall(r'^\| \d+ \| .([a-zA-Z0-9]+).',doc,re.M));m=cmds-doc_cmds;print('B10OK=DOCCMD' if not m else 'B10OK=MISSING:'+','.join(sorted(m)))"
+T1005	80桥Javadoc全覆盖	B10OK=DOCBRIDGE	cd /home/elysia/tbtools-cli && python3 -c "import os;bridges=[f[:-5] for f in os.listdir('bridges') if f.endswith('.java')];doc=open('docs/COMMAND_REFERENCE.md').read();missing=[b for b in bridges if '### .'+b+'.' not in doc];print('B10OK=DOCBRIDGE' if not missing else 'B10OK=MISSING:'+','.join(missing))"
+T1006	README数字一致性	B10OK=README	cd /home/elysia/tbtools-cli && grep -q '140 个绘图' README.md && grep -q '188 个 RPC' README.md && grep -q '82 个命令行' README.md && echo "B10OK=README" || echo "B10OK=0"
+T1007	端到端:GRAS蛋白statFasta	B10OK=STAT	cd /home/elysia/tbtools-cli && rm -rf /tmp/b10 && mkdir -p /tmp/b10 && bin/tbtools tool statFasta --inFasta examples/data/rpc/gras6_pep.fa --outPutFile /tmp/b10/gras6.stat.xls >/dev/null 2>&1; [ -s /tmp/b10/gras6.stat.xls ] && echo "B10OK=STAT" || echo "B10OK=0"
+T1008	端到端:GRAS ML建树onesteptree	B10OK=MLTREE	cd /home/elysia/tbtools-cli && timeout 280 bin/tbplot.sh onesteptree --inPepFie examples/data/rpc/gras6_pep.fa --outFilePrefix /tmp/b10/tree --bbTime 1000 >/dev/null 2>&1; [ -s /tmp/b10/tree/TBtools.IQtree.contree ] && echo "B10OK=MLTREE" || echo "B10OK=0"
+T1009	端到端:MSA seqlogo	B10OK=LOGO	cd /home/elysia/tbtools-cli && rm -f /tmp/b10/logo.svg && timeout 120 bin/tbplot.sh seqlogo examples/data/phylogeny/msa.fa /tmp/b10/logo.svg >/dev/null 2>&1; [ -s /tmp/b10/logo.svg ] && echo "B10OK=LOGO" || echo "B10OK=0"
+T1010	git文档修正(预期改动)	B10OK=DIFF	cd /home/elysia/tbtools-cli && git diff --quiet HEAD -- bin/tbplot.sh docs/COMMAND_REFERENCE.md 2>/dev/null && echo "B10OK=CLEAN" || echo "B10OK=DIFF"
+

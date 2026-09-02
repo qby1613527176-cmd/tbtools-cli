@@ -1,0 +1,8 @@
+Chr1	TBtools	gene	1000	5000	.	+	.	ID=Gene1
+Chr1	TBtools	mRNA	1000	5000	.	+	.	ID=Gene1.mRNA1;Parent=Gene1
+Chr1	TBtools	gene	6000	10000	.	+	.	ID=Gene2
+Chr1	TBtools	mRNA	6000	10000	.	+	.	ID=Gene2.mRNA1;Parent=Gene2
+Chr2	TBtools	gene	2000	6000	.	+	.	ID=GeneA
+Chr2	TBtools	mRNA	2000	6000	.	+	.	ID=GeneA.mRNA1;Parent=GeneA
+Chr2	TBtools	gene	7000	11000	.	+	.	ID=GeneB
+Chr2	TBtools	mRNA	7000	11000	.	+	.	ID=GeneB.mRNA1;Parent=GeneB

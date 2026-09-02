@@ -1,0 +1,6 @@
+#Batch CD-search tool	NIH/NLM/NCBI
+#status	0
+Query	Hit type	PSSM-ID	From	To	E-Value	Bitscore	Accession	Short name	Incomplete	Superfamily
+gene1	superfamily	223342	3	48	2.4e-08	38.4	GRAS	GRAS	-	cl21454
+gene2	superfamily	223342	4	47	3.1e-07	35.2	GRAS	GRAS	-	cl21454
+gene3	superfamily	223342	2	46	5.2e-06	32.1	GRAS	GRAS	-	cl21454

@@ -1,0 +1,16 @@
+# 批4定义文件 — 核心绘图 I：基因结构/Motif/热图/eFP/域图 全量回归
+# 格式: ID<TAB>DESC<TAB>EXPECT正则<TAB>CMD
+# 数据: test_reports/data_b4/（prep 脚本 + 真实 GRAS meme）
+
+T401	genestructure 基因结构图	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh genestructure examples/data/gene_structure.gff examples/data/ids.txt /tmp/b4/gs.svg >/dev/null 2>&1; [ -s /tmp/b4/gs.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T402	motif Motif分布图（真实GRAS meme）	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh motif test_reports/data_b4/meme_real.xml test_reports/data_b4/meme_ids.txt /tmp/b4/motif.svg >/dev/null 2>&1; [ -s /tmp/b4/motif.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T403	seqlogo 序列LOGO	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh seqlogo examples/data/phylogeny/msa.fa /tmp/b4/logo.svg >/dev/null 2>&1; [ -s /tmp/b4/logo.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T404	heatmap2 聚类热图	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh heatmap2 examples/data/expression2/expr_matrix.tsv /tmp/b4/hm2.svg >/dev/null 2>&1; [ -s /tmp/b4/hm2.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T405	cubeheatmap 3D立方体热图（group无表头）	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh cubeheatmap test_reports/data_b4/cube_expr.tsv test_reports/data_b4/cube_group3_nohdr.tsv /tmp/b4/cube.svg >/dev/null 2>&1; [ -s /tmp/b4/cube.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T406	layoutheatmap 布局热图	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh layoutheatmap test_reports/data_b4/layout2.tsv examples/data/expr/expr.tsv /tmp/b4/lh.svg >/dev/null 2>&1; [ -s /tmp/b4/lh.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T407	efpHeat eFP组织表达热图	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh efpHeat examples/data/efp/plant_bg.tga examples/data/efp/sample2cc.txt examples/data/efp/expmat.tsv GENE1 /tmp/b4/efp.svg >/dev/null 2>&1; [ -s /tmp/b4/efp.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T408	multiEfp 多矩阵eFP	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh multiEfp examples/data/efp/plant_bg.tga examples/data/efp/sample2cc.txt examples/data/efp/expmat.tsv GENE1 /tmp/b4/mefp.svg >/dev/null 2>&1; [ -s /tmp/b4/mefp.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T409	cddmotif CDD保守域图	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh cddmotif test_reports/data_b4/cdd.hitdata.txt test_reports/data_b4/prot.fa /tmp/b4/cdd.svg examples/data/phylogeny/root.nwk >/dev/null 2>&1; [ -s /tmp/b4/cdd.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T410	pfammotif Pfam域图	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh pfammotif test_reports/data_b4/pfamscan.txt test_reports/data_b4/prot.fa /tmp/b4/pfam.svg examples/data/phylogeny/root.nwk >/dev/null 2>&1; [ -s /tmp/b4/pfam.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T411	seqlentrack 序列长度骨架	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh seqlentrack test_reports/data_b4/seqlen.txt /tmp/b4/seqlen.svg examples/data/phylogeny/root.nwk >/dev/null 2>&1; [ -s /tmp/b4/seqlen.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
+T412	amazingmeta 组合图（树+结构+域）	B4OK=SVG_OK	cd /home/elysia/tbtools-cli && bin/tbplot.sh amazingmeta test_reports/data_b4/meme_real.xml examples/data/phylogeny/root.nwk /tmp/b4/am.svg test_reports/data_b4/seqlen.txt >/dev/null 2>&1; [ -s /tmp/b4/am.svg ] && echo "B4OK=SVG_OK" || echo "B4OK=0"
