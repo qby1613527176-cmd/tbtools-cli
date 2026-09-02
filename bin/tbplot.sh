@@ -1388,7 +1388,7 @@ case "$1" in
       echo "       tbplot.sh help <命令>   查看某命令详细用法（多行）"
       echo "================================================"
       echo ""
-      echo "📖 完整手册: docs/COMMAND_REFERENCE.md（88 绘图命令 + 82 工具 + 80 桥 + 35 坑位）"
+      echo "📖 完整手册: docs/COMMAND_REFERENCE.md（140 绘图命令 + 82 工具 + 80 桥 + 35 坑位）"
       echo "   RPC 188 方法: docs/rpc_methods_reference.md"
       echo ""
       echo "全部命令（$(sed -n 's/^  \([a-zA-Z][a-zA-Z0-9]*\))/\1/p' "$0" | sort -u | wc -l) 个):"

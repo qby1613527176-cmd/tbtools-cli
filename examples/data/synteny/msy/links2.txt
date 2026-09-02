@@ -1,3 +1,3 @@
-A_Chr1	B_Chr1
-A_Chr1	B_Chr1
-A_Chr1	B_Chr1
+AGene1	BGene1
+AGene2	BGene2
+AGene3	BGene3
