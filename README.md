@@ -72,6 +72,10 @@ export PATH="$PWD/bin:$PATH"
 ```
 
 ### 3. Verify
+
+```bash
+bash run_examples.sh   # 一键验证（8 项核心功能）
+```
 ```bash
 tbtools help
 ```
