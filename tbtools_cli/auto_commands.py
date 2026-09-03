@@ -680,6 +680,24 @@ def _upset_impl(args, verbose=False, quiet=False):
     java_args = ["xvfb-run", "-a", "java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "UpSetCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet)
 
+def _venn2_impl(args, verbose=False, quiet=False):
+    """venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]"""
+    java_args = ["xvfb-run", "-a", "java", "-Xmx2g", "-cp", JAR,
+                 "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn2"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet)
+
+def _venn3_impl(args, verbose=False, quiet=False):
+    """venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>"""
+    java_args = ["xvfb-run", "-a", "java", "-Xmx2g", "-cp", JAR,
+                 "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn3"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet)
+
+def _venn4_impl(args, verbose=False, quiet=False):
+    """venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>"""
+    java_args = ["xvfb-run", "-a", "java", "-Xmx2g", "-cp", JAR,
+                 "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn4Ellipse"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet)
+
 def _venn5_impl(args, verbose=False, quiet=False):
     """venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <set"""
     ensure_bridge("Venn5Cli")

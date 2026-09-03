@@ -1,0 +1,102 @@
+.\" Man page for tbtools-cli
+.TH TBTOOLS 1 "September 2026" "tbtools-cli v1.0.0" "TBtools-II CLI"
+.SH NAME
+tbtools \- TBtools-II 全功能命令行封装（140 绘图 + 82 工具 + 188 RPC）
+.SH SYNOPSIS
+.B tbtools
+[\fIGROUP\fR] \fICOMMAND\fR [\fIARGS\fR...] [\fIOPTIONS\fR]
+.SH DESCRIPTION
+TBtools-II 2.535 的全部功能封装为 headless 命令行，Linux/WSL 下免 GUI 直接使用。
+140 个绘图/分析命令 + 82 个命令行工具 + 188 个 RPC 数据工具 + 任意引擎反射。
+.SH COMMANDS
+.TP
+.B version
+显示版本信息
+.TP
+.B doctor
+环境诊断（Java/javac/xvfb/JAR/可选依赖）
+.TP
+.B list [plots|tools|rpc]
+列出可用命令
+.TP
+.B presets [NAME]
+列出或查看出版预设
+.TP
+.B examples [COMMAND]
+显示命令示例
+.SH GROUPS
+.TP
+.B seq
+序列/结构域命令（logo/msa/structure/motif/...）
+.TP
+.B expr
+表达/统计命令（volcano/heatmap/pca/hclust/...）
+.TP
+.B tree
+树/进化命令（draw/unrooted/rooting/one-step/...）
+.TP
+.B syn
+共线性/基因组命令（circos/dotplot/microsyn/dualsyn/...）
+.TP
+.B sets
+集合/韦恩命令（venn2-6/upset）
+.TP
+.B tool
+命令行工具（82 个：stat-fasta/cds2protein/fasta-extract/...）
+.SH OPTIONS
+.TP
+.BR \-V, " \-\-verbose"
+显示完整堆栈（debug 模式）
+.TP
+.BR \-q, " \-\-quiet"
+静默模式（只显示错误）
+.TP
+.BR \-f, " \-\-format " \fIFMT\fR
+输出格式: svg|png|pdf
+.TP
+.BR \-p, " \-\-preset " \fINAME\fR
+出版预设: nature|cell|plant_journal|new_phytologist|wide|poster|gras
+.TP
+.BR \-W, " \-\-width " \fIPX\fR
+画布宽度
+.TP
+.BR \-H, " \-\-height " \fIPX\fR
+画布高度
+.TP
+.BR \-t, " \-\-threads " \fIN\fR
+线程数
+.SH EXAMPLES
+.TP
+火山图:
+tbtools expr volcano deg.txt volcano.svg
+.TP
+热图（log2 + 行聚类）:
+tbtools expr heatmap expr.tsv heatmap.svg --log2 --cluster-row
+.TP
+基因结构图:
+tbtools seq structure genes.gff id_list.txt out.svg
+.TP
+三集合韦恩图:
+tbtools sets venn2 --List1 a.txt --List2 b.txt --label1 A --label2 B --graph out.svg --prefix out
+.TP
+FASTA 统计:
+tbtools tool stat-fasta input.fa output.xls
+.SH FILES
+.TP
+.I bin/tbtools
+主入口（bash → Python click）
+.TP
+.I bin/tbplot.sh
+绘图引擎兼容层
+.TP
+.I bridges/
+Java 桥源码（80 个）
+.TP
+.I docs/COMMAND_REFERENCE.md
+完整命令参考手册（2531 行）
+.SH SEE ALSO
+.PP
+.BR tbplot.sh (1),
+.BR tbtools_rpc.sh (1)
+.SH AUTHOR
+tbtools-cli project

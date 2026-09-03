@@ -11,10 +11,11 @@ import tbtools_cli.auto_commands as _ac
 
 # ---- 通用选项 ----
 def common_options(f):
-    """通用选项装饰器：--verbose, --quiet, --format, --width, --height"""
+    """通用选项装饰器：--verbose, --quiet, --format, --preset, --width, --height, --threads"""
     f = click.option("--verbose", "-V", is_flag=True, default=False, help="显示完整堆栈（debug 模式）")(f)
     f = click.option("--quiet", "-q", is_flag=True, default=False, help="静默模式（只显示错误）")(f)
     f = click.option("--format", "-f", "fmt", default=None, help="输出格式: svg|png|pdf")(f)
+    f = click.option("--preset", default=None, help="出版预设: nature|cell|plant_journal|wide|poster")(f)
     f = click.option("--height", "-H", type=int, default=None, help="画布高度")(f)
     f = click.option("--width", "-W", type=int, default=None, help="画布宽度")(f)
     f = click.option("--threads", "-t", type=int, default=None, help="线程数")(f)
@@ -41,7 +42,7 @@ def seq_group():
 @click.option("--scale-ic/--no-scale-ic", default=True, help="按信息含量缩放")
 @click.option("--show-pos/--no-show-pos", default=False, help="显示位置编号")
 @common_options
-def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, height, width, threads):
+def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, preset, height, width, threads):
     """序列 LOGO 图"""
     output_file = resolve_output(output_file, fmt)
     args = ["java", "-Xmx2g", "-cp", JAR,
@@ -59,7 +60,7 @@ def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, he
 @click.argument("output_file")
 @click.option("--padding", type=int, default=0, help="序列间填充")
 @common_options
-def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, height, width, threads):
+def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, height, width, threads):
     """多序列比对可视化"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("MSACli")
@@ -76,7 +77,7 @@ def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, height, wi
 @click.argument("output_file")
 @click.option("--genome", "-g", default=None, help="基因组 FASTA（可选）")
 @common_options
-def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, height, width, threads):
+def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, preset, height, width, threads):
     """基因结构图（外显子/UTR 从 GFF）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GeneStructureCli")
@@ -94,7 +95,7 @@ def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, h
 @click.argument("id_list")
 @click.argument("output_file")
 @common_options
-def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, height, width, threads):
+def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """Motif 分布图（MEME XML）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("MotifCli")
@@ -117,8 +118,13 @@ def expr_group():
 @click.option("--pval-cutoff", "-p", type=float, default=0.05, help="P值阈值")
 @click.option("--fc-cutoff", "-c", type=float, default=1.0, help="Log2FC 阈值")
 @common_options
-def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, height, width, threads):
+def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, preset, height, width, threads):
     """火山图（DEG: GeneID Log2FC pvalue）"""
+    if preset:
+        p = apply_preset(preset, width=width, height=height)
+        if not p: print(f"❌ 未知预设: {preset}", file=sys.stderr); sys.exit(1)
+        if 'width' in p and not width: width = p['width']
+        if 'height' in p and not height: height = p['height']
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GenericCli")
     args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -142,7 +148,7 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
 @click.option("--cluster-row/--no-cluster-row", default=False, help="行聚类")
 @click.option("--cluster-col/--no-cluster-col", default=False, help="列聚类")
 @common_options
-def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col, verbose, quiet, fmt, height, width, threads):
+def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col, verbose, quiet, fmt, preset, height, width, threads):
     """热图（表达矩阵）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HeatmapCli")
@@ -169,7 +175,7 @@ def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col,
 @click.argument("direction", type=click.Choice(["row", "col"]), default="row")
 @click.option("--scale/--no-scale", default=False, help="标准化")
 @common_options
-def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, height, width, threads):
+def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, preset, height, width, threads):
     """PCA 图"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GenericCli")
@@ -190,7 +196,7 @@ def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, he
 @click.argument("distance_file")
 @click.argument("output_file")
 @common_options
-def expr_hclust(distance_file, output_file, verbose, quiet, fmt, height, width, threads):
+def expr_hclust(distance_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """层次聚类树（三列距离文件 GeneA\tGeneB\tdist）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HclustCli")
@@ -203,7 +209,7 @@ def expr_hclust(distance_file, output_file, verbose, quiet, fmt, height, width, 
 @click.argument("deg_file")
 @click.argument("output_file")
 @common_options
-def expr_dehist(deg_file, output_file, verbose, quiet, fmt, height, width, threads):
+def expr_dehist(deg_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """差异表达双直方图"""
     output_file = resolve_output(output_file, fmt)
     args = ["java", "-Xmx2g", "-cp", JAR,
@@ -224,7 +230,7 @@ def tree_group():
 @click.argument("config_file")
 @click.argument("output_file")
 @common_options
-def tree_draw(config_file, output_file, verbose, quiet, fmt, height, width, threads):
+def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """树+注释图（TreeTreeTree 多轨道）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("TreeCli")
@@ -237,7 +243,7 @@ def tree_draw(config_file, output_file, verbose, quiet, fmt, height, width, thre
 @click.argument("newick_file")
 @click.argument("output_file")
 @common_options
-def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, height, width, threads):
+def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """无根树可视化"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("UnrootedTreeCli")
@@ -252,7 +258,7 @@ def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, height, width, 
 @click.argument("input_nwk")
 @click.argument("output_nwk")
 @common_options
-def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, height, width, threads):
+def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, preset, height, width, threads):
     """MAD 系统发育定根"""
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioDoer.JIGplotToolkit.newickParser.TreeTreeTree.TreeRootingByMAD",
@@ -265,7 +271,7 @@ def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, height, width, thre
 @click.argument("output_prefix")
 @click.option("--bb-time", "-b", type=int, default=1000, help="IQ-TREE bootstrap iterations")
 @common_options
-def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, height, width, threads):
+def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, preset, height, width, threads):
     """一步法 ML 树（muscle → trimal → IQ-TREE）"""
     t = threads or 4
     args = ["java", "-Xmx4g", "-cp", JAR,
@@ -276,7 +282,41 @@ def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, hei
     sys.exit(ec)
 
 # ---- 命令组：工具 ----
-@cli.group("tool")
+class ToolGroup(click.Group):
+    """tool 分组：未知子命令自动转发 auto_commands"""
+    def resolve_command(self, ctx, args):
+        try:
+            return super().resolve_command(ctx, args)
+        except click.UsageError:
+            # 未知子命令 → 尝试 auto_commands
+            if args:
+                name = args[0]
+                impl = getattr(_ac, f'_{name}_impl', None)
+                if impl:
+                    # 创建一次性 Command 包裹 impl
+                    doc = (impl.__doc__ or '').split(':',1)[1].strip() if ':' in (impl.__doc__ or '') else f'{name} [参数...]'
+                    pitfall = get_pitfall_hint(name)
+                    help_text = doc + (f'\n\n⚠️ {pitfall}' if pitfall else '')
+                    cmd = click.Command(name=name,
+                        callback=lambda: sys.exit(impl(list(ctx.args))),
+                        context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
+                        help=help_text)
+                    return name, cmd, args[1:]
+                # 列出可用工具
+                click.echo(f"❌ 未知工具: {name}", file=sys.stderr)
+                count = 0
+                for n in sorted(dir(_ac)):
+                    if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
+                        cmd = n[1:-5]
+                        doc = getattr(_ac, n).__doc__ or ''
+                        short = doc.split(':',1)[1].strip()[:50] if ':' in doc else ''
+                        click.echo(f"  {cmd:20s} {short}", file=sys.stderr)
+                        count += 1
+                click.echo(f"\n共 {count} 个工具，查看: tbtools list tools", file=sys.stderr)
+                ctx.exit(1)
+            raise
+
+@cli.group("tool", cls=ToolGroup)
 def tool_group():
     """命令行工具（82 个）"""
     pass
@@ -285,7 +325,7 @@ def tool_group():
 @click.argument("input_file")
 @click.argument("output_file")
 @common_options
-def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, height, width, threads):
+def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """FASTA 序列统计"""
     # stdin 管道支持
     if input_file == "-":
@@ -306,7 +346,7 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, height, width,
 @click.argument("cds_fasta")
 @click.argument("output_file")
 @common_options
-def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, height, width, threads):
+def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """CDS → 蛋白质翻译"""
     if output_file == "-": output_file = "/dev/stdout"
     args = ["java", "-Xmx2g", "-cp", JAR,
@@ -320,7 +360,7 @@ def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, height, width,
 @click.argument("id_list")
 @click.argument("output_file")
 @common_options
-def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, height, width, threads):
+def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """按 ID 列表提取 FASTA 序列"""
     if input_fasta == "-":
         import tempfile; tmp = tempfile.mktemp(suffix=".fa")
@@ -433,6 +473,7 @@ CATEGORY_MAP = {
     "conflictpaf": "syn", "partitionconflict": "syn",
     "microgenome": "syn",
     # 集合/ChIP
+    "venn2": "sets", "venn3": "sets", "venn4": "sets",
     "venn5": "sets", "venn6": "sets", "upset": "sets",
     "peaktss": "chipseq", "peakdist": "chipseq", "peakanno": "chipseq",
     "pileup": "chipseq",
@@ -497,6 +538,25 @@ for key, desc in GROUPS.items():
         g = click.Group(name=key, help=desc)
         cli.add_command(g, name=key)
         _groups[key] = g
+
+def _load_auto_commands():
+    """从 auto_commands.py 加载所有命令到对应分组（弥补 tbplot.sh 遗漏的命令）"""
+    skip = {"seqlogo", "msa", "motif", "genestructure",  # seq manual
+            "volcano", "heatmap2", "pca", "hclust", "dehist",  # expr manual
+            "tree", "unrooted", "treeRooting", "onesteptree",  # tree manual
+            "version", "doctor", "examples", "list", "presets",  # top commands
+            "seq", "expr", "tree", "tool",  # group names
+            "chipseq", "sets", "syn", "asm", "gxf", "mirna", "table",
+            "blast", "fastq", "hmm", "gwas", "engine"}
+    for name in sorted(dir(_ac)):
+        if name.startswith('_') and name.endswith('_impl') and not name.startswith('__'):
+            cmd = name[1:-5]
+            if cmd in skip:
+                continue
+            cat = CATEGORY_MAP.get(cmd, "engine")
+            target = _groups.get(cat)
+            if target and cmd not in target.commands:
+                _make_passthrough(cmd, target)
 
 def _load_dynamic_commands():
     """从 tbplot.sh 动态生成 click 命令，按分类注册到 group"""
@@ -608,6 +668,38 @@ def _make_passthrough(name, group=None):
     _target.add_command(cmd)
 
 
+@cli.command(name='list')
+@click.argument('category', required=False)
+def listing(category):
+    """列出可用命令（plots/tools/rpc）"""
+    if not category or category == 'plots':
+        click.echo("绘图/分析命令：")
+        for gname in sorted(GROUPS.keys()):
+            g = _groups.get(gname)
+            if g and g.commands:
+                click.echo(f"\n  {gname} — {GROUPS[gname]}")
+                for cname, cmd in sorted(g.commands.items()):
+                    short = (cmd.help or '').split('\n')[0][:60]
+                    click.echo(f"    {cname:20s} {short}")
+        if not category:
+            click.echo("\n用法: tbtools list tools|rpc")
+    elif category == 'tools':
+        click.echo("命令行工具（82 个）：")
+        for name in sorted(dir(_ac)):
+            if name.startswith('_') and name.endswith('_impl') and not name.startswith('__'):
+                cmd = name[1:-5]
+                doc = getattr(_ac, name).__doc__ or ''
+                short = doc.split(':',1)[1].strip()[:60] if ':' in doc else ''
+                click.echo(f"  {cmd:20s} {short}")
+    elif category == 'rpc':
+        click.echo("RPC 方法（188 个），启动 RPC 服务器后可用：")
+        click.echo("  tbtools_rpc.sh start    # 启动")
+        click.echo("  tbtools_rpc.sh methods   # 列出全部 188 方法")
+        click.echo("  tbtools_rpc.sh call <method> '<json>'")
+    else:
+        click.echo(f"未知类别: {category}。可用: plots|tools|rpc")
+        sys.exit(1)
+
 @cli.command()
 @click.argument("name", required=False)
 def presets(name):
@@ -630,6 +722,7 @@ def presets(name):
             click.echo(f"  {n:20s} {d}")
 
 _load_dynamic_commands()
+_load_auto_commands()
 
 if __name__ == "__main__":
     cli()
