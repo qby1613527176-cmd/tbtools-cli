@@ -1677,5 +1677,44 @@
       "--genes"
     ],
     "help": "multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt]"
+  },
+  "venn2": {
+    "name": "venn2",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn2",
+    "params": [
+      "--List1 <setA.txt>",
+      "--List2 <setB.txt>",
+      "--label1 A",
+      "--label2 B",
+      "--graph <out>",
+      "--prefix <out>",
+      "[--bgNum N]"
+    ],
+    "help": "venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]"
+  },
+  "venn3": {
+    "name": "venn3",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn3",
+    "params": [
+      "--List1..3 <sets>",
+      "--label1..3 <labels>",
+      "--graph <out>",
+      "--prefix <out>"
+    ],
+    "help": "venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>"
+  },
+  "venn4": {
+    "name": "venn4",
+    "mode": "direct",
+    "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn4Ellipse",
+    "params": [
+      "--List1..4 <sets>",
+      "--label1..4 <labels>",
+      "--graph <out>",
+      "--prefix <out>"
+    ],
+    "help": "venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>"
   }
 }

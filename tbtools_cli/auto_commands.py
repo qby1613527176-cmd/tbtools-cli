@@ -699,13 +699,13 @@ def _venn4_impl(args, verbose=False, quiet=False):
     return run_plot(java_args, verbose=verbose, quiet=quiet)
 
 def _venn5_impl(args, verbose=False, quiet=False):
-    """venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <set"""
+    """venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]"""
     ensure_bridge("Venn5Cli")
     java_args = ["xvfb-run", "-a", "java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "Venn5Cli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet)
 
 def _venn6_impl(args, verbose=False, quiet=False):
-    """venn6: venn6 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <set"""
+    """venn6: venn6 <out> <setA..F.txt> [labels]"""
     ensure_bridge("Venn6Cli")
     java_args = ["xvfb-run", "-a", "java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "Venn6Cli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet)

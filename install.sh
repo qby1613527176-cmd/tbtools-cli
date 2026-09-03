@@ -76,10 +76,10 @@ done
 # ---------- 4. 测试 ----------
 echo ""
 echo "=============================================="
-echo " 测试: tbtools help"
+echo " 测试: tbtools --help"
 echo "=============================================="
-if "$BIN/tbtools" help >/dev/null 2>&1; then
-    echo "✅ 安装成功！运行 'tbtools help' 查看用法"
+if "$BIN/tbtools" --help >/dev/null 2>&1; then
+    echo "✅ 安装成功！运行 'tbtools --help' 查看用法"
 else
     echo "❌ 测试失败，请检查依赖"
     exit 1
@@ -88,7 +88,7 @@ fi
 echo ""
 echo "完成。快速开始:"
 
-echo "  bash run_examples.sh       # 一键验证（8项核心功能）"
+echo "  bash examples/scripts/run_examples.sh       # 一键验证（8项核心功能）"
 echo "  tbtools --help              # 查看全部命令"
 echo "  tbtools seq logo seqs.fa logo.svg  # 序列 LOGO 图"
-echo "  tbtools server start        # 启动 RPC（数据工具）"
+echo "  tbtools list rpc        # 启动 RPC（数据工具）"

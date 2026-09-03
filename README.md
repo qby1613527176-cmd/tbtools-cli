@@ -401,16 +401,17 @@ tbtools circlegene <gff> <geneID.txt> <out.svg> [--link f --rankedChr f ...]
 
 ### Venn / Sets
 ```bash
-# Venn 2/3/4 (native CLI)
-tbtools engine biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn2 --List1 a.txt --List2 b.txt --label1 A --label2 B --graph out.svg --prefix out --bgNum 30000
-# Venn3: --List1..3 ; Venn4Ellipse: --List1..4
+# Venn 2/3/4 (native ArgsParser CLI)
+tbtools sets venn2 --List1 a.txt --List2 b.txt --label1 A --label2 B --graph out.svg --prefix out
+tbtools sets venn3 --List1 a.txt --List2 b.txt --List3 c.txt --label1 A --label2 B --label3 C --graph out.svg --prefix out
+tbtools sets venn4 --List1 a.txt --List2 b.txt --List3 c.txt --List4 d.txt --label1 A --label2 B --label3 C --label4 D --graph out.svg --prefix out
 
 # Venn 5/6 (bridge)
-tbtools venn5 <out.svg> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]
-tbtools venn6 <out.svg> <setA.txt> ... <setF.txt> [labels]
+tbtools sets venn5 <out.svg> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]
+tbtools sets venn6 <out.svg> <setA.txt> ... <setF.txt> [labels]
 
 # UpSet intersection plot
-tbtools upset <sets.txt> <out.svg> [w] [h]
+tbtools sets upset <sets.txt> <out.svg> [w] [h]
 ```
 
 ### ChIP-seq / Others

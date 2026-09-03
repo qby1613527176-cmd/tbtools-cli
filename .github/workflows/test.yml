@@ -32,13 +32,18 @@ jobs:
           python3 -c "import sys; sys.path.insert(0,'.'); from tbtools_cli.cli import cli; print(f'click CLI loaded: {len(cli.commands)} groups')"
           python3 -c "import sys; sys.path.insert(0,'.'); from tbtools_cli.auto_commands import *; print('auto_commands loaded')"
       
+      - name: Run pytest suite
+        run: |
+          pip install pytest
+          python3 -m pytest tests/test_cli.py -v --tb=short
+      
       - name: Verify bash scripts
         run: |
           bash -n bin/tbplot.sh && echo "tbplot.sh 语法 OK"
           bash -n bin/tbtools && echo "tbtools 语法 OK"
           bash -n bin/tbengine.sh && echo "tbengine.sh 语法 OK"
           bash -n install.sh && echo "install.sh 语法 OK"
-          bash -n run_examples.sh && echo "run_examples.sh 语法 OK"
+          bash -n examples/scripts/run_examples.sh && echo "examples/scripts/run_examples.sh 语法 OK"
       
       - name: Verify metadata
         run: |

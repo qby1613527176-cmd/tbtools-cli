@@ -313,7 +313,7 @@ class ToolGroup(click.Group):
                         click.echo(f"  {cmd:20s} {short}", file=sys.stderr)
                         count += 1
                 click.echo(f"\n共 {count} 个工具，查看: tbtools list tools", file=sys.stderr)
-                ctx.exit(1)
+                ctx.exit(2)
             raise
 
 @cli.group("tool", cls=ToolGroup)
@@ -684,13 +684,22 @@ def listing(category):
         if not category:
             click.echo("\n用法: tbtools list tools|rpc")
     elif category == 'tools':
-        click.echo("命令行工具（82 个）：")
-        for name in sorted(dir(_ac)):
-            if name.startswith('_') and name.endswith('_impl') and not name.startswith('__'):
-                cmd = name[1:-5]
-                doc = getattr(_ac, name).__doc__ or ''
+        click.echo("命令行工具：")
+        # 排除绘图类命令（属于 seq/expr/tree/syn/sets/chipseq 分组的）
+        plot_groups = {'seq', 'expr', 'tree', 'syn', 'sets', 'chipseq'}
+        count = 0
+        for n in sorted(dir(_ac)):
+            if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
+                cmd = n[1:-5]
+                cat = CATEGORY_MAP.get(cmd, 'engine')
+                if cat in plot_groups:
+                    continue  # 跳过绘图类
+                doc = getattr(_ac, n).__doc__ or ''
                 short = doc.split(':',1)[1].strip()[:60] if ':' in doc else ''
                 click.echo(f"  {cmd:20s} {short}")
+                count += 1
+        # 加上手动注册的 3 个
+        click.echo(f"\n共 {count + 3} 个工具（含 3 个手动迁移）")
     elif category == 'rpc':
         click.echo("RPC 方法（188 个），启动 RPC 服务器后可用：")
         click.echo("  tbtools_rpc.sh start    # 启动")
