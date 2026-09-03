@@ -4,7 +4,10 @@ import os, sys, subprocess
 
 # ---- 配置 ----
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from tbtools_cli.core import JAR, run_java, run_plot, ensure_bridge, resolve_output, ROOT
+from tbtools_cli.core import (JAR, run_java, run_plot, ensure_bridge,
+    resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint)
+from tbtools_cli.presets import apply_preset, list_presets, PRESETS
+import tbtools_cli.auto_commands as _ac
 
 # ---- 通用选项 ----
 def common_options(f):
@@ -516,301 +519,115 @@ def _load_dynamic_commands():
         cat = CATEGORY_MAP.get(cmd_name, "engine")
         _make_passthrough(cmd_name, _groups[cat])
 
+def _parse_auto_metadata(name):
+    """从 auto_commands.py 解析命令元数据（docstring + 坑位）"""
+    impl = getattr(_ac, f'_{name}_impl', None)
+    doc = (impl.__doc__ or "").strip() if impl else ""
+    usage = doc.split(':', 1)[1].strip() if ':' in doc else f"{name} [参数...]"
+    pitfall = get_pitfall_hint(name)
+    return {'impl': impl, 'usage': usage, 'pitfall': pitfall}
+
 def _make_passthrough(name, group=None):
-    """生成一个转发到 tbplot.sh 的命令"""
+    """生成元数据驱动的 click 命令（help + 校验 + 预设 + 直调 Java）"""
+    meta = _parse_auto_metadata(name)
+    impl = meta['impl']
+    usage = meta['usage']
+    pitfall = meta['pitfall']
+    
+    help_text = usage
+    if pitfall:
+        help_text += f"\n\n⚠️ {pitfall}"
+    
     _target = group or cli
-    @_target.command(name=name, context_settings={"ignore_unknown_options": True, "allow_extra_args": True})
-    @click.pass_context
-    def _cmd(ctx, **kw):
-        args = ["bash", os.path.join(ROOT, "bin", "tbplot.sh"), name] + ctx.args
-        ec = subprocess.run(args).returncode
+    
+    def _cmd_impl(ctx, verbose, quiet, fmt, preset, height, width, threads):
+        args = list(ctx.args)
+        
+        # 输入校验：第一个非选项参数通常是输入文件
+        if args and not args[0].startswith('-'):
+            ok, msg = validate_file(args[0], f"{name} 输入文件")
+            if not ok:
+                print(msg, file=sys.stderr)
+                sys.exit(2)
+        
+        # 应用预设
+        if preset:
+            p = apply_preset(preset, width=width, height=height)
+            if not p:
+                print(f"❌ 未知预设: {preset}", file=sys.stderr)
+                print(f"   可用: {', '.join(PRESETS.keys())}", file=sys.stderr)
+                sys.exit(1)
+            if 'width' in p and not width:
+                width = p['width']
+            if 'height' in p and not height:
+                height = p['height']
+        
+        # 格式覆盖：替换输出文件扩展名
+        if fmt:
+            for i in range(len(args) - 1, -1, -1):
+                if args[i].endswith(('.svg', '.png', '.pdf')):
+                    base = os.path.splitext(args[i])[0]
+                    args[i] = f"{base}.{fmt}"
+                    break
+        
+        # 追加 width/height 到参数末尾（大多数命令接受 [w] [h] 位置参数）
+        if width:
+            args.append(str(width))
+        if height:
+            args.append(str(height))
+        
+        # 调用 impl 或回退到 bash tbplot.sh
+        if impl:
+            ec = impl(args, verbose=verbose, quiet=quiet)
+        else:
+            bash_args = ["bash", os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
+            ec = subprocess.run(bash_args).returncode
         sys.exit(ec)
-    _cmd.__doc__ = f"转发到 tbplot.sh {name}"
+    
+    # 先设置 docstring，再装饰
+    _cmd_impl.__doc__ = help_text
+    _cmd_impl = click.pass_context(_cmd_impl)
+    for opt_args, opt_kwargs in [
+        (("--verbose", "-V"), {"is_flag": True, "default": False, "help": "显示完整堆栈"}),
+        (("--quiet", "-q"), {"is_flag": True, "default": False, "help": "静默模式"}),
+        (("--format", "-f", "fmt"), {"default": None, "help": "输出格式: svg|png|pdf"}),
+        (("--preset", "-p"), {"default": None, "help": "出版预设: nature|cell|plant_journal|wide|poster"}),
+        (("--height", "-H"), {"type": int, "default": None, "help": "画布高度"}),
+        (("--width", "-W"), {"type": int, "default": None, "help": "画布宽度"}),
+        (("--threads", "-t"), {"type": int, "default": None, "help": "线程数"}),
+    ]:
+        _cmd_impl = click.option(*opt_args, **opt_kwargs)(_cmd_impl)
+    
+    # 提取 click.option 装饰器注册的参数（__click_params__）
+    params = getattr(_cmd_impl, '__click_params__', [])
+    params = params[::-1]  # click 处理顺序是反的
+    
+    cmd = click.Command(name=name, callback=_cmd_impl, params=params,
+        context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
+        help=help_text)
+    _target.add_command(cmd)
 
 
-# ---- 自动命令注册 ----
-from tbtools_cli.auto_commands import *
-
-def admixture(args, verbose=False, quiet=False):
-    return _admixture_impl(args, verbose=verbose, quiet=quiet)
-def amazingmeta(args, verbose=False, quiet=False):
-    return _amazingmeta_impl(args, verbose=verbose, quiet=quiet)
-def annocompare(args, verbose=False, quiet=False):
-    return _annocompare_impl(args, verbose=verbose, quiet=quiet)
-def bamMerge(args, verbose=False, quiet=False):
-    return _bamMerge_impl(args, verbose=verbose, quiet=quiet)
-def bamindex(args, verbose=False, quiet=False):
-    return _bamindex_impl(args, verbose=verbose, quiet=quiet)
-def bamsort(args, verbose=False, quiet=False):
-    return _bamsort_impl(args, verbose=verbose, quiet=quiet)
-def bamstate(args, verbose=False, quiet=False):
-    return _bamstate_impl(args, verbose=verbose, quiet=quiet)
-def barplot(args, verbose=False, quiet=False):
-    return _barplot_impl(args, verbose=verbose, quiet=quiet)
-def barplotter(args, verbose=False, quiet=False):
-    return _barplotter_impl(args, verbose=verbose, quiet=quiet)
-def batchReplace(args, verbose=False, quiet=False):
-    return _batchReplace_impl(args, verbose=verbose, quiet=quiet)
-def calcRepeat(args, verbose=False, quiet=False):
-    return _calcRepeat_impl(args, verbose=verbose, quiet=quiet)
-def cddmotif(args, verbose=False, quiet=False):
-    return _cddmotif_impl(args, verbose=verbose, quiet=quiet)
-def circlegene(args, verbose=False, quiet=False):
-    return _circlegene_impl(args, verbose=verbose, quiet=quiet)
-def circos(args, verbose=False, quiet=False):
-    return _circos_impl(args, verbose=verbose, quiet=quiet)
-def collinearRegion(args, verbose=False, quiet=False):
-    return _collinearRegion_impl(args, verbose=verbose, quiet=quiet)
-def colorscheme(args, verbose=False, quiet=False):
-    return _colorscheme_impl(args, verbose=verbose, quiet=quiet)
-def conflictpaf(args, verbose=False, quiet=False):
-    return _conflictpaf_impl(args, verbose=verbose, quiet=quiet)
-def ctgGroup(args, verbose=False, quiet=False):
-    return _ctgGroup_impl(args, verbose=verbose, quiet=quiet)
-def cubeheatmap(args, verbose=False, quiet=False):
-    return _cubeheatmap_impl(args, verbose=verbose, quiet=quiet)
-def degramdom(args, verbose=False, quiet=False):
-    return _degramdom_impl(args, verbose=verbose, quiet=quiet)
-def dehist(args, verbose=False, quiet=False):
-    return _dehist_impl(args, verbose=verbose, quiet=quiet)
-def distance(args, verbose=False, quiet=False):
-    return _distance_impl(args, verbose=verbose, quiet=quiet)
-def dotplot(args, verbose=False, quiet=False):
-    return _dotplot_impl(args, verbose=verbose, quiet=quiet)
-def dualsyn(args, verbose=False, quiet=False):
-    return _dualsyn_impl(args, verbose=verbose, quiet=quiet)
-def efpHeat(args, verbose=False, quiet=False):
-    return _efpHeat_impl(args, verbose=verbose, quiet=quiet)
-def exprCorr(args, verbose=False, quiet=False):
-    return _exprCorr_impl(args, verbose=verbose, quiet=quiet)
-def fastaExtract(args, verbose=False, quiet=False):
-    return _fastaExtract_impl(args, verbose=verbose, quiet=quiet)
-def fastaSubseq(args, verbose=False, quiet=False):
-    return _fastaSubseq_impl(args, verbose=verbose, quiet=quiet)
-def filesplit(args, verbose=False, quiet=False):
-    return _filesplit_impl(args, verbose=verbose, quiet=quiet)
-def filterCScore(args, verbose=False, quiet=False):
-    return _filterCScore_impl(args, verbose=verbose, quiet=quiet)
-def findblockdual(args, verbose=False, quiet=False):
-    return _findblockdual_impl(args, verbose=verbose, quiet=quiet)
-def findblockmultiple(args, verbose=False, quiet=False):
-    return _findblockmultiple_impl(args, verbose=verbose, quiet=quiet)
-def findpath(args, verbose=False, quiet=False):
-    return _findpath_impl(args, verbose=verbose, quiet=quiet)
-def fqTrim(args, verbose=False, quiet=False):
-    return _fqTrim_impl(args, verbose=verbose, quiet=quiet)
-def fqfaConv(args, verbose=False, quiet=False):
-    return _fqfaConv_impl(args, verbose=verbose, quiet=quiet)
-def gel(args, verbose=False, quiet=False):
-    return _gel_impl(args, verbose=verbose, quiet=quiet)
-def genedensity(args, verbose=False, quiet=False):
-    return _genedensity_impl(args, verbose=verbose, quiet=quiet)
-def genelocation(args, verbose=False, quiet=False):
-    return _genelocation_impl(args, verbose=verbose, quiet=quiet)
-def genelocgff(args, verbose=False, quiet=False):
-    return _genelocgff_impl(args, verbose=verbose, quiet=quiet)
-def generic(args, verbose=False, quiet=False):
-    return _generic_impl(args, verbose=verbose, quiet=quiet)
-def genestructure(args, verbose=False, quiet=False):
-    return _genestructure_impl(args, verbose=verbose, quiet=quiet)
-def gfa(args, verbose=False, quiet=False):
-    return _gfa_impl(args, verbose=verbose, quiet=quiet)
-def gfa2fa(args, verbose=False, quiet=False):
-    return _gfa2fa_impl(args, verbose=verbose, quiet=quiet)
-def goParse(args, verbose=False, quiet=False):
-    return _goParse_impl(args, verbose=verbose, quiet=quiet)
-def groupCol(args, verbose=False, quiet=False):
-    return _groupCol_impl(args, verbose=verbose, quiet=quiet)
-def groupedbar(args, verbose=False, quiet=False):
-    return _groupedbar_impl(args, verbose=verbose, quiet=quiet)
-def gsadiag(args, verbose=False, quiet=False):
-    return _gsadiag_impl(args, verbose=verbose, quiet=quiet)
-def gxfAppend(args, verbose=False, quiet=False):
-    return _gxfAppend_impl(args, verbose=verbose, quiet=quiet)
-def gxfFix(args, verbose=False, quiet=False):
-    return _gxfFix_impl(args, verbose=verbose, quiet=quiet)
-def gxfGenepos(args, verbose=False, quiet=False):
-    return _gxfGenepos_impl(args, verbose=verbose, quiet=quiet)
-def gxfMatch(args, verbose=False, quiet=False):
-    return _gxfMatch_impl(args, verbose=verbose, quiet=quiet)
-def gxfOverlap(args, verbose=False, quiet=False):
-    return _gxfOverlap_impl(args, verbose=verbose, quiet=quiet)
-def gxfRecall(args, verbose=False, quiet=False):
-    return _gxfRecall_impl(args, verbose=verbose, quiet=quiet)
-def gxfRegion(args, verbose=False, quiet=False):
-    return _gxfRegion_impl(args, verbose=verbose, quiet=quiet)
-def gxfRename(args, verbose=False, quiet=False):
-    return _gxfRename_impl(args, verbose=verbose, quiet=quiet)
-def gxfRepGXF(args, verbose=False, quiet=False):
-    return _gxfRepGXF_impl(args, verbose=verbose, quiet=quiet)
-def gxfRepIDs(args, verbose=False, quiet=False):
-    return _gxfRepIDs_impl(args, verbose=verbose, quiet=quiet)
-def gxfStat(args, verbose=False, quiet=False):
-    return _gxfStat_impl(args, verbose=verbose, quiet=quiet)
-def gxffilter(args, verbose=False, quiet=False):
-    return _gxffilter_impl(args, verbose=verbose, quiet=quiet)
-def gxfsort(args, verbose=False, quiet=False):
-    return _gxfsort_impl(args, verbose=verbose, quiet=quiet)
-def hclust(args, verbose=False, quiet=False):
-    return _hclust_impl(args, verbose=verbose, quiet=quiet)
-def heatmap2(args, verbose=False, quiet=False):
-    return _heatmap2_impl(args, verbose=verbose, quiet=quiet)
-def hicEnzyme(args, verbose=False, quiet=False):
-    return _hicEnzyme_impl(args, verbose=verbose, quiet=quiet)
-def hmmExtract(args, verbose=False, quiet=False):
-    return _hmmExtract_impl(args, verbose=verbose, quiet=quiet)
-def homoPhase(args, verbose=False, quiet=False):
-    return _homoPhase_impl(args, verbose=verbose, quiet=quiet)
-def layoutheatmap(args, verbose=False, quiet=False):
-    return _layoutheatmap_impl(args, verbose=verbose, quiet=quiet)
-def levelGo(args, verbose=False, quiet=False):
-    return _levelGo_impl(args, verbose=verbose, quiet=quiet)
-def marker(args, verbose=False, quiet=False):
-    return _marker_impl(args, verbose=verbose, quiet=quiet)
-def markertools(args, verbose=False, quiet=False):
-    return _markertools_impl(args, verbose=verbose, quiet=quiet)
-def mast2tab(args, verbose=False, quiet=False):
-    return _mast2tab_impl(args, verbose=verbose, quiet=quiet)
-def mastExtract(args, verbose=False, quiet=False):
-    return _mastExtract_impl(args, verbose=verbose, quiet=quiet)
-def mastrun(args, verbose=False, quiet=False):
-    return _mastrun_impl(args, verbose=verbose, quiet=quiet)
-def mcscanx(args, verbose=False, quiet=False):
-    return _mcscanx_impl(args, verbose=verbose, quiet=quiet)
-def memerun(args, verbose=False, quiet=False):
-    return _memerun_impl(args, verbose=verbose, quiet=quiet)
-def mggxf(args, verbose=False, quiet=False):
-    return _mggxf_impl(args, verbose=verbose, quiet=quiet)
-def microgenome(args, verbose=False, quiet=False):
-    return _microgenome_impl(args, verbose=verbose, quiet=quiet)
-def microsyn(args, verbose=False, quiet=False):
-    return _microsyn_impl(args, verbose=verbose, quiet=quiet)
-def mirnaIdentify(args, verbose=False, quiet=False):
-    return _mirnaIdentify_impl(args, verbose=verbose, quiet=quiet)
-def mirnaTarget2(args, verbose=False, quiet=False):
-    return _mirnaTarget2_impl(args, verbose=verbose, quiet=quiet)
-def mirnatarget(args, verbose=False, quiet=False):
-    return _mirnatarget_impl(args, verbose=verbose, quiet=quiet)
-def motif(args, verbose=False, quiet=False):
-    return _motif_impl(args, verbose=verbose, quiet=quiet)
-def mountain(args, verbose=False, quiet=False):
-    return _mountain_impl(args, verbose=verbose, quiet=quiet)
-def msa(args, verbose=False, quiet=False):
-    return _msa_impl(args, verbose=verbose, quiet=quiet)
-def msy(args, verbose=False, quiet=False):
-    return _msy_impl(args, verbose=verbose, quiet=quiet)
-def multiEfp(args, verbose=False, quiet=False):
-    return _multiEfp_impl(args, verbose=verbose, quiet=quiet)
-def multisyn(args, verbose=False, quiet=False):
-    return _multisyn_impl(args, verbose=verbose, quiet=quiet)
-def nwAlign(args, verbose=False, quiet=False):
-    return _nwAlign_impl(args, verbose=verbose, quiet=quiet)
-def onesteptree(args, verbose=False, quiet=False):
-    return _onesteptree_impl(args, verbose=verbose, quiet=quiet)
-def pafcomp(args, verbose=False, quiet=False):
-    return _pafcomp_impl(args, verbose=verbose, quiet=quiet)
-def pafref(args, verbose=False, quiet=False):
-    return _pafref_impl(args, verbose=verbose, quiet=quiet)
-def pafviz(args, verbose=False, quiet=False):
-    return _pafviz_impl(args, verbose=verbose, quiet=quiet)
-def partitionconflict(args, verbose=False, quiet=False):
-    return _partitionconflict_impl(args, verbose=verbose, quiet=quiet)
-def pca(args, verbose=False, quiet=False):
-    return _pca_impl(args, verbose=verbose, quiet=quiet)
-def peakanno(args, verbose=False, quiet=False):
-    return _peakanno_impl(args, verbose=verbose, quiet=quiet)
-def peakdist(args, verbose=False, quiet=False):
-    return _peakdist_impl(args, verbose=verbose, quiet=quiet)
-def peaktss(args, verbose=False, quiet=False):
-    return _peaktss_impl(args, verbose=verbose, quiet=quiet)
-def pep2codon(args, verbose=False, quiet=False):
-    return _pep2codon_impl(args, verbose=verbose, quiet=quiet)
-def pfammotif(args, verbose=False, quiet=False):
-    return _pfammotif_impl(args, verbose=verbose, quiet=quiet)
-def phylotree(args, verbose=False, quiet=False):
-    return _phylotree_impl(args, verbose=verbose, quiet=quiet)
-def pileup(args, verbose=False, quiet=False):
-    return _pileup_impl(args, verbose=verbose, quiet=quiet)
-def plotrna(args, verbose=False, quiet=False):
-    return _plotrna_impl(args, verbose=verbose, quiet=quiet)
-def preparespecies(args, verbose=False, quiet=False):
-    return _preparespecies_impl(args, verbose=verbose, quiet=quiet)
-def qpcr(args, verbose=False, quiet=False):
-    return _qpcr_impl(args, verbose=verbose, quiet=quiet)
-def qpcrExp(args, verbose=False, quiet=False):
-    return _qpcrExp_impl(args, verbose=verbose, quiet=quiet)
-def qpcrproc(args, verbose=False, quiet=False):
-    return _qpcrproc_impl(args, verbose=verbose, quiet=quiet)
-def quickFamily(args, verbose=False, quiet=False):
-    return _quickFamily_impl(args, verbose=verbose, quiet=quiet)
-def recipBlast(args, verbose=False, quiet=False):
-    return _recipBlast_impl(args, verbose=verbose, quiet=quiet)
-def regionAnno(args, verbose=False, quiet=False):
-    return _regionAnno_impl(args, verbose=verbose, quiet=quiet)
-def regiondepth(args, verbose=False, quiet=False):
-    return _regiondepth_impl(args, verbose=verbose, quiet=quiet)
-def rnaplot(args, verbose=False, quiet=False):
-    return _rnaplot_impl(args, verbose=verbose, quiet=quiet)
-def sambamcov(args, verbose=False, quiet=False):
-    return _sambamcov_impl(args, verbose=verbose, quiet=quiet)
-def sepChr(args, verbose=False, quiet=False):
-    return _sepChr_impl(args, verbose=verbose, quiet=quiet)
-def seqconvert(args, verbose=False, quiet=False):
-    return _seqconvert_impl(args, verbose=verbose, quiet=quiet)
-def seqlentrack(args, verbose=False, quiet=False):
-    return _seqlentrack_impl(args, verbose=verbose, quiet=quiet)
-def seqlogo(args, verbose=False, quiet=False):
-    return _seqlogo_impl(args, verbose=verbose, quiet=quiet)
-def simplehmmscan(args, verbose=False, quiet=False):
-    return _simplehmmscan_impl(args, verbose=verbose, quiet=quiet)
-def supercircos(args, verbose=False, quiet=False):
-    return _supercircos_impl(args, verbose=verbose, quiet=quiet)
-def tableAppend(args, verbose=False, quiet=False):
-    return _tableAppend_impl(args, verbose=verbose, quiet=quiet)
-def tableCast(args, verbose=False, quiet=False):
-    return _tableCast_impl(args, verbose=verbose, quiet=quiet)
-def tableColSel(args, verbose=False, quiet=False):
-    return _tableColSel_impl(args, verbose=verbose, quiet=quiet)
-def tableColSelect(args, verbose=False, quiet=False):
-    return _tableColSelect_impl(args, verbose=verbose, quiet=quiet)
-def tableCollapse(args, verbose=False, quiet=False):
-    return _tableCollapse_impl(args, verbose=verbose, quiet=quiet)
-def tableMelt(args, verbose=False, quiet=False):
-    return _tableMelt_impl(args, verbose=verbose, quiet=quiet)
-def tableMerge(args, verbose=False, quiet=False):
-    return _tableMerge_impl(args, verbose=verbose, quiet=quiet)
-def tableSplit(args, verbose=False, quiet=False):
-    return _tableSplit_impl(args, verbose=verbose, quiet=quiet)
-def tableTranspose(args, verbose=False, quiet=False):
-    return _tableTranspose_impl(args, verbose=verbose, quiet=quiet)
-def tableUniq(args, verbose=False, quiet=False):
-    return _tableUniq_impl(args, verbose=verbose, quiet=quiet)
-def tauIndex(args, verbose=False, quiet=False):
-    return _tauIndex_impl(args, verbose=verbose, quiet=quiet)
-def tree(args, verbose=False, quiet=False):
-    return _tree_impl(args, verbose=verbose, quiet=quiet)
-def treeRooting(args, verbose=False, quiet=False):
-    return _treeRooting_impl(args, verbose=verbose, quiet=quiet)
-def trimmsa(args, verbose=False, quiet=False):
-    return _trimmsa_impl(args, verbose=verbose, quiet=quiet)
-def twoSeqBlast(args, verbose=False, quiet=False):
-    return _twoSeqBlast_impl(args, verbose=verbose, quiet=quiet)
-def unrooted(args, verbose=False, quiet=False):
-    return _unrooted_impl(args, verbose=verbose, quiet=quiet)
-def upset(args, verbose=False, quiet=False):
-    return _upset_impl(args, verbose=verbose, quiet=quiet)
-def venn5(args, verbose=False, quiet=False):
-    return _venn5_impl(args, verbose=verbose, quiet=quiet)
-def venn6(args, verbose=False, quiet=False):
-    return _venn6_impl(args, verbose=verbose, quiet=quiet)
-def violin(args, verbose=False, quiet=False):
-    return _violin_impl(args, verbose=verbose, quiet=quiet)
-def virusRecomb(args, verbose=False, quiet=False):
-    return _virusRecomb_impl(args, verbose=verbose, quiet=quiet)
-def visualizeblock(args, verbose=False, quiet=False):
-    return _visualizeblock_impl(args, verbose=verbose, quiet=quiet)
-def volcano(args, verbose=False, quiet=False):
-    return _volcano_impl(args, verbose=verbose, quiet=quiet)
+@cli.command()
+@click.argument("name", required=False)
+def presets(name):
+    """列出或查看出版预设"""
+    if name:
+        p = PRESETS.get(name)
+        if not p:
+            click.echo(f"❌ 未知预设: {name}")
+            click.echo(f"   可用: {', '.join(PRESETS.keys())}")
+            sys.exit(1)
+        click.echo(f"\n  预设: {name}")
+        click.echo(f"  描述: {p['desc']}")
+        for k, v in p.items():
+            if k != 'desc':
+                click.echo(f"  {k}: {v}")
+    else:
+        click.echo("出版级预设模板")
+        click.echo("用法: tbtools <命令> ... --preset <名称>\n")
+        for n, d in list_presets():
+            click.echo(f"  {n:20s} {d}")
 
 _load_dynamic_commands()
 
