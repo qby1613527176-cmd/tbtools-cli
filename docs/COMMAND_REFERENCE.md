@@ -16,17 +16,35 @@
 
 | 层 | 入口 | 用途 | 数量 |
 |:---|:-----|:-----|:----:|
-| 绘图/分析引擎 | `tbplot.sh <命令>` | 出图类引擎+数据工具（SVG/PNG/PDF） | 140 命令 / 123 引擎 |
-| 命令行工具 | `tbtools tool <名称>` | 数据处理类工具（自带 ArgsParser） | 82 |
+| **click 分组入口** | `tbtools <group> <command>` | 结构化 CLI（推荐，带 --preset/校验/坑位提示） | 143 命令 |
+| 绘图/分析引擎 | `tbplot.sh <命令>` | 旧入口（等价，无校验） | 140 命令 / 123 引擎 |
+| 命令行工具 | `tbtools tool <名称>` | 数据处理类工具（自带 ArgsParser） | 66+3 |
 | 通用反射 | `tbtools engine <类> key=value` | 任意 TBtools 引擎万能兜底 | 任意 |
-| RPC 数据工具 | `tbtools rpc <方法> '<json>'` | 188 个数据方法 | 188 |
+| RPC | `tbtools rpc start\|methods\|call` | 188 个数据方法 | 188 |
+
+### click 分组（15 组）
+
+| 分组 | 命令数 | 内容 |
+|:-----|:------:|:-----|
+| seq | 19 | 序列可视化（logo/msa/gel 等） |
+| expr | 21 | 表达数据（volcano/heatmap/hclust/pca/qpcr 等） |
+| tree | 8 | 系统发育树 |
+| syn | 19 | 共线性（circos/dotplot/microsyn/multisyn/mcscanx 等） |
+| sets | 6 | 集合可视化（venn2-6/upset） |
+| chipseq | 5 | ChIP-seq（peaktss/peakdist/peakanno 等） |
+| asm/gxf/mirna/table/blast/fastq/hmm/gwas | ~40 | 数据处理 |
+| engine | 1 | 通用反射兜底 |
 
 ```bash
-# 快速自检：所有命令一览
-tbtools list plots          # 绘图命令（转发 tbplot.sh help）
-tbtools list tools         # CLI 工具（CLI_TOOLS）
-tbtools methods            # RPC 方法
-tbplot.sh help             # 绘图命令 + 用法一屏
+# 快速自检
+tbtools list                # 全部分组概览
+tbtools list plots          # 绘图命令
+tbtools list tools          # 纯工具（66 个，过滤绘图类）
+tbtools list rpc            # RPC 方法
+tbtools help <命令>          # 快捷帮助（自动定位分组）
+tbtools presets             # 7 种期刊预设
+# 旧入口仍可用
+tbplot.sh help              # 绘图命令 + 用法一屏
 ```
 
 ## 二、tbplot.sh 命令（140，绘图引擎+数据工具封装）
@@ -2529,3 +2547,52 @@ tbtools heatmap <matrix> <out.png> [group]   # 热图快捷
   - RPC handler（CheckPrimerHandler.process）调 `cp.check()` 写文件，但**结果没写进 outputPath**——重启 RPC 服务器后复现，确认为 RPC handler 缺陷。
   - 对策：用 CLI 直调（stdout）或 `tbtools tool checkPrimer` 替代 RPC。
 - **RPC 服务器启动**：`tbtools_rpc.sh start` 会**误报超时**（进程实际活着）。更稳的方式：`nohup java -Xmx4g -cp $TBTOOLS_JAR biocjava.rpc.RpcServer > /tmp/rpc_server.log 2>&1 &`
+
+## 八、2026-09-04 click 框架变更（v1.0.0）
+
+### 新增命令
+
+| 命令 | 用途 |
+|:-----|:-----|
+| `tbtools help <命令名>` | 快捷帮助，自动定位分组（不用记 volcano 在 expr） |
+| `tbtools list plots\\|tools\\|rpc` | 命令清单（tools 已过滤绘图类，66 纯工具） |
+| `tbtools presets [名称]` | 7 种期刊预设（nature 89×89 / cell / presentation / poster / slide / twitter / a4） |
+| `tbtools rpc start [--port] [--mem]` | 启动 RPC 服务器 |
+| `tbtools rpc methods` | 列出全部 188 RPC 方法 |
+| `tbtools rpc call <method> [params]` | 调用 RPC 方法 |
+| `tbtools sets venn2\\|venn3\\|venn4` | 原生 ArgsParser CLI（--List1..4 --label1..4 --graph --prefix） |
+
+### 统一选项（所有绘图命令）
+
+- `--preset <名称>`：期刊预设画布（nature=89×89mm 等）
+- `--format svg|png|pdf`：输出格式
+- `--width/--height`：手动覆盖（mm）
+- `--verbose/-V`：完整堆栈；`--quiet/-q`：静默
+
+### 修复
+
+- venn5/venn6 `--help` 截断
+- PITFALL_HINTS 双 ⚠️ emoji
+- `tool` 未知命令退出码 1→2
+- `list tools` 过滤绘图类（130→66）
+- version 数字改为动态统计
+
+### 配置文件
+
+`~/.config/tbtools-cli/config.toml`：
+
+```toml
+jar = "/path/to/TBtools_JRE1.6.jar"
+
+[defaults]
+threads = 4
+format = "svg"
+# preset = "nature"
+```
+
+优先级：环境变量 `TBTOOLS_JAR` > config.toml `jar` > 常见路径探测。
+
+### 测试
+
+- `tests/test_cli.py`：44 pytest 测试（框架/命令/list/venn/拼写/tool fallback/preset/退出码/输入校验/help 质量/rpc）
+- `examples/scripts/run_examples.sh`：8 项全量回归

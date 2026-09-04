@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tbtools-cli"
+version = "1.0.0"
+description = "TBtools-II command-line wrapper: 123 engines, 188 RPC methods, journal presets, pitfall hints"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "tbtools-cli contributors" }
+]
+keywords = ["bioinformatics", "tbtools", "cli", "plotting", "genomics"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Java",
+]
+dependencies = [
+    "click>=8.1",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.urls]
+Homepage = "https://github.com/CJ-Chen/TBtools"  # upstream jar
+Documentation = "docs/COMMAND_REFERENCE.md"
+
+[project.scripts]
+tbtools = "tbtools_cli.cli:cli"
+
+[tool.setuptools]
+packages = ["tbtools_cli"]
+
+[tool.setuptools.package-data]
+tbtools_cli = ["command_metadata.json", "config.example.toml"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -8,7 +8,7 @@ _tbtools_complete() {
     _init_completion || return
 
     local groups="seq expr tree syn sets chipseq asm gxf mirna table blast fastq hmm gwas engine"
-    local top_cmds="version doctor examples list presets tool"
+    local top_cmds="version doctor examples list presets tool help rpc"
 
     if [ $cword -eq 1 ]; then
         COMPREPLY=( $(compgen -W "$groups $top_cmds" -- "$cur") )
@@ -19,42 +19,56 @@ _tbtools_complete() {
     if [ $cword -ge 2 ]; then
         case "$cmd" in
             tool)
-                # List tool subcommands from auto_commands
+                # List tool subcommands from auto_commands (non-plot only)
                 local tools=$(python3 -c "
 import sys; sys.path.insert(0, '$PWD')
 import tbtools_cli.auto_commands as ac
+plot = {'seq','expr','tree','syn','sets','chipseq'}
+try:
+    from tbtools_cli.cli import CATEGORY_MAP
+except Exception:
+    CATEGORY_MAP = {}
 for n in sorted(dir(ac)):
     if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
-        print(n[1:-5], end=' ')
+        cmd = n[1:-5]
+        if CATEGORY_MAP.get(cmd, 'engine') not in plot:
+            print(cmd, end=' ')
 " 2>/dev/null)
                 COMPREPLY=( $(compgen -W "$tools stat-fasta cds2protein fasta-extract" -- "$cur") )
-                return
                 ;;
-            expr)
-                COMPREPLY=( $(compgen -W "volcano heatmap pca hclust dehist qpcr qpcrExp groupedbar barplot layoutheatmap cubeheatmap violin colorscheme distance mountain tauIndex exprCorr groupCol efpHeat multiEfp" -- "$cur") )
-                return
+            help)
+                # help 补全：所有分组命令
+                local all_cmds=$(python3 -c "
+import sys; sys.path.insert(0, '$PWD')
+from tbtools_cli.cli import _groups
+for gname, g in _groups.items():
+    for c in g.commands:
+        print(c, end=' ')
+" 2>/dev/null)
+                COMPREPLY=( $(compgen -W "$all_cmds version doctor list presets tool help rpc" -- "$cur") )
                 ;;
-            seq)
-                COMPREPLY=( $(compgen -W "logo msa structure motif seqlentrack amazingmeta cddmotif pfammotif memerun mastrun mastExtract mast2tab pep2codon simplehmmscan gel gfa gfa2fa plotrna rnaplot" -- "$cur") )
-                return
+            list)
+                COMPREPLY=( $(compgen -W "plots tools rpc" -- "$cur") )
                 ;;
-            tree)
-                COMPREPLY=( $(compgen -W "draw unrooted rooting one-step phylotree degramdom findpath nwAlign" -- "$cur") )
-                return
+            rpc)
+                COMPREPLY=( $(compgen -W "start methods call" -- "$cur") )
                 ;;
-            syn)
-                COMPREPLY=( $(compgen -W "circos supercircos circlegene dotplot microsyn msy multisyn dualsyn pafviz pafcomp pafref mcscanx collinearRegion findblockdual findblockmultiple visualizeblock conflictpaf partitionconflict microgenome" -- "$cur") )
-                return
+            presets)
+                COMPREPLY=( $(compgen -W "nature cell presentation poster" -- "$cur") )
                 ;;
-            sets)
-                COMPREPLY=( $(compgen -W "venn2 venn3 venn4 venn5 venn6 upset" -- "$cur") )
-                return
+            seq|expr|tree|syn|sets|chipseq|asm|gxf|mirna|table|blast|fastq|hmm|gwas|engine)
+                # 分组子命令补全
+                local subs=$(python3 -c "
+import sys; sys.path.insert(0, '$PWD')
+from tbtools_cli.cli import _groups
+g = _groups.get('$cmd')
+if g:
+    print(' '.join(g.commands.keys()))
+" 2>/dev/null)
+                COMPREPLY=( $(compgen -W "$subs" -- "$cur") )
                 ;;
         esac
     fi
-
-    # File completion for remaining args
-    COMPREPLY=( $(compgen -f -- "$cur") )
 }
 
 complete -F _tbtools_complete tbtools
