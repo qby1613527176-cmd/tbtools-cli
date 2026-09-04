@@ -67,4 +67,5 @@ jobs:
       # ── ⑤ pytest 回归 ──
       - name: Step 5 — pytest suite
         run: |
+          set -o pipefail
           python3 -m pytest tests/test_cli.py -q 2>&1 | tail -3

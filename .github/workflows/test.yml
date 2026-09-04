@@ -37,6 +37,7 @@ jobs:
       - name: Run pytest suite
         run: |
           pip install pytest
+          set -o pipefail
           python3 -m pytest tests/test_cli.py -v --tb=short
       
       - name: Verify bash scripts

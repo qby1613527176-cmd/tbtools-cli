@@ -451,15 +451,16 @@ class TestAgentOnboarding:
         assert cfg.exists()
         assert "TBtools_JRE1.6.jar" in cfg.read_text()
 
-    def test_doctor_guidance_when_no_jar(self, tmp_path, monkeypatch):
-        """jar 缺失时 doctor 应给出 setup/fetch-jar 指引"""
-        import tbtools_cli.cli as cli_mod
+    def test_doctor_guidance_when_no_jar(self, tmp_path):
+        """jar 缺失时 doctor 应给出 setup/fetch-jar 指引（子进程+干净 HOME，绕开模块级 JAR 缓存）"""
         fake_home = tmp_path / "home"
         fake_home.mkdir(parents=True)
-        monkeypatch.setenv("HOME", str(fake_home))
-        monkeypatch.delenv("TBTOOLS_JAR", raising=False)
-        from click.testing import CliRunner
-        runner = CliRunner()
-        result = runner.invoke(cli_mod.cli, ["doctor"])
-        assert "setup --auto" in result.output
-        assert "fetch-jar" in result.output
+        env = dict(os.environ)
+        env["HOME"] = str(fake_home)
+        env.pop("TBTOOLS_JAR", None)
+        import subprocess as sp
+        p = sp.run([sys.executable, "-m", "tbtools_cli.cli", "doctor"],
+                   capture_output=True, text=True, timeout=30, env=env)
+        out = p.stdout + p.stderr
+        assert "setup --auto" in out
+        assert "fetch-jar" in out
