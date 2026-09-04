@@ -775,7 +775,7 @@ def examples(command):
             click.echo(f"    {cmd}")
         click.echo("\n用法: tbtools examples <命令>")
 
-@cli.command()
+@cli.command(name="completion")
 @click.pass_context
 @click.argument("shell", type=click.Choice(["bash", "zsh", "fish"]), required=False)
 def completion_cmd(ctx, shell):
