@@ -71,3 +71,4 @@
 - 输出目录不存在 → 立即报错（不挂 Java）
 - 分组内未知子命令 → 最近命令纠错
 - run_plot/run_java/auto_commands 补 command_name（报错带命令名 + 坑位提示）
+- `tbtools new` 交互式向导（按「想做什么」生成命令，--list / --run）
