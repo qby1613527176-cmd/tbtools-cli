@@ -5,7 +5,7 @@ import os, sys, subprocess
 # ---- 配置 ----
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tbtools_cli.core import (JAR, run_java, run_plot, ensure_bridge,
-    resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint)
+    resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint, c)
 from tbtools_cli.presets import apply_preset, list_presets, PRESETS
 import tbtools_cli.auto_commands as _ac
 
@@ -479,15 +479,27 @@ def doctor():
 @cli.command()
 @click.argument('name')
 def help(name):
-    """快捷帮助: tbtools help <命令名> 自动定位"""
+    """快捷帮助: tbtools help <命令名> 自动定位 + 坑位提示"""
     # 尝试在所有分组中查找
     for gname, g in _groups.items():
         if name in g.commands:
             cmd = g.commands[name]
-            click.echo(f"\n  命令: {gname} {name}")
-            click.echo(f"  分组: {gname}")
+            click.echo(f"\n  命令: {gname} {name}  （分组 {gname}）")
             if cmd.help:
                 click.echo(f"\n{cmd.help}")
+            # 坑位提示
+            pit = get_pitfall_hint(name)
+            if pit:
+                click.echo(f"\n  ⚠️ 坑位: {pit}")
+            # 示例（若存在）
+            try:
+                from tbtools_cli.auto_commands import EXAMPLES
+                ex = EXAMPLES.get(name)
+                if ex:
+                    click.echo(f"\n  示例: {ex}")
+            except Exception:
+                pass
+            click.echo(f"\n  完整帮助: tbtools {gname} {name} --help")
             return
     # 顶层命令
     if name in cli.commands:
@@ -871,14 +883,14 @@ def listing(category):
     """列出可用命令（plots/tools/rpc）——TTY 下自动分页"""
     lines = []
     if not category or category == 'plots':
-        lines.append("绘图/分析命令：")
+        lines.append(c("绘图/分析命令：", "bold"))
         for gname in sorted(GROUPS.keys()):
             g = _groups.get(gname)
             if g and g.commands:
-                lines.append(f"\n  {gname} — {GROUPS[gname]}")
+                lines.append(f"\n  {c(gname, 'cyan', bold=True)} — {GROUPS[gname]}")
                 for cname, cmd in sorted(g.commands.items()):
                     short = (cmd.help or '').split('\n')[0][:60]
-                    lines.append(f"    {cname:20s} {short}")
+                    lines.append(f"    {c(cname:20s, 'green')} {short}")
         if not category:
             lines.append("\n用法: tbtools list tools|rpc")
     elif category == 'tools':

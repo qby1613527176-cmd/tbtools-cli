@@ -279,3 +279,26 @@ def run_plot(java_args, verbose=False, quiet=False, use_xvfb=True, command_name=
     else:
         full_args = java_args
     return run_java(full_args, verbose=verbose, quiet=quiet, command_name=command_name)
+
+
+# ---- ANSI 彩色（仅 TTY 时启用）----
+def _tty() -> bool:
+    try:
+        return bool(sys.stdout.isatty())
+    except Exception:
+        return False
+
+def c(text, color=None, bold=False):
+    """条件 ANSI 着色：非 TTY 返回原样"""
+    if not _tty():
+        return text
+    codes = {"red": "31", "green": "32", "yellow": "33", "blue": "34",
+             "magenta": "35", "cyan": "36", "dim": "2", "bold": "1"}
+    out = []
+    if bold:
+        out.append("1")
+    if color in codes:
+        out.append(codes[color])
+    if not out:
+        return text
+    return f"\033[{';'.join(out)}m{text}\033[0m"
