@@ -947,6 +947,95 @@ def presets(name):
         for n, d in list_presets():
             click.echo(f"  {n:20s} {d}")
 
+# ---- new 交互式向导 ----
+@cli.command()
+@click.option("--list", "list_only", is_flag=True, help="只列出场景，不交互")
+@click.option("--run", "run_it", is_flag=True, help="生成后直接执行")
+def new(list_only, run_it):
+    """交互式向导：按「想做什么」生成命令"""
+    from tbtools_cli.scenarios import _categories, SCENARIOS
+    if list_only:
+        click.echo("可用的场景（tbtools new 交互式选择）：")
+        for cat, scens in _categories.items():
+            click.echo(f"\n  [{cat}]")
+            for s in scens:
+                sc = SCENARIOS[s]
+                click.echo(f"    {s:22s} → tbtools {sc['group']} {sc['cmd']}")
+        return
+    # 非 TTY 的 stdin：拒绝（引导 --list）——但允许显式测试/管道注入
+    import sys as _sys
+    if not (hasattr(sys.stdin, "isatty") and sys.stdin.isatty()):
+        # 检查 stdin 是否有数据（管道注入）
+        try:
+            import select
+            if select.select([sys.stdin], [], [], 0)[0]:
+                pass  # 有管道输入，允许
+            else:
+                raise Exception("no input")
+        except Exception:
+            click.echo("交互式向导需要终端。\n  tbtools new --list    # 查看全部场景\n  tbtools help <命令>   # 查看用法", err=True)
+            sys.exit(1)
+    _run_new_wizard(_categories, SCENARIOS, run_it)
+
+
+def _wiz_prompt(text, *a, **kw):
+    """click.prompt 封装，EOF/非交互时友好退出"""
+    try:
+        return click.prompt(text, *a, **kw)
+    except (EOFError, KeyboardInterrupt, click.Abort):
+        click.echo("（已取消，未生成命令）", err=True)
+        sys.exit(130)
+
+
+def _run_new_wizard(_categories, SCENARIOS, run_it=False):
+    """执行向导：选类别 → 选场景 → 填参数 → 出命令"""
+    # 1. 选类别
+    cats = list(_categories.keys())
+    click.echo("\n🧭 你想做什么？（选一个类型）")
+    for i, cat in enumerate(cats, 1):
+        click.echo(f"  {i}. {cat}")
+    cat_idx = _wiz_prompt("\n选择 [1-%d]" % len(cats), type=click.IntRange(1, len(cats)), default=1)
+    cat = cats[cat_idx - 1]
+
+    # 2. 选场景
+    scens = _categories[cat]
+    click.echo(f"\n📂 [{cat}] 具体场景：")
+    for i, s in enumerate(scens, 1):
+        sc = SCENARIOS[s]
+        click.echo(f"  {i}. {s}\n      {sc['desc']}")
+    sc_idx = _wiz_prompt("\n选择 [1-%d]" % len(scens), type=click.IntRange(1, len(scens)), default=1)
+    scen = SCENARIOS[scens[sc_idx - 1]]
+
+    # 3. 填参数（交互）
+    click.echo(f"\n🔧 命令: tbtools {scen['group']} {scen['cmd']}")
+    click.echo(f"   用法: {scen['usage']}\n")
+    parts = [scen['cmd']]
+    if scen['args']:
+        click.echo("填参数（直接回车用默认/跳过，可稍后改）:")
+        for label, default in scen['args']:
+            p = _wiz_prompt(f"  {label}", default=default if default else None, show_default=False)
+            p = (p or "").strip()
+            if p:
+                parts.append(p)
+    else:
+        click.echo("（此命令无需位置参数，请用 --help 看选项）")
+
+    # 4. 展示最终命令
+    cmd_str = f"tbtools {scen['group']} " + " ".join(parts)
+    click.echo("\n✅ 生成命令:")
+    click.echo(f"  {cmd_str}")
+    # 坑位
+    pit = get_pitfall_hint(scen['cmd'])
+    if pit:
+        click.echo(f"\n  ⚠️ 坑位: {pit}")
+    if run_it:
+        click.echo("\n🚀 正在执行...")
+        # 剥离前面的 'tbtools' 并调用相应分组命令
+        argv = cmd_str.split()[1:]  # 去 tbtools，剩 [group, args...]
+        sys.exit(cli.main(argv, standalone_mode=False) or 0)
+    click.echo(f"\n  复制后运行，或：\n    直接运行: tbtools {scen['group']} {scen['cmd']} --help")
+
+
 _load_dynamic_commands()
 _load_auto_commands()
 

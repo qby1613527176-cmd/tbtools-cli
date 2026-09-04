@@ -316,6 +316,29 @@ class TestRpcAndHelp:
         assert ec == 0
         assert "bash" in out and "zsh" in out and "fish" in out
 
+    def test_new_list(self):
+        ec, out, err = run_cli("new", "--list")
+        assert ec == 0
+        assert "多序列比对可视化" in out
+        assert "火山图" in out
+
+    def test_new_wizard_non_interactive(self):
+        """无 stdin（/dev/null EOF）→ 友好取消，不挂死"""
+        import subprocess as sp
+        p = sp.run([sys.executable, "-m", "tbtools_cli.cli", "new"],
+                   stdin=sp.DEVNULL, capture_output=True, text=True, timeout=30)
+        # 非交互 EOF 应友好取消（exit 130），不挂死
+        assert p.returncode == 130
+        assert "已取消" in p.stderr or "已取消" in p.stdout
+
+    def test_new_wizard_piped(self):
+        """管道注入选择 → 生成命令"""
+        import subprocess as sp
+        p = sp.run([sys.executable, "-m", "tbtools_cli.cli", "new"],
+                   input="2\n1\ndeg.txt\nvolcano.svg\n", capture_output=True, text=True, timeout=30)
+        assert p.returncode == 0
+        assert "tbtools expr volcano deg.txt volcano.svg" in p.stdout
+
     def test_help_shortcut(self):
         ec, out, err = run_cli("help", "volcano")
         assert ec == 0
