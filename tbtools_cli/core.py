@@ -146,6 +146,10 @@ def resolve_output(output, fmt="svg", width=None, height=None):
         click.echo(f"❌ 输出目录不存在: {out_dir}", err=True)
         click.echo(f"   创建: mkdir -p {out_dir}", err=True)
         sys.exit(1)
+    # 已存在警告（不阻断，仅提示防覆盖）
+    if os.path.isfile(output):
+        import click as _click
+        _click.echo(f"⚠️ 输出文件已存在将被覆盖: {output}", err=True)
     return output
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
