@@ -283,17 +283,15 @@ def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, pre
 
 # ---- 命令组：工具 ----
 class ToolGroup(click.Group):
-    """tool 分组：未知子命令自动转发 auto_commands"""
+    """tool 分组：未知子命令自动转发 auto_commands + --help 列出全部"""
     def resolve_command(self, ctx, args):
         try:
             return super().resolve_command(ctx, args)
         except click.UsageError:
-            # 未知子命令 → 尝试 auto_commands
             if args:
                 name = args[0]
                 impl = getattr(_ac, f'_{name}_impl', None)
                 if impl:
-                    # 创建一次性 Command 包裹 impl
                     doc = (impl.__doc__ or '').split(':',1)[1].strip() if ':' in (impl.__doc__ or '') else f'{name} [参数...]'
                     pitfall = get_pitfall_hint(name)
                     help_text = doc + (f'\n\n⚠️ {pitfall}' if pitfall else '')
@@ -302,7 +300,6 @@ class ToolGroup(click.Group):
                         context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
                         help=help_text)
                     return name, cmd, args[1:]
-                # 列出可用工具
                 click.echo(f"❌ 未知工具: {name}", file=sys.stderr)
                 count = 0
                 for n in sorted(dir(_ac)):
@@ -315,6 +312,27 @@ class ToolGroup(click.Group):
                 click.echo(f"\n共 {count} 个工具，查看: tbtools list tools", file=sys.stderr)
                 ctx.exit(2)
             raise
+    
+    def format_options(self, ctx, formatter):
+        """重写 --help：手动命令 + auto_command 工具全列出"""
+        super().format_options(ctx, formatter)
+        plot_groups = {'seq', 'expr', 'tree', 'syn', 'sets', 'chipseq'}
+        entries = []
+        for n in sorted(dir(_ac)):
+            if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
+                cmd = n[1:-5]
+                cat = CATEGORY_MAP.get(cmd, 'engine')
+                if cat in plot_groups:
+                    continue
+                doc = getattr(_ac, n).__doc__ or ''
+                short = doc.split(':',1)[1].strip()[:50] if ':' in doc else ''
+                entries.append(f"{cmd:20s} {short}")
+        if entries:
+            with formatter.section(f'可用工具（共 {len(entries)} 个，完整列表: tbtools list tools）'):
+                for e in entries[:20]:
+                    formatter.write_text(e)
+                if len(entries) > 20:
+                    formatter.write_text(f"... 及其他 {len(entries)-20} 个")
 
 @cli.group("tool", cls=ToolGroup)
 def tool_group():
@@ -377,9 +395,14 @@ def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, p
 @cli.command()
 def version():
     """显示版本信息"""
+    # 动态统计
+    plot_count = sum(len(g.commands) for g in _groups.values())
+    auto_count = sum(1 for n in dir(_ac) if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'))
+    from tbtools_cli.core import PITFALL_HINTS, BRIDGES_DIR
+    bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 80
     click.echo(f"tbtools-cli v1.0.0")
-    click.echo(f"  140 绘图命令 + 82 CLI 工具 + 188 RPC 方法")
-    click.echo(f"  bridges: 80 | engines: 123 | 坑位: 35")
+    click.echo(f"  {plot_count} 绘图/分析命令 + {auto_count} auto_commands + 188 RPC 方法")
+    click.echo(f"  bridges: {bridge_count} | pitfall hints: {len(PITFALL_HINTS)}")
     r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
     java_ver = r.stderr.splitlines()[0] if r.stderr else "unknown"
     click.echo(f"  Java: {java_ver}")
@@ -420,6 +443,94 @@ def doctor():
         ok += 1
     click.echo(f"\n  汇总: ✅ {ok}  ⚠️ {warn}  ❌ {err}")
     if err:
+        sys.exit(1)
+
+@cli.command()
+@click.argument('name')
+def help(name):
+    """快捷帮助: tbtools help <命令名> 自动定位"""
+    # 尝试在所有分组中查找
+    for gname, g in _groups.items():
+        if name in g.commands:
+            cmd = g.commands[name]
+            click.echo(f"\n  命令: {gname} {name}")
+            click.echo(f"  分组: {gname}")
+            if cmd.help:
+                click.echo(f"\n{cmd.help}")
+            return
+    # 顶层命令
+    if name in cli.commands:
+        cmd = cli.commands[name]
+        if cmd.help:
+            click.echo(f"\n{cmd.help}")
+        return
+    click.echo(f"❌ 未找到命令: {name}")
+    click.echo(f"   查看: tbtools list")
+    sys.exit(1)
+
+@cli.group('rpc')
+def rpc_group():
+    """RPC 服务器管理（188 方法）"""
+    pass
+
+@rpc_group.command('start')
+@click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
+@click.option('--mem', '-m', default='4g', help='Java 堆内存')
+def rpc_start(port, mem):
+    """启动 RPC 服务器"""
+    import subprocess
+    args = ["java", f"-Xmx{mem}", "-cp", JAR, "biocjava.rpc.RpcServer"]
+    click.echo(f"启动 RPC 服务器（端口 {port}）...")
+    try:
+        proc = subprocess.Popen(args, stdout=sys.stdout, stderr=sys.stderr)
+        click.echo(f"RPC PID: {proc.pid}")
+        click.echo(f"测试: curl -X POST http://127.0.0.1:{port}/rpc -H 'Content-Type: application/json' -d '{{\"method\":\"system.listMethods\",\"params\":[],\"id\":1}}'")
+    except FileNotFoundError:
+        click.echo("❌ Java 未安装", err=True)
+        sys.exit(1)
+
+@rpc_group.command('methods')
+@click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
+def rpc_methods(port):
+    """列出全部 188 RPC 方法"""
+    import json, urllib.request
+    try:
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/rpc",
+            data=json.dumps({"method": "system.listMethods", "params": [], "id": 1}).encode(),
+            headers={"Content-Type": "application/json"})
+        resp = urllib.request.urlopen(req, timeout=5)
+        result = json.loads(resp.read())
+        methods = result.get('result', [])
+        click.echo(f"RPC 方法（{len(methods)} 个）：")
+        for m in methods:
+            click.echo(f"  {m}")
+    except Exception as e:
+        click.echo(f"❌ RPC 服务器未启动或连接失败: {e}", err=True)
+        click.echo("   启动: tbtools rpc start")
+        sys.exit(1)
+
+@rpc_group.command('call')
+@click.argument('method')
+@click.argument('params', required=False)
+@click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
+def rpc_call(method, params, port):
+    """调用 RPC 方法"""
+    import json, urllib.request
+    params_list = json.loads(params) if params else []
+    try:
+        req = urllib.request.Request(
+            f"http://127.0.0.1:{port}/rpc",
+            data=json.dumps({"method": method, "params": params_list, "id": 1}).encode(),
+            headers={"Content-Type": "application/json"})
+        resp = urllib.request.urlopen(req, timeout=60)
+        result = json.loads(resp.read())
+        if 'error' in result and result['error']:
+            click.echo(f"❌ RPC 错误: {result['error']}", err=True)
+            sys.exit(1)
+        click.echo(json.dumps(result.get('result', ''), indent=2, ensure_ascii=False))
+    except Exception as e:
+        click.echo(f"❌ RPC 调用失败: {e}", err=True)
         sys.exit(1)
 
 @cli.command()

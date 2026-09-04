@@ -59,13 +59,13 @@ class TestTopLevelCommands:
     def test_help_no_args(self):
         ec, out, err = run_cli()
         assert ec == 0
-        assert "140" in out or "绘图" in out
+        assert "绘图" in out or "143" in out
 
     def test_version(self):
         ec, out, err = run_cli("version")
         assert ec == 0
         assert "tbtools-cli" in out
-        assert "140" in out
+        assert "绘图" in out
 
     def test_doctor(self):
         ec, out, err = run_cli("doctor")
@@ -246,6 +246,34 @@ class TestInputValidation:
         f.write_text("(A,B);\n")
         fmt, ncols, lines = detect_format(str(f))
         assert fmt == "newick"
+
+
+# ============ 11. RPC + help 快捷入口 ============
+
+class TestRpcAndHelp:
+    def test_rpc_group_exists(self):
+        ec, out, err = run_cli("rpc", "--help")
+        assert ec == 0
+        assert "start" in out
+        assert "methods" in out
+        assert "call" in out
+
+    def test_help_shortcut(self):
+        ec, out, err = run_cli("help", "volcano")
+        assert ec == 0
+        assert "expr" in out
+        assert "volcano" in out
+
+    def test_help_not_found(self):
+        ec, out, err = run_cli("help", "nonexistent_cmd")
+        assert ec == 1
+        assert "❌" in out
+
+    def test_rpc_methods_no_server(self):
+        ec, out, err = run_cli("rpc", "methods")
+        # 没启动 RPC 服务器应该报错
+        assert ec == 1
+        assert "❌" in err or "❌" in out or "启动" in out
 
 
 # ============ 10. help 文本质量 ============
