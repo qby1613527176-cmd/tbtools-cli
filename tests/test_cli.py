@@ -267,6 +267,12 @@ class TestRootNavigation:
         ec, out, err = run_cli("zzzz")
         assert "list" in err
 
+    def test_error_shows_command_name(self):
+        """报错时帮助提示带命令名 + 坑位提示"""
+        ec, out, err = run_cli("expr", "hclust", "/no_file.txt", "/tmp/tb_x.svg")
+        assert "tbtools hclust --help" in err
+        assert "已知坑位" in err  # hclust 有坑位提示
+
     def test_output_dir_not_exist(self):
         """输出目录不存在 → 立即报错（不挂 Java）"""
         ec, out, err = run_cli("expr", "volcano", "examples/data/deg.txt", "/nonexist_dir_xyz/o.svg")
