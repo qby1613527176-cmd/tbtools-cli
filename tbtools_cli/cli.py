@@ -890,7 +890,7 @@ def listing(category):
                 lines.append(f"\n  {c(gname, 'cyan', bold=True)} — {GROUPS[gname]}")
                 for cname, cmd in sorted(g.commands.items()):
                     short = (cmd.help or '').split('\n')[0][:60]
-                    lines.append(f"    {c(cname:20s, 'green')} {short}")
+                    lines.append(f"    {c(f'{cname:20s}', 'green')} {short}")
         if not category:
             lines.append("\n用法: tbtools list tools|rpc")
     elif category == 'tools':
