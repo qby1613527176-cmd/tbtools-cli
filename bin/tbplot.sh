@@ -1308,7 +1308,7 @@ case "$1" in
     shift
     if [ $# -lt 7 ]; then echo "用法: tbplot.sh findblockmultiple <qGenome.fa> <q.gff> <qId> <out> <s1Genome.fa> <s1.gff> [更多subject对] [options]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/FindBlockMultipleCli.java" 2>/dev/null
-    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx6g -cp "$TBCLI_DIR:$JAR" FindBlockMultipleCli "$@"
+    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-${HOME}/tmp_tb}" -Xmx6g -cp "$TBCLI_DIR:$JAR" FindBlockMultipleCli "$@"
     ;;
   findblockdual)
     # 用法: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
@@ -1316,7 +1316,7 @@ case "$1" in
     shift
     if [ $# -lt 6 ]; then echo "用法: tbplot.sh findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa> <subject.gff> <queryId> <out.txt> [options]"; exit 1; fi
     javac -cp "$JAR" "$TBCLI_DIR/FindBlockDualCli.java" 2>/dev/null
-    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-/home/elysia/tmp_tb}" -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
+    _run_java xvfb-run -a java -Djava.io.tmpdir="${TMPDIR_DISK:-${HOME}/tmp_tb}" -Xmx3g -cp "$TBCLI_DIR:$JAR" FindBlockDualCli "$@"
     ;;
   collinearRegion)
     # 用法: collinearRegion <in.collinearity> <simGff> <out.txt>

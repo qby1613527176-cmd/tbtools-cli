@@ -15,5 +15,5 @@
 
 ## 坑（重要）
 1. **queryId 不能选 GFF 第一个 mRNA**：hitIdIndex=0 时左扩循环 get(-1) IndexOutOfBounds 崩溃（真实数据才暴露）
-2. **/tmp 是 tmpfs（16G 内存盘）**：双 3GB 基因组 init 残留 tmpWk 目录撑爆 → 必须 `-Djava.io.tmpdir=<磁盘路径>`（本验证用 /home/elysia/tmp_fbd）
+2. **/tmp 是 tmpfs（16G 内存盘）**：双 3GB 基因组 init 残留 tmpWk 目录撑爆 → 必须 `-Djava.io.tmpdir=<磁盘路径>`（本验证用磁盘路径）
 3. 基因组必须已解压且 fasta 头与 GFF seqid 匹配

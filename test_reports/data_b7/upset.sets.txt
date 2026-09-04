@@ -1,3 +1,0 @@
-Set1	E1	E2	E3	E4
-Set2	E3	E4	E5	E6
-Set3	E1	E3	E5	E7

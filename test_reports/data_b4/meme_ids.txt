@@ -1,8 +1,0 @@
-augustus_masked-HiC_scaffold_1-processed-gene-1847.4-mRNA-1
-augustus_masked-HiC_scaffold_10-processed-gene-1877.13-mRNA-1
-augustus_masked-HiC_scaffold_11-processed-gene-1792.1-mRNA-1
-augustus_masked-HiC_scaffold_12-processed-gene-1094.34-mRNA-1
-augustus_masked-HiC_scaffold_12-processed-gene-425.52-mRNA-1
-augustus_masked-HiC_scaffold_12-processed-gene-587.28-mRNA-1
-augustus_masked-HiC_scaffold_14-processed-gene-806.18-mRNA-1
-augustus_masked-HiC_scaffold_14-processed-gene-807.14-mRNA-1
