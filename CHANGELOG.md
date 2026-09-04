@@ -55,3 +55,19 @@
 
 - TBtools-II 2.535+（CJ-Chen）主 jar 需用户自备（install.sh 引导）
 - 桥/引擎签名基于 2026-08 全量逆向（CFR 反编译 + jstack + 窗口遍历方案）
+
+## [1.1.0] - 2026-09-04
+
+### Added
+- `tbtools completion bash|zsh|fish` 内建补全生成（A1）
+- `run_java` 成功耗时统计 `⏱ 耗时 X.Xs`（A4）
+- `list` TTY 分页（>20 行自动 pager）（A2）
+- `list` 分组着色（TTY-only，零依赖 ANSI）（B1）
+- `help` 增强：分组 + 坑位 + 示例 + 完整帮助入口（B2）
+- 输出文件已存在警告（防覆盖）（B3）
+
+### Fixed
+- 顶层直调分组内命令 → 提示正确入口
+- 输出目录不存在 → 立即报错（不挂 Java）
+- 分组内未知子命令 → 最近命令纠错
+- run_plot/run_java/auto_commands 补 command_name（报错带命令名 + 坑位提示）
