@@ -1,0 +1,65 @@
+name: onboarding-e2e
+
+# 端到端「别人电脑 Agent 自动接入」测试
+# 每次运行 = 一台全新 Ubuntu 机器，完整模拟新用户/Agent 的上手路径:
+#   clone → doctor(缺失指引) → fetch-jar(自动下载提取) → doctor(全绿) → 8 张图
+#
+# 手动触发: Actions 页 → onboarding-e2e → Run workflow
+# 或每周自动: 周一 08:00 UTC
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 8 * * 1"   # 每周一 08:00 UTC
+
+jobs:
+  onboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install xvfb + python deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb
+          pip install click pytest
+
+      # ── ① Agent 第一步：doctor（此时无 jar，应给出可执行指引）──
+      - name: Step 1 — doctor shows guidance when JAR missing
+        run: |
+          ./bin/tbtools doctor 2>&1 | tee /tmp/doctor_before.txt
+          grep -q "setup --auto" /tmp/doctor_before.txt && echo "✅ 指引包含 setup --auto"
+          grep -q "fetch-jar" /tmp/doctor_before.txt && echo "✅ 指引包含 fetch-jar"
+
+      # ── ② Agent 第二步：fetch-jar 自动下载官方包并提取 jar ──
+      - name: Step 2 — fetch-jar auto-download + extract
+        run: |
+          ./bin/tbtools fetch-jar --yes 2>&1 | tee /tmp/fetch_jar.txt
+          grep -q "已提取" /tmp/fetch_jar.txt && echo "✅ jar 提取成功"
+          ls -la ~/tbtools-cli/lib/TBtools_JRE1.6.jar
+
+      # ── ③ 验证 doctor 全绿 ──
+      - name: Step 3 — doctor all green after setup
+        run: |
+          ./bin/tbtools doctor 2>&1 | tee /tmp/doctor_after.txt
+          grep -q "JAR:.*MB" /tmp/doctor_after.txt && echo "✅ JAR 已找到"
+          grep -q "❌" /tmp/doctor_after.txt && { echo "❌ doctor 仍有错误"; exit 1; } || echo "✅ doctor 无错误"
+
+      # ── ④ 完整功能验证：8 张图全跑 ──
+      - name: Step 4 — run_examples (8 plots)
+        run: |
+          bash examples/scripts/run_examples.sh 2>&1 | tail -15
+          ls examples/output/*.svg | wc -l | grep -q "8" && echo "✅ 8 张图全部生成"
+
+      # ── ⑤ pytest 回归 ──
+      - name: Step 5 — pytest suite
+        run: |
+          python3 -m pytest tests/test_cli.py -q 2>&1 | tail -3
