@@ -868,20 +868,21 @@ def _make_passthrough(name, group=None):
 @cli.command(name='list')
 @click.argument('category', required=False)
 def listing(category):
-    """列出可用命令（plots/tools/rpc）"""
+    """列出可用命令（plots/tools/rpc）——TTY 下自动分页"""
+    lines = []
     if not category or category == 'plots':
-        click.echo("绘图/分析命令：")
+        lines.append("绘图/分析命令：")
         for gname in sorted(GROUPS.keys()):
             g = _groups.get(gname)
             if g and g.commands:
-                click.echo(f"\n  {gname} — {GROUPS[gname]}")
+                lines.append(f"\n  {gname} — {GROUPS[gname]}")
                 for cname, cmd in sorted(g.commands.items()):
                     short = (cmd.help or '').split('\n')[0][:60]
-                    click.echo(f"    {cname:20s} {short}")
+                    lines.append(f"    {cname:20s} {short}")
         if not category:
-            click.echo("\n用法: tbtools list tools|rpc")
+            lines.append("\n用法: tbtools list tools|rpc")
     elif category == 'tools':
-        click.echo("命令行工具：")
+        lines.append("命令行工具：")
         # 排除绘图类命令（属于 seq/expr/tree/syn/sets/chipseq 分组的）
         plot_groups = {'seq', 'expr', 'tree', 'syn', 'sets', 'chipseq'}
         count = 0
@@ -893,18 +894,25 @@ def listing(category):
                     continue  # 跳过绘图类
                 doc = getattr(_ac, n).__doc__ or ''
                 short = doc.split(':',1)[1].strip()[:60] if ':' in doc else ''
-                click.echo(f"  {cmd:20s} {short}")
+                lines.append(f"  {cmd:20s} {short}")
                 count += 1
         # 加上手动注册的 3 个
-        click.echo(f"\n共 {count + 3} 个工具（含 3 个手动迁移）")
+        lines.append(f"\n共 {count + 3} 个工具（含 3 个手动迁移）")
     elif category == 'rpc':
-        click.echo("RPC 方法（188 个），启动 RPC 服务器后可用：")
-        click.echo("  tbtools_rpc.sh start    # 启动")
-        click.echo("  tbtools_rpc.sh methods   # 列出全部 188 方法")
-        click.echo("  tbtools_rpc.sh call <method> '<json>'")
+        lines.append("RPC 方法（188 个），启动 RPC 服务器后可用：")
+        lines.append("  tbtools_rpc.sh start    # 启动")
+        lines.append("  tbtools_rpc.sh methods   # 列出全部 188 方法")
+        lines.append("  tbtools_rpc.sh call <method> '<json>'")
     else:
-        click.echo(f"未知类别: {category}。可用: plots|tools|rpc")
+        click.echo(f"未知类别: {category}。可用: plots|tools|rpc", err=True)
         sys.exit(1)
+    # 输出：TTY 且行数多 → pager；否则直接打印（管道/重定向可 grep）
+    text = "\n".join(lines)
+    is_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()
+    if is_tty and len(lines) > 20:
+        click.echo_via_pager(text)
+    else:
+        click.echo(text)
 
 @cli.command()
 @click.argument("name", required=False)

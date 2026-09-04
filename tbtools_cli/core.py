@@ -155,6 +155,8 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
     退出码: 0=成功, 1=参数错误, 2=文件不存在, 3=格式错误
     """
     err_file = tempfile.mktemp(prefix="tbtools_err.")
+    import time as _time
+    _t0 = _time.perf_counter()
     
     # 确保桥编译产物存在
     os.makedirs(BUILD_DIR, exist_ok=True)
@@ -231,6 +233,10 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
         # 成功时输出进度信息（quiet 模式跳过）
         if not quiet and os.path.isfile(err_file):
             sys.stderr.write(open(err_file).read())
+        # 耗时统计（quiet 模式跳过）
+        if not quiet:
+            _dt = _time.perf_counter() - _t0
+            sys.stderr.write(f"⏱ 耗时 {_dt:.1f}s ({command_name})\n")
     
     try:
         os.unlink(err_file)
