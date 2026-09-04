@@ -702,7 +702,7 @@ def _load_auto_commands():
 
 def _load_dynamic_commands():
     """从 tbplot.sh 动态生成 click 命令，按分类注册到 group"""
-    import re
+    import re, difflib
     tbplot_sh = os.path.join(ROOT, "bin", "tbplot.sh")
     if not os.path.isfile(tbplot_sh):
         return
@@ -720,6 +720,28 @@ def _load_dynamic_commands():
     for cmd_name in sorted(cmds - registered):
         cat = CATEGORY_MAP.get(cmd_name, "engine")
         _make_passthrough(cmd_name, _groups[cat])
+
+    # 给所有分组加未知子命令纠错（ToolGroup/rpc 已有自己的 resolve_command）
+    def _smart_resolve(self, ctx, args):
+        try:
+            return click.Group.resolve_command(self, ctx, args)
+        except click.UsageError:
+            if not args:
+                raise
+            name = args[0]
+            close = difflib.get_close_matches(name, list(self.commands.keys()), n=3, cutoff=0.6)
+            if close:
+                click.echo(f"❌ '{name}' 不是 '{self.name}' 分组内的命令", err=True)
+                click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
+            else:
+                click.echo(f"❌ '{name}' 不是 '{self.name}' 分组内的命令", err=True)
+                click.echo(f"   查看: tbtools {self.name} --help", err=True)
+            ctx.exit(2)
+    for gname, g in _groups.items():
+        if gname in ("tool", "rpc"):
+            continue
+        if not hasattr(g, "resolve_command") or g.__class__.__name__ == "Group":
+            g.resolve_command = _smart_resolve.__get__(g, type(g))
 
 def _parse_auto_metadata(name):
     """从 auto_commands.py 解析命令元数据（docstring + 坑位）"""

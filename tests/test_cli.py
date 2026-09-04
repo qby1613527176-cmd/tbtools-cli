@@ -273,6 +273,16 @@ class TestRootNavigation:
         assert "tbtools hclust --help" in err
         assert "已知坑位" in err  # hclust 有坑位提示
 
+    def test_group_unknown_subcommand_suggests(self):
+        """分组内未知子命令 → 最近命令纠错"""
+        ec, out, err = run_cli("syn", "circcos")
+        assert "circos" in err
+
+    def test_group_unknown_subcommand_no_match(self):
+        """分组内未知子命令无接近 → 指向 help"""
+        ec, out, err = run_cli("seq", "qqqq")
+        assert "seq --help" in err
+
     def test_output_dir_not_exist(self):
         """输出目录不存在 → 立即报错（不挂 Java）"""
         ec, out, err = run_cli("expr", "volcano", "examples/data/deg.txt", "/nonexist_dir_xyz/o.svg")
