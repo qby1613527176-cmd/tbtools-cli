@@ -478,6 +478,14 @@ def doctor():
     else:
         click.echo("  ❌ JAR: 未找到")
         err += 1
+        click.echo("")
+        click.echo("  ── 解决方法（AI 可直接执行）──")
+        click.echo("  ① 本机已有 TBtools jar？自动搜索并配置：")
+        click.echo("       tbtools setup --auto")
+        click.echo("  ② 知道 jar 路径，直接指定：")
+        click.echo("       tbtools setup /path/to/TBtools_JRE1.6.jar")
+        click.echo("  ③ 还没有 jar，自动下载+提取+配置（官方只发 portable zip）：")
+        click.echo("       tbtools fetch-jar")
     optional = {"samtools": "SAM/BAM", "blastp": "BLAST", "muscle": "MSA",
                 "iqtree2": "建树", "meme": "Motif", "RNAfold": "RNA"}
     avail = [f"{d}({v})" for d, v in optional.items() if shutil.which(d)]
@@ -487,6 +495,161 @@ def doctor():
     click.echo(f"\n  汇总: ✅ {ok}  ⚠️ {warn}  ❌ {err}")
     if err:
         sys.exit(1)
+
+@cli.command()
+@click.argument('jar_path', required=False)
+@click.option('--auto', is_flag=True, help="自动搜索本机 TBtools jar 并配置")
+def setup(jar_path, auto):
+    """配置 TBtools jar 路径（AI 友好：一条命令接入本机 TBtools）"""
+    import glob as _glob
+    found = None
+    if jar_path:
+        if not os.path.isfile(jar_path):
+            click.echo(f"❌ 文件不存在: {jar_path}", err=True)
+            sys.exit(1)
+        found = jar_path
+    elif auto:
+        click.echo("🔍 自动搜索 TBtools jar ...")
+        # 复用 core 的搜索逻辑 + glob 深层搜索
+        candidates = []
+        for pat in [
+            os.path.expanduser("~/TBtools*/**/TBtools_JRE1.6.jar"),
+            os.path.expanduser("~/Downloads/TBtools*.jar"),
+            os.path.expanduser("~/下载/TBtools*.jar"),
+            os.path.expanduser("~/Desktop/TBtools*.jar"),
+            "/opt/TBtools*/**/TBtools_JRE1.6.jar",
+            "/mnt/*/TBtools*/**/TBtools_JRE1.6.jar",
+            "/mnt/*/Users/*/Downloads/TBtools*.jar",
+            "/mnt/*/Users/*/Desktop/TBtools*.jar",
+            "/Applications/TBtools*/**/TBtools_JRE1.6.jar",
+        ]:
+            try:
+                candidates.extend(_glob.glob(pat, recursive=True))
+            except Exception:
+                pass
+        candidates = sorted(set(c for c in candidates if os.path.isfile(c)))
+        if candidates:
+            found = candidates[0]
+            click.echo(f"✅ 找到: {found}")
+            if len(candidates) > 1:
+                click.echo(f"   （还有 {len(candidates)-1} 个候选，用 tbtools setup <路径> 指定其他）")
+        else:
+            click.echo("❌ 未找到。请先下载 TBtools_JRE1.6.jar：")
+            click.echo("   https://github.com/CJ-Chen/TBtools/releases")
+            click.echo("   下载后运行: tbtools setup /path/to/TBtools_JRE1.6.jar")
+            sys.exit(1)
+    else:
+        click.echo("用法:")
+        click.echo("  tbtools setup --auto                    # 自动搜索本机 jar")
+        click.echo("  tbtools setup /path/to/TBtools.jar     # 指定路径")
+        sys.exit(0)
+    # 写入配置
+    cfg_dir = os.path.expanduser("~/.config/tbtools-cli")
+    os.makedirs(cfg_dir, exist_ok=True)
+    with open(os.path.join(cfg_dir, "config.sh"), "w") as f:
+        f.write(f'export TBTOOLS_JAR="{found}"\n')
+    with open(os.path.join(cfg_dir, "config.toml"), "w") as f:
+        f.write(f'jar = "{found}"\n\n[defaults]\nthreads = 4\nformat = "svg"\n')
+    click.echo(f"✅ 已配置: {found}")
+    click.echo("   写入 ~/.config/tbtools-cli/{config.sh,config.toml}")
+    click.echo("   运行 tbtools doctor 验证")
+
+@cli.command()
+@click.option('--version', 'ver', default=None, help="TBtools 版本 tag（默认最新含 portable 的 release）")
+@click.option('--yes', is_flag=True, help="跳过确认")
+def fetch_jar(ver, yes):
+    """自动下载并提取 TBtools_JRE1.6.jar（官方只发 portable zip，需解包）"""
+    import urllib.request
+    import zipfile
+    import tempfile
+    # 确定版本
+    tag = ver
+    if not tag:
+        click.echo("🔍 查询最新 portable release ...")
+        try:
+            req = urllib.request.Request("https://api.github.com/repos/CJ-Chen/TBtools-II/releases",
+                headers={"Accept": "application/vnd.github+json", "User-Agent": "tbtools-cli"})
+            import json
+            rels = json.loads(urllib.request.urlopen(req, timeout=30).read())
+            tag = next((r["tag_name"] for r in rels
+                        if any("portable" in a["name"] for a in r.get("assets", []))), None)
+            if not tag:
+                click.echo("❌ 未找到含 portable 的 release", err=True)
+                sys.exit(1)
+            click.echo(f"   最新: {tag}")
+        except Exception as e:
+            click.echo(f"❌ 查询失败: {e}", err=True)
+            click.echo("   手动: tbtools fetch-jar --version 2.475", err=True)
+            sys.exit(1)
+    # 找资产
+    zip_name = None
+    try:
+        req = urllib.request.Request(f"https://api.github.com/repos/CJ-Chen/TBtools-II/releases/tags/{tag}",
+            headers={"Accept": "application/vnd.github+json", "User-Agent": "tbtools-cli"})
+        import json
+        rel = json.loads(urllib.request.urlopen(req, timeout=30).read())
+        zip_name = next((a["name"] for a in rel.get("assets", []) if "portable" in a["name"] and a["name"].endswith(".zip")), None)
+    except Exception as e:
+        click.echo(f"❌ 查询资产失败: {e}", err=True)
+        sys.exit(1)
+    if not zip_name:
+        click.echo(f"❌ {tag} 无 portable zip 资产", err=True)
+        sys.exit(1)
+    url = f"https://github.com/CJ-Chen/TBtools-II/releases/download/{tag}/{zip_name}"
+    size_mb = None
+    try:
+        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "tbtools-cli"})
+        resp = urllib.request.urlopen(req, timeout=30)
+        size_mb = int(resp.headers.get("Content-Length", 0)) / 1024 / 1024
+    except Exception:
+        pass
+    click.echo(f"📦 下载 {zip_name}" + (f"（~{size_mb:.0f}MB）" if size_mb else ""))
+    if not yes:
+        if not click.confirm("  继续下载?"):
+            click.echo("已取消")
+            sys.exit(0)
+    # 下载
+    tmp = tempfile.mktemp(suffix=".zip")
+    click.echo("  ⏳ 下载中（约 300MB，请稍候）...")
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "tbtools-cli"})
+        with urllib.request.urlopen(req, timeout=600) as r, open(tmp, "wb") as f:
+            import shutil as _sh
+            _sh.copyfileobj(r, f)
+    except Exception as e:
+        click.echo(f"❌ 下载失败: {e}", err=True)
+        sys.exit(1)
+    # 提取 jar
+    jar_target = os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar")
+    os.makedirs(os.path.dirname(jar_target), exist_ok=True)
+    found = False
+    try:
+        with zipfile.ZipFile(tmp) as z:
+            for n in z.namelist():
+                if n.endswith("TBtools_JRE1.6.jar"):
+                    click.echo(f"  📂 提取 {n}")
+                    with z.open(n) as src, open(jar_target, "wb") as dst:
+                        _sh = __import__("shutil")
+                        _sh.copyfileobj(src, dst)
+                    found = True
+                    break
+    except Exception as e:
+        click.echo(f"❌ 解压失败: {e}", err=True)
+        sys.exit(1)
+    finally:
+        os.unlink(tmp)
+    if not found:
+        click.echo("❌ zip 中未找到 TBtools_JRE1.6.jar", err=True)
+        sys.exit(1)
+    click.echo(f"✅ 已提取: {jar_target}")
+    # 配置
+    cfg_dir = os.path.expanduser("~/.config/tbtools-cli")
+    os.makedirs(cfg_dir, exist_ok=True)
+    with open(os.path.join(cfg_dir, "config.sh"), "w") as f:
+        f.write(f'export TBTOOLS_JAR="{jar_target}"\n')
+    with open(os.path.join(cfg_dir, "config.toml"), "w") as f:
+        f.write(f'jar = "{jar_target}"\n\n[defaults]\nthreads = 4\nformat = "svg"\n')
+    click.echo("✅ 已配置。运行 tbtools doctor 验证")
 
 @cli.command()
 @click.argument('name')

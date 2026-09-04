@@ -15,14 +15,46 @@ def get_jar():
             return cj
     except Exception:
         pass
+    # 常见路径 + Windows/WSL/macOS 路径
+    home = os.path.expanduser("~")
     for cand in [
         os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar"),
         os.path.expanduser("~/TBtools/TBtools_JRE1.6.jar"),
         os.path.expanduser("~/Downloads/TBtools_JRE1.6.jar"),
+        os.path.expanduser("~/下载/TBtools_JRE1.6.jar"),
+        os.path.expanduser("~/Desktop/TBtools_JRE1.6.jar"),
+        os.path.expanduser("~/桌面/TBtools_JRE1.6.jar"),
         "/opt/TBtools/TBtools_JRE1.6.jar",
+        "/usr/local/lib/TBtools_JRE1.6.jar",
+        # Windows 原生路径（git-bash / cmd 环境）
+        "C:/TBtools/TBtools_JRE1.6.jar",
+        "C:/Program Files/TBtools/TBtools_JRE1.6.jar",
+        "C:/Users/%s/Downloads/TBtools_JRE1.6.jar" % os.environ.get("USERNAME", ""),
+        # WSL 挂载 Win 盘
+        "/mnt/c/TBtools/TBtools_JRE1.6.jar",
+        "/mnt/c/Program Files/TBtools/TBtools_JRE1.6.jar",
+        "/mnt/d/TBtools/TBtools_JRE1.6.jar",
+        "/mnt/c/Users/*/Downloads/TBtools_JRE1.6.jar",
+        "/mnt/c/Users/*/Desktop/TBtools_JRE1.6.jar",
+        # macOS
+        "/Applications/TBtools/TBtools_JRE1.6.jar",
+        os.path.expanduser("~/Applications/TBtools/TBtools_JRE1.6.jar"),
     ]:
         if os.path.isfile(cand):
             return cand
+    # 最后手段：全盘常见位置细搜（限定深度，避免超时）
+    try:
+        import glob
+        for pat in [
+            "/mnt/*/TBtools*/**/TBtools_JRE1.6.jar",
+            "/mnt/*/Users/*/Downloads/TBtools*.jar",
+            "/mnt/*/Users/*/Desktop/TBtools*.jar",
+        ]:
+            hits = sorted(glob.glob(pat, recursive=True))
+            if hits and os.path.isfile(hits[0]):
+                return hits[0]
+    except Exception:
+        pass
     return jar  # 返回空或原始值（让下游报错）
 
 JAR = get_jar()

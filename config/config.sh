@@ -27,11 +27,31 @@ if [ -z "${TBTOOLS_JAR:-}" ]; then
         "$HOME/TBtools/TBtools_JRE1.6.jar" \
         "$HOME/Downloads/TBtools_JRE1.6.jar" \
         "$HOME/下载/TBtools_JRE1.6.jar" \
+        "$HOME/Desktop/TBtools_JRE1.6.jar" \
+        "$HOME/桌面/TBtools_JRE1.6.jar" \
         "/opt/TBtools/TBtools_JRE1.6.jar" \
         "/usr/local/lib/TBtools_JRE1.6.jar" \
+        "C:/TBtools/TBtools_JRE1.6.jar" \
+        "C:/Program Files/TBtools/TBtools_JRE1.6.jar" \
+        "/mnt/c/TBtools/TBtools_JRE1.6.jar" \
+        "/mnt/d/TBtools/TBtools_JRE1.6.jar" \
+        "/Applications/TBtools/TBtools_JRE1.6.jar" \
         ; do
         if [ -f "$cand" ]; then TBTOOLS_JAR="$cand"; break; fi
     done
+    # 最后手段：常见目录细搜（避免全盘 find 超时）
+    if [ -z "${TBTOOLS_JAR:-}" ]; then
+        for pat in \
+            "$HOME"/TBtools*/TBtools_JRE1.6.jar \
+            /mnt/*/TBtools*/TBtools_JRE1.6.jar \
+            /mnt/*/Users/*/Downloads/TBtools*.jar \
+            /mnt/*/Users/*/Desktop/TBtools*.jar \
+            ; do
+            for hit in $pat; do
+                if [ -f "$hit" ]; then TBTOOLS_JAR="$hit"; break 2; fi
+            done
+        done
+    fi
 fi
 export TBTOOLS_JAR
 

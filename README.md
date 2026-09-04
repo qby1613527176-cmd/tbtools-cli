@@ -92,30 +92,46 @@ java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参�
 ## 📦 Installation
 
 ### Requirements
-- **Linux / WSL2**（需要 `xvfb-run`）
+- **Linux / WSL2 / macOS**（绘图需要 `xvfb-run`，可用 `sudo apt install xvfb`）
 - **JDK 11+**（`java`、`javac`）
 - **TBtools_JRE1.6.jar**（TBtools-II 主 jar，~55MB）
 
-### 1. Download TBtools jar
-```bash
-# Option A: GitHub releases
-wget -O lib/TBtools_JRE1.6.jar https://github.com/CJ-Chen/TBtools/releases/download/v2.xxx/TBtools_JRE1.6.jar
+### 1. Install（自动接入本机 TBtools）
 
-# Option B: TBtools official site
-# https://www.tbtools.com
-```
-
-### 2. Install
 ```bash
-git clone https://github.com/<you>/tbtools-cli.git
+git clone https://github.com/qby1613527176-cmd/tbtools-cli.git
 cd tbtools-cli
-./install.sh --jar /path/to/TBtools_JRE1.6.jar
 ```
 
-Or set environment variable:
+**三种接入方式，AI/脚本可按需选用：**
+
 ```bash
+# ① 自动搜索本机已有 TBtools jar 并配置（最常用）
+tbtools setup --auto
+#    → 自动扫描 ~/TBtools、~/Downloads、~/桌面、/mnt/*（WSL）、C:/TBtools（Git-Bash）、
+#      /Applications（macOS）等常见位置，找到即写入 ~/.config/tbtools-cli/
+
+# ② 知道 jar 路径，直接指定
+tbtools setup /path/to/TBtools_JRE1.6.jar
+
+# ③ 本机没有 jar？自动下载官方 portable 包并提取 jar（官方只发 zip，~300MB）
+tbtools fetch-jar
+#    → 自动查询最新含 portable 的 release，下载 → 提取 TBtools_JRE1.6.jar → 配置
+#    可选: tbtools fetch-jar --version 2.475
+```
+
+手动方式（无 tbtools 时）：
+```bash
+./install.sh --jar /path/to/TBtools_JRE1.6.jar
+# 或
 export TBTOOLS_JAR=/path/to/TBtools_JRE1.6.jar
 export PATH="$PWD/bin:$PATH"
+```
+
+### 2. Verify
+```bash
+tbtools doctor      # 一键检查 Java/jar/xvfb/可选依赖；jar 缺失时给出可执行指引
+tbtools version
 ```
 
 ### 3. Verify

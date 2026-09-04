@@ -408,3 +408,58 @@ class TestFormatDetection:
         ec, out, err = run_cli("check", deg)
         assert ec == 0
         assert "tsv" in out
+
+
+class TestAgentOnboarding:
+    """自动接入：setup / fetch-jar / doctor 指引 / 跨平台 jar 发现"""
+
+    def test_setup_command_exists(self):
+        ec, out, err = run_cli("setup", "--help")
+        assert ec == 0
+        assert "--auto" in out
+
+    def test_fetch_jar_command_exists(self):
+        ec, out, err = run_cli("fetch-jar", "--help")
+        assert ec == 0
+        assert "--version" in out
+
+    def test_setup_no_args_shows_usage(self):
+        ec, out, err = run_cli("setup")
+        assert ec == 0
+        assert "--auto" in out
+
+    def test_setup_with_missing_path(self):
+        ec, out, err = run_cli("setup", "/nonexistent/xyz.jar")
+        assert ec == 1
+        assert "不存在" in err
+
+    def test_setup_auto_discovers(self, tmp_path, monkeypatch):
+        """fake home 里有 TBtools 目录 → setup --auto 应找到并写配置"""
+        import tbtools_cli.cli as cli_mod
+        fake_home = tmp_path / "home"
+        tb_dir = fake_home / "TBtools"
+        tb_dir.mkdir(parents=True)
+        fake_jar = tb_dir / "TBtools_JRE1.6.jar"
+        fake_jar.write_bytes(b"PK\x05\x06" + b"\x00" * 18)  # 假装 zip/jar
+        monkeypatch.setenv("HOME", str(fake_home))
+        monkeypatch.delenv("TBTOOLS_JAR", raising=False)
+        from click.testing import CliRunner
+        runner = CliRunner()
+        result = runner.invoke(cli_mod.cli, ["setup", "--auto"])
+        assert "已配置" in result.output
+        cfg = fake_home / ".config" / "tbtools-cli" / "config.sh"
+        assert cfg.exists()
+        assert "TBtools_JRE1.6.jar" in cfg.read_text()
+
+    def test_doctor_guidance_when_no_jar(self, tmp_path, monkeypatch):
+        """jar 缺失时 doctor 应给出 setup/fetch-jar 指引"""
+        import tbtools_cli.cli as cli_mod
+        fake_home = tmp_path / "home"
+        fake_home.mkdir(parents=True)
+        monkeypatch.setenv("HOME", str(fake_home))
+        monkeypatch.delenv("TBTOOLS_JAR", raising=False)
+        from click.testing import CliRunner
+        runner = CliRunner()
+        result = runner.invoke(cli_mod.cli, ["doctor"])
+        assert "setup --auto" in result.output
+        assert "fetch-jar" in result.output
