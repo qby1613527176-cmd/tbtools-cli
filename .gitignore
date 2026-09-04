@@ -30,3 +30,6 @@ __pycache__/
 *.TBtools.fa*
 *.TBtoolsDB.*
 temp.collinearity
+
+# Test data (large, not distributed)
+test_reports/data_*/

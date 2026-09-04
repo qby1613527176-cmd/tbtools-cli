@@ -1,5 +1,6 @@
 """tbtools-cli 核心引擎：通用选项 + _run_java wrapper + 统一输出格式 + 输入校验"""
 import subprocess, tempfile, os, sys, re, shutil
+import click
 
 # ---- 配置 ----
 def get_jar():
@@ -128,7 +129,7 @@ def get_pitfall_hint(command_name):
 
 # ---- 统一输出格式处理 ----
 def resolve_output(output, fmt="svg", width=None, height=None):
-    """处理输出文件路径 + 格式推断/覆盖"""
+    """处理输出文件路径 + 格式推断/覆盖 + 父目录提前校验"""
     if not output:
         # 无输出文件 → 生成默认文件名
         output = f"output.{fmt}"
@@ -139,6 +140,12 @@ def resolve_output(output, fmt="svg", width=None, height=None):
         # 只在用户显式指定 -f 时覆盖
         if fmt and fmt != ext:
             output = f"{base}.{fmt}"
+    # 父目录提前校验（避免 Java 引擎里静默挂死/异常堆栈）
+    out_dir = os.path.dirname(os.path.abspath(output))
+    if not os.path.isdir(out_dir):
+        click.echo(f"❌ 输出目录不存在: {out_dir}", err=True)
+        click.echo(f"   创建: mkdir -p {out_dir}", err=True)
+        sys.exit(1)
     return output
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----

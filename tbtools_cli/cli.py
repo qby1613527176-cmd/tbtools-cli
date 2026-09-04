@@ -22,11 +22,42 @@ def common_options(f):
     return f
 
 # ---- 主命令组 ----
-@click.group(invoke_without_command=True)
+class RootGroup(click.Group):
+    """顶层：未知命令时给分组建议 + 拼写纠错"""
+    def resolve_command(self, ctx, args):
+        try:
+            return super().resolve_command(ctx, args)
+        except click.UsageError:
+            if not args:
+                raise
+            name = args[0]
+            # 检查是否是某个分组内的子命令
+            for gname, g in _groups.items():
+                if name in g.commands:
+                    click.echo(f"❌ '{name}' 不是顶层命令，它在 '{gname}' 分组内", err=True)
+                    click.echo(f"   正确用法: tbtools {gname} {name} ...", err=True)
+                    doc = g.commands[name].help or ''
+                    if doc:
+                        first = doc.strip().split('\n')[0]
+                        click.echo(f"   说明: {first}", err=True)
+                    ctx.exit(2)
+            # 拼写纠错（对分组名+顶层命令）
+            import difflib
+            candidates = sorted(set(list(_groups.keys()) + [c for c in cli.commands.keys()]))
+            close = difflib.get_close_matches(name, candidates, n=3, cutoff=0.6)
+            if close:
+                click.echo(f"❌ 未知命令: {name}", err=True)
+                click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
+            else:
+                click.echo(f"❌ 未知命令: {name}", err=True)
+                click.echo("   查看: tbtools list", err=True)
+            ctx.exit(2)
+
+@click.group(cls=RootGroup, invoke_without_command=True)
 @click.version_option("1.0.0", prog_name="tbtools-cli")
 @click.pass_context
 def cli(ctx):
-    """TBtools-II 全功能 CLI — 140 绘图命令 + 82 工具 + 188 RPC"""
+    """TBtools-II 全功能 CLI — 143 绘图命令 + 130 工具 + 188 RPC"""
     if ctx.invoked_subcommand is None:
         click.echo(ctx.get_help())
 

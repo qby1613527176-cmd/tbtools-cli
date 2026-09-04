@@ -248,6 +248,33 @@ class TestInputValidation:
         assert fmt == "newick"
 
 
+# ============ 12. 顶层错误导航 + 输出目录校验 ============
+
+class TestRootNavigation:
+    def test_top_level_group_command_hint(self):
+        """顶层直调分组内命令 → 提示正确分组"""
+        ec, out, err = run_cli("venn2")
+        assert "sets" in err
+        assert "tbtools sets venn2" in err
+
+    def test_top_level_typo_suggestion(self):
+        """拼写错分组名 → 纠错建议"""
+        ec, out, err = run_cli("exp")
+        assert "expr" in err
+
+    def test_top_level_unknown_no_match(self):
+        """完全未知命令 → 指向 list"""
+        ec, out, err = run_cli("zzzz")
+        assert "list" in err
+
+    def test_output_dir_not_exist(self):
+        """输出目录不存在 → 立即报错（不挂 Java）"""
+        ec, out, err = run_cli("expr", "volcano", "examples/data/deg.txt", "/nonexist_dir_xyz/o.svg")
+        assert ec == 1
+        assert "目录不存在" in err
+        assert "mkdir -p" in err
+
+
 # ============ 11. RPC + help 快捷入口 ============
 
 class TestRpcAndHelp:
