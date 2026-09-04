@@ -51,7 +51,12 @@ jobs:
         run: |
           ./bin/tbtools doctor 2>&1 | tee /tmp/doctor_after.txt
           grep -q "JAR:.*MB" /tmp/doctor_after.txt && echo "✅ JAR 已找到"
-          grep -q "❌" /tmp/doctor_after.txt && { echo "❌ doctor 仍有错误"; exit 1; } || echo "✅ doctor 无错误"
+          # ❌ 0（零错误计数）合法；只有 ❌ 且非零计数才算失败
+          if grep -qE "❌ [1-9]" /tmp/doctor_after.txt; then
+            echo "❌ doctor 仍有错误"; exit 1
+          else
+            echo "✅ doctor 无错误"
+          fi
 
       # ── ④ 完整功能验证：8 张图全跑 ──
       - name: Step 4 — run_examples (8 plots)
