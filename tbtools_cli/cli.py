@@ -588,6 +588,39 @@ def examples(command):
             click.echo(f"    {cmd}")
         click.echo("\n用法: tbtools examples <命令>")
 
+@cli.command()
+@click.pass_context
+@click.argument("shell", type=click.Choice(["bash", "zsh", "fish"]), required=False)
+def completion_cmd(ctx, shell):
+    """生成 shell 补全脚本（tbtools completion bash）"""
+    comp_path = os.path.join(ROOT, "scripts", "tbtools-completion.bash")
+    if not os.path.isfile(comp_path):
+        click.echo(f"❌ 补全脚本不存在: {comp_path}", err=True)
+        sys.exit(1)
+    if shell == "bash":
+        click.echo(open(comp_path, encoding="utf-8").read())
+    elif shell == "zsh":
+        click.echo("autoload -U +X bashcompinit && bashcompinit")
+        click.echo(open(comp_path, encoding="utf-8").read())
+    elif shell == "fish":
+        try:
+            lines = []
+            for gname in _groups:
+                for cname in _groups[gname].commands:
+                    lines.append(f"complete -c tbtools -n '__fish_use_subcommand' -a '{cname}'")
+            click.echo("# tbtools-cli fish 补全")
+            click.echo("\n".join(sorted(set(lines))))
+        except Exception as e:
+            click.echo(f"❌ fish 补全生成失败: {e}", err=True)
+            sys.exit(1)
+    else:
+        click.echo("生成 shell 补全脚本")
+        click.echo("用法: tbtools completion bash|zsh|fish")
+        for s, inst in {"bash": "source <(tbtools completion bash)",
+                        "zsh": "tbtools completion zsh > ~/.zshrc",
+                        "fish": "tbtools completion fish > ~/.config/fish/completions/tbtools.fish"}.items():
+            click.echo(f"  {s:6s} {inst}")
+
 # ---- 动态加载剩余命令 ----
 # ---- 命令分类映射 ----
 CATEGORY_MAP = {

@@ -301,6 +301,21 @@ class TestRpcAndHelp:
         assert "methods" in out
         assert "call" in out
 
+    def test_completion_bash(self):
+        ec, out, err = run_cli("completion", "bash")
+        assert ec == 0
+        assert "_tbtools_complete" in out
+
+    def test_completion_fish(self):
+        ec, out, err = run_cli("completion", "fish")
+        assert ec == 0
+        assert "complete -c tbtools" in out
+
+    def test_completion_menu(self):
+        ec, out, err = run_cli("completion")
+        assert ec == 0
+        assert "bash" in out and "zsh" in out and "fish" in out
+
     def test_help_shortcut(self):
         ec, out, err = run_cli("help", "volcano")
         assert ec == 0
