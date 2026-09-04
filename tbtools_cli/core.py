@@ -89,6 +89,44 @@ def validate_format_cols(path, expected_cols, desc="输入文件"):
         return False, f"❌ {desc}: 需要 ≥{expected_cols} 列，实际 {ncols} 列（{fmt} 格式）→ {path}"
     return True, ""
 
+# ---- C2: 早期格式不匹配警告 ----
+# 命令 → (期望格式, 最少列数, 人类描述)。仅高置信场景，警告不阻断。
+EXPECTED_INPUT_FORMATS = {
+    "hclust":    ("tsv", 3, "三列距离文件 GeneA\tGeneB\tdist"),
+    "volcano":   ("tsv", 3, "DEG 表（ID\tlog2FC\tP值...）"),
+    "heatmap":   ("tsv", 2, "表达矩阵（基因×样本）"),
+    "pca":       ("tsv", 2, "表达矩阵（基因×样本，行=观测）"),
+    "msa":       ("fasta", 0, "多序列比对 FASTA"),
+    "logo":      ("fasta", 0, "比对 FASTA"),
+    "motif":     ("xml", 0, "MEME XML"),
+    "structure": ("gff3", 9, "GFF3 注释"),
+    "tree":      ("newick", 0, "Newick 树文件"),
+    "barplot":   ("tsv", 2, "富集表（term\tP值...）"),
+}
+
+def check_input_format(cmd_name, path):
+    """早期格式检测：期望格式与实际不符时返回警告文本（不阻断）"""
+    exp = EXPECTED_INPUT_FORMATS.get(cmd_name)
+    if not exp:
+        return None
+    exp_fmt, min_cols, desc = exp
+    fmt, ncols, _ = detect_format(path)
+    if fmt in ("unknown", "empty", "stdin"):
+        return None
+    if exp_fmt == "fasta" and fmt != "fasta":
+        return f"输入文件看起来是 {fmt}，但 {cmd_name} 通常需要 FASTA（{desc}）"
+    if exp_fmt == "newick" and fmt != "newick":
+        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要 Newick 树文件（{desc}）"
+    if exp_fmt == "xml" and fmt != "xml":
+        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要 XML（{desc}）"
+    if exp_fmt == "gff3" and fmt != "gff3":
+        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要 GFF3（{desc}）"
+    if exp_fmt == "tsv" and fmt not in ("tsv", "csv"):
+        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要表格（{desc}）"
+    if exp_fmt == "tsv" and min_cols and ncols and ncols < min_cols:
+        return f"输入文件只有 {ncols} 列，{cmd_name} 通常需要 ≥{min_cols} 列（{desc}）"
+    return None
+
 # ---- 已知坑位提示 ----
 PITFALL_HINTS = {
     "hclust": "输入必须是三列距离文件 GeneA\\tGeneB\\tdist（不是表达矩阵！）",
@@ -306,3 +344,15 @@ def c(text, color=None, bold=False):
     if not out:
         return text
     return f"\033[{';'.join(out)}m{text}\033[0m"
+
+def pre_flight(cmd_name, first_file):
+    """手动注册命令的早期格式检查（打印警告，不阻断）"""
+    if not first_file or str(first_file).startswith('-'):
+        return
+    ok, _ = validate_file(str(first_file))
+    if not ok:
+        return
+    warn = check_input_format(cmd_name, str(first_file))
+    if warn:
+        print(f"⚠️ 格式提醒: {warn}", file=sys.stderr)
+        print("   （继续执行；如确认无误可忽略）", file=sys.stderr)

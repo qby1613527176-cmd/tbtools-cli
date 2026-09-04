@@ -5,7 +5,8 @@ import os, sys, subprocess
 # ---- 配置 ----
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tbtools_cli.core import (JAR, run_java, run_plot, ensure_bridge,
-    resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint, c)
+    resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint, c,
+    check_input_format, pre_flight)
 from tbtools_cli.presets import apply_preset, list_presets, PRESETS
 import tbtools_cli.auto_commands as _ac
 
@@ -75,6 +76,7 @@ def seq_group():
 @common_options
 def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, preset, height, width, threads):
     """序列 LOGO 图"""
+    pre_flight("logo", input_file)
     output_file = resolve_output(output_file, fmt)
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioDoer.seqLogo.makeSeqLogo",
@@ -93,6 +95,7 @@ def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, pr
 @common_options
 def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, height, width, threads):
     """多序列比对可视化"""
+    pre_flight("msa", aligned_fasta)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("MSACli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -110,6 +113,7 @@ def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, he
 @common_options
 def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, preset, height, width, threads):
     """基因结构图（外显子/UTR 从 GFF）"""
+    pre_flight("structure", gff_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GeneStructureCli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -128,6 +132,7 @@ def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, p
 @common_options
 def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """Motif 分布图（MEME XML）"""
+    pre_flight("motif", meme_xml)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("MotifCli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -151,6 +156,7 @@ def expr_group():
 @common_options
 def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, preset, height, width, threads):
     """火山图（DEG: GeneID Log2FC pvalue）"""
+    pre_flight("volcano", deg_file)
     if preset:
         p = apply_preset(preset, width=width, height=height)
         if not p: print(f"❌ 未知预设: {preset}", file=sys.stderr); sys.exit(1)
@@ -180,6 +186,7 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
 @click.option("--cluster-col/--no-cluster-col", default=False, help="列聚类")
 @common_options
 def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col, verbose, quiet, fmt, preset, height, width, threads):
+    pre_flight("heatmap", matrix_file)
     """热图（表达矩阵）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HeatmapCli")
@@ -208,6 +215,7 @@ def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col,
 @common_options
 def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, preset, height, width, threads):
     """PCA 图"""
+    pre_flight("pca", matrix_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GenericCli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -229,6 +237,7 @@ def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, pr
 @common_options
 def expr_hclust(distance_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """层次聚类树（三列距离文件 GeneA\tGeneB\tdist）"""
+    pre_flight("hclust", distance_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HclustCli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -242,6 +251,7 @@ def expr_hclust(distance_file, output_file, verbose, quiet, fmt, preset, height,
 @common_options
 def expr_dehist(deg_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """差异表达双直方图"""
+    pre_flight("dehist", deg_file)
     output_file = resolve_output(output_file, fmt)
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioDoer.JIGplotToolkit.DiffExp.DualHistPlot.DiffExpDualHistPlot",
@@ -263,6 +273,7 @@ def tree_group():
 @common_options
 def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """树+注释图（TreeTreeTree 多轨道）"""
+    pre_flight("draw", config_file)  # draw 输入是 TreeTab 配置文件，不适用格式表
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("TreeCli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -276,6 +287,7 @@ def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, wid
 @common_options
 def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """无根树可视化"""
+    pre_flight("unrooted", newick_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("UnrootedTreeCli")
     args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
@@ -818,6 +830,11 @@ def _make_passthrough(name, group=None):
             if not ok:
                 print(msg, file=sys.stderr)
                 sys.exit(2)
+            # C2: 早期格式不匹配警告（不阻断，仅提示）
+            warn = check_input_format(name, args[0])
+            if warn:
+                print(f"⚠️ 格式提醒: {warn}", file=sys.stderr)
+                print("   （继续执行；如确认无误可忽略）", file=sys.stderr)
         
         # 应用预设
         if preset:
@@ -1035,6 +1052,34 @@ def _run_new_wizard(_categories, SCENARIOS, run_it=False):
         sys.exit(cli.main(argv, standalone_mode=False) or 0)
     click.echo(f"\n  复制后运行，或：\n    直接运行: tbtools {scen['group']} {scen['cmd']} --help")
 
+
+# ---- check 格式探测器 ----
+@cli.command()
+@click.argument('files', nargs=-1, required=True)
+def check(files):
+    """探测文件格式：tbtools check <文件...>（FASTA/GFF/Newick/XML/TSV）"""
+    import json as _json
+    for path in files:
+        ok, msg = validate_file(path, "文件")
+        if not ok:
+            click.echo(msg, err=True)
+            continue
+        fmt, ncols, sample = detect_format(path)
+        import os as _os
+        size = _os.path.getsize(path)
+        with open(path, 'rb') as fh:
+            head = fh.read(4)
+        gz = head[:2] == b'\x1f\x8b'
+        lines = sum(1 for _ in open(path, 'r', errors='replace')) if size < 50_000_000 else None
+        click.echo(f"\n📄 {path}")
+        click.echo(f"   格式: {fmt}{'+gzip' if gz else ''}   大小: {size:,}B" + (f"   行数: {lines:,}" if lines is not None else ""))
+        if ncols:
+            click.echo(f"   列数: {ncols}")
+        for s in sample[:2]:
+            disp = s if len(s) <= 90 else s[:87] + "..."
+            click.echo(f"   样例: {disp}")
+        if _json.dumps(sample[:1], ensure_ascii=False) and fmt == "unknown":
+            click.echo("   （无法识别格式；如是表格确认分隔符是 Tab 还是逗号）")
 
 _load_dynamic_commands()
 _load_auto_commands()

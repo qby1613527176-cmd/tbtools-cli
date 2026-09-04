@@ -372,3 +372,39 @@ class TestHelpQuality:
     def test_all_groups_have_help(self):
         for gname, g in _groups.items():
             assert g.help is not None, f"Group '{gname}' has no help text"
+
+
+DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "examples", "data")
+
+
+def _find(pattern):
+    import glob
+    cands = sorted(glob.glob(os.path.join(DATA_DIR, pattern), recursive=True))
+    return cands[0] if cands else None
+
+
+class TestFormatDetection:
+    """C2: 早期格式检测 + check 探测器"""
+
+    def test_check_input_format_fasta_vs_tsv(self):
+        from tbtools_cli.core import check_input_format
+        fa = _find("**/*.fa") or _find("**/*.fasta")
+        if not fa:
+            pytest.skip("no fasta example")
+        warn = check_input_format("hclust", fa)
+        assert warn is not None and "表格" in warn
+
+    def test_check_input_format_ok_no_warn(self):
+        from tbtools_cli.core import check_input_format
+        deg = _find("deg.txt")
+        if not deg:
+            pytest.skip("no deg.txt")
+        assert check_input_format("volcano", deg) is None
+
+    def test_check_command(self):
+        deg = _find("deg.txt")
+        if not deg:
+            pytest.skip("no deg.txt")
+        ec, out, err = run_cli("check", deg)
+        assert ec == 0
+        assert "tsv" in out
