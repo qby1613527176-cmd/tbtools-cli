@@ -41,6 +41,15 @@ fi
 # 写入用户配置文件
 mkdir -p "$HOME/.config/tbtools-cli"
 cat > "$HOME/.config/tbtools-cli/config.sh" << EOF
+# 同时写 TOML 配置
+cat > "$HOME/.config/tbtools-cli/config.toml" << TOMLEOF
+jar = "$JAR"
+
+[defaults]
+threads = 4
+format = "svg"
+TOMLEOF
+echo "✅ TOML 配置写入: $HOME/.config/tbtools-cli/config.toml"
 export TBTOOLS_JAR="$JAR"
 EOF
 echo "✅ TBtools jar 配置写入: $HOME/.config/tbtools-cli/config.sh"

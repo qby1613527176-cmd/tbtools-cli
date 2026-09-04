@@ -15,32 +15,48 @@
 ## 🚀 Quick Start
 
 ```bash
-tbtools version          # 查看版本
+tbtools version          # 查看版本（动态统计）
 tbtools doctor           # 环境诊断（检查 Java/JAR/xvfb/依赖）
+tbtools list              # 列出全部绘图/分析命令
+tbtools list tools        # 列出全部命令行工具
+tbtools help volcano      # 快捷帮助（自动定位分组）
+tbtools rpc start         # 启动 RPC 服务器（188 方法）
 bash examples/scripts/run_examples.sh     # 一键验证（8 项核心功能）
+```
+
+### 配置文件
+
+```bash
+# ~/.config/tbtools-cli/config.toml
+jar = "/path/to/TBtools_JRE1.6.jar"
+[defaults]
+threads = 4
+format = "svg"
+# preset = "nature"    # 取消注释启用默认预设
 ```
 
 ### Bash Completion（tab 补全）
 
 ```bash
-source completions/tbtools_completion.bash   # 临时启用
+source scripts/tbtools-completion.bash   # 临时启用
 # 或永久安装:
-cp completions/tbtools_completion.bash ~/.local/share/bash-completion/completions/tbtools
+cp scripts/tbtools-completion.bash ~/.local/share/bash-completion/completions/tbtools
 ```
 
 ### Man Page
 
 ```bash
-man -l man/tbtools.1              # 查看 man page
+man -l scripts/tbtools.1              # 查看 man page
 # 或安装到系统:
-sudo cp man/tbtools.1 /usr/local/share/man/man1/
+sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 ```
 
 ### stdin/stdout 管道（CLI 工具层）
 
 ```bash
-cat seqs.fa | tbtools tool statFasta --inFasta - --outPutFile - | head
-tbtools tool statFasta --inFasta seqs.fa --outPutFile - | head
+# stat-fasta 支持 stdin
+ ./tbtools tool stat-fasta /dev/stdin /dev/stdout < seqs.fa
+# ⚠️ 大部分 Java 引擎不认 /dev/stdin，管道支持有限
 ```
 
 ## ✨ Features

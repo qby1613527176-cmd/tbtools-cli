@@ -6,6 +6,14 @@ def get_jar():
     jar = os.environ.get("TBTOOLS_JAR", "")
     if jar and os.path.isfile(jar):
         return jar
+    # 配置文件
+    try:
+        from tbtools_cli.config import get_jar as cfg_jar
+        cj = cfg_jar()
+        if cj and os.path.isfile(cj):
+            return cj
+    except Exception:
+        pass
     for cand in [
         os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar"),
         os.path.expanduser("~/TBtools/TBtools_JRE1.6.jar"),
