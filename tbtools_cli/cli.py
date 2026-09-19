@@ -887,7 +887,6 @@ CATEGORY_MAP = {
     # GO/表格
     "levelGo": "table", "goParse": "table", "batchReplace": "table",
     "goEnrich": "table", "keggEnrich": "table",
-    "goEnrich": "table", "keggEnrich": "table",
     "tableCollapse": "table", "tableColSelect": "table", "tableAppend": "table",
     "tableMelt": "table", "tableColSel": "table", "tableCast": "table",
     "tableUniq": "table", "tableTranspose": "table", "tableSplit": "table",
@@ -899,7 +898,7 @@ CATEGORY_MAP = {
     "fqTrim": "fastq", "fqfaConv": "fastq", "fastaSubseq": "fastq",
     "fastaExtract": "fastq",
     # HMM
-    "hmmExtract": "hmm",
+    "hmmExtract": "hmm", "hmmsearch": "hmm", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用

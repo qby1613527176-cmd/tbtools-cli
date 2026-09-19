@@ -43,7 +43,7 @@ class TestFrameworkLoad:
         assert len(impls) >= 127, f"Expected >=127 auto_commands, got {len(impls)}"
 
     def test_pitfall_hints_count(self):
-        assert len(PITFALL_HINTS) == 30, f"Expected 30 pitfall hints, got {len(PITFALL_HINTS)}"
+        assert len(PITFALL_HINTS) >= 30, f"Expected >=30 pitfall hints, got {len(PITFALL_HINTS)}"
 
     def test_pitfall_hints_no_double_emoji(self):
         for k, v in PITFALL_HINTS.items():

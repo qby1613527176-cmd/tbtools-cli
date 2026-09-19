@@ -739,3 +739,7 @@ def _keggEnrich_impl(args, verbose=False, quiet=False):
     ensure_bridge("KeggEnrichCli")
     java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{JAR}", "KeggEnrichCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="keggEnrich")
+
+def _hmmsearch_impl(args, verbose=False, quiet=False):
+    """hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）"""
+    return _simplehmmscan_impl(args, verbose=verbose, quiet=quiet)

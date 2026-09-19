@@ -161,6 +161,8 @@ def check_input_format(cmd_name, path):
 
 # ---- 已知坑位提示 ----
 PITFALL_HINTS = {
+    "hmmsearch": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
+    "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
     "hclust": "输入必须是三列距离文件 GeneA\\tGeneB\\tdist（不是表达矩阵！）",
     "barplot": "termCol/pvalCol 用列名（如 Term/Pvalue），不是列索引数字",
     "cubeheatmap": "group 文件第一行会被当数据——喂前先去表头",
