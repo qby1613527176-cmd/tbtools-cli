@@ -198,6 +198,18 @@ def cmd_rpc(method, params_json):
     params = json.loads(params_json) if params_json else {}
     print(json.dumps(rpc_call(method, params), ensure_ascii=False, indent=2))
 
+def _read_err(p):
+    """GBK/UTF-8 安全的错误文件读取（FIX P0-2：中文 Windows 上 Java stderr 输出 GBK 字节，
+    venv Python 默认 UTF-8 读取会 UnicodeDecodeError 崩溃且误报失败。
+    WorkBuddy 2026-09-19 报告 §3.2，Windows 已验证）"""
+    raw = open(p, "rb").read()
+    for enc in ("utf-8", "gbk"):
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("utf-8", errors="replace")
+
 def _run_tool(java_cmd, tool_name):
     """执行 java 工具命令，失败时输出友好错误提示"""
     import subprocess, tempfile, os
@@ -212,8 +224,7 @@ def _run_tool(java_cmd, tool_name):
         print(f"❌ 执行失败（退出码 {r.returncode}）", file=sys.stderr)
         # 提取异常关键行
         import re
-        with open(_err_file) as f:
-            lines = f.readlines()
+        lines = _read_err(_err_file).splitlines()
         exc_lines = [l.rstrip() for l in lines if re.match(r'^(Exception in thread|Caused by:|Error:|\[Error\])', l)]
         if exc_lines:
             for l in exc_lines[:3]:
@@ -226,7 +237,7 @@ def _run_tool(java_cmd, tool_name):
         print("", file=sys.stderr)
         # 智能异常分类
         _hint = "参数缺失/格式不对/文件路径错误/数据不匹配"
-        _err_text = open(_err_file).read()
+        _err_text = _read_err(_err_file)
         if "FileNotFoundException" in _err_text:
             _hint = "文件不存在或路径错误，检查输入文件路径"
         elif "NullPointerException" in _err_text:
@@ -242,9 +253,8 @@ def _run_tool(java_cmd, tool_name):
     else:
         # 成功时输出引擎进度信息到 stderr
         try:
-            with open(_err_file) as f:
-                import sys as _sys
-                _sys.stderr.write(f.read())
+            import sys as _sys
+            _sys.stderr.write(_read_err(_err_file))
         except: pass
     try: os.unlink(_err_file)
     except: pass

@@ -338,8 +338,14 @@ class ToolGroup(click.Group):
                     doc = (impl.__doc__ or '').split(':',1)[1].strip() if ':' in (impl.__doc__ or '') else f'{name} [参数...]'
                     pitfall = get_pitfall_hint(name)
                     help_text = doc + (f'\n\n⚠️ {pitfall}' if pitfall else '')
+                    # FIX(P0-1): 旧写法闭包捕获 tool 分组自身 Context（ctx.args 恒空），
+                    # 所有参数被丢弃。改用 pass_context 拿子命令自己的 Context。
+                    # （WorkBuddy 2026-09-19 三轮实测报告 §3.1，Windows 已验证）
+                    @click.pass_context
+                    def _fwd(sctx, _impl=impl):
+                        sys.exit(_impl(list(sctx.args)))
                     cmd = click.Command(name=name,
-                        callback=lambda: sys.exit(impl(list(ctx.args))),
+                        callback=_fwd,
                         context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
                         help=help_text)
                     return name, cmd, args[1:]
