@@ -898,7 +898,8 @@ CATEGORY_MAP = {
     "fqTrim": "fastq", "fqfaConv": "fastq", "fastaSubseq": "fastq",
     "fastaExtract": "fastq",
     # HMM
-    "hmmExtract": "hmm", "hmmsearch": "hmm", "hmmsearch": "hmm",
+    "hmmExtract": "hmm", "hmmsearch": "hmm",
+    "gxfAttr": "gxf", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用

@@ -743,3 +743,69 @@ def _keggEnrich_impl(args, verbose=False, quiet=False):
 def _hmmsearch_impl(args, verbose=False, quiet=False):
     """hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）"""
     return _simplehmmscan_impl(args, verbose=verbose, quiet=quiet)
+
+def _gxfAttr_impl(args, verbose=False, quiet=False):
+    """gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）"""
+    import re as _re
+    # 解析参数
+    pos, feature, attrs = [], "mRNA", None
+    i = 0
+    while i < len(args):
+        if args[i] == "--feature" and i + 1 < len(args):
+            feature = args[i + 1]; i += 2
+        elif args[i] == "--attrs" and i + 1 < len(args):
+            attrs = [a.strip() for a in args[i + 1].split(",") if a.strip()]; i += 2
+        else:
+            pos.append(args[i]); i += 1
+    if len(pos) < 2:
+        print("用法: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]", file=sys.stderr)
+        return 1
+    in_gxf, out_tsv = pos[0], pos[1]
+    if not os.path.isfile(in_gxf):
+        print(f"❌ 输入文件不存在: {in_gxf}", file=sys.stderr)
+        return 2
+    def parse_attrs(field):
+        """兼容 GFF3 (k=v;) 与 GTF (k "v";) 属性列"""
+        d = {}
+        for m in _re.finditer(r'([^\s;=]+)\s*=\s*"?([^";]+)"?\s*;?', field):
+            d[m.group(1)] = m.group(2)
+        if not d:  # GTF 风格
+            for m in _re.finditer(r'([^\s;]+)\s+"([^"]+)"\s*;?', field):
+                d[m.group(1)] = m.group(2)
+        return d
+    rows, attr_keys = [], []
+    with open(in_gxf, encoding="utf-8", errors="replace") as f:
+        for line in f:
+            if line.startswith("#") or not line.strip():
+                continue
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) < 9:
+                continue
+            feat = parts[2]
+            if feature.lower() != "all" and feat.lower() != feature.lower():
+                continue
+            d = parse_attrs(parts[8])
+            d["__feature__"] = feat
+            d["__chr__"], d["__start__"], d["__end__"], d["__strand__"] = parts[0], parts[3], parts[4], parts[6]
+            rows.append(d)
+            for k in d:
+                if not k.startswith("__") and k not in attr_keys:
+                    attr_keys.append(k)
+    if not rows:
+        print(f"⚠️ 未提取到 feature={feature} 的记录（--feature all 提取全部）", file=sys.stderr)
+        return 1
+    # 列序: feature/坐标 + 用户指定 attrs + 其余按出现序
+    lead = ["__feature__", "__chr__", "__start__", "__end__", "__strand__"]
+    if attrs:
+        ordered = attrs + [k for k in attr_keys if k not in attrs]
+    else:
+        preferred = ["ID", "Name", "Parent", "gene_id", "gene_name", "transcript_id", "symbol", "gene", "product", "Note"]
+        ordered = [k for k in preferred if k in attr_keys] + [k for k in attr_keys if k not in preferred]
+    header = ["feature", "chr", "start", "end", "strand"] + ordered
+    with open(out_tsv, "w", encoding="utf-8") as f:
+        f.write("\t".join(header) + "\n")
+        for d in rows:
+            f.write("\t".join([d.get(k, "") for k in lead] + [d.get(k, "") for k in ordered]) + "\n")
+    if not quiet:
+        print(f"[gxfAttr] {len(rows)} 条 {feature} 记录 × {len(ordered)} 属性列 → {out_tsv}", file=sys.stderr)
+    return 0
