@@ -7,4 +7,7 @@
 # ============================================================
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT/config/config.sh" 2>/dev/null
+# FIX: python -m tbtools_cli.cli 需要仓库根在 PYTHONPATH，否则离开仓库目录即
+# ModuleNotFoundError（WorkBuddy 报告 §2.3 第 3 条）
+export PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}"
 exec python3 -m tbtools_cli.cli "$@"

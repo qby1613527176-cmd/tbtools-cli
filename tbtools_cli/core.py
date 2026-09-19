@@ -161,6 +161,7 @@ def check_input_format(cmd_name, path):
 
 # ---- 已知坑位提示 ----
 PITFALL_HINTS = {
+    "onesteptree": "--bb-time 必须 ≥1000（IQ-TREE UFBoot 下限），小于 1000 会静默不产树；outFilePrefix 若是目录，产物命名为 目录/TBtools.*",
     "hmmsearch": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
     "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
     "hclust": "输入必须是三列距离文件 GeneA\\tGeneB\\tdist（不是表达矩阵！）",
@@ -390,3 +391,42 @@ def pre_flight(cmd_name, first_file):
     if warn:
         print(f"⚠️ 格式提醒: {warn}", file=sys.stderr)
         print("   （继续执行；如确认无误可忽略）", file=sys.stderr)
+
+
+# ---- G5: 注册引擎类完整性探测（不起 JVM，zip 中央目录秒查）----
+def probe_dead_engines():
+    """提取代码中硬编码的 biocjava.* 引擎类，检查 jar 内是否存在对应 .class。
+
+    覆盖: auto_commands.py / cli.py / cli_tools_registry.py / bridges/*.java
+    返回 [(className, 来源文件), ...]（缺失项）；jar 不可读时返回 []。
+    用途: tbtools doctor 死命令预警（WorkBuddy 报告 P1-1：2.475 jar 无
+    Phylogenetics.OneStepTree，tbtools tree one-step 直接 ClassNotFound）。
+    """
+    import zipfile, re as _re
+    try:
+        with zipfile.ZipFile(JAR) as z:
+            names = set(z.namelist())
+    except Exception:
+        return []
+    pat = _re.compile(r'"(biocjava\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"')
+    dead = {}
+    srcs = [os.path.join(ROOT, "tbtools_cli", "auto_commands.py"),
+            os.path.join(ROOT, "tbtools_cli", "cli.py"),
+            os.path.join(ROOT, "tbtools_cli", "cli_tools_registry.py")]
+    bridges_dir = os.path.join(ROOT, "bridges")
+    if os.path.isdir(bridges_dir):
+        srcs += [os.path.join(bridges_dir, f) for f in os.listdir(bridges_dir) if f.endswith(".java")]
+    for src in srcs:
+        if not os.path.isfile(src):
+            continue
+        try:
+            with open(src, encoding="utf-8", errors="replace") as f:
+                content = f.read()
+        except Exception:
+            continue
+        for m in pat.finditer(content):
+            cls = m.group(1)
+            path = cls.replace(".", "/") + ".class"
+            if path not in names:
+                dead.setdefault(cls, os.path.basename(src))
+    return sorted(dead.items())

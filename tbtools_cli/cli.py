@@ -254,9 +254,11 @@ def expr_dehist(deg_file, output_file, verbose, quiet, fmt, preset, height, widt
     """差异表达双直方图"""
     pre_flight("dehist", deg_file)
     output_file = resolve_output(output_file, fmt)
-    args = ["java", "-Xmx2g", "-cp", JAR,
-            "biocjava.bioDoer.JIGplotToolkit.DiffExp.DualHistPlot.DiffExpDualHistPlot",
-            deg_file, output_file]
+    # FIX(G5): 原注册类 DiffExp.DualHistPlot.DiffExpDualHistPlot 在 2.535 jar 不存在，
+    # 真实类 RNAseqViz.DiffExpDualHistPlot main 硬编码 → DeHistCli 桥（doctor 死命令探测发现）
+    ensure_bridge("DeHistCli")
+    args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "DeHistCli", deg_file, output_file]
     if width: args += [str(width)]
     if height: args += [str(height)]
     ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="dehist")
@@ -304,9 +306,11 @@ def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, preset, height,
 @common_options
 def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, preset, height, width, threads):
     """MAD 系统发育定根"""
-    args = ["java", "-Xmx2g", "-cp", JAR,
-            "biocjava.bioDoer.JIGplotToolkit.newickParser.TreeTreeTree.TreeRootingByMAD",
-            input_nwk, output_nwk]
+    # FIX(G5): 原注册类 newickParser.TreeTreeTree.TreeRootingByMAD 在 2.535 jar 不存在，
+    # 改走既有 TreeRootingCli 桥（quickMadRoot，08/29 已验证）
+    ensure_bridge("TreeRootingCli")
+    args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+            "TreeRootingCli", input_nwk, output_nwk]
     ec = run_java(args, verbose=verbose, quiet=quiet, command_name="rooting")
     sys.exit(ec)
 
@@ -317,11 +321,13 @@ def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, preset, height, wid
 @common_options
 def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, preset, height, width, threads):
     """一步法 ML 树（muscle → trimal → IQ-TREE）"""
-    t = threads or 4
+    # FIX(G5): 原注册类 Phylogenetics.OneStepTree 在 2.475/2.535 jar 均不存在（WorkBuddy P1-1
+    # + 本地 doctor 探测复核）；真实引擎为 BioSoftPipeServer.OneStepMLTree。
+    # ⚠️ 该引擎 ArgsParser 只认 --inPepFie/--outFilePrefix/--clean/--bbTime，没有 --threads！
     args = ["java", "-Xmx4g", "-cp", JAR,
-            "biocjava.bioDoer.JIGplotToolkit.Phylogenetics.OneStepTree",
+            "biocjava.bioIO.BioSoftPipeServer.OneStepMLTree",
             "--inPepFie", pep_fasta, "--outFilePrefix", output_prefix,
-            "--bbTime", str(bb_time), "--threads", str(t)]
+            "--bbTime", str(bb_time)]
     ec = run_java(args, verbose=verbose, quiet=quiet, command_name="onesteptree")
     sys.exit(ec)
 
@@ -435,9 +441,11 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, preset, height
 def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """CDS → 蛋白质翻译"""
     if output_file == "-": output_file = "/dev/stdout"
+    # FIX(G5): 原注册类 JIGplotToolkit.Protein.CdsToProtein 在 2.535 jar 不存在，
+    # 真实引擎 bioIO.ORF.Translater（ArgsParser: --inFa/--outFa）
     args = ["java", "-Xmx2g", "-cp", JAR,
-            "biocjava.bioDoer.JIGplotToolkit.Protein.CdsToProtein",
-            cds_fasta, output_file]
+            "biocjava.bioIO.ORF.Translater",
+            "--inFa", cds_fasta, "--outFa", output_file]
     ec = run_java(args, verbose=verbose, quiet=quiet, command_name="cds2protein")
     sys.exit(ec)
 
@@ -453,9 +461,11 @@ def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, p
         with open(tmp, "wb") as f: f.write(sys.stdin.buffer.read())
         input_fasta = tmp
     if output_file == "-": output_file = "/dev/stdout"
+    # FIX(G5): 原注册类 bioIO.FastX.FastaIndex.ExtractFasta 路径错误，
+    # 真实类 bioDoer.Fasta.ExtractFasta（ArgsParser: --inFa/--inIDList/--outFa）
     args = ["java", "-Xmx2g", "-cp", JAR,
-            "biocjava.bioIO.FastX.FastaIndex.ExtractFasta",
-            input_fasta, id_list, output_file]
+            "biocjava.bioDoer.Fasta.ExtractFasta",
+            "--inFa", input_fasta, "--inIDList", id_list, "--outFa", output_file]
     ec = run_java(args, verbose=verbose, quiet=quiet, command_name="fasta_extract")
     sys.exit(ec)
 
@@ -500,6 +510,20 @@ def doctor():
         size_mb = os.path.getsize(JAR) / 1024 / 1024
         click.echo(f"  ✅ JAR: {JAR} ({size_mb:.0f}MB)")
         ok += 1
+        # G5: 死命令探测（jar 版本与 CLI 注册类不匹配预警，WorkBuddy P1-1）
+        from tbtools_cli.core import probe_dead_engines
+        dead = probe_dead_engines()
+        if dead:
+            click.echo(f"  ⚠️ 死命令探测: {len(dead)} 个注册引擎类在当前 jar 中不存在（版本不匹配）:")
+            for cls, src in dead[:5]:
+                click.echo(f"      - {cls}  （注册于 {src}）")
+            if len(dead) > 5:
+                click.echo(f"      ... 及其他 {len(dead)-5} 个")
+            click.echo(f"      💡 这些命令会 ClassNotFound；升级 jar 到 2.535+ 或忽略对应命令")
+            warn += 1
+        else:
+            click.echo("  ✅ 引擎类完整性: 注册类全部存在于 jar")
+            ok += 1
     else:
         click.echo("  ❌ JAR: 未找到")
         err += 1
