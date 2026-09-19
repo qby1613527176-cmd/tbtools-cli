@@ -162,6 +162,7 @@ def check_input_format(cmd_name, path):
 # ---- 已知坑位提示 ----
 PITFALL_HINTS = {
     "onesteptree": "--bb-time 必须 ≥1000（IQ-TREE UFBoot 下限），小于 1000 会静默不产树；outFilePrefix 若是目录，产物命名为 目录/TBtools.*",
+    "draw": "输入必须是 TreeTab 配置（[TYPE]:Tree + [NEWICK]: 行），直接喂 .nwk 曾导致引擎从 stdin 读入而挂起（G2 已修复为快速报错）；只画树用 tbtools tree phylotree",
     "hmmsearch": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
     "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
     "hclust": "输入必须是三列距离文件 GeneA\\tGeneB\\tdist（不是表达矩阵！）",

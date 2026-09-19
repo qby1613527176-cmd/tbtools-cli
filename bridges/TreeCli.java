@@ -31,6 +31,27 @@ public class TreeCli {
         int width = args.length > 3 ? Integer.parseInt(args[3]) : 1200;
         int height = args.length > 4 ? Integer.parseInt(args[4]) : 800;
 
+        // FIX(G2): TreeTreeTree 在配置解析失败时会从 System.in 读入（挂起元凶，
+        // WorkBuddy 报告「tree draw 挂起无响应」；本地复现：喂 .nwk 挂 30s+，
+        // stdin 关死即立即返回）。两道防线：
+        // ① 预检配置必须含 [TYPE]: 行，否则快速报错并指路 phylotree
+        // ② System.in 置空流，引擎任何 stdin 读立即 EOF
+        try {
+            String content = new String(java.nio.file.Files.readAllBytes(new File(configFile).toPath()));
+            if (!content.contains("[TYPE]:")) {
+                System.err.println("❌ 输入不是 TreeTab 配置（缺 [TYPE]: 行）: " + configFile);
+                System.err.println("   配置文件示例:");
+                System.err.println("     [TYPE]:Tree");
+                System.err.println("     [NEWICK]:((A:0.1,B:0.2):0.3,C:0.4);");
+                System.err.println("   💡 如果只想直接画 newick 树: tbtools tree phylotree <in.nwk> <out.svg>");
+                System.exit(2);
+            }
+        } catch (java.io.IOException ioe) {
+            System.err.println("❌ 无法读取配置文件: " + configFile + " (" + ioe.getMessage() + ")");
+            System.exit(2);
+        }
+        System.setIn(new java.io.ByteArrayInputStream(new byte[0]));
+
         TreeTreeTree ttt = new TreeTreeTree();
         ttt.setInConfig(new File(configFile));
         ttt.setScaleFactor(1.0);
