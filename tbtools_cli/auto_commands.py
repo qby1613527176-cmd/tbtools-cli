@@ -809,3 +809,41 @@ def _gxfAttr_impl(args, verbose=False, quiet=False):
     if not quiet:
         print(f"[gxfAttr] {len(rows)} 条 {feature} 记录 × {len(ordered)} 属性列 → {out_tsv}", file=sys.stderr)
     return 0
+
+def _notung_impl(args, verbose=False, quiet=False):
+    """notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）"""
+    notung = os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar")
+    if not os.path.isfile(notung):
+        print(f"❌ Notung 引擎缺失: {notung}", file=sys.stderr)
+        return 1
+    java_args = ["java", "-Xmx2g", "-jar", notung] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="notung")
+
+def _newickRename_impl(args, verbose=False, quiet=False):
+    """newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_NewickRenamer.jar")
+    if not os.path.isfile(pjar):
+        print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
+        return 1
+    java_args = ["java", "-Xmx1g", "-cp", f"{pjar}:{JAR}", "newickRenamer.NewickRenamer"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="newickRename")
+
+def _hmmerSearch_impl(args, verbose=False, quiet=False):
+    """hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_HmmerSuite.jar")
+    if not os.path.isfile(pjar):
+        print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
+        return 1
+    ensure_bridge("HmmerSuiteCli")
+    java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "HmmerSuiteCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="hmmerSearch")
+
+def _memeViz_impl(args, verbose=False, quiet=False):
+    """memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Batch_MEME_Motif_Viz.jar")
+    if not os.path.isfile(pjar):
+        print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
+        return 1
+    ensure_bridge("BatchVizMotifsCli")
+    java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "BatchVizMotifsCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="memeViz")

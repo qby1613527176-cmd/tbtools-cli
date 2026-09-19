@@ -923,7 +923,11 @@ CATEGORY_MAP = {
     "fastaExtract": "fastq",
     # HMM
     "hmmExtract": "hmm", "hmmsearch": "hmm",
-    "gxfAttr": "gxf", "hmmsearch": "hmm",
+    "gxfAttr": "gxf",
+    "notung": "tree",
+    "newickRename": "tree",
+    "hmmerSearch": "hmm",
+    "memeViz": "seq", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用
