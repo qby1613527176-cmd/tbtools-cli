@@ -927,7 +927,9 @@ CATEGORY_MAP = {
     "notung": "tree",
     "newickRename": "tree",
     "hmmerSearch": "hmm",
-    "memeViz": "seq", "hmmsearch": "hmm",
+    "memeViz": "seq",
+    "gsea": "table",
+    "tfbsShift": "seq", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用

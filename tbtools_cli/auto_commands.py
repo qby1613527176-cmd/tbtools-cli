@@ -847,3 +847,26 @@ def _memeViz_impl(args, verbose=False, quiet=False):
     ensure_bridge("BatchVizMotifsCli")
     java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "BatchVizMotifsCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="memeViz")
+
+def _gsea_impl(args, verbose=False, quiet=False):
+    """gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_GSEAWrapper.jar")
+    dep = os.path.join(ROOT, "plugins", "lib", "Dependency")
+    if not (os.path.isfile(pjar) and os.path.isdir(dep)):
+        print(f"❌ GSEA 插件或 Dependency 缺失: {pjar}", file=sys.stderr)
+        return 1
+    ensure_bridge("GSEAWrapperCli")
+    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "GSEAWrapperCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="gsea")
+
+def _tfbsShift_impl(args, verbose=False, quiet=False):
+    """tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_PlantTFbindingMotifShift.jar")
+    ath = os.path.join(ROOT, "plugins", "lib", "plantTF", "ath.pep")
+    motifs = os.path.join(ROOT, "plugins", "lib", "plantTF", "binding.motifs")
+    if not (os.path.isfile(pjar) and os.path.isfile(ath) and os.path.isfile(motifs)):
+        print(f"❌ TFBS 插件或参考数据缺失: {pjar}", file=sys.stderr)
+        return 1
+    ensure_bridge("MotifShiftCli")
+    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "MotifShiftCli", ath, motifs] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="tfbsShift")
