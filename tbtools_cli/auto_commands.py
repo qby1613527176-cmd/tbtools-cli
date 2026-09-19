@@ -728,3 +728,14 @@ def _visualizeblock_impl(args, verbose=False, quiet=False):
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="visualizeblock")
 
 # 共生成 127 个命令实现
+def _goEnrich_impl(args, verbose=False, quiet=False):
+    """goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）"""
+    ensure_bridge("GoEnrichCli")
+    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{JAR}", "GoEnrichCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="goEnrich")
+
+def _keggEnrich_impl(args, verbose=False, quiet=False):
+    """keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）"""
+    ensure_bridge("KeggEnrichCli")
+    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{JAR}", "KeggEnrichCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="keggEnrich")
