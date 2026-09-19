@@ -9,6 +9,7 @@ from tbtools_cli.core import (JAR, run_java, run_plot, ensure_bridge,
     check_input_format, pre_flight)
 from tbtools_cli.presets import apply_preset, list_presets, PRESETS
 import tbtools_cli.auto_commands as _ac
+from tbtools_cli.cli_tools_registry import CLI_TOOLS
 
 # ---- 通用选项 ----
 def common_options(f):
@@ -349,6 +350,19 @@ class ToolGroup(click.Group):
                         context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
                         help=help_text)
                     return name, cmd, args[1:]
+                # FIX(P0-3): 回退到共享注册表（82 个 CLI 工具，原仅旧入口 tbcli.py 可达，
+                # WorkBuddy 报告 §3.3：rpkmCal/statFasta/tpmCalc 等在新入口全部未找到）
+                cls = CLI_TOOLS.get(name)
+                if cls:
+                    @click.pass_context
+                    def _fwd_reg(sctx, _cls=cls, _name=name):
+                        java_args = ["java", "-Xmx4g", "-cp", JAR, _cls] + list(sctx.args)
+                        sys.exit(run_java(java_args, command_name=_name))
+                    cmd = click.Command(name=name,
+                        callback=_fwd_reg,
+                        context_settings={"ignore_unknown_options": True, "allow_extra_args": True},
+                        help=f"{name} [引擎命名参数...]\n\n⚠️ ArgsParser 系引擎一律 --key value 空格分隔，--key=value 会被拒绝")
+                    return name, cmd, args[1:]
                 click.echo(f"❌ 未知工具: {name}", file=sys.stderr)
                 count = 0
                 for n in sorted(dir(_ac)):
@@ -358,6 +372,11 @@ class ToolGroup(click.Group):
                         short = doc.split(':',1)[1].strip()[:50] if ':' in doc else ''
                         click.echo(f"  {cmd:20s} {short}", file=sys.stderr)
                         count += 1
+                for tname in sorted(CLI_TOOLS):
+                    if getattr(_ac, f'_{tname}_impl', None):
+                        continue
+                    click.echo(f"  {tname:20s} {CLI_TOOLS[tname].split('.')[-1]}", file=sys.stderr)
+                    count += 1
                 click.echo(f"\n共 {count} 个工具，查看: tbtools list tools", file=sys.stderr)
                 ctx.exit(2)
             raise
@@ -687,6 +706,15 @@ def help(name):
         cmd = cli.commands[name]
         if cmd.help:
             click.echo(f"\n{cmd.help}")
+        return
+    # 共享注册表工具（P0-3：tbtools tool <name> 动态解析，不在静态 commands 里）
+    if name in CLI_TOOLS:
+        click.echo(f"\n  命令: tool {name}  （分组 tool · 注册表工具）")
+        click.echo(f"\n  {name} [引擎命名参数...]")
+        click.echo(f"  引擎类: {CLI_TOOLS[name]}")
+        click.echo(f"\n  ⚠️ ArgsParser 系引擎一律 --key value 空格分隔，--key=value 会被拒绝")
+        click.echo(f"  💡 查看引擎真实参数: java -cp $TBTOOLS_JAR {CLI_TOOLS[name]} --bogus x（逼出 Usage）")
+        click.echo(f"\n  完整帮助: tbtools tool {name} --help")
         return
     click.echo(f"❌ 未找到命令: {name}")
     click.echo(f"   查看: tbtools list")
@@ -1094,8 +1122,15 @@ def listing(category):
                 short = doc.split(':',1)[1].strip()[:60] if ':' in doc else ''
                 lines.append(f"  {cmd:20s} {short}")
                 count += 1
+        # 加上共享注册表（P0-3：82 个 CLI 工具，排除已被 _impl 覆盖的）
+        reg_count = 0
+        for tname in sorted(CLI_TOOLS):
+            if getattr(_ac, f'_{tname}_impl', None):
+                continue  # 已在上面列出
+            lines.append(f"  {tname:20s} {CLI_TOOLS[tname].split('.')[-1]}")
+            reg_count += 1
         # 加上手动注册的 3 个
-        lines.append(f"\n共 {count + 3} 个工具（含 3 个手动迁移）")
+        lines.append(f"\n共 {count + reg_count + 3} 个工具（含 {reg_count} 个注册表工具 + 3 个手动迁移）")
     elif category == 'rpc':
         lines.append("RPC 方法（188 个），启动 RPC 服务器后可用：")
         lines.append("  tbtools_rpc.sh start    # 启动")
