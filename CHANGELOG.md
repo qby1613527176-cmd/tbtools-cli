@@ -2,6 +2,20 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [Unreleased]
+
+### 修复（外部实测报告合入，WorkBuddy 2026-09-18/19 · Windows + TBtools-II 2.475 · 油茶 WOX 真实数据）
+
+- **P0-1 `tbtools tool` 分组丢全部参数**：`ToolGroup.resolve_command` 的 lambda 闭包捕获分组自身 Context（`ctx.args` 恒空），~80 个转发命令参数全丢。改 `@click.pass_context` 拿子命令 Context（报告 §3.1 补丁原文，对方回归 14/14 PASS）
+- **P0-2 `bin/tbcli.py` Windows GBK 崩溃 + 退出码失真**：`_run_tool` 三处 stderr 读取无编码参数，中文 Windows 上 Java 输出 GBK 字节 → `UnicodeDecodeError` 且误报失败。加 `_read_err` utf-8→gbk 降级探测（报告 §3.2 补丁原文）
+- **130 处 xvfb 双重嵌套**（自查发现）：`auto_commands.py` 全部 `_impl` 在 `java_args` 内嵌 `xvfb-run` 前缀，与 `run_plot` 按需 prepend 构成双重嵌套；Windows 无 xvfb-run 时 `FileNotFoundError` 且误报「Java 未安装」。统一移除，xvfb 归 `run_plot` 单点处理
+
+### 已知未修（报告待办，见 GitHub Issues 候选）
+
+- P0-3：82 个 CLI 工具仅注册于旧入口 `bin/tbcli.py`，新入口 `tool` 分组不可达（rpkmCal/statFasta/tpmCalc 等）；README 的 `engine` 分组不存在
+- B2：Windows 上报「包装器吞引擎崩溃退出码」——Linux 复核不复现（EXIT=1 正确透传），待 Windows 环境复现定位
+- B3/P1-1/P1-2/P1-5/P2-1 等引擎级问题；§8 封装缺口 G1~G7（hmmsearch/GO 富集/GXF ID 对照等）
+
 ## [1.0.0] - 2026-09-04
 
 首个公开发布版本。
