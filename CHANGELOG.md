@@ -4,18 +4,19 @@
 
 ## [Unreleased]
 
-### 新增（GUI 面板逆向接口第二批，09/20 · #15~#26 共 14 个命令）
+### 新增（GUI 面板逆向接口第二批，09/20 · #15~#29 共 17 个命令）
 
 方法论同 `docs/GUI-INTERFACE-SOP.md`（反编译 GUIPanel StartButton 回调 → 拿权威 setter+process 调用链）。
 
+- **系统发育管线（muscle→trimal→iqtree 全链实测闭环）**：`seq muscle`（#27 QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 muscle5 系统崩 → Python 直调自动探测 v3/v5）、`seq trimal`（#29 QuickTrimAL；automated1/gappyout/strict/strictplus 四模式）、`tree iqtree`（#28 QuickRunIQtree；MFP 自动选模/UFBoot/自由速率/ASC；⚠️ UFBoot 须 ≥1000 否则 IQ-TREE 2 静默失败，桥内加防御校验）
 - **进化/树**：`tree kaks`（#15 PairWiseKaKsCalculator，Ka/Ks 计算；引擎自带 ArgsParser）、`tree subtree`（#23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree，诱导子树提取）
 - **序列**：`seq sixframe`（#16 SixFrameTranlater，六框翻译）、`seq longestorf`（#17 GetLongestORF，最长完整 ORF 预测）、`seq protparam`（#18 ProtParamWrapper，蛋白理化性质；⚠️ 联网 Expasy）、`seq genomefilter`（#19 QuickStatFasta+ExtractFasta 组合，长度过滤+可选 GXF 同过滤）、`seq seqpattern`（#20 QuickLocateSeqPattern，正则模式定位 GFF3）、`seq careclassify`（#22 PlantCAREResultClassify，PlantCARE 顺式元件 97 类分类）、`seq protsim`（#24 CalculateSimilarity，蛋白两两相似度矩阵）、`seq fa2tab`/`tab2fa`（#26 FastaTable 双向互转）
 - **GFF**：`gxf bed2gff3`（#21 RegionBedToGFF3；⚠️ BED 第 4 列须为 `ID:链向:编码` 如 G01:+:C）
 - **BLAST**：`blast xml2blasttab`/`xml2pairwise`（#25 BlastXmlToBlastFoolTable+BlastXMLToPairwise，补 GUI 四模式单选中注册表未覆盖的两个）
 
-**排坑沉淀**：① RegionBedToGFF3.process line81 崩=BED 第 4 列 split(':') 期望 ID:strand:coding ② pairwise 需 Hsp_query-frame/Hsp_hit-frame 字段 ③ QuickLocateSeqPattern 的 setMaxLenKbases 是 chunk 参数非长度过滤（main() --maxSeqLen 才是）
+**排坑沉淀**：① RegionBedToGFF3.process line81 崩=BED 第 4 列 split(':') 期望 ID:strand:coding ② pairwise 需 Hsp_query-frame/Hsp_hit-frame 字段 ③ QuickLocateSeqPattern 的 setMaxLenKbases 是 chunk 参数非长度过滤（main() --maxSeqLen 才是）④ QuickRunMUSCLE 引擎 muscle3 语法硬编码，v5 系统须 Python 直调适配 ⑤ 'no space in path' 是无害 debug 日志 ⑥ IQ-TREE 2 UFBoot<1000 静默失败
 
-**覆盖审计澄清**：DEGsDistPlot=dehist、GoTermparser=goParse、EnrichmentGrapher=barplot（面板名与 CLI 名差异导致的假阳性，实际已覆盖）
+**覆盖审计澄清**：DEGsDistPlot=dehist、GoTermparser=goParse、EnrichmentGrapher=barplot、GXFRepresentativeGrabber=gxfRepGXF（面板名与 CLI 名差异导致的假阳性，实际已覆盖）
 
 ### 重构（auto_commands 表驱动化，09/20）
 
