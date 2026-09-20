@@ -898,6 +898,7 @@ CATEGORY_MAP = {
     "xml2blasttab": "blast", "xml2pairwise": "blast",  # GUI 逆向：BLAST XML 转换
     "fa2tab": "seq", "tab2fa": "seq",  # GUI 逆向：FASTA↔表
     "muscle": "seq",  # GUI 逆向：MUSCLE 比对（系统二进制）
+    "trimal": "seq",  # GUI 逆向：trimAl 修剪
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
