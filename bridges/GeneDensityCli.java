@@ -1,34 +1,38 @@
-import biocjava.bioDoer.GXFUtils.GeneDensityProfiler;
-
-import java.io.File;
-
 /**
- * tbplot genedensity — 基因密度谱 CLI（08/31 第五十三波）
+ * tbplot gdensity — 基因密度分析 CLI（GUI 面板逆向接口，09/20）
  *
- * 用法: GeneDensityCli <in.gff3> <out> [binSize]
- *   in.gff3: 基因组注释
- *   out:     基因密度表 (tsv)
- *   binSize: 窗口大小 bp（默认 100000）
+ * 用法: GeneDensityCli <in.gff3> <out.geneRecords.bed> <binSize> [--feature <tag>] [--chrlen <file>]
  *
- * 引擎: GeneDensityProfiler.setBinSize/setInGXF/setOutGeneRecordFile/process()
- *       （窗口内基因计数 → 染色体密度谱，供基因组轨道/密度热图）
+ * 接口来源：反编译 GeneDensityProfilerGUIPanel（GUI 真实调用链）：
+ *   GeneDensityProfiler gdpf = new GeneDensityProfiler();
+ *   gdpf.setBinSize(N); setInGXF(gff); [setDefinedFeatureTag] [setChrLengthFile]
+ *   gdpf.setOutGeneRecordFile(out); gdpf.process();
+ * 纯逻辑无 GUI。产物：基因记录（按 bin 划分），供染色体基因密度分布图。
  */
 public class GeneDensityCli {
     public static void main(String[] args) throws Exception {
-        if (args.length < 2) {
-            System.err.println("用法: GeneDensityCli <in.gff3> <out> [binSize]");
+        String feature = "";
+        String chrlen = "";
+        java.util.ArrayList<String> pos = new java.util.ArrayList<String>();
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--feature") && i+1 < args.length) feature = args[++i];
+            else if (args[i].equals("--chrlen") && i+1 < args.length) chrlen = args[++i];
+            else pos.add(args[i]);
+        }
+        if (pos.size() < 3) {
+            System.err.println("用法: GeneDensityCli <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]");
             System.exit(1);
         }
-        String inGff = args[0];
-        String out = args[1];
-        int binSize = args.length > 2 ? Integer.parseInt(args[2]) : 100000;
-
-        GeneDensityProfiler gdp = new GeneDensityProfiler();
-        gdp.setBinSize(binSize);
-        gdp.setInGXF(new File(inGff));
-        gdp.setOutGeneRecordFile(new File(out));
-        gdp.process();
-        System.err.println("[tbplot] 已保存: " + out + " (binSize=" + binSize + ")");
+        Object gd = Class.forName("biocjava.bioDoer.GXFUtils.GeneDensityProfiler")
+                .getDeclaredConstructor().newInstance();
+        Class<?> c = gd.getClass();
+        c.getMethod("setInGXF", java.io.File.class).invoke(gd, new java.io.File(pos.get(0)));
+        c.getMethod("setOutGeneRecordFile", java.io.File.class).invoke(gd, new java.io.File(pos.get(1)));
+        c.getMethod("setBinSize", int.class).invoke(gd, Integer.parseInt(pos.get(2)));
+        if (!feature.isEmpty()) c.getMethod("setDefinedFeatureTag", String.class).invoke(gd, feature);
+        if (!chrlen.isEmpty()) c.getMethod("setChrLengthFile", java.io.File.class).invoke(gd, new java.io.File(chrlen));
+        c.getMethod("process").invoke(gd);
+        System.err.println("[tbplot] 已保存: " + pos.get(1));
         System.exit(0);
     }
 }

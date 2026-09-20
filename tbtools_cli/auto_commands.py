@@ -2097,3 +2097,9 @@ def _mpattern_impl(args, verbose=False, quiet=False):
     ensure_bridge("MotifPatternCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MotifPatternCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mpattern")
+
+def _gdensity_impl(args, verbose=False, quiet=False):
+    """gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）"""
+    ensure_bridge("GeneDensityCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GeneDensityCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="gdensity")

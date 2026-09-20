@@ -923,7 +923,7 @@ CATEGORY_MAP = {
     "fastaExtract": "fastq",
     # HMM
     "hmmExtract": "hmm", "hmmsearch": "hmm",
-    "gxfAttr": "gxf",
+    "gxfAttr": "gxf", "gdensity": "gxf",
     "notung": "tree",
     "newickRename": "tree",
     "hmmerSearch": "hmm",
