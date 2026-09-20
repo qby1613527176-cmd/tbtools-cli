@@ -67,6 +67,7 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
 | 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
+| 🧩 **插件命令** | 8 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名） | `tbtools table gsea` / `tbtools tree notung` 等 |
 
 All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Verified with real biological data (oil-Camellia GRAS gene family etc).
 
@@ -672,6 +673,7 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <方法> '<json>'` |
 | 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <类名> key=value` |
+| 🧩 **插件命令** | 8 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名） | `tbtools table gsea` / `tbtools tree notung` 等 |
 
 所有引擎在 Linux/WSL 下 **headless 运行**（xvfb），无需 GUI。已用真实生物数据验证（油茶 GRAS 基因家族等）。
 
