@@ -16,7 +16,14 @@
 
 **排坑沉淀**：① RegionBedToGFF3.process line81 崩=BED 第 4 列 split(':') 期望 ID:strand:coding ② pairwise 需 Hsp_query-frame/Hsp_hit-frame 字段 ③ QuickLocateSeqPattern 的 setMaxLenKbases 是 chunk 参数非长度过滤（main() --maxSeqLen 才是）④ QuickRunMUSCLE 引擎 muscle3 语法硬编码，v5 系统须 Python 直调适配 ⑤ 'no space in path' 是无害 debug 日志 ⑥ IQ-TREE 2 UFBoot<1000 静默失败
 
-**覆盖审计澄清**：DEGsDistPlot=dehist、GoTermparser=goParse、EnrichmentGrapher=barplot、GXFRepresentativeGrabber=gxfRepGXF（面板名与 CLI 名差异导致的假阳性，实际已覆盖）
+**覆盖审计澄清**：DEGsDistPlot=dehist、GoTermparser=goParse、EnrichmentGrapher=barplot、GXFRepresentativeGrabber=gxfRepGXF、MSAtrimmer=trimmsa（面板名与 CLI 名差异导致的假阳性，实际已覆盖）
+
+### 新增（GUI 面板逆向接口第三批，09/20 晚 · #27~#32 共 6 命令+管线闭环）
+
+- **系统发育管线闭环（muscle→trimal→iqtree 全链实测）**：`seq muscle`（#27 QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 muscle5 系统崩 → Python 直调自动探测 v3/v5）、`seq trimal`（#29 QuickTrimAL；automated1/gappyout/strict/strictplus 四模式七格式）、`tree iqtree`（#28 QuickRunIQtree；MFP/UFBoot/FreeRate/ASC；⚠️ UFBoot<1000 被 IQ-TREE 2 静默拒绝→桥内防御校验）
+- **比对修剪补充**：`seq gblocks`（#30 Jgblocks 纯 Java Gblocks 实现；main 仅 in/out 全参数须 setter 桥；GUI 默认 IS=0.5/FS=0.85/CP=8/BL1=15/BL2=10）
+- **BLAST**：`blast bestid`（#31 BestIDConverter 双向 BLAST 最优 ID 转换；⚠️ CLI 公共 -t/--threads 吃掉引擎强制 --threads → 手写 impl 缺省注入 4）
+- **GO**：`table goAnno`（#32 GoAnnoPipe GO 注释管道：blastx XML→query2gi→gi2go；⚠️ idmappingDb 须 **gzip 压缩**格式「ID; ID\tGO:num; GO:num」；自带 ArgsParser→direct）
 
 ### 重构（auto_commands 表驱动化，09/20）
 
