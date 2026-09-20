@@ -2,6 +2,16 @@
 import subprocess, tempfile, os, sys, re, shutil
 import click
 
+# ---- 平台常量（Windows 主战场：classpath 分隔符；Linux/WSL 用 :）----
+CP_SEP = ";" if os.name == "nt" else ":"
+def cp(*parts):
+    """平台安全的 classpath 拼接（Windows ; / POSIX :）"""
+    return CP_SEP.join(p for p in parts if p)
+
+def stdout_path():
+    """标准输出占位路径：POSIX /dev/stdout；Windows 用 CON（模式受限时回退临时文件）"""
+    return "/dev/stdout" if os.name != "nt" else "CON"
+
 # ---- 配置 ----
 def get_jar():
     jar = os.environ.get("TBTOOLS_JAR", "")

@@ -1,24 +1,24 @@
 """自动生成的 click 命令（从 tbplot.sh 元数据提取，直调 Java）"""
 import click, sys, os, subprocess
-from tbtools_cli.core import JAR, run_java, run_plot, ensure_bridge, resolve_output, ROOT, BUILD_DIR
+from tbtools_cli.core import JAR, run_java, run_plot, ensure_bridge, resolve_output, ROOT, BUILD_DIR, cp
 
 
 def _admixture_impl(args, verbose=False, quiet=False):
     """admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor"""
     ensure_bridge("AdmixtureCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "AdmixtureCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "AdmixtureCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="admixture")
 
 def _amazingmeta_impl(args, verbose=False, quiet=False):
     """amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> ["""
     ensure_bridge("AmazingMetaCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "AmazingMetaCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "AmazingMetaCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="amazingmeta")
 
 def _annocompare_impl(args, verbose=False, quiet=False):
     """annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r"""
     ensure_bridge("StructAnnoCompareCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "StructAnnoCompareCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "StructAnnoCompareCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="annocompare")
 
 def _bamMerge_impl(args, verbose=False, quiet=False):
@@ -29,31 +29,31 @@ def _bamMerge_impl(args, verbose=False, quiet=False):
 def _bamindex_impl(args, verbose=False, quiet=False):
     """bamindex: bamindex <in.sorted.bam> [out.bai]"""
     ensure_bridge("BamIndexCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "BamIndexCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "BamIndexCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="bamindex")
 
 def _bamsort_impl(args, verbose=False, quiet=False):
     """bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]"""
     ensure_bridge("BamSortCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "BamSortCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "BamSortCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="bamsort")
 
 def _bamstate_impl(args, verbose=False, quiet=False):
     """bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]"""
     ensure_bridge("BamStateCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "BamStateCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "BamStateCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="bamstate")
 
 def _barplot_impl(args, verbose=False, quiet=False):
     """barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol"""
     ensure_bridge("BarplotCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "BarplotCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "BarplotCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="barplot")
 
 def _barplotter_impl(args, verbose=False, quiet=False):
     """barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>"""
     ensure_bridge("BarPlotterCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "BarPlotterCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "BarPlotterCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="barplotter")
 
 def _batchReplace_impl(args, verbose=False, quiet=False):
@@ -64,25 +64,25 @@ def _batchReplace_impl(args, verbose=False, quiet=False):
 def _calcRepeat_impl(args, verbose=False, quiet=False):
     """calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min"""
     ensure_bridge("CalcRepeatCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "CalcRepeatCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "CalcRepeatCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="calcRepeat")
 
 def _cddmotif_impl(args, verbose=False, quiet=False):
     """cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new"""
     ensure_bridge("CddMotifCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "CddMotifCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "CddMotifCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="cddmotif")
 
 def _circlegene_impl(args, verbose=False, quiet=False):
     """circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r"""
     ensure_bridge("CircleGeneViewerCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "CircleGeneViewerCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "CircleGeneViewerCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="circlegene")
 
 def _circos_impl(args, verbose=False, quiet=False):
     """circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] ["""
     ensure_bridge("CircosCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "CircosCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "CircosCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="circos")
 
 def _collinearRegion_impl(args, verbose=False, quiet=False):
@@ -93,7 +93,7 @@ def _collinearRegion_impl(args, verbose=False, quiet=False):
 def _colorscheme_impl(args, verbose=False, quiet=False):
     """colorscheme: colorscheme <inTab> <outTab> <refColIndex>"""
     ensure_bridge("ColorSchemeCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "ColorSchemeCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "ColorSchemeCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="colorscheme")
 
 def _conflictpaf_impl(args, verbose=False, quiet=False):
@@ -104,25 +104,25 @@ def _conflictpaf_impl(args, verbose=False, quiet=False):
 def _ctgGroup_impl(args, verbose=False, quiet=False):
     """ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>"""
     ensure_bridge("CtgGroupCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "CtgGroupCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "CtgGroupCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="ctgGroup")
 
 def _cubeheatmap_impl(args, verbose=False, quiet=False):
     """cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor"""
     ensure_bridge("CubeHeatmapCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "CubeHeatmapCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "CubeHeatmapCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="cubeheatmap")
 
 def _degramdom_impl(args, verbose=False, quiet=False):
     """degramdom: degramdom <in.tsv> [out.nwk]"""
     ensure_bridge("DegramdomCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "DegramdomCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "DegramdomCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="degramdom")
 
 def _distance_impl(args, verbose=False, quiet=False):
     """distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi"""
     ensure_bridge("DistanceCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "DistanceCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "DistanceCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="distance")
 
 def _dotplot_impl(args, verbose=False, quiet=False):
@@ -133,7 +133,7 @@ def _dotplot_impl(args, verbose=False, quiet=False):
 def _dualsyn_impl(args, verbose=False, quiet=False):
     """dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] """
     ensure_bridge("DualSynCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "DualSynCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "DualSynCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="dualsyn")
 
 def _efpHeat_impl(args, verbose=False, quiet=False):
@@ -144,7 +144,7 @@ def _efpHeat_impl(args, verbose=False, quiet=False):
 def _exprCorr_impl(args, verbose=False, quiet=False):
     """exprCorr: exprCorr <inFPKM> <outCorrMat>"""
     ensure_bridge("ExprCorrCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "ExprCorrCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "ExprCorrCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="exprCorr")
 
 def _fastaExtract_impl(args, verbose=False, quiet=False):
@@ -160,7 +160,7 @@ def _fastaSubseq_impl(args, verbose=False, quiet=False):
 def _filesplit_impl(args, verbose=False, quiet=False):
     """filesplit: filesplit <inFile> <numParts>"""
     ensure_bridge("FileSplitCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "FileSplitCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "FileSplitCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="filesplit")
 
 def _filterCScore_impl(args, verbose=False, quiet=False):
@@ -171,19 +171,19 @@ def _filterCScore_impl(args, verbose=False, quiet=False):
 def _findblockdual_impl(args, verbose=False, quiet=False):
     """findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa"""
     ensure_bridge("FindBlockDualCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "FindBlockDualCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "FindBlockDualCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="findblockdual")
 
 def _findblockmultiple_impl(args, verbose=False, quiet=False):
     """findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou"""
     ensure_bridge("FindBlockMultipleCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "FindBlockMultipleCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "FindBlockMultipleCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="findblockmultiple")
 
 def _findpath_impl(args, verbose=False, quiet=False):
     """findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --"""
     ensure_bridge("FindPathCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "FindPathCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "FindPathCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="findpath")
 
 def _fqTrim_impl(args, verbose=False, quiet=False):
@@ -204,7 +204,7 @@ def _gel_impl(args, verbose=False, quiet=False):
 def _genedensity_impl(args, verbose=False, quiet=False):
     """genedensity: genedensity <in.gff3> <out.tsv> [binSize]"""
     ensure_bridge("GeneDensityCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GeneDensityCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GeneDensityCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="genedensity")
 
 def _genelocation_impl(args, verbose=False, quiet=False):
@@ -215,19 +215,19 @@ def _genelocation_impl(args, verbose=False, quiet=False):
 def _genelocgff_impl(args, verbose=False, quiet=False):
     """genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam"""
     ensure_bridge("GeneLocGffCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GeneLocGffCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GeneLocGffCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="genelocgff")
 
 def _generic_impl(args, verbose=False, quiet=False):
     """generic: generic <engineClass> <method[+method2]> <out> [--set field """
     ensure_bridge("GenericCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GenericCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GenericCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="generic")
 
 def _gfa_impl(args, verbose=False, quiet=False):
     """gfa: gfa <in.gfa> <out> [width] [height]"""
     ensure_bridge("VizGFACli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "VizGFACli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "VizGFACli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="gfa")
 
 def _gfa2fa_impl(args, verbose=False, quiet=False):
@@ -248,13 +248,13 @@ def _groupCol_impl(args, verbose=False, quiet=False):
 def _groupedbar_impl(args, verbose=False, quiet=False):
     """groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHe"""
     ensure_bridge("GroupedBarCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GroupedBarCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GroupedBarCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="groupedbar")
 
 def _gsadiag_impl(args, verbose=False, quiet=False):
     """gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax"""
     ensure_bridge("GsaDiagCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GsaDiagCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GsaDiagCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="gsadiag")
 
 def _gxfAppend_impl(args, verbose=False, quiet=False):
@@ -315,13 +315,13 @@ def _gxfStat_impl(args, verbose=False, quiet=False):
 def _gxffilter_impl(args, verbose=False, quiet=False):
     """gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>"""
     ensure_bridge("GxfFilterCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GxfFilterCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GxfFilterCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="gxffilter")
 
 def _gxfsort_impl(args, verbose=False, quiet=False):
     """gxfsort: gxfsort <in.gff3|gtf> <out.sorted>"""
     ensure_bridge("GxfSortCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GxfSortCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GxfSortCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="gxfsort")
 
 def _hicEnzyme_impl(args, verbose=False, quiet=False):
@@ -342,7 +342,7 @@ def _homoPhase_impl(args, verbose=False, quiet=False):
 def _layoutheatmap_impl(args, verbose=False, quiet=False):
     """layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]"""
     ensure_bridge("LayoutHeatmapCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "LayoutHeatmapCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "LayoutHeatmapCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="layoutheatmap")
 
 def _levelGo_impl(args, verbose=False, quiet=False):
@@ -358,13 +358,13 @@ def _marker_impl(args, verbose=False, quiet=False):
 def _markertools_impl(args, verbose=False, quiet=False):
     """markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi"""
     ensure_bridge("MarkerToolsCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MarkerToolsCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MarkerToolsCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="markertools")
 
 def _mast2tab_impl(args, verbose=False, quiet=False):
     """mast2tab: mast2tab <mast|meme.xml> <out.tab>"""
     ensure_bridge("Mast2TabCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "Mast2TabCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "Mast2TabCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mast2tab")
 
 def _mastExtract_impl(args, verbose=False, quiet=False):
@@ -375,25 +375,25 @@ def _mastExtract_impl(args, verbose=False, quiet=False):
 def _mastrun_impl(args, verbose=False, quiet=False):
     """mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--"""
     ensure_bridge("MastRunCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MastRunCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MastRunCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mastrun")
 
 def _mcscanx_impl(args, verbose=False, quiet=False):
     """mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测"""
     ensure_bridge("MCScanXCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MCScanXCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MCScanXCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mcscanx")
 
 def _memerun_impl(args, verbose=False, quiet=False):
     """memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma"""
     ensure_bridge("MemeRunCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MemeRunCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MemeRunCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="memerun")
 
 def _mggxf_impl(args, verbose=False, quiet=False):
     """mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked"""
     ensure_bridge("MgGxfCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MgGxfCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MgGxfCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mggxf")
 
 def _microgenome_impl(args, verbose=False, quiet=False):
@@ -404,13 +404,13 @@ def _microgenome_impl(args, verbose=False, quiet=False):
 def _microsyn_impl(args, verbose=False, quiet=False):
     """microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star"""
     ensure_bridge("MicroSynCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MicroSynCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MicroSynCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="microsyn")
 
 def _mirnaIdentify_impl(args, verbose=False, quiet=False):
     """mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [o"""
     ensure_bridge("MirIdentifyCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MirIdentifyCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MirIdentifyCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mirnaIdentify")
 
 def _mirnaTarget2_impl(args, verbose=False, quiet=False):
@@ -421,31 +421,31 @@ def _mirnaTarget2_impl(args, verbose=False, quiet=False):
 def _mirnatarget_impl(args, verbose=False, quiet=False):
     """mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [-"""
     ensure_bridge("TargetScoreCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "TargetScoreCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "TargetScoreCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mirnatarget")
 
 def _mountain_impl(args, verbose=False, quiet=False):
     """mountain: mountain <fold.txt> <out.tsv>"""
     ensure_bridge("MountainPlotCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MountainPlotCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MountainPlotCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mountain")
 
 def _msy_impl(args, verbose=False, quiet=False):
     """msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w"""
     ensure_bridge("GenericCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "GenericCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GenericCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="msy")
 
 def _multiEfp_impl(args, verbose=False, quiet=False):
     """multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId"""
     ensure_bridge("MultiSuperHeatCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "MultiSuperHeatCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MultiSuperHeatCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="multiEfp")
 
 def _multisyn_impl(args, verbose=False, quiet=False):
     """multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt"""
     ensure_bridge("SeveralSpeciesCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "SeveralSpeciesCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SeveralSpeciesCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="multisyn")
 
 def _nwAlign_impl(args, verbose=False, quiet=False):
@@ -456,7 +456,7 @@ def _nwAlign_impl(args, verbose=False, quiet=False):
 def _pafcomp_impl(args, verbose=False, quiet=False):
     """pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q"""
     ensure_bridge("PafGC")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "PafGC"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PafGC"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pafcomp")
 
 def _pafref_impl(args, verbose=False, quiet=False):
@@ -467,7 +467,7 @@ def _pafref_impl(args, verbose=False, quiet=False):
 def _pafviz_impl(args, verbose=False, quiet=False):
     """pafviz: pafviz <in.paf> <out> [graphSize] [colorMode] [switchQT] [mi"""
     ensure_bridge("PafVizCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "PafVizCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PafVizCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pafviz")
 
 def _partitionconflict_impl(args, verbose=False, quiet=False):
@@ -483,7 +483,7 @@ def _peakanno_impl(args, verbose=False, quiet=False):
 def _peakdist_impl(args, verbose=False, quiet=False):
     """peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]"""
     ensure_bridge("PeakDistCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "PeakDistCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PeakDistCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="peakdist")
 
 def _peaktss_impl(args, verbose=False, quiet=False):
@@ -494,25 +494,25 @@ def _peaktss_impl(args, verbose=False, quiet=False):
 def _pep2codon_impl(args, verbose=False, quiet=False):
     """pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>"""
     ensure_bridge("Pep2CodonCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "Pep2CodonCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "Pep2CodonCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pep2codon")
 
 def _pfammotif_impl(args, verbose=False, quiet=False):
     """pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic"""
     ensure_bridge("PfamMotifCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "PfamMotifCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PfamMotifCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pfammotif")
 
 def _phylotree_impl(args, verbose=False, quiet=False):
     """phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]"""
     ensure_bridge("PhyloTreeCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "PhyloTreeCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PhyloTreeCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="phylotree")
 
 def _pileup_impl(args, verbose=False, quiet=False):
     """pileup: pileup <blast.xml> <out.svg> [--query NAME]"""
     ensure_bridge("PileUpCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "PileUpCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PileUpCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pileup")
 
 def _plotrna_impl(args, verbose=False, quiet=False):
@@ -528,19 +528,19 @@ def _preparespecies_impl(args, verbose=False, quiet=False):
 def _qpcr_impl(args, verbose=False, quiet=False):
     """qpcr: qpcr <data.txt> <out> [w] [h]   (data: name\tmean\tsd)"""
     ensure_bridge("QpcrCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "QpcrCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "QpcrCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="qpcr")
 
 def _qpcrExp_impl(args, verbose=False, quiet=False):
     """qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>"""
     ensure_bridge("QpcrDdctCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "QpcrDdctCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "QpcrDdctCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="qpcrExp")
 
 def _qpcrproc_impl(args, verbose=False, quiet=False):
     """qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>"""
     ensure_bridge("QpcrProcCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "QpcrProcCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "QpcrProcCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="qpcrproc")
 
 def _quickFamily_impl(args, verbose=False, quiet=False):
@@ -561,19 +561,19 @@ def _regionAnno_impl(args, verbose=False, quiet=False):
 def _regiondepth_impl(args, verbose=False, quiet=False):
     """regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]"""
     ensure_bridge("RegionDepthCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "RegionDepthCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "RegionDepthCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="regiondepth")
 
 def _rnaplot_impl(args, verbose=False, quiet=False):
     """rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R"""
     ensure_bridge("RNAplotCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "RNAplotCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "RNAplotCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="rnaplot")
 
 def _sambamcov_impl(args, verbose=False, quiet=False):
     """sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]"""
     ensure_bridge("SamBamCovCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "SamBamCovCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SamBamCovCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="sambamcov")
 
 def _sepChr_impl(args, verbose=False, quiet=False):
@@ -584,25 +584,25 @@ def _sepChr_impl(args, verbose=False, quiet=False):
 def _seqconvert_impl(args, verbose=False, quiet=False):
     """seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>"""
     ensure_bridge("SeqConverterCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "SeqConverterCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SeqConverterCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="seqconvert")
 
 def _seqlentrack_impl(args, verbose=False, quiet=False):
     """seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]"""
     ensure_bridge("SeqLenTrackCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "SeqLenTrackCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SeqLenTrackCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="seqlentrack")
 
 def _simplehmmscan_impl(args, verbose=False, quiet=False):
     """simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt"""
     ensure_bridge("SimpleHmmscanCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "SimpleHmmscanCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SimpleHmmscanCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="simplehmmscan")
 
 def _supercircos_impl(args, verbose=False, quiet=False):
     """supercircos: supercircos <config.cfg> <out> [width] [height]"""
     ensure_bridge("SuperCircosCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "SuperCircosCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SuperCircosCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="supercircos")
 
 def _tableAppend_impl(args, verbose=False, quiet=False):
@@ -623,13 +623,13 @@ def _tableColSel_impl(args, verbose=False, quiet=False):
 def _tableColSelect_impl(args, verbose=False, quiet=False):
     """tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]"""
     ensure_bridge("TableColManipCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "TableColManipCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "TableColManipCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="tableColSelect")
 
 def _tableCollapse_impl(args, verbose=False, quiet=False):
     """tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader """
     ensure_bridge("TableCollapseCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "TableCollapseCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "TableCollapseCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="tableCollapse")
 
 def _tableMelt_impl(args, verbose=False, quiet=False):
@@ -660,13 +660,13 @@ def _tableUniq_impl(args, verbose=False, quiet=False):
 def _tauIndex_impl(args, verbose=False, quiet=False):
     """tauIndex: tauIndex <inExpTab> <outTAU>"""
     ensure_bridge("TauCalcCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "TauCalcCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "TauCalcCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="tauIndex")
 
 def _trimmsa_impl(args, verbose=False, quiet=False):
     """trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]"""
     ensure_bridge("TrimMSACli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "TrimMSACli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "TrimMSACli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="trimmsa")
 
 def _twoSeqBlast_impl(args, verbose=False, quiet=False):
@@ -677,7 +677,7 @@ def _twoSeqBlast_impl(args, verbose=False, quiet=False):
 def _upset_impl(args, verbose=False, quiet=False):
     """upset: upset <sets.txt> <outFile> [w] [h]"""
     ensure_bridge("UpSetCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "UpSetCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "UpSetCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="upset")
 
 def _venn2_impl(args, verbose=False, quiet=False):
@@ -701,19 +701,19 @@ def _venn4_impl(args, verbose=False, quiet=False):
 def _venn5_impl(args, verbose=False, quiet=False):
     """venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]"""
     ensure_bridge("Venn5Cli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "Venn5Cli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "Venn5Cli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="venn5")
 
 def _venn6_impl(args, verbose=False, quiet=False):
     """venn6: venn6 <out> <setA..F.txt> [labels]"""
     ensure_bridge("Venn6Cli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "Venn6Cli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "Venn6Cli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="venn6")
 
 def _violin_impl(args, verbose=False, quiet=False):
     """violin: violin <in.tsv> <out> [width] [height]"""
     ensure_bridge("ViolinCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "ViolinCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "ViolinCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="violin")
 
 def _virusRecomb_impl(args, verbose=False, quiet=False):
@@ -724,20 +724,20 @@ def _virusRecomb_impl(args, verbose=False, quiet=False):
 def _visualizeblock_impl(args, verbose=False, quiet=False):
     """visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Gen"""
     ensure_bridge("VisualizeCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "VisualizeCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "VisualizeCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="visualizeblock")
 
 # 共生成 127 个命令实现
 def _goEnrich_impl(args, verbose=False, quiet=False):
     """goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）"""
     ensure_bridge("GoEnrichCli")
-    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{JAR}", "GoEnrichCli"] + args
+    java_args = ["java", "-Xmx4g", "-cp", cp(BUILD_DIR, JAR), "GoEnrichCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="goEnrich")
 
 def _keggEnrich_impl(args, verbose=False, quiet=False):
     """keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）"""
     ensure_bridge("KeggEnrichCli")
-    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{JAR}", "KeggEnrichCli"] + args
+    java_args = ["java", "-Xmx4g", "-cp", cp(BUILD_DIR, JAR), "KeggEnrichCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="keggEnrich")
 
 def _hmmsearch_impl(args, verbose=False, quiet=False):
@@ -835,7 +835,7 @@ def _hmmerSearch_impl(args, verbose=False, quiet=False):
         print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
         return 1
     ensure_bridge("HmmerSuiteCli")
-    java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "HmmerSuiteCli"] + args
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, pjar, JAR), "HmmerSuiteCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="hmmerSearch")
 
 def _memeViz_impl(args, verbose=False, quiet=False):
@@ -845,7 +845,7 @@ def _memeViz_impl(args, verbose=False, quiet=False):
         print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
         return 1
     ensure_bridge("BatchVizMotifsCli")
-    java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "BatchVizMotifsCli"] + args
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, pjar, JAR), "BatchVizMotifsCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="memeViz")
 
 def _gsea_impl(args, verbose=False, quiet=False):
@@ -856,7 +856,7 @@ def _gsea_impl(args, verbose=False, quiet=False):
         print(f"❌ GSEA 插件或 Dependency 缺失: {pjar}", file=sys.stderr)
         return 1
     ensure_bridge("GSEAWrapperCli")
-    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "GSEAWrapperCli"] + args
+    java_args = ["java", "-Xmx4g", "-cp", cp(BUILD_DIR, pjar, JAR), "GSEAWrapperCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="gsea")
 
 def _tfbsShift_impl(args, verbose=False, quiet=False):
@@ -868,7 +868,7 @@ def _tfbsShift_impl(args, verbose=False, quiet=False):
         print(f"❌ TFBS 插件或参考数据缺失: {pjar}", file=sys.stderr)
         return 1
     ensure_bridge("MotifShiftCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "MotifShiftCli", ath, motifs] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, pjar, JAR), "MotifShiftCli", ath, motifs] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="tfbsShift")
 
 def _kallisto_impl(args, verbose=False, quiet=False):
@@ -950,13 +950,13 @@ def _mcscanxd_impl(args, verbose=False, quiet=False):
         return 1
     os.environ["PATH"] = bin_dir + os.pathsep + os.environ.get("PATH", "")
     ensure_bridge("MCScanXFastCli")
-    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "MCScanXFastCli"] + args
+    java_args = ["java", "-Xmx4g", "-cp", cp(BUILD_DIR, pjar, JAR), "MCScanXFastCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="mcscanxd")
 
 def _qdot_impl(args, verbose=False, quiet=False):
     """qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）"""
     ensure_bridge("QuickGenomeDotCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "QuickGenomeDotCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "QuickGenomeDotCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="qdot")
 
 def _quickAnno_impl(args, verbose=False, quiet=False):
@@ -971,7 +971,7 @@ def _quickAnno_impl(args, verbose=False, quiet=False):
         return 1
     os.environ["PATH"] = bin_dir + os.pathsep + os.environ.get("PATH", "")
     ensure_bridge("QuickProteinAnnoCli")
-    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "QuickProteinAnnoCli"] + args
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, pjar, JAR), "QuickProteinAnnoCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="quickAnno")
 
 def _smart_impl(args, verbose=False, quiet=False):
@@ -981,7 +981,7 @@ def _smart_impl(args, verbose=False, quiet=False):
         print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
         return 1
     ensure_bridge("SubmitSMARTCli")
-    java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "SubmitSMARTCli"] + args
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, pjar, JAR), "SubmitSMARTCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="smart")
 
 def _fimo_impl(args, verbose=False, quiet=False):

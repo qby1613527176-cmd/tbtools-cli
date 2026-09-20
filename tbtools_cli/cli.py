@@ -6,7 +6,7 @@ import os, sys, subprocess
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from tbtools_cli.core import (JAR, run_java, run_plot, ensure_bridge,
     resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint, c,
-    check_input_format, pre_flight)
+    check_input_format, pre_flight, cp, stdout_path)
 from tbtools_cli.presets import apply_preset, list_presets, PRESETS
 import tbtools_cli.auto_commands as _ac
 from tbtools_cli.cli_tools_registry import CLI_TOOLS
@@ -99,7 +99,7 @@ def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, he
     pre_flight("msa", aligned_fasta)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("MSACli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "MSACli", aligned_fasta, output_file]
     if padding:
         args += ["--padding", str(padding)]
@@ -117,7 +117,7 @@ def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, p
     pre_flight("structure", gff_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GeneStructureCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "GeneStructureCli", gff_file, id_list, output_file]
     if genome:
         args += [genome]
@@ -136,7 +136,7 @@ def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, preset, heigh
     pre_flight("motif", meme_xml)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("MotifCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "MotifCli", meme_xml, id_list, output_file]
     if width: args += [str(width)]
     if height: args += [str(height)]
@@ -165,7 +165,7 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
         if 'height' in p and not height: height = p['height']
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GenericCli")
-    args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx2g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "GenericCli", "biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot", "show",
             output_file, "--set", "inData", deg_file]
     args += ["--set", "log2FoldChange", "true", "--set", "negLogPvalue", "true"]
@@ -191,7 +191,7 @@ def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col,
     """热图（表达矩阵）"""
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HeatmapCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "HeatmapCli", matrix_file, output_file]
     if log2:
         args += ["--log2"]
@@ -219,7 +219,7 @@ def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, pr
     pre_flight("pca", matrix_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("GenericCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "GenericCli", "biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis",
             "doPCA+postGraph", output_file,
             "--set", "inTabFile", matrix_file,
@@ -241,7 +241,7 @@ def expr_hclust(distance_file, output_file, verbose, quiet, fmt, preset, height,
     pre_flight("hclust", distance_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HclustCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "HclustCli", distance_file, output_file]
     ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="hclust")
     sys.exit(ec)
@@ -257,7 +257,7 @@ def expr_dehist(deg_file, output_file, verbose, quiet, fmt, preset, height, widt
     # FIX(G5): 原注册类 DiffExp.DualHistPlot.DiffExpDualHistPlot 在 2.535 jar 不存在，
     # 真实类 RNAseqViz.DiffExpDualHistPlot main 硬编码 → DeHistCli 桥（doctor 死命令探测发现）
     ensure_bridge("DeHistCli")
-    args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx2g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "DeHistCli", deg_file, output_file]
     if width: args += [str(width)]
     if height: args += [str(height)]
@@ -279,7 +279,7 @@ def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, wid
     pre_flight("draw", config_file)  # draw 输入是 TreeTab 配置文件，不适用格式表
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("TreeCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "TreeCli", config_file, output_file]
     ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="draw")
     sys.exit(ec)
@@ -293,7 +293,7 @@ def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, preset, height,
     pre_flight("unrooted", newick_file)
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("UnrootedTreeCli")
-    args = ["java", "-Xmx3g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "UnrootedTreeCli", newick_file, output_file]
     if width: args += ["--width", str(width)]
     if height: args += ["--height", str(height)]
@@ -309,7 +309,7 @@ def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, preset, height, wid
     # FIX(G5): 原注册类 newickParser.TreeTreeTree.TreeRootingByMAD 在 2.535 jar 不存在，
     # 改走既有 TreeRootingCli 桥（quickMadRoot，08/29 已验证）
     ensure_bridge("TreeRootingCli")
-    args = ["java", "-Xmx2g", "-cp", f"{os.path.join(ROOT, 'build')}:{JAR}",
+    args = ["java", "-Xmx2g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "TreeRootingCli", input_nwk, output_nwk]
     ec = run_java(args, verbose=verbose, quiet=quiet, command_name="rooting")
     sys.exit(ec)
@@ -427,7 +427,7 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, preset, height
             f.write(sys.stdin.buffer.read())
         input_file = tmp
     if output_file == "-":
-        output_file = "/dev/stdout"
+        output_file = stdout_path()
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
             "--inFasta", input_file, "--outPutFile", output_file]
@@ -440,7 +440,7 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, preset, height
 @common_options
 def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """CDS → 蛋白质翻译"""
-    if output_file == "-": output_file = "/dev/stdout"
+    if output_file == "-": output_file = stdout_path()
     # FIX(G5): 原注册类 JIGplotToolkit.Protein.CdsToProtein 在 2.535 jar 不存在，
     # 真实引擎 bioIO.ORF.Translater（ArgsParser: --inFa/--outFa）
     args = ["java", "-Xmx2g", "-cp", JAR,
@@ -460,7 +460,7 @@ def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, p
         import tempfile; tmp = tempfile.mktemp(suffix=".fa")
         with open(tmp, "wb") as f: f.write(sys.stdin.buffer.read())
         input_fasta = tmp
-    if output_file == "-": output_file = "/dev/stdout"
+    if output_file == "-": output_file = stdout_path()
     # FIX(G5): 原注册类 bioIO.FastX.FastaIndex.ExtractFasta 路径错误，
     # 真实类 bioDoer.Fasta.ExtractFasta（ArgsParser: --inFa/--inIDList/--outFa）
     args = ["java", "-Xmx2g", "-cp", JAR,
@@ -1099,8 +1099,14 @@ def _make_passthrough(name, group=None):
         if impl:
             ec = impl(args, verbose=verbose, quiet=quiet)
         else:
-            bash_args = ["bash", os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
-            ec = subprocess.run(bash_args).returncode
+            # 兜底走 bash tbplot.sh（Windows 需 Git Bash；无 bash 时报清晰错误）
+            bash_bin = shutil.which("bash") if hasattr(__import__("shutil"), "which") else None
+            if bash_bin:
+                bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
+                ec = subprocess.run(bash_args).returncode
+            else:
+                print(f"❌ {name} 需要 bash 兜底（tbplot.sh），但未找到 bash（Windows 请装 Git Bash）", file=sys.stderr)
+                ec = 1
         sys.exit(ec)
     
     # 先设置 docstring，再装饰
