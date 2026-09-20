@@ -39,6 +39,13 @@
 
 **SRA 工具组 3/3 面板全清**（srr2ena/sraxml2tab/sranum2info）
 
+### 新增（GUI 面板逆向接口第六批，09/21 凌晨 · #42~#45 共 4 命令）
+
+- **比对/推荐**：`blast blat`（#42 BlatExecutor；**org.ucsc.blat 纯 Java BLAT 实现内嵌 jar 无需外部二进制**；9 输出格式默认 blast9+auto/dnadna/dnarna 三模式）、`engine seqrecommend`（#43 AssemblyGenomeDataSizeRecommand 测序量推荐；纯计算离线；400Mb Draft=Hifi 15-20X+HiC 30-60X）
+- **下载/文献**：`seq seqfetch`（#44 NcbiSmartSeqFetchEntrezUtils NCBI 智能序列下载；ID 自动检测/转换/审计/apiKey/限速，NM_000546→TP53 mRNA）、`table pubmed`（#45 PubmedSearch；联网 eutils；期刊/标题/年份/IF/DOI 表）
+
+**判不可做（第六批裁决）**：BlastXmlAlignment 可视化组（DotPlot/PileupGrapher/Shower——JJplot2GUI 是 Swing 交互窗 JustShowIt，非 JIGBasePanel 可 save2SVG，GUI 强依赖）、eRace（GenomeWalking 引擎复杂+GUI 表格渲染重）、SimpleDownloadSeq/BulkDownloadSeq（旧版下载引擎无 CLI 且功能被 seqfetch 覆盖，判冗余）、PlantPhyloTreeRebuild（PrepareDB 依赖已死网站 theplantlist.org 下载属级映射，内置仅 47 属；GUI 同病）
+
 ### 重构（auto_commands 表驱动化，09/20）
 
 - **auto_commands.py 2105→461 行（-78%）**：审计发现原文件 309 个 def 仅 157 个唯一函数（历史合并整段重复，Python 后者覆盖前者）→ 按生效规格提取 ENGINE_REGISTRY（144 条：86 bridge + 58 direct）+ `_make_impl` 工厂动态生成
