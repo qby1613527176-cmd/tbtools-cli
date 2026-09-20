@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+### 重构（auto_commands 表驱动化，09/20）
+
+- **auto_commands.py 2105→461 行（-78%）**：审计发现原文件 309 个 def 仅 157 个唯一函数（历史合并整段重复，Python 后者覆盖前者）→ 按生效规格提取 ENGINE_REGISTRY（144 条：86 bridge + 58 direct）+ `_make_impl` 工厂动态生成
+- **13 个特殊实现手写保留**：hmmsearch 转发 / gxfAttr 原生 / kallisto 二进制 / fimo 二进制 / notung 插件 / newickRename 插件 / hmmerSearch / memeViz / gsea / tfbsShift / mcscanxd / quickAnno / smart（各含独立预检/环境/参考数据逻辑）
+- **正确性验证**：新旧模块 157 函数集合一致、doc 全一致（含编译器 docstring 制表符展开语义）、行为 0 不一致；端到端 bridge 型 hclust 出 nwk / direct 型 venn2 出 SVG / 注册表工具 statFasta 出表
+- **ruff 46→0 errors**（顺带消灭整段重复冗余）；备份 auto_commands.py.bak_pre_tabledriven
+
 ### 新增（GUI 面板逆向接口，09/20 · 14 个命令）
 
 方法论：反编译 GUIPanel StartButton 回调 → 拿权威 setter+process 调用链 → 绕 GUI 弹窗直驱（public process()/plot()/buildPanel()/postGraph 重载）。详见 `docs/GUI-INTERFACE-SOP.md`。
