@@ -1011,3 +1011,9 @@ def _pafviz_impl(args, verbose=False, quiet=False):
     ensure_bridge("PafVizCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PafVizCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pafviz")
+
+def _meme_impl(args, verbose=False, quiet=False):
+    """meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）"""
+    ensure_bridge("MemeCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MemeCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="meme")

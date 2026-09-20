@@ -935,7 +935,7 @@ CATEGORY_MAP = {
     "qdot": "syn", "pafviz": "syn",
     "quickAnno": "blast",
     "smart": "seq",
-    "fimo": "seq", "hmmsearch": "hmm",
+    "fimo": "seq", "meme": "seq", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用
