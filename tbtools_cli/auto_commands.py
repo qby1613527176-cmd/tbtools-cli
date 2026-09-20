@@ -2073,3 +2073,9 @@ def _golevel_impl(args, verbose=False, quiet=False):
     ensure_bridge("GoLevelCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GoLevelCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="golevel")
+
+def _mast_impl(args, verbose=False, quiet=False):
+    """mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）"""
+    ensure_bridge("MastCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MastCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="mast")
