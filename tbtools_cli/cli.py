@@ -910,6 +910,7 @@ CATEGORY_MAP = {
     "srr2ena": "table",  # GUI 逆向：SRR→ENA 链接
     "sraxml2tab": "table",  # GUI 逆向：SRA XML→表
     "sranum2info": "table",  # GUI 逆向：SRR 信息表
+    "blat": "blast",  # GUI 逆向：BLAT 比对
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
