@@ -931,7 +931,11 @@ CATEGORY_MAP = {
     "gsea": "table",
     "tfbsShift": "seq",
     "kallisto": "expr",
-    "mcscanxd": "syn", "hmmsearch": "hmm",
+    "mcscanxd": "syn",
+    "qdot": "syn",
+    "quickAnno": "blast",
+    "smart": "seq",
+    "fimo": "seq", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用

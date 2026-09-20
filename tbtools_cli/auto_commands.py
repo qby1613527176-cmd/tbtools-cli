@@ -952,3 +952,49 @@ def _mcscanxd_impl(args, verbose=False, quiet=False):
     ensure_bridge("MCScanXFastCli")
     java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "MCScanXFastCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="mcscanxd")
+
+def _qdot_impl(args, verbose=False, quiet=False):
+    """qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）"""
+    ensure_bridge("QuickGenomeDotCli")
+    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{JAR}", "QuickGenomeDotCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="qdot")
+
+def _quickAnno_impl(args, verbose=False, quiet=False):
+    """quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   # diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_QuickProteinAnno.jar")
+    bin_dir = os.path.join(ROOT, "plugins", "lib", "bin")
+    if not os.path.isfile(pjar):
+        print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
+        return 1
+    if not os.path.isfile(os.path.join(bin_dir, "diamond")):
+        print(f"❌ diamond 二进制缺失: {bin_dir}/diamond", file=sys.stderr)
+        return 1
+    os.environ["PATH"] = bin_dir + os.pathsep + os.environ.get("PATH", "")
+    ensure_bridge("QuickProteinAnnoCli")
+    java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "QuickProteinAnnoCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="quickAnno")
+
+def _smart_impl(args, verbose=False, quiet=False):
+    """smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_BatchSMART.jar")
+    if not os.path.isfile(pjar):
+        print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
+        return 1
+    ensure_bridge("SubmitSMARTCli")
+    java_args = ["java", "-Xmx2g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "SubmitSMARTCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="smart")
+
+def _fimo_impl(args, verbose=False, quiet=False):
+    """fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）"""
+    import shutil as _sh
+    fimo_bin = _sh.which("fimo")
+    if not fimo_bin:
+        print("❌ 未找到 fimo（meme-suite），安装: apt install meme-suite", file=sys.stderr)
+        return 1
+    r = subprocess.run([fimo_bin] + args, capture_output=True, text=True)
+    if r.returncode != 0:
+        print(f"❌ fimo 失败:\n{r.stderr[-600:]}", file=sys.stderr)
+        return r.returncode
+    if not quiet:
+        print(f"[fimo] 完成 (退出码 0)", file=sys.stderr)
+    return 0
