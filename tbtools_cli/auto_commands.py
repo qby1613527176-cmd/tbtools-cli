@@ -186,6 +186,7 @@ ENGINE_REGISTRY = [
     ('taxparse', 'bridge', 'TaxonomyBatchCli', '2g', 'java', 'taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）'),
     ('srr2ena', 'bridge', 'GetENALinksCli', '2g', 'java', 'srr2ena <srrList.txt> <out.xls>   # SRR→ENA 下载链接解析（GUI 逆向 #39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）'),
     ('sraxml2tab', 'direct', 'biocjava.bioIO.SRAtools.ParseSRAXml2Table', '2g', 'java', 'sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）'),
+    ('sranum2info', 'direct', 'biocjava.bioWeb.EntrezUtils.BatchGetSRARecordInfo', '2g', 'java', 'sranum2info --sraIdList <srrList.txt> --outTabInfo <out.xls>   # SRR 批量信息表（GUI 逆向 #41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser；SRA 组 3/3 全清）'),
 ]
 
 

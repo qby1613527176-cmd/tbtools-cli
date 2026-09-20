@@ -909,6 +909,7 @@ CATEGORY_MAP = {
     "taxparse": "table",  # GUI 逆向：物种分类解析
     "srr2ena": "table",  # GUI 逆向：SRR→ENA 链接
     "sraxml2tab": "table",  # GUI 逆向：SRA XML→表
+    "sranum2info": "table",  # GUI 逆向：SRR 信息表
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
