@@ -174,6 +174,7 @@ ENGINE_REGISTRY = [
     ('careclassify', 'bridge', 'PlantCAREResultClassifyCli', '2g', 'java', 'careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）'),
     ('subtree', 'bridge', 'GetSubNewickTreeCli', '2g', 'java', 'subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向 #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）'),
     ('protsim', 'bridge', 'CalculateSimilarityCli', '2g', 'java', 'protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）'),
+    ('iqtree', 'bridge', 'QuickRunIQtreeCli', '2g', 'java', 'iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）'),
 ]
 
 
