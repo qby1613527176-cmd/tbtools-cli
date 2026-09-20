@@ -178,6 +178,8 @@ ENGINE_REGISTRY = [
     ('trimal', 'bridge', 'QuickTrimALCli', '2g', 'java', 'trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）'),
     ('gblocks', 'bridge', 'JgblocksCli', '2g', 'java', 'gblocks <in.aln.fa> <out.aln.fa> [--is 0.5] [--fs 0.85] [--cp 8] [--bl1 15] [--bl2 10] [--nongap 0.5] [--gaptreat none|half|all]   # Gblocks 保守区修剪（GUI 逆向 #30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）'),
     ('goAnno', 'direct', 'biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe', '3g', 'java', 'goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--inPutFileType BlastxXml|Query2GiTable] [--maxEvalue 1e-5] [--minQueryCov 0.33] [--outDir dir] [--isDoDbFormat]   # GO 注释管道（GUI 逆向 #32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️ idmappingDb 须 gzip 格式「ID; ID\\tGO:num; GO:num」；产物 outDir/<输入名>.xls）'),
+    ('fasplit', 'direct', 'biocjava.bioIO.FastX.FastaIndex.QuickSpiltFasta', '2g', 'java', 'fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）'),
+    ('famerge', 'bridge', 'FastaMergerCli', '2g', 'java', 'famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）'),
 ]
 
 
