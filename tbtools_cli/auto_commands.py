@@ -354,6 +354,95 @@ def _fimo_impl(args, verbose=False, quiet=False):
     return 0
 
 
+def _genomefilter_impl(args, verbose=False, quiet=False):
+    """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
+    import tempfile
+    pos, min_len, gxf = [], None, None
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == "--min-len" and i + 1 < len(args):
+            min_len = int(args[i + 1]); i += 2
+        elif a == "--gxf" and i + 1 < len(args):
+            gxf = args[i + 1]; i += 2
+        else:
+            pos.append(a); i += 1
+    if len(pos) < 2 or min_len is None:
+        print("用法: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]", file=sys.stderr)
+        return 1
+    in_fa, out_fa = pos[0], pos[1]
+    if not os.path.isfile(in_fa):
+        print(f"❌ 输入文件不存在: {in_fa}", file=sys.stderr)
+        return 2
+    # 1) QuickStatFasta 统计长度
+    stat_out = os.path.join(tempfile.gettempdir(), f"genomefilter_stat_{os.getpid()}.txt")
+    r = subprocess.run(["java", "-Xmx2g", "-cp", JAR,
+                        "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
+                        "--inFasta", in_fa, "--outPutFile", stat_out],
+                       capture_output=True, text=True)
+    if r.returncode != 0 or not os.path.isfile(stat_out):
+        print(f"❌ statFasta 失败:\n{r.stderr[-400:]}", file=sys.stderr)
+        return r.returncode or 1
+    # 2) 过滤 ID（表头: Original_ID Simplified_ID ... Length）
+    keep_ids = []
+    with open(stat_out, encoding="utf-8", errors="replace") as f:
+        header = f.readline().rstrip("\n").split("\t")
+        try:
+            len_idx = header.index("Length")
+            id_idx = 0
+        except ValueError:
+            len_idx, id_idx = 3, 0
+        for line in f:
+            if not line.strip():
+                continue
+            cols = line.rstrip("\n").split("\t")
+            if len(cols) <= len_idx:
+                continue
+            try:
+                ln = int(cols[len_idx])
+            except ValueError:
+                continue
+            if ln >= min_len:
+                keep_ids.append(cols[id_idx])
+    if not keep_ids:
+        print(f"⚠️ 无序列 ≥ {min_len} bp，输出为空", file=sys.stderr)
+        return 1
+    id_list = os.path.join(tempfile.gettempdir(), f"genomefilter_ids_{os.getpid()}.txt")
+    with open(id_list, "w", encoding="utf-8") as f:
+        f.write("\n".join(keep_ids) + "\n")
+    # 3) ExtractFasta 按 ID 提取
+    r = subprocess.run(["java", "-Xmx2g", "-cp", JAR,
+                        "biocjava.bioDoer.Fasta.ExtractFasta",
+                        "--inFa", in_fa, "--inIDList", id_list, "--outFa", out_fa,
+                        "--processMode", "Extract", "--matchMode", "Match", "--caseInSensitive", "false"],
+                       capture_output=True, text=True)
+    os.unlink(id_list)
+    try: os.unlink(stat_out)
+    except OSError: pass
+    if r.returncode != 0 or not os.path.isfile(out_fa):
+        print(f"❌ ExtractFasta 失败:\n{r.stderr[-400:]}", file=sys.stderr)
+        return r.returncode or 1
+    # 4) 可选 GXF 同过滤
+    if gxf:
+        if os.path.isfile(gxf):
+            keep_set = set(keep_ids)
+            out_gxf = out_fa + ".gxf"
+            with open(gxf, encoding="utf-8", errors="replace") as fi, open(out_gxf, "w", encoding="utf-8") as fo:
+                for line in fi:
+                    if not line.strip() or line.startswith("#"):
+                        continue
+                    chr_name = line.split("\t", 1)[0].strip()
+                    if chr_name in keep_set:
+                        fo.write(line)
+            if not quiet:
+                print(f"[genomefilter] GXF 同过滤: {out_gxf}", file=sys.stderr)
+        else:
+            print(f"⚠️ GXF 文件不存在，跳过: {gxf}", file=sys.stderr)
+    if not quiet:
+        print(f"[genomefilter] {len(keep_ids)}/{len(open(in_fa).readlines())} 序列保留 → {out_fa}", file=sys.stderr)
+    return 0
+
+
 def _notung_impl(args, verbose=False, quiet=False):
     """notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）"""
     notung = os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar")
