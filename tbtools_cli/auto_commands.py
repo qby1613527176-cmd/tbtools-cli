@@ -449,8 +449,9 @@ def _multisyn_impl(args, verbose=False, quiet=False):
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="multisyn")
 
 def _nwAlign_impl(args, verbose=False, quiet=False):
-    """nwAlign: nwAlign <inSeq1.txt> <inSeq2.txt> <out>   # Needleman-Wunsch"""
-    java_args = ["java", "-Xmx3g", "-cp", JAR, "biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess"] + args
+    """nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA] [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   # Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）"""
+    ensure_bridge("NeedlemanWunschCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "NeedlemanWunschCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="nwAlign")
 
 def _pafcomp_impl(args, verbose=False, quiet=False):
