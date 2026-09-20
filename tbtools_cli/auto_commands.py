@@ -387,6 +387,50 @@ def _tab2fa_impl(args, verbose=False, quiet=False):
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="tab2fa")
 
 
+def _muscle_impl(args, verbose=False, quiet=False):
+    """muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）"""
+    import shutil as _sh
+    muscle_bin = _sh.which("muscle")
+    if not muscle_bin:
+        print("❌ 未找到 muscle，安装: apt install muscle", file=sys.stderr)
+        return 1
+    pos, extra = [], []
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a in ("--super5",):
+            extra.append(a); i += 1
+        elif a == "--threads" and i + 1 < len(args):
+            extra += ["-threads", args[i + 1]]; i += 2
+        else:
+            pos.append(a); i += 1
+    if len(pos) < 2:
+        print("用法: muscle <in.fa> <out.aln> [--super5] [--threads N]", file=sys.stderr)
+        return 1
+    in_fa, out_aln = pos[0], pos[1]
+    if not os.path.isfile(in_fa):
+        print(f"❌ 输入文件不存在: {in_fa}", file=sys.stderr)
+        return 2
+    # 版本探测：muscle -version 输出含 "muscle 5"/"MUSCLE v5" 即 v5 语法
+    vr = subprocess.run([muscle_bin, "-version"], capture_output=True, text=True)
+    vtxt = (vr.stdout + vr.stderr).lower()
+    is_v5 = "muscle 5" in vtxt or "muscle v5" in vtxt or "v5." in vtxt
+    super5 = "--super5" in extra
+    if is_v5:
+        cmd = [muscle_bin, "-super5" if super5 else "-align", in_fa, "-output", out_aln]
+        cmd += [e for e in extra if e != "--super5"]
+    else:
+        cmd = [muscle_bin, "-in", in_fa, "-out", out_aln]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0 or not os.path.isfile(out_aln):
+        print(f"❌ muscle 失败:\n{r.stderr[-500:]}", file=sys.stderr)
+        return r.returncode or 1
+    if not quiet:
+        n = sum(1 for l in open(out_aln) if l.startswith(">"))
+        print(f"[muscle] 比对完成({'v5' if is_v5 else 'v3'} 语法): {n} 条 → {out_aln}", file=sys.stderr)
+    return 0
+
+
 def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
     import tempfile
