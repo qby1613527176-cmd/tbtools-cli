@@ -373,6 +373,20 @@ def _xml2pairwise_impl(args, verbose=False, quiet=False):
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="xml2pairwise")
 
 
+def _fa2tab_impl(args, verbose=False, quiet=False):
+    """fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）"""
+    ensure_bridge("FastaTableConvertCli")
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, JAR), "FastaTableConvertCli", "fa2tab"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="fa2tab")
+
+
+def _tab2fa_impl(args, verbose=False, quiet=False):
+    """tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）"""
+    ensure_bridge("FastaTableConvertCli")
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, JAR), "FastaTableConvertCli", "tab2fa"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="tab2fa")
+
+
 def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
     import tempfile

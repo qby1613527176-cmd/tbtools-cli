@@ -896,6 +896,7 @@ CATEGORY_MAP = {
     "careclassify": "seq",  # GUI 逆向：PlantCARE 元件分类
     "protsim": "seq",  # GUI 逆向：蛋白相似度矩阵
     "xml2blasttab": "blast", "xml2pairwise": "blast",  # GUI 逆向：BLAST XML 转换
+    "fa2tab": "seq", "tab2fa": "seq",  # GUI 逆向：FASTA↔表
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
