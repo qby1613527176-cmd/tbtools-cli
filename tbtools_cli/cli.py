@@ -1,15 +1,33 @@
 """tbtools-cli 主入口 — Python click 重构版"""
+import os
+import shutil
+import subprocess
+import sys
+
 import click
-import os, sys, subprocess
 
 # ---- 配置 ----
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from tbtools_cli.core import (JAR, run_java, run_plot, ensure_bridge,
-    resolve_output, ROOT, validate_file, detect_format, get_pitfall_hint, c,
-    check_input_format, pre_flight, cp, stdout_path)
-from tbtools_cli.presets import apply_preset, list_presets, PRESETS
 import tbtools_cli.auto_commands as _ac
 from tbtools_cli.cli_tools_registry import CLI_TOOLS
+from tbtools_cli.core import (
+    JAR,
+    ROOT,
+    c,
+    check_input_format,
+    cp,
+    detect_format,
+    ensure_bridge,
+    get_pitfall_hint,
+    pre_flight,
+    resolve_output,
+    run_java,
+    run_plot,
+    stdout_path,
+    validate_file,
+)
+from tbtools_cli.presets import PRESETS, apply_preset, list_presets
+
 
 # ---- 通用选项 ----
 def common_options(f):
@@ -62,7 +80,6 @@ def cli(ctx):
 @cli.group("seq")
 def seq_group():
     """序列/结构域命令"""
-    pass
 
 @seq_group.command("logo")
 @click.argument("input_file")
@@ -146,7 +163,6 @@ def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, preset, heigh
 @cli.group("expr")
 def expr_group():
     """表达/统计命令"""
-    pass
 
 @expr_group.command("volcano")
 @click.argument("deg_file")
@@ -267,7 +283,6 @@ def expr_dehist(deg_file, output_file, verbose, quiet, fmt, preset, height, widt
 @cli.group("tree")
 def tree_group():
     """树/进化命令"""
-    pass
 
 @tree_group.command("draw")
 @click.argument("config_file")
@@ -414,7 +429,6 @@ class ToolGroup(click.Group):
 @cli.group("tool", cls=ToolGroup)
 def tool_group():
     """命令行工具（82 个）"""
-    pass
 
 @tool_group.command("stat-fasta")
 @click.argument("input_file")
@@ -479,9 +493,9 @@ def version():
     # 动态统计
     plot_count = sum(len(g.commands) for g in _groups.values())
     auto_count = sum(1 for n in dir(_ac) if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'))
-    from tbtools_cli.core import PITFALL_HINTS, BRIDGES_DIR
+    from tbtools_cli.core import BRIDGES_DIR, PITFALL_HINTS
     bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 80
-    click.echo(f"tbtools-cli v1.0.0")
+    click.echo("tbtools-cli v1.0.0")
     click.echo(f"  {plot_count} 绘图/分析命令 + {auto_count} auto_commands + 188 RPC 方法")
     click.echo(f"  bridges: {bridge_count} | pitfall hints: {len(PITFALL_HINTS)}")
     r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
@@ -522,7 +536,7 @@ def doctor():
                 click.echo(f"      - {cls}  （注册于 {src}）")
             if len(dead) > 5:
                 click.echo(f"      ... 及其他 {len(dead)-5} 个")
-            click.echo(f"      💡 这些命令会 ClassNotFound；升级 jar 到 2.535+ 或忽略对应命令")
+            click.echo("      💡 这些命令会 ClassNotFound；升级 jar 到 2.535+ 或忽略对应命令")
             warn += 1
         else:
             click.echo("  ✅ 引擎类完整性: 注册类全部存在于 jar")
@@ -611,9 +625,9 @@ def setup(jar_path, auto):
 @click.option('--yes', is_flag=True, help="跳过确认")
 def fetch_jar(ver, yes):
     """自动下载并提取 TBtools_JRE1.6.jar（官方只发 portable zip，需解包）"""
+    import tempfile
     import urllib.request
     import zipfile
-    import tempfile
     # 确定版本
     tag = ver
     if not tag:
@@ -739,18 +753,17 @@ def help(name):
         click.echo(f"\n  命令: tool {name}  （分组 tool · 注册表工具）")
         click.echo(f"\n  {name} [引擎命名参数...]")
         click.echo(f"  引擎类: {CLI_TOOLS[name]}")
-        click.echo(f"\n  ⚠️ ArgsParser 系引擎一律 --key value 空格分隔，--key=value 会被拒绝")
+        click.echo("\n  ⚠️ ArgsParser 系引擎一律 --key value 空格分隔，--key=value 会被拒绝")
         click.echo(f"  💡 查看引擎真实参数: java -cp $TBTOOLS_JAR {CLI_TOOLS[name]} --bogus x（逼出 Usage）")
         click.echo(f"\n  完整帮助: tbtools tool {name} --help")
         return
     click.echo(f"❌ 未找到命令: {name}")
-    click.echo(f"   查看: tbtools list")
+    click.echo("   查看: tbtools list")
     sys.exit(1)
 
 @cli.group('rpc')
 def rpc_group():
     """RPC 服务器管理（188 方法）"""
-    pass
 
 @rpc_group.command('start')
 @click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
@@ -772,7 +785,8 @@ def rpc_start(port, mem):
 @click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
 def rpc_methods(port):
     """列出全部 188 RPC 方法"""
-    import json, urllib.request
+    import json
+    import urllib.request
     try:
         req = urllib.request.Request(
             f"http://127.0.0.1:{port}/rpc",
@@ -795,7 +809,8 @@ def rpc_methods(port):
 @click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
 def rpc_call(method, params, port):
     """调用 RPC 方法"""
-    import json, urllib.request
+    import json
+    import urllib.request
     params_list = json.loads(params) if params else []
     try:
         req = urllib.request.Request(
@@ -804,7 +819,7 @@ def rpc_call(method, params, port):
             headers={"Content-Type": "application/json"})
         resp = urllib.request.urlopen(req, timeout=60)
         result = json.loads(resp.read())
-        if 'error' in result and result['error']:
+        if result.get('error'):
             click.echo(f"❌ RPC 错误: {result['error']}", err=True)
             sys.exit(1)
         click.echo(json.dumps(result.get('result', ''), indent=2, ensure_ascii=False))
@@ -913,7 +928,7 @@ CATEGORY_MAP = {
     "mirnatarget": "mirna", "mirnaTarget2": "mirna", "mirnaIdentify": "mirna",
     # GO/表格
     "levelGo": "table", "goParse": "table", "batchReplace": "table",
-    "goEnrich": "table", "upset": "sets", "keggEnrich": "table",
+    "goEnrich": "table", "keggEnrich": "table",
     "tableCollapse": "table", "tableColSelect": "table", "tableAppend": "table",
     "tableMelt": "table", "tableColSel": "table", "tableCast": "table",
     "tableUniq": "table", "tableTranspose": "table", "tableSplit": "table",
@@ -935,10 +950,10 @@ CATEGORY_MAP = {
     "tfbsShift": "seq",
     "kallisto": "expr",
     "mcscanxd": "syn",
-    "qdot": "syn", "pafviz": "syn",
+    "qdot": "syn",
     "quickAnno": "blast",
     "smart": "seq",
-    "fimo": "seq", "meme": "seq", "mast": "seq", "meme2tab": "seq", "makemotif": "seq", "mpattern": "seq", "hmmsearch": "hmm",
+    "fimo": "seq", "meme": "seq", "mast": "seq", "meme2tab": "seq", "makemotif": "seq", "mpattern": "seq",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用
@@ -982,7 +997,7 @@ def _load_auto_commands():
             "volcano", "heatmap2", "pca", "hclust", "dehist",  # expr manual
             "tree", "unrooted", "treeRooting", "onesteptree",  # tree manual
             "version", "doctor", "examples", "list", "presets",  # top commands
-            "seq", "expr", "tree", "tool",  # group names
+            "seq", "expr", "tool",  # group names
             "chipseq", "sets", "syn", "asm", "gxf", "mirna", "table",
             "blast", "fastq", "hmm", "gwas", "engine"}
     for name in sorted(dir(_ac)):
@@ -997,19 +1012,20 @@ def _load_auto_commands():
 
 def _load_dynamic_commands():
     """从 tbplot.sh 动态生成 click 命令，按分类注册到 group"""
-    import re, difflib
+    import difflib
+    import re
     tbplot_sh = os.path.join(ROOT, "bin", "tbplot.sh")
     if not os.path.isfile(tbplot_sh):
         return
     with open(tbplot_sh) as f:
         content = f.read()
-    cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.M))
+    cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.MULTILINE))
     # 已迁移命令的原始名（不动态转发）——用 tbplot.sh 里的原始命令名
     # 只排除真正有 @xxx.command 手动注册的命令 + group 名
     registered = {"seqlogo", "msa", "motif", "genestructure",  # seq
                   "volcano", "heatmap2", "pca", "hclust", "dehist",  # expr
                   "tree", "unrooted", "treeRooting", "onesteptree",  # tree
-                  "version", "doctor", "examples", "seq", "expr", "tree", "tool",
+                  "version", "doctor", "examples", "seq", "expr", "tool",
                   "chipseq", "sets", "syn", "asm", "gxf", "mirna", "table",
                   "blast", "fastq", "hmm", "gwas", "engine"}
     for cmd_name in sorted(cmds - registered):
@@ -1103,7 +1119,7 @@ def _make_passthrough(name, group=None):
             ec = impl(args, verbose=verbose, quiet=quiet)
         else:
             # 兜底走 bash tbplot.sh（Windows 需 Git Bash；无 bash 时报清晰错误）
-            bash_bin = shutil.which("bash") if hasattr(__import__("shutil"), "which") else None
+            bash_bin = shutil.which("bash")
             if bash_bin:
                 bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
                 ec = subprocess.run(bash_args).returncode
@@ -1219,7 +1235,7 @@ def presets(name):
 @click.option("--run", "run_it", is_flag=True, help="生成后直接执行")
 def new(list_only, run_it):
     """交互式向导：按「想做什么」生成命令"""
-    from tbtools_cli.scenarios import _categories, SCENARIOS
+    from tbtools_cli.scenarios import SCENARIOS, _categories
     if list_only:
         click.echo("可用的场景（tbtools new 交互式选择）：")
         for cat, scens in _categories.items():
@@ -1229,7 +1245,6 @@ def new(list_only, run_it):
                 click.echo(f"    {s:22s} → tbtools {sc['group']} {sc['cmd']}")
         return
     # 非 TTY 的 stdin：拒绝（引导 --list）——但允许显式测试/管道注入
-    import sys as _sys
     if not (hasattr(sys.stdin, "isatty") and sys.stdin.isatty()):
         # 检查 stdin 是否有数据（管道注入）
         try:

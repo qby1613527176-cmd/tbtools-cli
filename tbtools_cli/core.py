@@ -1,5 +1,11 @@
 """tbtools-cli 核心引擎：通用选项 + _run_java wrapper + 统一输出格式 + 输入校验"""
-import subprocess, tempfile, os, sys, re, shutil
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
 import click
 
 # ---- 平台常量（Windows 主战场：classpath 分隔符；Linux/WSL 用 :）----
@@ -264,7 +270,7 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
         ec_out = ec
         # 错误处理
         err_text = open(err_file).read() if os.path.isfile(err_file) else ""
-        print("", file=sys.stderr)
+        print(file=sys.stderr)
         print(f"❌ 执行失败（退出码 {ec}）", file=sys.stderr)
         
         # 提取异常关键行
@@ -297,7 +303,7 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
             hint = "内存不足，尝试 -Xmx4g 或更大堆内存"
             ec_out = 4
         
-        print("", file=sys.stderr)
+        print(file=sys.stderr)
         print(f"   💡 {hint}", file=sys.stderr)
         
         # 坑位提示
@@ -314,7 +320,7 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
         else:
             print(f"   🔍 完整堆栈: {err_file}（--verbose 显示，重启后清除）", file=sys.stderr)
         
-        print("", file=sys.stderr)
+        print(file=sys.stderr)
     else:
         # 成功时输出进度信息（quiet 模式跳过）
         if not quiet and os.path.isfile(err_file):
@@ -411,7 +417,8 @@ def probe_dead_engines():
     用途: tbtools doctor 死命令预警（WorkBuddy 报告 P1-1：2.475 jar 无
     Phylogenetics.OneStepTree，tbtools tree one-step 直接 ClassNotFound）。
     """
-    import zipfile, re as _re
+    import re as _re
+    import zipfile
     try:
         with zipfile.ZipFile(JAR) as z:
             names = set(z.namelist())

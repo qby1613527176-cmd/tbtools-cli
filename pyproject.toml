@@ -43,3 +43,14 @@ tbtools_cli = ["command_metadata.json", "config.example.toml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+# 核心正确性规则（F=pyflakes），忽略低危风格类（捕获性 except 是 CLI 容错设计）
+select = ["F", "E4", "E7", "E9"]
+# E702/E704 分号等忽略
+ignore = ["E501", "E722"]
+target-version = "py310"
+
+[tool.ruff.lint.per-file-ignores]
+# auto_commands 生成代码风格容忍
+"tbtools_cli/auto_commands.py" = ["E4", "E7"]

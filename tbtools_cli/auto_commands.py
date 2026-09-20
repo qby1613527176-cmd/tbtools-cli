@@ -1,6 +1,9 @@
 """自动生成的 click 命令（从 tbplot.sh 元数据提取，直调 Java）"""
-import click, sys, os, subprocess
-from tbtools_cli.core import JAR, run_java, run_plot, ensure_bridge, resolve_output, ROOT, BUILD_DIR, cp
+import os
+import subprocess
+import sys
+
+from tbtools_cli.core import BUILD_DIR, JAR, ROOT, cp, ensure_bridge, run_java, run_plot
 
 
 def _admixture_impl(args, verbose=False, quiet=False):
@@ -897,7 +900,8 @@ def _kallisto_impl(args, verbose=False, quiet=False):
         return 1
     tx, reads_str, out_ab = pos[0], pos[1], pos[2]
     reads = [r.strip() for r in reads_str.split(",")]
-    import tempfile, shutil
+    import shutil
+    import tempfile
     env = dict(os.environ)
     env["PATH"] = os.path.dirname(bin_path) + os.pathsep + env.get("PATH", "")
     if os.path.isdir(libs_dir):
@@ -927,7 +931,7 @@ def _kallisto_impl(args, verbose=False, quiet=False):
             return r.returncode
         abund = os.path.join(tmp_dir, "abundance.tsv")
         if not os.path.isfile(abund):
-            print(f"❌ 未找到 abundance.tsv（quant 输出异常）", file=sys.stderr)
+            print("❌ 未找到 abundance.tsv（quant 输出异常）", file=sys.stderr)
             return 1
         shutil.copy2(abund, out_ab)
         if not quiet:
@@ -997,7 +1001,7 @@ def _fimo_impl(args, verbose=False, quiet=False):
         print(f"❌ fimo 失败:\n{r.stderr[-600:]}", file=sys.stderr)
         return r.returncode
     if not quiet:
-        print(f"[fimo] 完成 (退出码 0)", file=sys.stderr)
+        print("[fimo] 完成 (退出码 0)", file=sys.stderr)
     return 0
 
 def _eggnog_impl(args, verbose=False, quiet=False):
@@ -1030,17 +1034,6 @@ def _gbar_impl(args, verbose=False, quiet=False):
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GroupedBarCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="gbar")
 
-"""自动生成的 click 命令（从 tbplot.sh 元数据提取，直调 Java）"""
-import click, sys, os, subprocess
-from tbtools_cli.core import JAR, run_java, run_plot, ensure_bridge, resolve_output, ROOT, BUILD_DIR, cp
-
-
-def _admixture_impl(args, verbose=False, quiet=False):
-    """admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor"""
-    ensure_bridge("AdmixtureCli")
-    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "AdmixtureCli"] + args
-    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="admixture")
-
 def _amazingmeta_impl(args, verbose=False, quiet=False):
     """amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> ["""
     ensure_bridge("AmazingMetaCli")
@@ -1929,7 +1922,8 @@ def _kallisto_impl(args, verbose=False, quiet=False):
         return 1
     tx, reads_str, out_ab = pos[0], pos[1], pos[2]
     reads = [r.strip() for r in reads_str.split(",")]
-    import tempfile, shutil
+    import shutil
+    import tempfile
     env = dict(os.environ)
     env["PATH"] = os.path.dirname(bin_path) + os.pathsep + env.get("PATH", "")
     if os.path.isdir(libs_dir):
@@ -1959,7 +1953,7 @@ def _kallisto_impl(args, verbose=False, quiet=False):
             return r.returncode
         abund = os.path.join(tmp_dir, "abundance.tsv")
         if not os.path.isfile(abund):
-            print(f"❌ 未找到 abundance.tsv（quant 输出异常）", file=sys.stderr)
+            print("❌ 未找到 abundance.tsv（quant 输出异常）", file=sys.stderr)
             return 1
         shutil.copy2(abund, out_ab)
         if not quiet:
@@ -2029,7 +2023,7 @@ def _fimo_impl(args, verbose=False, quiet=False):
         print(f"❌ fimo 失败:\n{r.stderr[-600:]}", file=sys.stderr)
         return r.returncode
     if not quiet:
-        print(f"[fimo] 完成 (退出码 0)", file=sys.stderr)
+        print("[fimo] 完成 (退出码 0)", file=sys.stderr)
     return 0
 
 def _eggnog_impl(args, verbose=False, quiet=False):

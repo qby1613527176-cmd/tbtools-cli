@@ -1,5 +1,6 @@
 """出版级预设模板 — 期刊风格一键应用"""
-import os, json
+import json
+import os
 
 # 预设定义
 PRESETS = {
