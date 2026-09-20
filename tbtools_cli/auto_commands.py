@@ -1005,3 +1005,9 @@ def _eggnog_impl(args, verbose=False, quiet=False):
     ensure_bridge("EggnogCli")
     java_args = ["java", "-Xmx4g", "-cp", cp(BUILD_DIR, JAR), "EggnogCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="eggnog")
+
+def _pafviz_impl(args, verbose=False, quiet=False):
+    """pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）"""
+    ensure_bridge("PafVizCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "PafVizCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="pafviz")

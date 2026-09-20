@@ -932,7 +932,7 @@ CATEGORY_MAP = {
     "tfbsShift": "seq",
     "kallisto": "expr",
     "mcscanxd": "syn",
-    "qdot": "syn",
+    "qdot": "syn", "pafviz": "syn",
     "quickAnno": "blast",
     "smart": "seq",
     "fimo": "seq", "hmmsearch": "hmm",
