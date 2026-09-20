@@ -447,6 +447,45 @@ def _bestid_impl(args, verbose=False, quiet=False):
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="bestid")
 
 
+def _getseqdb_impl(args, verbose=False, quiet=False):
+    """getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST 库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，否则 Skipped；依赖系统 blastdbcmd）"""
+    import shutil as _sh
+    blastdbcmd = _sh.which("blastdbcmd")
+    if not blastdbcmd:
+        print("❌ 未找到 blastdbcmd（ncbi-blast+），安装: apt install ncbi-blast+", file=sys.stderr)
+        return 1
+    pos, entry = [], None
+    i = 0
+    while i < len(args):
+        if args[i] == "--entry" and i + 1 < len(args):
+            entry = args[i + 1]; i += 2
+        else:
+            pos.append(args[i]); i += 1
+    if entry:
+        if len(pos) < 2:
+            print("用法: getseqdb <dbPrefix> <out.fa> --entry ID", file=sys.stderr)
+            return 1
+        cmd = [blastdbcmd, "-db", pos[0], "-entry", entry, "-out", pos[1]]
+        out_fa = pos[1]
+    else:
+        if len(pos) < 3:
+            print("用法: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]", file=sys.stderr)
+            return 1
+        if not os.path.isfile(pos[1]):
+            print(f"❌ ID 列表不存在: {pos[1]}", file=sys.stderr)
+            return 2
+        cmd = [blastdbcmd, "-db", pos[0], "-entry_batch", pos[1], "-out", pos[2]]
+        out_fa = pos[2]
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    if r.returncode != 0 or not os.path.isfile(out_fa):
+        print(f"❌ blastdbcmd 失败:\n{r.stderr[-400:]}", file=sys.stderr)
+        return r.returncode or 1
+    if not quiet:
+        n = sum(1 for l in open(out_fa) if l.startswith(">"))
+        print(f"[getseqdb] 提取 {n} 条 → {out_fa}", file=sys.stderr)
+    return 0
+
+
 def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
     import tempfile
