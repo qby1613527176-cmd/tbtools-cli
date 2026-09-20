@@ -2103,3 +2103,9 @@ def _gdensity_impl(args, verbose=False, quiet=False):
     ensure_bridge("GeneDensityCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GeneDensityCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="gdensity")
+
+def _sricher_impl(args, verbose=False, quiet=False):
+    """sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx> <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）"""
+    ensure_bridge("SimpleEnricherCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "SimpleEnricherCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="sricher")

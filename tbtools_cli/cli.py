@@ -928,7 +928,7 @@ CATEGORY_MAP = {
     "newickRename": "tree",
     "hmmerSearch": "hmm",
     "memeViz": "seq",
-    "gsea": "table", "gbar": "expr", "golevel": "table",
+    "gsea": "table", "gbar": "expr", "golevel": "table", "sricher": "table",
     "tfbsShift": "seq",
     "kallisto": "expr",
     "mcscanxd": "syn",
