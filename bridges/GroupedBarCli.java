@@ -1,113 +1,95 @@
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarRawData;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarRawData.GroupOrder;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics.AnalysisResult;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics.ErrorBarType;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarPlotWithSignificance;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedPlotType;
-import biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.PlotVisualConfig;
 import jigplot.engine.JIGBasePanel;
 
-import java.awt.Color;
 import java.io.File;
+import java.lang.reflect.Method;
 
 /**
- * tbplot groupedbar — TBtools 分组柱图+显著性 CLI（08/29 重建）
+ * tbplot gbar — 分组柱状图 + 显著性标注 CLI（GUI 面板逆向接口，09/20）
  *
- * 用法: GroupedBarCli <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title] [--options]
- *   plotType: BAR_ERROR|BOXPLOT|VIOLIN|SWARM（默认 BAR_ERROR）
- *   errorBarType: SEM|SD|CI95（默认 SEM）
- *   hasHeader: true/false（默认 true）
- *   data.tsv: Group\tValue（每组至少 2 重复）
- *   --options: --width --height --fontSize --yMin --yMax --pStar --pStar2 --pStar3 --noNs --color <i> <r,g,b> --order ALPHA|FIRST --homoscedastic
+ * 用法: GroupedBarCli <data.tsv> <out.svg> [--header|--no-header] [--group-order FIRST_OCCURRENCE|ALPHABETICAL]
+ *        [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM]
+ *        [--title <t>] [--homoscedastic-t] [--width N] [--height N]
  *
- * 引擎: GroupedBarRawData.load → GroupedBarStatistics.analyze → buildPanel（自动 T-test/ANOVA + Bonferroni）
+ * 接口来源：反编译 GroupedBarSignificanceGUIPanel（GUI 真实调用链）：
+ *   GroupedBarRawData raw = GroupedBarRawData.load(file, hasHeader, groupOrder, charset);
+ *   GroupedBarStatistics.Options opt = new Options(); opt.homoscedasticT = ...;
+ *   AnalysisResult ar = GroupedBarStatistics.analyze(raw.getGroups(), opt);
+ *   GroupedBarPlotWithSignificance.showFrame(...);   // showFrame = buildPanel + JFrame 壳
+ * 规避：直调 public static buildPanel(raw, ar, eb, pt, title, null) → JIGBasePanel
+ *
+ * 数据格式（行=样本，列=group value [optionalVariable]）：
+ *   Group1 10.2
+ *   Group1 12.1
+ *   Group2 8.4
+ *   ...（首行可选表头）
  */
 public class GroupedBarCli {
     public static void main(String[] args) throws Exception {
-        if (args.length < 2) {
-            System.err.println("用法: GroupedBarCli <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title] [--options]");
+        boolean hasHeader = true, homoscedastic = false;
+        String groupOrder = "FIRST_OCCURRENCE", eb = "SEM", plot = "BAR_ERROR", title = "";
+        int width = 1200, height = 800;
+        java.util.ArrayList<String> pos = new java.util.ArrayList<String>();
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--header")) hasHeader = true;
+            else if (args[i].equals("--no-header")) hasHeader = false;
+            else if (args[i].equals("--group-order") && i+1 < args.length) groupOrder = args[++i];
+            else if (args[i].equals("--errorbar") && i+1 < args.length) eb = args[++i];
+            else if (args[i].equals("--plot") && i+1 < args.length) plot = args[++i];
+            else if (args[i].equals("--title") && i+1 < args.length) title = args[++i];
+            else if (args[i].equals("--homoscedastic-t")) homoscedastic = true;
+            else if (args[i].equals("--width") && i+1 < args.length) width = Integer.parseInt(args[++i]);
+            else if (args[i].equals("--height") && i+1 < args.length) height = Integer.parseInt(args[++i]);
+            else pos.add(args[i]);
+        }
+        if (pos.size() < 2) {
+            System.err.println("用法: GroupedBarCli <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]");
             System.exit(1);
         }
-        String inFile = args[0];
-        String outFile = args[1];
-        String plotType = args.length > 2 ? args[2] : "BAR_ERROR";
-        String errorBarType = args.length > 3 ? args[3] : "SEM";
-        boolean hasHeader = args.length > 4 ? Boolean.parseBoolean(args[4]) : true;
-        String title = args.length > 5 ? args[5] : "";
-        int width = 1000, height = 800, fontSize = 14;
-        double yMin = -1e18, yMax = 1e18;
-        String pStar1 = "0.05", pStar2 = "0.01", pStar3 = "0.001";
-        boolean noNs = false, homoscedastic = false, alphaOrder = false;
-        String[] colorOverrides = null; // "i,r,g,b" 对
-        for (int i = 6; i < args.length; i++) {
-            switch (args[i]) {
-                case "--width": width = Integer.parseInt(args[++i]); break;
-                case "--height": height = Integer.parseInt(args[++i]); break;
-                case "--fontSize": fontSize = Integer.parseInt(args[++i]); break;
-                case "--yMin": yMin = Double.parseDouble(args[++i]); break;
-                case "--yMax": yMax = Double.parseDouble(args[++i]); break;
-                case "--pStar": pStar1 = args[++i]; break;
-                case "--pStar2": pStar2 = args[++i]; break;
-                case "--pStar3": pStar3 = args[++i]; break;
-                case "--noNs": noNs = true; break;
-                case "--homoscedastic": homoscedastic = true; break;
-                case "--order": alphaOrder = args[++i].equalsIgnoreCase("ALPHA"); break;
-                case "--color":
-                    if (i + 2 < args.length) {
-                        String idx = args[++i];
-                        String rgb = args[++i];
-                        if (colorOverrides == null) colorOverrides = new String[0];
-                        String[] tmp = new String[colorOverrides.length + 1];
-                        System.arraycopy(colorOverrides, 0, tmp, 0, colorOverrides.length);
-                        tmp[colorOverrides.length] = idx + "|" + rgb;
-                        colorOverrides = tmp;
-                    }
-                    break;
-            }
-        }
+        File in = new File(pos.get(0));
+        String outPath = pos.get(1);
+        java.nio.charset.Charset utf8 = java.nio.charset.StandardCharsets.UTF_8;
 
-        // 1. 加载数据
-        GroupOrder order = alphaOrder ? GroupOrder.ALPHABETICAL : GroupOrder.FIRST_OCCURRENCE;
-        GroupedBarRawData data = GroupedBarRawData.load(new File(inFile), hasHeader, order);
+        Class<?> rawCls = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarRawData");
+        Class<?> go = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarRawData$GroupOrder");
+        Object order = Enum.valueOf((Class)go, groupOrder);
+        Object raw = rawCls.getMethod("load", File.class, boolean.class, go, java.nio.charset.Charset.class)
+                .invoke(null, in, hasHeader, order, utf8);
 
-        // 2. 统计分析（自动 T-test/ANOVA + Bonferroni）
-        GroupedBarStatistics.Options opts = new GroupedBarStatistics.Options();
-        opts.homoscedasticT = homoscedastic;
-        AnalysisResult result = GroupedBarStatistics.analyze(data.getGroups(), opts);
+        Class<?> statsCls = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics");
+        Object opt = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics$Options")
+                .getDeclaredConstructor().newInstance();
+        opt.getClass().getField("homoscedasticT").setBoolean(opt, homoscedastic);
+        Class<?> gsCls = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarRawData$GroupSummary");
+        Method analyze = statsCls.getMethod("analyze",
+                java.util.List.class,
+                Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics$Options"));
+        Object ar = analyze.invoke(null, raw.getClass().getMethod("getGroups").invoke(raw), opt);
 
-        // 3. 视觉配置
-        PlotVisualConfig config = new PlotVisualConfig();
-        config.fontSize = fontSize;
-        config.textColor = Color.BLACK;
-        config.errorBarColor = Color.DARK_GRAY;
-        config.significanceLineColor = Color.BLACK;
-        config.axisColor = Color.BLACK;
-        if (colorOverrides != null) {
-            // PlotVisualConfig 有颜色数组字段（若有）
-            for (String co : colorOverrides) {
-                String[] parts = co.split("\\|");
-                // 通过 buildPanel 内部默认调色板——此处仅记录
-                System.err.println("[tbplot] 颜色覆盖: 索引" + parts[0] + " -> " + parts[1]);
-            }
-        }
-
-        // 4. 构建面板
-        JIGBasePanel panel = GroupedBarPlotWithSignificance.buildPanel(
-            data, result, ErrorBarType.valueOf(errorBarType),
-            GroupedPlotType.valueOf(plotType), title, config);
-        if (panel == null) {
-            System.err.println("错误: buildPanel 返回 null");
-            System.exit(1);
-        }
-        panel.setSize(new java.awt.Dimension(width, height));
-        panel.setPreferredSize(new java.awt.Dimension(width, height));
-
-        String low = outFile.toLowerCase();
-        if (low.endsWith(".png")) panel.save2PNG(new File(outFile));
-        else if (low.endsWith(".pdf")) panel.save2PDF(new File(outFile));
-        else panel.save2SVG(new File(outFile));
-        System.err.println("[tbplot] 已保存: " + outFile);
+        Class<?> ebCls = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarStatistics$ErrorBarType");
+        Class<?> ptCls = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedPlotType");
+        Class<?> vcCls = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.PlotVisualConfig");
+        Object cfg = vcCls.getDeclaredConstructor().newInstance();
+        java.lang.reflect.Field f;
+        f = vcCls.getField("baseFontName"); f.set(cfg, "Arial");
+        f = vcCls.getField("fontSize"); f.set(cfg, 14);
+        f = vcCls.getField("xLabelAngle"); f.set(cfg, 45f);
+        f = vcCls.getField("textColor"); f.set(cfg, java.awt.Color.BLACK);
+        f = vcCls.getField("axisColor"); f.set(cfg, java.awt.Color.BLACK);
+        f = vcCls.getField("errorBarColor"); f.set(cfg, java.awt.Color.BLACK);
+        f = vcCls.getField("lineStroke"); f.set(cfg, 1.2f);
+        f = vcCls.getField("significanceGapFactor"); f.set(cfg, 0.05);
+        f = vcCls.getField("barHalfWidth"); f.set(cfg, 0.8);
+        f = vcCls.getField("boxHalfWidth"); f.set(cfg, 0.8);
+        Object panel = Class.forName("biocjava.bioDoer.JIGplotToolkit.groupedBarPlot.GroupedBarPlotWithSignificance")
+                .getMethod("buildPanel",
+                        rawCls, ar.getClass(), ebCls, ptCls, String.class, vcCls)
+                .invoke(null, raw, ar, Enum.valueOf((Class)ebCls, eb), Enum.valueOf((Class)ptCls, plot), title, cfg);
+        File outf = new File(outPath);
+        String low = outPath.toLowerCase();
+        if (low.endsWith(".png")) ((JIGBasePanel) panel).save2PNG(outf);
+        else if (low.endsWith(".pdf")) ((JIGBasePanel) panel).save2PDF(outf);
+        else ((JIGBasePanel) panel).save2SVG(outf);
+        System.err.println("[tbplot] 已保存: " + outPath);
         System.exit(0);
     }
 }

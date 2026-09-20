@@ -1023,3 +1023,9 @@ def _upset_impl(args, verbose=False, quiet=False):
     ensure_bridge("UpSetCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "UpSetCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="upset")
+
+def _gbar_impl(args, verbose=False, quiet=False):
+    """gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）"""
+    ensure_bridge("GroupedBarCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GroupedBarCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="gbar")
