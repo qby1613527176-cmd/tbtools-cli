@@ -908,6 +908,7 @@ CATEGORY_MAP = {
     "findhomolog": "blast",  # GUI 逆向：最优同源
     "taxparse": "table",  # GUI 逆向：物种分类解析
     "srr2ena": "table",  # GUI 逆向：SRR→ENA 链接
+    "sraxml2tab": "table",  # GUI 逆向：SRA XML→表
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
