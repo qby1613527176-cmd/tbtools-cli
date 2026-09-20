@@ -165,6 +165,7 @@ ENGINE_REGISTRY = [
     ('violin', 'bridge', 'ViolinCli', '3g', 'plot', 'violin: violin <in.tsv> <out> [width] [height]'),
     ('virusRecomb', 'direct', 'biocjava.bioDoer.VirusDetect.RecombinationAnalysis', '3g', 'plot', 'virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引'),
     ('visualizeblock', 'bridge', 'VisualizeCli', '3g', 'plot', 'visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Gen'),
+    ('kaks', 'direct', 'biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator', '2g', 'java', 'kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）'),
 ]
 
 
