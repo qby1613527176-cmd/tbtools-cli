@@ -2067,3 +2067,9 @@ def _admixtureViz_impl(args, verbose=False, quiet=False):
     ensure_bridge("AdmixtureCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "AdmixtureCli"] + args
     return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="admixtureViz")
+
+def _golevel_impl(args, verbose=False, quiet=False):
+    """golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）"""
+    ensure_bridge("GoLevelCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GoLevelCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="golevel")
