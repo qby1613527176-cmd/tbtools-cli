@@ -94,6 +94,7 @@ java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参�
 
 ### Requirements
 - **Linux / WSL2 / macOS**（绘图需要 `xvfb-run`，可用 `sudo apt install xvfb`）
+- **Windows**：支持工具类/RPC/表格类命令（Git Bash + TBtools-II/bin 加入 PATH）；绘图类命令受 xvfb 限制（部分可用）
 - **JDK 11+**（`java`、`javac`）
 - **TBtools_JRE1.6.jar**（TBtools-II 主 jar，~55MB）
 
@@ -142,6 +143,19 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 ```
 
 ---
+
+## 🖼️ Example Outputs（示例输出，fulltest 合成数据实测）
+
+| Heatmap | Venn / UpSet |
+|:--|:--|
+| ![heatmap](docs/images/heatmap.svg) | ![venn](docs/images/venn.svg) / ![upset](docs/images/upset.svg) |
+
+| Phylogenetic tree | Synteny (MCScanX + dot plot) | Grouped bar + significance |
+|:--|:--|:--|
+| ![tree](docs/images/tree.svg) | ![synteny](docs/images/synteny.svg) | ![bar](docs/images/bar.svg) |
+
+> 全部由本仓库 `examples/fulltest` 合成数据实测生成（`docs/images/`，SVG 可放大无损）。
+> 复现: `bash examples/scripts/run_examples.sh`。
 
 ## 🎨 Plotting Engines (140)
 
@@ -673,6 +687,8 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 | 🧩 **插件命令** | 12 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名/基因组 dot plot/diamond 蛋白注释/SMART 域注释/FIMO motif 扫描） | `tbtools table gsea` / `tbtools tree notung` 等 |
 
 所有引擎在 Linux/WSL 下 **headless 运行**（xvfb），无需 GUI。已用真实生物数据验证（油茶 GRAS 基因家族等）。
+
+> **平台支持**：Linux / WSL2 / macOS（完整）；**Windows** 需 Git Bash + TBtools-II/bin 加入 PATH（绘图类命令走 xvfb 受限，工具类/RPC/表格类可用）。
 
 ## 📦 安装
 
