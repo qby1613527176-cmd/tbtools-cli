@@ -2085,3 +2085,9 @@ def _meme2tab_impl(args, verbose=False, quiet=False):
     ensure_bridge("Meme2TabCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "Meme2TabCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="meme2tab")
+
+def _makemotif_impl(args, verbose=False, quiet=False):
+    """makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）"""
+    ensure_bridge("MakeMotifCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MakeMotifCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="makemotif")
