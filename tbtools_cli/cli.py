@@ -33,16 +33,11 @@ class RootGroup(click.Group):
             if not args:
                 raise
             name = args[0]
-            # 检查是否是某个分组内的子命令
+            # 兼容旧写法/README：顶层裸命令自动转发到分组（如 tbtools seqlogo → tbtools seq logo）
             for gname, g in _groups.items():
                 if name in g.commands:
-                    click.echo(f"❌ '{name}' 不是顶层命令，它在 '{gname}' 分组内", err=True)
-                    click.echo(f"   正确用法: tbtools {gname} {name} ...", err=True)
-                    doc = g.commands[name].help or ''
-                    if doc:
-                        first = doc.strip().split('\n')[0]
-                        click.echo(f"   说明: {first}", err=True)
-                    ctx.exit(2)
+                    sub = click.Context(g, info_name=gname, parent=ctx)
+                    return gname, g.commands[name], args[1:]
             # 拼写纠错（对分组名+顶层命令）
             import difflib
             candidates = sorted(set(list(_groups.keys()) + [c for c in cli.commands.keys()]))
@@ -125,6 +120,10 @@ def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, p
     if height: args += [str(height)]
     ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="structure")
     sys.exit(ec)
+
+
+# 旧名别名（README/老用户兼容）：genestructure == structure
+seq_group.add_command(seq_structure, name="genestructure")
 
 @seq_group.command("motif")
 @click.argument("meme_xml")
@@ -313,6 +312,10 @@ def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, preset, height, wid
             "TreeRootingCli", input_nwk, output_nwk]
     ec = run_java(args, verbose=verbose, quiet=quiet, command_name="rooting")
     sys.exit(ec)
+
+
+# 旧名别名（README/老用户兼容）：treeRooting == rooting
+tree_group.add_command(tree_rooting, name="treeRooting")
 
 @tree_group.command("one-step")
 @click.argument("pep_fasta")
@@ -1330,5 +1333,9 @@ def check(files):
 _load_dynamic_commands()
 _load_auto_commands()
 
+
+# 旧名别名（README/老用户兼容，顶层/分组均可用）——须在 cli() 前注册
+seq_group.add_command(seqlogo, name="seqlogo")
+expr_group.add_command(heatmap, name="heatmap2")
 if __name__ == "__main__":
     cli()

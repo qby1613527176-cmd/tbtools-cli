@@ -171,10 +171,10 @@ def check_input_format(cmd_name, path):
 
 # ---- 已知坑位提示 ----
 PITFALL_HINTS = {
-    "onesteptree": "--bb-time 必须 ≥1000（IQ-TREE UFBoot 下限），小于 1000 会静默不产树；outFilePrefix 若是目录，产物命名为 目录/TBtools.*",
+    "onesteptree": "--bb-time 必须 ≥1000（IQ-TREE UFBoot 下限），小于 1000 会静默不产树；序列须 ≥4 条唯一（太相似会被合并报错）；outFilePrefix 若是目录，产物命名为 目录/TBtools.*",
     "draw": "输入必须是 TreeTab 配置（[TYPE]:Tree + [NEWICK]: 行），直接喂 .nwk 曾导致引擎从 stdin 读入而挂起（G2 已修复为快速报错）；只画树用 tbtools tree phylotree",
     "hmmsearch": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
-    "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
+    "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；需 Pfam-A.hmm 数据库，idList 每行一个 Pfam NAME（如 GRAS）",
     "hclust": "输入必须是三列距离文件 GeneA\\tGeneB\\tdist（不是表达矩阵！）",
     "barplot": "termCol/pvalCol 用列名（如 Term/Pvalue），不是列索引数字",
     "cubeheatmap": "group 文件第一行会被当数据——喂前先去表头",
@@ -199,12 +199,10 @@ PITFALL_HINTS = {
     "efpHeat": "TGA 底图必须 TrueColor(type2)；需 fake DatatypeConverter",
     "multiEfp": "TGA 底图必须 TrueColor(type2)；需 fake DatatypeConverter",
     "annocompare": "输入两个 GFF3 + 输出目录；生成 change_summary.csv + figures/*",
-    "onesteptree": "--bbTime ≥1000；序列须 ≥4 条唯一（太相似会被合并报错）",
     "nwAlign": "输入文件每行一条序列，无 FASTA 头（传 FASTA 会把 >s1 当序列）",
     "treeRooting": "Newick 树必须带枝长（裸 Newick 报 Corrupt NEWICK format）",
     "distance": "方法名小写 euclidean/pearson/pearsonDist；结果输出到 stdout（非文件）",
     "markertools": "结果输出到 stderr（非 stdout！）；$(...) 需 2>&1 捕获",
-    "simplehmmscan": "需 Pfam-A.hmm 数据库；idList 每行一个 Pfam NAME（如 GRAS）",
 }
 
 def get_pitfall_hint(command_name):

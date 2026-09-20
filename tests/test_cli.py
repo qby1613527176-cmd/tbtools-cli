@@ -252,10 +252,11 @@ class TestInputValidation:
 
 class TestRootNavigation:
     def test_top_level_group_command_hint(self):
-        """顶层直调分组内命令 → 提示正确分组"""
-        ec, out, err = run_cli("venn2")
-        assert "sets" in err
-        assert "tbtools sets venn2" in err
+        """顶层直调分组内命令 → 自动转发（兼容 README 旧写法，2026-09-20）"""
+        ec, out, err = run_cli("venn2", "--help")
+        # 不再报错，而是成功转发到 sets 分组（help 里能看到 venn2 用法）
+        assert ec == 0
+        assert "venn2" in out or "venn2" in err
 
     def test_top_level_typo_suggestion(self):
         """拼写错分组名 → 纠错建议"""
