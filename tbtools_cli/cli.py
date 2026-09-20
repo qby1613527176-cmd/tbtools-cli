@@ -889,6 +889,7 @@ def completion_cmd(ctx, shell):
 CATEGORY_MAP = {
     "sixframe": "seq",  # GUI 逆向：六框翻译
     "longestorf": "seq",  # GUI 逆向：最长 ORF 预测
+    "protparam": "seq",  # GUI 逆向：蛋白理化性质
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",

@@ -168,6 +168,7 @@ ENGINE_REGISTRY = [
     ('kaks', 'direct', 'biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator', '2g', 'java', 'kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）'),
     ('sixframe', 'bridge', 'SixFrameTranlaterCli', '2g', 'java', 'sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）'),
     ('longestorf', 'direct', 'biocjava.bioIO.ORF.GetLongestORF', '2g', 'java', 'longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）'),
+    ('protparam', 'direct', 'biocjava.bioWeb.ProtParamWrapper', '2g', 'java', 'protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️ 联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）'),
 ]
 
 
