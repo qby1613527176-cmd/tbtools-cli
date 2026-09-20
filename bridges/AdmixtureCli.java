@@ -1,72 +1,91 @@
-import biocjava.bioDoer.JIGplotToolkit.PopulationGenetics.AdmixtureQmatViz;
 import jigplot.engine.JIGBasePanel;
 import jigplot.engine.JIGSubPanel;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
+import java.lang.reflect.Method;
 
 /**
- * tbplot admixture — TBtools ADMIXTURE Q 矩阵堆叠图 CLI（08/29 重建）
+ * tbplot admixtureViz — ADMIXTURE Q 矩阵可视化 CLI（GUI 面板逆向接口，09/20）
  *
- * 用法: AdmixtureCli <qFiles.lst> <out> [sampleIDFile] [groupFile] [sortMode] [width] [height] [panelInterval]
- *   qFiles.lst: 每行一个 Q 矩阵文件路径（ADMIXTURE 输出 *.Q，如 K=2、K=3）
- *   sampleIDFile: 样本 ID 文件（每行一个，与 Q 矩阵行对应）
- *   groupFile: 分组文件（可选）
- *   sortMode: Qraito|Lexical|None（默认 None）
+ * 用法: AdmixtureCli <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id <samples.txt>]
+ *        [--group <group.txt>] [--sort Qraito|Lexical|None] [--width N] [--height N] [--interval N]
  *
- * 引擎: AdmixtureQmatViz
- *   process(File[]) 返回 JIGSubPanel[]（每个 Q 文件一个面板）→ save2Graph
+ * 接口来源：反编译 AdmixtureVizGUIPanel（GUI 真实调用链）：
+ *   AdmixtureQmatViz aqv = new AdmixtureQmatViz();
+ *   aqv.setSampleIDFile/setInGroupFile/setSortMode/setWidth/setHeight/setPanelInterval;
+ *   JIGUtils.quickShow(aqv.process(fileArr));
+ * 规避：直调 process(File[])（返回 JIGSubPanel）→ JIGBasePanel.save2*。
+ *
+ * 输入：ADMIIX 输出的 Q 矩阵（每行=样本，每列=群体占比）+ 可选样本 ID 文件
+ *   （旧格式每行 sampleId+数值；新 Q 文件无 ID 列时用 --id）与群体分组文件。
  */
 public class AdmixtureCli {
     public static void main(String[] args) throws Exception {
-        if (args.length < 2) {
-            System.err.println("用法: AdmixtureCli <qFiles.lst> <out> [sampleIDFile] [groupFile] [sortMode] [width] [height] [panelInterval]");
+        java.util.ArrayList<String> pos = new java.util.ArrayList<String>();
+        String idFile = null, groupFile = null, sort = "Qraito";
+        int width = 800, height = 600, interval = 0;
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--id") && i+1 < args.length) idFile = args[++i];
+            else if (args[i].equals("--group") && i+1 < args.length) groupFile = args[++i];
+            else if (args[i].equals("--sort") && i+1 < args.length) sort = args[++i];
+            else if (args[i].equals("--width") && i+1 < args.length) width = Integer.parseInt(args[++i]);
+            else if (args[i].equals("--height") && i+1 < args.length) height = Integer.parseInt(args[++i]);
+            else if (args[i].equals("--interval") && i+1 < args.length) interval = Integer.parseInt(args[++i]);
+            else pos.add(args[i]);
+        }
+        if (pos.size() < 2) {
+            System.err.println("用法: AdmixtureCli <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id samples.txt] [--group group.txt] [--sort Qraito|Lexical|None]");
             System.exit(1);
         }
-        String lstFile = args[0];
-        String outFile = args[1];
-        File sampleIDFile = args.length > 2 && !args[2].equals("-") ? new File(args[2]) : null;
-        File groupFile = args.length > 3 && !args[3].equals("-") ? new File(args[3]) : null;
-        String sortMode = args.length > 4 ? args[4] : "None";
-        int width = args.length > 5 ? Integer.parseInt(args[5]) : 1200;
-        int height = args.length > 6 ? Integer.parseInt(args[6]) : 600;
-        int interval = args.length > 7 ? Integer.parseInt(args[7]) : 120;
-
-        // 读 qFiles.lst
-        ArrayList<String> qFiles = new ArrayList<String>();
-        BufferedReader br = new BufferedReader(new FileReader(lstFile));
-        String line;
-        while ((line = br.readLine()) != null) {
-            line = line.trim();
-            if (!line.isEmpty() && !line.startsWith("#")) qFiles.add(line);
+        String outPath = pos.remove(pos.size() - 1);
+        // 支持两种输入：直接 Q 文件 / *.lst 清单（每行一个 Q 文件路径，GUI 传统格式）
+        java.util.ArrayList<File> qList = new java.util.ArrayList<File>();
+        for (String fp : pos) {
+            File f = new File(fp);
+            if (f.getName().toLowerCase().endsWith(".lst")) {
+                java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(f));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    String t = line.trim();
+                    if (!t.isEmpty()) qList.add(new File(t));
+                }
+                br.close();
+            } else {
+                qList.add(f);
+            }
         }
-        br.close();
-        if (qFiles.isEmpty()) {
-            System.err.println("错误: qFiles.lst 为空");
+        File[] qFiles = qList.toArray(new File[0]);
+
+        Object aqv = Class.forName("biocjava.bioDoer.JIGplotToolkit.PopulationGenetics.AdmixtureQmatViz")
+                .getDeclaredConstructor().newInstance();
+        Class<?> c = aqv.getClass();
+        if (idFile != null) c.getMethod("setSampleIDFile", File.class).invoke(aqv, new File(idFile));
+        if (groupFile != null) c.getMethod("setInGroupFile", File.class).invoke(aqv, new File(groupFile));
+        Class<?> sm = Class.forName("biocjava.bioDoer.JIGplotToolkit.PopulationGenetics.AdmixtureQmatViz$SortMode");
+        c.getMethod("setSortMode", sm).invoke(aqv, Enum.valueOf((Class)sm, sort));
+        c.getMethod("setWidth", int.class).invoke(aqv, width);
+        c.getMethod("setHeight", int.class).invoke(aqv, height);
+        c.getMethod("setPanelInterval", int.class).invoke(aqv, interval);
+        Object result = c.getMethod("process", File[].class).invoke(aqv, (Object) qFiles);
+        JIGSubPanel[] panels;
+        if (result instanceof JIGSubPanel[]) {
+            panels = (JIGSubPanel[]) result;
+        } else if (result instanceof JIGSubPanel) {
+            panels = new JIGSubPanel[]{ (JIGSubPanel) result };
+        } else {
+            System.err.println("❌ process 未返回 JIGSubPanel/JIGSubPanel[]");
             System.exit(1);
+            panels = new JIGSubPanel[0];
         }
-        File[] qFileArr = new File[qFiles.size()];
-        for (int i = 0; i < qFiles.size(); i++) qFileArr[i] = new File(qFiles.get(i));
-        System.err.println("[tbplot] Q 文件数: " + qFiles.size());
-
-        AdmixtureQmatViz viz = new AdmixtureQmatViz();
-        viz.setSortMode(AdmixtureQmatViz.SortMode.valueOf(sortMode));
-        viz.setWidth(width);
-        viz.setHeight(height);
-        viz.setPanelInterval(interval);
-        if (sampleIDFile != null && sampleIDFile.exists()) viz.setSampleIDFile(sampleIDFile);
-        if (groupFile != null && groupFile.exists()) viz.setInGroupFile(groupFile);
-
-        JIGSubPanel[] panels = viz.process(qFileArr);
-        JIGBasePanel base = new JIGBasePanel(width, height * panels.length + interval * (panels.length - 1));
+        JIGBasePanel base = new JIGBasePanel(width, height);
         for (JIGSubPanel p : panels) base.addSubPanel(p);
-        String low = outFile.toLowerCase();
-        if (low.endsWith(".png")) base.save2PNG(new File(outFile));
-        else if (low.endsWith(".pdf")) base.save2PDF(new File(outFile));
-        else base.save2SVG(new File(outFile));
-        System.err.println("[tbplot] 已保存: " + outFile + " (" + panels.length + " 面板)");
+        System.err.println("[tbplot] " + panels.length + " 个 Q 面板");
+        File outf = new File(outPath);
+        String low = outPath.toLowerCase();
+        if (low.endsWith(".png")) base.save2PNG(outf);
+        else if (low.endsWith(".pdf")) base.save2PDF(outf);
+        else base.save2SVG(outf);
+        System.err.println("[tbplot] 已保存: " + outPath);
         System.exit(0);
     }
 }
