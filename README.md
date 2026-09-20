@@ -1,8 +1,8 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **140 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 任意引擎反射**，全部实测出图。
-> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），80 个 Java 桥，140 命令。10 批回归 162/162 PASS。
+> **174 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 100 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
+> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），100 个 Java 桥，174 命令。10 批回归 162/162 PASS。
 
 <div align="center">
 
@@ -63,7 +63,7 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 140 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
+| 🎨 **绘图引擎** | 174 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
 | 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
@@ -77,7 +77,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 | 文档 | 内容 |
 |:-----|:-----|
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：140 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 80 个桥 Javadoc（输入格式权威来源）+ 35 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：174 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 100 个桥 Javadoc（输入格式权威来源）+ 32 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值，89KB） |
 
 ```bash
@@ -621,12 +621,12 @@ tbtools-cli/
 │   ├── tbtools_rpc.sh     # RPC server & calls
 │   ├── tbcli.py           # tool list & CLI tools
 │   └── tbengine.sh        # reflection launcher
-├── bridges/               # 27 Java bridge sources
+├── bridges/               # 100 Java bridge sources
 ├── build/                 # compiled bridges (auto-generated)
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
 ├── examples/              # example data + scripts
 ├── docs/                  # detailed documentation
-│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（140 命令+82 工具+80 桥+坑位）
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（174 命令+82 工具+100 桥+坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md
@@ -669,7 +669,7 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 
 | 层 | 能力 | 入口 |
 |:---|:-----|:-----|
-| 🎨 **绘图引擎** | 140 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
+| 🎨 **绘图引擎** | 174 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
 | 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <方法> '<json>'` |
 | 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <类名> key=value` |

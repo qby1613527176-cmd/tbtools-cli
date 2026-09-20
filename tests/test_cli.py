@@ -465,3 +465,33 @@ class TestAgentOnboarding:
         out = p.stdout + p.stderr
         assert "setup --auto" in out
         assert "fetch-jar" in out
+
+
+# ============ 12. README 数字防漂移（外部审查反馈） ============
+
+class TestReadmeCounts:
+    """README 硬编码数字必须与实现实时统计一致（防漂移）"""
+
+    def _counts(self):
+        import re, os
+        from tbtools_cli.core import ROOT
+        impls = len(re.findall(r'def _\w+_impl',
+                    open(os.path.join(ROOT, "tbtools_cli", "auto_commands.py"), encoding="utf-8").read()))
+        bridges = len([f for f in os.listdir(os.path.join(ROOT, "bridges")) if f.endswith(".java")])
+        return impls, bridges
+
+    def test_readme_bridge_count(self):
+        import os
+        from tbtools_cli.core import ROOT
+        readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
+        impls, bridges = self._counts()
+        # README 里必须出现实际桥数（100 → 更新时同步改）
+        assert f"{bridges} 个 Java 桥" in readme or f"{bridges} 个桥" in readme or f"{bridges} Java bridge" in readme, \
+            f"README 桥数与实现({bridges})漂移，运行 tbtools version 后同步 README"
+
+    def test_version_cmd_reports_positive_counts(self):
+        ec, out, err = run_cli("version")
+        assert ec == 0
+        import re
+        nums = re.findall(r"(\d+) 绘图/分析命令", out)
+        assert nums and int(nums[0]) > 100, f"version 命令绘图命令数异常: {out[:100]}"
