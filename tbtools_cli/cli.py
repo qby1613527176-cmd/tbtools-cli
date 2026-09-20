@@ -913,6 +913,7 @@ CATEGORY_MAP = {
     "blat": "blast",  # GUI 逆向：BLAT 比对
     "seqrecommend": "engine",  # GUI 逆向：测序量推荐
     "seqfetch": "seq",  # GUI 逆向：NCBI 序列下载
+    "pubmed": "table",  # GUI 逆向：PubMed 检索
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
