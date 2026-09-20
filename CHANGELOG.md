@@ -4,6 +4,31 @@
 
 ## [Unreleased]
 
+### 新增（GUI 面板逆向接口，09/20 · 14 个命令）
+
+方法论：反编译 GUIPanel StartButton 回调 → 拿权威 setter+process 调用链 → 绕 GUI 弹窗直驱（public process()/plot()/buildPanel()/postGraph 重载）。详见 `docs/GUI-INTERFACE-SOP.md`。
+
+- **注释**：`tool eggnog`（eggNOG-mapper 官方 CLI 移植 CliParser→EmapperPipeline）
+- **序列**：`tree nwAlign`（Needleman-Wunsch，替换旧静默失败的 SimpleBatchProcess 实现）
+- **共线**：`syn pafviz`（PAF dot 图）、`syn mcscanxd`（OneStep MCScanX-SuperFast，diamond 加速）
+- **MEME 管线全覆盖**：`seq meme`（发现）、`seq mast`（搜索）、`seq fimo`（扫描）、`seq meme2tab`（XML→表）、`seq makemotif`（序列→motif）、`seq mpattern`（motif 序列标注图）、`seq memeViz`（可视化）
+- **集合/统计/群体**：`sets upset`（UpSet 图）、`expr gbar`（分组柱状图+显著性）、`engine admixture`（Q 矩阵可视化，修复 .lst 参数不匹配）
+- **GO/注释**：`table golevel`（层级统计+柱状图）、`table sricher`（超几何富集+BH）、`gxf gdensity`（基因密度 bin）
+- **判定不可做**：GoCompare（getColDivide 列名索引 bug + main() ArgsParser bug，引擎缺陷）；BlastZone（交互式 GUI 强依赖）
+
+### 修复（外部代码审查，09/20 · 6 批）
+
+第三方 AI 通读仓库审查，逐条核实后修复：
+
+- **README 命令名脱节（最严重）**：118 个裸命令示例 117 个顶层不可调用 → 顶层自动转发（`tbtools venn2` → `tbtools sets venn2`）+ 4 个旧名别名（seqlogo/heatmap2/genestructure/treeRooting）
+- **ruff lint 落地，抓出 4 类真问题**：F811 12 处（`auto_commands.py` 中间嵌第二个文件头，清理 200+ 行重复定义）、F601 3 处（CATEGORY_MAP 重复键）、F821（shutil 未导入）、F401/F541 等 38 处自动清理
+- **PITFALL_HINTS 重复键**：onesteptree/simplehmmscan 各定义两次静默覆盖，合并去重
+- **README 数字防漂移**：27→100 桥、140→174 命令等 7 处修正 + 防漂移 pytest（TestReadmeCounts）
+- **README 示例图画廊**：6 张 SVG（heatmap/venn/upset/tree/synteny/bar，fulltest 数据实测）
+- **get_jar 去导入期全盘 glob**：import 从秒级降到 0.074s，深搜移入 find_jar_deep()
+- **Windows 支持声明**：Requirements + 中文版明确（工具类/RPC 可用，绘图类受 xvfb 限制）
+- **probe 假 jar 测试**：CI 无真 jar 也能验证死命令探测逻辑（TestProbeWithFakeJar）
+
 ### 新增（插件 CLI 化，09/19-09/20）
 
 - **§8 外部报告缺口全清**：G4 goEnrich/keggEnrich（GO/KEGG 富集桥）、G1 hmmsearch（HMM Search 别名）、G7 gxfAttr（GXF 属性/ID 对照，Python 原生）、G5 doctor 死命令探测（probe_dead_engines，揪出并修复 5 个死注册）、G2 tree draw 挂起根治（stdin 预检）
