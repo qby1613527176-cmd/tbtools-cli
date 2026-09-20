@@ -895,6 +895,7 @@ CATEGORY_MAP = {
     "bed2gff3": "gxf",  # GUI 逆向：BED→GFF3
     "careclassify": "seq",  # GUI 逆向：PlantCARE 元件分类
     "protsim": "seq",  # GUI 逆向：蛋白相似度矩阵
+    "xml2blasttab": "blast", "xml2pairwise": "blast",  # GUI 逆向：BLAST XML 转换
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",

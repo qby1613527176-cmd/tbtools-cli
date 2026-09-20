@@ -359,6 +359,20 @@ def _fimo_impl(args, verbose=False, quiet=False):
     return 0
 
 
+def _xml2blasttab_impl(args, verbose=False, quiet=False):
+    """xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向 #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）"""
+    ensure_bridge("BlastXmlConvertCli")
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, JAR), "BlastXmlConvertCli", "blasttab"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="xml2blasttab")
+
+
+def _xml2pairwise_impl(args, verbose=False, quiet=False):
+    """xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI 逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）"""
+    ensure_bridge("BlastXmlConvertCli")
+    java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, JAR), "BlastXmlConvertCli", "pairwise"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="xml2pairwise")
+
+
 def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
     import tempfile
