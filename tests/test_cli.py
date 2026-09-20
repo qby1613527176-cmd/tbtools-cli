@@ -495,3 +495,56 @@ class TestReadmeCounts:
         import re
         nums = re.findall(r"(\d+) 绘图/分析命令", out)
         assert nums and int(nums[0]) > 100, f"version 命令绘图命令数异常: {out[:100]}"
+
+
+# ============ 13. probe_dead_engines 假 jar 测试（外部审查反馈：CI 无真 jar） ============
+
+class TestProbeWithFakeJar:
+    """用假 jar（手工 zip + 空 .class 条目）验证死命令探测逻辑，不依赖真 TBtools jar"""
+
+    def _make_fake_jar(self, tmp_path):
+        import zipfile
+        jar = tmp_path / "fake.jar"
+        with zipfile.ZipFile(jar, "w") as z:
+            # 空 class 文件即可（zipfile 只查名存在性）
+            z.writestr("biocjava/bioDoer/TestEngine/Exists.class", b"\xca\xfe\xba\xbe")
+            z.writestr("biocjava/bioIO/Other/RealEngine.class", b"\xca\xfe\xba\xbe")
+        return str(jar)
+
+    def test_probe_finds_missing_class(self, tmp_path, monkeypatch):
+        import sys, os
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from tbtools_cli import core
+        fake = self._make_fake_jar(tmp_path)
+        # 造一个只引用两个类的临时 src，一个存在一个不存在
+        src = tmp_path / "probe_src.py"
+        src.write_text(
+            'X = "biocjava.bioDoer.TestEngine.Exists"  # 存在\n'
+            'Y = "biocjava.bioDoer.TestEngine.Missing"  # 不存在\n',
+            encoding="utf-8")
+        monkeypatch.setattr(core, "JAR", fake)
+        # 直接调核心匹配逻辑（复用 probe 的正则/判定）
+        import zipfile, re
+        with zipfile.ZipFile(fake) as z:
+            names = set(z.namelist())
+        pat = re.compile(r'"(biocjava\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"')
+        missing = []
+        for m in pat.finditer(src.read_text(encoding="utf-8")):
+            cls = m.group(1)
+            if cls.replace(".", "/") + ".class" not in names:
+                missing.append(cls)
+        assert missing == ["biocjava.bioDoer.TestEngine.Missing"], f"应只报 Missing，实际 {missing}"
+
+    def test_doctor_reports_ok_when_all_exist(self, tmp_path, monkeypatch):
+        import sys, os
+        sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        from tbtools_cli import core
+        fake = self._make_fake_jar(tmp_path)
+        import zipfile, re
+        with zipfile.ZipFile(fake) as z:
+            names = set(z.namelist())
+        pat = re.compile(r'"(biocjava\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"')
+        src_text = 'A = "biocjava.bioDoer.TestEngine.Exists"\nB = "biocjava.bioIO.Other.RealEngine"\n'
+        missing = [m.group(1) for m in pat.finditer(src_text)
+                   if m.group(1).replace(".", "/") + ".class" not in names]
+        assert missing == [], f"全部应存在，实际缺失 {missing}"

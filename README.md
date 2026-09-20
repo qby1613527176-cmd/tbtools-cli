@@ -132,16 +132,13 @@ export PATH="$PWD/bin:$PATH"
 ### 2. Verify
 ```bash
 tbtools doctor      # 一键检查 Java/jar/xvfb/可选依赖；jar 缺失时给出可执行指引
-tbtools version
+tbtools version     # 实时统计命令/桥/坑位数量
 ```
 
-### 3. Verify
+### 3. Auto-verify（一键回归，8 项核心功能示例图）
 
 ```bash
-bash examples/scripts/run_examples.sh   # 一键验证（8 项核心功能）
-```
-```bash
-tbtools --help
+bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → examples/output/ 下生成示例图
 ```
 
 ---
