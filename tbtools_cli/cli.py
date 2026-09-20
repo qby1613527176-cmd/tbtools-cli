@@ -887,6 +887,7 @@ def completion_cmd(ctx, shell):
 # ---- 动态加载剩余命令 ----
 # ---- 命令分类映射 ----
 CATEGORY_MAP = {
+    "sixframe": "seq",  # GUI 逆向：六框翻译
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",

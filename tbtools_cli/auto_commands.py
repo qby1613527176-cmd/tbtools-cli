@@ -166,6 +166,7 @@ ENGINE_REGISTRY = [
     ('virusRecomb', 'direct', 'biocjava.bioDoer.VirusDetect.RecombinationAnalysis', '3g', 'plot', 'virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引'),
     ('visualizeblock', 'bridge', 'VisualizeCli', '3g', 'plot', 'visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Gen'),
     ('kaks', 'direct', 'biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator', '2g', 'java', 'kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）'),
+    ('sixframe', 'bridge', 'SixFrameTranlaterCli', '2g', 'java', 'sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）'),
 ]
 
 
