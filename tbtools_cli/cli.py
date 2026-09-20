@@ -945,6 +945,7 @@ CATEGORY_MAP = {
     "mirnatarget": "mirna", "mirnaTarget2": "mirna", "mirnaIdentify": "mirna",
     # GO/表格
     "levelGo": "table", "goParse": "table", "batchReplace": "table",
+    "goAnno": "table",  # GUI 逆向：GO 注释管道
     "goEnrich": "table", "keggEnrich": "table",
     "tableCollapse": "table", "tableColSelect": "table", "tableAppend": "table",
     "tableMelt": "table", "tableColSel": "table", "tableCast": "table",
