@@ -905,6 +905,7 @@ CATEGORY_MAP = {
     "clearchar": "table",  # GUI 逆向：非法字符清理
     "getseqdb": "blast",  # GUI 逆向：BLAST 库提序列
     "gb2fa": "seq",  # GUI 逆向：GenBank→FASTA
+    "findhomolog": "blast",  # GUI 逆向：最优同源
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
