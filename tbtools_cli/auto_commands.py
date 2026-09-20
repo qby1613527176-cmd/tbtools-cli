@@ -2091,3 +2091,9 @@ def _makemotif_impl(args, verbose=False, quiet=False):
     ensure_bridge("MakeMotifCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MakeMotifCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="makemotif")
+
+def _mpattern_impl(args, verbose=False, quiet=False):
+    """mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）"""
+    ensure_bridge("MotifPatternCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MotifPatternCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="mpattern")
