@@ -998,3 +998,9 @@ def _fimo_impl(args, verbose=False, quiet=False):
     if not quiet:
         print(f"[fimo] 完成 (退出码 0)", file=sys.stderr)
     return 0
+
+def _eggnog_impl(args, verbose=False, quiet=False):
+    """eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb> [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）"""
+    ensure_bridge("EggnogCli")
+    java_args = ["java", "-Xmx4g", "-cp", cp(BUILD_DIR, JAR), "EggnogCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="eggnog")
