@@ -1,8 +1,8 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **174 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 112 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
-> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），112 个 Java 桥，174 命令。10 批回归 162/162 PASS。
+> **174 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 113 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
+> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），113 个 Java 桥，174 命令。10 批回归 162/162 PASS。
 
 <div align="center">
 
@@ -77,7 +77,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 | 文档 | 内容 |
 |:-----|:-----|
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：174 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 112 个桥 Javadoc（输入格式权威来源）+ 32 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：174 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 113 个桥 Javadoc（输入格式权威来源）+ 32 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值，89KB） |
 
 ```bash
@@ -632,7 +632,7 @@ tbtools-cli/
 │   ├── tbtools_rpc.sh     # RPC server & calls
 │   ├── tbcli.py           # tool list & CLI tools
 │   └── tbengine.sh        # reflection launcher
-├── bridges/               # 112 Java bridge sources
+├── bridges/               # 113 Java bridge sources
 ├── build/                 # compiled bridges (auto-generated)
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
 ├── examples/              # example data + scripts

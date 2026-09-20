@@ -904,6 +904,7 @@ CATEGORY_MAP = {
     "fasplit": "seq", "famerge": "seq",  # GUI 逆向：FASTA 拆/合
     "clearchar": "table",  # GUI 逆向：非法字符清理
     "getseqdb": "blast",  # GUI 逆向：BLAST 库提序列
+    "gb2fa": "seq",  # GUI 逆向：GenBank→FASTA
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",

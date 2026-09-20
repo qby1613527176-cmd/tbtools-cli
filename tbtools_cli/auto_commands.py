@@ -181,6 +181,7 @@ ENGINE_REGISTRY = [
     ('fasplit', 'direct', 'biocjava.bioIO.FastX.FastaIndex.QuickSpiltFasta', '2g', 'java', 'fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）'),
     ('famerge', 'bridge', 'FastaMergerCli', '2g', 'java', 'famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）'),
     ('clearchar', 'bridge', 'FileCleanerCli', '2g', 'java', 'clearchar <in.txt> <out.txt>   # 文件非法字符清理（GUI 逆向 #34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）'),
+    ('gb2fa', 'bridge', 'GenBank2FastaCli', '2g', 'java', 'gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）'),
 ]
 
 
