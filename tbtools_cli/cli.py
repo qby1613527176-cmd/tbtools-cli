@@ -902,6 +902,7 @@ CATEGORY_MAP = {
     "gblocks": "seq",  # GUI 逆向：Gblocks 修剪
     "bestid": "blast",  # GUI 逆向：最优 ID 转换
     "fasplit": "seq", "famerge": "seq",  # GUI 逆向：FASTA 拆/合
+    "clearchar": "table",  # GUI 逆向：非法字符清理
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
