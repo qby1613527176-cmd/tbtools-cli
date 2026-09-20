@@ -33,6 +33,12 @@
 
 **排坑沉淀**：① CLI 输入校验误拦非常规首参（输出文件/dbPrefix）→ 跳过名单（famerge/getseqdb）② makeblastdb 须 -parse_seqids 否则 blastdbcmd Skipped ③ DEAnalysisPrepare 的 ComparisonPrepare 是 JList/JPanel 交互对话框 → 判 GUI 强依赖不可 CLI 化
 
+### 新增（GUI 面板逆向接口第五批，09/21 凌晨 · #38~#41 共 4 命令+SRA 组全清）
+
+- **物种/SRA**：`table taxparse`（#38 NCBITaxonomy 批量分类解析，9 级分类列；⚠️ 联网 NCBI eutils）、`table srr2ena`（#39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）、`table sraxml2tab`（#40 ParseSRAXml2Table 离线 JDOM 解析 SRA XML→17 列信息表；自带 ArgsParser→direct）、`table sranum2info`（#41 BatchGetSRARecordInfo SRR 批量信息表；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser→direct）
+
+**SRA 工具组 3/3 面板全清**（srr2ena/sraxml2tab/sranum2info）
+
 ### 重构（auto_commands 表驱动化，09/20）
 
 - **auto_commands.py 2105→461 行（-78%）**：审计发现原文件 309 个 def 仅 157 个唯一函数（历史合并整段重复，Python 后者覆盖前者）→ 按生效规格提取 ENGINE_REGISTRY（144 条：86 bridge + 58 direct）+ `_make_impl` 工厂动态生成
