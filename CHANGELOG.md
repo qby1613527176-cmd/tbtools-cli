@@ -7,7 +7,8 @@
 ### 新增（插件 CLI 化，09/19-09/20）
 
 - **§8 外部报告缺口全清**：G4 goEnrich/keggEnrich（GO/KEGG 富集桥）、G1 hmmsearch（HMM Search 别名）、G7 gxfAttr（GXF 属性/ID 对照，Python 原生）、G5 doctor 死命令探测（probe_dead_engines，揪出并修复 5 个死注册）、G2 tree draw 挂起根治（stdin 预检）
-- **插件 CLI 化 8 个**（plugins/ 目录，来源 = TBtools 插件商店 122 插件）：`table gsea`（GO 预排序 GSEA）、`tree notung`（基因树-物种树 reconcile）、`seq tfbsShift`（植物 TF motif 偏移）、`seq memeViz`（MEME motif 可视化）、`hmm hmmerSearch`（HMMer 全库扫描）、`expr kallisto`（RNA-seq 定量）、`syn mcscanxd`（MCScanX-SuperFast）、`tree newickRename`
+- **插件 CLI 化 8 个**（plugins/ 目录，来源 = TBtools 插件商店 122 插件）：`table gsea`（GO 预排序 GSEA）、`tree notung`（基因树-物种树 reconcile）、`seq tfbsShift`（植物 TF motif 偏移）、`seq memeViz`（MEME motif 可视化）、`hmm hmmerSearch`（HMMer 全库扫描）、`expr kallisto`（RNA-seq 定量）、`syn mcscanxd`（MCScanX-SuperFast）、`tree newickRename`；**09/20 第四批追加 4 个**（累计 12）：`syn qdot`（基因组 dot plot，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）、`blast quickAnno`（diamond 蛋白注释，db 需带描述行）、`seq smart`（SMART 域注释，POST EMBL 约 65s）、`seq fimo`（FIMO motif 扫描，直调系统 fimo）
+- **已评估跳过**：CutSignalP（P00062，Windows-only PE+python DLL）
 - **坑位提示**：插件自带 "Linux" 二进制实为 Mach-O（macOS）——已清出并回退系统/conda 真 ELF（kallisto 0.51.1 + hdf5 依赖库随包）
 
 ### 修复（外部实测报告合入，WorkBuddy 2026-09-18/19 · Windows + TBtools-II 2.475 · 油茶 WOX 真实数据）
