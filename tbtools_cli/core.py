@@ -58,20 +58,31 @@ def get_jar():
     ]:
         if os.path.isfile(cand):
             return cand
-    # 最后手段：全盘常见位置细搜（限定深度，避免超时）
-    try:
-        import glob
-        for pat in [
-            "/mnt/*/TBtools*/**/TBtools_JRE1.6.jar",
-            "/mnt/*/Users/*/Downloads/TBtools*.jar",
-            "/mnt/*/Users/*/Desktop/TBtools*.jar",
-        ]:
-            hits = sorted(glob.glob(pat, recursive=True))
-            if hits and os.path.isfile(hits[0]):
-                return hits[0]
-    except Exception:
-        pass
     return jar  # 返回空或原始值（让下游报错）
+
+
+def find_jar_deep():
+    """全盘深搜 TBtools jar（限定常见挂载点 + 递归 glob）。
+
+    外部审查反馈（2026-09-20）：原 get_jar 在模块导入期执行递归全盘
+    glob（/mnt/*/TBtools*/**/...），无 jar 机器每次起 CLI 都白扫一遍。
+    现改为独立函数，仅 doctor / setup --auto 显式调用。
+    """
+    import glob
+    for pat in [
+        "/mnt/*/TBtools*/**/TBtools_JRE1.6.jar",
+        "/mnt/*/Users/*/Downloads/TBtools*.jar",
+        "/mnt/*/Users/*/Desktop/TBtools*.jar",
+        "/mnt/c/Users/*/Downloads/TBtools*.jar",
+        "/mnt/c/Users/*/Desktop/TBtools*.jar",
+    ]:
+        try:
+            hits = sorted(glob.glob(pat, recursive=True))
+        except Exception:
+            continue
+        if hits and os.path.isfile(hits[0]):
+            return hits[0]
+    return ""
 
 JAR = get_jar()
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
