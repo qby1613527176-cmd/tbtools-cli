@@ -929,7 +929,9 @@ CATEGORY_MAP = {
     "hmmerSearch": "hmm",
     "memeViz": "seq",
     "gsea": "table",
-    "tfbsShift": "seq", "hmmsearch": "hmm",
+    "tfbsShift": "seq",
+    "kallisto": "expr",
+    "mcscanxd": "syn", "hmmsearch": "hmm",
     # GWAS
     "mimicVqsr": "gwas",
     # 通用
@@ -1053,8 +1055,8 @@ def _make_passthrough(name, group=None):
     def _cmd_impl(ctx, verbose, quiet, fmt, preset, height, width, threads):
         args = list(ctx.args)
         
-        # 输入校验：第一个非选项参数通常是输入文件
-        if args and not args[0].startswith('-'):
+        # 输入校验：第一个非选项参数通常是输入文件（mcscanxd/kallisto 首参为工作目录/自定义路径，跳过校验）
+        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto"):
             ok, msg = validate_file(args[0], f"{name} 输入文件")
             if not ok:
                 print(msg, file=sys.stderr)
@@ -1064,8 +1066,6 @@ def _make_passthrough(name, group=None):
             if warn:
                 print(f"⚠️ 格式提醒: {warn}", file=sys.stderr)
                 print("   （继续执行；如确认无误可忽略）", file=sys.stderr)
-        
-        # 应用预设
         if preset:
             p = apply_preset(preset, width=width, height=height)
             if not p:

@@ -870,3 +870,85 @@ def _tfbsShift_impl(args, verbose=False, quiet=False):
     ensure_bridge("MotifShiftCli")
     java_args = ["java", "-Xmx3g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "MotifShiftCli", ath, motifs] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="tfbsShift")
+
+def _kallisto_impl(args, verbose=False, quiet=False):
+    """kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 kallisto 二进制——插件 wrapper 的 Linux 分支有拼接 bug 已绕开）"""
+    bin_path = os.path.join(ROOT, "plugins", "lib", "bin", "kallisto")
+    if not os.path.isfile(bin_path):
+        print(f"❌ kallisto 二进制缺失: {bin_path}", file=sys.stderr)
+        return 1
+    libs_dir = os.path.join(ROOT, "plugins", "lib", "kallisto-libs")
+    # 解析参数
+    pos, kmer, threads, bootstrap, bias, single, frag_len, frag_sd = [], 31, 4, 0, False, False, 200, 30
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == "--kmer" and i + 1 < len(args): kmer = int(args[i + 1]); i += 2
+        elif a == "--threads" and i + 1 < len(args): threads = int(args[i + 1]); i += 2
+        elif a == "--bootstrap" and i + 1 < len(args): bootstrap = int(args[i + 1]); i += 2
+        elif a == "--frag-len" and i + 1 < len(args): frag_len = int(args[i + 1]); i += 2
+        elif a == "--frag-sd" and i + 1 < len(args): frag_sd = int(args[i + 1]); i += 2
+        elif a == "--bias": bias = True; i += 1
+        elif a == "--single": single = True; i += 1
+        else: pos.append(a); i += 1
+    if len(pos) < 3:
+        print("用法: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]", file=sys.stderr)
+        return 1
+    tx, reads_str, out_ab = pos[0], pos[1], pos[2]
+    reads = [r.strip() for r in reads_str.split(",")]
+    import tempfile, shutil
+    env = dict(os.environ)
+    env["PATH"] = os.path.dirname(bin_path) + os.pathsep + env.get("PATH", "")
+    if os.path.isdir(libs_dir):
+        env["LD_LIBRARY_PATH"] = libs_dir + os.pathsep + env.get("LD_LIBRARY_PATH", "")
+    idx = os.path.join(os.path.dirname(os.path.abspath(out_ab)), os.path.basename(out_ab) + ".kallisto.idx")
+    try:
+        # 1) index
+        os.unlink(idx)
+    except OSError:
+        pass
+    r = subprocess.run([bin_path, "index", "-k", str(kmer), "-i", idx, tx], env=env, capture_output=True, text=True)
+    if r.returncode != 0:
+        print(f"❌ kallisto index 失败:{chr(10)}{r.stderr[-800:]}", file=sys.stderr)
+        return r.returncode
+    # 2) quant
+    tmp_dir = tempfile.mkdtemp(prefix="kallisto_quant_")
+    try:
+        q = [bin_path, "quant", "-i", idx, "-o", tmp_dir, "-t", str(threads)]
+        if bias: q.append("--bias")
+        if bootstrap: q += ["-b", str(bootstrap)]
+        if single:
+            q += ["--single", "-l", str(frag_len), "-s", str(frag_sd)]
+        q += reads
+        r = subprocess.run(q, env=env, capture_output=True, text=True)
+        if r.returncode != 0:
+            print(f"❌ kallisto quant 失败:{chr(10)}{r.stderr[-800:]}", file=sys.stderr)
+            return r.returncode
+        abund = os.path.join(tmp_dir, "abundance.tsv")
+        if not os.path.isfile(abund):
+            print(f"❌ 未找到 abundance.tsv（quant 输出异常）", file=sys.stderr)
+            return 1
+        shutil.copy2(abund, out_ab)
+        if not quiet:
+            print(f"[kallisto] {os.path.basename(out_ab)} 已写出（kmer={kmer} threads={threads}{' bias' if bias else ''}{' single' if single else ''}）", file=sys.stderr)
+        return 0
+    finally:
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+        try: os.unlink(idx)
+        except OSError: pass
+
+
+def _mcscanxd_impl(args, verbose=False, quiet=False):
+    """mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）"""
+    pjar = os.path.join(ROOT, "plugins", "lib", "Plugin_OneStepMCScanX_Diamond.jar")
+    bin_dir = os.path.join(ROOT, "plugins", "lib", "bin")
+    if not os.path.isfile(pjar):
+        print(f"❌ 插件缺失: {pjar}", file=sys.stderr)
+        return 1
+    if not os.path.isfile(os.path.join(bin_dir, "diamond")):
+        print(f"❌ diamond 二进制缺失: {bin_dir}/diamond", file=sys.stderr)
+        return 1
+    os.environ["PATH"] = bin_dir + os.pathsep + os.environ.get("PATH", "")
+    ensure_bridge("MCScanXFastCli")
+    java_args = ["java", "-Xmx4g", "-cp", f"{BUILD_DIR}:{pjar}:{JAR}", "MCScanXFastCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="mcscanxd")
