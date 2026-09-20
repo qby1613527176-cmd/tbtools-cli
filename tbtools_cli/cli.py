@@ -893,6 +893,7 @@ CATEGORY_MAP = {
     "genomefilter": "seq",  # GUI 逆向：序列长度过滤
     "seqpattern": "seq",  # GUI 逆向：序列模式定位
     "bed2gff3": "gxf",  # GUI 逆向：BED→GFF3
+    "careclassify": "seq",  # GUI 逆向：PlantCARE 元件分类
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
