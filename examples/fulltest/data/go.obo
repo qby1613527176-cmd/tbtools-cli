@@ -1,0 +1,41 @@
+format-version: 1.2
+data-version: fulltest
+
+[Term]
+id: GO:0008150
+name: biological_process
+namespace: biological_process
+
+[Term]
+id: GO:0003674
+name: molecular_function
+namespace: molecular_function
+
+[Term]
+id: GO:0005575
+name: cellular_component
+namespace: cellular_component
+
+[Term]
+id: GO:0006915
+name: apoptotic process
+namespace: biological_process
+is_a: GO:0008150 ! biological_process
+
+[Term]
+id: GO:0007049
+name: cell cycle
+namespace: biological_process
+is_a: GO:0008150 ! biological_process
+
+[Term]
+id: GO:0005634
+name: nucleus
+namespace: cellular_component
+is_a: GO:0005575 ! cellular_component
+
+[Term]
+id: GO:0016301
+name: kinase activity
+namespace: molecular_function
+is_a: GO:0003674 ! molecular_function
