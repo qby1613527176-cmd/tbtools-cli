@@ -911,6 +911,7 @@ CATEGORY_MAP = {
     "sraxml2tab": "table",  # GUI 逆向：SRA XML→表
     "sranum2info": "table",  # GUI 逆向：SRR 信息表
     "blat": "blast",  # GUI 逆向：BLAT 比对
+    "seqrecommend": "engine",  # GUI 逆向：测序量推荐
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
@@ -1107,7 +1108,7 @@ def _make_passthrough(name, group=None):
         args = list(ctx.args)
         
         # 输入校验：第一个非选项参数通常是输入文件（mcscanxd/kallisto 首参为工作目录/自定义路径，跳过校验）
-        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb"):
+        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend"):
             ok, msg = validate_file(args[0], f"{name} 输入文件")
             if not ok:
                 print(msg, file=sys.stderr)
