@@ -189,6 +189,7 @@ ENGINE_REGISTRY = [
     ('sranum2info', 'direct', 'biocjava.bioWeb.EntrezUtils.BatchGetSRARecordInfo', '2g', 'java', 'sranum2info --sraIdList <srrList.txt> --outTabInfo <out.xls>   # SRR 批量信息表（GUI 逆向 #41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser；SRA 组 3/3 全清）'),
     ('blat', 'bridge', 'BlatExecutorCli', '2g', 'java', 'blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8] [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra "opts"]   # BLAT 序列比对（GUI 逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）'),
     ('seqrecommend', 'bridge', 'AssemblyRecommandCli', '2g', 'java', 'seqrecommend <genomeSize1n_bp> [--polyploid] [--het 0.01] [--level Minimum|Draft|Haplotyped_Resolved|Haplotyped_T2T]   # 基因组组装测序量推荐（GUI 逆向 #43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）'),
+    ('seqfetch', 'direct', 'biocjava.bioWeb.EntrezUtils.NcbiSmartSeqFetchEntrezUtils', '2g', 'java', 'seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.txt> [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）'),
 ]
 
 

@@ -912,6 +912,7 @@ CATEGORY_MAP = {
     "sranum2info": "table",  # GUI 逆向：SRR 信息表
     "blat": "blast",  # GUI 逆向：BLAT 比对
     "seqrecommend": "engine",  # GUI 逆向：测序量推荐
+    "seqfetch": "seq",  # GUI 逆向：NCBI 序列下载
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",
