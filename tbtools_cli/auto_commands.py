@@ -184,6 +184,7 @@ ENGINE_REGISTRY = [
     ('gb2fa', 'bridge', 'GenBank2FastaCli', '2g', 'java', 'gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）'),
     ('findhomolog', 'direct', 'biocjava.bioIO.BioSoftPipeServer.FindBestHomology', '3g', 'java', 'findhomolog --inQueryProteinSet <query.pep> --inSubjectProteinSet <subject.pep> --targetIDs <ID[,ID2]> --outDir <dir> [--threads N] [--extendClade] [--sensitive N] [--similarity 0.x] [--weightCov 0.x] [--plot] [--directGraph]   # 最优同源查找（GUI 逆向 #37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）'),
     ('taxparse', 'bridge', 'TaxonomyBatchCli', '2g', 'java', 'taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）'),
+    ('srr2ena', 'bridge', 'GetENALinksCli', '2g', 'java', 'srr2ena <srrList.txt> <out.xls>   # SRR→ENA 下载链接解析（GUI 逆向 #39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）'),
 ]
 
 
