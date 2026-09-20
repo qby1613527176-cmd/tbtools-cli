@@ -906,6 +906,7 @@ CATEGORY_MAP = {
     "colorscheme": "expr", "distance": "expr", "mountain": "expr",
     "tauIndex": "expr", "exprCorr": "expr", "groupCol": "expr",
     "kaks": "tree",  # GUI 逆向：成对 Ka/Ks
+    "subtree": "tree",  # GUI 逆向：子树提取
     # 树/进化
     "phylotree": "tree", "unrooted": "tree", "treeRooting": "tree",
     "onesteptree": "tree", "degramdom": "tree", "findpath": "tree",
