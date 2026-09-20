@@ -2079,3 +2079,9 @@ def _mast_impl(args, verbose=False, quiet=False):
     ensure_bridge("MastCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MastCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="mast")
+
+def _meme2tab_impl(args, verbose=False, quiet=False):
+    """meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）"""
+    ensure_bridge("Meme2TabCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "Meme2TabCli"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="meme2tab")
