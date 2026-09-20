@@ -900,6 +900,7 @@ CATEGORY_MAP = {
     "muscle": "seq",  # GUI 逆向：MUSCLE 比对（系统二进制）
     "trimal": "seq",  # GUI 逆向：trimAl 修剪
     "gblocks": "seq",  # GUI 逆向：Gblocks 修剪
+    "bestid": "blast",  # GUI 逆向：最优 ID 转换
     # 序列/结构/域
     "genestructure": "seq", "motif": "seq", "msa": "seq", "seqlentrack": "seq",
     "amazingmeta": "seq", "cddmotif": "seq", "pfammotif": "seq", "memerun": "seq",

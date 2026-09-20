@@ -434,6 +434,15 @@ def _muscle_impl(args, verbose=False, quiet=False):
     return 0
 
 
+def _bestid_impl(args, verbose=False, quiet=False):
+    """bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix> [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threads，CLI 公共 -t 会吃掉它——缺省自动注入 4，精确指定用 --config parameter.txt；依赖 blastp/diamond）"""
+    if "--threads" not in args:
+        args = args + ["--threads", "4"]
+    java_args = ["java", "-Xmx3g", "-cp", JAR,
+                 "biocjava.bioDoer.BLAST.ReciprocalBlast.BestIDConverter"] + args
+    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="bestid")
+
+
 def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
     import tempfile
