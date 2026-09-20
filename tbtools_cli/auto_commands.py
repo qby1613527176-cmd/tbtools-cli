@@ -1017,3 +1017,9 @@ def _meme_impl(args, verbose=False, quiet=False):
     ensure_bridge("MemeCli")
     java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "MemeCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="meme")
+
+def _upset_impl(args, verbose=False, quiet=False):
+    """upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）"""
+    ensure_bridge("UpSetCli")
+    java_args = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "UpSetCli"] + args
+    return run_plot(java_args, verbose=verbose, quiet=quiet, command_name="upset")
