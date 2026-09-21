@@ -515,9 +515,6 @@ class TestReadmeCounts:
         m = re.search(r'(\d+) 条实测坑位', readme)
         assert m and int(m.group(1)) == len(PITFALL_HINTS), \
             f"README 坑位数 {m.group(1) if m else '?'} != 实际 {len(PITFALL_HINTS)}"
-        import re
-        nums = re.findall(r"(\d+) 绘图/分析命令", out)
-        assert nums and int(nums[0]) > 100, f"version 命令绘图命令数异常: {out[:100]}"
 
 
 # ============ 13. probe_dead_engines 假 jar 测试（外部审查反馈：CI 无真 jar） ============
