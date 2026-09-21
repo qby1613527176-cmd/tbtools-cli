@@ -574,6 +574,8 @@ tbplot.sh help              # 绘图命令 + 用法一屏
 - 用法: onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean true|false]
 - 一步法 ML 系统发育树（引擎 119，OneStepMLTree——pep→muscle→trimal→IQ-TREE MFP+UFboot）
 - 需系统 muscle+iqtree；⚠️ --bbTime ≥1000（iqtree 限制）；序列需 ≥4 条唯一
+- 依赖预检（muscle5|muscle/trimal/iqtree 缺失即报错）；`TBTOOLS_ONESTEPTREE_TIMEOUT`（秒，默认 1800，0=不限）超时自动杀并提示
+- ⚠️ 引擎级缺陷 N40（2026-09-21 归因）：IQ-TREE 阶段走 `SystemCommander.excuteCommandsAndOutputMergedStd` 只排水 stdout 不排水 stderr，子进程 stderr 写满管道（Windows 管道缓冲远小于 Linux 64K）即永久挂起（Windows 上 300s 服务端超时必现）；Linux 下一般可正常完成。属上游 jar 缺陷，包装层不硬修
 
 #### `simplehmmscan`
 
@@ -2557,9 +2559,13 @@ tbtools heatmap <matrix> <out.png> [group]   # 热图快捷
 | `tbtools help <命令名>` | 快捷帮助，自动定位分组（不用记 volcano 在 expr） |
 | `tbtools list plots\\|tools\\|rpc` | 命令清单（tools 已过滤绘图类，66 纯工具） |
 | `tbtools presets [名称]` | 7 种期刊预设（nature 89×89 / cell / presentation / poster / slide / twitter / a4） |
-| `tbtools rpc start [--port] [--mem]` | 启动 RPC 服务器 |
-| `tbtools rpc methods` | 列出全部 188 RPC 方法 |
-| `tbtools rpc call <method> [params]` | 调用 RPC 方法 |
+| `tbtools rpc start [--port] [--mem] [--force]` | 启动 RPC 服务器（pid 文件+健康检查，幂等） |
+| `tbtools rpc stop [--port]` | 停止 RPC 服务器 |
+| `tbtools rpc status [--port]` | 查看 RPC 服务器状态 |
+| `tbtools rpc methods` | 列出全部 188 RPC 方法（不可达时自动拉起） |
+| `tbtools rpc call <method> [params]` | 调用 RPC 方法（不可达时自动拉起，--timeout 可调） |
+
+> **RPC 自愈（2026-09-21，批次 2 / N34・N35）**：`rpc start` 写 pid 文件（`~/.config/tbtools-cli/rpc-<port>.pid`）+ 启动后健康探针（`system.listMethods`）；`rpc call/methods` 前自动 ensure——服务不可达（引擎自发死亡/被杀）时自动清理 stale pid 并重新拉起；Java 侧加 `-XX:+CrashOnOutOfMemoryError`+堆转储（OOM 宁可崩溃可自愈也不僵尸悬挂）。日志：`~/.config/tbtools-cli/rpc-<port>.log`。`bin/tbtools_rpc.sh` 同构（新增 `stop` 子命令）。
 | `tbtools sets venn2\\|venn3\\|venn4` | 原生 ArgsParser CLI（--List1..4 --label1..4 --graph --prefix） |
 
 ### 统一选项（所有绘图命令）

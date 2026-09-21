@@ -768,7 +768,39 @@ case "$1" in
     # 用法: onesteptree --inPepFie <in.pep> --outFilePrefix <outDir> [--bbTime N] [--clean true|false]
     #   一步法 ML 系统发育树（引擎 119，OneStepMLTree——pep→muscle→trimal→IQ-TREE MFP+UFboot）
     #   需系统 muscle+iqtree；⚠️ --bbTime ≥1000（iqtree 限制）；序列需 ≥4 条唯一
+    #   N40（引擎级缺陷，包装层不硬修）：QuickRunIQtree 走 SystemCommander.excuteCommandsAndOutputMergedStd，
+    #   只排水 stdout 不排水 stderr → 子进程 stderr 写满管道（Windows 管道缓冲远小于 Linux 64K）即永久挂起。
+    #   对质：TBTOOLS_ONESTEPTREE_TIMEOUT（秒，默认 1800，0=不限）超时即杀并给出指引。
     shift
+    # 外部依赖预检（引擎要求 muscle5 或 muscle、trimal、iqtree 在 PATH）
+    _osbt_missing=()
+    command -v muscle5 >/dev/null 2>&1 || command -v muscle >/dev/null 2>&1 || _osbt_missing+=("muscle5(或 muscle)")
+    command -v trimal  >/dev/null 2>&1 || _osbt_missing+=("trimal")
+    command -v iqtree  >/dev/null 2>&1 || _osbt_missing+=("iqtree")
+    if [ ${#_osbt_missing[@]} -gt 0 ]; then
+        echo "❌ onesteptree 缺少外部依赖: ${_osbt_missing[*]}" >&2
+        echo "   安装: apt install muscle trimal iqtree2（或 bioconda: muscle=5.* trimal iqtree）" >&2
+        exit 1
+    fi
+    _osbt_timeout="${TBTOOLS_ONESTEPTREE_TIMEOUT:-1800}"
+    if [ "$_osbt_timeout" != "0" ] && command -v timeout >/dev/null 2>&1; then
+        # 不走 _run_java（其失败即 exit，会绕过 N40 提示）
+        _osbt_err=$(mktemp /tmp/tbtools_osbt_err.XXXXXX)
+        timeout --signal=KILL "$_osbt_timeout" xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioIO.BioSoftPipeServer.OneStepMLTree "$@" 2>"$_osbt_err"
+        _rc=$?
+        if [ $_rc -eq 137 ] || [ $_rc -eq 124 ]; then
+            echo "❌ onesteptree 超过 ${_osbt_timeout}s 被杀。疑似命中引擎缺陷 N40（IQ-TREE 阶段 stderr 管道不排水导致子进程挂起，Windows 上必现）。" >&2
+            echo "   可拆分手动跑: muscle → trimal → iqtree（见 tbtools muscle / trimal 命令），或调大 TBTOOLS_ONESTEPTREE_TIMEOUT（0=不限）。" >&2
+            rm -f "$_osbt_err"
+            exit 1
+        fi
+        if [ $_rc -ne 0 ]; then
+            echo "❌ onesteptree 失败（退出码 $_rc），stderr 末尾：" >&2
+            tail -5 "$_osbt_err" >&2
+        fi
+        rm -f "$_osbt_err"
+        exit $_rc
+    fi
     _run_java xvfb-run -a java -Xmx4g -cp "$JAR" biocjava.bioIO.BioSoftPipeServer.OneStepMLTree "$@"
     ;;
   simplehmmscan)

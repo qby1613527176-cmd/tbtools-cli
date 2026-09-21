@@ -20,7 +20,8 @@ tbtools doctor           # 环境诊断（检查 Java/JAR/xvfb/依赖）
 tbtools list              # 列出全部绘图/分析命令
 tbtools list tools        # 列出全部命令行工具
 tbtools help volcano      # 快捷帮助（自动定位分组）
-tbtools rpc start         # 启动 RPC 服务器（188 方法）
+tbtools rpc start         # 启动 RPC 服务器（188 方法；pid 文件+健康检查，死亡后 call/methods 自动拉起）
+tbtools rpc status        # 查看 RPC 状态；rpc stop 停止
 bash examples/scripts/run_examples.sh     # 一键验证（8 项核心功能）
 ```
 
