@@ -1,4 +1,5 @@
 """tbtools-cli 核心引擎：通用选项 + _run_java wrapper + 统一输出格式 + 输入校验"""
+import hashlib
 import os
 import re
 import shutil
@@ -251,11 +252,120 @@ def resolve_output(output, fmt="svg", width=None, height=None):
         _click.echo(f"⚠️ 输出文件已存在将被覆盖: {output}", err=True)
     return output
 
+# ---- P0 输入保护（N19/N23/N25/N37：引擎在用户输入上建库/清洗/写穿，系统性防御）----
+# 副作用文件模式（引擎在输入旁落 *.TBtools.fa* 索引 / *.TBtoolsDB.* BLAST 库 / 清洗中间文件）
+_SIDE_EFFECT_RE = re.compile(
+    r'(\.TBtools\.(fa|fai|gp|highGC)$|\.TBtoolsDB\.|\.tmpClean$|\.sortedGXF$|'
+    r'\.subjectSubset$|\.subJog\.|\.splitLines\.txt$|\.link\.dmnd$|\.s2s(\.finished)?$)',
+    re.IGNORECASE)
+# 参数名含 out/output/prefix/graph/dir/report → 值是输出路径，不纳入输入快照
+_OUT_FLAG_RE = re.compile(
+    r'^(--?)?(out|output|prefix|graph|dir|report)(file|path|fa|fq|tab|table|gff|gff3|gtf|txt|xml|xls|svg|png|pdf|nwk|pre|dir|put)*$',
+    re.IGNORECASE)
+_MAX_SNAPSHOT_COPY = 50 * 1024 * 1024  # >50MB 只记 (size, mtime)，不复制（无法恢复，只报警）
+
+def _sha1_file(f):
+    h = hashlib.sha1()
+    with open(f, "rb") as fh:
+        for _chunk in iter(lambda: fh.read(1 << 20), b""):
+            h.update(_chunk)
+    return h.hexdigest()
+
+def snapshot_inputs(java_args):
+    """识别 java_args 中的输入文件并快照。
+
+    返回 [(path, backup|None, size, mtime)]；
+    规则：跳过执行器/-cp/-D/-X/-jar 值、跳过输出型参数名（_OUT_FLAG_RE）、
+    跳过 .jar/.class 与空文件。
+    """
+    snaps = []
+    tmpdir = None
+    prev = None
+    for _i, _a in enumerate(java_args):
+        if _i == 0 or not isinstance(_a, str):
+            continue
+        if _a in ("-cp", "-classpath", "-jar") or _a.startswith(("-D", "-X", "-J", "--module-path")):
+            prev = _a if not _a.startswith("-") else None
+            continue
+        if _a.startswith("-"):
+            prev = _a
+            continue
+        # _a 是参数值
+        flag = prev
+        prev = None
+        if flag and (_OUT_FLAG_RE.search(flag) or flag in ("-cp", "-classpath", "-jar", "-o")):
+            continue
+        if not os.path.isfile(_a):
+            continue
+        if _a.endswith((".jar", ".class")):
+            continue
+        try:
+            size = os.path.getsize(_a)
+            mtime = os.path.getmtime(_a)
+        except OSError:
+            continue
+        if size == 0:
+            continue
+        backup = None
+        if size <= _MAX_SNAPSHOT_COPY:
+            if tmpdir is None:
+                tmpdir = tempfile.mkdtemp(prefix="tbtools_inp.")
+            backup = os.path.join(tmpdir, f"inp_{len(snaps)}_{os.path.basename(_a)}")
+            try:
+                shutil.copy2(_a, backup)
+            except Exception:
+                backup = None
+        snaps.append([_a, backup, size, mtime])
+    return snaps
+
+def verify_and_restore(snaps):
+    """调用后比对快照；被引擎改写的输入自动恢复。返回问题清单 [(path, 状态)]。"""
+    problems = []
+    for path, backup, size, mtime in snaps:
+        if not os.path.isfile(path):
+            problems.append((path, "missing"))
+            continue
+        if backup and os.path.isfile(backup):
+            try:
+                if _sha1_file(path) != _sha1_file(backup):
+                    shutil.copy2(backup, path)
+                    problems.append((path, "modified-restored"))
+            except Exception:
+                problems.append((path, "verify-error"))
+        else:
+            try:
+                if (os.path.getsize(path), os.path.getmtime(path)) != (size, mtime):
+                    problems.append((path, "modified-no-backup"))
+            except OSError:
+                problems.append((path, "verify-error"))
+    return problems
+
+def cleanup_side_effects(t0):
+    """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。"""
+    try:
+        cwd = os.getcwd()
+        names = os.listdir(cwd)
+    except Exception:
+        return 0
+    n = 0
+    for fn in names:
+        if not _SIDE_EFFECT_RE.search(fn):
+            continue
+        fp = os.path.join(cwd, fn)
+        try:
+            if os.path.isfile(fp) and os.path.getmtime(fp) >= t0 - 2:
+                os.unlink(fp)
+                n += 1
+        except Exception:
+            pass
+    return n
+
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 def run_java(java_args, verbose=False, quiet=False, command_name=None):
     """执行 Java 命令，失败时输出友好提示
     
     退出码: 0=成功, 1=参数错误, 2=文件不存在, 3=格式错误
+    P0 保护：调用前快照输入，调用后恢复被改写输入 + 清理副作用文件。
     """
     err_file = tempfile.mktemp(prefix="tbtools_err.")
     import time as _time
@@ -263,6 +373,32 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
     
     # 确保桥编译产物存在
     os.makedirs(BUILD_DIR, exist_ok=True)
+    
+    # ── N19 特判：FindBestHomologyBatch 引擎把结果写进 queryFasta 而非 outTable ──
+    # 包装：query 重定向到临时副本（引擎写穿副本），调用后仅当副本被引擎改写（sha1 变）
+    # 才把副本搬到 --outTable 目标；未改写=引擎未产出（参数拒认），不搬并报错。
+    n19_tmp = n19_out = n19_orig_sha = None
+    if command_name == "findBestHomologyBatch":
+        qidx = oidx = None
+        for _i, _a in enumerate(java_args):
+            if _a == "--queryFasta":
+                qidx = _i
+            elif _a == "--outTable":
+                oidx = _i
+        if qidx is not None and qidx + 1 < len(java_args) and os.path.isfile(java_args[qidx + 1]):
+            n19_tmp = tempfile.mktemp(prefix="tbq.", suffix=".fa", dir=os.path.dirname(os.path.abspath(java_args[qidx + 1])) or None)
+            try:
+                shutil.copy2(java_args[qidx + 1], n19_tmp)
+                n19_orig_sha = _sha1_file(n19_tmp)
+                java_args = list(java_args)
+                java_args[qidx + 1] = n19_tmp
+                n19_out = java_args[oidx + 1] if (oidx is not None and oidx + 1 < len(java_args)) else None
+            except Exception:
+                n19_tmp = None
+    
+    # ── P0：输入快照（在原 java_args 上做，含 query 原文件，兜底验证）──
+    snaps = snapshot_inputs(java_args)
+    _wall_t0 = _time.time()
     
     try:
         result = subprocess.run(
@@ -276,6 +412,35 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
     except Exception as e:
         print(f"❌ 启动失败: {e}", file=sys.stderr)
         return 1
+    
+    # ── P0：输入保护（无论成败都执行）──
+    _problems = verify_and_restore(snaps)
+    _clean_n = cleanup_side_effects(_wall_t0)
+    if _problems:
+        print(file=sys.stderr)
+        print("⚠️ 输入保护：检测到引擎修改/删除了输入文件，已自动恢复：", file=sys.stderr)
+        for _p, _st in _problems:
+            print(f"   {_p} [{_st}]", file=sys.stderr)
+    if _clean_n:
+        print(f"⚠️ 已清理引擎副作用文件 {_clean_n} 个（临时索引/建库残留）", file=sys.stderr)
+    
+    # ── N19：仅当引擎改写了临时副本时才把结果搬到 outTable ──
+    if n19_tmp:
+        try:
+            _modified = (os.path.isfile(n19_tmp) and os.path.getsize(n19_tmp) > 0
+                         and _sha1_file(n19_tmp) != n19_orig_sha)
+            if _modified:
+                if n19_out:
+                    _od = os.path.dirname(os.path.abspath(n19_out))
+                    if _od:
+                        os.makedirs(_od, exist_ok=True)
+                    shutil.copy2(n19_tmp, n19_out)
+                    print(f"✅ findBestHomologyBatch 结果已写入: {n19_out}", file=sys.stderr)
+                else:
+                    print(f"⚠️ findBestHomologyBatch 未指定 --outTable，结果留在: {n19_tmp}", file=sys.stderr)
+            os.unlink(n19_tmp)
+        except Exception as _e:
+            print(f"⚠️ findBestHomologyBatch 结果搬移失败: {_e}", file=sys.stderr)
     
     if ec != 0:
         ec_out = ec
@@ -356,14 +521,15 @@ def ensure_bridge(bridge_name):
     """确保桥 Java 文件已编译到 build/ 目录"""
     src = os.path.join(BRIDGES_DIR, f"{bridge_name}.java")
     dst = os.path.join(BUILD_DIR, f"{bridge_name}.java")
-    
+
     # 同步源码到 build/
     if os.path.isfile(src):
-        need_copy = (not os.path.isfile(dst) 
+        need_copy = (not os.path.isfile(dst)
                      or os.path.getmtime(src) > os.path.getmtime(dst))
         if need_copy:
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
             shutil.copy2(src, dst)
-    
+
     # 编译（如果 .class 不存在或源码更新）
     cls_file = os.path.join(BUILD_DIR, f"{bridge_name}.class")
     if not os.path.isfile(cls_file) or (
@@ -373,6 +539,16 @@ def ensure_bridge(bridge_name):
             ["javac", "-cp", JAR, dst],
             capture_output=True, cwd=BUILD_DIR
         )
+
+    # N27: fake jaxb DatatypeConverter（JDK9+ 无 javax.xml.bind）随仓库分发源码，
+    # 有需要即编译到 build/javax/xml/bind/（全新 checkout 也能重建，修复 NoClassDefFoundError）
+    fake_src = os.path.join(BRIDGES_DIR, "javax", "xml", "bind", "DatatypeConverter.java")
+    if os.path.isfile(fake_src):
+        fake_cls = os.path.join(BUILD_DIR, "javax", "xml", "bind", "DatatypeConverter.class")
+        if (not os.path.isfile(fake_cls)
+                or os.path.getmtime(fake_src) > os.path.getmtime(fake_cls)):
+            os.makedirs(os.path.dirname(fake_cls), exist_ok=True)
+            subprocess.run(["javac", "-d", BUILD_DIR, fake_src], capture_output=True)
 
 # ---- xvfb-run 包装 ----
 def run_plot(java_args, verbose=False, quiet=False, use_xvfb=True, command_name=None):

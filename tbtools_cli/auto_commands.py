@@ -9,8 +9,10 @@ cli.py 通过 dir(_ac) 反射 _xxx_impl 名字注册命令，函数形态必须�
 doc 值为旧模块运行时 __doc__（已含编译器 docstring 处理后的真实字符）。
 """
 import os
+import shutil
 import subprocess
 import sys
+import tempfile
 
 from tbtools_cli.core import BUILD_DIR, JAR, ROOT, cp, ensure_bridge, run_java, run_plot
 
@@ -205,7 +207,8 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
     else:  # direct
         def impl(args, verbose=False, quiet=False):
-            java_args = ["java", f"-Xmx{xmx}", "-cp", JAR, cls] + args
+            # N27: direct 类也含 build/（fake jaxb DatatypeConverter 等），否则 JDK9+ 缺 javax.xml.bind
+            java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
                 return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
@@ -694,3 +697,234 @@ def _smart_impl(args, verbose=False, quiet=False):
     java_args = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, pjar, JAR), "SubmitSMARTCli"] + args
     return run_java(java_args, verbose=verbose, quiet=quiet, command_name="smart")
 
+
+# ── P0/P1 修复实现（N19/N23/N25：覆盖错误的注册表/表驱动路径，覆盖顺序=后定义者胜）──
+
+def _findBestHomologyBatch_impl(args, verbose=False, quiet=False):
+    """findBestHomologyBatch: findBestHomologyBatch <query.pep> <subject.pep> <outDir> [--targetIds ID[,ID2...]] [--threads N] [--plot false] [--sensitive 5,10]
+       # 最优同源批量查找（FindBestHomologyBatch；N19 修复）
+       # ⚠️ 引擎真实参数: --inQueryProteinSet/--inSubjectProteinSet/--targetIdList(GeneName\tID1[,ID2])/--outDir；
+       #    旧写法 --queryFasta/--subjectFasta/--outTable 是错误参数名，引擎拒参仍返 ec=0（静默成功+输出不创建）。
+       # ⚠️ 引擎不自动创建 --outDir；targetIdList 必需，缺省时自动取 query 全部 ID（targetName=All）。
+       #    产物: <outDir>/<targetName>.s<subjectId>.ids（最佳同源 ID 对，逗号分隔）。"""
+    pos, kw = [], {}
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a.startswith("--") and i + 1 < len(args):
+            kw[a[2:]] = args[i + 1]
+            i += 2
+        else:
+            pos.append(a)
+            i += 1
+    query = kw.get("inQueryProteinSet") or kw.get("queryFasta") or (pos[0] if pos else None)
+    subject = kw.get("inSubjectProteinSet") or kw.get("subjectFasta") or (pos[1] if len(pos) > 1 else None)
+    out_dir = kw.get("outDir") or kw.get("outTable") or (pos[2] if len(pos) > 2 else None)
+    if not query or not subject or not out_dir:
+        print("用法: findBestHomologyBatch <query.pep> <subject.pep> <outDir> [--targetIds ID,...] [--threads N] [--plot false]", file=sys.stderr)
+        return 1
+    for f in (query, subject):
+        if not os.path.isfile(f):
+            print(f"❌ 输入文件不存在: {f}", file=sys.stderr)
+            return 2
+    try:
+        os.makedirs(out_dir, exist_ok=True)  # 引擎不自动创建
+    except OSError as e:
+        print(f"❌ 无法创建 outDir: {out_dir}: {e}", file=sys.stderr)
+        return 2
+    target_list = kw.get("targetIdList") or kw.get("targetIds")
+    tmp_targets = None
+    if not (target_list and os.path.isfile(target_list)):
+        ids = [l[1:].split()[0] for l in open(query, encoding="utf-8", errors="replace") if l.startswith(">")]
+        if not ids:
+            print("❌ query FASTA 无序列头", file=sys.stderr)
+            return 3
+        tmp_targets = tempfile.mktemp(prefix="tb_fbh.", suffix=".tsv")
+        with open(tmp_targets, "w") as fh:
+            fh.write(f"{kw.get('targetName') or 'All'}\t{','.join(ids)}\n")
+        target_list = tmp_targets
+    try:
+        jargs = ["java", "-Xmx4g", "-cp", JAR,
+                 "biocjava.bioIO.BioSoftPipeServer.FindBestHomologyBatch",
+                 "--inQueryProteinSet", query, "--inSubjectProteinSet", subject,
+                 "--targetIdList", target_list, "--outDir", out_dir,
+                 "--useDiamond", str(kw.get("useDiamond", "false")).lower(),
+                 "--threads", str(kw.get("threads", 2)),
+                 "--plot", str(kw.get("plot", "false")).lower()]
+        for opt in ("sensitive", "similarity", "weightCov", "extendClade"):
+            if opt in kw:
+                jargs += [f"--{opt}", kw[opt]]
+        ec = run_java(jargs, verbose=verbose, quiet=quiet, command_name="findBestHomologyBatch")
+        # 防引擎拒参仍 ec=0（N19 静默成功）: 校验产物
+        if ec == 0:
+            outs = [f for f in os.listdir(out_dir) if f.endswith(".ids")] if os.path.isdir(out_dir) else []
+            if not outs:
+                print(f"❌ 引擎未产出结果（检查 --targetIds 与输入格式），outDir={out_dir}", file=sys.stderr)
+                ec = 1
+        return ec
+    finally:
+        if tmp_targets:
+            try:
+                os.unlink(tmp_targets)
+            except Exception:
+                pass
+
+
+def _gffCdsPhaseCorrector_impl(args, verbose=False, quiet=False):
+    """gffCdsPhaseCorrector: gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [--problemGff <p.gff3>] [--report <r.txt>]
+       # CDS phase 校正（GffCdsPhaseCorrector；N25 修复：引擎为位置参数式 <in> <correct> <problematic> <report>，
+       #    原注册表直通导致 --inGff/--outGff 被当字面量文件、警告覆盖输入——现显式转位置参数并避免覆盖已存在输出）。"""
+    pos, kw = [], {}
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a.startswith("--") and i + 1 < len(args):
+            kw[a[2:]] = args[i + 1]
+            i += 2
+        else:
+            pos.append(a)
+            i += 1
+    in_gff = kw.get("inGff") or (pos[0] if pos else None)
+    out_gff = kw.get("outGff") or (pos[1] if len(pos) > 1 else None)
+    if not in_gff or not out_gff:
+        print("用法: gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3>", file=sys.stderr)
+        return 1
+    if not os.path.isfile(in_gff):
+        print(f"❌ 输入文件不存在: {in_gff}", file=sys.stderr)
+        return 2
+    if os.path.abspath(in_gff) == os.path.abspath(out_gff):
+        print("❌ inGff 与 outGff 不能相同（引擎会覆盖输入，N25）", file=sys.stderr)
+        return 2
+    prob = kw.get("problemGff") or (out_gff + ".problem.gff3")
+    rep = kw.get("report") or (out_gff + ".report.txt")
+    od = os.path.dirname(os.path.abspath(out_gff))
+    if od:
+        os.makedirs(od, exist_ok=True)
+    jargs = ["java", "-Xmx2g", "-cp", JAR,
+             "biocjava.bioDoer.GXFUtils.GffCdsPhase.GffCdsPhaseCorrector",
+             in_gff, out_gff, prob, rep]
+    return run_java(jargs, verbose=verbose, quiet=quiet, command_name="gffCdsPhaseCorrector")
+
+
+def _mirnatarget_impl(args, verbose=False, quiet=False):
+    """mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]
+       # miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli
+       #   原表驱动误把本命令直通 TargetScoreCli（其输入是 ssearch36 的 m10，不是 FASTA），
+       #   导致第 2 参数被当输出清零、第 3 参被忽略、输出永不落盘——现恢复完整管线并校验输出。
+       # 依赖: ssearch36（fasta36 套件）。产物: miRNA\ttarget\tstrand\tbeg\tend\tscore\t..."""
+    pos, evalue, extra = [], 1.0, []
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == "--evalue" and i + 1 < len(args):
+            try:
+                evalue = float(args[i + 1])
+            except ValueError:
+                pass
+            i += 2
+        elif a.startswith("--") and i + 1 < len(args):
+            extra += [a, args[i + 1]]
+            i += 2
+        else:
+            pos.append(a)
+            i += 1
+    if len(pos) < 3:
+        print("用法: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]", file=sys.stderr)
+        return 1
+    mirna, target, out = pos[0], pos[1], pos[2]
+    for f in (mirna, target):
+        if not os.path.isfile(f):
+            print(f"❌ 输入文件不存在: {f}", file=sys.stderr)
+            return 2
+    if os.path.abspath(out) in (os.path.abspath(mirna), os.path.abspath(target)):
+        print("❌ 输出文件与输入同名会覆盖输入（N23），请换输出名", file=sys.stderr)
+        return 2
+    ssearch = shutil.which("ssearch36")
+    if not ssearch:
+        print("❌ 缺少依赖 ssearch36（fasta36 套件），请先安装", file=sys.stderr)
+        return 4
+    od = os.path.dirname(os.path.abspath(out))
+    if od:
+        os.makedirs(od, exist_ok=True)
+    tmp_m10 = tempfile.mktemp(prefix="tb_mirna.", suffix=".m10")
+    try:
+        with open(tmp_m10, "w") as fh:
+            r = subprocess.run([ssearch, "-w", "100", "-W", "25", "-E", str(evalue),
+                                "-m", "10", "-T", "1", "-i", "-U", mirna, target],
+                               stdout=fh, stderr=subprocess.PIPE)
+        if r.returncode != 0 or not os.path.isfile(tmp_m10) or os.path.getsize(tmp_m10) == 0:
+            print(f"❌ ssearch36 未产出比对（0 命中或序列格式不符；evalue={evalue}）", file=sys.stderr)
+            return 3
+        ensure_bridge("TargetScoreCli")
+        jargs = ["java", "-Xmx2g", "-cp", cp(BUILD_DIR, JAR), "TargetScoreCli", tmp_m10, out] + extra
+        ec = run_java(jargs, verbose=verbose, quiet=quiet, command_name="mirnatarget")
+        if ec == 0 and not os.path.isfile(out):
+            print(f"❌ 输出文件未生成: {out}", file=sys.stderr)
+            ec = 1
+        return ec
+    finally:
+        try:
+            os.unlink(tmp_m10)
+        except Exception:
+            pass
+
+
+
+def _msy_impl(args, verbose=False, quiet=False):
+    """msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]
+       # 多物种微共线性图（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当
+       #   engineClass 导致 ClassNotFoundException——现按 tbplot.sh 已验证调用方式显式拼参数）
+       # 格式: pos=Chr\\tGene\\tStart\\tEnd；links=GeneA\\tGeneB\\t[r,g,b]；layout=Genome: chr1 chr2"""
+    if len(args) < 4:
+        print("用法: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]", file=sys.stderr)
+        return 1
+    pos, links, layout, out = args[0], args[1], args[2], args[3]
+    w, h = "1000", "800"
+    if len(args) >= 5:
+        w = args[4]
+    if len(args) >= 6:
+        h = args[5]
+    for f in (pos, links, layout):
+        if not os.path.isfile(f):
+            print(f"❌ 输入文件不存在: {f}", file=sys.stderr)
+            return 2
+    ensure_bridge("GenericCli")
+    jargs = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "GenericCli",
+             "biocjava.bioDoer.JIGplotToolkit.Synteny.MultipleSpeciesSyteny", "plot", out,
+             "--set", "inSimplifiedGff", pos, "--set", "genePairInfoFile", links,
+             "--set", "chrLayoutFile", layout, "--width", w, "--height", h]
+    return run_plot(jargs, verbose=verbose, quiet=quiet, command_name="msy")
+
+
+def _getLongestCompleteORF_impl(args, verbose=False, quiet=False):
+    """getLongestCompleteORF: getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa>
+       # 批量最长完整 ORF 预测（N24 修复：原注册到 JavaFX 无 main 的 biocjava.bioIO.ORF.ORF，
+       #   改映射到 GetLongestORF（longestorf 同引擎，ArgsParser --inFa/--outORFs 实测可用））"""
+    return _longestorf_impl(args, verbose=verbose, quiet=quiet)  # noqa: F821
+
+
+def _efpHeat_impl(args, verbose=False, quiet=False):
+    """efpHeat: efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> --expMat <expMat.tsv> --geneId <ID> --outImg <out>
+       # eFP 组织表达热图（单矩阵，generateSuperHeatMap）——N27 附带修复：引擎是 --key value 式，
+       #   旧 docstring 写成位置参数导致拒参；支持位置参数 <tga> <sample2cc> <expmat> <geneId> <out> 自动转换
+       # ⚠️ 需 fake DatatypeConverter（build/，JDK9+ 无 javax.xml.bind，ensure_bridge 自动重建）"""
+    has_flag = any(a.startswith("--") for a in args)
+    if has_flag:
+        # 命名参数直通（TGA 参数校验交给引擎）
+        jargs = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR),
+                 "biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap"] + args
+        return run_plot(jargs, verbose=verbose, quiet=quiet, command_name="efpHeat")
+    pos = [a for a in args if not a.startswith("--")]
+    if len(pos) < 5:
+        print("用法: efpHeat --inTGA <plant.tga> --inSample2CC <s2cc.txt> --expMat <exp.tsv> --geneId <ID> --outImg <out>", file=sys.stderr)
+        return 1
+    tga, s2cc, exp, gid, out = pos[0], pos[1], pos[2], pos[3], pos[4]
+    for f in (tga, s2cc, exp):
+        if not os.path.isfile(f):
+            print(f"❌ 输入文件不存在: {f}", file=sys.stderr)
+            return 2
+    jargs = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR),
+             "biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap",
+             "--inTGA", tga, "--inSample2CC", s2cc, "--expMat", exp,
+             "--geneId", gid, "--outImg", out]
+    return run_plot(jargs, verbose=verbose, quiet=quiet, command_name="efpHeat")
