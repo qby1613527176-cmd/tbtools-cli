@@ -1174,6 +1174,7 @@ CATEGORY_MAP = {
     "bamMerge": "asm", "bamindex": "asm", "bamsort": "asm", "bamstate": "asm",
     "hicEnzyme": "asm", "virusRecomb": "asm", "preparespecies": "asm",
     "gxfRename": "gxf", "gxfStat": "gxf", "gxfAppend": "gxf", "gxfGenepos": "gxf",
+    "gxfSplit": "gxf", "gxfIdAppender": "gxf",
     "gxfRegion": "gxf", "gxfFix": "gxf", "gxfOverlap": "gxf", "gxfRepIDs": "gxf",
     "gxfRepGXF": "gxf", "gxfMatch": "gxf", "gxfRecall": "gxf",
     "regionAnno": "gxf", "annocompare": "gxf", "genedensity": "gxf",
@@ -1357,7 +1358,7 @@ def _make_passthrough(name, group=None):
         args = list(ctx.args)
         
         # 输入校验：第一个非选项参数通常是输入文件（mcscanxd/kallisto 首参为工作目录/自定义路径，跳过校验）
-        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend", "pubmed", "tableMerge", "generic"):
+        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend", "pubmed", "tableMerge", "generic", "preparespecies", "marker", "markertools", "venn5", "venn6"):
             ok, msg = validate_file(args[0], f"{name} 输入文件")
             if not ok:
                 print(msg, file=sys.stderr)

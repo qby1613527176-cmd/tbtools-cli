@@ -1055,3 +1055,71 @@ def _extractFeatureFromGTF_impl(args, verbose=False, quiet=False):
         if opt in kw:
             jargs += [f"--{opt}", kw[opt]]
     return run_java(jargs, verbose=verbose, quiet=quiet, command_name="extractFeatureFromGTF")
+
+
+def _gxfSplit_impl(args, verbose=False, quiet=False):
+    """gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]
+       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）"""
+    import json as _json
+    import urllib.request as _ur
+    pos, num = [], 8
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a == "--numOfFile" and i + 1 < len(args):
+            num = int(args[i + 1]); i += 2
+        else:
+            pos.append(a); i += 1
+    if len(pos) < 2:
+        print("用法: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]", file=sys.stderr)
+        return 1
+    inp, prefix = pos[0], pos[1]
+    if not os.path.isfile(inp):
+        print(f"❌ 输入文件不存在: {inp}", file=sys.stderr)
+        return 2
+    from tbtools_cli.core import run_java  # noqa
+    # 走 RPC（服务器按需拉起，见 rpc call --no-autostart 之外的自动拉起）
+    import tbtools_cli.cli as _cli
+    ok = _cli._ensure_rpc(8765) if hasattr(_cli, "_ensure_rpc") else True
+    if not ok:
+        print("❌ RPC 服务器不可用，无法调用 GxfSplit", file=sys.stderr)
+        return 1
+    body = _json.dumps({"jsonrpc":"2.0","method":"GxfSplit.process",
+        "params":{"inputPath": inp, "outputPrefix": prefix, "numOfFile": num}, "id":1}).encode()
+    req = _ur.Request("http://127.0.0.1:8765/rpc", data=body, headers={"Content-Type":"application/json"})
+    resp = _json.loads(_ur.urlopen(req, timeout=120).read())
+    if resp.get("error"):
+        print(f"❌ RPC 错误: {resp['error']}", file=sys.stderr)
+        return 1
+    r = resp.get("result", {})
+    print(f"✅ 拆分完成 {num} 份 × 前缀 {prefix}（{r.get('outputPrefix', '')}）", file=sys.stderr)
+    return 0
+
+
+def _gxfIdAppender_impl(args, verbose=False, quiet=False):
+    """gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>
+       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）"""
+    import json as _json
+    import urllib.request as _ur
+    pos = [a for a in args if not a.startswith("--")]
+    if len(pos) < 3:
+        print("用法: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>", file=sys.stderr)
+        return 1
+    inp, out, prefix = pos[0], pos[1], pos[2]
+    if not os.path.isfile(inp):
+        print(f"❌ 输入文件不存在: {inp}", file=sys.stderr)
+        return 2
+    import tbtools_cli.cli as _cli
+    ok = _cli._ensure_rpc(8765) if hasattr(_cli, "_ensure_rpc") else True
+    if not ok:
+        print("❌ RPC 服务器不可用，无法调用 GxfIdAppender", file=sys.stderr)
+        return 1
+    body = _json.dumps({"jsonrpc":"2.0","method":"GxfIdAppender.process",
+        "params":{"inputPath": inp, "outputPath": out, "prefix": prefix}, "id":1}).encode()
+    req = _ur.Request("http://127.0.0.1:8765/rpc", data=body, headers={"Content-Type":"application/json"})
+    resp = _json.loads(_ur.urlopen(req, timeout=120).read())
+    if resp.get("error"):
+        print(f"❌ RPC 错误: {resp['error']}", file=sys.stderr)
+        return 1
+    print(f"✅ ID 前缀追加完成: {out}", file=sys.stderr)
+    return 0
