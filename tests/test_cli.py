@@ -351,11 +351,12 @@ class TestRpcAndHelp:
         assert ec == 1
         assert "❌" in out
 
-    def test_rpc_methods_no_server(self):
-        ec, out, err = run_cli("rpc", "methods")
-        # 没启动 RPC 服务器应该报错
-        assert ec == 1
-        assert "❌" in err or "❌" in out or "启动" in out
+    def test_rpc_methods_no_autostart(self):
+        ec, out, err = run_cli("rpc", "methods", "-p", "9999", "--no-autostart")
+        # N34/N35 修复后：默认自动拉起（不再依赖手动 start）；--no-autostart 关闭自愈，
+        # 此时服务器不可达（9999 无服务）应报错退出（而非静默失败/连接拒绝裸奔）
+        assert ec != 0
+        assert "❌" in err or "❌" in out or "不可达" in out or "启动" in out or "拉起" in err
 
 
 # ============ 10. help 文本质量 ============

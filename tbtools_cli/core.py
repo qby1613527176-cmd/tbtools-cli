@@ -360,6 +360,29 @@ def cleanup_side_effects(t0):
             pass
     return n
 
+# 强输出参数名：调用成功后对应文件必须存在（N30：长路径/引擎静默跳过兜底）
+_STRONG_OUT_RE = re.compile(
+    r'^(--)?(outPutFile|outFile|outTable|outTab|outFa|outFq|outGff|outGff3|outGtf|'
+    r'outTxt|outXml|outXls|outSvg|outPng|outPdf|outNwk|outGraph|outORFs|outImg)$',
+    re.IGNORECASE)
+
+def check_missing_outputs(java_args):
+    """调用成功后检查强输出参数对应文件是否生成。返回缺失列表。"""
+    missing = []
+    prev = None
+    for _i, _a in enumerate(java_args):
+        if _a.startswith("--") or (prev is None and _i > 0):
+            if _a.startswith("--"):
+                prev = _a
+            continue
+        # _a 是值
+        if prev and _STRONG_OUT_RE.match(prev):
+            if _a and not _a.startswith("-") and _a not in ("/dev/stdout", "CON", "stdout"):
+                if not os.path.isfile(_a):
+                    missing.append(_a)
+        prev = None
+    return missing
+
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 def run_java(java_args, verbose=False, quiet=False, command_name=None):
     """执行 Java 命令，失败时输出友好提示
@@ -373,6 +396,18 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
     
     # 确保桥编译产物存在
     os.makedirs(BUILD_DIR, exist_ok=True)
+    
+    # ── N1: 解析 java 绝对路径（不依赖 PATH；找不到时给可操作指引）──
+    if java_args and java_args[0] in ("java", "java.exe"):
+        _java_bin = get_java()
+        if not _java_bin:
+            print("❌ 未找到 java 可执行文件。可操作指引：", file=sys.stderr)
+            print("   ① 安装 JDK/JRE（如 apt install default-jdk）", file=sys.stderr)
+            print("   ② 或 export PATH 使其包含 java", file=sys.stderr)
+            print("   ③ 或设置 TBTOOLS_JAVA 环境变量指向 java 可执行文件", file=sys.stderr)
+            return 1
+        java_args = list(java_args)
+        java_args[0] = _java_bin
     
     # ── N19 特判：FindBestHomologyBatch 引擎把结果写进 queryFasta 而非 outTable ──
     # 包装：query 重定向到临时副本（引擎写穿副本），调用后仅当副本被引擎改写（sha1 变）
@@ -501,6 +536,14 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
         # 成功时输出进度信息（quiet 模式跳过）
         if not quiet and os.path.isfile(err_file):
             sys.stderr.write(open(err_file).read())
+        # N30: 输出存在性校验（声明了强输出但未生成 → 报错，避免长路径/静默失败）
+        _missing_out = check_missing_outputs(java_args)
+        if _missing_out:
+            print("⚠️ 声明了输出但未检测到生成文件（路径过长或引擎静默跳过）:", file=sys.stderr)
+            for _o in _missing_out:
+                print(f"   {_o}", file=sys.stderr)
+            if ec_out == 0:
+                ec_out = 1
         # 耗时统计（quiet 模式跳过）
         if not quiet:
             _dt = _time.perf_counter() - _t0
@@ -515,6 +558,36 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
     if ec == 0:
         ec_out = 0
     return ec_out
+
+def get_java():
+    """定位 java 可执行文件（N1：tool 层 PATH 依赖误导报错）。
+
+    优先级: TBTOOLS_JAVA 环境变量 > PATH 搜索 > 常见位置。
+    Windows 下 Python 运行时注入 PATH 对 CreateProcess 无效（交付包实测），
+    所以调用前必须解析出绝对路径而非依赖 PATH。
+    """
+    j = os.environ.get("TBTOOLS_JAVA", "")
+    if j and os.path.isfile(j):
+        return j
+    w = shutil.which("java")
+    if w:
+        return w
+    for cand in (
+        "/usr/bin/java", "/usr/local/bin/java", "/opt/java/bin/java",
+        os.path.expanduser("~/jdk*/bin/java"),
+        "C:/Program Files/TBtools/jre/bin/java.exe",
+        "C:/Program Files/Java/*/bin/java.exe",
+        "/mnt/c/Program Files/TBtools/jre/bin/java.exe",
+        "/mnt/c/Program Files/Java/*/bin/java.exe",
+        "/Applications/TBtools/jre/bin/java",
+    ):
+        import glob as _glob
+        hits = _glob.glob(cand)
+        for h in hits:
+            if os.path.isfile(h):
+                return h
+    return ""
+
 
 # ---- 桥编译 ----
 def ensure_bridge(bridge_name):

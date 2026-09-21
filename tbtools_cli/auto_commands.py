@@ -196,10 +196,23 @@ ENGINE_REGISTRY = [
 ]
 
 
+def _warn_gtf_input(args, cmd):
+    """N28: Gxf 族命令输入为 .gtf 时警告（引擎对 GENCODE 真 GTF 解析 NPE，合成 GTF 假阴性）。"""
+    for a in args:
+        if not a.startswith("-") and a.lower().endswith((".gtf", ".gtf.gz")):
+            print(f"⚠️ 格式提醒: {cmd} 对 GTF 输入支持有限（GENCODE 真 GTF 会触发引擎 NPE，N28）", file=sys.stderr)
+            print("   （建议先转 GFF3 再输入；如确认可忽略）", file=sys.stderr)
+            break
+
+
 def _make_impl(cmd, kind, cls, xmx, runner, doc):
     """工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）"""
+    # N28: Gxf 族引擎对 GTF 输入解析 NPE（GENCODE 真 GTF 实证），输入预检警告
+    gxf_cmd = cmd.startswith("gxf") or cmd in ("gsadiag", "annocompare", "genedensity", "gblocks")
     if kind == "bridge":
         def impl(args, verbose=False, quiet=False):
+            if gxf_cmd:
+                _warn_gtf_input(args, cmd)
             ensure_bridge(cls)
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
@@ -207,6 +220,8 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
     else:  # direct
         def impl(args, verbose=False, quiet=False):
+            if gxf_cmd:
+                _warn_gtf_input(args, cmd)
             # N27: direct 类也含 build/（fake jaxb DatatypeConverter 等），否则 JDK9+ 缺 javax.xml.bind
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":

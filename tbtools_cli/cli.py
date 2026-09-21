@@ -350,6 +350,9 @@ def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, pre
     sys.exit(ec)
 
 # ---- 命令组：工具 ----
+# N2: GUI 面板类工具黑名单（headless 无参直通会弹 Swing 窗口悬挂）
+_GUI_TOOLS = {"RNAplotAdvance", "PlotRNAfold", "AmazingGeneView", "BlastZone", "SequenceZone"}
+
 class ToolGroup(click.Group):
     """tool 分组：未知子命令自动转发 auto_commands + --help 列出全部"""
     def resolve_command(self, ctx, args):
@@ -380,6 +383,11 @@ class ToolGroup(click.Group):
                 if cls:
                     @click.pass_context
                     def _fwd_reg(sctx, _cls=cls, _name=name):
+                        # N2: GUI 类工具无参直通会弹 Swing 窗口悬挂——黑名单无参时打印用法即退出
+                        if _name in _GUI_TOOLS and not sctx.args:
+                            click.echo(f"❌ {_name} 是 GUI 面板类工具，headless 下不可用；请提供参数直接调用引擎[Usage]查看签名", file=sys.stderr)
+                            click.echo(f"   💡 查看引擎真实参数: java -cp $TBTOOLS_JAR {_cls} --bogus x（逼出 Usage）", file=sys.stderr)
+                            sys.exit(1)
                         java_args = ["java", "-Xmx4g", "-cp", JAR, _cls] + list(sctx.args)
                         sys.exit(run_java(java_args, command_name=_name))
                     cmd = click.Command(name=name,
@@ -1021,7 +1029,14 @@ def rpc_call(method, params, port, mem, timeout, no_autostart):
         resp = opener.open(req, timeout=timeout)
         result = json.loads(resp.read())
         if result.get('error'):
-            click.echo(f"❌ RPC 错误: {result['error']}", err=True)
+            # N38: 引擎错误 message 空/占位符时补友好提示（GffReconstructorBatch 等家族）
+            err = result['error']
+            msg = str(err.get('data', {}).get('message') if isinstance(err.get('data'), dict) else err.get('data') or err.get('message') or '')
+            if not msg.strip() or msg.strip() == '===== See Following Info =====' or msg.startswith('Something Error'):
+                msg = '引擎内部错误且未提供消息（N38 家族，GffReconstructorBatch/BestIdConverter/ReciprocalBlast 已知）'
+                click.echo(f"❌ RPC 错误 [{err.get('code')}]: {msg}（原始: {json.dumps(err, ensure_ascii=False)[:200]}）", err=True)
+            else:
+                click.echo(f"❌ RPC 错误 [{err.get('code')}]: {msg}", err=True)
             sys.exit(1)
         click.echo(json.dumps(result.get('result', ''), indent=2, ensure_ascii=False))
     except Exception as e:

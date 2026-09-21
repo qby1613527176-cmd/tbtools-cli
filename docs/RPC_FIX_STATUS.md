@@ -25,6 +25,21 @@
 - 新增 `tests/test_p0_protection.py` 11 项(snapshot/restore/cleanup/三 impl 防覆盖)
 - 全量: **80 passed, 1 skipped**(`test_rpc_methods_no_server` 语义待批次 2 N34/N35 自动拉起后更新)
 
-## 批次 1 — 复活类 N24/N26/N27 ⏳ 子任务 A 进行中
-## 批次 2 — RPC 稳定性 N34/N35/N40 ⏳ 子任务 B 进行中
-## 批次 3-5 — 待批 1/2 收口后统一 review + commit
+## 批次 1 — 复活类 N24/N26/N27 ✅ 完成（commit a527916）
+- N24 getLongestCompleteORF → GetLongestORF 转发（JavaFX 无 main 类弃用）
+- N26 msy 表驱动参数错位修复（显式拼 GenericCli: MultipleSpeciesSyteny plot + 3 setter）
+- N27 multiEfp/efpHeat fake DatatypeConverter 源码入库 + ensure_bridge 自动重建 + direct classpath 补 build/；附带 efpHeat --key value 修复
+
+## 批次 2 — RPC 稳定性 N34/N35/N40 ✅ 完成（commit c2eab5d）
+- N34/N35: pid 文件 + 健康探针 + call/methods 前置自动拉起；rpc stop/status/--force；OOM 转储；代理绕过（N41）
+- N40: javap 归因=引擎 IQ-TREE stderr 管道未排水（引擎级），包装层超时+预检加固
+
+## 批次 3 — 其余 P1（N1/N2/N28/N30/N38）✅ 完成（commit 待）
+- N1 get_java(): TBTOOLS_JAVA > PATH > 常见路径，绝对路径调用告别 PATH 误导
+- N2 GUI 工具黑名单（RNAplotAdvance 等 5 个）无参即退不弹窗
+- N28 Gxf 族 GTF 输入预检警告（引擎 GENCODE NPE 无法修，至少不裸奔）
+- N30 check_missing_outputs 强输出参数存在性校验（长路径/静默失败→非零退出）
+- N38 RPC 空消息/占位符友好兜底
+- 测试: 81 passed 1 skipped（test_rpc_methods_no_autostart 改 -p 9999 确定性语义）
+
+## 批次 4-5 — P2 快赢 + P3 收尾 + 回归脚本 Linux 化 ⏳ 待做
