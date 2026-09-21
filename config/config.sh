@@ -73,7 +73,7 @@ export TBTOOLS_RPC_PORT="${TBTOOLS_RPC_PORT:-8765}"
 export TBTOOLS_RPC_URL="http://127.0.0.1:${TBTOOLS_RPC_PORT}/rpc"
 
 # ---------- 桥源码目录 ----------
-TBTOOLS_BRIDGES="${TBTOOLS_ROOT}/bridges"
+export TBTOOLS_BRIDGES="${TBTOOLS_ROOT}/bridges"   # 供外部脚本引用(SC2034)
 
 # ---------- 构建目录（编译产物，可清）----------
 TBTOOLS_BUILD="${TBTOOLS_ROOT}/build"

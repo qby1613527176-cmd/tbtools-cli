@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -uo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")" || exit 1   # SC2164
 source config/config.sh 2>/dev/null
 
 P=0; F=0; S=0

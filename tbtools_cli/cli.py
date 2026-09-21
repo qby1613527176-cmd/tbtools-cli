@@ -54,8 +54,7 @@ class RootGroup(click.Group):
             # 兼容旧写法/README：顶层裸命令自动转发到分组（如 tbtools seqlogo → tbtools seq logo）
             for gname, g in _groups.items():
                 if name in g.commands:
-                    sub = click.Context(g, info_name=gname, parent=ctx)
-                    return gname, g.commands[name], args[1:]
+                    return gname, g.commands[name], args[1:]  # F841 修复: 删未用 sub 变量
             # 拼写纠错（对分组名+顶层命令；前缀匹配优先——venn2 案例：n=3 截断挤掉正确建议）
             import difflib
             candidates = sorted(set(list(_groups.keys()) + [c for c in cli.commands.keys()]))

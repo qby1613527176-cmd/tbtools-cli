@@ -74,7 +74,7 @@ start_server() {
     local pid=$!
     echo "$pid" > "$PID_FILE"
     # 等待健康检查
-    for i in $(seq 1 30); do
+    for _ in $(seq 1 30); do   # SC2034: i 未使用
         sleep 1
         if curl -s --max-time 2 "$HEALTH_URL" | grep -q "OK"; then
             echo "✅ RPC 服务器就绪 (PID $pid): $HEALTH_URL" >&2

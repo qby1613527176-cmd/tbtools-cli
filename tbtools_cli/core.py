@@ -33,7 +33,6 @@ def get_jar():
     except Exception:
         pass
     # 常见路径 + Windows/WSL/macOS 路径
-    home = os.path.expanduser("~")
     for cand in [
         os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar"),
         os.path.expanduser("~/TBtools/TBtools_JRE1.6.jar"),
@@ -195,13 +194,13 @@ PITFALL_HINTS = {
     "onesteptree": "--bb-time 必须 ≥1000（IQ-TREE UFBoot 下限），小于 1000 会静默不产树；序列须 ≥4 条唯一（太相似会被合并报错）；outFilePrefix 若是目录，产物命名为 目录/TBtools.*",
     "draw": "输入必须是 TreeTab 配置（[TYPE]:Tree + [NEWICK]: 行），直接喂 .nwk 曾导致引擎从 stdin 读入而挂起（G2 已修复为快速报错）；只画树用 tbtools tree phylotree",
     "hmmsearch": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；idList 是 Pfam ID 每行一个（如 GRAS），不是基因 ID",
-    "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；需 Pfam-A.hmm 数据库，idList 每行一个 Pfam NAME（如 GRAS）",
+    "simplehmmscan": "调系统 hmmsearch 二进制（Linux: apt install hmmer；Windows: TBtools-II/bin 需加入 PATH）；需 Pfam-A.hmm 数据库文件，idList 每行一个 Pfam",
     "hclust": "输入必须是三列距离文件 GeneA\\tGeneB\\tdist（不是表达矩阵！）",
     "barplot": "termCol/pvalCol 用列名（如 Term/Pvalue），不是列索引数字",
     "cubeheatmap": "group 文件第一行会被当数据——喂前先去表头",
     "admixture": "第一个参数是 qFiles.lst（每行一个 Q 矩阵文件路径），不是 Q 矩阵内容",
     "dotplot": "--chrLayout 传文件路径（内容: Genome: Chr1 Chr2...），不是内联字符串",
-    "microsyn": "必须指定 --chr1/--start1/--end1 和 --chr2/--start2/--end2；染色体名须数字",
+    "microsyn": "必须指定 --chr1/--start1/--end1 和 --chr2/--start2/--end2；染色体名须数字；简化 GFF=数字染色体名\tGene\tStart\tEnd；输出父目录须存在",
     "dualsyn": "简化 GFF 染色体名必须数字（parseInt）；需显式 --chr1/--chr2",
     "msy": "简化 GFF 染色体名必须数字；基因名在第 2 列；坐标列不连 -",
     "multisyn": "染色体名必须数字；gxf.lst 路径不能硬编码",
@@ -220,28 +219,22 @@ PITFALL_HINTS = {
     "efpHeat": "TGA 底图必须 TrueColor(type2)；需 fake DatatypeConverter",
     "multiEfp": "TGA 底图必须 TrueColor(type2)；需 fake DatatypeConverter",
     "layoutheatmap": "layout.tsv 样本名须与 expr.tsv 表头一致（官方 examples 两文件样本名不匹配会 ArrayIndexOutOfBounds，属数据问题非命令缺陷）",
-    "annocompare": "输入两个 GFF3 + 输出目录；生成 change_summary.csv + figures/*",
+    "annocompare": "输入两个 GFF3 + 输出目录；生成 change_summary.csv + figures/*；before/after 须有共同 seqid（无共同序列报 IOException）",
     "nwAlign": "输入文件每行一条序列，无 FASTA 头（传 FASTA 会把 >s1 当序列）",
     "treeRooting": "Newick 树必须带枝长（裸 Newick 报 Corrupt NEWICK format）",
     "distance": "方法名小写 euclidean/pearson/pearsonDist；结果输出到 stdout（非文件）；col1/col2 是列索引(从 0 起)非列名（喂列名报 NumberFormatException）",
-    "markertools": "结果输出到 stderr（非 stdout！）；$(...) 需 2>&1 捕获",
-    "barplot": "termCol/pvalCol 是列索引；输入富集表须 term/pvalue 列齐全（列数不足 IndexOutOfBounds）",
+    "markertools": "首参是子命令 filter|dist|sampledist（非文件）；结果输出到 stderr（非 stdout！）；$(...) 需 2>&1 捕获",
     "barplotter": "选项式引擎: -g <gff> -s <synteny> -c <ctl> -o <out>（非位置参数；宽高须 >0）",
     "qpcrproc": "输入 qpcr 表列格式须规范（列数不足 ArrayIndexOutOfBounds）",
     "qdot": "GFF 用 4 列简化格式 Chr\tGene\tStart\tEnd（全 GFF 带特征列会被引擎当数字解析报 NumberFormatException）",
-    "microsyn": "简化 GFF=数字染色体名\tGene\tStart\tEnd；输出父目录须存在",
     "findblockmultiple": "需真实跨物种共线数据（合成数据无共线块→空输出）",
-    "annocompare": "before/after 两个 GFF 须有共同 seqid（无共同序列报 IOException）",
     "cddmotif": "cdd.hitdata 须 CDD 标准 8 列（qstart/qend/…）；列数不足越界",
     "seqlentrack": "序列 ID/树 taxon 须与 motif 域信息匹配（不匹配报 IOException）",
     "pfammotif": "输入 newick 树 taxon 须与 motif 信息匹配",
-    "simplehmmscan": "需要 Pfam-A.hmm 数据库文件（未提供时失败）",
-    "supercircos": "配置文件 [chrLen] 后跟文件路径，非内联数据；[link]/[gene]/[track] 同理",
     "calcRepeat": "需要 jellyfish 在 PATH（Windows 默认缺失；apt install jellyfish）",
     "rnaplot": "需要 RNAfold/RNAplot 在 PATH（Windows 默认缺失；Linux apt install rna-folding）",
     "preparespecies": "首参是 ID 前缀字符串（非文件）",
     "marker": "首参是子命令 MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDesign（非文件）",
-    "markertools": "首参是子命令 filter|dist|sampledist（非文件）",
     "venn5": "首参是输出文件（非输入）；setA..E.txt 才是输入",
     "venn6": "首参是输出文件（非输入）；setA..F.txt 才是输入",
 }
@@ -536,13 +529,13 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
         print(f"❌ 执行失败（退出码 {ec}）", file=sys.stderr)
         
         # 提取异常关键行
-        exc_lines = [l for l in err_text.splitlines() 
-                     if re.match(r'^(Exception in thread|Caused by:|Error:|\[Error\])', l)]
+        exc_lines = [ln for ln in err_text.splitlines()
+                     if re.match(r'^(Exception in thread|Caused by:|Error:|\[Error\])', ln)]
         for line in exc_lines[:3]:
             print(f"   {line}", file=sys.stderr)
         
         if not exc_lines:
-            nonblank = [l for l in err_text.splitlines() if l.strip()]
+            nonblank = [ln for ln in err_text.splitlines() if ln.strip()]
             for line in nonblank[-3:]:
                 print(f"   {line}", file=sys.stderr)
         

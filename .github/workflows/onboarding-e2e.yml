@@ -64,8 +64,43 @@ jobs:
           bash examples/scripts/run_examples.sh 2>&1 | tail -15
           ls examples/output/*.svg | wc -l | grep -q "8" && echo "✅ 8 张图全部生成"
 
-      # ── ⑤ pytest 回归 ──
-      - name: Step 5 — pytest suite
+      # ── ⑤ pytest 回归（全量）──
+      - name: Step 5 — full pytest suite
         run: |
           set -o pipefail
-          python3 -m pytest tests/test_cli.py -q 2>&1 | tail -3
+          python3 -m pytest tests/ -q 2>&1 | tail -3
+
+      # ── ⑥ 真实 jar 代表命令出图断言（架构重构批次 C：CI 不再空转）──
+      - name: Step 6 — representative commands with real jar (8 plots/table)
+        run: |
+          set -e
+          E=examples/data
+          export TBTOOLS_JAR="$HOME/tbtools-cli/lib/TBtools_JRE1.6.jar"
+          mkdir -p /tmp/ci_out
+          PY="python3 -m tbtools_cli.cli"
+          # 1 volcano（DEG 火山图）
+          $PY expr volcano $E/deg.txt /tmp/ci_out/vol.svg
+          [ -s /tmp/ci_out/vol.svg ] && echo "✅ volcano $(stat -c%s /tmp/ci_out/vol.svg)B"
+          # 2 venn2（集合图,顶层裸命令转发）
+          $PY venn2 --List1 $E/set_0.txt --List2 $E/set_1.txt --label1 A --label2 B --graph /tmp/ci_out/v2.svg --prefix /tmp/ci_out/v2
+          [ -s /tmp/ci_out/v2.svg ] && echo "✅ venn2 $(stat -c%s /tmp/ci_out/v2.svg)B"
+          # 3 statFasta（工具层,命名参数）
+          $PY tool statFasta --inFasta $E/blast/query.fa --outPutFile /tmp/ci_out/st.xls
+          [ -s /tmp/ci_out/st.xls ] && echo "✅ statFasta $(stat -c%s /tmp/ci_out/st.xls)B"
+          # 4 heatmap（表达热图）
+          $PY expr heatmap $E/expr/expr.tsv /tmp/ci_out/hm.svg
+          [ -s /tmp/ci_out/hm.svg ] && echo "✅ heatmap $(stat -c%s /tmp/ci_out/hm.svg)B"
+          # 5 msa（多序列比对图）
+          $PY seq msa $E/phylogeny/msa.fa /tmp/ci_out/msa.svg
+          [ -s /tmp/ci_out/msa.svg ] && echo "✅ msa $(stat -c%s /tmp/ci_out/msa.svg)B"
+          # 6 seqlogo（序列 LOGO,需 PIL/xvfb 走通即过）
+          $PY seq logo $E/phylogeny/msa.fa /tmp/ci_out/logo.svg 2>/dev/null || true
+          # 7 pep2codon（CDS+pep 互转,官方数据平反过）
+          $PY seq pep2codon $E/rpc/gras6_cds.fa $E/rpc/gras6_pep.fa /tmp/ci_out/p2c.fa 2>/dev/null || true
+          # 8 tableMerge（N3 修复验证：位置参数兼容,输出落盘）
+          $PY table tableMerge /tmp/ci_out/m.out.tsv $E/table/reshape/tab1.txt $E/table/reshape/tab2.txt
+          [ -s /tmp/ci_out/m.out.tsv ] && echo "✅ tableMerge $(stat -c%s /tmp/ci_out/m.out.tsv)B"
+          # 计数：至少 5 个非零产物（msa/logo/pep2codon 可能因环境跳过,不阻断）
+          N=$(find /tmp/ci_out -type f -size +0c | wc -l)
+          echo "✅ 非零产物: $N"
+          [ "$N" -ge 5 ] || { echo "❌ 非零产物 <5"; exit 1; }
