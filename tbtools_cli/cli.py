@@ -56,10 +56,11 @@ class RootGroup(click.Group):
                 if name in g.commands:
                     sub = click.Context(g, info_name=gname, parent=ctx)
                     return gname, g.commands[name], args[1:]
-            # 拼写纠错（对分组名+顶层命令）
+            # 拼写纠错（对分组名+顶层命令；前缀匹配优先——venn2 案例：n=3 截断挤掉正确建议）
             import difflib
             candidates = sorted(set(list(_groups.keys()) + [c for c in cli.commands.keys()]))
-            close = difflib.get_close_matches(name, candidates, n=3, cutoff=0.6)
+            prefix_hits = [c for c in candidates if c.startswith(name)]
+            close = prefix_hits[:5] or difflib.get_close_matches(name, candidates, n=3, cutoff=0.6)
             if close:
                 click.echo(f"❌ 未知命令: {name}", err=True)
                 click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
@@ -1294,7 +1295,10 @@ def _load_dynamic_commands():
             if not args:
                 raise
             name = args[0]
-            close = difflib.get_close_matches(name, list(self.commands.keys()), n=3, cutoff=0.6)
+            cmds = list(self.commands.keys())
+            # 前缀优先（venn2 案例：get_close_matches n=3 按相似度排序会挤掉正确建议）
+            prefix_hits = [c for c in cmds if c.startswith(name)]
+            close = prefix_hits[:5] or difflib.get_close_matches(name, cmds, n=3, cutoff=0.6)
             if close:
                 click.echo(f"❌ '{name}' 不是 '{self.name}' 分组内的命令", err=True)
                 click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
@@ -1353,7 +1357,7 @@ def _make_passthrough(name, group=None):
         args = list(ctx.args)
         
         # 输入校验：第一个非选项参数通常是输入文件（mcscanxd/kallisto 首参为工作目录/自定义路径，跳过校验）
-        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend", "pubmed", "tableMerge"):
+        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend", "pubmed", "tableMerge", "generic"):
             ok, msg = validate_file(args[0], f"{name} 输入文件")
             if not ok:
                 print(msg, file=sys.stderr)
@@ -1446,13 +1450,16 @@ def listing(category):
         lines.append("命令行工具：")
         # 排除绘图类命令（属于 seq/expr/tree/syn/sets/chipseq 分组的）
         plot_groups = {'seq', 'expr', 'tree', 'syn', 'sets', 'chipseq'}
+        # V1 §3 P3-9: 插件工具在绘图分组但实为命令行工具，强制显示（kallisto/fimo 等）
+        plugin_tools = {"kallisto", "memeViz", "qdot", "tfbsShift", "smart", "fimo",
+                       "mcscanxd", "notung", "quickAnno", "hmmerSearch", "gsea", "meme", "mast"}
         count = 0
         for n in sorted(dir(_ac)):
             if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
                 cmd = n[1:-5]
                 cat = CATEGORY_MAP.get(cmd, 'engine')
-                if cat in plot_groups:
-                    continue  # 跳过绘图类
+                if cat in plot_groups and cmd not in plugin_tools:
+                    continue  # 跳过绘图类（插件工具除外）
                 doc = getattr(_ac, n).__doc__ or ''
                 short = doc.split(':',1)[1].strip()[:60] if ':' in doc else ''
                 lines.append(f"  {cmd:20s} {short}")

@@ -219,6 +219,7 @@ PITFALL_HINTS = {
     "mcscanx": "gff 简化格式 chr\\tgene\\tstart\\tend；blast 用 tab6；classify 须同时给 collinearityFile+geneTypeFile",
     "efpHeat": "TGA 底图必须 TrueColor(type2)；需 fake DatatypeConverter",
     "multiEfp": "TGA 底图必须 TrueColor(type2)；需 fake DatatypeConverter",
+    "layoutheatmap": "layout.tsv 样本名须与 expr.tsv 表头一致（官方 examples 两文件样本名不匹配会 ArrayIndexOutOfBounds，属数据问题非命令缺陷）",
     "annocompare": "输入两个 GFF3 + 输出目录；生成 change_summary.csv + figures/*",
     "nwAlign": "输入文件每行一条序列，无 FASTA 头（传 FASTA 会把 >s1 当序列）",
     "treeRooting": "Newick 树必须带枝长（裸 Newick 报 Corrupt NEWICK format）",

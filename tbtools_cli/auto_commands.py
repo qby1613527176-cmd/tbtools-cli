@@ -329,7 +329,11 @@ def _gxfAttr_impl(args, verbose=False, quiet=False):
 
 def _kallisto_impl(args, verbose=False, quiet=False):
     """kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 kallisto 二进制——插件 wrapper 的 Linux 分支有拼接 bug 已绕开）"""
-    bin_path = os.path.join(ROOT, "plugins", "lib", "bin", "kallisto")
+    # A(kallisto Windows 二进制选择, V1 §3 P1-3): 按平台优先 .exe（Linux ELF 在 Windows 报 WinError 193）
+    bin_path = os.path.join(ROOT, "plugins", "lib", "bin",
+                            "kallisto.exe" if os.name == "nt" else "kallisto")
+    if not os.path.isfile(bin_path) and os.name == "nt":
+        bin_path = os.path.join(ROOT, "plugins", "lib", "bin", "kallisto")  # 回退旧路径
     if not os.path.isfile(bin_path):
         print(f"❌ kallisto 二进制缺失: {bin_path}", file=sys.stderr)
         return 1
