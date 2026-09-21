@@ -494,6 +494,27 @@ class TestReadmeCounts:
     def test_version_cmd_reports_positive_counts(self):
         ec, out, err = run_cli("version")
         assert ec == 0
+
+    def test_readme_plot_count(self):
+        """README 绘图命令数 = list plots 实际数（防漂移；2026-09-21 曾 174 vs 实际 218）"""
+        import os, subprocess, sys, re
+        from tbtools_cli.core import ROOT
+        readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
+        plots = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "list", "plots"],
+                               capture_output=True, text=True, timeout=60).stdout
+        actual = len([l for l in plots.splitlines() if l.startswith("    ")])
+        m = re.search(r'(\d+) 个绘图/分析命令', readme)
+        assert m and int(m.group(1)) == actual, \
+            f"README 绘图命令数 {m.group(1) if m else '?'} != 实际 {actual}，同步 README"
+
+    def test_readme_pitfall_count(self):
+        """README 坑位数 = PITFALL_HINTS 实际数"""
+        import os, re
+        from tbtools_cli.core import ROOT, PITFALL_HINTS
+        readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
+        m = re.search(r'(\d+) 条实测坑位', readme)
+        assert m and int(m.group(1)) == len(PITFALL_HINTS), \
+            f"README 坑位数 {m.group(1) if m else '?'} != 实际 {len(PITFALL_HINTS)}"
         import re
         nums = re.findall(r"(\d+) 绘图/分析命令", out)
         assert nums and int(nums[0]) > 100, f"version 命令绘图命令数异常: {out[:100]}"
