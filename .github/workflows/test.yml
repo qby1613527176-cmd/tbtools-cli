@@ -57,13 +57,12 @@ jobs:
           python3 -m tbtools_cli.cli check /no/such/file 2>/dev/null; [ $? -ne 0 ] && echo "✅ check 失败退出码"
           python3 -m tbtools_cli.cli --help | grep -q "TBtools-II" && echo "✅ help"
 
-      - name: Verify metadata (命令数断言)
+      - name: Verify metadata (唯一数据源一致性)
         run: |
+          python3 scripts/gen_metadata.py --check
           python3 -c "
           import json
           m = json.load(open('tbtools_cli/command_metadata.json'))
-          assert len(m) >= 140, f'Expected >=140 commands, got {len(m)}'
-          bridges = sum(1 for v in m.values() if v['mode'] == 'bridge')
-          directs = sum(1 for v in m.values() if v['mode'] == 'direct')
-          print(f'Commands: {len(m)} (bridges: {bridges}, direct: {directs})')
+          assert len(m) >= 200, f'Expected >=200 commands, got {len(m)}'
+          print(f'Commands: {len(m)}')
           "
