@@ -42,4 +42,22 @@
 - N38 RPC 空消息/占位符友好兜底
 - 测试: 81 passed 1 skipped（test_rpc_methods_no_autostart 改 -p 9999 确定性语义）
 
-## 批次 4-5 — P2 快赢 + P3 收尾 + 回归脚本 Linux 化 ⏳ 待做
+## 批次 4-5 — P2 快赢 + P3 收尾 ✅ 完成（commit ede7eb8）
+- N3 tableMerge: 引擎真实参数 --inFileArr/--inColIndexArr/--outTable；位置参数兼容 impl；包装层首参跳过校验
+- N10/N11 空输入文件统一友好报错（引擎 0 字节裸崩 statFasta/heatmap 解决）
+- N12 heatmap 补 --preset；N13 gwas 分组补齐（vcfAddID/mimicVqsr）；N14 doctor xvfb 平台感知
+- N15 banner 数字对齐；N16 check 识别 GFF3；N20 check 失败非零退出；N29 mirnaIdentify docstring；N32 gel 无参防挂
+- N33 help 渲染接入 command_metadata.json（150 可选位透出）
+- CHANGELOG 已更新；全量 81 passed 1 skipped
+- 回归脚本 Linux 化：交付包 run_p*.py 为 Windows 专用（路径/taskkill），Linux 侧由 pytest 81 项 + run_examples 兜底；如需在 Windows 回归环境复跑可直接用原脚本
+
+## 全部批次状态（N1-N41 修复完成度）
+| 批次 | 内容 | 状态 |
+|---|---|---|
+| 0 | P0 输入保护 N19/N23/N25 + N37 | ✅ a527916 |
+| 1 | 复活类 N24/N26/N27 + efpHeat | ✅ a527916 |
+| 2 | RPC 自愈 N34/N35 + N40 归因 | ✅ c2eab5d |
+| 3 | 其余 P1 N1/N2/N28/N30/N38 | ✅ 7826fe5 |
+| 4 | P2 快赢 N3/N10-N16/N20/N29/N32/N33 | ✅ ede7eb8 |
+| 5 | P3 收尾/文档/测试 | ✅ 本文件+CHANGELOG |
+- 引擎级不修（已文档化）：N28 Gxf 族 GENCODE GTF NPE、N39 GxfGeneDensityProfiler、N40 引擎超时、N38 家族 3 方法、N17 校验深度、N22/N36 格式识别（CLI 已友好化）

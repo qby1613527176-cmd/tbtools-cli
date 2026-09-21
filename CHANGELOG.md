@@ -4,6 +4,27 @@
 
 ## [Unreleased]
 
+### 修复（RPC 测试交付包 N1-N41，09/21 · 批次 0-4 全部落地）
+
+> 来源：WorkBuddy Windows 17 轮穷举测试（~1665 项/~812 通过），证据链与回归脚本见交付包 `workflows/tbtools_cli化_修复清单.md` + `tbtools-cli/docs/RPC_FIX_STATUS.md`。
+
+**P0 输入保护（系统性）**：`core.py` run_java 统一接入 snapshot_inputs/verify_and_restore/cleanup_side_effects——引擎在用户输入上建库/清洗/写穿时自动恢复并告警（N37 四起输入清空事件防御）。
+
+**P1 修复**：
+- N19 findBestHomologyBatch 真实参数 impl（--inQueryProteinSet/--targetIdList/--outDir；旧 --queryFasta/--outTable 兼容；产物校验防静默成功）
+- N23 mirnatarget 恢复完整管线（ssearch36 -m 10 → TargetScoreCli），输出落盘 + 防 in==out 清零
+- N25 gffCdsPhaseCorrector 位置参数包装（防覆盖输入）
+- N24 getLongestCompleteORF → GetLongestORF（弃 JavaFX 无 main 类）
+- N26 msy 表驱动参数错位修复（显式拼 GenericCli）
+- N27 multiEfp/efpHeat fake DatatypeConverter 源码入库 + ensure_bridge 自动重建 + direct classpath 补 build/
+- N34/N35 RPC 自愈：pid 文件 + 健康探针 + call/methods 自动拉起 + rpc stop/status + OOM 转储 + 代理绕过
+- N40 OneStepBuildATree 归因（引擎 IQ-TREE stderr 管道未排水，Windows 死锁）+ 包装层超时/依赖预检
+- N1 java 绝对路径定位（TBTOOLS_JAVA > PATH > 常见位置）；N2 GUI 类工具黑名单无参即退；N28 Gxf 族 GTF 输入警告；N30 强输出存在性校验；N38 RPC 空消息友好兜底
+
+**P2 快赢**：N3 tableMerge 引擎真实参数对齐；N10/N11 空输入统一报错；N12 heatmap --preset；N13 gwas 分组补齐（vcfAddID/mimicVqsr）；N14 doctor xvfb 平台感知；N15 banner 数字对齐；N16 check 识别 GFF3；N20 check 退出码；N29 mirnaIdentify docstring；N32 gel 无参防挂；N33 help 渲染接入 command_metadata.json（150 可选位透出）
+
+**测试**：新增 tests/test_p0_protection.py 11 项 + 既有更新；全量 **81 passed 1 skipped**（基线 70/71）。
+
 ### 新增（GUI 面板逆向接口第二批，09/20 · #15~#29 共 17 个命令）
 
 方法论同 `docs/GUI-INTERFACE-SOP.md`（反编译 GUIPanel StartButton 回调 → 拿权威 setter+process 调用链）。
