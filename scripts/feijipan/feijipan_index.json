@@ -1,0 +1,1970 @@
+[
+ {
+  "name": "P00030-Rserver",
+  "author": "CJ",
+  "desc": "The basic component for all TBtools-R Plugin",
+  "shareId": "1nVIywGy",
+  "files": [
+   {
+    "path": "Rserver/windows/Rserver.plugin",
+    "fileName": "Rserver.plugin",
+    "fileId": 29479190379,
+    "fileSize": 109024,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:32:06"
+   },
+   {
+    "path": "Rserver/macos_intel/Rserver.plugin",
+    "fileName": "Rserver.plugin",
+    "fileId": 29479197205,
+    "fileSize": 88139,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:33:16"
+   },
+   {
+    "path": "Rserver/macos_arm/Rserver.plugin",
+    "fileName": "Rserver.plugin",
+    "fileId": 29479216621,
+    "fileSize": 81033,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:34:34"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Rserver/windows/Rserver.plugin",
+    "fileName": "Rserver.plugin",
+    "fileId": 29479190379,
+    "fileSize": 109024,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:32:06"
+   },
+   {
+    "path": "Rserver/macos_intel/Rserver.plugin",
+    "fileName": "Rserver.plugin",
+    "fileId": 29479197205,
+    "fileSize": 88139,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:33:16"
+   },
+   {
+    "path": "Rserver/macos_arm/Rserver.plugin",
+    "fileName": "Rserver.plugin",
+    "fileId": 29479216621,
+    "fileSize": 81033,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:34:34"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00080-Single Cell Sequencing Seurat Shiny",
+  "author": "Jiawei Li",
+  "desc": "A Seurat Shiny App for Single Cell Sequencing Data Analysis",
+  "shareId": "plVIfxqb",
+  "files": [
+   {
+    "path": "Single Cell Sequencing Seurat Shiny/windows/Single Cell Sequencing Seurat Shiny.plugin",
+    "fileName": "Single Cell Sequencing Seurat Shiny.plugin",
+    "fileId": 29479874260,
+    "fileSize": 189979,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:37:37"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Single Cell Sequencing Seurat Shiny/windows/Single Cell Sequencing Seurat Shiny.plugin",
+    "fileName": "Single Cell Sequencing Seurat Shiny.plugin",
+    "fileId": 29479874260,
+    "fileSize": 189979,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:37:37"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00090-WGCNA Shiny",
+  "author": "Shawn Wang",
+  "desc": "Weighted Gene Co-expressed Network Analysis wrapper for all ",
+  "shareId": "n5VIf8CA",
+  "files": [
+   {
+    "path": "WGCNAshiny/windows/WGCNAShiny.plugin",
+    "fileName": "WGCNAShiny.plugin",
+    "fileId": 29480087867,
+    "fileSize": 323919,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:43:48"
+   },
+   {
+    "path": "WGCNAshiny/macos/WGCNAShiny.plugin",
+    "fileName": "WGCNAShiny.plugin",
+    "fileId": 29480161359,
+    "fileSize": 356974,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:45:23"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "WGCNAshiny/windows/WGCNAShiny.plugin",
+    "fileName": "WGCNAShiny.plugin",
+    "fileId": 29480087867,
+    "fileSize": 323919,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:43:48"
+   },
+   {
+    "path": "WGCNAshiny/macos/WGCNAShiny.plugin",
+    "fileName": "WGCNAShiny.plugin",
+    "fileId": 29480161359,
+    "fileSize": 356974,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:45:23"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00170-Batch DEGs Analysis Tools",
+  "author": "Lihu Wang",
+  "desc": "[R Plugin] Perform Differential Gene Expression with DESeq2 ",
+  "shareId": "GVVIfuRI",
+  "files": [
+   {
+    "path": "Batch DEGs Analysis Tools/windows/Batch DEGs Analysis Tools.plugin",
+    "fileName": "Batch DEGs Analysis Tools.plugin",
+    "fileId": 29480206425,
+    "fileSize": 130253,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:48:05"
+   },
+   {
+    "path": "Batch DEGs Analysis Tools/macos/Batch DEGs Analysis Tools.plugin",
+    "fileName": "Batch DEGs Analysis Tools.plugin",
+    "fileId": 29480207889,
+    "fileSize": 132674,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:48:38"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Batch DEGs Analysis Tools/windows/Batch DEGs Analysis Tools.plugin",
+    "fileName": "Batch DEGs Analysis Tools.plugin",
+    "fileId": 29480206425,
+    "fileSize": 130253,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:48:05"
+   },
+   {
+    "path": "Batch DEGs Analysis Tools/macos/Batch DEGs Analysis Tools.plugin",
+    "fileName": "Batch DEGs Analysis Tools.plugin",
+    "fileId": 29480207889,
+    "fileSize": 132674,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:48:38"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00200-GO KEGG Enrichment Shiny",
+  "author": "Hualiang Ge",
+  "desc": "An R plugin for GO and KEGG Enrichment Analysis",
+  "shareId": "j7VIgZjm",
+  "files": [
+   {
+    "path": "GO_KEGG_GSEA.shiny/windows/GO_KEGG_GSEA.shiny.plugin",
+    "fileName": "GO_KEGG_GSEA.shiny.plugin",
+    "fileId": 29480303954,
+    "fileSize": 698314,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:55:07"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "GO_KEGG_GSEA.shiny/windows/GO_KEGG_GSEA.shiny.plugin",
+    "fileName": "GO_KEGG_GSEA.shiny.plugin",
+    "fileId": 29480303954,
+    "fileSize": 698314,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:55:07"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00300-Principal Component Analysis",
+  "author": "Qianghua Zhou",
+  "desc": "Perform PCA Analysis on Input Data Matrix",
+  "shareId": "PAVIgpTi",
+  "files": [
+   {
+    "path": "Principal Component Analysis/windows/Principal Component Analysis.plugin",
+    "fileName": "Principal Component Analysis.plugin",
+    "fileId": 29480279953,
+    "fileSize": 22908,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:53:34"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Principal Component Analysis/windows/Principal Component Analysis.plugin",
+    "fileName": "Principal Component Analysis.plugin",
+    "fileId": 29480279953,
+    "fileSize": 22908,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:53:34"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00314-qPCRsum Shiny",
+  "author": "Qianghua Zhou",
+  "desc": "An  R-shinyApp for qPCR result summary",
+  "shareId": "2LVIhZGM",
+  "files": [
+   {
+    "path": "qPCRsum Shiny/windows/qPCRsum Shiny.plugin",
+    "fileName": "qPCRsum Shiny.plugin",
+    "fileId": 29480399082,
+    "fileSize": 292982,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:56:18"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "qPCRsum Shiny/windows/qPCRsum Shiny.plugin",
+    "fileName": "qPCRsum Shiny.plugin",
+    "fileId": 29480399082,
+    "fileSize": 292982,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:56:18"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00315-quickQrtPCR",
+  "author": "Nongxinshengxin",
+  "desc": "A shiny APP to assist in calculating qRT-PCR relative expres",
+  "shareId": "G6VIh26o",
+  "files": [
+   {
+    "path": "quickQrtPCR/windows/quickQrtPCR.plugin",
+    "fileName": "quickQrtPCR.plugin",
+    "fileId": 29480441563,
+    "fileSize": 140752,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:58:02"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "quickQrtPCR/windows/quickQrtPCR.plugin",
+    "fileName": "quickQrtPCR.plugin",
+    "fileId": 29480441563,
+    "fileSize": 140752,
+    "userId": 1084038,
+    "updTime": "2026-01-11 19:58:02"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00350-Differential Gene Expression Analysis-DESeq2 Wrapper",
+  "author": "CJ",
+  "desc": "An R plugin to Perform Differential Gene Expression Analysis",
+  "shareId": "qCVIiUbn",
+  "files": [
+   {
+    "path": "Differential Gene Expression Analysis-DESeq2 Wrapper/macos/DifferentialGeneExpressionAnalysis_DESeq2_Wrapper.plugin",
+    "fileName": "DifferentialGeneExpressionAnalysis_DESeq2_Wrapper.plugin",
+    "fileId": 29480500522,
+    "fileSize": 138550,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:00:19"
+   },
+   {
+    "path": "Differential Gene Expression Analysis-DESeq2 Wrapper/windows/Differential Gene Expression Analysis-DESeq2 Wrapper.plugin",
+    "fileName": "Differential Gene Expression Analysis-DESeq2 Wrapper.plugin",
+    "fileId": 29480500531,
+    "fileSize": 126056,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:00:20"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Differential Gene Expression Analysis-DESeq2 Wrapper/macos/DifferentialGeneExpressionAnalysis_DESeq2_Wrapper.plugin",
+    "fileName": "DifferentialGeneExpressionAnalysis_DESeq2_Wrapper.plugin",
+    "fileId": 29480500522,
+    "fileSize": 138550,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:00:19"
+   },
+   {
+    "path": "Differential Gene Expression Analysis-DESeq2 Wrapper/windows/Differential Gene Expression Analysis-DESeq2 Wrapper.plugin",
+    "fileName": "Differential Gene Expression Analysis-DESeq2 Wrapper.plugin",
+    "fileId": 29480500531,
+    "fileSize": 126056,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:00:20"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00513-RNAdiff",
+  "author": "Nongxinshengxin",
+  "desc": "A shiny APP for easy downstream analysis of RNA-seq",
+  "shareId": "yLVIiNiB",
+  "files": [
+   {
+    "path": "RNAdiff/windows/RNAdiff.plugin",
+    "fileName": "RNAdiff.plugin",
+    "fileId": 29480616842,
+    "fileSize": 274231,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:13"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "RNAdiff/windows/RNAdiff.plugin",
+    "fileName": "RNAdiff.plugin",
+    "fileId": 29480616842,
+    "fileSize": 274231,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:13"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00610-QTLseqR GUI Wrapper",
+  "author": "CJ",
+  "desc": "QTLseqR GUI Wrapper",
+  "shareId": "4gVIia6A",
+  "files": [
+   {
+    "path": "QTLseqR GUI Wrapper/windows/QTLseqR GUI Wrapper.plugin",
+    "fileName": "QTLseqR GUI Wrapper.plugin",
+    "fileId": 29480617440,
+    "fileSize": 112386,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:27"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "QTLseqR GUI Wrapper/windows/QTLseqR GUI Wrapper.plugin",
+    "fileName": "QTLseqR GUI Wrapper.plugin",
+    "fileId": 29480617440,
+    "fileSize": 112386,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:27"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00620-MACS2 GUI Wrapper CallPeaks",
+  "author": "CJ",
+  "desc": "MACS2 GUI Wrapper for ChIPseq/DAPseq Peak Calling",
+  "shareId": "LpVIi6On",
+  "files": [
+   {
+    "path": "MACS2 GUI Wrapper CallPeaks WINonly/windows/MACS2 GUI Wrapper CallPeaks WINonly.plugin",
+    "fileName": "MACS2 GUI Wrapper CallPeaks WINonly.plugin",
+    "fileId": 29480616937,
+    "fileSize": 26674,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:15"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "MACS2 GUI Wrapper CallPeaks WINonly/windows/MACS2 GUI Wrapper CallPeaks WINonly.plugin",
+    "fileName": "MACS2 GUI Wrapper CallPeaks WINonly.plugin",
+    "fileId": 29480616937,
+    "fileSize": 26674,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:15"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00630-Simple Haplotype Caller(RanbowWinOnly)",
+  "author": "CJ",
+  "desc": "Ranbow GUI Wrapper",
+  "shareId": "oJVIiiAA",
+  "files": [
+   {
+    "path": "Simple Haplotype Caller/windows/Simple Haplotype Caller.plugin",
+    "fileName": "Simple Haplotype Caller.plugin",
+    "fileId": 29480617712,
+    "fileSize": 40869,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:53"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Simple Haplotype Caller/windows/Simple Haplotype Caller.plugin",
+    "fileName": "Simple Haplotype Caller.plugin",
+    "fileId": 29480617712,
+    "fileSize": 40869,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:06:53"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00631-trimPolyA",
+  "author": "Jianhua Zhao",
+  "desc": "A Better PolyA Sequence Trimmer for ONT cDNA Reads",
+  "shareId": "JeVIisFY",
+  "files": [
+   {
+    "path": "trimPolyA/windows/trimPolyA.sim.plugin",
+    "fileName": "trimPolyA.sim.plugin",
+    "fileId": 29480623497,
+    "fileSize": 30483,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:08:03"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "trimPolyA/windows/trimPolyA.sim.plugin",
+    "fileName": "trimPolyA.sim.plugin",
+    "fileId": 29480623497,
+    "fileSize": 30483,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:08:03"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00639-Crispr Stitch",
+  "author": "Yanshun Han",
+  "desc": "Fast evaluation of the efficiency of CRISPR editing",
+  "shareId": "EqVIjAQt",
+  "files": [
+   {
+    "path": "Crispr Stitch/windows/Crispr Stitch.plugin",
+    "fileName": "Crispr Stitch.plugin",
+    "fileId": 29480626141,
+    "fileSize": 44122,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:09:17"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Crispr Stitch/windows/Crispr Stitch.plugin",
+    "fileName": "Crispr Stitch.plugin",
+    "fileId": 29480626141,
+    "fileSize": 44122,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:09:17"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00641-SuperDecode",
+  "author": "Xianrong Xie",
+  "desc": "An integrated toolkit for analyzing mutations induced by gen",
+  "shareId": "4XVIjQJO",
+  "files": [
+   {
+    "path": "SuperDecode/macos/SuperDecode.plugin",
+    "fileName": "SuperDecode.plugin",
+    "fileId": 29480705050,
+    "fileSize": 171155,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:12:46"
+   },
+   {
+    "path": "SuperDecode/windows/SuperDecode.plugin",
+    "fileName": "SuperDecode.plugin",
+    "fileId": 29480728994,
+    "fileSize": 176322,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:13:04"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "SuperDecode/macos/SuperDecode.plugin",
+    "fileName": "SuperDecode.plugin",
+    "fileId": 29480705050,
+    "fileSize": 171155,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:12:46"
+   },
+   {
+    "path": "SuperDecode/windows/SuperDecode.plugin",
+    "fileName": "SuperDecode.plugin",
+    "fileId": 29480728994,
+    "fileSize": 176322,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:13:04"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00100-GO Bubble Plot",
+  "author": "Shawn Wang",
+  "desc": "Make Bubble Plot from TBtools Gene Ontology/KEGG Pathway Enr",
+  "shareId": "dkVImVgX",
+  "files": [
+   {
+    "path": "GOBubblePlot/windows/GOBubblePlot.plugin",
+    "fileName": "GOBubblePlot.plugin",
+    "fileId": 29481223542,
+    "fileSize": 35752,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:26:30"
+   },
+   {
+    "path": "GOBubblePlot/macos/GOBubblePlot.plugin",
+    "fileName": "GOBubblePlot.plugin",
+    "fileId": 29481252377,
+    "fileSize": 38482,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:26:35"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "GOBubblePlot/windows/GOBubblePlot.plugin",
+    "fileName": "GOBubblePlot.plugin",
+    "fileId": 29481223542,
+    "fileSize": 35752,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:26:30"
+   },
+   {
+    "path": "GOBubblePlot/macos/GOBubblePlot.plugin",
+    "fileName": "GOBubblePlot.plugin",
+    "fileId": 29481252377,
+    "fileSize": 38482,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:26:35"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00110-Batch Bubble Plot",
+  "author": "Shawn Wang",
+  "desc": "Make Bubble Plots from TBtools Gene Ontology/KEGG Pathway En",
+  "shareId": "zwVImfyQ",
+  "files": [
+   {
+    "path": "BatchBubblePlot/windows/BatchBubblePlot.plugin",
+    "fileName": "BatchBubblePlot.plugin",
+    "fileId": 29481934057,
+    "fileSize": 35803,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:28:56"
+   },
+   {
+    "path": "BatchBubblePlot/macos/BatchBubblePlot.plugin",
+    "fileName": "BatchBubblePlot.plugin",
+    "fileId": 29482001619,
+    "fileSize": 38593,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:29:11"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "BatchBubblePlot/windows/BatchBubblePlot.plugin",
+    "fileName": "BatchBubblePlot.plugin",
+    "fileId": 29481934057,
+    "fileSize": 35803,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:28:56"
+   },
+   {
+    "path": "BatchBubblePlot/macos/BatchBubblePlot.plugin",
+    "fileName": "BatchBubblePlot.plugin",
+    "fileId": 29482001619,
+    "fileSize": 38593,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:29:11"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00120-Bubble Shiny",
+  "author": "Shawn Wang",
+  "desc": "Make Bubble Plots from Get Set Enrichment Result",
+  "shareId": "QWVIn76v",
+  "files": [
+   {
+    "path": "Bubble Shiny/windows/Bubble_shiny.plugin",
+    "fileName": "Bubble_shiny.plugin",
+    "fileId": 29483510748,
+    "fileSize": 62591,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:34:22"
+   },
+   {
+    "path": "Bubble Shiny/macos/Bubble_shiny.plugin",
+    "fileName": "Bubble_shiny.plugin",
+    "fileId": 29483557749,
+    "fileSize": 67938,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:34:38"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Bubble Shiny/windows/Bubble_shiny.plugin",
+    "fileName": "Bubble_shiny.plugin",
+    "fileId": 29483510748,
+    "fileSize": 62591,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:34:22"
+   },
+   {
+    "path": "Bubble Shiny/macos/Bubble_shiny.plugin",
+    "fileName": "Bubble_shiny.plugin",
+    "fileId": 29483557749,
+    "fileSize": 67938,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:34:38"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00130-Barplot Shiny",
+  "author": "Shao Yang",
+  "desc": "Make Bar Plots from Tab-delimited Table",
+  "shareId": "27VInglD",
+  "files": [
+   {
+    "path": "Barplot_shiny/windows/Barplot_shiny.plugin",
+    "fileName": "Barplot_shiny.plugin",
+    "fileId": 29483907174,
+    "fileSize": 215467,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:48"
+   },
+   {
+    "path": "Barplot_shiny/macos/Barplot_shiny.plugin",
+    "fileName": "Barplot_shiny.plugin",
+    "fileId": 29483907178,
+    "fileSize": 165630,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:49"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Barplot_shiny/windows/Barplot_shiny.plugin",
+    "fileName": "Barplot_shiny.plugin",
+    "fileId": 29483907174,
+    "fileSize": 215467,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:48"
+   },
+   {
+    "path": "Barplot_shiny/macos/Barplot_shiny.plugin",
+    "fileName": "Barplot_shiny.plugin",
+    "fileId": 29483907178,
+    "fileSize": 165630,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:49"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00140-Sample Distance",
+  "author": "Xizhe Sun",
+  "desc": "Make a Heatmap to Illustrate Sample Distance",
+  "shareId": "UaVInKtX",
+  "files": [
+   {
+    "path": "Sample_Distance/windows/Sample_Distance.plugin",
+    "fileName": "Sample_Distance.plugin",
+    "fileId": 29483902709,
+    "fileSize": 8757,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:16"
+   },
+   {
+    "path": "Sample_Distance/macos/Sample_Distance.plugin",
+    "fileName": "Sample_Distance.plugin",
+    "fileId": 29483904144,
+    "fileSize": 9429,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:26"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Sample_Distance/windows/Sample_Distance.plugin",
+    "fileName": "Sample_Distance.plugin",
+    "fileId": 29483902709,
+    "fileSize": 8757,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:16"
+   },
+   {
+    "path": "Sample_Distance/macos/Sample_Distance.plugin",
+    "fileName": "Sample_Distance.plugin",
+    "fileId": 29483904144,
+    "fileSize": 9429,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:37:26"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00150-CorrPlot",
+  "author": "Lihu Wang",
+  "desc": "Quickly calculate correlation between each two traits",
+  "shareId": "oqVIoGOT",
+  "files": [
+   {
+    "path": "CorrPlot/windows/CorrPlot.plugin",
+    "fileName": "CorrPlot.plugin",
+    "fileId": 29483943495,
+    "fileSize": 5114,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:38:19"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "CorrPlot/windows/CorrPlot.plugin",
+    "fileName": "CorrPlot.plugin",
+    "fileId": 29483943495,
+    "fileSize": 5114,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:38:19"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00160-SuperCorrPlot",
+  "author": "Lihu Wang",
+  "desc": "Quickly calculate correlation between each two traits",
+  "shareId": "8ZVIo2DK",
+  "files": [
+   {
+    "path": "SuperCorrPlot/windows/SuperCorrPlot.plugin",
+    "fileName": "SuperCorrPlot.plugin",
+    "fileId": 29483962070,
+    "fileSize": 9144,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:39:04"
+   },
+   {
+    "path": "SuperCorrPlot/macos/SuperCorrPlot.plugin",
+    "fileName": "SuperCorrPlot.plugin",
+    "fileId": 29483965007,
+    "fileSize": 9224,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:39:14"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "SuperCorrPlot/windows/SuperCorrPlot.plugin",
+    "fileName": "SuperCorrPlot.plugin",
+    "fileId": 29483962070,
+    "fileSize": 9144,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:39:04"
+   },
+   {
+    "path": "SuperCorrPlot/macos/SuperCorrPlot.plugin",
+    "fileName": "SuperCorrPlot.plugin",
+    "fileId": 29483965007,
+    "fileSize": 9224,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:39:14"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00180-Sankey Plot",
+  "author": "Chuang Li",
+  "desc": "An R plugin to make Sankey Plot, especially useful for CeRNA",
+  "shareId": "sxVIoyD4",
+  "files": [
+   {
+    "path": "Sankey Plot/windows/Sankey_Plots.plugin",
+    "fileName": "Sankey_Plots.plugin",
+    "fileId": 29483971263,
+    "fileSize": 24888,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:40:23"
+   },
+   {
+    "path": "Sankey Plot/macos/Sankey_Plots.plugin",
+    "fileName": "Sankey_Plots.plugin",
+    "fileId": 29483975500,
+    "fileSize": 27495,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:40:36"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Sankey Plot/windows/Sankey_Plots.plugin",
+    "fileName": "Sankey_Plots.plugin",
+    "fileId": 29483971263,
+    "fileSize": 24888,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:40:23"
+   },
+   {
+    "path": "Sankey Plot/macos/Sankey_Plots.plugin",
+    "fileName": "Sankey_Plots.plugin",
+    "fileId": 29483975500,
+    "fileSize": 27495,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:40:36"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00181-ggVennDiagram ShinyApp",
+  "author": "Chunhui Gao",
+  "desc": "An R-shinyApp for Venn/UpsetPlot Analysis of Data Set",
+  "shareId": "1MVIonRv",
+  "files": [
+   {
+    "path": "ggVennDiagram ShinyApp/windows/ggVennDiagram ShinyApp.plugin",
+    "fileName": "ggVennDiagram ShinyApp.plugin",
+    "fileId": 29483995842,
+    "fileSize": 118631,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:41:57"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "ggVennDiagram ShinyApp/windows/ggVennDiagram ShinyApp.plugin",
+    "fileName": "ggVennDiagram ShinyApp.plugin",
+    "fileId": 29483995842,
+    "fileSize": 118631,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:41:57"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00311-Rectangular Manhattan Plot Shiny",
+  "author": "Qianghua Zhou",
+  "desc": "A R-shinyApp for Rectangular Manhattan Plot",
+  "shareId": "EbVIoKGe",
+  "files": [
+   {
+    "path": "Rectangular Manhattan Plot Shiny/windows/Rectangular Manhattan Plot Shiny.plugin",
+    "fileName": "Rectangular Manhattan Plot Shiny.plugin",
+    "fileId": 29484006575,
+    "fileSize": 48441,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:42:23"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Rectangular Manhattan Plot Shiny/windows/Rectangular Manhattan Plot Shiny.plugin",
+    "fileName": "Rectangular Manhattan Plot Shiny.plugin",
+    "fileId": 29484006575,
+    "fileSize": 48441,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:42:23"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00514-PanCoreDistribution",
+  "author": "Nongxinshengxin",
+  "desc": "A plugin to calculate trends of core and dispensable genes w",
+  "shareId": "WkVIpBRz",
+  "files": [
+   {
+    "path": "PanCoreDistribution/windows/PanCoreDistribution.plugin",
+    "fileName": "PanCoreDistribution.plugin",
+    "fileId": 29484016416,
+    "fileSize": 90102,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:43:17"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "PanCoreDistribution/windows/PanCoreDistribution.plugin",
+    "fileName": "PanCoreDistribution.plugin",
+    "fileId": 29484016416,
+    "fileSize": 90102,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:43:17"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00061-quickGenome",
+  "author": "Nongxinshengxin",
+  "desc": "A plugin for the convenient accounting of genomic informatio",
+  "shareId": "c7VIpQkV",
+  "files": [
+   {
+    "path": "quickGenome/windows/quickGenome.plugin",
+    "fileName": "quickGenome.plugin",
+    "fileId": 29484017889,
+    "fileSize": 23349,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:43:31"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "quickGenome/windows/quickGenome.plugin",
+    "fileName": "quickGenome.plugin",
+    "fileId": 29484017889,
+    "fileSize": 23349,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:43:31"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00063-Fasta_Statistic",
+  "author": "Xiao Chen",
+  "desc": "This script is used to analyze nucleotide or amino acid sequ",
+  "shareId": "qVVIsSoC",
+  "files": [
+   {
+    "path": "Fasta_Statistic/windows/Fasta_Statistic.plugin",
+    "fileName": "Fasta_Statistic.plugin",
+    "fileId": 29484048893,
+    "fileSize": 49326,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:44:32"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Fasta_Statistic/windows/Fasta_Statistic.plugin",
+    "fileName": "Fasta_Statistic.plugin",
+    "fileId": 29484048893,
+    "fileSize": 49326,
+    "userId": 1084038,
+    "updTime": "2026-01-11 20:44:32"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00064-splitSuperBigGenome",
+  "author": "Zhougeng Xu",
+  "desc": "A plugin for splitting large chromosomes in big genomes and ",
+  "shareId": "dGVItTAW",
+  "files": [
+   {
+    "path": "splitSuperBigGenome/windows/splitSuperBigGenome.plugin",
+    "fileName": "splitSuperBigGenome.plugin",
+    "fileId": 29485074527,
+    "fileSize": 29292,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:09:05"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "splitSuperBigGenome/windows/splitSuperBigGenome.plugin",
+    "fileName": "splitSuperBigGenome.plugin",
+    "fileId": 29485074527,
+    "fileSize": 29292,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:09:05"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00066-Coding Potential Predict - CPC2",
+  "author": "Chengjie Chen",
+  "desc": "A simple GUI wrapper for CPC2",
+  "shareId": "pJVItMqM",
+  "files": [
+   {
+    "path": "Coding Potential Predict - CPC2/windows/Coding Potential Predict - CPC2.plugin",
+    "fileName": "Coding Potential Predict - CPC2.plugin",
+    "fileId": 29485078140,
+    "fileSize": 22953,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:09:55"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Coding Potential Predict - CPC2/windows/Coding Potential Predict - CPC2.plugin",
+    "fileName": "Coding Potential Predict - CPC2.plugin",
+    "fileId": 29485078140,
+    "fileSize": 22953,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:09:55"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00210-Multiprocess RevComSeq",
+  "author": "Chuhao Li ",
+  "desc": "Sequence Reverse and Completement Invoking Multiple Threads",
+  "shareId": "94VItvR6",
+  "files": [
+   {
+    "path": "Multiprocess_RevComSeq_v0.3/windows/Multiprocess_RevComSeq_v0.3.plugin",
+    "fileName": "Multiprocess_RevComSeq_v0.3.plugin",
+    "fileId": 29485230521,
+    "fileSize": 22270,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:11:52"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Multiprocess_RevComSeq_v0.3/windows/Multiprocess_RevComSeq_v0.3.plugin",
+    "fileName": "Multiprocess_RevComSeq_v0.3.plugin",
+    "fileId": 29485230521,
+    "fileSize": 22270,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:11:52"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00211-Sort_Sequence_bySxl",
+  "author": "Xiaoliang Shan",
+  "desc": "Sort Sequence by Length / GC content",
+  "shareId": "UhVIuBbr",
+  "files": [
+   {
+    "path": "Sort_Sequence_bySxl/windows/Sort_Sequence_bySxl.plugin",
+    "fileName": "Sort_Sequence_bySxl.plugin",
+    "fileId": 29485385165,
+    "fileSize": 90016,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:13:08"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Sort_Sequence_bySxl/windows/Sort_Sequence_bySxl.plugin",
+    "fileName": "Sort_Sequence_bySxl.plugin",
+    "fileId": 29485385165,
+    "fileSize": 90016,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:13:08"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00212-Bed_Extract_Sequence_bySxl",
+  "author": "Xiaoliang Shan",
+  "desc": "Extract Sequence from a genome according to a bed file",
+  "shareId": "4hVIuNg5",
+  "files": [
+   {
+    "path": "Bed_Extract_Sequence_bySxl/windows/Bed_Extract_Sequence_bySxl.plugin",
+    "fileName": "Bed_Extract_Sequence_bySxl.plugin",
+    "fileId": 29485462419,
+    "fileSize": 90261,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:15:16"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Bed_Extract_Sequence_bySxl/windows/Bed_Extract_Sequence_bySxl.plugin",
+    "fileName": "Bed_Extract_Sequence_bySxl.plugin",
+    "fileId": 29485462419,
+    "fileSize": 90261,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:15:16"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00213-GeneWindowCounter",
+  "author": "LiangL",
+  "desc": "A plugin that calculates gene density within a sliding windo",
+  "shareId": "wZVIu30a",
+  "files": [
+   {
+    "path": "GeneWindowCounter/windows/GeneWindowCounter.plugin",
+    "fileName": "GeneWindowCounter.plugin",
+    "fileId": 29485469891,
+    "fileSize": 29482,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:16:27"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "GeneWindowCounter/windows/GeneWindowCounter.plugin",
+    "fileName": "GeneWindowCounter.plugin",
+    "fileId": 29485469891,
+    "fileSize": 29482,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:16:27"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00271-Quick Interval Gene Anno",
+  "author": "Qianghua Zhou",
+  "desc": "Annotate Genes in a Candidate Interval",
+  "shareId": "JqVIueMv",
+  "files": [
+   {
+    "path": "Quick Intervel Gene Anno/windows/Quick Intervel Gene Anno.plugin",
+    "fileName": "Quick Intervel Gene Anno.plugin",
+    "fileId": 29485485444,
+    "fileSize": 31373,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:17:21"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Quick Intervel Gene Anno/windows/Quick Intervel Gene Anno.plugin",
+    "fileName": "Quick Intervel Gene Anno.plugin",
+    "fileId": 29485485444,
+    "fileSize": 31373,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:17:21"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00290-Batch Protein Anno in InterPro",
+  "author": "Qianghua Zhou",
+  "desc": "A batch wrapper for annotating protein in interproscan via w",
+  "shareId": "uCVIuyXT",
+  "files": [
+   {
+    "path": "Batch Protein Annotation in InterPro/windows/Batch Protein Annotation in InterPro.plugin",
+    "fileName": "Batch Protein Annotation in InterPro.plugin",
+    "fileId": 29485610494,
+    "fileSize": 34416,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:18:04"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Batch Protein Annotation in InterPro/windows/Batch Protein Annotation in InterPro.plugin",
+    "fileName": "Batch Protein Annotation in InterPro.plugin",
+    "fileId": 29485610494,
+    "fileSize": 34416,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:18:04"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00313-Rapid Gene Family Members Initial Identification",
+  "author": "Qianghua Zhou",
+  "desc": "An One Step Rapid Gene Family Members Identification Pipelin",
+  "shareId": "mHVIupVH",
+  "files": [
+   {
+    "path": "Rapid Gene Family Members Initial Identification2/windows/Rapid Gene Family Members Initial Identification.plugin",
+    "fileName": "Rapid Gene Family Members Initial Identification.plugin",
+    "fileId": 29485627252,
+    "fileSize": 32917,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:19:05"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Rapid Gene Family Members Initial Identification2/windows/Rapid Gene Family Members Initial Identification.plugin",
+    "fileName": "Rapid Gene Family Members Initial Identification.plugin",
+    "fileId": 29485627252,
+    "fileSize": 32917,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:19:05"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00321-Diamond GUI Wrapper",
+  "author": "Peike Chen",
+  "desc": "A Diamond GUI Wrapper to faciltate sequence alignmnet, which",
+  "shareId": "cSVIut2v",
+  "files": [
+   {
+    "path": "Diamond GUI Wrapper/windows/Diamond GUI Wrapper.plugin",
+    "fileName": "Diamond GUI Wrapper.plugin",
+    "fileId": 29485649357,
+    "fileSize": 8086,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:19:43"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Diamond GUI Wrapper/windows/Diamond GUI Wrapper.plugin",
+    "fileName": "Diamond GUI Wrapper.plugin",
+    "fileId": 29485649357,
+    "fileSize": 8086,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:19:43"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00331-mafft GUI Wrapper",
+  "author": "Qiuping Wu",
+  "desc": "A GUI Wrapper for mafft, the best multiple sequence aligner",
+  "shareId": "DeVILAlK",
+  "files": [
+   {
+    "path": "mafft GUI Wrapper/windows/mafft GUI Wrapper.plugin",
+    "fileName": "mafft GUI Wrapper.plugin",
+    "fileId": 29485686108,
+    "fileSize": 26658,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:20:45"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "mafft GUI Wrapper/windows/mafft GUI Wrapper.plugin",
+    "fileName": "mafft GUI Wrapper.plugin",
+    "fileId": 29485686108,
+    "fileSize": 26658,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:20:45"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00341-Root a PhyloTree",
+  "author": "CJ",
+  "desc": "Pack MAD software as a plugin for easy rooting a phylotree",
+  "shareId": "jrVILOWD",
+  "files": [
+   {
+    "path": "Root a PhyloTree/windows/Root a PhyloTree.plugin",
+    "fileName": "Root a PhyloTree.plugin",
+    "fileId": 29485708000,
+    "fileSize": 33925,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:21:33"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Root a PhyloTree/windows/Root a PhyloTree.plugin",
+    "fileName": "Root a PhyloTree.plugin",
+    "fileId": 29485708000,
+    "fileSize": 33925,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:21:33"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00381-RepeatMaskandStatistics",
+  "author": "Luodong Huang",
+  "desc": "Mask Genome Sequence based on a repeat position information ",
+  "shareId": "QkVILQ0V",
+  "files": [
+   {
+    "path": "RepeatMaskandStatistics/windows/RepeatMaskandStatistics.plugin",
+    "fileName": "RepeatMaskandStatistics.plugin",
+    "fileId": 29485793992,
+    "fileSize": 49482,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:22:27"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "RepeatMaskandStatistics/windows/RepeatMaskandStatistics.plugin",
+    "fileName": "RepeatMaskandStatistics.plugin",
+    "fileId": 29485793992,
+    "fileSize": 49482,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:22:27"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00382-Mummer",
+  "author": "Fengqi Wu",
+  "desc": "A simple plugin to invoke mummer to compare two genome assem",
+  "shareId": "rjVILdCF",
+  "files": [
+   {
+    "path": "MUMmer/windows/MUMmer.plugin",
+    "fileName": "MUMmer.plugin",
+    "fileId": 29485817980,
+    "fileSize": 22248,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:22:57"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "MUMmer/windows/MUMmer.plugin",
+    "fileName": "MUMmer.plugin",
+    "fileId": 29485817980,
+    "fileSize": 22248,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:22:57"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00383-GenomeSyn_tool",
+  "author": "Zuwen Zhou",
+  "desc": "A simple plugin to invoke GenomeSyn to visualize genome comp",
+  "shareId": "RqVILg8T",
+  "files": [
+   {
+    "path": "GenomeSyn_tool/windows/GenomeSyn_tool.plugin",
+    "fileName": "GenomeSyn_tool.plugin",
+    "fileId": 29485840095,
+    "fileSize": 6379,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:23:37"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "GenomeSyn_tool/windows/GenomeSyn_tool.plugin",
+    "fileName": "GenomeSyn_tool.plugin",
+    "fileId": 29485840095,
+    "fileSize": 6379,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:23:37"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00384-GeneCorrectionStatistics",
+  "author": "Nongxinshengxin",
+  "desc": "A plugin for quick statistics of manually corrected gene str",
+  "shareId": "HjVILpFg",
+  "files": [
+   {
+    "path": "GeneCorrectionStatistics/windows/GeneCorrectionStatistics.plugin",
+    "fileName": "GeneCorrectionStatistics.plugin",
+    "fileId": 29486192283,
+    "fileSize": 45927,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:24:31"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "GeneCorrectionStatistics/windows/GeneCorrectionStatistics.plugin",
+    "fileName": "GeneCorrectionStatistics.plugin",
+    "fileId": 29486192283,
+    "fileSize": 45927,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:24:31"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00401-WGDI_Prepare",
+  "author": "Yingxiao Mai",
+  "desc": "A GUI Wrpper for WGDI Input file prepare. WGDI is an amazing",
+  "shareId": "3eVIRT9y",
+  "files": [
+   {
+    "path": "WGDI_Prepare/windows/WGDI_Prepare.plugin",
+    "fileName": "WGDI_Prepare.plugin",
+    "fileId": 29486272227,
+    "fileSize": 167889,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:25:52"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "WGDI_Prepare/windows/WGDI_Prepare.plugin",
+    "fileName": "WGDI_Prepare.plugin",
+    "fileId": 29486272227,
+    "fileSize": 167889,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:25:52"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00402-WGDI_Genome_Compare",
+  "author": "Yingxiao Mai",
+  "desc": "A GUI Wrpper for WGDI Genome Comparative Analyses. WGDI is a",
+  "shareId": "5xVIR5UA",
+  "files": [
+   {
+    "path": "WGDI_Genome_Compare/windows/WGDI_Genome_Compare.plugin",
+    "fileName": "WGDI_Genome_Compare.plugin",
+    "fileId": 29486656514,
+    "fileSize": 168129,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:27:09"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "WGDI_Genome_Compare/windows/WGDI_Genome_Compare.plugin",
+    "fileName": "WGDI_Genome_Compare.plugin",
+    "fileId": 29486656514,
+    "fileSize": 168129,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:27:09"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00481-Batch Protein Paramters Calc",
+  "author": "chatGPT",
+  "desc": "Batch Calculate Protein Paramters",
+  "shareId": "x8VIRh5B",
+  "files": [
+   {
+    "path": "Batch Protein Paramters Calc/windows/Batch Protein Paramters Calc.plugin",
+    "fileName": "Batch Protein Paramters Calc.plugin",
+    "fileId": 29486754784,
+    "fileSize": 44575,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:29:02"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Batch Protein Paramters Calc/windows/Batch Protein Paramters Calc.plugin",
+    "fileName": "Batch Protein Paramters Calc.plugin",
+    "fileId": 29486754784,
+    "fileSize": 44575,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:29:02"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00511-Centro Locate",
+  "author": "Fengqi Wu",
+  "desc": "a simple scripts for plant centromere region identification",
+  "shareId": "jiVIRRjP",
+  "files": [
+   {
+    "path": "Centro Locate/windows/Centro Locate.plugin",
+    "fileName": "Centro Locate.plugin",
+    "fileId": 29486785534,
+    "fileSize": 154413,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:31:09"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Centro Locate/windows/Centro Locate.plugin",
+    "fileName": "Centro Locate.plugin",
+    "fileId": 29486785534,
+    "fileSize": 154413,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:31:09"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00512-T2Tvalidator",
+  "author": "Fengqi Wu",
+  "desc": "an enhanced scripts for plant centromere and telomere region",
+  "shareId": "VLVISBqD",
+  "files": [
+   {
+    "path": "T2Tvalidator/windows/T2Tvalidator.plugin",
+    "fileName": "T2Tvalidator.plugin",
+    "fileId": 29486830077,
+    "fileSize": 154664,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:32:15"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "T2Tvalidator/windows/T2Tvalidator.plugin",
+    "fileName": "T2Tvalidator.plugin",
+    "fileId": 29486830077,
+    "fileSize": 154664,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:32:15"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00640-HiMT_Toolkit",
+  "author": "Shuyuan Tang",
+  "desc": "HiMT: An Integrative Toolkit for Assembling Plant Mitochondr",
+  "shareId": "5UVISZPz",
+  "files": [
+   {
+    "path": "HiMT_Toolkit/windows/HiMT_Toolkit.v1.5.plugin",
+    "fileName": "HiMT_Toolkit.v1.5.plugin",
+    "fileId": 29487067948,
+    "fileSize": 204345,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:33:07"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "HiMT_Toolkit/windows/HiMT_Toolkit.v1.5.plugin",
+    "fileName": "HiMT_Toolkit.v1.5.plugin",
+    "fileId": 29487067948,
+    "fileSize": 204345,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:33:07"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00230-BEDtools Intersect GUI Simple Wrapper Only Win",
+  "author": "Qianghua Zhou",
+  "desc": "Batch Get Intersect Intevals",
+  "shareId": "MvVIJrPf",
+  "files": [
+   {
+    "path": "BEDtools Intersect GUI Simple Wrapper Only Win/windows/BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileName": "BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileId": 29488162907,
+    "fileSize": 12525,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:42:10"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "BEDtools Intersect GUI Simple Wrapper Only Win/windows/BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileName": "BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileId": 29488162907,
+    "fileSize": 12525,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:42:10"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00240-Obtain Correlation and P-value Matrix Base On Expression Matrix Win",
+  "author": "Qianghua Zhou",
+  "desc": "Batch Calculate Correlation basing on a Value Matrix",
+  "shareId": "uGVIKGNE",
+  "files": [
+   {
+    "path": "Obtain Correlation and P-value Matrix Base On Expression Matrix Win/windows/BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileName": "BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileId": 29488196659,
+    "fileSize": 12525,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:42:54"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Obtain Correlation and P-value Matrix Base On Expression Matrix Win/windows/BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileName": "BEDtools Intersect GUI Simple Wrapper Only Win.plugin",
+    "fileId": 29488196659,
+    "fileSize": 12525,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:42:54"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00250-Prepare Input Files for Cytoscape Based on Correlation and P-value Matrix",
+  "author": "Qianghua Zhou",
+  "desc": "Prepare Input Files for Cytoscape Based on Correlation and P",
+  "shareId": "bsVIK8qs",
+  "files": [
+   {
+    "path": "Prepare Input For Cytoscape Based On Correlation and P-value Matrix/windows/Prepare Input For Cytoscape Based On Correlation and P-value Matrix.plugin",
+    "fileName": "Prepare Input For Cytoscape Based On Correlation and P-value Matrix.plugin",
+    "fileId": 29488226266,
+    "fileSize": 134,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:44:06"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Prepare Input For Cytoscape Based On Correlation and P-value Matrix/windows/Prepare Input For Cytoscape Based On Correlation and P-value Matrix.plugin",
+    "fileName": "Prepare Input For Cytoscape Based On Correlation and P-value Matrix.plugin",
+    "fileId": 29488226266,
+    "fileSize": 134,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:44:06"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00260-Obain Taxon ID as Order Shown in Newick Tree",
+  "author": "Qianghua Zhou",
+  "desc": "Extract Taxon IDs from a Newick Tree String with Theri Order",
+  "shareId": "6lVIKr04",
+  "files": [
+   {
+    "path": "Obain Taxon ID as Order Shown in Newick Tree/windows/Obain Taxon ID as Order Shown in Newick Tree Win v2.plugin",
+    "fileName": "Obain Taxon ID as Order Shown in Newick Tree Win v2.plugin",
+    "fileId": 29488475422,
+    "fileSize": 15655,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:45:10"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Obain Taxon ID as Order Shown in Newick Tree/windows/Obain Taxon ID as Order Shown in Newick Tree Win v2.plugin",
+    "fileName": "Obain Taxon ID as Order Shown in Newick Tree Win v2.plugin",
+    "fileId": 29488475422,
+    "fileSize": 15655,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:45:10"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00280-Conserved Domain Sequences Extraction for Phylogenetic Tree",
+  "author": "Qianghua Zhou",
+  "desc": "Extract Conserved Domain Sequences from Sequence Set",
+  "shareId": "9PVJTXbx",
+  "files": [
+   {
+    "path": "Conserved Domain Sequences Extraction For Phylogenetic Tree/windows/Conserved Domain Sequences Extraction For Phylogenetic Tree.plugin",
+    "fileName": "Conserved Domain Sequences Extraction For Phylogenetic Tree.plugin",
+    "fileId": 29488830450,
+    "fileSize": 376798,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:50:47"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Conserved Domain Sequences Extraction For Phylogenetic Tree/windows/Conserved Domain Sequences Extraction For Phylogenetic Tree.plugin",
+    "fileName": "Conserved Domain Sequences Extraction For Phylogenetic Tree.plugin",
+    "fileId": 29488830450,
+    "fileSize": 376798,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:50:47"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00451-File Join ShinyApp",
+  "author": "Shawn Wang",
+  "desc": "Join Table File as You Need",
+  "shareId": "cyVJTukE",
+  "files": [
+   {
+    "path": "Filejoin/windows/Filejoin-win.plugin",
+    "fileName": "Filejoin-win.plugin",
+    "fileId": 29488835628,
+    "fileSize": 181200,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:52:17"
+   },
+   {
+    "path": "Filejoin/macos_intel/Filejoin-mac-Intel.plugin",
+    "fileName": "Filejoin-mac-Intel.plugin",
+    "fileId": 29488860745,
+    "fileSize": 174527,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:52:36"
+   },
+   {
+    "path": "Filejoin/macos_arm/Filejoin-mac-arm.plugin",
+    "fileName": "Filejoin-mac-arm.plugin",
+    "fileId": 29488863318,
+    "fileSize": 172101,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:52:42"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Filejoin/windows/Filejoin-win.plugin",
+    "fileName": "Filejoin-win.plugin",
+    "fileId": 29488835628,
+    "fileSize": 181200,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:52:17"
+   },
+   {
+    "path": "Filejoin/macos_intel/Filejoin-mac-Intel.plugin",
+    "fileName": "Filejoin-mac-Intel.plugin",
+    "fileId": 29488860745,
+    "fileSize": 174527,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:52:36"
+   },
+   {
+    "path": "Filejoin/macos_arm/Filejoin-mac-arm.plugin",
+    "fileName": "Filejoin-mac-arm.plugin",
+    "fileId": 29488863318,
+    "fileSize": 172101,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:52:42"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00512-Get Intron GXF",
+  "author": "Chengyu Gao",
+  "desc": "A plugin that generates a GFF/GTF file with intron features ",
+  "shareId": "rkVJUsSb",
+  "files": [
+   {
+    "path": "Get Intron GXF/windows/Get Intron GXF.plugin",
+    "fileName": "Get Intron GXF.plugin",
+    "fileId": 29488876992,
+    "fileSize": 6713,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:54:01"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Get Intron GXF/windows/Get Intron GXF.plugin",
+    "fileName": "Get Intron GXF.plugin",
+    "fileId": 29488876992,
+    "fileSize": 6713,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:54:01"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00312-Aspera for HTS Data TurboDL",
+  "author": "Qianghua Zhou",
+  "desc": "A GUI Wrapper for Aspera to facilitate HTS Data Download",
+  "shareId": "ogVJAGif",
+  "files": [
+   {
+    "path": "Aspera for HTS Data TurboDL/windows/Aspera for HTS Data TurboDL.plugin",
+    "fileName": "Aspera for HTS Data TurboDL.plugin",
+    "fileId": 29488883825,
+    "fileSize": 12909,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:54:52"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Aspera for HTS Data TurboDL/windows/Aspera for HTS Data TurboDL.plugin",
+    "fileName": "Aspera for HTS Data TurboDL.plugin",
+    "fileId": 29488883825,
+    "fileSize": 12909,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:54:52"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00360-Aspera Wrapper",
+  "author": "CJ",
+  "desc": "An Aspera Wrapper facilitating NGS data downloan",
+  "shareId": "xsVJA9z5",
+  "files": [
+   {
+    "path": "Aspera Wrapper/windows/Aspera Wrapper.plugin",
+    "fileName": "Aspera Wrapper.plugin",
+    "fileId": 29488891783,
+    "fileSize": 20607,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:56:12"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Aspera Wrapper/windows/Aspera Wrapper.plugin",
+    "fileName": "Aspera Wrapper.plugin",
+    "fileId": 29488891783,
+    "fileSize": 20607,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:56:12"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00440-Youtube Download",
+  "author": "CJ",
+  "desc": "Download Video from Youtube or Bilibili",
+  "shareId": "6FVJAi95",
+  "files": [
+   {
+    "path": "Youtube Download/windows/Youtube_Download_v3.plugin",
+    "fileName": "Youtube_Download_v3.plugin",
+    "fileId": 29489085632,
+    "fileSize": 34983,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:58:00"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Youtube Download/windows/Youtube_Download_v3.plugin",
+    "fileName": "Youtube_Download_v3.plugin",
+    "fileId": 29489085632,
+    "fileSize": 34983,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:58:00"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00491-PPTX to Image PDF",
+  "author": "CJ",
+  "desc": "Quick convert PPTX to Images, Press Text and merge in PDF",
+  "shareId": "7AVJBB4a",
+  "files": [
+   {
+    "path": "PPTX to Image PDF/PPTX to Image PDF.plugin",
+    "fileName": "PPTX to Image PDF.plugin",
+    "fileId": 29489287218,
+    "fileSize": 33120,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:58:46"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "PPTX to Image PDF/PPTX to Image PDF.plugin",
+    "fileName": "PPTX to Image PDF.plugin",
+    "fileId": 29489287218,
+    "fileSize": 33120,
+    "userId": 1084038,
+    "updTime": "2026-01-11 21:58:46"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00500-Quick Make a QRcode",
+  "author": "chatGPT",
+  "desc": "a tiny app for QRcode generation from a string",
+  "shareId": "JoVJB18c",
+  "files": [
+   {
+    "path": "Quick Make a QRcode/windows/Quick Make QRcode with Python on Window Only.plugin",
+    "fileName": "Quick Make QRcode with Python on Window Only.plugin",
+    "fileId": 29489623015,
+    "fileSize": 42723,
+    "userId": 1084038,
+    "updTime": "2026-01-11 22:00:05"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Quick Make a QRcode/windows/Quick Make QRcode with Python on Window Only.plugin",
+    "fileName": "Quick Make QRcode with Python on Window Only.plugin",
+    "fileId": 29489623015,
+    "fileSize": 42723,
+    "userId": 1084038,
+    "updTime": "2026-01-11 22:00:05"
+   }
+  ],
+  "error": null
+ },
+ {
+  "name": "P00520-Batch Paper Fetch",
+  "author": "CJ",
+  "desc": "Batch Download Paper",
+  "shareId": "xZVJBY4K",
+  "files": [
+   {
+    "path": "Batch Paper Fetch/Batch Paper Fetch.plugin",
+    "fileName": "Batch Paper Fetch.plugin",
+    "fileId": 29490058429,
+    "fileSize": 23179,
+    "userId": 1084038,
+    "updTime": "2026-01-11 22:00:46"
+   }
+  ],
+  "plugins": [
+   {
+    "path": "Batch Paper Fetch/Batch Paper Fetch.plugin",
+    "fileName": "Batch Paper Fetch.plugin",
+    "fileId": 29490058429,
+    "fileSize": 23179,
+    "userId": 1084038,
+    "updTime": "2026-01-11 22:00:46"
+   }
+  ],
+  "error": null
+ }
+]

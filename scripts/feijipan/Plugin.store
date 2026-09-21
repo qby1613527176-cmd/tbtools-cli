@@ -1,0 +1,127 @@
+#PluginName	Class	Plugin Author	Contact	Plugin Function	SourceLink
+P00010-Plugin Creator	Basic	CJ	ccj0410@gmail.com	CLI Program Wrapper Creator is now renamed to "Plugin Creator", which is suggested by several users. Every User Could Use this Plugin to Create Their Own GUI Wrapper for All CLI Program	http://43.155.73.187/plugins/Plugin%20Creator.plugin
+# P00020-R Plugin Demo	Basic	CJ	ccj0410@gmail.com	A Demo for TBtools R Plugin Author	http://43.155.73.187/plugins/R%20Plugin%20Demo.plugin
+P00030-Rserver	Basic	CJ	ccj0410@gmail.com	The basic component for all TBtools-R Plugin	https://share.feijipan.com/s/1nVIywGy
+# P00050-TBtools Turtorial Mini Database	Basic	Qianghua Zhou	zhouqh20010504@163.com	Quick Serach for TBtools Publically Available Tutorials	http://43.155.73.187/plugins/TBtools%20Tutorial%20Mini%20Database.plugin
+P00080-Single Cell Sequencing Seurat Shiny	Data Analyses	Jiawei Li	NULL	A Seurat Shiny App for Single Cell Sequencing Data Analysis	https://share.feijipan.com/s/plVIfxqb
+P00090-WGCNA Shiny	Data Analyses	Shawn Wang	NULL	Weighted Gene Co-expressed Network Analysis wrapper for all TBtools Users	https://share.feijipan.com/s/n5VIf8CA
+P00170-Batch DEGs Analysis Tools	Data Analyses	Lihu Wang	wanglihu@hebeu.edu.cn	[R Plugin] Perform Differential Gene Expression with DESeq2 and edgeR	https://share.feijipan.com/s/GVVIfuRI
+P00200-GO KEGG Enrichment Shiny	Data Analyses	Hualiang Ge	NULL	An R plugin for GO and KEGG Enrichment Analysis	https://share.feijipan.com/s/j7VIgZjm
+P00300-Principal Component Analysis	Data Analyses	Qianghua Zhou	zhouqh20010504@163.com	Perform PCA Analysis on Input Data Matrix	https://share.feijipan.com/s/PAVIgpTi
+P00314-qPCRsum Shiny	Data Analyses	Qianghua Zhou	zhouqh20010504@163.com	An  R-shinyApp for qPCR result summary	https://share.feijipan.com/s/2LVIhZGM
+P00315-quickQrtPCR	Data Analyses	Nongxinshengxin	nongxinshengxin@163.com	A shiny APP to assist in calculating qRT-PCR relative expression and primer amplification efficiencies	https://share.feijipan.com/s/G6VIh26o
+P00350-Differential Gene Expression Analysis-DESeq2 Wrapper	Data Analyses	CJ	ccj0410@gmail.com	An R plugin to Perform Differential Gene Expression Analysis	https://share.feijipan.com/s/qCVIiUbn
+P00513-RNAdiff	Data Analyses	Nongxinshengxin	nongxinshengxin@163.com	A shiny APP for easy downstream analysis of RNA-seq	https://share.feijipan.com/s/yLVIiNiB
+P00610-QTLseqR GUI Wrapper	Data Analyses	CJ	ccj0410@gmail.com	QTLseqR GUI Wrapper	https://share.feijipan.com/s/4gVIia6A
+P00342-Simple GO GSEA Wrapper	Data Analyses	CJ	ccj0410@gmail.com	A Simple GUI Wrapper for GSEA Software	http://43.155.73.187/plugins/Simple%20GO%20GSEA%20Wrapper.plugin
+P00620-MACS2 GUI Wrapper CallPeaks	Data Analyses	CJ	ccj0410@gmail.com	MACS2 GUI Wrapper for ChIPseq/DAPseq Peak Calling	https://share.feijipan.com/s/LpVIi6On
+P00630-Simple Haplotype Caller(RanbowWinOnly)	Data Analyses	CJ	ccj0410@gmail.com	Ranbow GUI Wrapper	https://share.feijipan.com/s/oJVIiiAA
+P00631-trimPolyA	Data Analyses	Jianhua Zhao	1145757247@qq.com	A Better PolyA Sequence Trimmer for ONT cDNA Reads	https://share.feijipan.com/s/JeVIisFY
+P00639-Crispr Stitch	Data Analyses	Yanshun Han	NULL	Fast evaluation of the efficiency of CRISPR editing	https://share.feijipan.com/s/EqVIjAQt
+P00640-Sanger Sequencing Result Check Advanced	Data Analyses	CJ	ccj0410@gmail.com	Sanger Sequencing Result Check Advanced	http://43.155.73.187/plugins/Sanger%20Sequencing%20Result%20Check%20Advanced.plugin
+P00641-SuperDecode	Data Analyses	Xianrong Xie	xiexianrong@scau.edu.cn	An integrated toolkit for analyzing mutations induced by genome editing	https://share.feijipan.com/s/4XVIjQJO
+P00100-GO Bubble Plot	Data Visualization	Shawn Wang	NULL	Make Bubble Plot from TBtools Gene Ontology/KEGG Pathway Enrichment Result	https://share.feijipan.com/s/dkVImVgX
+P00110-Batch Bubble Plot	Data Visualization	Shawn Wang	NULL	Make Bubble Plots from TBtools Gene Ontology/KEGG Pathway Enrichment Result	https://share.feijipan.com/s/zwVImfyQ
+P00120-Bubble Shiny	Data Visualization	Shawn Wang	NULL	Make Bubble Plots from Get Set Enrichment Result	https://share.feijipan.com/s/QWVIn76v
+P00130-Barplot Shiny	Data Visualization	Shao Yang	NULL	Make Bar Plots from Tab-delimited Table	https://share.feijipan.com/s/27VInglD
+P00140-Sample Distance	Data Visualization	Xizhe Sun	xizhesun@gmail.com	Make a Heatmap to Illustrate Sample Distance	https://share.feijipan.com/s/UaVInKtX
+P00150-CorrPlot	Data Visualization	Lihu Wang	wanglihu@hebeu.edu.cn	Quickly calculate correlation between each two traits	https://share.feijipan.com/s/oqVIoGOT
+P00160-SuperCorrPlot	Data Visualization	Lihu Wang	wanglihu@hebeu.edu.cn	Quickly calculate correlation between each two traits	https://share.feijipan.com/s/8ZVIo2DK
+P00180-Sankey Plot	Data Visualization	Chuang Li	NULL	An R plugin to make Sankey Plot, especially useful for CeRNA analysis	https://share.feijipan.com/s/sxVIoyD4
+P00181-ggVennDiagram ShinyApp	Data Visualization	Chunhui Gao	NULL	An R-shinyApp for Venn/UpsetPlot Analysis of Data Set	https://share.feijipan.com/s/1MVIonRv
+P00311-Rectangular Manhattan Plot Shiny	Data Visualization	Qianghua Zhou	zhouqh20010504@163.com	A R-shinyApp for Rectangular Manhattan Plot	https://share.feijipan.com/s/EbVIoKGe
+P00341-Simple IGV WebApp	Data Visualization	CJ	ccj0410@gmail.com	A Simple IGV Wep App plugin for out-of-box IGV usage	http://43.155.73.187/plugins/Simple%20IGV%20WebApp.plugin
+P00514-PanCoreDistribution	Data Visualization	Nongxinshengxin	nongxinshengxin@163.com	A plugin to calculate trends of core and dispensable genes with the number of strains of a species based on the OTU table.	https://share.feijipan.com/s/WkVIpBRz
+P00060-Batch SMART	Sequence Analyses	CJ	ccj0410@gmail.com	Batch Mode for SMART Search	http://43.155.73.187/plugins/Batch%20SMART.plugin
+P00061-quickGenome	Sequence Analyses	Nongxinshengxin	nongxinshengxin@163.com	A plugin for the convenient accounting of genomic information	https://share.feijipan.com/s/c7VIpQkV
+P00062-CutSignalP	Sequence Analyses	Nongxinshengxin	nongxinshengxin@163.com	A plug-in that can cut the signal peptide sequence of secreted proteins with one click.	http://43.155.73.187/plugins/CutSignalP.plugin
+P00063-Fasta_Statistic	Sequence Analyses	Xiao Chen	chenxiao.email@qq.com	This script is used to analyze nucleotide or amino acid sequence files.\n 1. During analysis, any '*' characters in the sequences are removed. The script performs case-insensitive matching for GAP(N), ATCG, and amino acid sequences.\n 2.The statistics generated include the number of sequences in the file, N50, the total length, GC content, and GAP(N) content of each sequence and the entire set of sequences. \n 3.For amino acid sequences, GAP and GC content can be ignored. \n 4.For nucleotide sequences, calculations such as the length of a single sequence, total sequence length, N50 length, average length, and the lengths of the longest and shortest sequences include GAP(N). However, GC content for a single sequence and the overall nucleotide sequence GC content are calculated as the proportion of GC bases to the total ATCG bases (excluding GAP).	https://share.feijipan.com/s/qVVIsSoC
+P00064-splitSuperBigGenome	Sequence Analyses	Zhougeng Xu	xuzhougeng@163.com	A plugin for splitting large chromosomes in big genomes and processing corresponding GTF files. When a chromosome exceeds 512mb in length, some bioinformatics tools start to malfunction. Considering current large genomes are unlikely to be completed as a single piece and are typically connected through scaffolding methods linking multiple contigs, this tool was developed for splitting purposes.	https://share.feijipan.com/s/dGVItTAW
+P00065-Sequence Processor Tool v1.0	Sequence Analyses	Zheng Jiang	jiangzheng0166@qq.com	A versatile sequence processor for effortless cleaning, conversion, and manipulation of Sequence data.	http://43.155.73.187/plugins/Sequence%20Processor%20Tool%20v1.0.plugin
+P00066-Coding Potential Predict - CPC2	Sequence Analyses	Chengjie Chen	ccj0410@gmail.com	A simple GUI wrapper for CPC2	https://share.feijipan.com/s/pJVItMqM
+P00190-fastANI	Sequence Analyses	Chuhao Li 	a879942613@qq.com	fast alignment-free computation of whole-genome Average Nucleotide Identity (ANI)	https://tbtools.cowtransfer.com/s/8e2cdf7549334d
+P00210-Multiprocess RevComSeq	Sequence Analyses	Chuhao Li 	a879942613@qq.com	Sequence Reverse and Completement Invoking Multiple Threads	https://share.feijipan.com/s/94VItvR6
+P00211-Sort_Sequence_bySxl	Sequence Analyses	Xiaoliang Shan	sdausxl@126.com	Sort Sequence by Length / GC content	https://share.feijipan.com/s/UhVIuBbr
+P00212-Bed_Extract_Sequence_bySxl	Sequence Analyses	Xiaoliang Shan	sdausxl@126.com	Extract Sequence from a genome according to a bed file	https://share.feijipan.com/s/4hVIuNg5
+P00213-GeneWindowCounter	Sequence Analyses	LiangL	624783939@qq.com	A plugin that calculates gene density within a sliding window range based on the provided GFF3 and GFF3-like file.	https://share.feijipan.com/s/wZVIu30a
+P00271-Quick Interval Gene Anno	Sequence Analyses	Qianghua Zhou	zhouqh20010504@163.com	Annotate Genes in a Candidate Interval	https://share.feijipan.com/s/JqVIueMv
+P00290-Batch Protein Anno in InterPro	Sequence Analyses	Qianghua Zhou	zhouqh20010504@163.com	A batch wrapper for annotating protein in interproscan via web	https://share.feijipan.com/s/uCVIuyXT
+P00313-Rapid Gene Family Members Initial Identification	Sequence Analyses	Qianghua Zhou	zhouqh20010504@163.com	An One Step Rapid Gene Family Members Identification Pipeline	https://share.feijipan.com/s/mHVIupVH
+P00320-My BLAT GUI Wrapper	Sequence Analyses	CJ	ccj0410@gmail.com	A BLAT GUI Wrapper to facilitate sequence comparison	http://43.155.73.187/plugins/My%20BLAT%20GUI%20Wrapper.plugin
+P00321-Diamond GUI Wrapper	Sequence Analyses	Peike Chen	911303513@qq.com	A Diamond GUI Wrapper to faciltate sequence alignmnet, which is much faster than BLAST	https://share.feijipan.com/s/cSVIut2v
+P00330-Miniprot GUI Wrapper	Sequence Analyses	CJ	ccj0410@gmail.com	A Miniprot GUI Wrapper for mapping protein sequence to a genome	http://43.155.73.187/plugins/Miniprot%20GUI%20Wrapper.plugin
+P00331-mafft GUI Wrapper	Sequence Analyses	Qiuping Wu	NULL	A GUI Wrapper for mafft, the best multiple sequence aligner	https://share.feijipan.com/s/DeVILAlK
+P00339-FastTree GUI Wrapper	Sequence Analyses	Siyu Ding	NULL	A GUI Wrapper for FastTree, the fastest Maximum Likelihood Tree Constructor	http://43.155.73.187/plugins/FastTree%20GUI%20Wrapper.plugin
+P00341-Root a PhyloTree	Data Analyses	CJ	ccj0410@gmail.com	Pack MAD software as a plugin for easy rooting a phylotree	https://share.feijipan.com/s/jrVILOWD
+P00340-Figtree Pack Plugin	Sequence Analyses	CJ	ccj0410@gmail.com	Pack Figtree software as a plugin for easy usage	http://43.155.73.187/plugins/Figtree%20Pack%20Plugin.plugin
+P00370-OneStepMCScanX-SuperFast	Sequence Analyses	CJ	ccj0410@gmail.com	Invoke Diamond BlastP to Get Sequence Similarity Matrix and Subjected them to MCScanX	http://43.155.73.187/plugins/OneStepMCScanX-SuperFast.plugin
+P00380-Quick Genome Dot Plot	Sequence Analyses	CJ	ccj0410@gmail.com	Invoke Diamond BlastP to Get Sequence Similarity Matrix and Subjected them to MCScanX	http://43.155.73.187/plugins/Quick%20Genome%20Dot%20Plot.plugin
+P00381-RepeatMaskandStatistics	Sequence Analyses	Luodong Huang	NULL	Mask Genome Sequence based on a repeat position information file and count total repeat length	https://share.feijipan.com/s/QkVILQ0V
+P00382-Mummer	Sequence Analyses	Fengqi Wu	360875601@qq.com	A simple plugin to invoke mummer to compare two genome assemblies	https://share.feijipan.com/s/rjVILdCF
+P00383-GenomeSyn_tool	Sequence Analyses	Zuwen Zhou	NULL	A simple plugin to invoke GenomeSyn to visualize genome comparison result	https://share.feijipan.com/s/RqVILg8T
+P00384-GeneCorrectionStatistics	Sequence Analyses	Nongxinshengxin	nongxinshengxin@163.com	A plugin for quick statistics of manually corrected gene structure annotations	https://share.feijipan.com/s/HjVILpFg
+P00390-Fastq to Fasta	Sequence Analyses	CJ	ccj0410@gmail.com	Convert Fastq Sequence to Fasta Sequence	http://43.155.73.187/plugins/Fastq%20to%20Fasta.plugin
+P00391-Fasta Sort By Length	Sequence Analyses	chatGPT	ccj0410@gmail.com	Sort Fasta Sequence by Length	http://43.155.73.187/plugins/FastaSortSequenceByLength.plugin
+P00400-CGSuite	Sequence Analyses	CJ	ccj0410@gmail.com	A One Step Multiple Species Comparative Analysis Suite	http://43.155.73.187/plugins/CGsuite.plugin
+P00401-WGDI_Prepare	Data Analyses	Yingxiao Mai	NULL	A GUI Wrpper for WGDI Input file prepare. WGDI is an amazing tools for comparative genomic analyses. It is published on Molecular Plant in 2022.	https://share.feijipan.com/s/3eVIRT9y
+P00402-WGDI_Genome_Compare	Data Analyses	Yingxiao Mai	NULL	A GUI Wrpper for WGDI Genome Comparative Analyses. WGDI is an amazing tools for comparative gennomic analyses. It is published on Molecular Plant in 2022.	https://share.feijipan.com/s/5xVIR5UA
+P00480-Quick Protein Anno	Sequence Analyses	CJ	ccj0410@gmail.com	Annotate Protein Set in short time	http://43.155.73.187/plugins/Quick%20Protein%20Anno.plugin
+P00481-Batch Protein Paramters Calc	Sequence Analyses	chatGPT	ai.TBtools.icu	Batch Calculate Protein Paramters	https://share.feijipan.com/s/x8VIRh5B
+P00511-Centro Locate	Sequence Analyses	Fengqi Wu	360875601@qq.com	a simple scripts for plant centromere region identification	https://share.feijipan.com/s/jiVIRRjP
+P00512-T2Tvalidator	Sequence Analyses	Fengqi Wu	360875601@qq.com	an enhanced scripts for plant centromere and telomere region identification	https://share.feijipan.com/s/VLVISBqD
+P00530-Batch qPCR Primer Design	Sequence Analyses	CJ	ccj0410@gmail.com	Batch qPCR Primer Design	http://43.155.73.187/plugins/Batch%20qPCR%20Primer%20Design.plugin
+P00540-Batch Target Region Primer Design	Sequence Analyses	CJ	ccj0410@gmail.com	Batch Target Region Primer Design	http://43.155.73.187/plugins/Batch%20Target%20Region%20Primer%20Design.plugin
+P00550-Primer Check	Sequence Analyses	CJ	ccj0410@gmail.com	Primer Check	http://43.155.73.187/plugins/Primer%20Check.plugin
+P00551-Plant TF Binding Motif Shift	Sequence Analyses	CJ	ccj0410@gmail.com	A Simple GUI to Shift Arabidopsis Transcription Factor Binding Motifs to Species of Interest	http://43.155.73.187/plugins/Plant%20TF%20Binding%20Motif%20Shift.plugin
+P00552-Fimo Binding Site Scan	Sequence Analyses	CJ	ccj0410@gmail.com	A GUI Wrapper for the Fimo Program for Motif Scan	http://43.155.73.187/plugins/Fimo%20Binding%20Motif%20Scan.plugin
+P00560-Genome VarScan	Sequence Analyses	CJ	ccj0410@gmail.com	Genome VarScan	http://43.155.73.187/plugins/Genome%20VarScan.plugin
+P00570-BWA-MEM2 GUI Wrapper	Sequence Analyses	CJ	ccj0410@gmail.com	BMA-MEM2 GUI Wrapper	http://43.155.73.187/plugins/BWA-MEM2%20GUI%20Wrapper.plugin
+P00580-SAMtools GUI Wrapper	Sequence Analyses	CJ	ccj0410@gmail.com	SAMtools GUI Wrapper	http://43.155.73.187/plugins/SAMtools%20GUI%20Wrapper.plugin
+P00590-BCFtools GUI Wrapper	Sequence Analyses	CJ	ccj0410@gmail.com	BCFtools GUI Wrapper	http://43.155.73.187/plugins/BCFtools%20GUI%20Wrapper.plugin
+P00600-Freebayes GUI Wrapper	Sequence Analyses	CJ	ccj0410@gmail.com	Freebayes GUI Wrapper for better Indel calling	http://43.155.73.187/plugins/Freebayes%20GUI%20Wrapper.plugin
+P00631-Target Genome Region Mapping	Sequence Analyses	CJ	ccj0410@gmail.com	A simple function for optimal genome region RNAseq read mapping	http://43.155.73.187/plugins/Target%20Genome%20Region%20Mapping.plugin
+P00632-Target Genome Region Miniprot	Sequence Analyses	CJ	ccj0410@gmail.com	A simple function for optimal genome region miniprot mapping	http://43.155.73.187/plugins/Target%20Genome%20Region%20Miniprot.plugin
+P00640-HiMT_Toolkit	Sequence Analyses	Shuyuan Tang	ccj0410@gmail.com	HiMT: An Integrative Toolkit for Assembling Plant Mitochondrial Genomes Using HiFi Reads	https://share.feijipan.com/s/5UVISZPz
+P00220-Batch Sub	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Batch String Substitution Plugin	https://tbtools.cowtransfer.com/s/0799318fa54b4f
+P00230-BEDtools Intersect GUI Simple Wrapper Only Win	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Batch Get Intersect Intevals	https://share.feijipan.com/s/MvVIJrPf
+P00240-Obtain Correlation and P-value Matrix Base On Expression Matrix Win	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Batch Calculate Correlation basing on a Value Matrix	https://share.feijipan.com/s/uGVIKGNE
+P00250-Prepare Input Files for Cytoscape Based on Correlation and P-value Matrix	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Prepare Input Files for Cytoscape Based on Correlation and P-value Matrix	https://share.feijipan.com/s/bsVIK8qs
+P00260-Obain Taxon ID as Order Shown in Newick Tree	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Extract Taxon IDs from a Newick Tree String with Theri Orders	https://share.feijipan.com/s/6lVIKr04
+P00270-Obtain genes in candidate interval	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Obtain Genes in a Candidate Interval	https://tbtools.cowtransfer.com/s/e7a033934e2b47
+P00280-Conserved Domain Sequences Extraction for Phylogenetic Tree	Text or Table Manipulation	Qianghua Zhou	zhouqh20010504@163.com	Extract Conserved Domain Sequences from Sequence Set	https://share.feijipan.com/s/9PVJTXbx
+P00450-Excel to Tab	Text or Table Manipulation	CJ	ccj0410@gmail.com	Convert Excel.xlsx Files to Tab-delimited Files	http://43.155.73.187/plugins/Excel%20to%20Tab.plugin
+P00451-File Join ShinyApp	Text or Table Manipulation	Shawn Wang	NULL	Join Table File as You Need	https://share.feijipan.com/s/cyVJTukE
+P00512-Get Intron GXF	Text or Table Manipulation	Chengyu Gao	nongxinshengxin@163.com	A plugin that generates a GFF/GTF file with intron features based on the GFF/GTF file.	https://share.feijipan.com/s/rkVJUsSb
+P00040-Web Awesome	Misc	CJ	ccj0410@gmail.com	Collecting a series of amazing website	http://43.155.73.187/plugins/Web%20Awesome.plugin
+P00070-Pubmed Summary	Misc	CJ	ccj0410@gmail.com	A Batch Function to Summary Pubmed Search Result	http://43.155.73.187/plugins/Pubmed%20Summary.plugin
+P00312-Aspera for HTS Data TurboDL	Misc	Qianghua Zhou	zhouqh20010504@163.com	A GUI Wrapper for Aspera to facilitate HTS Data Download	https://share.feijipan.com/s/ogVJAGif
+P00360-Aspera Wrapper	Misc	CJ	ccj0410@gmail.com	An Aspera Wrapper facilitating NGS data downloan	https://share.feijipan.com/s/xsVJA9z5
+P00410-The BEST Gift	Misc	CJ	ccj0410@gmail.com	A Game for Single Dogs	http://43.155.73.187/plugins/The%20BEST%20Gift.plugin
+P00420-Random Item Select Advanced	Misc	CJ	ccj0410@gmail.com	An advanced version of Random Item Select	http://43.155.73.187/plugins/Random%20Item%20Select%20Advanced.plugin
+P00430-Random Random Item Rolling Select	Misc	CJ	ccj0410@gmail.com	An advanced version of Random Item Rolling	http://43.155.73.187/plugins/Random%20Rolling%20Item%20Choice.plugin
+P00440-Youtube Download	Misc	CJ	ccj0410@gmail.com	Download Video from Youtube or Bilibili	https://share.feijipan.com/s/6FVJAi95
+P00460-Simple Dict	Misc	CJ	ccj0410@gmail.com	Simple Dictionary based on Youdao	http://43.155.73.187/plugins/Simple%20Dict.plugin
+P00470-Simple Random Music	Misc	CJ	ccj0410@gmail.com	Simple Random Music Player based on music.163.com	http://43.155.73.187/plugins/Simple%20Random%20Music.plugin
+P00490-Simple Screen Draw	Misc	CJ	ccj0410@gmail.com	Quick Draw on Screen	http://43.155.73.187/plugins/Simple%20Screen%20Draw.plugin
+P00491-PPTX to Image PDF	Misc	CJ	ccj0410@gmail.com	Quick convert PPTX to Images, Press Text and merge in PDF	https://share.feijipan.com/s/7AVJBB4a
+P00500-Quick Make a QRcode	Misc	chatGPT	NULL	a tiny app for QRcode generation from a string	https://share.feijipan.com/s/JoVJB18c
+P00510-Mine Sweep Game	Misc	chatGPT	NULL	a tiny game developed by CJ with chatGPT	http://43.155.73.187/plugins/MineSweeperGame.plugin
+P00520-Batch Paper Fetch	Misc	CJ	ccj0410@gmail.com	Batch Download Paper	https://share.feijipan.com/s/xZVJBY4K
+P00521-Paper PDF Word Frequency	Misc	CJ	ccj0410@gmail.com	Batch Word Counting for PDF Files	http://43.155.73.187/plugins/Paper%20PDF%20Word%20Frequency.plugin
+P00650-MagicBLAST GUI Wrapper	Pro	WatchBio	[License Required]	A GUI Wrapper for Magic BLAST	http://43.155.73.187/plugins/MagicBLAST%20GUI%20Wrapper.plugin
+P00651-Gene Gain and Lost Analysis	Pro	WatchBio	[License Required]	A GUI Wrapper for Notung	http://43.155.73.187/plugins/Gene%20Gain%20and%20Lost%20Analysis.plugin
+P00660-Genome Region Compare Advanced Suite	Pro	WatchBio	[License Required:280]	An Amazing Plugin for Genome Region Comparison	http://43.155.73.187/plugins/Genome%20Region%20Compare%20Advanced%20Suite.plugin
+P00670-BioPanGu	Pro	WatchBio	[License Required:250]	Managing Your NGS Project and Analyze Them in a Single Window	http://43.155.73.187/plugins/BioPanGu.plugin
+P00680-Advanced HMMer Search	Pro	WatchBio	[License Required:120]	Advanced Version for hmmsearch	http://43.155.73.187/plugins/Advanced%20HMMer%20Search.plugin
+P00690-Newick Rename	Pro	WatchBio	[License Required:80]	A handy plugin to rename taxon names of newick tree	http://43.155.73.187/plugins/Newick%20Rename.plugin
+P00700-Batch MEME Motif Viz	Pro	WatchBio	[License Required:120]	Batch SeqLogo Visualization of All MEME Motifs	http://43.155.73.187/plugins/Batch%20MEME%20Motif%20Viz.plugin
+P00710-SRA to Fastq	Pro	WatchBio	[License Required:120]	A wrapper to invoke sratools	http://43.155.73.187/plugins/SRA%20to%20Fastq.plugin
+P00720-FastQC	Pro	WatchBio	[License Required:120]	A wrapper to invoke FastQC	http://43.155.73.187/plugins/FastQC.plugin
+P00730-Trimmomatic	Pro	WatchBio	[License Required:120]	A wrapper to invoke Trimmomatics	http://43.155.73.187/plugins/Trimmomatic.plugin
+P00740-Kallisto Super Wrapper	Pro	WatchBio	[License Required:150]	A wrapper to invoke Kallisto	http://43.155.73.187/plugins/Kallisto%20Super%20Wrapper.plugin
+P00781-One Step RNAseq 2 Expression	Pro	WatchBio	[License Required:360]	A wrapper to for RNAseq Expression Analysis	http://43.155.73.187/plugins/One%20Step%20RNAseq%202%20Expression.plugin
+# P00750-Hisat2 Build	Plus	WatchBio	NULL	A wrapper to invoke hisat2-build	http://43.155.73.187/plugins/Hisat2%20Build.plugin
+# # P00760-Hisat2 Align	Plus	WatchBio	NULL	A wrapper to invoke hisat2-align	http://43.155.73.187/plugins/Hisat2%20Align.plugin
+# # P00770-Stringtie Assembly	Plus	WatchBio	NULL	A wrapper to invoke stringtie for transcript assembly	http://43.155.73.187/plugins/Stringtie%20Assembly.plugin
+# # P00780-Stringtie Quantify	Plus	WatchBio	NULL	A wrapper to invoke stringtie for transcript quantify	http://43.155.73.187/plugins/Stringtie%20Quantify.plugin
+# 
