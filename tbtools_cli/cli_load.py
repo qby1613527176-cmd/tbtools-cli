@@ -7,13 +7,16 @@ _make_passthrough（metadata 驱动）+ ToolGroup 兜底注册。
 import difflib
 import os
 import re
+import shutil
+import subprocess
 import sys
 
 import click
 
 from tbtools_cli import auto_commands as _ac
-from tbtools_cli.cli_tools_registry import CLI_TOOLS
-from tbtools_cli.core import ROOT, cp, ensure_bridge, get_pitfall_hint, run_java
+from tbtools_cli.core import ROOT, check_input_format, get_pitfall_hint, validate_file
+from tbtools_cli.presets import PRESETS, apply_preset
+
 
 # ---- 动态加载剩余命令 ----
 # ---- 命令分类映射 ----
@@ -166,8 +169,6 @@ def _load_auto_commands():
 
 def _load_dynamic_commands():
     """从 tbplot.sh 动态生成 click 命令，按分类注册到 group"""
-    import difflib
-    import re
     tbplot_sh = os.path.join(ROOT, "bin", "tbplot.sh")
     if not os.path.isfile(tbplot_sh):
         return
@@ -250,7 +251,7 @@ def _make_passthrough(name, group=None):
     if pitfall:
         help_text += f"\n\n⚠️ {pitfall}"
     
-    _target = group or cli
+    _target = group  # 调用方总传 group
     
     def _cmd_impl(ctx, verbose, quiet, fmt, preset, height, width, threads):
         args = list(ctx.args)

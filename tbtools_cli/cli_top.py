@@ -10,32 +10,16 @@ import sys
 import click
 
 from tbtools_cli import auto_commands as _ac
-from tbtools_cli import scenarios
 from tbtools_cli.cli_tools_registry import CLI_TOOLS
 from tbtools_cli.core import (
     JAR,
     ROOT,
     c,
-    check_input_format,
-    cp,
     detect_format,
-    ensure_bridge,
     get_pitfall_hint,
-    pre_flight,
-    probe_dead_engines,
-    resolve_output,
-    run_java,
-    run_plot,
-    stdout_path,
     validate_file,
 )
-from tbtools_cli.presets import PRESETS, apply_preset, list_presets
-
-
-def register_top(cli, _LG):
-    """注册顶层命令。cli=主 CLI group；_LG=cli_load 模块（提供 _groups/GROUPS/CATEGORY_MAP）。"""
-
-import click
+from tbtools_cli.presets import PRESETS, list_presets
 
 
 def register_top(cli, _LG):

@@ -7,7 +7,8 @@ import os
 # 确保 tbtools_cli 可导入
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from tbtools_cli.cli import cli, _groups, GROUPS, CATEGORY_MAP
+from tbtools_cli.cli import cli
+from tbtools_cli.cli_load import _groups, GROUPS, CATEGORY_MAP  # 批次B: 已移至 cli_load
 from tbtools_cli.core import PITFALL_HINTS, validate_file, detect_format
 from tbtools_cli.presets import PRESETS, apply_preset
 import tbtools_cli.auto_commands as auto_commands

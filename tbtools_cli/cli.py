@@ -1,7 +1,5 @@
 """tbtools-cli 主入口 — Python click 重构版"""
 import os
-import shutil
-import subprocess
 import sys
 
 import click
@@ -13,10 +11,7 @@ from tbtools_cli.cli_tools_registry import CLI_TOOLS
 from tbtools_cli.core import (
     JAR,
     ROOT,
-    c,
-    check_input_format,
     cp,
-    detect_format,
     ensure_bridge,
     get_pitfall_hint,
     pre_flight,
@@ -24,19 +19,16 @@ from tbtools_cli.core import (
     run_java,
     run_plot,
     stdout_path,
-    validate_file,
 )
-from tbtools_cli.presets import PRESETS, apply_preset, list_presets
+from tbtools_cli.presets import apply_preset
 from tbtools_cli.cli_rpc import build_rpc_group
 import tbtools_cli.cli_load as cli_load
 from tbtools_cli.cli_top import register_top  # 批次 B: 顶层命令拆分
 from tbtools_cli.cli_load import (  # 批次 B: 动态注册拆分
     CATEGORY_MAP,
-    GROUPS,
     _groups,
     _load_auto_commands,
     _load_dynamic_commands,
-    _make_passthrough,
     build_and_load,
 )
 
