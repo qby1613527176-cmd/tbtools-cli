@@ -51,6 +51,17 @@
 - CHANGELOG 已更新；全量 81 passed 1 skipped
 - 回归脚本 Linux 化：交付包 run_p*.py 为 Windows 专用（路径/taskkill），Linux 侧由 pytest 81 项 + run_examples 兜底；如需在 Windows 回归环境复跑可直接用原脚本
 
+### 第二轮深度核对（用户二次质疑后 excavate 压缩包全文，20:20）
+> 对照对象从 00_缺陷速览 扩展到 V1 报告 §3 问题清单 + §0.2 遗留 + 全部“待深挖/记录项/留档”
+- ✅ kallisto Windows 二进制选择(V1 §3 P1-3)：按 os.name 优先 .exe
+- ✅ engine generic 首参校验误伤(V1 §3 P2-5)：跳过名单补 generic
+- ✅ 拼写纠错 n=3 截断(V1 §3 P3-8, venn2 案例)：前缀匹配优先
+- ✅ list tools 插件可见性(V1 §3 P3-9)：插件工具 12 个强制显示
+- ✅ layoutheatmap “官方数据失败”：已平反——examples 数据样本名不匹配（layout=SampleA..E vs expr=A..E）→ 匹配数据实测 55.8KB SVG/7 面板；PITFALL 已提示
+- ✅ multiEfp/mirnaIdentify/msy 待深挖项：分别=geneId 用错/缺第4参(N29)/分组用错（expr vs syn），均非缺陷（N27/N29/N26 已修）
+- 📝 记录项定性：quickFamily “Finally Obtain ID:[]”=引擎无同源命中时空集（官方数据 ✅，非崩溃）；BLAST 无命中 0 字节+ok:true=引擎行为（message 无法区分，文档化）
+- 本轮 commit：a16515d（+ N7 0174172、N6 extractFeatureFromGTF 59f8659、补漏 98fde25）
+
 ## 全部批次状态（N1-N41 修复完成度）
 | 批次 | 内容 | 状态 |
 |---|---|---|
