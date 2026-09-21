@@ -65,7 +65,7 @@
 ### 补充核查（用户质疑后逐条对照缺陷速览，20:02）
 - **N4 cubeheatmap**：引擎对 group 列数假设严格（官方 cube_group.tsv 仍崩，引擎缺陷确凿）→ docstring+PITFALL 文档化 group 格式（非修引擎）
 - **N5 groupedbar**：数据格式=每行 group\tvalue（非矩阵）→ docstring 文档化；矩阵输入引擎崩溃已注明
-- **N6 extractFeatureFromGTF**：main 硬编码路径；核心 setter 齐全 → **桥已写**（bridges/ExtractFeatureGTFCli.java，setGtfFile/preProcess/setInGenome/process 跑通引擎流程）；⚠️ 输出落盘语义未完全逆向（process 返回值空），**未注册为正式命令**，保留资产待后续确认
+- **N6 extractFeatureFromGTF**：main 硬编码 Windows 路径（误判），实际 toolsKit.ArgsParser 可覆盖 → **新 impl 走 ArgsParser 路线**（--inGtf/--inGenome/--outFile/--targetFeature/--targetIdTag/--retainAttr），位置参数兼容；实测双链 CDS 输出 732B FASTA；桥文件已删（118 桥）
 - **N6 parallelMD5Check**：位置参数式 `<md5_list> [threads]`，注册表直通参数形态易错（ec=3）→ 新增 _parallelMD5Check_impl 参数校验+文档化，实测 OK:1 FAILED:0
 - **N21**：TodoList.updateTask/moveTask/deleteTask 参数名为 `id`（引擎 RPC 约定，非 REST 惯例）→ 保持原名，此处文档化；
 - **N22/N36**：Gxf 族对 BED 输入报误导性『can not decide GFF3 or GTF』+ GxfStat NPE → _warn_gtf_input 扩展：.bed 输入明确警告不支持格式

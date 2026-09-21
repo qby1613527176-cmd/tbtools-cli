@@ -1015,3 +1015,39 @@ def _parallelMD5Check_impl(args, verbose=False, quiet=False):
             return 2
     jargs = ["java", "-Xmx2g", "-cp", JAR, "biocjava.bioDoer.FileUtils.ParallelMD5Check", lst, threads]
     return run_java(jargs, verbose=verbose, quiet=quiet, command_name="parallelMD5Check")
+
+
+def _extractFeatureFromGTF_impl(args, verbose=False, quiet=False):
+    """extractFeatureFromGTF: extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa> --outFile <out> [--targetFeature CDS|exon|...] [--targetIdTag transcript_id] [--retainAttr true|false]
+       # GTF 特征提取（N6 修复：引擎 main 硬编码 Windows 默认路径，但 toolsKit.ArgsParser 可覆盖 → 走 ArgsParser 路线；
+       #   旧注册表直通裸 main 必 FileNotFoundException；位置参数 <in.gtf> <genome.fa> <out> 兼容转换）
+       # ⚠️ 输入 GTF 坐标须与 genome 匹配（越界会 NPE）；输出 FASTA 头含 +/− 链/Location 注释"""
+    pos, kw = [], {}
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a.startswith("--") and i + 1 < len(args):
+            kw[a[2:]] = args[i + 1]
+            i += 2
+        else:
+            pos.append(a)
+            i += 1
+    in_gtf = kw.get("inGtf") or (pos[0] if pos else None)
+    genome = kw.get("inGenome") or (pos[1] if len(pos) > 1 else None)
+    out = kw.get("outFile") or (pos[2] if len(pos) > 2 else None)
+    if not in_gtf or not genome or not out:
+        print("用法: extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa> --outFile <out> [--targetFeature CDS] [--targetIdTag transcript_id] [--retainAttr true]", file=sys.stderr)
+        return 1
+    for f in (in_gtf, genome):
+        if not os.path.isfile(f):
+            print(f"❌ 输入文件不存在: {f}", file=sys.stderr)
+            return 2
+    jargs = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "biocjava.bioIO.GTF.ExtractFeaturefromGTFandGenome",
+             "--inGtf", in_gtf, "--inGenome", genome, "--outFile", out,
+             "--targetFeature", kw.get("targetFeature", "exon"),
+             "--targetIdTag", kw.get("targetIdTag", "transcript_id"),
+             "--retainAttr", kw.get("retainAttr", "false")]
+    for opt in ("onlyCheck", "maxFeatureCounts", "minFeatureCounts"):
+        if opt in kw:
+            jargs += [f"--{opt}", kw[opt]]
+    return run_java(jargs, verbose=verbose, quiet=quiet, command_name="extractFeatureFromGTF")
