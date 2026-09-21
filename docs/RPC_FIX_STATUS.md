@@ -68,5 +68,7 @@
 - **N6 extractFeatureFromGTF**：main 硬编码 Windows 路径（误判），实际 toolsKit.ArgsParser 可覆盖 → **新 impl 走 ArgsParser 路线**（--inGtf/--inGenome/--outFile/--targetFeature/--targetIdTag/--retainAttr），位置参数兼容；实测双链 CDS 输出 732B FASTA；桥文件已删（118 桥）
 - **N6 parallelMD5Check**：位置参数式 `<md5_list> [threads]`，注册表直通参数形态易错（ec=3）→ 新增 _parallelMD5Check_impl 参数校验+文档化，实测 OK:1 FAILED:0
 - **N21**：TodoList.updateTask/moveTask/deleteTask 参数名为 `id`（引擎 RPC 约定，非 REST 惯例）→ 保持原名，此处文档化；
+- **N7**：方法清单核对——运行时 188 = 文档 183 业务方法 + 缺 system.* 5 个；已补 system.capabilities/describeMethod/listMethods/ping/toolsJson 文档（188=188 全对齐）。测试方“无 Table* 方法”系臆测错名（TableTools.tableTranspose 实为 TableTools.transpose，17 个 TableTools.* 均在运行时）
+- **回归脚本 Linux 化**：scripts/rpc_regression_linux.sh 一键转换 34 份 run_p*.py → tests/rpc_regression_linux/（T 目录/仓库目录环境变量化 + sys.executable + killpg 杀树；Windows 默认保留双平台可用）
 - **N22/N36**：Gxf 族对 BED 输入报误导性『can not decide GFF3 or GTF』+ GxfStat NPE → _warn_gtf_input 扩展：.bed 输入明确警告不支持格式
 - 引擎级不修（已文档化）：N28 Gxf 族 GENCODE GTF NPE、N39 GxfGeneDensityProfiler、N40 引擎超时、N38 家族 3 方法、N17 校验深度、N31 二进制垃圾 NPE、N36 GxfStat NPE、N4/N5 引擎崩溃

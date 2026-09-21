@@ -1481,3 +1481,28 @@
 | TableTools.sortByColumns | ⚠️ RPC bug | 数组参数被 JSON 强转 float([1]→[1.0]) 报错——RPC 层类型转换 bug |
 | TableTools.mergeByKey* | ⚠️ 待测 | 标量 int 可能可用 |
 | FastaRepeatStater / Sequence2Feature / GCContentStater / RemoveRedundantSeq / Enrichment | ❌ 未暴露 | RPC 无此方法（非 RPC 覆盖）|
+
+### system.listMethods
+  summary: 列出全部 RPC 方法（N7 核对：运行时 188 个，含 TableTools.* 17 个——测试方臆测的 TableTools.tableTranspose 应为 TableTools.transpose，tableUniq 应为 TableTools.uniq）
+  - (no params)
+  -> returns: methods (array of string)
+
+### system.capabilities
+  summary: 服务器能力声明（RPC 协议版本/支持特性）
+  - (no params)
+  -> returns: capabilities (object)
+
+### system.describeMethod
+  summary: 查询单个方法的参数 schema（含必填/可选/默认值），排障权威来源
+    - method: string (required) - 完整方法名，如 "FastaStat.process"
+  -> returns: description (object - summary/params/resultFields)
+
+### system.ping
+  summary: 健康探针（无参；返回 pong），CLI 自愈 _rpc_ping 用它
+  - (no params)
+  -> returns: pong (string)
+
+### system.toolsJson
+  summary: 导出 CLI 工具注册表 JSON（与 tbtools_cli/cli_tools_registry.py 对齐）
+  - (no params)
+  -> returns: tools (object)
