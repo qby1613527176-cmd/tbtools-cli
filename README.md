@@ -1,5 +1,10 @@
 # TBtools CLI — TBtools-II 全功能命令行封装
 
+[![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![engines](https://img.shields.io/badge/engines-218-orange.svg)]()
+
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
 > **218 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 118 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
 > 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），118 个 Java 桥，218 命令。10 批回归 162/162 PASS。
@@ -93,6 +98,12 @@ java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参�
 
 ## 📦 Installation
 
+### 0. pip 安装（推荐，Python 包入口）
+```bash
+pip install .            # 或 pipx install . / pip install git+https://github.com/qby1613527176-cmd/tbtools-cli
+# 安装后 `tbtools` 直接可用（console_script）；JAR 仍需就位（见下）
+```
+
 ### Requirements
 - **Linux / WSL2 / macOS**（绘图需要 `xvfb-run`，可用 `sudo apt install xvfb`）
 - **Windows**：支持工具类/RPC/表格类命令（Git Bash + TBtools-II/bin 加入 PATH）；绘图类命令受 xvfb 限制（部分可用）
@@ -158,7 +169,7 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 > 全部由本仓库 `examples/fulltest` 合成数据实测生成（`docs/images/`，SVG 可放大无损）。
 > 复现: `bash examples/scripts/run_examples.sh`。
 
-## 🎨 Plotting Engines (140)
+## 🎨 Plotting Engines (218)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
@@ -628,17 +639,27 @@ tbtools engine biocjava.bioIO.FastX.FastaIndex.QuickStatFasta inFile=seqs.fa --c
 ```
 tbtools-cli/
 ├── bin/
-│   ├── tbtools            # unified entry (33 plots + RPC + tools + engine)
-│   ├── tbplot.sh          # plotting engines
+│   ├── tbtools            # unified entry (bash 兼容层，转发 python -m tbtools_cli.cli)
+│   ├── tbplot.sh          # plotting engines（兼容层，逐步退役为转发）
 │   ├── tbtools_rpc.sh     # RPC server & calls
-│   ├── tbcli.py           # tool list & CLI tools
-│   └── tbengine.sh        # reflection launcher
+│   └── tbcli.py           # 旧工具入口（已由 cli_tools_registry 替代，保留兼容）
+├── tbtools_cli/           # ✅ Python 包（真正的入口）
+│   ├── cli.py             # click 主 CLI（全命令注册 + rpc 自愈 + 纠错）
+│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂（201 命令）
+│   ├── cli_tools_registry.py  # 82 个 CLI 工具共享注册表
+│   ├── command_metadata.json  # 143 命令完整元数据（help 权威来源）
+│   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
+│   ├── presets.py / scenarios.py / config.py
+├── pyproject.toml         # ✅ pip 安装（tbtools console_script）
 ├── bridges/               # 118 Java bridge sources
 ├── build/                 # compiled bridges (auto-generated)
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
+├── completions/           # bash completion + man page
 ├── examples/              # example data + scripts
+├── scripts/               # rpc_regression_linux.sh 等工具脚本
+├── tests/                 # pytest（83 passed：框架/命令/防漂移/输入保护）
 ├── docs/                  # detailed documentation
-│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（218 命令+82 工具+118 桥+坑位）
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（218 命令+82 工具+118 桥+46 坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md

@@ -659,10 +659,14 @@ def ensure_bridge(bridge_name):
     if not os.path.isfile(cls_file) or (
         os.path.isfile(dst) and os.path.getmtime(dst) > os.path.getmtime(cls_file)
     ):
-        subprocess.run(
+        _r = subprocess.run(
             ["javac", "-cp", JAR, dst],
             capture_output=True, cwd=BUILD_DIR
         )
+        # 外部审查反馈: javac 编译错误不再静默吞掉（此前 capture_output 丢 stderr）
+        if _r.returncode != 0:
+            _err = _r.stderr.decode("utf-8", "replace") if _r.stderr else ""
+            print(f"⚠️ 桥编译失败 {bridge_name}:\n{_err[-800:]}", file=sys.stderr)
 
     # N27: fake jaxb DatatypeConverter（JDK9+ 无 javax.xml.bind）随仓库分发源码，
     # 有需要即编译到 build/javax/xml/bind/（全新 checkout 也能重建，修复 NoClassDefFoundError）

@@ -3,7 +3,7 @@
 # tbtools — TBtools-II 全功能 CLI 统一入口
 # ============================================================
 # Python click 框架驱动，旧 bash 入口保留为 bin/tbplot.sh
-# 140 绘图命令 + 82 CLI 工具 + 188 RPC 方法 + 任意引擎反射
+# 218 绘图命令 + 82 CLI 工具 + 188 RPC 方法 + 任意引擎反射
 # ============================================================
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$ROOT/config/config.sh" 2>/dev/null
