@@ -1079,8 +1079,8 @@ def _gxfSplit_impl(args, verbose=False, quiet=False):
         return 2
     from tbtools_cli.core import run_java  # noqa
     # 走 RPC（服务器按需拉起，见 rpc call --no-autostart 之外的自动拉起）
-    import tbtools_cli.cli as _cli
-    ok = _cli._ensure_rpc(8765) if hasattr(_cli, "_ensure_rpc") else True
+    from tbtools_cli.cli_rpc import _ensure_rpc  # 批次B: rpc 段已拆出
+    ok = _ensure_rpc(8765)
     if not ok:
         print("❌ RPC 服务器不可用，无法调用 GxfSplit", file=sys.stderr)
         return 1
@@ -1109,8 +1109,8 @@ def _gxfIdAppender_impl(args, verbose=False, quiet=False):
     if not os.path.isfile(inp):
         print(f"❌ 输入文件不存在: {inp}", file=sys.stderr)
         return 2
-    import tbtools_cli.cli as _cli
-    ok = _cli._ensure_rpc(8765) if hasattr(_cli, "_ensure_rpc") else True
+    from tbtools_cli.cli_rpc import _ensure_rpc  # 批次B: rpc 段已拆出
+    ok = _ensure_rpc(8765)
     if not ok:
         print("❌ RPC 服务器不可用，无法调用 GxfIdAppender", file=sys.stderr)
         return 1

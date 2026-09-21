@@ -27,7 +27,6 @@ from tbtools_cli.core import (
     validate_file,
 )
 from tbtools_cli.presets import PRESETS, apply_preset, list_presets
-from tbtools_cli.cli_rpc import build_rpc_group
 
 
 # ---- 通用选项 ----
@@ -777,6 +776,7 @@ def help(name):
     click.echo("   查看: tbtools list")
     sys.exit(1)
 
+from tbtools_cli.cli_rpc import build_rpc_group
 @cli.command()
 @click.argument("command", required=False)
 def examples(command):
@@ -1364,9 +1364,5 @@ _load_auto_commands()
 # 旧名别名（README/老用户兼容，顶层/分组均可用）——须在 cli() 前注册
 seq_group.add_command(seqlogo, name="seqlogo")
 expr_group.add_command(heatmap, name="heatmap2")
-# ---- RPC 分组注册（批次 B: 从 cli_rpc 模块组装）----
-cli.add_command(build_rpc_group())
-
-
 if __name__ == "__main__":
     cli()
