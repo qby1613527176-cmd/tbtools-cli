@@ -60,4 +60,13 @@
 | 3 | 其余 P1 N1/N2/N28/N30/N38 | ✅ 7826fe5 |
 | 4 | P2 快赢 N3/N10-N16/N20/N29/N32/N33 | ✅ ede7eb8 |
 | 5 | P3 收尾/文档/测试 | ✅ 本文件+CHANGELOG |
-- 引擎级不修（已文档化）：N28 Gxf 族 GENCODE GTF NPE、N39 GxfGeneDensityProfiler、N40 引擎超时、N38 家族 3 方法、N17 校验深度、N22/N36 格式识别（CLI 已友好化）
+| 4b | 补充核查 N4/N5/N6/N21/N22/N36 | ✅ 本批 |
+
+### 补充核查（用户质疑后逐条对照缺陷速览，20:02）
+- **N4 cubeheatmap**：引擎对 group 列数假设严格（官方 cube_group.tsv 仍崩，引擎缺陷确凿）→ docstring+PITFALL 文档化 group 格式（非修引擎）
+- **N5 groupedbar**：数据格式=每行 group\tvalue（非矩阵）→ docstring 文档化；矩阵输入引擎崩溃已注明
+- **N6 extractFeatureFromGTF**：main 硬编码路径；核心 setter 齐全 → **桥已写**（bridges/ExtractFeatureGTFCli.java，setGtfFile/preProcess/setInGenome/process 跑通引擎流程）；⚠️ 输出落盘语义未完全逆向（process 返回值空），**未注册为正式命令**，保留资产待后续确认
+- **N6 parallelMD5Check**：位置参数式 `<md5_list> [threads]`，注册表直通参数形态易错（ec=3）→ 新增 _parallelMD5Check_impl 参数校验+文档化，实测 OK:1 FAILED:0
+- **N21**：TodoList.updateTask/moveTask/deleteTask 参数名为 `id`（引擎 RPC 约定，非 REST 惯例）→ 保持原名，此处文档化；
+- **N22/N36**：Gxf 族对 BED 输入报误导性『can not decide GFF3 or GTF』+ GxfStat NPE → _warn_gtf_input 扩展：.bed 输入明确警告不支持格式
+- 引擎级不修（已文档化）：N28 Gxf 族 GENCODE GTF NPE、N39 GxfGeneDensityProfiler、N40 引擎超时、N38 家族 3 方法、N17 校验深度、N31 二进制垃圾 NPE、N36 GxfStat NPE、N4/N5 引擎崩溃

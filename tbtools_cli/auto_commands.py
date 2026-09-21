@@ -42,7 +42,7 @@ ENGINE_REGISTRY = [
     ('colorscheme', 'bridge', 'ColorSchemeCli', '3g', 'plot', 'colorscheme: colorscheme <inTab> <outTab> <refColIndex>'),
     ('conflictpaf', 'direct', 'biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF', '3g', 'plot', 'conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]'),
     ('ctgGroup', 'bridge', 'CtgGroupCli', '3g', 'plot', 'ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>'),
-    ('cubeheatmap', 'bridge', 'CubeHeatmapCli', '3g', 'plot', 'cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor'),
+    ('cubeheatmap', 'bridge', 'CubeHeatmapCli', '3g', 'plot', 'cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor <c> --midColor <c> --maxColor <c>]   # 3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）'),
     ('degramdom', 'bridge', 'DegramdomCli', '3g', 'plot', 'degramdom: degramdom <in.tsv> [out.nwk]'),
     ('distance', 'bridge', 'DistanceCli', '3g', 'plot', 'distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi'),
     ('dotplot', 'direct', 'biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot', '3g', 'plot', 'dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout'),
@@ -72,7 +72,7 @@ ENGINE_REGISTRY = [
     ('goParse', 'direct', 'biocjava.bioDoer.GeneOntology.littleTools.GOtermParser', '3g', 'plot', 'goParse: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103'),
     ('golevel', 'bridge', 'GoLevelCli', '3g', 'plot', 'golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）'),
     ('groupCol', 'direct', 'biocjava.bioDoer.Table.TableColCollaspe', '3g', 'plot', 'groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|'),
-    ('groupedbar', 'bridge', 'GroupedBarCli', '3g', 'plot', 'groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHe'),
+    ('groupedbar', 'bridge', 'GroupedBarCli', '3g', 'plot', 'groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load 崩溃——引擎缺陷）'),
     ('gsadiag', 'bridge', 'GsaDiagCli', '3g', 'plot', 'gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax'),
     ('gxfAppend', 'direct', 'biocjava.bioDoer.GXFUtils.GxfIDAppender', '3g', 'plot', 'gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀'),
     ('gxfFix', 'direct', 'biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix', '3g', 'plot', 'gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang'),
@@ -200,11 +200,16 @@ ENGINE_REGISTRY = [
 
 
 def _warn_gtf_input(args, cmd):
-    """N28: Gxf 族命令输入为 .gtf 时警告（引擎对 GENCODE 真 GTF 解析 NPE，合成 GTF 假阴性）。"""
+    """N28/N22/N36: Gxf 族命令输入格式预检——GTF 引擎 NPE、BED 误报 GFF3/GTF 识别。"""
     for a in args:
         if not a.startswith("-") and a.lower().endswith((".gtf", ".gtf.gz")):
             print(f"⚠️ 格式提醒: {cmd} 对 GTF 输入支持有限（GENCODE 真 GTF 会触发引擎 NPE，N28）", file=sys.stderr)
             print("   （建议先转 GFF3 再输入；如确认可忽略）", file=sys.stderr)
+            break
+        if not a.startswith("-") and a.lower().endswith((".bed", ".bed.gz")):
+            # N22/N36: 引擎 GFF3/GTF 识别对 BED 报误导性错误（"can not decide"）+ GxfStat NPE
+            print(f"⚠️ 格式提醒: {cmd} 不支持 BED 输入（引擎会报『can not decide GFF3 or GTF』并可能 NPE）", file=sys.stderr)
+            print("   （请提供 GFF3/GTF 注释文件）", file=sys.stderr)
             break
 
 
@@ -988,3 +993,25 @@ def _tableMerge_impl(args, verbose=False, quiet=False):
         if opt in kw:
             jargs += [f"--{opt}", kw[opt]]
     return run_java(jargs, verbose=verbose, quiet=quiet, command_name="tableMerge")
+
+
+def _parallelMD5Check_impl(args, verbose=False, quiet=False):
+    """parallelMD5Check: parallelMD5Check <md5_list.txt> [threads]
+       # 并行校验 MD5 列表（N6 修复：位置参数式 <md5_list_file> [threads]；
+       #   每行 `md5sum  文件名`，与 md5sum -c 同格式；原 registry 直通在参数形态错误时 ec=3）"""
+    if not args:
+        print("用法: parallelMD5Check <md5_list.txt> [threads]", file=sys.stderr)
+        print("   每行: <md5sum>  <文件名>（与 md5sum -c 同格式）", file=sys.stderr)
+        return 1
+    lst = args[0]
+    if not os.path.isfile(lst):
+        print(f"❌ MD5 列表文件不存在: {lst}", file=sys.stderr)
+        return 2
+    threads = "24"
+    if len(args) >= 2:
+        threads = args[1]
+        if not threads.isdigit():
+            print(f"❌ threads 须为数字: {threads}", file=sys.stderr)
+            return 2
+    jargs = ["java", "-Xmx2g", "-cp", JAR, "biocjava.bioDoer.FileUtils.ParallelMD5Check", lst, threads]
+    return run_java(jargs, verbose=verbose, quiet=quiet, command_name="parallelMD5Check")
