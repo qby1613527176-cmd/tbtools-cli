@@ -18,7 +18,7 @@ def _usage(group, cmd):
         if ':' in d:
             return d.split(':', 1)[1].strip()
     # 从已注册命令找
-    from .cli import _groups
+    from .cli_load import _groups  # 批次B: _groups 移至 cli_load
     g = _groups.get(group)
     if g and cmd in g.commands:
         h = g.commands[cmd].help or ''
