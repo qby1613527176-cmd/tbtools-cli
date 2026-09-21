@@ -20,7 +20,12 @@ tbcli — TBtools-II 2.535 全功能 CLI 统一入口（完整版）
 
 VERSION = "1.0.0"
 
-import subprocess, sys, json, os, re, urllib.request
+import subprocess
+import sys
+import json
+import os
+import re
+import urllib.request
 
 JAR = os.environ.get("TBTOOLS_JAR", "")
 RPC = "http://127.0.0.1:8765/rpc"
@@ -135,7 +140,9 @@ def _read_err(p):
 
 def _run_tool(java_cmd, tool_name):
     """执行 java 工具命令，失败时输出友好错误提示"""
-    import subprocess, tempfile, os
+    import subprocess
+    import tempfile
+    import os
     # stdin/stdout 管道支持: - → /dev/stdin 或 /dev/stdout
     # 只对文件路径参数（--in* / --out*）做替换
     java_cmd = java_cmd.replace('=/dev/stdin', '=/dev/stdin')  # no-op，占位
@@ -170,7 +177,7 @@ def _run_tool(java_cmd, tool_name):
         elif "ArrayIndexOutOfBoundsException" in _err_text:
             _hint = "可能缺少必需参数或输入数据行列数不足"
         print(f"   💡 {_hint}", file=sys.stderr)
-        print(f"   📖 查看帮助: tbtools list tools 或 docs/COMMAND_REFERENCE.md", file=sys.stderr)
+        print("   📖 查看帮助: tbtools list tools 或 docs/COMMAND_REFERENCE.md", file=sys.stderr)
         print(f"   🔍 完整堆栈: {_err_file}", file=sys.stderr)
         print("", file=sys.stderr)
     else:
@@ -256,8 +263,8 @@ def cmd_engine(cls, kvs):
 
 def cmd_version():
     print(f"tbtools-cli v{VERSION}")
-    print(f"  140 绘图命令 + 82 CLI 工具 + 188 RPC 方法")
-    print(f"  bridges: 80 | engines: 123 | 坑位: 35")
+    print("  140 绘图命令 + 82 CLI 工具 + 188 RPC 方法")
+    print("  bridges: 80 | engines: 123 | 坑位: 35")
     import subprocess
     try:
         r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
@@ -268,10 +275,11 @@ def cmd_version():
     if jar and os.path.isfile(jar):
         print(f"  JAR: {jar}")
     else:
-        print(f"  JAR: ⚠️ 未配置（运行 tbtools doctor 排查）")
+        print("  JAR: ⚠️ 未配置（运行 tbtools doctor 排查）")
 
 def cmd_doctor():
-    import subprocess, shutil
+    import subprocess
+    import shutil
     print("tbtools-cli 环境诊断")
     print("=" * 40)
     ok = 0; warn = 0; err = 0

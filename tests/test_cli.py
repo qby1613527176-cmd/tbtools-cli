@@ -8,9 +8,9 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from tbtools_cli.cli import cli
-from tbtools_cli.cli_load import _groups, GROUPS, CATEGORY_MAP  # 批次B: 已移至 cli_load
+from tbtools_cli.cli_load import _groups  # 批次B: 已移至 cli_load
 from tbtools_cli.core import PITFALL_HINTS, validate_file, detect_format
-from tbtools_cli.presets import PRESETS, apply_preset
+from tbtools_cli.presets import PRESETS
 import tbtools_cli.auto_commands as auto_commands
 
 JAR = os.environ.get("TBTOOLS_JAR", "")
@@ -367,7 +367,7 @@ class TestHelpQuality:
     def test_venn5_help_not_truncated(self):
         ec, out, err = run_cli("sets", "venn5", "--help")
         # 应包含完整 setE.txt 和 [labels]
-        assert "setE.txt" in out or "[labels]" in out, f"venn5 help truncated"
+        assert "setE.txt" in out or "[labels]" in out, "venn5 help truncated"
 
     def test_mcscanx_no_double_emoji(self):
         ec, out, err = run_cli("syn", "mcscanx", "--help")
@@ -476,7 +476,8 @@ class TestReadmeCounts:
     """README 硬编码数字必须与实现实时统计一致（防漂移）"""
 
     def _counts(self):
-        import re, os
+        import re
+        import os
         from tbtools_cli.core import ROOT
         impls = len(re.findall(r'def _\w+_impl',
                     open(os.path.join(ROOT, "tbtools_cli", "auto_commands.py"), encoding="utf-8").read()))
@@ -498,19 +499,23 @@ class TestReadmeCounts:
 
     def test_readme_plot_count(self):
         """README 绘图命令数 = list plots 实际数（防漂移；2026-09-21 曾 174 vs 实际 218）"""
-        import os, subprocess, sys, re
+        import os
+        import subprocess
+        import sys
+        import re
         from tbtools_cli.core import ROOT
         readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
         plots = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "list", "plots"],
                                capture_output=True, text=True, timeout=60).stdout
-        actual = len([l for l in plots.splitlines() if l.startswith("    ")])
+        actual = len([ln for ln in plots.splitlines() if ln.startswith("    ")])
         m = re.search(r'(\d+) 个绘图/分析命令', readme)
         assert m and int(m.group(1)) == actual, \
             f"README 绘图命令数 {m.group(1) if m else '?'} != 实际 {actual}，同步 README"
 
     def test_readme_pitfall_count(self):
         """README 坑位数 = PITFALL_HINTS 实际数"""
-        import os, re
+        import os
+        import re
         from tbtools_cli.core import ROOT, PITFALL_HINTS
         readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
         m = re.search(r'(\d+) 条实测坑位', readme)
@@ -533,7 +538,8 @@ class TestProbeWithFakeJar:
         return str(jar)
 
     def test_probe_finds_missing_class(self, tmp_path, monkeypatch):
-        import sys, os
+        import sys
+        import os
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         from tbtools_cli import core
         fake = self._make_fake_jar(tmp_path)
@@ -545,7 +551,8 @@ class TestProbeWithFakeJar:
             encoding="utf-8")
         monkeypatch.setattr(core, "JAR", fake)
         # 直接调核心匹配逻辑（复用 probe 的正则/判定）
-        import zipfile, re
+        import zipfile
+        import re
         with zipfile.ZipFile(fake) as z:
             names = set(z.namelist())
         pat = re.compile(r'"(biocjava\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"')
@@ -557,11 +564,12 @@ class TestProbeWithFakeJar:
         assert missing == ["biocjava.bioDoer.TestEngine.Missing"], f"应只报 Missing，实际 {missing}"
 
     def test_doctor_reports_ok_when_all_exist(self, tmp_path, monkeypatch):
-        import sys, os
+        import sys
+        import os
         sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        from tbtools_cli import core
         fake = self._make_fake_jar(tmp_path)
-        import zipfile, re
+        import zipfile
+        import re
         with zipfile.ZipFile(fake) as z:
             names = set(z.namelist())
         pat = re.compile(r'"(biocjava\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"')

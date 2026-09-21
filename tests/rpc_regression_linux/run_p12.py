@@ -3,7 +3,13 @@ import sys
 """Phase 12：第九轮 — 收尾全测
 A >1GB 性能  B 格式互换矩阵  C BLAST 输出交叉  E 可选参数矩阵  D RPC 残余自动救援
 """
-import io, os, json, re, time, shutil, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

@@ -4,7 +4,15 @@ import sys
 A 特殊路径(特殊字符/UNC/junction) B 畸形内容矩阵 C docstring 全量审计
 D 并发写同一输出 E RPC 压力与畸形请求 F RPC kill 生命周期(最后)
 """
-import io, os, json, re, time, shutil, subprocess, threading, urllib.request
+import io
+import os
+import json
+import re
+import time
+import shutil
+import subprocess
+import threading
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 OUT = T + r"\out\p11"

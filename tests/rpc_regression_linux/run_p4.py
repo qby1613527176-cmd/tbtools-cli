@@ -1,9 +1,13 @@
-import sys
 #!/usr/bin/env python
 """Phase4: RPC 188 方法自动补参深测
 迭代策略：空参 → 解析 "-32602: xx is required" → 按参数名关键词填真实数据 → 重试（≤4 轮）
 """
-import io, json, os, re, sys, time, urllib.request
+import io
+import json
+import os
+import re
+import time
+import urllib.request
 
 os.environ.setdefault("TBTOOLS_JAR", "C:/Program Files/TBtools/TBtools_JRE1.6.jar")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

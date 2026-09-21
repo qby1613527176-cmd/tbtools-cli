@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """P14b：A 段 6 方法迭代收敛（错误回显驱动，8 轮上限）"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 # 本会话注入了 HTTP_PROXY → 会劫持对 127.0.0.1:8765 的请求，必须禁用

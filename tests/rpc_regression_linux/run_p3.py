@@ -1,7 +1,11 @@
-import sys
 #!/usr/bin/env python
 """Phase3: RPC 188 方法全量盘点 + 可映射方法实跑（原样 JSON 响应）"""
-import io, json, os, subprocess, sys, time, urllib.request
+import io
+import json
+import os
+import subprocess
+import time
+import urllib.request
 
 os.environ.setdefault("TBTOOLS_JAR", "C:/Program Files/TBtools/TBtools_JRE1.6.jar")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

@@ -47,6 +47,8 @@ testpaths = ["tests"]
 [tool.ruff]
 # core 正确性规则 + py310 目标（target-version 须在顶层；lint 段不支持）
 target-version = "py310"
+# 转换生成的回归脚本(scripts/rpc_regression_linux.sh 产物)非手写代码,不 lint
+exclude = ["tests/rpc_regression_linux"]
 
 [tool.ruff.lint]
 # 核心正确性规则（F=pyflakes），忽略低危风格类（捕获性 except 是 CLI 容错设计）
@@ -57,3 +59,7 @@ ignore = ["E501", "E722", "E701", "E702"]
 [tool.ruff.lint.per-file-ignores]
 # auto_commands 生成代码风格容忍
 "tbtools_cli/auto_commands.py" = ["E4", "E7"]
+# bin/tbcli.py: 旧入口兼容层(已由 cli_tools_registry 替代,不重构)
+"bin/tbcli.py" = ["E401", "E402", "E741", "F541"]
+# tests/rpc_regression_linux/: 转换生成的回归脚本(Windows 路径参数化产物,非手写)
+"tests/rpc_regression_linux/*.py" = ["E401", "E402", "E741", "F401", "F541", "E743"]

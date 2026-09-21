@@ -4,7 +4,14 @@ import sys
 A. pileup 真 BLAST XML；B. N28 真 GTF 验证；C. 大文件性能（GRCh38 240MB）；
 D. Unicode ID 专项；E. 长路径 >260；F. 只读目录；G. BlastCompareTwoSeqRegion 真数据 rescue
 """
-import io, os, json, time, stat, shutil, urllib.request, subprocess
+import io
+import os
+import json
+import time
+import stat
+import shutil
+import urllib.request
+import subprocess
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

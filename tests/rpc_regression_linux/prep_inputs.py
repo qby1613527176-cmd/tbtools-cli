@@ -1,5 +1,5 @@
-import sys
-import io, os, re
+import io
+import os
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 # blast xml（供 pileup）
 os.system('C:/Users/16135/.workbuddy/binaries/python/envs/default/Scripts/python.exe -m tbtools_cli.cli blast twoSeqBlast --query out/pin10.fa --subject data/monarda_chloro_pep.fa --outBlastResult out/t2b5.xml --outFmt 5 --thread 4')

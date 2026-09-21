@@ -1,7 +1,11 @@
 import sys
 # -*- coding: utf-8 -*-
 """Phase 9：第六轮 — P8 遗留 7 命令官方数据补测 + N22 族 GTF 交叉验证 + 幂等性/并发"""
-import io, os, subprocess, sys, threading, time, shutil
+import io
+import os
+import subprocess
+import threading
+import time
 
 os.chdir(os.environ.get("TBREGRESSION_CLI", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-cli"))
 PY = sys.executable
@@ -161,7 +165,8 @@ print("IDEM:", idem, flush=True)
 w("\n### RPC 并发：10 线程同时调 system.listMethods + statFasta.process，观察错误/串扰\n")
 results = []
 def rpc_call(i):
-    import json, urllib.request
+    import json
+    import urllib.request
     body = json.dumps({"jsonrpc": "2.0",
                        "method": "statFasta.process",
                        "params": {"inFasta": os.path.abspath(f"{E}/blast/query.fa").replace("/", "\\"),

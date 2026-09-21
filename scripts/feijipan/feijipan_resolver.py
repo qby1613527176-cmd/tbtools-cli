@@ -4,7 +4,11 @@
      → 每个分享的文件树（.plugin 文件 + fileId + 大小）→ 索引 JSON + Markdown
 加密: AES-128-ECB(key="dingHao-disk-app") uppercase-hex（已逐字节验证与前端 CryptoJS 一致）
 """
-import subprocess, time, urllib.request, urllib.parse, json, sys
+import subprocess
+import time
+import urllib.request
+import urllib.parse
+import json
 
 KEY_HEX = "dingHao-disk-app".encode().hex()
 API = "https://api.feijipan.com"
@@ -104,7 +108,7 @@ def main():
     total_files = sum(len(e["files"]) for e in index)
     total_plugins = sum(len(e["plugins"]) for e in index)
     errors = [e for e in index if e["error"]]
-    print(f"\n=== 汇总 ===")
+    print("\n=== 汇总 ===")
     print(f"分享 {len(index)} / 文件总数 {total_files} / .plugin 文件 {total_plugins} / 失败 {len(errors)}")
     for e in errors:
         print(f"  ❌ {e['name']}: {e['error']}")

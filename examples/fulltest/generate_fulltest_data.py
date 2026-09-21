@@ -23,7 +23,6 @@ generate_fulltest_data.py — 全功能测试数据集生成器（可重现）
 
 import os
 import random
-import sys
 
 random.seed(20260920)  # 可重现
 
@@ -110,7 +109,7 @@ def main():
     write_fa(os.path.join(OUT, "genome.fa"), genome)
     with open(os.path.join(OUT, "anno.gff3"), "w") as f:
         f.write("\n".join(gff_lines) + "\n")
-    print(f"  ✅ anno.gff3（{sum(1 for l in gff_lines if l.startswith('Scf'))} 个 feature）")
+    print(f"  ✅ anno.gff3（{sum(1 for ln in gff_lines if ln.startswith('Scf'))} 个 feature）")
 
     # 1.3 ID 列表 / 重命名映射 / 启动子
     with open(os.path.join(OUT, "ids.txt"), "w") as f:
@@ -240,8 +239,6 @@ def main():
             seed = ancestors[grp + copy]
             genome_peps["1"][gid_1] = ortho_pep(seed, mut_rate=0.05)
             genome_peps["2"][gid_2] = ortho_pep(seed, mut_rate=0.05)
-    chr_names = {("1", 1): "1", ("1", 2): "1", ("1", 3): "1",
-                 ("2", 1): "2", ("2", 2): "2", ("2", 3): "2"}
     # 实际按 A/B/C 各占一条染色体
     chr_of_sp2 = {"A": "ChrA2", "B": "ChrB2", "C": "ChrC2"}
     chr_of_sp1 = {"A": "ChrA", "B": "ChrB", "C": "ChrC"}

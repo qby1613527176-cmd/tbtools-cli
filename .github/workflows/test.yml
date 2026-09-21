@@ -23,7 +23,7 @@ jobs:
       # ── L1: 框架/静态/lint（无 TBtools jar 依赖）────────────────────────
       - name: Lint with ruff (硬失败)
         run: |
-          ruff check tbtools_cli/
+          ruff check .
           echo "✅ ruff 0 errors"
 
       - name: Shellcheck (硬失败)

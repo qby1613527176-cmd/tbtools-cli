@@ -14,7 +14,6 @@ import shutil
 import tempfile
 import time
 
-import pytest
 
 from tbtools_cli import core
 

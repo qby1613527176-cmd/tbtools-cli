@@ -1,7 +1,12 @@
 import sys
 # -*- coding: utf-8 -*-
 """P13c：33 个失败方法——每次调用前确保服务存活（N35 对策），3 次重试"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

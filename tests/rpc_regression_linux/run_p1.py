@@ -1,7 +1,11 @@
 import sys
 #!/usr/bin/env python
 """Phase1: 159 条分组命令全量测试，逐条原样捕获输出"""
-import io, os, re, subprocess, sys, time
+import io
+import os
+import re
+import subprocess
+import time
 
 os.environ.setdefault("TBTOOLS_JAR", "C:/Program Files/TBtools/TBtools_JRE1.6.jar")
 ROOT = os.environ["TBROOT"]

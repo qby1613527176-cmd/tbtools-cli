@@ -1,7 +1,14 @@
 import sys
 # -*- coding: utf-8 -*-
 """Phase 10b：长路径(\\?\前缀) + 只读目录 + FastaSsrMiner/GxfGenomeMatch 参数反查重试"""
-import io, os, json, time, stat, shutil, urllib.request, subprocess
+import io
+import os
+import json
+import time
+import stat
+import shutil
+import urllib.request
+import subprocess
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

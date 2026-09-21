@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """Phase 13b：A. command_metadata.json 全量可选参数目录 + 实测；B. 33 个失败方法 describeMethod 精确二轮救援"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

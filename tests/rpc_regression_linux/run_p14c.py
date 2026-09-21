@@ -1,7 +1,12 @@
 import sys
 # -*- coding: utf-8 -*-
 """P14c：定向收敛 GxfGeneDensityProfiler 与 OneStepBuildATree"""
-import io, os, json, time, subprocess, urllib.request
+import io
+import os
+import json
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 for k in ("HTTP_PROXY","http_proxy","HTTPS_PROXY","https_proxy","ALL_PROXY","all_proxy"):

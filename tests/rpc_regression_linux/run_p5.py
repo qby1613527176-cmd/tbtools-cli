@@ -1,7 +1,9 @@
-import sys
 #!/usr/bin/env python
 """Phase5: CLI 表面/未测工具/输出格式矩阵/边界输入 逐条原样记录"""
-import io, os, re, subprocess, sys, time
+import io
+import os
+import subprocess
+import time
 
 os.environ.setdefault("TBTOOLS_JAR", "C:/Program Files/TBtools/TBtools_JRE1.6.jar")
 os.chdir(os.path.dirname(os.path.abspath(__file__)))

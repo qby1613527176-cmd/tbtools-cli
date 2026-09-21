@@ -1,7 +1,12 @@
-import sys
 # -*- coding: utf-8 -*-
 """P16b：可选参数逐位实测（SPEC+历轮种子做基线；数组参数修复）"""
-import io, os, json, re, time, subprocess, urllib.request, random
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = r"C:/Users/16135/WorkBuddy/2026-09-20-10-24-01/tbtools-test"
 for k in ("HTTP_PROXY","http_proxy","HTTPS_PROXY","https_proxy","ALL_PROXY","all_proxy"):

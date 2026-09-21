@@ -4,7 +4,14 @@ import sys
 教训：no-arg 调用某些工具会挂起且 Windows 下 subprocess 超时杀不净 java 子进程。
 对策：timeout=20s + 超时后 taskkill /T /F 清树 + 每工具打印进度。
 """
-import io, os, json, re, time, subprocess, threading, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import threading
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 OUT = T + r"\out\p11"

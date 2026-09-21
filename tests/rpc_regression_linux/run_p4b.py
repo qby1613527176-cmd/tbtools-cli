@@ -1,7 +1,11 @@
-import sys
 #!/usr/bin/env python
 """Phase4b: PARAM-OTHER 68 方法定向救援（12 轮迭代 + 增强数据池 + 特殊流程）"""
-import io, json, os, re, sys, time, urllib.request
+import io
+import json
+import os
+import re
+import time
+import urllib.request
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 LOG = io.open("P4B_LOG.md", "w", encoding="utf-8", newline="\n")

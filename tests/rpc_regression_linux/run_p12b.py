@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """Phase 12b：重启 RPC 后重跑 C/B/D + N35 复现 + E Plan B（docstring/click --help 枚举 flag）"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

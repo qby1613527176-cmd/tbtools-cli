@@ -1,7 +1,9 @@
-import sys
 #!/usr/bin/env python
 """Phase8: 官方 examples/data 权威输入重跑全部此前失败命令"""
-import io, os, re, subprocess, sys, time
+import io
+import os
+import subprocess
+import time
 
 os.chdir(os.environ.get("TBREGRESSION_CLI", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-cli"))
 EX = "examples/data"

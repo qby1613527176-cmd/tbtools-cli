@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """P12c：RPC 残余自动救援（带重试与存活检查）"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

@@ -1,7 +1,9 @@
-import sys
 #!/usr/bin/env python
 """Phase7: 中文/特殊字符路径 + 零散未测项，逐条原样记录"""
-import io, os, re, subprocess, sys, time
+import io
+import os
+import subprocess
+import time
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 LOG = io.open("P7_LOG.md", "w", encoding="utf-8", newline="\n")

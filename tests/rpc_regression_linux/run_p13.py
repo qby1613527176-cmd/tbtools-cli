@@ -4,7 +4,15 @@ import sys
 A. jar 类常量池提取 usage/flag → 可选参数目录 + 基线工具 flag 实测
 B. 66 个 RPC 方法按类型化数据池重跑救援
 """
-import io, os, json, re, time, zipfile, random, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import zipfile
+import random
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 PUB = T + r"\data\public"

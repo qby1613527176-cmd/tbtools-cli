@@ -1,7 +1,14 @@
 import sys
 # -*- coding: utf-8 -*-
 """Phase 14：第十一轮 — A 8个RPC定向补齐  B N37金丝雀二分  C 可选参数150位全量实测"""
-import io, os, json, re, ast, time, shutil, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import shutil
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 OUT = T + r"\out\p14"
@@ -245,12 +252,12 @@ for name in sorted(catalog := md.keys()):
         results.append((name, f"opt[{opt}]={val[:12]}", ec3))
     print(f"C {name}: opts={len(opts)} ec0={okc}", flush=True)
 
-w(f"\n### 实测统计\n")
+w("\n### 实测统计\n")
 w(f"- 可选位总实测：**{tested}** 次")
 w(f"- 基线命令可跑通：{sum(1 for r in results if r[1]=='基线通过' or True)}")
 silent = [r for r in results if r[2] != 0 and r[2] != -99]
-w(f"- 非零退出且有报错信息（正常失败）：多数")
-w(f"- 结果明细已存 p14_stdout / P14_LOG")
+w("- 非零退出且有报错信息（正常失败）：多数")
+w("- 结果明细已存 p14_stdout / P14_LOG")
 print(f"C: tested={tested}", flush=True)
 
 # 恢复官方文件

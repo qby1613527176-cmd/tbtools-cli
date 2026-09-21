@@ -1,7 +1,11 @@
 import sys
 #!/usr/bin/env python
 """全量命令测试台架：逐条运行 tbtools 命令，原样捕获 stdout/stderr 到 DETAILED_LOG.md"""
-import io, os, re, subprocess, sys, time
+import io
+import os
+import re
+import subprocess
+import time
 
 os.environ.setdefault("TBTOOLS_JAR", "C:/Program Files/TBtools/TBtools_JRE1.6.jar")
 ROOT = os.environ["TBROOT"]

@@ -1,7 +1,11 @@
 import sys
 #!/usr/bin/env python
 """Phase2: tbtools tool <name> 全量——先无参抓引擎 [Usage]，再对可映射工具带参实跑"""
-import io, os, re, subprocess, sys, time
+import io
+import os
+import re
+import subprocess
+import time
 
 os.environ.setdefault("TBTOOLS_JAR", "C:/Program Files/TBtools/TBtools_JRE1.6.jar")
 os.environ["PATH"] = "C:\\Program Files\\TBtools\\bin;" + os.environ.get("PATH", "")  # 确保子进程能找到 java（Windows PATH 需反斜杠）

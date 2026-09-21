@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """P16：RPC 层可选参数逐位实测（全方法 describe 枚举 + 基线收敛 + 逐位追加 + N37 守卫）"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 for k in ("HTTP_PROXY","http_proxy","HTTPS_PROXY","https_proxy","ALL_PROXY","all_proxy"):
@@ -168,11 +174,11 @@ for m in sorted(methods):
     print(f"P16 {base}: req={len(req)} opt={len(opt)}", flush=True)
     w(f"- {base}: 必填{len(req)} 可选{len(opt)}")
 
-w(f"\n## 总计\n")
+w("\n## 总计\n")
 w(f"- 方法枚举：{len(methods)-len(SKIP)}（跳过 {len(SKIP)}）")
 w(f"- 基线未通：{len(base_fail)}")
 w(f"- 可选位实测：{total_opt}，通过 {ok_opt}，报错/拒绝 {err_opt}")
-w(f"\n### 可选位报错明细（前 40）\n")
+w("\n### 可选位报错明细（前 40）\n")
 for b, p, m2 in detail[:40]:
     w(f"- {b}[{p}]: {m2}")
 w("\n## Phase 16 完")

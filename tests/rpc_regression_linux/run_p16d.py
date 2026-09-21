@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """P16d：终局微调（重建 IDLIST/N37第四起 + SRA XML 样本 + 类型解析重试可选位）"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 for k in ("HTTP_PROXY","http_proxy","HTTPS_PROXY","https_proxy","ALL_PROXY","all_proxy"):

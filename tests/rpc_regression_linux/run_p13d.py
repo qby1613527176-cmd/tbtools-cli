@@ -1,7 +1,13 @@
 import sys
 # -*- coding: utf-8 -*-
 """P13d：迭代补参收敛——解析 'X is required' 回显自动填池重试，至多 8 轮"""
-import io, os, json, re, time, subprocess, urllib.request
+import io
+import os
+import json
+import re
+import time
+import subprocess
+import urllib.request
 
 T = os.environ.get("TBREGRESSION_TEST", r"C:\Users\16135\WorkBuddy\2026-09-20-10-24-01\tbtools-test")
 OUT = T + r"\out\p13"
