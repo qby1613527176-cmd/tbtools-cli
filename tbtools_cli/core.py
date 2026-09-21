@@ -126,7 +126,10 @@ def detect_format(path, max_lines=3):
     # FASTA
     if lines[0].startswith('>'):
         return ("fasta", 0, lines)
-    # GFF3
+    # GFF3（N16: 含 ##gff-version 头或特征列 gene/mRNA 的均判 GFF3，此前误判 text）
+    if lines[0].startswith('##gff-version') or '\tgene\t' in lines[0] or '\tmRNA\t' in lines[0]:
+        return ("gff3", len(lines[0].split('\t')), lines)
+    # GFF3（旧判定保留）
     if '\tgff3' in lines[0].lower() or '\tgff' in lines[0].lower():
         return ("gff3", len(lines[0].split('\t')), lines)
     # Newick
@@ -383,6 +386,27 @@ def check_missing_outputs(java_args):
         prev = None
     return missing
 
+def find_empty_inputs(java_args):
+    """N10/N11: 识别 java_args 中的空输入文件（非输出参数值、存在但 0 字节）。"""
+    empties = []
+    prev = None
+    for _i, _a in enumerate(java_args):
+        if _i == 0 or not isinstance(_a, str):
+            continue
+        if _a in ("-cp", "-classpath", "-jar") or _a.startswith(("-D", "-X", "-J")):
+            prev = None
+            continue
+        if _a.startswith("-"):
+            prev = _a
+            continue
+        flag = prev
+        prev = None
+        if flag and (_OUT_FLAG_RE.search(flag) or flag in ("-cp", "-classpath", "-jar", "-o")):
+            continue
+        if os.path.isfile(_a) and os.path.getsize(_a) == 0:
+            empties.append(_a)
+    return empties
+
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 def run_java(java_args, verbose=False, quiet=False, command_name=None):
     """执行 Java 命令，失败时输出友好提示
@@ -434,6 +458,13 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
     # ── P0：输入快照（在原 java_args 上做，含 query 原文件，兜底验证）──
     snaps = snapshot_inputs(java_args)
     _wall_t0 = _time.time()
+    # N10/N11: 空输入文件友好报错（引擎对 0 字节文件裸崩：statFasta/heatmap 等）
+    _empties = find_empty_inputs(java_args)
+    if _empties:
+        for _e in _empties:
+            print(f"❌ 输入文件为空（0 字节）: {_e}", file=sys.stderr)
+        print("   💡 数据可能未生成或路径指向了空文件", file=sys.stderr)
+        return 3
     
     try:
         result = subprocess.run(

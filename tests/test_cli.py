@@ -59,7 +59,8 @@ class TestTopLevelCommands:
     def test_help_no_args(self):
         ec, out, err = run_cli()
         assert ec == 0
-        assert "绘图" in out or "143" in out
+        # N15: banner 不再宣称固定数字（原 "143 绘图命令" 与实际脱节），改断命令分组存在
+        assert "TBtools-II" in out and "tool" in out
 
     def test_version(self):
         ec, out, err = run_cli("version")

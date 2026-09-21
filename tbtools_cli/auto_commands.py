@@ -61,7 +61,7 @@ ENGINE_REGISTRY = [
     ('fqfaConv', 'direct', 'biocjava.bioDoer.LinuxPipe.FastqAndFasta', '3g', 'plot', 'fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第'),
     ('gbar', 'bridge', 'GroupedBarCli', '3g', 'plot', 'gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）'),
     ('gdensity', 'bridge', 'GeneDensityCli', '3g', 'java', 'gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）'),
-    ('gel', 'direct', 'biocjava.bioDoer.JIGplotToolkit.GelImage.Marker', '3g', 'plot', 'gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>'),
+    ('gel', 'direct', 'biocjava.bioDoer.JIGplotToolkit.GelImage.Marker', '3g', 'plot', 'gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）'),
     ('genedensity', 'bridge', 'GeneDensityCli', '3g', 'plot', 'genedensity: genedensity <in.gff3> <out.tsv> [binSize]'),
     ('genelocation', 'direct', 'biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation', '3g', 'plot', 'genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph'),
     ('genelocgff', 'bridge', 'GeneLocGffCli', '3g', 'plot', 'genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam'),
@@ -107,7 +107,7 @@ ENGINE_REGISTRY = [
     ('mggxf', 'bridge', 'MgGxfCli', '3g', 'plot', 'mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked'),
     ('microgenome', 'direct', 'biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot', '3g', 'plot', 'microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]'),
     ('microsyn', 'bridge', 'MicroSynCli', '3g', 'plot', 'microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star'),
-    ('mirnaIdentify', 'bridge', 'MirIdentifyCli', '3g', 'plot', 'mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [o'),
+    ('mirnaIdentify', 'bridge', 'MirIdentifyCli', '3g', 'plot', 'mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> <outChecklog.txt> [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxBulge N]   # miRNA 前体鉴定（GUI 逆向 #78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）'),
     ('mirnaTarget2', 'direct', 'biocjava.bioDoer.miRNA.Target2TablePipe', '3g', 'plot', 'mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true'),
     ('mirnatarget', 'bridge', 'TargetScoreCli', '3g', 'plot', 'mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [-'),
     ('mountain', 'bridge', 'MountainPlotCli', '3g', 'plot', 'mountain: mountain <fold.txt> <out.tsv>'),
@@ -151,7 +151,7 @@ ENGINE_REGISTRY = [
     ('tableColSelect', 'bridge', 'TableColManipCli', '3g', 'plot', 'tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]'),
     ('tableCollapse', 'bridge', 'TableCollapseCli', '3g', 'plot', 'tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader '),
     ('tableMelt', 'direct', 'biocjava.bioDoer.Table.TableMelt', '3g', 'plot', 'tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）'),
-    ('tableMerge', 'direct', 'biocjava.bioDoer.Table.TableMerger', '3g', 'plot', 'tableMerge: tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,'),
+    ('tableMerge', 'direct', 'biocjava.bioDoer.Table.TableMerger', '3g', 'plot', 'tableMerge: tableMerge --inFileArr "f1,f2,..." --inColIndexArr "0,1,..." --outTable <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   # 按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)'),
     ('tableSplit', 'direct', 'biocjava.bioDoer.Table.TableSplitByCol', '3g', 'plot', 'tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]'),
     ('tableTranspose', 'direct', 'biocjava.bioDoer.Table.TableTransposer', '3g', 'plot', 'tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran'),
     ('tableUniq', 'direct', 'biocjava.bioDoer.Table.TableUniq', '3g', 'plot', 'tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|'),
@@ -193,6 +193,9 @@ ENGINE_REGISTRY = [
     ('seqrecommend', 'bridge', 'AssemblyRecommandCli', '2g', 'java', 'seqrecommend <genomeSize1n_bp> [--polyploid] [--het 0.01] [--level Minimum|Draft|Haplotyped_Resolved|Haplotyped_T2T]   # 基因组组装测序量推荐（GUI 逆向 #43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）'),
     ('seqfetch', 'direct', 'biocjava.bioWeb.EntrezUtils.NcbiSmartSeqFetchEntrezUtils', '2g', 'java', 'seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.txt> [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）'),
     ('pubmed', 'bridge', 'PubmedSearchCli', '2g', 'java', 'pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）'),
+    # N13: gwas 分组补命令（vcfAddID/mimicVqsr 原只在 CLI_TOOLS，gwas 分组是空壳）
+    ('vcfAddID', 'direct', 'biocjava.bioDoer.GWAS.VCFAddID', '2g', 'java', 'vcfAddID: vcfAddID --inFile <vcf> --outFile <out.vcf>   # VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz）'),
+    ('mimicVqsr', 'direct', 'biocjava.bioDoer.GWAS.MimicVqsrCutoffFind', '2g', 'java', 'mimicVqsr: mimicVqsr --inFile <vcf> --outFile <out.txt>   # VCF 质量指标（QD/MQ/FS/SOR；GWAS）'),
 ]
 
 
@@ -205,12 +208,18 @@ def _warn_gtf_input(args, cmd):
             break
 
 
+# N32: 无参调用会挂起/弹窗的命令（引擎无参读 stdin/等 GUI）——直接打印用法退出
+_NOARG_HANG = {"gel"}
+
 def _make_impl(cmd, kind, cls, xmx, runner, doc):
     """工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）"""
     # N28: Gxf 族引擎对 GTF 输入解析 NPE（GENCODE 真 GTF 实证），输入预检警告
     gxf_cmd = cmd.startswith("gxf") or cmd in ("gsadiag", "annocompare", "genedensity", "gblocks")
     if kind == "bridge":
         def impl(args, verbose=False, quiet=False):
+            if cmd in _NOARG_HANG and not args:
+                print(f"用法: {doc.split(':', 1)[1].strip() if ':' in doc else cmd}", file=sys.stderr)
+                return 1
             if gxf_cmd:
                 _warn_gtf_input(args, cmd)
             ensure_bridge(cls)
@@ -220,6 +229,9 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
     else:  # direct
         def impl(args, verbose=False, quiet=False):
+            if cmd in _NOARG_HANG and not args:
+                print(f"用法: {doc.split(':', 1)[1].strip() if ':' in doc else cmd}", file=sys.stderr)
+                return 1
             if gxf_cmd:
                 _warn_gtf_input(args, cmd)
             # N27: direct 类也含 build/（fake jaxb DatatypeConverter 等），否则 JDK9+ 缺 javax.xml.bind
@@ -943,3 +955,36 @@ def _efpHeat_impl(args, verbose=False, quiet=False):
              "--inTGA", tga, "--inSample2CC", s2cc, "--expMat", exp,
              "--geneId", gid, "--outImg", out]
     return run_plot(jargs, verbose=verbose, quiet=quiet, command_name="efpHeat")
+
+
+def _tableMerge_impl(args, verbose=False, quiet=False):
+    """tableMerge: tableMerge --inFileArr \"f1,f2,...\" --inColIndexArr \"0,1,...\" --outTable <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]
+       # 按键合并多个表格（N3 修复：引擎为 ArgsParser 式 --inFileArr/--inColIndexArr/--outTable，
+       #   旧 docstring 位置参数写法 <outTable> <inFile1> [...] 与引擎完全对不上；本 impl 兼容位置参数自动转换）"""
+    pos, kw = [], {}
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a.startswith("--") and i + 1 < len(args):
+            kw[a[2:]] = args[i + 1]
+            i += 2
+        else:
+            pos.append(a)
+            i += 1
+    # 位置参数兼容: <outTable> <inFile1> [<inFile2>...] → --outTable + --inFileArr
+    if "inFileArr" not in kw and len(pos) >= 2:
+        kw["outTable"] = pos[0]
+        kw["inFileArr"] = ",".join(pos[1:])
+        kw.setdefault("inColIndexArr", ",".join("0" for _ in pos[1:]))
+    if "inFileArr" not in kw or "outTable" not in kw:
+        print("用法: tableMerge --inFileArr \"f1,f2,...\" --inColIndexArr \"0,1,...\" --outTable <out>", file=sys.stderr)
+        print("   （旧位置参数写法 <outTable> <inFile1> [...] 已兼容自动转换）", file=sys.stderr)
+        return 1
+    jargs = ["java", "-Xmx3g", "-cp", cp(BUILD_DIR, JAR), "biocjava.bioDoer.Table.TableMerger",
+             "--inFileArr", kw["inFileArr"],
+             "--inColIndexArr", kw.get("inColIndexArr", "0"),
+             "--outTable", kw["outTable"]]
+    for opt in ("defaultNAvalue", "appendMergedKey", "rmKeyColumns", "appendOnly"):
+        if opt in kw:
+            jargs += [f"--{opt}", kw[opt]]
+    return run_java(jargs, verbose=verbose, quiet=quiet, command_name="tableMerge")

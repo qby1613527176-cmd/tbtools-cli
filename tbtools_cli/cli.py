@@ -72,7 +72,7 @@ class RootGroup(click.Group):
 @click.version_option("1.0.0", prog_name="tbtools-cli")
 @click.pass_context
 def cli(ctx):
-    """TBtools-II 全功能 CLI — 143 绘图命令 + 130 工具 + 188 RPC"""
+    """TBtools-II 全功能 CLI（命令/工具/RPC 数字见 tbtools list）"""
     if ctx.invoked_subcommand is None:
         click.echo(ctx.get_help())
 
@@ -204,6 +204,13 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
 def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col, verbose, quiet, fmt, preset, height, width, threads):
     pre_flight("heatmap", matrix_file)
     """热图（表达矩阵）"""
+    # N12: heatmap 应用 --preset（同 volcano 通用选项一致性）
+    if preset:
+        p = apply_preset(preset, width=width, height=height)
+        if not p:
+            print(f"❌ 未知预设: {preset}", file=sys.stderr); sys.exit(1)
+        if 'width' in p and not width: width = p['width']
+        if 'height' in p and not height: height = p['height']
     output_file = resolve_output(output_file, fmt)
     ensure_bridge("HeatmapCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
@@ -519,7 +526,7 @@ def doctor():
     checks = [
         ("java", "Java", True),
         ("javac", "javac", False),
-        ("xvfb-run", "xvfb-run（绘图必需）", True),
+        ("xvfb-run", "xvfb-run（Linux 绘图必需）", os.name != "nt"),  # N14: Windows 无 xvfb 且不需要
     ]
     for cmd_name, desc, required in checks:
         if shutil.which(cmd_name):
@@ -1202,7 +1209,7 @@ CATEGORY_MAP = {
     "smart": "seq",
     "fimo": "seq", "meme": "seq", "mast": "seq", "meme2tab": "seq", "makemotif": "seq", "mpattern": "seq",
     # GWAS
-    "mimicVqsr": "gwas",
+    "mimicVqsr": "gwas", "vcfAddID": "gwas",
     # 通用
     "generic": "engine", "efpHeat": "expr", "multiEfp": "expr",
     "plotrna": "seq", "rnaplot": "seq",
@@ -1301,11 +1308,31 @@ def _load_dynamic_commands():
         if not hasattr(g, "resolve_command") or g.__class__.__name__ == "Group":
             g.resolve_command = _smart_resolve.__get__(g, type(g))
 
+_META_JSON = None
+def _load_meta_json():
+    """懒加载 command_metadata.json（N33: 143 命令完整 help，含 150 可选位）"""
+    global _META_JSON
+    if _META_JSON is None:
+        try:
+            import json as _json
+            _p = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+            _META_JSON = _json.load(open(_p, encoding="utf-8")) if os.path.isfile(_p) else {}
+        except Exception:
+            _META_JSON = {}
+    return _META_JSON
+
 def _parse_auto_metadata(name):
     """从 auto_commands.py 解析命令元数据（docstring + 坑位）"""
     impl = getattr(_ac, f'_{name}_impl', None)
     doc = (impl.__doc__ or "").strip() if impl else ""
-    usage = doc.split(':', 1)[1].strip() if ':' in doc else f"{name} [参数...]"
+    # N33: 优先 command_metadata.json 完整 help（含可选位；docstring 常被表驱动截断）
+    _meta = _load_meta_json().get(name)
+    if _meta and _meta.get("help"):
+        usage = _meta["help"]
+    elif ':' in doc:
+        usage = doc.split(':', 1)[1].strip()
+    else:
+        usage = f"{name} [参数...]"
     pitfall = get_pitfall_hint(name)
     return {'impl': impl, 'usage': usage, 'pitfall': pitfall}
 
@@ -1326,7 +1353,7 @@ def _make_passthrough(name, group=None):
         args = list(ctx.args)
         
         # 输入校验：第一个非选项参数通常是输入文件（mcscanxd/kallisto 首参为工作目录/自定义路径，跳过校验）
-        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend", "pubmed"):
+        if args and not args[0].startswith('-') and name not in ("mcscanxd", "kallisto", "famerge", "getseqdb", "seqrecommend", "pubmed", "tableMerge"):
             ok, msg = validate_file(args[0], f"{name} 输入文件")
             if not ok:
                 print(msg, file=sys.stderr)
@@ -1570,10 +1597,12 @@ def _run_new_wizard(_categories, SCENARIOS, run_it=False):
 def check(files):
     """探测文件格式：tbtools check <文件...>（FASTA/GFF/Newick/XML/TSV）"""
     import json as _json
+    bad = 0  # N20: check 对不存在的文件报错后应非零退出
     for path in files:
         ok, msg = validate_file(path, "文件")
         if not ok:
             click.echo(msg, err=True)
+            bad += 1
             continue
         fmt, ncols, sample = detect_format(path)
         import os as _os
@@ -1591,6 +1620,8 @@ def check(files):
             click.echo(f"   样例: {disp}")
         if _json.dumps(sample[:1], ensure_ascii=False) and fmt == "unknown":
             click.echo("   （无法识别格式；如是表格确认分隔符是 Tab 还是逗号）")
+    if bad:
+        sys.exit(1)
 
 _load_dynamic_commands()
 _load_auto_commands()
