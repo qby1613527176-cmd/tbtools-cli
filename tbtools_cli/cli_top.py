@@ -467,6 +467,10 @@ def register_top(cli, _LG):
             "class": cls,
             "pitfall": get_pitfall_hint(command),
         }
+        if v.get("inputs"):
+            desc["inputs"] = v["inputs"]
+        if v.get("outputs"):
+            desc["outputs"] = v["outputs"]
         if as_json:
             click.echo(_json.dumps(desc, ensure_ascii=False, indent=1))
         else:

@@ -14,8 +14,18 @@ from tbtools_cli.cli_load import CATEGORY_MAP
 
 
 @dataclass
+class InputSpec:
+    """命令输入定义(二期 schema: 类型/格式/必填)"""
+    name: str
+    role: str = "file"           # file | param
+    format: str = ""             # gff3 | fasta | tsv | newick | ...
+    required: bool = True
+    note: str = ""
+
+
+@dataclass
 class CommandSpec:
-    """单一命令定义(第八轮评审 CommandSpec 模型的最小可用版)"""
+    """单一命令定义(第八轮评审 CommandSpec 模型)"""
     name: str
     group: str
     kind: str                    # bridge | direct | tool | manual
@@ -23,8 +33,26 @@ class CommandSpec:
     runner: str = ""             # plot | java | ""
     xmx: str = "2g"
     doc: str = ""
-    status: str = "stable"       # 预留: stable|beta|legacy|platform-limited|network-required
+    status: str = "stable"       # stable|beta|legacy|platform-limited|network-required
     aliases: list[str] = field(default_factory=list)
+    inputs: list[InputSpec] = field(default_factory=list)
+    outputs: list[str] = field(default_factory=list)  # 输出类型(如 svg/png/tsv)
+
+
+# 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
+KNOWN_SCHEMAS = {
+    "volcano": ([InputSpec("deg", format="tsv", note="GeneID\tLog2FC\tpvalue")], ["svg"]),
+    "heatmap": ([InputSpec("matrix", format="tsv", note="表达矩阵 gene×sample")], ["svg"]),
+    "hclust": ([InputSpec("distance", format="tsv", note="三列: GeneA\tGeneB\tdist")], ["svg"]),
+    "venn2": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt")], ["svg"]),
+    "msy": ([InputSpec("pos", format="tsv", note="Chr\tGene\tStart\tEnd"),
+             InputSpec("links", format="tsv"), InputSpec("layout", format="txt")], ["svg"]),
+    "genestructure": ([InputSpec("gff", format="gff3"), InputSpec("ids", format="txt")], ["svg"]),
+    "motif": ([InputSpec("meme_xml", format="xml"), InputSpec("ids", format="txt")], ["svg"]),
+    "peaktss": ([InputSpec("gxf", format="gff3"), InputSpec("peaks", format="tsv", note="MACS2")], ["svg"]),
+    "tableMerge": ([InputSpec("tables", format="tsv", note="多个输入表")], ["tsv"]),
+    "qdot": ([InputSpec("gff", format="tsv", note="4 列简化: Chr\tGene\tStart\tEnd")], ["svg"]),
+}
 
 
 # 已知别名(兼容层命名; canonical → 命令)
@@ -93,10 +121,13 @@ def build_command_specs() -> dict[str, CommandSpec]:
     except Exception:
         pass
 
-    # 别名/状态标注(统一模型增强; 在所有来源构建完成后)
+    # 别名/状态/schema 标注(统一模型增强; 在所有来源构建完成后)
     for name, spec in specs.items():
         spec.aliases = [a for a, target in KNOWN_ALIASES.items() if target == name]
         spec.status = KNOWN_STATUS.get(name, "stable")
+        if name in KNOWN_SCHEMAS:
+            ins, outs = KNOWN_SCHEMAS[name]
+            spec.inputs, spec.outputs = ins, outs
     return specs
 
 
@@ -110,6 +141,11 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     if spec.xmx and spec.xmx != "2g":
         e["xmx"] = spec.xmx
     e["help"] = spec.doc
+    if spec.inputs:
+        e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
+                        "required": i.required, "note": i.note} for i in spec.inputs]
+    if spec.outputs:
+        e["outputs"] = spec.outputs
     if spec.status != "stable":
         e["status"] = spec.status
     if spec.aliases:

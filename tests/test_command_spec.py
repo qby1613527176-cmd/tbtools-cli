@@ -43,3 +43,10 @@ class TestCommandSpec:
         assert kinds.get("direct", 0) >= 60
         assert kinds.get("tool", 0) >= 70
         assert kinds.get("manual", 0) >= 10
+
+    def test_schemas_for_core(self):
+        """核心命令有 inputs/outputs schema(二期样例)"""
+        specs = build_command_specs()
+        for cmd in ("volcano", "venn2", "msy", "genestructure", "tableMerge"):
+            assert specs[cmd].inputs, f"{cmd} 缺 inputs schema"
+            assert specs[cmd].outputs, f"{cmd} 缺 outputs schema"
