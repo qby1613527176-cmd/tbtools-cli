@@ -24,6 +24,8 @@ from tbtools_cli.presets import apply_preset
 from tbtools_cli.cli_rpc import build_rpc_group
 import tbtools_cli.cli_load as cli_load
 from tbtools_cli.cli_top import register_top  # 批次 B: 顶层命令拆分
+from tbtools_cli import __version__ as _CLI_VERSION  # 单一源: pyproject
+
 from tbtools_cli.cli_load import (  # 批次 B: 动态注册拆分
     CATEGORY_MAP,
     _groups,
@@ -101,7 +103,6 @@ class RootGroup(click.Group):
                 click.echo("   查看: tbtools list", err=True)
             ctx.exit(2)
 
-from tbtools_cli import __version__ as _CLI_VERSION  # 单一源: __init__ ← importlib.metadata ← pyproject
 
 @click.group(cls=RootGroup, invoke_without_command=True)
 @click.version_option(_CLI_VERSION, prog_name="tbtools-cli")
