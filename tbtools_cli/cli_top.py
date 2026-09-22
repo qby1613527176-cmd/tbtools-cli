@@ -15,6 +15,7 @@ from tbtools_cli.core import (
     JAR,
     ROOT,
     c,
+    check_input_format,
     detect_format,
     get_pitfall_hint,
     safe_temp,
@@ -474,10 +475,47 @@ def register_top(cli, _LG):
             click.echo(f"  调用: {desc['invoke']}")
             click.echo(f"  坑位: {desc['pitfall'] or '无'}")
 
+    @cli.command(name="tool-validate")
+    @click.argument("command")
+    @click.argument("inputs", nargs=-1, required=True)
+    @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent)")
+    def tool_validate(command, inputs, as_json):
+        """执行前预检: 输入存在性/格式/列数(Agent 能力3;不运行命令)"""
+        import json as _json
+        checks = []
+        ok = True
+        for i, path in enumerate(inputs, 1):
+            if not os.path.isfile(path):
+                checks.append({"input": path, "ok": False, "issue": "文件不存在"})
+                ok = False
+                continue
+            v_ok, msg = validate_file(path, "文件")
+            if not v_ok:
+                checks.append({"input": path, "ok": False, "issue": msg})
+                ok = False
+                continue
+            fmt, ncols, _ = detect_format(path)
+            warn = check_input_format(command, path)
+            checks.append({"input": path, "ok": True, "format": fmt, "columns": ncols,
+                           "warning": warn or None})
+            if warn:
+                ok = False
+        result = {"command": command, "valid": ok, "checks": checks}
+        if as_json:
+            click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
+        else:
+            for c2 in checks:
+                st = "✅" if c2["ok"] else "❌"
+                w = f" ⚠️ {c2.get('warning')}" if c2.get("warning") else ""
+                click.echo(f"  {st} {c2['input']} [{c2.get('format','?')}/{c2.get('columns','?')}列]{w}")
+            click.echo(f"  结论: {'✅ 可执行' if ok else '❌ 有预检问题(可 --force 忽略,见引擎报错)'}")
+        sys.exit(0 if ok else 3)
+
     @cli.command(name="search")
     @click.argument("keyword", required=True)
-    def search_cmd(keyword):
-        """模糊搜索命令（匹配名称+doc，276 命令可发现性）: tbtools search <关键词>"""
+    @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
+    def search_cmd(keyword, as_json):
+        """模糊搜索命令（匹配名称+doc）: tbtools search <关键词> [--json]"""
         import json as _json
         meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
         if not os.path.isfile(meta_path):
@@ -494,8 +532,14 @@ def register_top(cli, _LG):
                 desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
                 hits.append((name, cat, kind, desc))
         if not hits:
-            click.echo(f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")
+            click.echo(_json.dumps({"query": keyword, "hits": []}, ensure_ascii=False) if as_json
+                       else f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")
             sys.exit(1)
+        if as_json:
+            click.echo(_json.dumps({"query": keyword, "hits": [
+                {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in sorted(hits)
+            ]}, ensure_ascii=False, indent=1))
+            return
         click.echo(f"🔍 匹配 '{keyword}' 的命令（{len(hits)} 个）:")
         for name, cat, kind, desc in sorted(hits):
             click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")

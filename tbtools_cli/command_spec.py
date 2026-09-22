@@ -1,0 +1,81 @@
+"""command_spec.py — 统一命令模型(CommandSpec, 第八轮评审核心建议骨架)。
+
+目标: 所有命令产物(metadata/docs/help/search/统计)从单一 CommandSpec 模型派生,
+不再各自从 ENGINE_REGISTRY / CLI_TOOLS / cli.py / CATEGORY_MAP 分散读取。
+
+当前为兼容层骨架: 从现有注册源构建统一 specs(不改运行时行为),
+gen_metadata 与后续工具以 specs 为唯一输入。
+"""
+from dataclasses import dataclass, field
+
+from tbtools_cli import auto_commands as _ac
+from tbtools_cli.cli_tools_registry import CLI_TOOLS
+from tbtools_cli.cli_load import CATEGORY_MAP
+
+
+@dataclass
+class CommandSpec:
+    """单一命令定义(第八轮评审 CommandSpec 模型的最小可用版)"""
+    name: str
+    group: str
+    kind: str                    # bridge | direct | tool | manual
+    class_name: str = ""
+    runner: str = ""             # plot | java | ""
+    xmx: str = "2g"
+    doc: str = ""
+    status: str = "stable"       # 预留: stable|beta|legacy|platform-limited|network-required
+    aliases: list = field(default_factory=list)
+
+
+def build_command_specs() -> dict[str, CommandSpec]:
+    """构建统一命令模型(单一源, 兼容层: 不改变现运行行为)。
+
+    来源:
+      1. ENGINE_REGISTRY 表驱动(组 CATEGORY_MAP 归属)
+      2. CLI_TOOLS 工具注册表
+      3. 手动命令(经 cli_load 分组注册的 manual 命令, 从分组命令集补)
+    """
+    specs: dict[str, CommandSpec] = {}
+
+    # 1. 表驱动引擎命令
+    for name, kind, cls, xmx, runner, doc in _ac.ENGINE_REGISTRY:
+        specs[name] = CommandSpec(
+            name=name, group=CATEGORY_MAP.get(name, "engine"),
+            kind=kind, class_name=cls, runner=runner, xmx=xmx, doc=doc,
+        )
+
+    # 2. CLI 工具
+    for name, cls in CLI_TOOLS.items():
+        specs.setdefault(name, CommandSpec(name=name, group="tool", kind="tool", class_name=cls))
+
+    # 3. 手动命令: 从现有 metadata 回退(kind=manual 且未被表驱动/工具覆盖)
+    #    (完整版应遍历 cli 分组命令树; 骨架期以 metadata 为准, 单一模型逐步接管)
+    try:
+        import json as _json
+        import os as _os
+        meta_path = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+                                  "tbtools_cli", "command_metadata.json")
+        if _os.path.isfile(meta_path):
+            meta = _json.load(open(meta_path, encoding="utf-8"))
+            for name, v in meta.items():
+                if v.get("kind") == "manual" and name not in specs:
+                    specs[name] = CommandSpec(
+                        name=name, group=v.get("group", "engine"), kind="manual",
+                        doc=v.get("help", ""),
+                    )
+    except Exception:
+        pass
+    return specs
+
+
+def to_metadata_entry(spec: CommandSpec) -> dict:
+    """CommandSpec → metadata 条目(与现有 command_metadata.json 结构兼容)"""
+    e = {"group": spec.group, "kind": spec.kind}
+    if spec.class_name:
+        e["class"] = spec.class_name
+    if spec.runner:
+        e["runner"] = spec.runner
+    if spec.xmx and spec.xmx != "2g":
+        e["xmx"] = spec.xmx
+    e["help"] = spec.doc
+    return e
