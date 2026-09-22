@@ -27,6 +27,32 @@ class CommandSpec:
     aliases: list = field(default_factory=list)
 
 
+# 已知别名(兼容层命名; canonical → 命令)
+KNOWN_ALIASES = {
+    "treeRooting": "rooting",
+    "TableCast": "tableCast",
+    "gbar": "groupedbar",
+    "gdensity": "genedensity",
+    "getLongestCompleteORF": "longestorf",
+    "one-step": "onesteptree",
+    "genestructure": "structure",  # 旧名 → seq structure? 保留注释: genestructure 是独立命令
+}
+
+# 已知状态(engine 级/环境限制; 未列默认为 stable)
+KNOWN_STATUS = {
+    "srr2ena": "network-required",
+    "pubmed": "network-required",
+    "seqfetch": "network-required",
+    "rnaplot": "platform-limited",       # 需 RNAfold 在 PATH(Windows 默认缺)
+    "calcRepeat": "platform-limited",    # 需 jellyfish(Windows 默认缺)
+    "hmmsearch": "platform-limited",     # 需系统 hmmsearch
+    "simplehmmscan": "platform-limited",
+    "cubeheatmap": "beta",               # 引擎列数假设严格(官方数据仍 ArrayIndexOutOfBounds)
+    "groupedbar": "beta",
+    "nwAlign": "beta",                   # 输入格式易错(FASTA 头被当序列)
+}
+
+
 def build_command_specs() -> dict[str, CommandSpec]:
     """构建统一命令模型(单一源, 兼容层: 不改变现运行行为)。
 
@@ -48,6 +74,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
     for name, cls in CLI_TOOLS.items():
         specs.setdefault(name, CommandSpec(name=name, group="tool", kind="tool", class_name=cls))
 
+
     # 3. 手动命令: 从现有 metadata 回退(kind=manual 且未被表驱动/工具覆盖)
     #    (完整版应遍历 cli 分组命令树; 骨架期以 metadata 为准, 单一模型逐步接管)
     try:
@@ -65,6 +92,11 @@ def build_command_specs() -> dict[str, CommandSpec]:
                     )
     except Exception:
         pass
+
+    # 别名/状态标注(统一模型增强; 在所有来源构建完成后)
+    for name, spec in specs.items():
+        spec.aliases = [a for a, target in KNOWN_ALIASES.items() if target == name]
+        spec.status = KNOWN_STATUS.get(name, "stable")
     return specs
 
 
@@ -78,4 +110,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     if spec.xmx and spec.xmx != "2g":
         e["xmx"] = spec.xmx
     e["help"] = spec.doc
+    if spec.status != "stable":
+        e["status"] = spec.status
+    if spec.aliases:
+        e["aliases"] = spec.aliases
     return e
