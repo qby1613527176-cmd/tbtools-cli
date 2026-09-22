@@ -7,7 +7,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "admixtureViz": {
   "name": "admixtureViz",
@@ -17,7 +18,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "admixtureViz: admixtureViz <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id samples.txt] [--group group.txt] [--sort Qraito|Lexical|None]   # ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "amazingmeta": {
   "name": "amazingmeta",
@@ -27,7 +29,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "annocompare": {
   "name": "annocompare",
@@ -37,7 +40,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "bamMerge": {
   "name": "bamMerge",
@@ -47,7 +51,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "bamindex": {
   "name": "bamindex",
@@ -57,7 +62,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "bamindex: bamindex <in.sorted.bam> [out.bai]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "bamsort": {
   "name": "bamsort",
@@ -67,7 +73,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "bamstate": {
   "name": "bamstate",
@@ -77,7 +84,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "barplot": {
   "name": "barplot",
@@ -87,7 +95,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "barplotter": {
   "name": "barplotter",
@@ -97,7 +106,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "batchReplace": {
   "name": "batchReplace",
@@ -107,7 +117,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "calcRepeat": {
   "name": "calcRepeat",
@@ -117,7 +128,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "cddmotif": {
   "name": "cddmotif",
@@ -127,7 +139,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "circlegene": {
   "name": "circlegene",
@@ -137,7 +150,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "circos": {
   "name": "circos",
@@ -147,7 +161,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "collinearRegion": {
   "name": "collinearRegion",
@@ -157,7 +172,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "colorscheme": {
   "name": "colorscheme",
@@ -167,7 +183,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "colorscheme: colorscheme <inTab> <outTab> <refColIndex>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "conflictpaf": {
   "name": "conflictpaf",
@@ -177,7 +194,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "ctgGroup": {
   "name": "ctgGroup",
@@ -187,7 +205,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "cubeheatmap": {
   "name": "cubeheatmap",
@@ -197,7 +216,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor <c> --midColor <c> --maxColor <c>]   # 3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "degramdom": {
   "name": "degramdom",
@@ -207,7 +227,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "degramdom: degramdom <in.tsv> [out.nwk]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "distance": {
   "name": "distance",
@@ -217,7 +238,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "dotplot": {
   "name": "dotplot",
@@ -227,7 +249,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "dualsyn": {
   "name": "dualsyn",
@@ -237,7 +260,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] ",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "efpHeat": {
   "name": "efpHeat",
@@ -247,7 +271,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "efpHeat: efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> --expMat <expMat.tsv> --geneId <ID> --outImg <out>",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "expr"
  },
  "eggnog": {
   "name": "eggnog",
@@ -257,7 +282,8 @@
   "xmx": "4g",
   "runner": "java",
   "help": "eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb> [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "exprCorr": {
   "name": "exprCorr",
@@ -267,7 +293,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "exprCorr: exprCorr <inFPKM> <outCorrMat>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "fastaExtract": {
   "name": "fastaExtract",
@@ -277,7 +304,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "fastq"
  },
  "fastaSubseq": {
   "name": "fastaSubseq",
@@ -287,7 +315,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "fastq"
  },
  "filesplit": {
   "name": "filesplit",
@@ -297,7 +326,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "filesplit: filesplit <inFile> <numParts>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "filterCScore": {
   "name": "filterCScore",
@@ -307,7 +337,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "blast"
  },
  "findblockdual": {
   "name": "findblockdual",
@@ -317,7 +348,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "findblockmultiple": {
   "name": "findblockmultiple",
@@ -327,7 +359,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "findpath": {
   "name": "findpath",
@@ -337,7 +370,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "fqTrim": {
   "name": "fqTrim",
@@ -347,7 +381,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "fastq"
  },
  "fqfaConv": {
   "name": "fqfaConv",
@@ -357,7 +392,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "fastq"
  },
  "gbar": {
   "name": "gbar",
@@ -367,7 +403,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "gdensity": {
   "name": "gdensity",
@@ -377,7 +414,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gel": {
   "name": "gel",
@@ -387,7 +425,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "genedensity": {
   "name": "genedensity",
@@ -397,7 +436,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "genedensity: genedensity <in.gff3> <out.tsv> [binSize]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "genelocation": {
   "name": "genelocation",
@@ -407,7 +447,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "genelocgff": {
   "name": "genelocgff",
@@ -417,7 +458,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "generic": {
   "name": "generic",
@@ -427,7 +469,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "generic: generic <engineClass> <method[+method2]> <out> [--set field ",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "gfa": {
   "name": "gfa",
@@ -437,7 +480,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gfa: gfa <in.gfa> <out> [width] [height]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "gfa2fa": {
   "name": "gfa2fa",
@@ -447,7 +491,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "goEnrich": {
   "name": "goEnrich",
@@ -457,7 +502,8 @@
   "xmx": "4g",
   "runner": "java",
   "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "goParse": {
   "name": "goParse",
@@ -467,7 +513,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "goParse: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "golevel": {
   "name": "golevel",
@@ -477,7 +524,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "groupCol": {
   "name": "groupCol",
@@ -487,7 +535,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "groupedbar": {
   "name": "groupedbar",
@@ -497,7 +546,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load 崩溃——引擎缺陷）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "gsadiag": {
   "name": "gsadiag",
@@ -507,7 +557,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "gxfAppend": {
   "name": "gxfAppend",
@@ -517,7 +568,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfFix": {
   "name": "gxfFix",
@@ -527,7 +579,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfGenepos": {
   "name": "gxfGenepos",
@@ -537,7 +590,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfGenepos: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # G",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfMatch": {
   "name": "gxfMatch",
@@ -547,7 +601,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfOverlap": {
   "name": "gxfOverlap",
@@ -557,7 +612,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfOverlap: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfRecall": {
   "name": "gxfRecall",
@@ -567,7 +623,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfRecall: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfRegion": {
   "name": "gxfRegion",
@@ -577,7 +634,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfRename": {
   "name": "gxfRename",
@@ -587,7 +645,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfRepGXF": {
   "name": "gxfRepGXF",
@@ -597,7 +656,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfRepGXF: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfRepIDs": {
   "name": "gxfRepIDs",
@@ -607,7 +667,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxfStat": {
   "name": "gxfStat",
@@ -617,7 +678,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "gxffilter": {
   "name": "gxffilter",
@@ -627,7 +689,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "gxfsort": {
   "name": "gxfsort",
@@ -637,7 +700,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "hicEnzyme": {
   "name": "hicEnzyme",
@@ -647,7 +711,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "hicEnzyme: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "hmmExtract": {
   "name": "hmmExtract",
@@ -657,7 +722,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "hmmExtract: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAM",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "hmm"
  },
  "homoPhase": {
   "name": "homoPhase",
@@ -667,7 +733,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "keggEnrich": {
   "name": "keggEnrich",
@@ -677,7 +744,8 @@
   "xmx": "4g",
   "runner": "java",
   "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "layoutheatmap": {
   "name": "layoutheatmap",
@@ -687,7 +755,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "levelGo": {
   "name": "levelGo",
@@ -697,7 +766,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "makemotif": {
   "name": "makemotif",
@@ -707,7 +777,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "marker": {
   "name": "marker",
@@ -717,7 +788,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "marker: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "markertools": {
   "name": "markertools",
@@ -727,7 +799,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "mast": {
   "name": "mast",
@@ -737,7 +810,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "mast2tab": {
   "name": "mast2tab",
@@ -747,7 +821,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "mastExtract": {
   "name": "mastExtract",
@@ -757,7 +832,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "mastrun": {
   "name": "mastrun",
@@ -767,7 +843,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "mcscanx": {
   "name": "mcscanx",
@@ -777,7 +854,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "meme": {
   "name": "meme",
@@ -787,7 +865,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "meme2tab": {
   "name": "meme2tab",
@@ -797,7 +876,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "memerun": {
   "name": "memerun",
@@ -807,7 +887,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "mggxf": {
   "name": "mggxf",
@@ -817,7 +898,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "microgenome": {
   "name": "microgenome",
@@ -827,7 +909,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "microsyn": {
   "name": "microsyn",
@@ -837,7 +920,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "mirnaIdentify": {
   "name": "mirnaIdentify",
@@ -847,7 +931,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> <outChecklog.txt> [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxBulge N]   # miRNA 前体鉴定（GUI 逆向 #78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "mirna"
  },
  "mirnaTarget2": {
   "name": "mirnaTarget2",
@@ -857,7 +942,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "mirna"
  },
  "mountain": {
   "name": "mountain",
@@ -867,7 +953,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mountain: mountain <fold.txt> <out.tsv>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "mpattern": {
   "name": "mpattern",
@@ -877,7 +964,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "multiEfp": {
   "name": "multiEfp",
@@ -887,7 +975,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "multisyn": {
   "name": "multisyn",
@@ -897,7 +986,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "nwAlign": {
   "name": "nwAlign",
@@ -907,7 +997,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA] [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   # Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "pafcomp": {
   "name": "pafcomp",
@@ -917,7 +1008,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "pafref": {
   "name": "pafref",
@@ -927,7 +1019,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "pafviz": {
   "name": "pafviz",
@@ -937,7 +1030,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "partitionconflict": {
   "name": "partitionconflict",
@@ -947,7 +1041,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "peakanno": {
   "name": "peakanno",
@@ -957,7 +1052,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "chipseq"
  },
  "peakdist": {
   "name": "peakdist",
@@ -967,7 +1063,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "chipseq"
  },
  "peaktss": {
   "name": "peaktss",
@@ -977,7 +1074,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "chipseq"
  },
  "pep2codon": {
   "name": "pep2codon",
@@ -987,7 +1085,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "pfammotif": {
   "name": "pfammotif",
@@ -997,7 +1096,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "phylotree": {
   "name": "phylotree",
@@ -1007,7 +1107,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "pileup": {
   "name": "pileup",
@@ -1017,7 +1118,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "pileup: pileup <blast.xml> <out.svg> [--query NAME]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "chipseq"
  },
  "plotrna": {
   "name": "plotrna",
@@ -1027,7 +1129,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "preparespecies": {
   "name": "preparespecies",
@@ -1037,7 +1140,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "qdot": {
   "name": "qdot",
@@ -1047,7 +1151,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "qpcr": {
   "name": "qpcr",
@@ -1057,7 +1162,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "qpcrExp": {
   "name": "qpcrExp",
@@ -1067,7 +1173,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "qpcrproc": {
   "name": "qpcrproc",
@@ -1077,7 +1184,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "quickFamily": {
   "name": "quickFamily",
@@ -1087,7 +1195,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "blast"
  },
  "recipBlast": {
   "name": "recipBlast",
@@ -1097,7 +1206,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "blast"
  },
  "regionAnno": {
   "name": "regionAnno",
@@ -1107,7 +1217,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "regiondepth": {
   "name": "regiondepth",
@@ -1117,7 +1228,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "rnaplot": {
   "name": "rnaplot",
@@ -1127,7 +1239,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "sambamcov": {
   "name": "sambamcov",
@@ -1137,7 +1250,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "sepChr": {
   "name": "sepChr",
@@ -1147,7 +1261,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "seqconvert": {
   "name": "seqconvert",
@@ -1157,7 +1272,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "seqlentrack": {
   "name": "seqlentrack",
@@ -1167,7 +1283,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "simplehmmscan": {
   "name": "simplehmmscan",
@@ -1177,7 +1294,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "sricher": {
   "name": "sricher",
@@ -1187,7 +1305,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx> <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "supercircos": {
   "name": "supercircos",
@@ -1197,7 +1316,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "supercircos: supercircos <config.cfg> <out> [width] [height]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "tableAppend": {
   "name": "tableAppend",
@@ -1207,7 +1327,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableAppend: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   #",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableCast": {
   "name": "tableCast",
@@ -1217,7 +1338,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableCast: tableCast <inLong.txt> <outMatrix>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableColSel": {
   "name": "tableColSel",
@@ -1227,7 +1349,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableColSel: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableColSelect": {
   "name": "tableColSelect",
@@ -1237,7 +1360,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableCollapse": {
   "name": "tableCollapse",
@@ -1247,7 +1371,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader ",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableMelt": {
   "name": "tableMelt",
@@ -1257,7 +1382,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableMerge": {
   "name": "tableMerge",
@@ -1267,7 +1393,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "tableMerge: tableMerge --inFileArr \\",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "table"
  },
  "tableSplit": {
   "name": "tableSplit",
@@ -1277,7 +1404,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableTranspose": {
   "name": "tableTranspose",
@@ -1287,7 +1415,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tableUniq": {
   "name": "tableUniq",
@@ -1297,7 +1426,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "tauIndex": {
   "name": "tauIndex",
@@ -1307,7 +1437,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "tauIndex: tauIndex <inExpTab> <outTAU>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "trimmsa": {
   "name": "trimmsa",
@@ -1317,7 +1448,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "twoSeqBlast": {
   "name": "twoSeqBlast",
@@ -1327,7 +1459,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "blast"
  },
  "upset": {
   "name": "upset",
@@ -1337,7 +1470,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "sets"
  },
  "venn2": {
   "name": "venn2",
@@ -1347,7 +1481,8 @@
   "xmx": "2g",
   "runner": "plot",
   "help": "venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "sets"
  },
  "venn3": {
   "name": "venn3",
@@ -1357,7 +1492,8 @@
   "xmx": "2g",
   "runner": "plot",
   "help": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "sets"
  },
  "venn4": {
   "name": "venn4",
@@ -1367,7 +1503,8 @@
   "xmx": "2g",
   "runner": "plot",
   "help": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "sets"
  },
  "venn5": {
   "name": "venn5",
@@ -1377,7 +1514,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "sets"
  },
  "venn6": {
   "name": "venn6",
@@ -1387,7 +1525,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "venn6: venn6 <out> <setA..F.txt> [labels]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "sets"
  },
  "violin": {
   "name": "violin",
@@ -1397,7 +1536,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "violin: violin <in.tsv> <out> [width] [height]",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "expr"
  },
  "virusRecomb": {
   "name": "virusRecomb",
@@ -1407,7 +1547,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "asm"
  },
  "visualizeblock": {
   "name": "visualizeblock",
@@ -1417,7 +1558,8 @@
   "xmx": "3g",
   "runner": "plot",
   "help": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "syn"
  },
  "kaks": {
   "name": "kaks",
@@ -1427,7 +1569,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "sixframe": {
   "name": "sixframe",
@@ -1437,7 +1580,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "longestorf": {
   "name": "longestorf",
@@ -1447,7 +1591,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "protparam": {
   "name": "protparam",
@@ -1457,7 +1602,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️ 联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "seqpattern": {
   "name": "seqpattern",
@@ -1467,7 +1613,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap] [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "bed2gff3": {
   "name": "bed2gff3",
@@ -1477,7 +1624,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "bed2gff3 <in.bed> <out.gff3> [genome.fa]   # exon BED→GFF3（GUI 逆向 #21 RegionBedToGFF3；⚠️ BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gxf"
  },
  "careclassify": {
   "name": "careclassify",
@@ -1487,7 +1635,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "subtree": {
   "name": "subtree",
@@ -1497,7 +1646,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向 #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "protsim": {
   "name": "protsim",
@@ -1507,7 +1657,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "iqtree": {
   "name": "iqtree",
@@ -1517,7 +1668,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "tree"
  },
  "trimal": {
   "name": "trimal",
@@ -1527,7 +1679,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "gblocks": {
   "name": "gblocks",
@@ -1537,7 +1690,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "gblocks <in.aln.fa> <out.aln.fa> [--is 0.5] [--fs 0.85] [--cp 8] [--bl1 15] [--bl2 10] [--nongap 0.5] [--gaptreat none|half|all]   # Gblocks 保守区修剪（GUI 逆向 #30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "goAnno": {
   "name": "goAnno",
@@ -1547,7 +1701,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--inPutFileType BlastxXml|Query2GiTable] [--maxEvalue 1e-5] [--minQueryCov 0.33] [--outDir dir] [--isDoDbFormat]   # GO 注释管道（GUI 逆向 #32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️ idmappingDb 须 gzip 格式「ID; ID\\tGO:num; GO:num」；产物 outDir/<输入名>.xls）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "fasplit": {
   "name": "fasplit",
@@ -1557,7 +1712,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "famerge": {
   "name": "famerge",
@@ -1567,7 +1723,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "clearchar": {
   "name": "clearchar",
@@ -1577,7 +1734,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "clearchar <in.txt> <out.txt>   # 文件非法字符清理（GUI 逆向 #34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "gb2fa": {
   "name": "gb2fa",
@@ -1587,7 +1745,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "findhomolog": {
   "name": "findhomolog",
@@ -1597,7 +1756,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "findhomolog --inQueryProteinSet <query.pep> --inSubjectProteinSet <subject.pep> --targetIDs <ID[,ID2]> --outDir <dir> [--threads N] [--extendClade] [--sensitive N] [--similarity 0.x] [--weightCov 0.x] [--plot] [--directGraph]   # 最优同源查找（GUI 逆向 #37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "blast"
  },
  "taxparse": {
   "name": "taxparse",
@@ -1607,7 +1767,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "srr2ena": {
   "name": "srr2ena",
@@ -1617,7 +1778,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "srr2ena <srrList.txt> <out.xls>   # SRR→ENA 下载链接解析（GUI 逆向 #39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "sraxml2tab": {
   "name": "sraxml2tab",
@@ -1627,7 +1789,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "sranum2info": {
   "name": "sranum2info",
@@ -1637,7 +1800,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "sranum2info --sraIdList <srrList.txt> --outTabInfo <out.xls>   # SRR 批量信息表（GUI 逆向 #41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser；SRA 组 3/3 全清）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "blat": {
   "name": "blat",
@@ -1647,7 +1811,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8] [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra \"opts\"]   # BLAT 序列比对（GUI 逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "blast"
  },
  "seqrecommend": {
   "name": "seqrecommend",
@@ -1657,7 +1822,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "seqrecommend <genomeSize1n_bp> [--polyploid] [--het 0.01] [--level Minimum|Draft|Haplotyped_Resolved|Haplotyped_T2T]   # 基因组组装测序量推荐（GUI 逆向 #43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "engine"
  },
  "seqfetch": {
   "name": "seqfetch",
@@ -1667,7 +1833,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.txt> [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "seq"
  },
  "pubmed": {
   "name": "pubmed",
@@ -1677,7 +1844,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "table"
  },
  "vcfAddID": {
   "name": "vcfAddID",
@@ -1687,7 +1855,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "vcfAddID: vcfAddID --inFile <vcf> --outFile <out.vcf>   # VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gwas"
  },
  "mimicVqsr": {
   "name": "mimicVqsr",
@@ -1697,7 +1866,8 @@
   "xmx": "2g",
   "runner": "java",
   "help": "mimicVqsr: mimicVqsr --inFile <vcf> --outFile <out.txt>   # VCF 质量指标（QD/MQ/FS/SOR；GWAS）",
-  "src": "engine_registry"
+  "src": "engine_registry",
+  "group": "gwas"
  },
  "DecodeIlluminaFqPool": {
   "name": "DecodeIlluminaFqPool",
@@ -1707,7 +1877,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "DecodeIlluminaFqPool: DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode Illumina Fq Pool",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "fastaIDAppender": {
   "name": "fastaIDAppender",
@@ -1717,7 +1888,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "fastaIDAppender: fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "rpkmCal": {
   "name": "rpkmCal",
@@ -1727,7 +1899,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "rpkmCal: rpkmCal (tool, RPKMcalculator) — R P K Mcalculator",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "fpkmToTpm": {
   "name": "fpkmToTpm",
@@ -1737,7 +1910,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "fpkmToTpm: fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "tpmCalc": {
   "name": "tpmCalc",
@@ -1747,7 +1921,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "autoMakeBlastDb": {
   "name": "autoMakeBlastDb",
@@ -1757,7 +1932,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "autoRemoteBlast": {
   "name": "autoRemoteBlast",
@@ -1767,7 +1943,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "autoRemoteBlast: autoRemoteBlast (tool, remoteblast) — remoteblast",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "GoCompareBar": {
   "name": "GoCompareBar",
@@ -1777,7 +1954,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "GoCompareBar: GoCompareBar (tool, GoCompare) — Go Compare",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "plotRNAfoldloci": {
   "name": "plotRNAfoldloci",
@@ -1787,7 +1965,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "plotRNAfoldloci: plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "getLongestCompleteORF": {
   "name": "getLongestCompleteORF",
@@ -1797,7 +1976,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "getLongestCompleteORF: getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa>",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "engine"
  },
  "ExtractFeaturefromGFF3andGenome": {
   "name": "ExtractFeaturefromGFF3andGenome",
@@ -1807,7 +1987,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "ExtractFeaturefromGFF3andGenome: ExtractFeaturefromGFF3andGenome (tool, ExtractFeaturefromGFF3andGenome) — Extract Featurefrom G F F3and Genome",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "Fasta36m10toTable": {
   "name": "Fasta36m10toTable",
@@ -1817,7 +1998,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "Fasta36m10toTable: Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to Table",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "FastaIDRenamer": {
   "name": "FastaIDRenamer",
@@ -1827,7 +2009,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "FastaIDRenamer: FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "FastaIDSimplifier": {
   "name": "FastaIDSimplifier",
@@ -1837,7 +2020,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "FastaIDSimplifier: FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D Simplifier",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "FastaLongestRepresentater": {
   "name": "FastaLongestRepresentater",
@@ -1847,7 +2031,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "FastaLongestRepresentater: FastaLongestRepresentater (tool, FastaLongestRepresentater) — Fasta Longest Representater",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "FoldStructureStater": {
   "name": "FoldStructureStater",
@@ -1857,7 +2042,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "FoldStructureStater: FoldStructureStater (tool, FoldStructureStater) — Fold Structure Stater",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "GXFOverlaper": {
   "name": "GXFOverlaper",
@@ -1867,7 +2053,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "GXFOverlaper: GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "NCBITaxonomy": {
   "name": "NCBITaxonomy",
@@ -1877,7 +2064,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "NCBITaxonomy: NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "OneStepMirGraph": {
   "name": "OneStepMirGraph",
@@ -1887,7 +2075,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "OneStepMirGraph: OneStepMirGraph (tool, OneStepMirGraph) — One Step Mir Graph",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "OverlapGeneModels": {
   "name": "OverlapGeneModels",
@@ -1897,7 +2086,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "OverlapGeneModels: OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene Models",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "PredictMirSTAR": {
   "name": "PredictMirSTAR",
@@ -1907,7 +2097,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "PredictMirSTAR: PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "RNAplotAdvance": {
   "name": "RNAplotAdvance",
@@ -1917,7 +2108,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "RNAplotAdvance: RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "MIRPrediionResultStat": {
   "name": "MIRPrediionResultStat",
@@ -1927,7 +2119,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "MIRPrediionResultStat: MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R Prediion Result Stat",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "ReciprocalBlast": {
   "name": "ReciprocalBlast",
@@ -1937,7 +2130,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "ReciprocalBlast: ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "RegionGXFOverlapAnnotation": {
   "name": "RegionGXFOverlapAnnotation",
@@ -1947,7 +2141,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "RegionGXFOverlapAnnotation: RegionGXFOverlapAnnotation (tool, RegionGXFOverlapAnnotation) — Region G X F Overlap Annotation",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "TableCast": {
   "name": "TableCast",
@@ -1957,7 +2152,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "TableCast: TableCast (tool, TableCast) — Table Cast",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "TableColSelector": {
   "name": "TableColSelector",
@@ -1967,7 +2163,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "TableColSelector: TableColSelector (tool, TableColSelector) — Table Col Selector",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "TableMelt": {
   "name": "TableMelt",
@@ -1977,7 +2174,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "TableMelt: TableMelt (tool, TableMelt) — Table Melt",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "downLoadNCBIFasta": {
   "name": "downLoadNCBIFasta",
@@ -1987,7 +2185,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "downLoadNCBIFasta: downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C B I Fasta",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "extractFasta": {
   "name": "extractFasta",
@@ -1997,7 +2196,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "extractFastaSub": {
   "name": "extractFastaSub",
@@ -2007,7 +2207,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "extractFastaSub: extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta Subseq",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "keggEnrichment": {
   "name": "keggEnrichment",
@@ -2017,7 +2218,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "keggEnrichment: keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "goAnnoPipe": {
   "name": "goAnnoPipe",
@@ -2027,7 +2229,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "goAnnoPipe: goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "dnDsCalculate": {
   "name": "dnDsCalculate",
@@ -2037,7 +2240,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "ssrMiner": {
   "name": "ssrMiner",
@@ -2047,7 +2251,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "ssrMiner: ssrMiner (tool, SSRminer) — S S Rminer",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "checkPrimer": {
   "name": "checkPrimer",
@@ -2057,7 +2262,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "checkPrimer: checkPrimer (tool, CheckPrimer) — Check Primer",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "quickLocateSeqPattern": {
   "name": "quickLocateSeqPattern",
@@ -2067,7 +2273,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "quickLocateSeqPattern: quickLocateSeqPattern (tool, QuickLocateSeqPattern) — Quick Locate Seq Pattern",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "blastXmlSummaryTable": {
   "name": "blastXmlSummaryTable",
@@ -2077,7 +2284,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "blastXmlSummaryTable: blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X M L Summary Table",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "emblToFasta": {
   "name": "emblToFasta",
@@ -2087,7 +2295,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "emblToFasta: emblToFasta (tool, emblToFasta) — embl To Fasta",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "gbff2gff": {
   "name": "gbff2gff",
@@ -2097,7 +2306,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "gbff2gff: gbff2gff (tool, gbff2gff) — gbff2gff",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "extractGff3Region": {
   "name": "extractGff3Region",
@@ -2107,7 +2317,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "extractGff3Region: extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 Region",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "vcfBinCount": {
   "name": "vcfBinCount",
@@ -2117,7 +2328,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "vcfBinCount: vcfBinCount (tool, VCFBINCount) — V C F B I N Count",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "getLongestORF": {
   "name": "getLongestORF",
@@ -2127,7 +2339,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "getLongestORF: getLongestORF (tool, GetLongestORF) — Get Longest O R F",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "translater": {
   "name": "translater",
@@ -2137,7 +2350,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "translater: translater (tool, Translater) — Translater",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "makeFastaIndex": {
   "name": "makeFastaIndex",
@@ -2147,7 +2361,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "makeFastaIndex: makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "quickSplitFasta": {
   "name": "quickSplitFasta",
@@ -2157,7 +2372,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "quickSplitFasta: quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "fastaFragmenter": {
   "name": "fastaFragmenter",
@@ -2167,7 +2383,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "fastaFragmenter: fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "eggNogMapperResult": {
   "name": "eggNogMapperResult",
@@ -2177,7 +2394,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "eggNogMapperResult: eggNogMapperResult (tool, eggNogMapperResult) — egg Nog Mapper Result",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "tandemDupFinder": {
   "name": "tandemDupFinder",
@@ -2187,7 +2405,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "tandemDupFinder: tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "genePairExpCorr": {
   "name": "genePairExpCorr",
@@ -2197,7 +2416,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "genePairExpCorr: genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "slurmScriptPrepare": {
   "name": "slurmScriptPrepare",
@@ -2207,7 +2427,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "slurmScriptPrepare: slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script Prepare",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "geneExpFilter": {
   "name": "geneExpFilter",
@@ -2217,7 +2438,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "geneExpFilter: geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "prepareFileFromMCScanXtoTBtools": {
   "name": "prepareFileFromMCScanXtoTBtools",
@@ -2227,7 +2449,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "prepareFileFromMCScanXtoTBtools: prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScanXtoTBtools) — Prepare File From M C Scan Xto T Btools",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "blastXmlToTable": {
   "name": "blastXmlToTable",
@@ -2237,7 +2460,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "blastXmlToTable: blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast Xml To Self Defined Table",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "targetSoPipe": {
   "name": "targetSoPipe",
@@ -2247,7 +2471,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "targetSoPipe: targetSoPipe (tool, TargetSoPipe) — Target So Pipe",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "target2TablePipe": {
   "name": "target2TablePipe",
@@ -2257,7 +2482,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "target2TablePipe: target2TablePipe (tool, Target2TablePipe) — Target2 Table Pipe",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "mirIdentifierBasedOnTargetSo": {
   "name": "mirIdentifierBasedOnTargetSo",
@@ -2267,7 +2493,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "mirIdentifierBasedOnTargetSo: mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTargetSoResult) — M I Ridentifier Based On Target So Result",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "regionBlast": {
   "name": "regionBlast",
@@ -2277,7 +2504,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "regionBlast: regionBlast (tool, regionBlast) — region Blast",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "findBestHomologyBatch": {
   "name": "findBestHomologyBatch",
@@ -2287,7 +2515,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "findBestHomologyBatch: findBestHomologyBatch <query.pep> <subject.pep> <outDir> [--targetIds ID[,ID2...]] [--threads N] [--plot false] [--sensitive 5,10]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "engine"
  },
  "collinearityToRegion": {
   "name": "collinearityToRegion",
@@ -2297,7 +2526,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "collinearityToRegion: collinearityToRegion (tool, CollinearityToRegion) — Collinearity To Region",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "pairWiseKaKsCalculator": {
   "name": "pairWiseKaKsCalculator",
@@ -2307,7 +2537,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "pairWiseKaKsCalculator: pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair Wise Ka Ks Calculator",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "simpleBatchProcess": {
   "name": "simpleBatchProcess",
@@ -2317,7 +2548,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "simpleBatchProcess: simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch Process",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "quickGeneFamilyIdentification": {
   "name": "quickGeneFamilyIdentification",
@@ -2327,7 +2559,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "quickGeneFamilyIdentification: quickGeneFamilyIdentification (tool, QuickGeneFamilyIdentification) — Quick Gene Family Identification",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "gffCdsPhaseCorrector": {
   "name": "gffCdsPhaseCorrector",
@@ -2337,7 +2570,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [--problemGff <p.gff3>] [--report <r.txt>]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "engine"
  },
  "parallelMD5Check": {
   "name": "parallelMD5Check",
@@ -2347,7 +2581,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "parallelMD5Check: parallelMD5Check <md5_list.txt> [threads]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "engine"
  },
  "pafRefBaseCoverCalc": {
   "name": "pafRefBaseCoverCalc",
@@ -2357,7 +2592,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "pafRefBaseCoverCalc: pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Base Cover Calc",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "sRNAseqReadLenStat": {
   "name": "sRNAseqReadLenStat",
@@ -2367,7 +2603,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "sRNAseqReadLenStat: sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq Read Len Stat",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "sRNAReadTrimmer": {
   "name": "sRNAReadTrimmer",
@@ -2377,7 +2614,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "sRNAReadTrimmer: sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read Trimmer",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "sRNAseqAdaperRemover": {
   "name": "sRNAseqAdaperRemover",
@@ -2387,7 +2625,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "sRNAseqAdaperRemover: sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N Aseq Adaper Remover",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "fastqParallelTrimmer": {
   "name": "fastqParallelTrimmer",
@@ -2397,7 +2636,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "fastqParallelTrimmer: fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Parallel Trimmer",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "fastqParallelSubBest": {
   "name": "fastqParallelSubBest",
@@ -2407,7 +2647,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "fastqParallelSubBest: fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq Parallel Sub Best",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "fastqAndFasta": {
   "name": "fastqAndFasta",
@@ -2417,7 +2658,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "fastqAndFasta: fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "extractFeatureFromGTF": {
   "name": "extractFeatureFromGTF",
@@ -2427,7 +2669,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "extractFeatureFromGTF: extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa> --outFile <out> [--targetFeature CDS|exon|...] [--targetIdTag transcript_id] [--retainAttr true|false]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "engine"
  },
  "sRNAseqCollasper": {
   "name": "sRNAseqCollasper",
@@ -2437,7 +2680,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "sRNAseqCollasper: sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq Collasper",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "generateMotifFromSequences": {
   "name": "generateMotifFromSequences",
@@ -2447,7 +2691,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "generateMotifFromSequences: generateMotifFromSequences (tool, GenerateMotifFromSequences) — Generate Motif From Sequences",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "sRNAseqDeCollasper": {
   "name": "sRNAseqDeCollasper",
@@ -2457,7 +2702,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "sRNAseqDeCollasper: sRNAseqDeCollasper (tool, sRNAseqDeCollasper) — s R N Aseq De Collasper",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "findBestForkerRootTree": {
   "name": "findBestForkerRootTree",
@@ -2467,7 +2713,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "findBestForkerRootTree: findBestForkerRootTree (tool, FindBestForkerRootTree) — Find Best Forker Root Tree",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "statFasta": {
   "name": "statFasta",
@@ -2477,7 +2724,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "goEnrichMerge": {
   "name": "goEnrichMerge",
@@ -2487,7 +2735,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "goEnrichMerge: goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichment Merge Bubble",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "bigMarkerRandomDesign": {
   "name": "bigMarkerRandomDesign",
@@ -2497,7 +2746,8 @@
   "xmx": "3g",
   "runner": "java",
   "help": "bigMarkerRandomDesign: bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big Marker Random Design",
-  "src": "cli_tools_registry"
+  "src": "cli_tools_registry",
+  "group": "tool"
  },
  "logo": {
   "name": "logo",
@@ -2507,7 +2757,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "序列 LOGO 图",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "seq"
  },
  "msa": {
   "name": "msa",
@@ -2517,7 +2768,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "多序列比对可视化",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "seq"
  },
  "structure": {
   "name": "structure",
@@ -2527,7 +2779,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "基因结构图（外显子/UTR 从 GFF）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "seq"
  },
  "motif": {
   "name": "motif",
@@ -2537,7 +2790,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "Motif 分布图（MEME XML）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "seq"
  },
  "volcano": {
   "name": "volcano",
@@ -2547,7 +2801,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "火山图（DEG: GeneID Log2FC pvalue）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "expr"
  },
  "heatmap": {
   "name": "heatmap",
@@ -2557,7 +2812,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "热图（表达矩阵）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "expr"
  },
  "pca": {
   "name": "pca",
@@ -2567,7 +2823,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "PCA 图",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "expr"
  },
  "hclust": {
   "name": "hclust",
@@ -2577,7 +2834,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "expr"
  },
  "dehist": {
   "name": "dehist",
@@ -2587,7 +2845,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "差异表达双直方图",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "expr"
  },
  "draw": {
   "name": "draw",
@@ -2597,7 +2856,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "树+注释图（TreeTreeTree 多轨道）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "tree"
  },
  "unrooted": {
   "name": "unrooted",
@@ -2607,7 +2867,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "无根树可视化",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "tree"
  },
  "rooting": {
   "name": "rooting",
@@ -2617,7 +2878,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "MAD 系统发育定根",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "tree"
  },
  "cds2protein": {
   "name": "cds2protein",
@@ -2627,7 +2889,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "CDS → 蛋白质翻译",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "tool"
  },
  "make": {
   "name": "make",
@@ -2637,7 +2900,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "engine"
  },
  "hmmsearch": {
   "name": "hmmsearch",
@@ -2647,7 +2911,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "hmm"
  },
  "gxfAttr": {
   "name": "gxfAttr",
@@ -2657,7 +2922,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "gxf"
  },
  "kallisto": {
   "name": "kallisto",
@@ -2667,7 +2933,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 ",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "expr"
  },
  "fimo": {
   "name": "fimo",
@@ -2677,7 +2944,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "xml2blasttab": {
   "name": "xml2blasttab",
@@ -2687,7 +2955,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向 #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "blast"
  },
  "xml2pairwise": {
   "name": "xml2pairwise",
@@ -2697,7 +2966,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI 逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "blast"
  },
  "fa2tab": {
   "name": "fa2tab",
@@ -2707,7 +2977,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "tab2fa": {
   "name": "tab2fa",
@@ -2717,7 +2988,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "muscle": {
   "name": "muscle",
@@ -2727,7 +2999,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "bestid": {
   "name": "bestid",
@@ -2737,7 +3010,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix> [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "blast"
  },
  "getseqdb": {
   "name": "getseqdb",
@@ -2747,7 +3021,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST 库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "blast"
  },
  "genomefilter": {
   "name": "genomefilter",
@@ -2757,7 +3032,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "notung": {
   "name": "notung",
@@ -2767,7 +3043,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "tree"
  },
  "newickRename": {
   "name": "newickRename",
@@ -2777,7 +3054,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "tree"
  },
  "hmmerSearch": {
   "name": "hmmerSearch",
@@ -2787,7 +3065,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "hmm"
  },
  "memeViz": {
   "name": "memeViz",
@@ -2797,7 +3076,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "gsea": {
   "name": "gsea",
@@ -2807,7 +3087,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "table"
  },
  "tfbsShift": {
   "name": "tfbsShift",
@@ -2817,7 +3098,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "mcscanxd": {
   "name": "mcscanxd",
@@ -2827,7 +3109,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "syn"
  },
  "quickAnno": {
   "name": "quickAnno",
@@ -2837,7 +3120,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   # diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "blast"
  },
  "smart": {
   "name": "smart",
@@ -2847,7 +3131,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "seq"
  },
  "mirnatarget": {
   "name": "mirnatarget",
@@ -2857,7 +3142,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "mirna"
  },
  "msy": {
   "name": "msy",
@@ -2867,7 +3153,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "syn"
  },
  "gxfSplit": {
   "name": "gxfSplit",
@@ -2877,7 +3164,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "gxf"
  },
  "gxfIdAppender": {
   "name": "gxfIdAppender",
@@ -2887,7 +3175,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>",
-  "src": "auto_manual"
+  "src": "auto_manual",
+  "group": "gxf"
  },
  "genestructure": {
   "name": "genestructure",
@@ -2897,7 +3186,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "seq"
  },
  "treeRooting": {
   "name": "treeRooting",
@@ -2907,7 +3197,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "(alias of rooting) MAD 系统发育定根",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "tree"
  },
  "seqlogo": {
   "name": "seqlogo",
@@ -2917,7 +3208,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "(alias of logo) 序列 LOGO 图",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "engine"
  },
  "heatmap2": {
   "name": "heatmap2",
@@ -2927,7 +3219,8 @@
   "xmx": "",
   "runner": "plot",
   "help": "(alias of heatmap) 热图（表达矩阵）",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "engine"
  },
  "tree": {
   "name": "tree",
@@ -2938,6 +3231,7 @@
   "runner": "plot",
   "help": "树+注释图（TreeTreeTree 多轨道）",
   "alias_of": "draw",
-  "src": "cli_manual"
+  "src": "cli_manual",
+  "group": "engine"
  }
 }

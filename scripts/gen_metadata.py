@@ -102,6 +102,30 @@ def scan_bridges():
     return sorted(f[:-5] for f in os.listdir(BRIDGES) if f.endswith(".java"))
 
 
+def _infer_group(name, kind, src=""):
+    """命令分组推断(CATEGORY_MAP 优先, kind/src 兜底)"""
+    try:
+        sys.path.insert(0, ROOT)
+        from tbtools_cli.cli_load import CATEGORY_MAP as _CM
+        if name in _CM:
+            return _CM[name]
+    except Exception:
+        pass
+    if kind == "tool":
+        return "tool"
+    if kind == "manual":
+        # cli.py 装饰器分组: @expr_group.command("volcano") → expr
+        try:
+            cli_src = open(CLI, encoding="utf-8").read()
+            m = re.search(r'@(\w+_group)\.command\(\s*["\']' + re.escape(name) + r'["\']', cli_src)
+            if m:
+                grp = m.group(1)[:-6]  # expr_group → expr
+                return grp
+        except Exception:
+            pass
+    return "engine"
+
+
 def build():
     reg = scan_engine_registry()
     tools = scan_cli_tools()
@@ -131,6 +155,9 @@ def build():
     for _v in meta.values():
         _v.setdefault("kind", "manual")
         _v.setdefault("mode", "manual")
+    # 二期: 统一补 group 字段(直接可查, 无需运行时推断)
+    for _n, _v in meta.items():
+        _v.setdefault("group", _infer_group(_n, _v.get("kind", "manual"), _v.get("src", "")))
     counts = {"registry": len(reg), "tools": len(tools), "bridges": len(bridges),
               "meta_total": len(meta),
               "plot_ish": sum(1 for v in meta.values() if v.get("kind") in ("bridge", "direct", "manual"))}
