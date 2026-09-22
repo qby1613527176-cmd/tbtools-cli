@@ -575,7 +575,8 @@ def register_top(cli, _LG):
         try:
             if timeout_s and timeout_s > 0:
                 # 超时模式: 独立进程执行, 可整体杀进程树(含 java/xvfb 子进程)
-                import subprocess as _sp, sys as _sys
+                import subprocess as _sp
+                import sys as _sys
                 try:
                     _r = _sp.run([_sys.executable, "-m", "tbtools_cli.cli"] + list(args),
                                  timeout=timeout_s)
@@ -587,7 +588,7 @@ def register_top(cli, _LG):
                 try:
                     ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
                 except SystemExit as _e:
-                    ec = _e.code or 0  # 命令内部 sys.exit(0/2) 在嵌套调用下逃逸——捕获
+                    ec = int(_e.code or 0)  # 命令内部 sys.exit(0/2) 在嵌套调用下逃逸——捕获
                 ec = ec or 0
         finally:
             if _saved_fd is not None:
@@ -628,6 +629,11 @@ def register_top(cli, _LG):
     def search_cmd(keyword, as_json, in_fmt, out_fmt, cap):
         """模糊搜索命令（匹配名称+doc）: tbtools search <关键词> [--json]"""
         import json as _json
+        if not keyword and not (in_fmt or out_fmt or cap):
+            click.echo(_json.dumps({"query": "", "hits": [], "error": "need keyword or --input/--output/--capability"},
+                                   ensure_ascii=False) if as_json
+                       else "❌ 需要关键词或 --input/--output/--capability。试试: tbtools search volcano")
+            sys.exit(1)
         meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
         if not os.path.isfile(meta_path):
             click.echo(f"❌ 元数据缺失: {meta_path}", err=True)
