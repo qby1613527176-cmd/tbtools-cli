@@ -53,6 +53,39 @@ asciinema play docs/images/demo.cast
 - [Credits](#credits)
 - [License](#license)
 
+## 🎯 这是什么
+
+生物信息学积累了大量成熟工具,但多为人工 GUI/CLI 设计,参数/格式/依赖复杂。**tbtools-cli 将 TBtools-II 及传统生信工具转换为 Agent 可发现、可调用、可验证的接口层**——人类用 CLI,AI Agent 用同一套接口(搜索/元数据/RPC/结构化输出)。
+
+```
+        Agent / 用户 / Shell
+                 │
+        ┌────────┴────────┐
+        ↓                 ↓
+      CLI              RPC(JSON)
+        │                 │
+        └────────┬────────┘
+                 ↓
+    统一注册层(metadata 单一数据源,268 命令)
+                 ↓
+  ┌────────┬─────────┬─────────┐
+  ↓        ↓         ↓         ↓
+ Bridge   Direct    Tool     Engine
+(118)   Engine    (82)     Reflection
+                 ↓
+         TBtools-II / 系统工具
+                 ↓
+           产物 SVG/TSV/图
+```
+
+### 典型工作流(Common Workflows)
+
+- **基因家族分析(GRAS 实测)**: FASTA → `muscle`/`trimal` → `iqtree` → `motif` → `genestructure`(DEG 表 ± `volcano`)
+- **RNA-seq**: counts → `tpmCalc` → `pca` → `heatmap` → `volcano`(DEG)
+- **比较基因组学**: GFF → `mcscanx` → `dualsyn` → `dotplot`
+- **系统发育**: FASTA → `msa` → `trimal` → `one-step`(IQ-TREE)→ `tree draw`
+- **Agent 调用**: `tbtools search <任务>` → `version --json` / `rpc <method>` → 结构化结果
+
 ## 🚀 Quick Start
 
 > **最小示例数据**（新人入门防格式坑）: 本仓库 `examples/data/` 为官方数据,`git clone` 或直接下载:

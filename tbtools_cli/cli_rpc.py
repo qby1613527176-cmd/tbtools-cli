@@ -185,6 +185,23 @@ def rpc_start(port, mem, force):
     click.echo(f"❌ 启动超时（30s），日志: {_rpc_log_file(port)}", err=True)
     sys.exit(1)
 
+
+@rpc_group.command('logs')
+@click.option('--tail', 'n', type=int, default=50, help='显示末尾 N 行(0=全部)')
+@click.option('--port', default=8765, help='RPC 端口')
+def logs(n, port):
+    """查看 RPC 服务器日志(尾部 N 行;0=全部)"""
+    import os as _os
+    log = _rpc_log_file(port)
+    if not _os.path.isfile(log):
+        click.echo(f"❌ 无日志文件(服务器未启动过?): {log}", err=True)
+        sys.exit(1)
+    if n <= 0:
+        click.echo(open(log, encoding="utf-8", errors="replace").read())
+    else:
+        lines = open(log, encoding="utf-8", errors="replace").read().splitlines()
+        click.echo("\n".join(lines[-n:]))
+
 @rpc_group.command('stop')
 @click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
 def rpc_stop(port):
