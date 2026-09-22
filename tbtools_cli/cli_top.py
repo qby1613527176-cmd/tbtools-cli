@@ -603,9 +603,12 @@ def register_top(cli, _LG):
         sys.exit(ec if ec else 0)
 
     @cli.command(name="search")
-    @click.argument("keyword", required=True)
+    @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
-    def search_cmd(keyword, as_json):
+    @click.option("--input", "in_fmt", default=None, help="反向搜索: 输入格式(gff3/fasta/tsv/...)")
+    @click.option("--output", "out_fmt", default=None, help="反向搜索: 输出格式(svg/tsv/nwk/...)")
+    @click.option("--capability", "cap", default=None, help="反向搜索: 能力标签(如 phylogeny/enrichment)")
+    def search_cmd(keyword, as_json, in_fmt, out_fmt, cap):
         """模糊搜索命令（匹配名称+doc）: tbtools search <关键词> [--json]"""
         import json as _json
         meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
@@ -614,7 +617,7 @@ def register_top(cli, _LG):
             sys.exit(1)
         meta = _json.load(open(meta_path, encoding="utf-8"))
         # 多词查询: 空格拆分, 全部词须命中(名/help/class)——Agent 自然语言("gene structure")
-        kws = [w for w in keyword.lower().split() if w]
+        kws = [w for w in (keyword or "").lower().split() if w]
         hits = []
         for name, v in meta.items():
             hay = " ".join([name.lower(),
@@ -635,8 +638,31 @@ def register_top(cli, _LG):
                     kind = v.get("kind", "?")
                     desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
                     hits.append((name, cat, kind, desc))
+
+        # 反向/能力过滤(GLM: 能力图搜索; --input/--output/--capability)
+        if (in_fmt or out_fmt or cap) and meta:
+            filtered = []
+            for name, v in meta.items():
+                ins = [i.get("format", "") for i in v.get("inputs", [])] if v.get("inputs") else []
+                outs = v.get("outputs", []) or []
+                caps = v.get("capabilities", []) or []
+                if in_fmt and in_fmt not in ins:
+                    continue
+                if out_fmt and out_fmt not in outs:
+                    continue
+                if cap and cap not in caps:
+                    continue
+                cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
+                desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
+                filtered.append((name, cat, v.get("kind", "?"), desc))
+            hits = filtered
         if not hits:
-            click.echo(_json.dumps({"query": keyword, "hits": []}, ensure_ascii=False) if as_json
+            if not keyword and not (in_fmt or out_fmt or cap):
+                click.echo(_json.dumps({"query": "", "hits": [], "error": "need keyword or --input/--output/--capability"},
+                                       ensure_ascii=False) if as_json
+                           else "❌ 需要关键词或 --input/--output/--capability。试试: tbtools search volcano")
+                sys.exit(1)
+            click.echo(_json.dumps({"query": keyword or "", "hits": []}, ensure_ascii=False) if as_json
                        else f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")
             sys.exit(1)
         if as_json:
@@ -644,7 +670,7 @@ def register_top(cli, _LG):
                 {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in sorted(hits)
             ]}, ensure_ascii=False, indent=1))
             return
-        click.echo(f"🔍 匹配 '{keyword}' 的命令（{len(hits)} 个）:")
+        click.echo(f"🔍 匹配 '{keyword or ""}' 的命令（{len(hits)} 个）:")
         for name, cat, kind, desc in sorted(hits):
             click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")
         click.echo("\n查看详情: tbtools help <命令> | 全量: tbtools list")
