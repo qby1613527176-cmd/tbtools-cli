@@ -61,3 +61,34 @@ def test_impl_reflection_matches_registry():
     assert not missing, f"注册表命令缺失 impl: {sorted(missing)[:10]}"
     # 反射命名规则一致(无无关的 _x_impl)
     assert len(reflected) >= len(reg_keys)
+
+
+def test_metadata_covers_runtime_commands():
+    """发现层防丢(二期教训): 运行时分组命令必须可被 metadata 发现。
+
+    背景: N23/N26 删除注册表条目导致 26 个手写 impl 命令从 metadata 消失(可用但 search/help 找不到)。
+    """
+    import json
+    import os as _os
+    import tbtools_cli.cli_load as _cl
+    root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+    meta = json.load(open(_os.path.join(root, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
+    cli_names = set()
+    import tbtools_cli.cli as _c
+    from click.testing import CliRunner
+    r = CliRunner().invoke(_c.cli, ["list", "plots"])
+    import re as _re
+    cli_names |= set(_re.findall(r"^    (\S+)", r.output, _re.M))
+    r2 = CliRunner().invoke(_c.cli, ["list", "tools"])
+    cli_names |= set(_re.findall(r"^    (\S+)", r2.output, _re.M))
+    hidden = cli_names - set(meta)
+    # 顶层管理命令不在 metadata 属预期;分组绘图/工具命令必须可发现
+    expected_hidden = {"version", "doctor", "setup", "fetch_jar", "help", "examples", "list", "new",
+                       "search", "completion", "presets", "check", "env", "tool-describe",
+                       "tool-validate", "tool-provenance", "rpc", "stat-fasta", "cds2protein",
+                       "fasta-extract", "seqlogo", "msa", "structure", "motif",
+                       "volcano", "heatmap", "pca", "hclust", "dehist",
+                       "tree", "unrooted", "rooting", "onesteptree", "draw", "gene-structure",
+                       "genestructure", "one-step", "treeRooting"}
+    real_missing = hidden - expected_hidden
+    assert not real_missing, f"运行时命令在 metadata 中不可发现(发现层缺口): {sorted(real_missing)[:15]}"

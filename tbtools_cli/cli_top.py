@@ -515,6 +515,40 @@ def register_top(cli, _LG):
             click.echo(f"  结论: {'✅ 可执行' if ok else '❌ 有预检问题(可 --force 忽略,见引擎报错)'}")
         sys.exit(0 if ok else 3)
 
+    @cli.command(name="tool-provenance")
+    @click.argument("artifact")
+    def tool_provenance(artifact):
+        """查询运行溯源: 读取 <artifact>.tbtools.json(Agent 能力7)"""
+        import json as _json
+        p = artifact + ".tbtools.json"
+        if not os.path.isfile(p):
+            click.echo(f"❌ 无溯源文件: {p}(命令成功运行后自动生成)", err=True)
+            sys.exit(1)
+        d = _json.load(open(p, encoding="utf-8"))
+        click.echo(_json.dumps(d, ensure_ascii=False, indent=1))
+
+    @cli.command(name="tool-result")
+    @click.argument("artifact")
+    def tool_result(artifact):
+        """结构化结果摘要(Agent 能力5): 从 provenance 提炼 status/artifacts/inputs"""
+        import json as _json
+        p = artifact + ".tbtools.json"
+        if not os.path.isfile(p):
+            click.echo(_json.dumps({"status": "unknown", "artifact": artifact,
+                                    "error": "无溯源文件(命令未成功运行或未生成)"},
+                                   ensure_ascii=False, indent=1))
+            sys.exit(1)
+        d = _json.load(open(p, encoding="utf-8"))
+        summary = {
+            "status": "success" if d.get("exit_code") == 0 else "failed",
+            "tool": d.get("command"),
+            "artifacts": [{"path": o, "role": "primary_output"} for o in d.get("outputs", [])],
+            "inputs_count": len(d.get("inputs", [])),
+            "tbtools_cli": d.get("tbtools_cli"),
+            "timestamp": d.get("timestamp"),
+        }
+        click.echo(_json.dumps(summary, ensure_ascii=False, indent=1))
+
     @cli.command(name="search")
     @click.argument("keyword", required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
