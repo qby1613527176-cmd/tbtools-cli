@@ -33,6 +33,29 @@ asciinema play docs/images/demo.cast
 # 或上传 asciinema.org 网页播放(asciinema upload)
 ```
 
+## 🤖 Agent 接口(结构化调用, AI 可用)
+
+统一命令模型 + 结构化 JSON 输出,Agent 可程序化发现/预检/执行/验证:
+
+| 能力 | 命令 | 说明 |
+|---|---|---|
+| 1 发现 | `tbtools search <任务> --json` | 自然语言多词搜索(名称/描述/类名) |
+| 2 描述 | `tbtools tool-describe <命令> --json` | 命令 schema(分组/参数/输入格式/输出/坑位) |
+| 3 预检 | `tbtools tool-validate <命令> <输入...> --json` | 执行前检查(存在性/格式/列数) |
+| 4 执行 | `tbtools tool-run <命令参数...> --json` | 统一执行 + {exit_code/duration/artifacts} |
+| 5 结果 | `tbtools tool-result <产出>` | 结构化结果摘要(状态/产物) |
+| 6 溯源 | `tbtools tool-provenance <产出>` | 运行记录(命令/版本/输入 sha/时间戳) |
+| 7 环境 | `tbtools env --json` / `env --lock` | 环境快照/可复现性固化 |
+
+```bash
+# Agent 调用链示例
+tbtools search "gene structure" --json        # 发现
+tbtools tool-describe genestructure --json    # 理解 schema
+tbtools tool-validate genestructure in.gff ids.txt --json   # 预检
+tbtools tool-run seq genestructure in.gff ids.txt out.svg --json  # 执行
+tbtools tool-provenance out.svg               # 溯源验证
+```
+
 ## 📑 Table of Contents
 
 - [Demo](#demo)
