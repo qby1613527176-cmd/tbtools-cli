@@ -22,17 +22,17 @@
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
-| `bestid` | 手动 |  |
+| `bestid` | 手动 | 31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa |
 | `blat` | 桥 | 42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制） |
 | `filterCScore` | 直连 | filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5] |
 | `findhomolog` | 直连 | 37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomol |
-| `getseqdb` | 手动 |  |
-| `quickAnno` | 手动 |  |
+| `getseqdb` | 手动 | 35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batc |
+| `quickAnno` | 手动 | diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错） |
 | `quickFamily` | 直连 | quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr |
 | `recipBlast` | 直连 | recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i |
 | `twoSeqBlast` | 直连 | twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp |
-| `xml2blasttab` | 手动 |  |
-| `xml2pairwise` | 手动 |  |
+| `xml2blasttab` | 手动 | 25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectI |
+| `xml2pairwise` | 手动 | 25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-fra |
 
 ## chipseq — ChIP-seq（4 个）
 
@@ -86,7 +86,7 @@
 | `emblToFasta` | 工具 |  |
 | `extractFasta` | 工具 |  |
 | `extractFastaSub` | 工具 |  |
-| `extractFeatureFromGTF` | 手动 |  |
+| `extractFeatureFromGTF` | 手动 | extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa |
 | `extractGff3Region` | 工具 |  |
 | `fastaFragmenter` | 工具 |  |
 | `fastaIDAppender` | 工具 |  |
@@ -95,16 +95,16 @@
 | `fastqParallelTrimmer` | 工具 |  |
 | `filesplit` | 桥 | filesplit <inFile> <numParts> |
 | `findBestForkerRootTree` | 工具 |  |
-| `findBestHomologyBatch` | 手动 |  |
+| `findBestHomologyBatch` | 手动 | findBestHomologyBatch <query.pep> <subject.pep> <outDir> [-- |
 | `fpkmToTpm` | 工具 |  |
 | `gbff2gff` | 工具 |  |
 | `geneExpFilter` | 工具 |  |
 | `genePairExpCorr` | 工具 |  |
 | `generateMotifFromSequences` | 工具 |  |
 | `generic` | 桥 | generic <engineClass> <method[+method2]> <out> [--set field |
-| `getLongestCompleteORF` | 手动 |  |
+| `getLongestCompleteORF` | 手动 | getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa> |
 | `getLongestORF` | 工具 |  |
-| `gffCdsPhaseCorrector` | 手动 |  |
+| `gffCdsPhaseCorrector` | 手动 | gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [ |
 | `goAnnoPipe` | 工具 |  |
 | `goEnrichMerge` | 工具 |  |
 | `gsadiag` | 桥 | gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax |
@@ -114,7 +114,7 @@
 | `heatmap2` | 手动 |  |
 | `keggEnrichment` | 工具 |  |
 | `logo` | 手动 |  |
-| `make` | 手动 |  |
+| `make` | 手动 | 工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名） |
 | `makeFastaIndex` | 工具 |  |
 | `marker` | 直连 | marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe |
 | `markertools` | 桥 | markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi |
@@ -122,7 +122,7 @@
 | `mirIdentifierBasedOnTargetSo` | 工具 |  |
 | `pafRefBaseCoverCalc` | 工具 |  |
 | `pairWiseKaKsCalculator` | 工具 |  |
-| `parallelMD5Check` | 手动 |  |
+| `parallelMD5Check` | 手动 | parallelMD5Check <md5_list.txt> [threads] |
 | `plotRNAfoldloci` | 工具 |  |
 | `prepareFileFromMCScanXtoTBtools` | 工具 |  |
 | `qpcrproc` | 桥 | qpcrproc <in.qpcr.tab> <out.xls> |
@@ -167,13 +167,13 @@
 | `cubeheatmap` | 桥 | group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBou |
 | `dehist` | 手动 |  |
 | `distance` | 桥 | distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi |
-| `efpHeat` | 手动 |  |
+| `efpHeat` | 手动 | efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> -- |
 | `exprCorr` | 桥 | exprCorr <inFPKM> <outCorrMat> |
 | `gbar` | 桥 | 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value） |
 | `groupCol` | 直连 | groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean| |
 | `groupedbar` | 桥 | 数据格式=每行 <group>	<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarR |
 | `hclust` | 手动 |  |
-| `kallisto` | 手动 |  |
+| `kallisto` | 手动 | RNA-seq 定量（插件 P00740 CLI 化，直调 |
 | `layoutheatmap` | 桥 | layoutheatmap <layout.tsv> <expr.tsv> <out> [--options] |
 | `mountain` | 桥 | mountain <fold.txt> <out.tsv> |
 | `multiEfp` | 桥 | multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId |
@@ -210,10 +210,10 @@
 | `genelocation` | 直连 | genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph |
 | `genelocgff` | 桥 | genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam |
 | `gxfAppend` | 直连 | GFF seqid+ID 加前缀 |
-| `gxfAttr` | 手动 |  |
+| `gxfAttr` | 手动 | GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎） |
 | `gxfFix` | 直连 | GFF 修复（重复ID前缀/CDS phase/dang |
 | `gxfGenepos` | 直连 | G |
-| `gxfIdAppender` | 手动 |  |
+| `gxfIdAppender` | 手动 | gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix> |
 | `gxfMatch` | 直连 | gxfMatch <in.gff3> <inGenome.fa> |
 | `gxfOverlap` | 直连 | gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand |
 | `gxfRecall` | 直连 | 从 gene 行恢复 mRNA 特征（第82引擎， |
@@ -221,7 +221,7 @@
 | `gxfRename` | 直连 | gxfRename <in.gff3> <out.gff3> <renameMap.tsv> |
 | `gxfRepGXF` | 直连 | gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID |
 | `gxfRepIDs` | 直连 | gxfRepIDs <in.gff3> <out.txt> |
-| `gxfSplit` | 手动 |  |
+| `gxfSplit` | 手动 | gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N] |
 | `gxfStat` | 直连 | GFF 统计（基因/mRNA/外显子/内含子/C |
 | `regionAnno` | 直连 | regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [- |
 
@@ -230,8 +230,8 @@
 | 命令 | 类型 | 说明 |
 |---|---|---|
 | `hmmExtract` | 直连 | 从 HMM 文件按 NAM |
-| `hmmerSearch` | 手动 |  |
-| `hmmsearch` | 手动 |  |
+| `hmmerSearch` | 手动 | Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList） |
+| `hmmsearch` | 手动 | HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名） |
 
 ## mirna — miRNA（3 个）
 
@@ -239,7 +239,7 @@
 |---|---|---|
 | `mirnaIdentify` | 桥 | 78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29） |
 | `mirnaTarget2` | 直连 | mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true |
-| `mirnatarget` | 手动 |  |
+| `mirnatarget` | 手动 | mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] |
 
 ## seq — 序列/结构/域（43 个）
 
@@ -248,15 +248,15 @@
 | `amazingmeta` | 桥 | amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [ |
 | `careclassify` | 桥 | 22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA） |
 | `cddmotif` | 桥 | cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new |
-| `fa2tab` | 手动 |  |
+| `fa2tab` | 手动 | 26 FastaTable.fa2tab；与 tab2fa 往返一致） |
 | `famerge` | 桥 | 33 FastaMergerAndSpliter.Merge） |
 | `fasplit` | 直连 | 33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.spli |
-| `fimo` | 手动 |  |
+| `fimo` | 手动 | MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite） |
 | `gb2fa` | 桥 | 36 genBank2Fasta；头含 locus/accession/organism/definition） |
 | `gblocks` | 桥 | 30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 v |
 | `gel` | 直连 | 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32） |
 | `genestructure` | 手动 |  |
-| `genomefilter` | 手动 |  |
+| `genomefilter` | 手动 | 19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过 |
 | `gfa` | 桥 | gfa <in.gfa> <out> [width] [height] |
 | `gfa2fa` | 直连 | GFA 组装图 → FASTA（第91引擎，GFAtoFast |
 | `longestorf` | 直连 | 17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 Arg |
@@ -267,12 +267,12 @@
 | `mastrun` | 桥 | mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [-- |
 | `meme` | 桥 | MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fi |
 | `meme2tab` | 桥 | MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab） |
-| `memeViz` | 手动 |  |
+| `memeViz` | 手动 | MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板） |
 | `memerun` | 桥 | memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma |
 | `motif` | 手动 |  |
 | `mpattern` | 桥 | MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗 |
 | `msa` | 手动 |  |
-| `muscle` | 手动 |  |
+| `muscle` | 手动 | 27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语 |
 | `pep2codon` | 桥 | pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out> |
 | `pfammotif` | 桥 | pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic |
 | `plotrna` | 直连 | plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf] |
@@ -284,9 +284,9 @@
 | `seqpattern` | 直连 | 20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔） |
 | `simplehmmscan` | 桥 | simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt |
 | `sixframe` | 桥 | 16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 |
-| `smart` | 手动 |  |
-| `tab2fa` | 手动 |  |
-| `tfbsShift` | 手动 |  |
+| `smart` | 手动 | SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 1 |
+| `tab2fa` | 手动 | 26 FastaTable.tab2fa） |
+| `tfbsShift` | 手动 | 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.m |
 | `trimal` | 桥 | 29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtre |
 
 ## sets — 集合/韦恩（6 个）
@@ -313,10 +313,10 @@
 | `findblockdual` | 桥 | findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa |
 | `findblockmultiple` | 桥 | findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou |
 | `mcscanx` | 桥 | 共线性检测 |
-| `mcscanxd` | 手动 |  |
+| `mcscanxd` | 手动 | OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包） |
 | `microgenome` | 直连 | microgenome <inGBK> <anno.tsv> <out> [micro|macro] |
 | `microsyn` | 桥 | microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star |
-| `msy` | 手动 |  |
+| `msy` | 手动 | msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w |
 | `multisyn` | 桥 | multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt |
 | `pafcomp` | 桥 | pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q |
 | `pafref` | 直连 | pafref --inPaf <paf> --outTab <out.tsv> |
@@ -336,7 +336,7 @@
 | `goEnrich` | 桥 | GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐） |
 | `goParse` | 直连 | GO 词典解析（第103 |
 | `golevel` | 桥 | GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb） |
-| `gsea` | 手动 |  |
+| `gsea` | 手动 | GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 |
 | `keggEnrich` | 桥 | KEGG 富集分析（G4 补齐，需真实 .keg 参考文件） |
 | `levelGo` | 直连 | levelGo <gene2Go.txt> <outTable> <oboFile> [--level N] |
 | `pubmed` | 桥 | 45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表） |
@@ -350,7 +350,7 @@
 | `tableColSelect` | 桥 | tableColSelect <inTable> <outTable> <colName1> [colName2...] |
 | `tableCollapse` | 桥 | tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader |
 | `tableMelt` | 直连 | 宽表转长表（第88引擎，TableMelt） |
-| `tableMerge` | 手动 |  |
+| `tableMerge` | 手动 | tableMerge --inFileArr \ |
 | `tableSplit` | 直连 | tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt] |
 | `tableTranspose` | 直连 | 表格转置（第95引擎，TableTran |
 | `tableUniq` | 直连 | tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true| |
@@ -364,8 +364,8 @@
 | `findpath` | 桥 | findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> -- |
 | `iqtree` | 桥 | 28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.tr |
 | `kaks` | 直连 | 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--ke |
-| `newickRename` | 手动 |  |
-| `notung` | 手动 |  |
+| `newickRename` | 手动 | 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName） |
+| `notung` | 手动 | 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化） |
 | `nwAlign` | 桥 | Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 Simple |
 | `phylotree` | 桥 | phylotree <in.nwk> <out> [vertical] [width] [height] |
 | `subtree` | 桥 | 23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contai |

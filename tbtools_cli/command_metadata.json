@@ -246,7 +246,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "efpHeat: efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> --expMat <expMat.tsv> --geneId <ID> --outImg <out>",
   "src": "auto_manual"
  },
  "eggnog": {
@@ -1266,7 +1266,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "tableMerge: tableMerge --inFileArr \\",
   "src": "auto_manual"
  },
  "tableSplit": {
@@ -1796,7 +1796,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "getLongestCompleteORF: getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa>",
   "src": "auto_manual"
  },
  "ExtractFeaturefromGFF3andGenome": {
@@ -2286,7 +2286,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "findBestHomologyBatch: findBestHomologyBatch <query.pep> <subject.pep> <outDir> [--targetIds ID[,ID2...]] [--threads N] [--plot false] [--sensitive 5,10]",
   "src": "auto_manual"
  },
  "collinearityToRegion": {
@@ -2336,7 +2336,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [--problemGff <p.gff3>] [--report <r.txt>]",
   "src": "auto_manual"
  },
  "parallelMD5Check": {
@@ -2346,7 +2346,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "parallelMD5Check: parallelMD5Check <md5_list.txt> [threads]",
   "src": "auto_manual"
  },
  "pafRefBaseCoverCalc": {
@@ -2426,7 +2426,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "extractFeatureFromGTF: extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa> --outFile <out> [--targetFeature CDS|exon|...] [--targetIdTag transcript_id] [--retainAttr true|false]",
   "src": "auto_manual"
  },
  "sRNAseqCollasper": {
@@ -2676,7 +2676,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）",
   "src": "auto_manual"
  },
  "hmmsearch": {
@@ -2686,7 +2686,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
   "src": "auto_manual"
  },
  "gxfAttr": {
@@ -2696,7 +2696,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
   "src": "auto_manual"
  },
  "kallisto": {
@@ -2706,7 +2706,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 ",
   "src": "auto_manual"
  },
  "fimo": {
@@ -2716,7 +2716,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）",
   "src": "auto_manual"
  },
  "xml2blasttab": {
@@ -2726,7 +2726,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向 #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）",
   "src": "auto_manual"
  },
  "xml2pairwise": {
@@ -2736,7 +2736,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI 逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
   "src": "auto_manual"
  },
  "fa2tab": {
@@ -2746,7 +2746,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
   "src": "auto_manual"
  },
  "tab2fa": {
@@ -2756,7 +2756,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）",
   "src": "auto_manual"
  },
  "muscle": {
@@ -2766,7 +2766,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
   "src": "auto_manual"
  },
  "bestid": {
@@ -2776,7 +2776,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix> [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
   "src": "auto_manual"
  },
  "getseqdb": {
@@ -2786,7 +2786,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST 库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，",
   "src": "auto_manual"
  },
  "genomefilter": {
@@ -2796,7 +2796,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
   "src": "auto_manual"
  },
  "notung": {
@@ -2806,7 +2806,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
   "src": "auto_manual"
  },
  "newickRename": {
@@ -2816,7 +2816,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
   "src": "auto_manual"
  },
  "hmmerSearch": {
@@ -2826,7 +2826,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
   "src": "auto_manual"
  },
  "memeViz": {
@@ -2836,7 +2836,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
   "src": "auto_manual"
  },
  "gsea": {
@@ -2846,7 +2846,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
   "src": "auto_manual"
  },
  "tfbsShift": {
@@ -2856,7 +2856,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
   "src": "auto_manual"
  },
  "mcscanxd": {
@@ -2866,7 +2866,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
   "src": "auto_manual"
  },
  "quickAnno": {
@@ -2876,7 +2876,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   # diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）",
   "src": "auto_manual"
  },
  "smart": {
@@ -2886,7 +2886,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
   "src": "auto_manual"
  },
  "mirnatarget": {
@@ -2896,7 +2896,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]",
   "src": "auto_manual"
  },
  "msy": {
@@ -2906,7 +2906,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]",
   "src": "auto_manual"
  },
  "gxfSplit": {
@@ -2916,7 +2916,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]",
   "src": "auto_manual"
  },
  "gxfIdAppender": {
@@ -2926,7 +2926,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>",
   "src": "auto_manual"
  },
  "tree": {

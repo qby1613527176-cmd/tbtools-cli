@@ -64,11 +64,12 @@ def scan_manual_commands():
     # 否则这些命令从 metadata/search/help 消失(2026-09-22 二期发现)
     try:
         ac_src = open(os.path.join(os.path.dirname(CLI), "auto_commands.py"), encoding="utf-8").read()
-        for name in re.findall(r"^def _([a-zA-Z0-9]+)_impl\(", ac_src, re.M):
+        for m in re.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\n\"]*)", ac_src, re.M):
+            name, docfirst = m.group(1), m.group(2).strip()
             if name in cmds or name in ("simplehmmscan", "longestorf"):
                 continue
             cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
-                          "xmx": "", "runner": "plot", "help": "", "src": "auto_manual"}
+                          "xmx": "", "runner": "plot", "help": docfirst[:200], "src": "auto_manual"}
     except Exception:
         pass
     return cmds
