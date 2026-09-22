@@ -236,11 +236,11 @@ def rpc_status(port):
 
 @rpc_group.command('methods')
 @click.option('--port', '-p', type=int, default=8765, help='RPC 端口')
-@click.option('--mem', '-m', default='4g', help='自动拉起时的 Java 堆内存')
-@click.option('--no-autostart', is_flag=True, help='禁用在不可达时自动拉起')
-def rpc_methods(port, mem, no_autostart):
-    """列出全部 188 RPC 方法（服务不可达时自动拉起）"""
-    if not no_autostart and not _ensure_rpc(port, mem):
+@click.option('--mem', '-m', default='4g', help='--autostart 时的 Java 堆内存')
+@click.option('--autostart', is_flag=True, help='服务不可达时自动拉起(默认不启动进程——发现操作应 side-effect free)')
+def rpc_methods(port, mem, autostart):
+    """列出全部 188 RPC 方法（默认静态发现, 不启动服务器; --autostart 时自动拉起）"""
+    if autostart and not _ensure_rpc(port, mem):
         click.echo("   手动启动: tbtools rpc start", err=True)
         sys.exit(1)
     try:

@@ -458,6 +458,7 @@ def register_top(cli, _LG):
             help_txt = (cmd_obj.help or "") if cmd_obj else ""
         cls = v.get("class") or ("" if command not in _LG._groups.get("engine", type("x", (), {"commands": {}})).commands else "")
         desc = {
+            "schema_version": "1.0",
             "id": f"tbtools.{group}.{command}",
             "name": command,
             "group": group,
@@ -483,7 +484,8 @@ def register_top(cli, _LG):
     @click.argument("command")
     @click.argument("inputs", nargs=-1, required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent)")
-    def tool_validate(command, inputs, as_json):
+    @click.option("--force", is_flag=True, help="忽略预检问题(结果 valid=True, 保留 warnings)")
+    def tool_validate(command, inputs, as_json, force):
         """执行前预检: 输入存在性/格式/列数(Agent 能力3;不运行命令)"""
         import json as _json
         checks = []
@@ -513,7 +515,7 @@ def register_top(cli, _LG):
                 w = f" ⚠️ {c2.get('warning')}" if c2.get("warning") else ""
                 click.echo(f"  {st} {c2['input']} [{c2.get('format','?')}/{c2.get('columns','?')}列]{w}")
             click.echo(f"  结论: {'✅ 可执行' if ok else '❌ 有预检问题(可 --force 忽略,见引擎报错)'}")
-        sys.exit(0 if ok else 3)
+        sys.exit(0 if (ok or force) else 3)
 
     @cli.command(name="tool-provenance")
     @click.argument("artifact")
@@ -540,6 +542,7 @@ def register_top(cli, _LG):
             sys.exit(1)
         d = _json.load(open(p, encoding="utf-8"))
         summary = {
+            "schema_version": "1.0",
             "status": "success" if d.get("exit_code") == 0 else "failed",
             "tool": d.get("command"),
             "artifacts": [{"path": o, "role": "primary_output"} for o in d.get("outputs", [])],
@@ -556,21 +559,38 @@ def register_top(cli, _LG):
         """统一执行接口: 转发任意 tbtools 命令 + 结构化结果(退出码/时长/产物)"""
         import json as _json
         import time as _time
+        # --json 时: stdout 是协议(纯 JSON)——执行期 stdout → /dev/null(日志丢弃, Java 详情在 err 文件)
+        _saved_fd = None
+        if as_json:
+            import os as _os
+            _saved_fd = _os.dup(1)
+            _devnull = _os.open(_os.devnull, _os.O_WRONLY)
+            _os.dup2(_devnull, 1)
+            _os.close(_devnull)
         t0 = _time.time()
-        ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
+        try:
+            ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
+        except SystemExit as _e:
+            ec = _e.code or 0  # 命令内部 sys.exit(0/2) 在嵌套调用下逃逸——捕获
+        finally:
+            if _saved_fd is not None:
+                import os as _os
+                _os.dup2(_saved_fd, 1)
+                _os.close(_saved_fd)
         ec = ec or 0
         dt = round(_time.time() - t0, 2)
-        # 从 provenance 读产物(命令成功时)
+        # 产物: 明确输出识别(args 中最后图形参数 → 其 provenance), 非扫描猜测
         artifacts = []
-        import glob as _glob
-        for p in _glob.glob("*.tbtools.json") + _glob.glob("**/*.tbtools.json", recursive=True)[:3]:
-            try:
-                d = _json.load(open(p, encoding="utf-8"))
-                if d.get("command") == (args[-1] if args else ""):
-                    artifacts = d.get("outputs", [])
-            except Exception:
-                pass
-        result = {"exit_code": ec, "duration_s": dt, "artifacts": artifacts}
+        for a in reversed(args):
+            if a.endswith((".svg", ".png", ".pdf")):
+                _po = a + ".tbtools.json"
+                if os.path.isfile(_po):
+                    try:
+                        artifacts = _json.load(open(_po, encoding="utf-8")).get("outputs", [])
+                    except Exception:
+                        pass
+                break
+        result = {"exit_code": ec, "duration_s": dt, "artifacts": artifacts, "schema_version": "1.0"}
         if as_json:
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
         else:
