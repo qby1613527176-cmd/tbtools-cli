@@ -23,6 +23,15 @@ from tbtools_cli.core import (
 from tbtools_cli.presets import PRESETS, list_presets
 
 
+
+def _detect_java_ver():
+    """检测 Java 版本(无 java 返回 None;不崩)"""
+    try:
+        r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
+        return r.stderr.splitlines()[0] if r.stderr else "unknown"
+    except FileNotFoundError:
+        return None
+
 def register_top(cli, _LG):
     """注册顶层命令。cli=主 CLI group；_LG=cli_load 模块（提供 _groups/GROUPS/CATEGORY_MAP）。"""
     # ---- 通用命令 ----
@@ -393,6 +402,77 @@ def register_top(cli, _LG):
                             "zsh": "tbtools completion zsh > ~/.zshrc",
                             "fish": "tbtools completion fish > ~/.config/fish/completions/tbtools.fish"}.items():
                 click.echo(f"  {s:6s} {inst}")
+
+    @cli.command(name="env")
+    @click.option("--json", "as_json", is_flag=True, help="输出结构化(JSON)")
+    @click.option("--lock", is_flag=True, help="固化环境到 tbtools.lock(可复现性)")
+    def env(as_json, lock):
+        """环境快照: 版本/依赖/可选工具(科研可复现, 第八轮评审建议)"""
+        import json as _json
+        import shutil as _sh
+        from tbtools_cli import __version__ as _pkg_ver
+        snap = {
+            "tbtools_cli": _pkg_ver,
+            "jar": JAR or "",
+            "java": _detect_java_ver(),
+            "xvfb": bool(_sh.which("xvfb-run")),
+            "deps": {},
+        }
+        for tool in ("blastp", "muscle", "iqtree2", "trimal", "jellyfish", "hmmsearch", "mafft", "diamond"):
+            snap["deps"][tool] = _sh.which(tool) or None
+        if lock:
+            path = "tbtools.lock"
+            _json.dump(snap, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            click.echo(f"✅ 环境已固化: {path}(运行复现:tbtools env --json 对比)")
+        elif as_json:
+            click.echo(_json.dumps(snap, ensure_ascii=False, indent=1))
+        else:
+            click.echo(f"  tbtools-cli: {snap['tbtools_cli']}")
+            click.echo(f"  TBtools JAR: {snap['jar'] or '⚠️ 未配置'}")
+            click.echo(f"  Java: {snap['java']}")
+            click.echo(f"  xvfb: {'✅' if snap['xvfb'] else '❌ 未安装(Linux 绘图必需)'}")
+            for k, v in snap["deps"].items():
+                click.echo(f"  {k}: {'✅' if v else '—'}")
+
+    @cli.command(name="tool-describe")
+    @click.argument("command")
+    @click.option("--json", "as_json", is_flag=True, help="输出机器 schema(JSON, 供 Agent)")
+    def tool_describe(command, as_json):
+        """命令机器描述(schema): tbtools tool-describe <命令> [--json](Agent 能力)"""
+        import json as _json
+        meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+        meta = _json.load(open(meta_path, encoding="utf-8")) if os.path.isfile(meta_path) else {}
+        if command not in meta:
+            click.echo(f"❌ 未知命令: {command}(见 tbtools list / search)", err=True)
+            sys.exit(1)
+        v = meta[command]
+        # 分组: 运行时 _groups 优先(cli.py 手动命令注册在装饰器分组), metadata CATEGORY_MAP 兜底
+        group = next((g for g, grp in _LG._groups.items() if command in grp.commands),
+                     _LG.CATEGORY_MAP.get(command, "engine"))
+        # help: metadata 优先, 回退点击命令对象(手动命令)
+        help_txt = (v.get("help", "") or "").split("#")[-1].strip()
+        if not help_txt:
+            grp = _LG._groups.get(group)
+            cmd_obj = grp.commands.get(command) if grp else None
+            help_txt = (cmd_obj.help or "") if cmd_obj else ""
+        cls = v.get("class") or ("" if command not in _LG._groups.get("engine", type("x", (), {"commands": {}})).commands else "")
+        desc = {
+            "id": f"tbtools.{group}.{command}",
+            "name": command,
+            "group": group,
+            "kind": v.get("kind", "?"),
+            "help": help_txt,
+            "invoke": f"tbtools {group} {command} <args...>" if group != "engine" else f"tbtools engine {cls} key=value",
+            "class": cls,
+            "pitfall": get_pitfall_hint(command),
+        }
+        if as_json:
+            click.echo(_json.dumps(desc, ensure_ascii=False, indent=1))
+        else:
+            click.echo(f"  {desc['id']}")
+            click.echo(f"  描述: {desc['help']}")
+            click.echo(f"  调用: {desc['invoke']}")
+            click.echo(f"  坑位: {desc['pitfall'] or '无'}")
 
     @cli.command(name="search")
     @click.argument("keyword", required=True)
