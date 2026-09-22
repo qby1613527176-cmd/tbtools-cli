@@ -150,6 +150,32 @@ def build_command_specs() -> dict[str, CommandSpec]:
     return specs
 
 
+def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
+    """扫描结果 → CommandSpec → metadata 投影(单一组装逻辑, gen_metadata 与工具共用)。
+
+    reg/tools/manual: scan_* 输出的条目 dict(含 name/kind/class/runner/xmx/help/group)。
+    infer_group: 可选分组推断函数(name, kind, src) -> str(manual 命令分组)。
+    """
+    from tbtools_cli.cli_load import CATEGORY_MAP as _CM
+    specs = {}
+    for name, e in reg.items():
+        specs[name] = CommandSpec(name, _CM.get(name, "engine"), e.get("kind", "direct"),
+                                  e.get("class", ""), e.get("runner") or "plot",
+                                  e.get("xmx") or "2g", e.get("help", ""))
+    for name, e in tools.items():
+        specs.setdefault(name, CommandSpec(name, "tool", "tool", e.get("class", ""),
+                                           "java", "3g", e.get("help", "")))
+    for name, e in manual.items():
+        grp = e.get("group") or (infer_group(name, "manual", e.get("src", "")) if infer_group else _CM.get(name, "engine"))
+        specs.setdefault(name, CommandSpec(name, grp, "manual", runner="plot", doc=e.get("help", "")))
+    for name, s in specs.items():
+        s.aliases = [a for a, t in KNOWN_ALIASES.items() if t == name]
+        s.status = KNOWN_STATUS.get(name, "stable")
+        if name in KNOWN_SCHEMAS:
+            s.inputs, s.outputs = KNOWN_SCHEMAS[name]
+    return {n: to_metadata_entry(s) for n, s in specs.items()}
+
+
 def to_metadata_entry(spec: CommandSpec) -> dict:
     """CommandSpec → metadata 条目(与现有 command_metadata.json 结构兼容)"""
     e: dict[str, object] = {"name": spec.name, "kind": spec.kind, "mode": spec.kind,

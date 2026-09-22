@@ -127,28 +127,12 @@ def _infer_group(name, kind, src=""):
 
 
 def _build_specs(reg, tools, manual):
-    """扫描结果 → CommandSpec 模型 → metadata 投影(二期: 单一命令模型接管生成)"""
+    """扫描结果 → CommandSpec 模型 → metadata 投影(复用 command_spec 单一组装逻辑)"""
     sys.path.insert(0, ROOT)
-    from tbtools_cli.command_spec import (CommandSpec, KNOWN_ALIASES, KNOWN_STATUS,
-                                          KNOWN_SCHEMAS, to_metadata_entry)
-    from tbtools_cli.cli_load import CATEGORY_MAP as _CM
-    specs = {}
-    for name, e in reg.items():
-        specs[name] = CommandSpec(name, _CM.get(name, "engine"), e.get("kind", "direct"),
-                                  e.get("class", ""), e.get("runner") or "plot",
-                                  e.get("xmx") or "2g", e.get("help", ""))
-    for name, e in tools.items():
-        specs.setdefault(name, CommandSpec(name, "tool", "tool", e.get("class", ""),
-                                           "java", "3g", e.get("help", "")))
-    for name, e in manual.items():
-        specs.setdefault(name, CommandSpec(name, e.get("group") or _infer_group(name, "manual", e.get("src", "")),
-                                           "manual", runner="plot", doc=e.get("help", "")))
-    for name, s in specs.items():
-        s.aliases = [a for a, t in KNOWN_ALIASES.items() if t == name]
-        s.status = KNOWN_STATUS.get(name, "stable")
-        if name in KNOWN_SCHEMAS:
-            s.inputs, s.outputs = KNOWN_SCHEMAS[name]
-    return {n: to_metadata_entry(s) for n, s in specs.items()}
+    from tbtools_cli.command_spec import specs_from_scans
+    return specs_from_scans(reg, tools, manual, infer_group=_infer_group)
+
+
 
 
 def build():
