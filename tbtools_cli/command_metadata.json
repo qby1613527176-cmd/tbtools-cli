@@ -1706,7 +1706,7 @@
   "class": "biocjava.bioDoer.Fastq.DecodeIlluminaFqPool",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "DecodeIlluminaFqPool: DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode Illumina Fq Pool",
   "src": "cli_tools_registry"
  },
  "fastaIDAppender": {
@@ -1716,7 +1716,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.FastaIDAppender",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "fastaIDAppender: fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender",
   "src": "cli_tools_registry"
  },
  "rpkmCal": {
@@ -1726,7 +1726,7 @@
   "class": "biocjava.bioDoer.ExpressionLevelCalculator.RPKMcalculator",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "rpkmCal: rpkmCal (tool, RPKMcalculator) — R P K Mcalculator",
   "src": "cli_tools_registry"
  },
  "fpkmToTpm": {
@@ -1736,7 +1736,7 @@
   "class": "biocjava.bioDoer.ExpressionLevelCalculator.FPKMtoTPM",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "fpkmToTpm: fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M",
   "src": "cli_tools_registry"
  },
  "tpmCalc": {
@@ -1746,7 +1746,7 @@
   "class": "biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
   "src": "cli_tools_registry"
  },
  "autoMakeBlastDb": {
@@ -1756,7 +1756,7 @@
   "class": "biocjava.bioDoer.BLAST.makeblastdb",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb",
   "src": "cli_tools_registry"
  },
  "autoRemoteBlast": {
@@ -1766,7 +1766,7 @@
   "class": "biocjava.bioDoer.BLAST.remoteblast",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "autoRemoteBlast: autoRemoteBlast (tool, remoteblast) — remoteblast",
   "src": "cli_tools_registry"
  },
  "GoCompareBar": {
@@ -1776,7 +1776,7 @@
   "class": "biocjava.bioDoer.GeneOntology.Grapher.GoCompare",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "GoCompareBar: GoCompareBar (tool, GoCompare) — Go Compare",
   "src": "cli_tools_registry"
  },
  "plotRNAfoldloci": {
@@ -1786,7 +1786,7 @@
   "class": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "plotRNAfoldloci: plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold",
   "src": "cli_tools_registry"
  },
  "getLongestCompleteORF": {
@@ -1806,7 +1806,7 @@
   "class": "biocjava.bioIO.GFF.ExtractFeaturefromGFF3andGenome",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "ExtractFeaturefromGFF3andGenome: ExtractFeaturefromGFF3andGenome (tool, ExtractFeaturefromGFF3andGenome) — Extract Featurefrom G F F3and Genome",
   "src": "cli_tools_registry"
  },
  "Fasta36m10toTable": {
@@ -1816,7 +1816,7 @@
   "class": "biocjava.bioIO.FastaAligner.Fasta36m10toTable",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "Fasta36m10toTable: Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to Table",
   "src": "cli_tools_registry"
  },
  "FastaIDRenamer": {
@@ -1826,7 +1826,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.FastaIDRenamer",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "FastaIDRenamer: FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer",
   "src": "cli_tools_registry"
  },
  "FastaIDSimplifier": {
@@ -1836,7 +1836,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.FastaIDSimplifier",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "FastaIDSimplifier: FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D Simplifier",
   "src": "cli_tools_registry"
  },
  "FastaLongestRepresentater": {
@@ -1846,7 +1846,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.FastaLongestRepresentater",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "FastaLongestRepresentater: FastaLongestRepresentater (tool, FastaLongestRepresentater) — Fasta Longest Representater",
   "src": "cli_tools_registry"
  },
  "FoldStructureStater": {
@@ -1856,7 +1856,7 @@
   "class": "biocjava.bioIO.RNAfold.FoldStructureStater",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "FoldStructureStater: FoldStructureStater (tool, FoldStructureStater) — Fold Structure Stater",
   "src": "cli_tools_registry"
  },
  "GXFOverlaper": {
@@ -1866,7 +1866,7 @@
   "class": "biocjava.bioDoer.GXFUtils.GXFOverlaper",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "GXFOverlaper: GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper",
   "src": "cli_tools_registry"
  },
  "NCBITaxonomy": {
@@ -1876,7 +1876,7 @@
   "class": "biocjava.bioWeb.NCBITaxonomy.NCBITaxonomy",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "NCBITaxonomy: NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy",
   "src": "cli_tools_registry"
  },
  "OneStepMirGraph": {
@@ -1886,7 +1886,7 @@
   "class": "biocjava.bioIO.RNAfold.OneStepMirGraph",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "OneStepMirGraph: OneStepMirGraph (tool, OneStepMirGraph) — One Step Mir Graph",
   "src": "cli_tools_registry"
  },
  "OverlapGeneModels": {
@@ -1896,7 +1896,7 @@
   "class": "biocjava.bioIO.GXF.gxfTree.OverlapGeneModels",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "OverlapGeneModels: OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene Models",
   "src": "cli_tools_registry"
  },
  "PredictMirSTAR": {
@@ -1906,7 +1906,7 @@
   "class": "biocjava.bioIO.RNAfold.PredictMirSTAR",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "PredictMirSTAR: PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R",
   "src": "cli_tools_registry"
  },
  "RNAplotAdvance": {
@@ -1916,7 +1916,7 @@
   "class": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.RNAplotAdvance",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "RNAplotAdvance: RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance",
   "src": "cli_tools_registry"
  },
  "MIRPrediionResultStat": {
@@ -1926,7 +1926,7 @@
   "class": "biocjava.bioDoer.miRNA.MIRPrediionResultStat",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "MIRPrediionResultStat: MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R Prediion Result Stat",
   "src": "cli_tools_registry"
  },
  "ReciprocalBlast": {
@@ -1936,7 +1936,7 @@
   "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "ReciprocalBlast: ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast",
   "src": "cli_tools_registry"
  },
  "RegionGXFOverlapAnnotation": {
@@ -1946,7 +1946,7 @@
   "class": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "RegionGXFOverlapAnnotation: RegionGXFOverlapAnnotation (tool, RegionGXFOverlapAnnotation) — Region G X F Overlap Annotation",
   "src": "cli_tools_registry"
  },
  "TableCast": {
@@ -1956,7 +1956,7 @@
   "class": "biocjava.bioDoer.Table.TableCast",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "TableCast: TableCast (tool, TableCast) — Table Cast",
   "src": "cli_tools_registry"
  },
  "TableColSelector": {
@@ -1966,7 +1966,7 @@
   "class": "biocjava.bioDoer.Table.TableColSelector",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "TableColSelector: TableColSelector (tool, TableColSelector) — Table Col Selector",
   "src": "cli_tools_registry"
  },
  "TableMelt": {
@@ -1976,7 +1976,7 @@
   "class": "biocjava.bioDoer.Table.TableMelt",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "TableMelt: TableMelt (tool, TableMelt) — Table Melt",
   "src": "cli_tools_registry"
  },
  "downLoadNCBIFasta": {
@@ -1986,7 +1986,7 @@
   "class": "biocjava.bioWeb.DownLoadNCBIFasta",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "downLoadNCBIFasta: downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C B I Fasta",
   "src": "cli_tools_registry"
  },
  "extractFasta": {
@@ -1996,7 +1996,7 @@
   "class": "biocjava.bioDoer.Fasta.ExtractFasta",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
   "src": "cli_tools_registry"
  },
  "extractFastaSub": {
@@ -2006,7 +2006,7 @@
   "class": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "extractFastaSub: extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta Subseq",
   "src": "cli_tools_registry"
  },
  "keggEnrichment": {
@@ -2016,7 +2016,7 @@
   "class": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "keggEnrichment: keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment",
   "src": "cli_tools_registry"
  },
  "goAnnoPipe": {
@@ -2026,7 +2026,7 @@
   "class": "biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "goAnnoPipe: goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe",
   "src": "cli_tools_registry"
  },
  "dnDsCalculate": {
@@ -2036,7 +2036,7 @@
   "class": "biocjava.bioIO.KaKs.DnDsCalculate",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
   "src": "cli_tools_registry"
  },
  "ssrMiner": {
@@ -2046,7 +2046,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.SSRminer",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "ssrMiner: ssrMiner (tool, SSRminer) — S S Rminer",
   "src": "cli_tools_registry"
  },
  "checkPrimer": {
@@ -2056,7 +2056,7 @@
   "class": "biocjava.bioIO.Primer.CheckPrimer",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "checkPrimer: checkPrimer (tool, CheckPrimer) — Check Primer",
   "src": "cli_tools_registry"
  },
  "quickLocateSeqPattern": {
@@ -2066,7 +2066,7 @@
   "class": "biocjava.bioIO.FastX.QuickLocateSeqPattern",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "quickLocateSeqPattern: quickLocateSeqPattern (tool, QuickLocateSeqPattern) — Quick Locate Seq Pattern",
   "src": "cli_tools_registry"
  },
  "blastXmlSummaryTable": {
@@ -2076,7 +2076,7 @@
   "class": "biocjava.bioIO.BlastXml.BlastXMLSummaryTable",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "blastXmlSummaryTable: blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X M L Summary Table",
   "src": "cli_tools_registry"
  },
  "emblToFasta": {
@@ -2086,7 +2086,7 @@
   "class": "biocjava.bioIO.Embl.emblToFasta",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "emblToFasta: emblToFasta (tool, emblToFasta) — embl To Fasta",
   "src": "cli_tools_registry"
  },
  "gbff2gff": {
@@ -2096,7 +2096,7 @@
   "class": "biocjava.bioIO.GBff.gbff2gff",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "gbff2gff: gbff2gff (tool, gbff2gff) — gbff2gff",
   "src": "cli_tools_registry"
  },
  "extractGff3Region": {
@@ -2106,7 +2106,7 @@
   "class": "biocjava.bioIO.GFF.ExtractGff3Region",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "extractGff3Region: extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 Region",
   "src": "cli_tools_registry"
  },
  "vcfBinCount": {
@@ -2116,7 +2116,7 @@
   "class": "biocjava.bioIO.HTSData.VCF.VCFBINCount",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "vcfBinCount: vcfBinCount (tool, VCFBINCount) — V C F B I N Count",
   "src": "cli_tools_registry"
  },
  "getLongestORF": {
@@ -2126,7 +2126,7 @@
   "class": "biocjava.bioIO.ORF.GetLongestORF",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "getLongestORF: getLongestORF (tool, GetLongestORF) — Get Longest O R F",
   "src": "cli_tools_registry"
  },
  "translater": {
@@ -2136,7 +2136,7 @@
   "class": "biocjava.bioIO.ORF.Translater",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "translater: translater (tool, Translater) — Translater",
   "src": "cli_tools_registry"
  },
  "makeFastaIndex": {
@@ -2146,7 +2146,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.MakeFastaIndex",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "makeFastaIndex: makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index",
   "src": "cli_tools_registry"
  },
  "quickSplitFasta": {
@@ -2156,7 +2156,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.QuickSpiltFasta",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "quickSplitFasta: quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta",
   "src": "cli_tools_registry"
  },
  "fastaFragmenter": {
@@ -2166,7 +2166,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.Fragment.FastaFragmenter",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "fastaFragmenter: fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter",
   "src": "cli_tools_registry"
  },
  "eggNogMapperResult": {
@@ -2176,7 +2176,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.eggNogMapperResult",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "eggNogMapperResult: eggNogMapperResult (tool, eggNogMapperResult) — egg Nog Mapper Result",
   "src": "cli_tools_registry"
  },
  "tandemDupFinder": {
@@ -2186,7 +2186,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.TandemDupFinder",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "tandemDupFinder: tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder",
   "src": "cli_tools_registry"
  },
  "genePairExpCorr": {
@@ -2196,7 +2196,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.GenePairExpCorr",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "genePairExpCorr: genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr",
   "src": "cli_tools_registry"
  },
  "slurmScriptPrepare": {
@@ -2206,7 +2206,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.SlurmScriptPrepare",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "slurmScriptPrepare: slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script Prepare",
   "src": "cli_tools_registry"
  },
  "geneExpFilter": {
@@ -2216,7 +2216,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.GeneExpFilter",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "geneExpFilter: geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter",
   "src": "cli_tools_registry"
  },
  "prepareFileFromMCScanXtoTBtools": {
@@ -2226,7 +2226,7 @@
   "class": "biocjava.bioDoer.JIGplotToolkit.Synteny.PrepareFileFromMCScanXtoTBtools",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "prepareFileFromMCScanXtoTBtools: prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScanXtoTBtools) — Prepare File From M C Scan Xto T Btools",
   "src": "cli_tools_registry"
  },
  "blastXmlToTable": {
@@ -2236,7 +2236,7 @@
   "class": "biocjava.bioIO.BlastXml.BlastXmlToSelfDefinedTable",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "blastXmlToTable: blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast Xml To Self Defined Table",
   "src": "cli_tools_registry"
  },
  "targetSoPipe": {
@@ -2246,7 +2246,7 @@
   "class": "biocjava.bioDoer.miRNA.TargetSoPipe",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "targetSoPipe: targetSoPipe (tool, TargetSoPipe) — Target So Pipe",
   "src": "cli_tools_registry"
  },
  "target2TablePipe": {
@@ -2256,7 +2256,7 @@
   "class": "biocjava.bioDoer.miRNA.Target2TablePipe",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "target2TablePipe: target2TablePipe (tool, Target2TablePipe) — Target2 Table Pipe",
   "src": "cli_tools_registry"
  },
  "mirIdentifierBasedOnTargetSo": {
@@ -2266,7 +2266,7 @@
   "class": "biocjava.bioDoer.miRNA.MIRidentifierBasedOnTargetSoResult",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "mirIdentifierBasedOnTargetSo: mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTargetSoResult) — M I Ridentifier Based On Target So Result",
   "src": "cli_tools_registry"
  },
  "regionBlast": {
@@ -2276,7 +2276,7 @@
   "class": "biocjava.bioDoer.BLAST.wholeGenomeBlastN.regionBlast",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "regionBlast: regionBlast (tool, regionBlast) — region Blast",
   "src": "cli_tools_registry"
  },
  "findBestHomologyBatch": {
@@ -2296,7 +2296,7 @@
   "class": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "collinearityToRegion: collinearityToRegion (tool, CollinearityToRegion) — Collinearity To Region",
   "src": "cli_tools_registry"
  },
  "pairWiseKaKsCalculator": {
@@ -2306,7 +2306,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "pairWiseKaKsCalculator: pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair Wise Ka Ks Calculator",
   "src": "cli_tools_registry"
  },
  "simpleBatchProcess": {
@@ -2316,7 +2316,7 @@
   "class": "biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "simpleBatchProcess: simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch Process",
   "src": "cli_tools_registry"
  },
  "quickGeneFamilyIdentification": {
@@ -2326,7 +2326,7 @@
   "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "quickGeneFamilyIdentification: quickGeneFamilyIdentification (tool, QuickGeneFamilyIdentification) — Quick Gene Family Identification",
   "src": "cli_tools_registry"
  },
  "gffCdsPhaseCorrector": {
@@ -2356,7 +2356,7 @@
   "class": "biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "pafRefBaseCoverCalc: pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Base Cover Calc",
   "src": "cli_tools_registry"
  },
  "sRNAseqReadLenStat": {
@@ -2366,7 +2366,7 @@
   "class": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "sRNAseqReadLenStat: sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq Read Len Stat",
   "src": "cli_tools_registry"
  },
  "sRNAReadTrimmer": {
@@ -2376,7 +2376,7 @@
   "class": "biocjava.sRNA.Tools.sRNAReadTrimmer",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "sRNAReadTrimmer: sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read Trimmer",
   "src": "cli_tools_registry"
  },
  "sRNAseqAdaperRemover": {
@@ -2386,7 +2386,7 @@
   "class": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "sRNAseqAdaperRemover: sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N Aseq Adaper Remover",
   "src": "cli_tools_registry"
  },
  "fastqParallelTrimmer": {
@@ -2396,7 +2396,7 @@
   "class": "biocjava.bioDoer.Fastq.FastqParallelTrimmer",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "fastqParallelTrimmer: fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Parallel Trimmer",
   "src": "cli_tools_registry"
  },
  "fastqParallelSubBest": {
@@ -2406,7 +2406,7 @@
   "class": "biocjava.bioDoer.Fastq.FastqParallelSubBest",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "fastqParallelSubBest: fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq Parallel Sub Best",
   "src": "cli_tools_registry"
  },
  "fastqAndFasta": {
@@ -2416,7 +2416,7 @@
   "class": "biocjava.bioDoer.LinuxPipe.FastqAndFasta",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "fastqAndFasta: fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta",
   "src": "cli_tools_registry"
  },
  "extractFeatureFromGTF": {
@@ -2436,7 +2436,7 @@
   "class": "biocjava.sRNA.Tools.sRNAseqCollasper",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "sRNAseqCollasper: sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq Collasper",
   "src": "cli_tools_registry"
  },
  "generateMotifFromSequences": {
@@ -2446,7 +2446,7 @@
   "class": "biocjava.bioIO.BioSoftPipeServer.MEMEsuiteWrapper.GenerateMotifFromSequences",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "generateMotifFromSequences: generateMotifFromSequences (tool, GenerateMotifFromSequences) — Generate Motif From Sequences",
   "src": "cli_tools_registry"
  },
  "sRNAseqDeCollasper": {
@@ -2456,7 +2456,7 @@
   "class": "biocjava.sRNA.Tools.sRNAseqDeCollasper",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "sRNAseqDeCollasper: sRNAseqDeCollasper (tool, sRNAseqDeCollasper) — s R N Aseq De Collasper",
   "src": "cli_tools_registry"
  },
  "findBestForkerRootTree": {
@@ -2466,7 +2466,7 @@
   "class": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "findBestForkerRootTree: findBestForkerRootTree (tool, FindBestForkerRootTree) — Find Best Forker Root Tree",
   "src": "cli_tools_registry"
  },
  "statFasta": {
@@ -2476,7 +2476,7 @@
   "class": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
   "src": "cli_tools_registry"
  },
  "goEnrichMerge": {
@@ -2486,7 +2486,7 @@
   "class": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "goEnrichMerge: goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichment Merge Bubble",
   "src": "cli_tools_registry"
  },
  "bigMarkerRandomDesign": {
@@ -2496,7 +2496,7 @@
   "class": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign",
   "xmx": "3g",
   "runner": "java",
-  "help": "",
+  "help": "bigMarkerRandomDesign: bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big Marker Random Design",
   "src": "cli_tools_registry"
  },
  "logo": {
@@ -2506,7 +2506,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "序列 LOGO 图",
   "src": "cli_manual"
  },
  "msa": {
@@ -2516,7 +2516,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "多序列比对可视化",
   "src": "cli_manual"
  },
  "structure": {
@@ -2526,7 +2526,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "基因结构图（外显子/UTR 从 GFF）",
   "src": "cli_manual"
  },
  "motif": {
@@ -2536,7 +2536,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "Motif 分布图（MEME XML）",
   "src": "cli_manual"
  },
  "volcano": {
@@ -2546,7 +2546,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "火山图（DEG: GeneID Log2FC pvalue）",
   "src": "cli_manual"
  },
  "heatmap": {
@@ -2556,7 +2556,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "热图（表达矩阵）",
   "src": "cli_manual"
  },
  "pca": {
@@ -2566,7 +2566,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "PCA 图",
   "src": "cli_manual"
  },
  "hclust": {
@@ -2576,7 +2576,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
   "src": "cli_manual"
  },
  "dehist": {
@@ -2586,7 +2586,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "差异表达双直方图",
   "src": "cli_manual"
  },
  "draw": {
@@ -2596,7 +2596,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "树+注释图（TreeTreeTree 多轨道）",
   "src": "cli_manual"
  },
  "unrooted": {
@@ -2606,7 +2606,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "无根树可视化",
   "src": "cli_manual"
  },
  "rooting": {
@@ -2616,7 +2616,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "MAD 系统发育定根",
   "src": "cli_manual"
  },
  "cds2protein": {
@@ -2626,7 +2626,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "CDS → 蛋白质翻译",
   "src": "cli_manual"
  },
  "genestructure": {
@@ -2936,7 +2936,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "",
+  "help": "树+注释图（TreeTreeTree 多轨道）",
   "alias_of": "draw",
   "src": "cli_manual"
  }

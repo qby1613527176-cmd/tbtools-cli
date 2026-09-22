@@ -70,7 +70,6 @@ def test_metadata_covers_runtime_commands():
     """
     import json
     import os as _os
-    import tbtools_cli.cli_load as _cl
     root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
     meta = json.load(open(_os.path.join(root, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
     cli_names = set()
