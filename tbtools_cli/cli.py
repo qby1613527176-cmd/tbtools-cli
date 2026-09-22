@@ -73,8 +73,15 @@ class RootGroup(click.Group):
                 click.echo("   查看: tbtools list", err=True)
             ctx.exit(2)
 
+try:
+    from importlib.metadata import version as _pkg_version
+    _CLI_VERSION = _pkg_version("tbtools-cli")  # pyproject 单一来源
+    del _pkg_version
+except Exception:
+    _CLI_VERSION = "1.0.0"
+
 @click.group(cls=RootGroup, invoke_without_command=True)
-@click.version_option("1.0.0", prog_name="tbtools-cli")
+@click.version_option(_CLI_VERSION, prog_name="tbtools-cli")
 @click.pass_context
 def cli(ctx):
     """TBtools-II 全功能 CLI（命令/工具/RPC 数字见 tbtools list）"""

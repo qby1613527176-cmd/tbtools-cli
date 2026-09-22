@@ -29,7 +29,8 @@ dependencies = [
 test = ["pytest>=7.0"]
 
 [project.urls]
-Homepage = "https://github.com/CJ-Chen/TBtools"  # upstream jar
+Homepage = "https://github.com/qby1613527176-cmd/tbtools-cli"  # 本仓库
+upstream = "https://github.com/CJ-Chen/TBtools"  # TBtools-II 上游
 Documentation = "docs/COMMAND_REFERENCE.md"
 
 [project.scripts]

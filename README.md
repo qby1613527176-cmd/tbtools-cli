@@ -160,7 +160,8 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 
 | Heatmap | Venn / UpSet |
 |:--|:--|
-| ![heatmap](docs/images/heatmap.svg) | ![venn](docs/images/venn.svg) / ![upset](docs/images/upset.svg) |
+| ![heatmap](docs/images/heatmap.svg) | ![venn](docs/images/venn.svg) |
+| ![msa](docs/images/msa.svg) | ![upset](docs/images/upset.svg) |
 
 | Phylogenetic tree | Synteny (MCScanX + dot plot) | Grouped bar + significance |
 |:--|:--|:--|
@@ -537,7 +538,7 @@ tbtools generic <engineClass> <method> <out.svg> [--set field value ...] [--widt
 ## 📊 RPC Data Tools (188 methods)
 
 ```bash
-tbtools server start                       # start RPC server (port 8765)
+tbtools rpc start                       # 启动 RPC 服务器 (port 8765)
 tbtools methods                            # list all 188 methods
 tbtools rpc FastaStat.process '{"inputPath":"in.fa","outputPath":"out.xls"}'
 tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outdir","options":{"ultraFastBS":true}}'
@@ -667,6 +668,12 @@ tbtools-cli/
 
 ---
 
+## 🏷️ Naming Convention
+
+- **规范命令名是小写 camelCase**：`tableCast` / `tableMelt` / `recipBlast`（分组命令）
+- 个别工具层保留旧大写注册名作别名：`TableCast` 与 `tableCast` 指向同一引擎（`tool TableCast` 兼容旧写法）
+- 新旧入口并存是过渡设计，规范入口见 `tbtools list`
+
 ## ⚠️ Known Limitations
 
 | Engine | Status |
@@ -694,81 +701,6 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 
 ---
 
-## 中文
-
-# TBtools CLI — TBtools-II 全功能命令行封装
-
-## ✨ 功能总览
-
-| 层 | 能力 | 入口 |
-|:---|:-----|:-----|
-| 🎨 **绘图引擎** | 218 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <图名>` |
-| 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <方法> '<json>'` |
-| 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <名称>` |
-| 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <类名> key=value` |
-| 🧩 **插件命令** | 12 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名/基因组 dot plot/diamond 蛋白注释/SMART 域注释/FIMO motif 扫描） | `tbtools table gsea` / `tbtools tree notung` 等 |
-
-所有引擎在 Linux/WSL 下 **headless 运行**（xvfb），无需 GUI。已用真实生物数据验证（油茶 GRAS 基因家族等）。
-
-> **平台支持**：Linux / WSL2 / macOS（完整）；**Windows** 需 Git Bash + TBtools-II/bin 加入 PATH（绘图类命令走 xvfb 受限，工具类/RPC/表格类可用）。
-
-## 📦 安装
-
-1. 下载 TBtools jar（GitHub releases 或官网 tbtools.com）
-2. `git clone` 本项目
-3. `./install.sh --jar /path/to/TBtools_JRE1.6.jar`
-
-## 🎨 绘图命令速查
-
-```bash
-# 基因结构 / Motif / LOGO
-tbtools genestructure <gff> <ids> <out.svg> [genome.fa] [w] [h]
-tbtools motif <meme.xml> <ids> <out.svg> [w] [h]
-tbtools seqlogo <seqs.fa> <out.svg>
-
-# 表达 / 统计
-tbtools volcano <deg.txt> <out.svg> [pval] [fc] [w] [h]
-tbtools heatmap2 <matrix> <out.svg> [--log2 --rowScale --clusterRow --clusterCol]
-tbtools cubeheatmap <expr> <group> <out.svg>
-tbtools layoutheatmap <layout> <expr> <out.svg>
-tbtools pca <expr> <out.svg> [rows|cols]
-tbtools qpcr <data> <out.svg>
-tbtools groupedbar <data> <out.svg> [BAR_ERROR|BOXPLOT|VIOLIN|SWARM]
-
-# 树
-tbtools tree <treeMeta.cfg> <out.svg>
-tbtools hclust <distance.tsv> <out.nwk>
-
-# 定位 / Circos / 共线性
-tbtools genelocgff <gff3> <ids> <out.svg>
-tbtools genelocation --ChrLen <len> --FeaturePos <pos> --OutGraph <out>
-tbtools circos <chrLen> <links> <genePos> <out.svg>
-tbtools supercircos <config.cfg> <out.svg>
-tbtools dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out>
-tbtools pafviz <in.paf> <out.svg>
-tbtools microsyn <gxf1> <gxf2> <collinearity> <out.svg>
-tbtools multisyn <gxf.lst> <collinear.lst> <out.svg>
-tbtools msy <pos> <links> <layout> <out.svg>
-tbtools circlegene <gff> <ids> <out.svg>
-
-# 韦恩
-tbtools venn5 <out> <5 sets> [labels]
-tbtools venn6 <out> <6 sets> [labels]
-tbtools upset <sets.txt> <out.svg>
-
-# ChIP-seq / 其他
-tbtools peaktss <gxf> <peak.xls> <out.svg>
-tbtools peakdist <chrLen> <peak.xls> <out.svg>
-tbtools dehist <deg.txt> <out.svg>
-tbtools barplot <enrich.tsv> <out.svg> <termCol> <pvalCol>
-tbtools admixture <qFiles.lst> <out.svg>
-tbtools msa <aligned.fa> <out.svg>
-tbtools generic <engineClass> <method> <out.svg> [--set f v ...]
-```
-
-## ⚠️ 已知限制
-
-见上方英文表格。
 
 ## 📄 许可
 
