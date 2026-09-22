@@ -105,8 +105,55 @@ def build():
     return meta, counts
 
 
+def render_commands_md(meta):
+    """按分组生成全量命令清单 docs/_generated/commands.md（metadata 驱动,防漂移）"""
+    sys.path.insert(0, ROOT)
+    from tbtools_cli.cli_load import CATEGORY_MAP, GROUPS
+    out_dir = os.path.join(ROOT, "docs", "_generated")
+    os.makedirs(out_dir, exist_ok=True)
+    lines = ["# 命令全量清单（自动生成,勿手改）",
+             "",
+             "> 由 `python3 scripts/gen_metadata.py --render` 生成,来源 command_metadata.json。",
+             "> 分组归类参考 cli_load.CATEGORY_MAP;数字防漂移由 gen_metadata.py --check 与 pytest 保证。",
+             ""]
+    # 分组 → 命令
+    grouped = {}
+    for name, v in meta.items():
+        cat = CATEGORY_MAP.get(name, "engine")
+        grouped.setdefault(cat, []).append((name, v))
+    for cat in sorted(GROUPS.keys()):
+        if cat not in grouped:
+            continue
+        cmds = grouped[cat]
+        lines.append(f"## {cat} — {GROUPS.get(cat, cat)}（{len(cmds)} 个）")
+        lines.append("")
+        lines.append("| 命令 | 类型 | 说明 |")
+        lines.append("|---|---|---|")
+        for name, v in sorted(cmds):
+            kind = v.get("kind", "?")
+            icon = {"bridge": "桥", "direct": "直连", "tool": "工具", "manual": "手动"}.get(kind, kind)
+            desc = (v.get("help", "") or "").split("#")[-1].strip() or (v.get("help", "") or "")[:40]
+            if ":" in desc:
+                desc = desc.split(":", 1)[-1].strip()
+            lines.append(f"| `{name}` | {icon} | {desc[:60]} |")
+        lines.append("")
+    # 数字统计
+    from collections import Counter
+    kinds = Counter(v.get("kind", "?") for v in meta.values())
+    lines.append("## 统计")
+    lines.append("")
+    lines.append(f"- 命令总数: {len(meta)}")
+    for k, n in kinds.most_common():
+        lines.append(f"- {k}: {n}")
+    lines.append("")
+    path = os.path.join(out_dir, "commands.md")
+    open(path, "w", encoding="utf-8").write("\n".join(lines))
+    print(f"✅ 已生成 {path}（{len(meta)} 命令,{len(lines)} 行）")
+
+
 def main():
     check = "--check" in sys.argv or "-c" in sys.argv
+    render = "--render" in sys.argv or "-r" in sys.argv
     meta, counts = build()
     print(json.dumps(counts, ensure_ascii=False, indent=1))
     if check:
@@ -114,6 +161,8 @@ def main():
         return 0
     json.dump(meta, open(META, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(f"✅ 已写入 {META}: {len(meta)} 命令")
+    if render:
+        render_commands_md(meta)
     return 0
 
 

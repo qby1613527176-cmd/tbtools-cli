@@ -176,365 +176,50 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 ```bash
 # Gene structure (exons/UTR from GFF)
 tbtools genestructure <input.gff> <mRNA_ids.txt> <out.svg> [genome.fa] [w] [h]
-
 # Motif distribution (MEME XML)
 tbtools motif <meme.xml> <idList.txt> <out.svg> [w] [h]
-
-# Sequence LOGO
-tbtools seqlogo <seqs.fa> <out.svg> [--scaleIC true --showPos false ...]
 ```
-
+> 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Expression / Statistics
 ```bash
 # Volcano plot (DEG: GeneID Log2FC pvalue)
 tbtools volcano <deg.txt> <out.svg> [pvalCutoff] [fcCutoff] [w] [h]
-
 # Expression level calculators (counts+len → RPKM/TPM; FPKM → TPM)
 tbtools tool rpkmCal    --countsTable counts.tsv --lenInfo gene_len.tsv --outTable RPKM.out.tsv
-tbtools tool tpmCalc    --countsTable counts.tsv --lenInfo gene_len.tsv --outTable TPM.out.tsv
-tbtools tool fpkmToTpm  --fpkmTable RPKM.out.tsv --tpmTable TPM2.out.tsv
-
-# GWAS VQSR mimic: VCF → QD/MQ/FS/SOR quality metrics table
-tbtools tool mimicVqsr  --inFile sample.vcf --outFile vqsr.txt
-
-# Marker design (0-1 matrix: rows=locus, cols=sample)
-tbtools marker MarkerDist   markers_0-1.tsv out.txt [--maxPoint N]   # max-discrimination marker combo
-tbtools marker MarkerFilter markers_0-1.tsv out.txt                   # per-sample marker count
-tbtools marker SampleDist   markers_0-1.tsv out.txt                   # marker pairwise distance
-tbtools marker BigMarkerRandomDesign markers_0-1.tsv --targetMarkerNum 10 --numberOfTest 200  # random marker combo search
-
-# Phylogenetic tree rooting (MAD: Tria et al. 2017)
-tbtools treeRooting unrooted.nwk rooted.out.nwk                        # MAD minimum-ancestor-deviation rooting
-
-# FASTA ID prefix appender
-tbtools tool fastaIDAppender --inFa seqs.fa --outFa prefixed.fa --prefix SAMPLE_
-
-# Heatmap (engine-level: clustering / grouping / tree)
-tbtools heatmap2 <expr.matrix.tsv> <out.svg> [--log2 --rowScale --clusterRow --clusterCol ...]
-
-# 3D cube heatmap (3 tissues × 3 stages)
-tbtools cubeheatmap <expr.tsv> <group.tsv> <out.svg> [--log10]
-# eFP-style tissue expression heatmap (engine 100; TGA background + sample-color map; needs TrueColor TGA)
-tbtools efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
-
-# Multi-matrix tissue expression heatmap (engine 110; multiple exp matrices overlaid on TGA; bypasses hardcoded main)
-tbtools multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId> <out.svg> [--imageWidth N] [--imageHeight N]
-
-# RNA secondary structure plot (engine 111; needs RNAfold/RNAplot; bypasses stdin-pipe bug via RNAplot -i + EPS parse)
-tbtools rnaplot <seq.fa|rawSeq> <out.svg> [--colorMap "seq1=R,G,B;..."] [--interactive false]
-
-# Layout heatmap (sample position matrix)
-tbtools layoutheatmap <layout.tsv> <expr.tsv> <out.svg> [--cellWidth N ...]
-
-# PCA
-tbtools pca <expr.tsv> <out.svg> [rows|cols] [scale] [w] [h]
-
-# qPCR bar plot (with error bars)
-tbtools qpcr <data.txt> <out.svg> [w] [h]
-
-# Grouped bar plot with significance (T-test/ANOVA + Bonferroni)
-tbtools groupedbar <data.tsv> <out.svg> [BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [SEM|SD|CI95]
 ```
-
+> 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Phylogeny / Tree
 ```bash
 # Tree + annotation tracks (TextAnno/HeatMap/BarPlot/Tile/StackBar/Domain...)
 tbtools tree <treeMeta.cfg> <out.svg> [pad]
-
 # Hclust → Newick
 tbtools hclust <distance_matrix.tsv> <out.nwk>
-
-# PhyloTreeView phylogenetic tree view (engine 112; direct newick, auto branch-length/Cladogram + axis)
-tbtools phylotree <in.nwk> <out.svg> [vertical] [width] [height]
-
-# Unrooted tree (engine 123; 6 layouts Circular/Radial/Force-Directed/Equal Angle/N-Body/Equal-Daylight)
-tbtools unrooted <in.nwk> <out.svg> [layout] [width] [height] [iterations]
-
-# Violin plot (engine 116; standalone ViolinPlot, SVG/PDF only)
-tbtools violin <in.tsv> <out.svg> [width] [height]
-
-# Synthetic collinearity bar plot (engine 117; bar_plotter.main1 — main is dead code)
-tbtools barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>
-
-# Collinear gene block evolutionary path (engine 118; FindPathBySynteny.main1 — main is demo)
-tbtools findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --inRegion <geneID> --outGraph <out> [--flankGeneNum N]
-
-# Amazing Meta Plot (engine 120; tree + motif pattern + gene structure + domain combo figure)
-tbtools amazingmeta <meme.xml> <newick.treefile> <out.svg> [seqLen.txt] [geneRename.txt]
-
-# Annotation version comparison (engine 113; before/after GFF → change summary + BED + Curation/ABCD figures)
-tbtools annocompare <before.gff3> <after.gff3> <outDir> [runName]
-
-# Gene density profile (engine 114; bin-wise gene counts per chromosome/contig)
-tbtools genedensity <in.gff3> <out.tsv> [binSize]
 ```
-
+> 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Genomic location / Circos / Synteny
 ```bash
 # Gene chromosome location (GFF + IDs)
 tbtools genelocgff <gff3> <ids.txt> <out.svg> [--chrLen l.tsv --pairs p.tsv ...]
-
 # Gene location (native CLI)
 tbtools genelocation --ChrLen <chrlen.tsv> --FeaturePos <pos.tsv> --OutGraph <out.svg>
-
-# Circos circular synteny
-tbtools circos <chrLen.txt> <link.txt> <genePos.txt> <out.svg> [w] [h]
-
-# SuperCircos (7 track types: Tile/Triangle/HeatMap/Point/Line/Bar/Arrow)
-tbtools supercircos <config.cfg> <out.svg> [w] [h]
-
-# Dot plot (synteny scatter)
-tbtools dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout> --outGraph <out.svg>
-
-# PAF dot-plot (minimap2 output)
-tbtools pafviz <in.paf> <out.svg> [graphSize] [colorMode]
-
-# PAF genome-comparison plot (13-col PAF required)
-tbtools pafcomp --inPaf <in.paf> --outGraph <out.svg> [--colorMode Target|Query|None]
-
-# PAF reference-base coverage calc
-tbtools pafref --inPaf <in.paf> --outTab <out.tsv>
-
-# PAF conflict detection (assembly conflict bins, GenomeAssembly module)
-tbtools conflictpaf <in.paf> <out.tsv> [binSize]
-
-# Assembly conflict partitioning (polyploid group clustering, chains after conflictpaf)
-tbtools partitionconflict <inConflict.tsv> <polyPoid> <outCluster>
-
-# Multi-species data prep (add species prefix to genome+GFF IDs — feed into findblockdual/multiple)
-tbtools preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> <outGFF>
-
-# BAM coverage/depth state assessment (RNA-seq/genome BAM vs GFF genes)
-tbtools bamstate <out.tsv> <gff3> <bam1> [bam2 ...]
-
-# qPCR relative quantification (2^-ΔΔCt; input: gene\tcontrolCt\tExprCt)
-tbtools qpcrExp <in.qpcr.tab> <out.xls>
-
-# Tissue-specificity tau index (0=ubiquitous, 1=tissue-specific)
-tbtools tauIndex <inExpTab> <outTAU>
-
-# Sample expression correlation matrix (Pearson, for co-expression/clustering)
-tbtools exprCorr <inFPKM> <outCorrMat>
-
-# Collapse expression matrix samples by group (Sum|Mean|Max|Min|Var|Std)
-tbtools groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Mean]
-
-# Batch string replace (pattern map: old\tnew; --partial for substring mode)
-tbtools batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]
-
-# GO slim level counts (LevelDoer, engine 85; gene2Go: geneIDs(comma) tab goIDs(comma); needs go-basic.obo/goslim obo)
-tbtools levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]
-# GO dictionary parse (engine 103; auto-generates Gene2Go/Go2Gene/Level-N files next to input)
-tbtools goParse <gene2Go.txt> <oboFile> [--level N]
-
-# Collapse table rows by key column (merge values with ;)
-tbtools tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader]
-
-# Select columns by header names (TableColManipulator, engine 84)
-tbtools tableColSelect <inTable> <outTable> <colName1> [colName2...] [--sep tab|comma|space] [--header true|false]
-
-# Table reshape suite (engines 87-90)
-# Merge two tables by key column
-tbtools tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]
-# Wide → long (melt)
-tbtools tableMelt <inTable> <outTable>
-# Select columns by ID-list regex (Match|Contain), optional sort-by-ID-list
-tbtools tableColSel <inTable> <outTable> <idList.txt> [--mode Match|Contain]
-# Long → wide matrix (3 cols: row tab col tab value); inverse of tableMelt
-tbtools tableCast <inLong.txt> <outMatrix>
-# Deduplicate table by column (engine 94; --showFreq for counts)
-tbtools tableUniq <inTab> <outFile> [--colIndex N] [--showFreq]
-# Transpose table (engine 95)
-tbtools tableTranspose <inTable> <outTable>
-# Split table into multiple files by column value (engine 96; auto-mkdir outDir)
-tbtools tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]
-# Merge multiple tables by key columns (engine 97)
-tbtools tableMerge <outTable> <inFile1> [<inFile2>...] [--keyCols 0,0]
-
-# FASTQ fixed-length trimming (5'/3' ends)
-tbtools fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]
-
-# GFA assembly graph → FASTA (engine 91)
-tbtools gfa2fa <in.gfa> <out.fa>
-# Extract FASTA subsequences by coordinates (engine 92; pos: GeneId\tChrId\tStart\tEnd)
-tbtools fastaSubseq <in.fa> <pos.txt> <out.fa>
-# Extract/filter FASTA records by ID list (engine 93; Match|Contain x Extract|Filter)
-tbtools fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Contain] [--process Extract|Filter]
-# FASTQ ↔ FASTA conversion (engine 98; fq2fa drops quality, fa2fq adds placeholder)
-tbtools fqfaConv <input> <output> <fq2fa|fa2fq>
-# Extract HMM models by NAME list (engine 99)
-tbtools hmmExtract <in.hmm> <idList.txt> <out.hmm>
-# Extract hit sequences from MAST XML output (engine 102; MEME suite; sequences→seg→hit structure)
-tbtools mastExtract <in.fa> <mast.xml> <out.txt>
-
-# GFF ID renaming (ID/Parent synced via rename map: old\tnew)
-tbtools gxfRename <in.gff3> <out.gff3> <renameMap.tsv>
-# GFF repair: dedup ID prefixes, CDS phase check, dangling mRNA separation, sort (engine 70)
-tbtools gxfFix <in.gff3> <out.gff3> [--noFixRepeatedIdPrefix]
-
-# Needleman-Wunsch global alignment (all-vs-all, pure Java, EMBOSS format)
-tbtools nwAlign <inSeq1.txt> <inSeq2.txt> <out>
-# Pairwise BLAST between two sequence sets (engine 105; wraps makeblastdb+blastp/n/tblastn)
-tbtools twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp] [--thread N]
-# Reciprocal (bidirectional) BLAST for gene family identification (engine 106; wraps makeblastdb+blastp both directions)
-# ⚠️ FASTA IDs >50 chars rejected by makeblastdb (GRAS IDs are 59 chars) — shorten IDs first
-tbtools recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds idlist] [--prog blastp] [--evalue 1e-5] [--minId 0.3] [--thread 2]
-# Filter BLAST tab6 by C-score (engine 107; distinguishes ortholog vs paralog candidates)
-# Input: standard BLAST outfmt 6 tabular; keeps high-confidence ortholog hits (median identity 97% vs 35% raw)
-tbtools filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]
-# Quick gene family identification (engine 108; reference family members → find homologs in query proteome)
-# Flow: family ID extraction → optional AutoFill iteration → query BLAST → family member list + sequences
-# ⚠️ AutoFill(default 2) needs full proteome (>20000 proteins); small ref tests use --autoFill 0
-tbtools quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix> [--autoFill N] [--thread N] [--diamond true]
-
-# Contig allele grouping from miniprot GFF (assembly helper chaining raw reads → groups)
-tbtools ctgGroup <in.miniprot.gff> <polyPoid> <outGrpMap>
-
-# Homoeologous conflict partitioning (phasing; chains after ctgGroup)
-tbtools homoPhase <inContigGrpMap> <outPhasedMap>
-
-# Allelic contig → chromosome assignment (gene2chr uses PROTEIN names, not mRNA IDs; chains after homoPhase)
-tbtools sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>
-
-# BAM merge by region coverage (select best sample per region; output merged.bam + region stats)
-tbtools bamMerge <gtf> <bamDir> <outDir>
-
-# HiC restriction enzyme prediction (MboI/DpnII | MseI | HindIII | NcoI | Arima; samples N reads)
-tbtools hicEnzyme <inHiC.fastq> [--numOfRecords N]
-
-# Virus recombination analysis (query contigs vs virus DB → Top-hit recombination PDF)
-tbtools virusRecomb <inDB.fa> <inContig.fa> <outDir>
-
-# GFF statistics (gene/mRNA/exon/intron/CDS/UTR detail table)
-tbtools gxfStat <in.gff3> <outStat.xls>
-
-# GFF ID prefix append (seqid + ID)
-tbtools gxfAppend <in.gff3> <out.gff3> <prefix>
-
-# GFF → gene-position + chr-length (feeds genelocation plot)
-tbtools gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]
-
-# Region-based GFF filtering (keep features overlapping regions)
-tbtools gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
-
-# GXFUtils suite (engines 79-83, all verified with real Camellia GFF)
-# Region overlap filter, strand-sensitive (region.txt: chr tab strand tab start tab end)
-tbtools gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand] [--extendLen N]
-# Representative transcript map: mRNA ID → gene ID + length
-tbtools gxfRepIDs <in.gff3> <out.txt>
-# Representative transcript extraction (longest isoform per gene; needs gene-prefix mRNA IDs like TGY000001.t1)
-tbtools gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS]
-# GFF vs genome FASTA seqid match check → Yes/No + Intersection Size
-tbtools gxfMatch <in.gff3> <inGenome.fa>
-# Recover mRNA features from gene lines
-tbtools gxfRecall <in.gff3> <out.gff3>
-# Region overlap annotation → Genic/Intergenic + overlapping gene (region.txt: id tab chr tab start tab end!)
-tbtools regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [--targetFeaturePattern P]
-
-# miRNA target prediction (full pipeline: ssearch36 -i -m10 → TargetSoEngine scoring)
-tbtools mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X --threads N --scoreCutOff N --maxMismatch N]
-# Full-pipeline miRNA target table (engine 101, Target2TablePipe; all hits incl. low-scoring + alignment cols)
-tbtools mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true|false] [--fragment true|false] [--threads N]
-
-# miRNA precursor identification (engine 78: FAindex genome + RNAfold structure check + ARM screen)
-#   targetSo.tsv col2 = chromosome name, col4/5 = genome coordinates (positionRecover required)
-tbtools mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> [outChecklog.txt] [--checkARM BOTH|FIVE|THREE]
-
-# Dual-genome micro-synteny
-tbtools microsyn <gxf1> <gxf2> <collinearity> <out.svg> [--chr1 C --start1 S --end1 E ...]
-
-# Dual-genome synteny, legacy JJplot2 (engine 109; chr names must be numeric)
-tbtools dualsyn <simplifiedGff> <collinearity> <out.svg> [--chr1 "1,2"] [--chr2 "3,4"] [--rows N] [--gap N]
-
-# Multi-species micro-synteny
-tbtools multisyn <gxf.lst> <collinear.lst> <out.svg> [--genes idlist.txt]
-
-# Multi-species synteny
-tbtools msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out.svg> [w] [h]
-
-# Circular gene viewer
-tbtools circlegene <gff> <geneID.txt> <out.svg> [--link f --rankedChr f ...]
 ```
-
+> 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Venn / Sets
 ```bash
 # Venn 2/3/4 (native ArgsParser CLI)
 tbtools sets venn2 --List1 a.txt --List2 b.txt --label1 A --label2 B --graph out.svg --prefix out
 tbtools sets venn3 --List1 a.txt --List2 b.txt --List3 c.txt --label1 A --label2 B --label3 C --graph out.svg --prefix out
 tbtools sets venn4 --List1 a.txt --List2 b.txt --List3 c.txt --List4 d.txt --label1 A --label2 B --label3 C --label4 D --graph out.svg --prefix out
-
-# Venn 5/6 (bridge)
-tbtools sets venn5 <out.svg> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]
-tbtools sets venn6 <out.svg> <setA.txt> ... <setF.txt> [labels]
-
-# UpSet intersection plot
-tbtools sets upset <sets.txt> <out.svg> [w] [h]
 ```
-
+> 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### ChIP-seq / Others
 ```bash
 # Peak-TSS heatmap
 tbtools peaktss <gxf> <macs2_peak.xls> <out.svg> [--dist N]
-
 # Peak chromosome distribution
 tbtools peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --height H]
-
-# Peak annotation to genes
-tbtools peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]
-
-# Differential expression dual histogram
-tbtools dehist <deg.txt> <out.svg> [w] [h]
-
-# Enrichment bar plot
-tbtools barplot <enrichment.tsv> <out.svg> <termCol> <pvalCol> [classCol] [maxTerms]
-
-# Color scheme generator (from a table column)
-tbtools colorscheme <inTab> <outTab> <refColIndex>
-
-# Distance / correlation between two columns
-tbtools distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDist>
-
-# RNA mountain plot (secondary-structure heights)
-tbtools mountain <fold.txt> <out.tsv>
-
-# BLAST XML pile-up (per-query hit coverage)
-tbtools pileup <blast.xml> <out.svg> [--query NAME]
-
-# Genome-coverage + RNA structure (PDF output)
-tbtools plotrna <genomeFA> <region> <SAM> --directPDF out.pdf
-
-# ADMIXTURE Q-matrix stacked plot
-tbtools admixture <qFiles.lst> <out.svg> [sampleIDFile] [groupFile] [sortMode]
-
-# MSA alignment viewer
-tbtools msa <aligned.fasta> <out.svg> [padding]
-
-# Virtual gel electrophoresis (PCR fragments)
-tbtools gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out.svg>
-
-# GFA assembly graph viz
-tbtools gfa <in.gfa> <out.svg> [w] [h]
-
-# Plastome circular map (GenBank → annotation)
-tbtools microgenome <in.gbk> <anno.tsv> <out.svg> [micro|macro]
-
-# Pseudo-synteny block search across two genomes (real-data verified: Camellia Chr06 ↔ tea Chr01)
-tbtools findblockdual <qGenome.fa> <q.gff> <sGenome.fa> <s.gff> <qId> <out.txt> [--leftEdge N --rightEdge N --expand N --threads N --evalue X --minIdentity X --bestHit N]
-# MCScanX collinearity -> region file (engine 104; chr1 s1 e1 chr2 s2 e2 genePairInfo)
-tbtools collinearRegion <in.collinearity> <simGff> <out.txt>
-
-# Multi-genome pseudo-synteny blocks (1 query + N subjects)
-tbtools findblockmultiple <qGenome.fa> <q.gff> <qId> <out.txt> <s1Genome.fa> <s1.gff> [<s2Genome.fa> <s2.gff> ...]
-
-# Visualize pseudo-synteny blocks (PDF; input = findblockdual/multiple output)
-tbtools visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Genome2"]
-
-# Generic reflection bridge (drive ANY TBtools engine)
-tbtools generic <engineClass> <method> <out.svg> [--set field value ...] [--width W] [--height H]
 ```
-
----
-
+> 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ## 📊 RPC Data Tools (188 methods)
 
 ```bash
@@ -543,25 +228,8 @@ tbtools methods                            # list all 188 methods
 tbtools rpc FastaStat.process '{"inputPath":"in.fa","outputPath":"out.xls"}'
 tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outdir","options":{"ultraFastBS":true}}'
 tbtools heatmap matrix.tsv out.png [group.tsv]   # quick heatmap
-```
 
-| Method | Function |
-|:-------|:---------|
-| `FastaStat.process` | sequence stats (N50/GC/length) |
-| `FastaExtract.process` | extract by ID |
-| `CdsToProtein.process` | CDS → protein |
-| `FastaSsrMiner.process` | SSR search |
-| `OneStepBuildATree.process` | one-step phylogeny (MUSCLE+trimAl+IQ-TREE) |
-| `FetchATimeTree.process` | TimeTree |
-| `AmazingHeatMap.process` | heatmap |
-| `ExpressionCorrMatrix.process` | expression correlation |
-| `GxfToGenePos.process` | GFF → gene position |
-| `QuickGeneFamilyIdentification.process` | gene family identification |
-| `TableTools.*` | 17 table tools |
-| `CheckPrimer.process` | primer check |
-
----
-
+> 全部 188 方法见 [docs/rpc_methods_reference.md](docs/rpc_methods_reference.md) 或 `tbtools list rpc`
 ## 🛠️ CLI Tools (82)
 
 ```bash
@@ -570,61 +238,8 @@ tbtools tool <name> [args...]      # run any CLI tool; full help: tbtools list t
 # --- Fasta / Fastq ---
 tbtools tool statFasta             # sequence statistics
 tbtools tool extractFasta          # extract/filter FASTA by ID list
-tbtools tool extractFastaSub       # extract subsequences by 4-col BED coordinates
-tbtools tool fastaIDAppender       # append prefix to FASTA IDs
-tbtools tool FastaIDRenamer        # rename FASTA IDs via map
-tbtools tool FastaIDSimplifier     # simplify long FASTA IDs
-tbtools tool FastaLongestRepresentater  # keep longest representative per group
-tbtools tool getLongestCompleteORF # longest complete ORF → protein
-tbtools tool DecodeIlluminaFqPool  # decode Illumina pooled FASTQ
 
-# --- BLAST ---
-tbtools tool autoMakeBlastDb       # build BLAST database
-tbtools tool autoRemoteBlast       # remote BLAST
-tbtools tool ReciprocalBlast       # bidirectional BLAST family identification
-
-# --- Expression ---
-tbtools tool rpkmCal               # RPKM calculation
-tbtools tool fpkmToTpm             # FPKM → TPM
-tbtools tool tpmCalc               # TPM from counts + gene length
-
-# --- GWAS / VCF ---
-tbtools tool mimicVqsr             # VCF quality metrics (QD/MQ/FS/SOR)
-tbtools tool vcfAddID              # add ID column to VCF
-
-# --- Table ---
-tbtools tool TableCast             # long → wide matrix
-tbtools tool TableMelt             # wide → long
-tbtools tool TableColSelector      # select columns by idList/regex
-
-# --- GXF ---
-tbtools tool GXFOverlaper          # region overlap filtering
-tbtools tool RegionGXFOverlapAnnotation  # region → Genic/Intergenic annotation
-tbtools tool ExtractFeaturefromGFF3andGenome  # extract features from GFF+genome
-
-# --- GO / KEGG / RNA ---
-tbtools tool GoCompareBar          # GO term comparison
-tbtools tool keggEnrichment        # KEGG enrichment
-tbtools tool goAnnoPipe          # GO annotation from BLAST XML / Query2Gi table + idmapping db (gzipped)
-tbtools tool Fasta36m10toTable     # ssearch36 m10 → table
-tbtools tool FoldStructureStater   # RNA fold structure statistics
-tbtools tool OneStepMirGraph       # one-step miRNA graph
-tbtools tool PredictMirSTAR        # miRNA star prediction
-tbtools tool plotRNAfoldloci       # plot RNAfold loci
-tbtools tool RNAplotAdvance        # RNA secondary structure plot (use `tbplot.sh rnaplot` — bypasses stdin bug)
-tbtools tool MIRPrediionResultStat  # MIRidentifier prediction result statistics
-tbplot.sh calcRepeat <genome.fa> <out.txt> [--kmerSize N] [--minFreq N] [--threads N]  # repeat score scan (needs jellyfish)
-tbtools tool OverlapGeneModels     # overlap gene models
-
-# --- Web / Misc ---
-tbtools tool NCBITaxonomy          # NCBI taxonomy lookup
-tbtools tool downLoadNCBIFasta     # download NCBI FASTA
-tbtools tool goEnrichMerge         # merge GO enrichment bubbles
-tbtools tool bigMarkerRandomDesign # random marker design
-```
-
----
-
+> 全部 82 个工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`
 ## 🔬 Any Engine Reflection (universal fallback)
 
 ```bash

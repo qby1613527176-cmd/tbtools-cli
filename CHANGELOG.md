@@ -6,7 +6,7 @@
 
 ### 修复（RPC 测试交付包 N1-N41，09/21 · 批次 0-4 全部落地）
 
-> 来源：WorkBuddy Windows 17 轮穷举测试（~1665 项/~812 通过），证据链与回归脚本见交付包 `workflows/tbtools_cli化_修复清单.md` + `tbtools-cli/docs/RPC_FIX_STATUS.md`。
+> 来源：WorkBuddy Windows 17 轮穷举测试（~1665 项/~812 通过），证据链与回归脚本见交付包 `workflows/tbtools_cli化_修复清单.md` + `tbtools-cli/docs/_worklog/RPC_FIX_STATUS.md`。
 
 **P0 输入保护（系统性）**：`core.py` run_java 统一接入 snapshot_inputs/verify_and_restore/cleanup_side_effects——引擎在用户输入上建库/清洗/写穿时自动恢复并告警（N37 四起输入清空事件防御）。
 
@@ -113,7 +113,7 @@
 - **130 处 xvfb 双重嵌套**（自查发现）：`auto_commands.py` 全部 `_impl` 在 `java_args` 内嵌 `xvfb-run` 前缀，与 `run_plot` 按需 prepend 构成双重嵌套；Windows 无 xvfb-run 时 `FileNotFoundError` 且误报「Java 未安装」。统一移除，xvfb 归 `run_plot` 单点处理
 - **P0-3 82 个 CLI 工具新入口不可达**：原注册表仅在旧入口 `bin/tbcli.py`，`tbtools tool rpkmCal/statFasta/tpmCalc` 等全部「未找到」。抽取共享注册表 `tbtools_cli/cli_tools_registry.py`（82 项），新旧入口共用；`ToolGroup` 解析链：手动命令 → auto_commands `_impl` → 注册表直转；`help`/`list tools`/未知工具列表同步覆盖注册表
 
-### 已知未修（报告待办，见 docs/EXTERNAL_TEST_REPORT_20260919.md）
+### 已知未修（报告待办，见 docs/_worklog/EXTERNAL_TEST_REPORT_20260919.md）
 
 - B2：Windows 上报「包装器吞引擎崩溃退出码」——Linux 复核不复现（EXIT=1 正确透传），待 Windows 环境复现定位
 - README 的 `engine` 分组示例不存在（`tool generic` 仅适用返回 JIGSubPanel 的绘图引擎）；`--key=value` 写法被 ArgsParser 系引擎拒绝（文档需统一空格写法）
