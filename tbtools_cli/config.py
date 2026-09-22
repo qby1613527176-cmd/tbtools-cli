@@ -8,7 +8,7 @@ except ImportError:
 
 DEFAULT_CONFIG_PATH = os.path.expanduser("~/.config/tbtools-cli/config.toml")
 
-_config_cache: dict | None = None
+_config_cache: tuple[str, dict] | None = None  # (config路径, 数据)
 
 def load_config():
     """加载配置文件。返回 dict（可能为空）。

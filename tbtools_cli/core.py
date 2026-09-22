@@ -283,6 +283,21 @@ PITFALL_HINTS = {
     "venn6": "首参是输出文件（非输入）；setA..F.txt 才是输入",
 }
 
+
+# PITFALL 英文版(Top10 高频命令;其余 en 模式回退中文——完整翻译见 backlog)
+PITFALL_HINTS_EN = {
+    "hclust": "hclust requires a THREE-column distance file: GeneA\\tGeneB\\tdistance (not an expression matrix!)",
+    "msy": "Microsynteny: simplified GFF must use NUMERIC chromosome names; gene name in column 2; coordinates in one column",
+    "venn2": "venn2 uses flag style: --List1 a.txt --List2 b.txt --label1 A --label2 B --graph out.svg --prefix <prefix>",
+    "venn5": "venn5: first arg is the OUTPUT file (not input); pass setA..E.txt as inputs",
+    "venn6": "venn6: first arg is the OUTPUT file (not input); pass setA..F.txt as inputs",
+    "peaktss": "peaktss: input GXF + MACS2 peak table; --dist sets the window around TSS",
+    "onesteptree": "--bb-time must be >= 1000 (IQ-TREE UFBoot minimum); smaller values are rejected",
+    "motif": "motif requires a REAL MEME XML (with motif definitions) + an ID list matching the sequences",
+    "tableMerge": "tableMerge: engine takes --inFileArr/--inColIndexArr/--outTable (hidden --config supported); first positional arg is treated as output",
+    "barplot": "barplot uses COLUMN NAMES (e.g. Term/Pvalue), not column indices",
+}
+
 def get_pitfall_hint(command_name: str) -> str | None:
     """获取已知坑位提示;en 模式优先英文版(未翻译回退中文)"""
     if _use_en():
