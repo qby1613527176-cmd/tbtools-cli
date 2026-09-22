@@ -358,7 +358,7 @@ tree_group.add_command(tree_rooting, name="treeRooting")
 @common_options
 def tree_onesteptree(pep_fasta, output_prefix, bb_time, verbose, quiet, fmt, preset, height, width, threads):
     """一步法 ML 树（muscle → trimal → IQ-TREE）"""
-    # FIX(G5): 原注册类 Phylogenetics.OneStepTree 在 2.475/2.535 jar 均不存在（WorkBuddy P1-1
+    # FIX(G5): 原注册类 Phylogenetics.OneStepTree 在 2.475/2.535 jar 均不存在（外部测试 P1-1
     # + 本地 doctor 探测复核）；真实引擎为 BioSoftPipeServer.OneStepMLTree。
     # ⚠️ 该引擎 ArgsParser 只认 --inPepFie/--outFilePrefix/--clean/--bbTime，没有 --threads！
     args = ["java", "-Xmx4g", "-cp", JAR,
@@ -387,7 +387,7 @@ class ToolGroup(click.Group):
                     help_text = doc + (f'\n\n⚠️ {pitfall}' if pitfall else '')
                     # FIX(P0-1): 旧写法闭包捕获 tool 分组自身 Context（ctx.args 恒空），
                     # 所有参数被丢弃。改用 pass_context 拿子命令自己的 Context。
-                    # （WorkBuddy 2026-09-19 三轮实测报告 §3.1，Windows 已验证）
+                    # （外部测试 2026-09-19 实测,Windows 已验证）
                     @click.pass_context
                     def _fwd(sctx, _impl=impl):
                         sys.exit(_impl(list(sctx.args)))
@@ -397,7 +397,7 @@ class ToolGroup(click.Group):
                         help=help_text)
                     return name, cmd, args[1:]
                 # FIX(P0-3): 回退到共享注册表（82 个 CLI 工具，原仅旧入口 tbcli.py 可达，
-                # WorkBuddy 报告 §3.3：rpkmCal/statFasta/tpmCalc 等在新入口全部未找到）
+                # 外部测试 §3.3：rpkmCal/statFasta/tpmCalc 等在新入口全部未找到）
                 cls = CLI_TOOLS.get(name)
                 if cls:
                     @click.pass_context

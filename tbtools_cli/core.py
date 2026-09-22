@@ -722,7 +722,7 @@ def probe_dead_engines():
 
     覆盖: auto_commands.py / cli.py / cli_tools_registry.py / bridges/*.java
     返回 [(className, 来源文件), ...]（缺失项）；jar 不可读时返回 []。
-    用途: tbtools doctor 死命令预警（WorkBuddy 报告 P1-1：2.475 jar 无
+    用途: tbtools doctor 死命令预警（外部测试 P1-1：2.475 jar 无
     Phylogenetics.OneStepTree，tbtools tree one-step 直接 ClassNotFound）。
     """
     import re as _re

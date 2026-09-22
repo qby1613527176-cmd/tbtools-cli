@@ -65,7 +65,7 @@ def register_top(cli, _LG):
             size_mb = os.path.getsize(JAR) / 1024 / 1024
             click.echo(f"  ✅ JAR: {JAR} ({size_mb:.0f}MB)")
             ok += 1
-            # G5: 死命令探测（jar 版本与 CLI 注册类不匹配预警，WorkBuddy P1-1）
+            # G5: 死命令探测（jar 版本与 CLI 注册类不匹配预警,外部测试 P1-1）
             from tbtools_cli.core import probe_dead_engines
             dead = probe_dead_engines()
             if dead:

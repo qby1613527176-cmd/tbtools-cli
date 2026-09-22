@@ -6,6 +6,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$SCRIPT_DIR")"
 # shellcheck disable=SC1091
 source "$ROOT/config/config.sh"
+
+# ⚠️ DEPRECATION (v1.1.0): 兼容层，推荐 `tbtools <cmd>`；计划 v2.0.0 移除
+echo "[tbplot] ⚠️ 旧入口兼容层，推荐改用: tbtools <命令>（v2.0.0 起移除）" >&2
 JAR="${TBTOOLS_JAR}"
 # ---- verbose/quiet 级别 ----
 # 默认: 显示引擎进度信息到 stderr

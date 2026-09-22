@@ -1,4 +1,12 @@
 #!/usr/bin/env python3
+import sys as _sys
+_warned = False
+def _warn_deprecation():
+    global _warned
+    if not _warned:
+        _warned = True
+        print("[tbcli] ⚠️ 旧入口兼容层，推荐改用: tbtools <命令>（v2.0.0 起移除）", file=_sys.stderr)
+
 """
 tbcli — TBtools-II 2.535 全功能 CLI 统一入口（完整版）
 ======================================================

@@ -2,7 +2,7 @@
 cli_tools_registry — 82 个命令行工具的共享注册表（name → java 类名）
 ====================================================================
 FIX(P0-3): 原注册表仅存在于旧入口 bin/tbcli.py，新入口 tbtools tool 不可达
-（WorkBuddy 2026-09-19 报告 §3.3）。抽取为共享模块，新旧入口共用：
+（外部测试 2026-09-19 报告 §3.3）。抽取为共享模块，新旧入口共用：
   - bin/tbcli.py（旧入口）import 本模块
   - tbtools_cli/cli.py ToolGroup（新入口）import 本模块
 """

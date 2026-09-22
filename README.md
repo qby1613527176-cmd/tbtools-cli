@@ -17,6 +17,24 @@
 
 ---
 
+## 📑 Table of Contents
+
+- [Quick Start](#quick-start)
+- [Features](#features)
+- [Documentation](#documentation)
+- [Installation](#installation)
+- [️ Example Outputs（示例输出，fulltest 合成数据实测）](#️-example-outputs（示例输出，fulltest-合成数据实测）)
+- [Plotting Engines (218)](#plotting-engines-218)
+- [RPC Data Tools (188 methods)](#rpc-data-tools-188-methods)
+- [️ CLI Tools (82)](#️-cli-tools-82)
+- [Any Engine Reflection (universal fallback)](#any-engine-reflection-universal-fallback)
+- [Project Structure](#project-structure)
+- [️ Naming Convention](#️-naming-convention)
+- [️ Known Limitations](#️-known-limitations)
+- [Credits](#credits)
+- [License](#license)
+- [许可](#许可)
+
 ## 🚀 Quick Start
 
 ```bash
@@ -66,6 +84,17 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 ```
 
 ## ✨ Features
+
+| 能力 | 状态 | 说明 |
+|:---|:---:|:---|
+| 绘图引擎 CLI | ✅ | 218 个（无头 SVG/PNG 输出,Linux 需 xvfb） |
+| RPC 数据工具 | ✅ | 188 方法,自愈服务器（pid+健康检查+自动重启） |
+| 管道（stdin/stdout） | ⚠️ | 仅部分 tool 层命令;绘图命令需真实文件路径 |
+| Windows 绘图 | ⚠️ | 基本可用;无 xvfb 时部分绘图受限 |
+| 联网命令（NCBI/API） | ⚠️ | srr2ena/pubmed/seqfetch 等需外网,被墙环境请配代理 |
+| 中文路径 | ✅ | 已实测支持 |
+| 并发/高吞吐 | ✅ | 1.2GB FASTA 23.9s 线性 |
+
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
@@ -286,6 +315,11 @@ tbtools-cli/
 
 ---
 
+## 🛠️ 兼容层退役计划
+
+`bin/tbplot.sh` / `bin/tbengine.sh` / `bin/tbcli.py` / `bin/tbtools_rpc.sh` 为旧入口兼容层（已打印 deprecation 警告）。
+**计划 v2.0.0 移除**。新用法一律走 `tbtools`（Python 入口）;`.bashrc` 如引用了旧入口请迁移。
+
 ## 🏷️ Naming Convention
 
 - **规范命令名是小写 camelCase**：`tableCast` / `tableMelt` / `recipBlast`（分组命令）
@@ -308,6 +342,20 @@ tbtools-cli/
 
 ---
 
+## ❓ FAQ
+
+**Java 版本要求?** 需要 JRE 8+（推荐 11/17;引擎为 Java 8 编译,JDK 9+ 移除部分 javax.xml 类,`--verbose` 报 ClassNotFoundException 时见 `docs/_worklog` 的 N27 修复记录）。`tbtools doctor` 会自动检测。
+
+**Windows 支持?** 双击/终端可用（v2.475 实测）;绘图命令在 Windows 无 xvfb 时部分受限（见「Known Limitations」）。WSL2 经 /mnt/d 挂载 JAR 亦可。
+
+**xvfb 是什么?** Linux 无头绘图必须的虚拟显示层。`sudo apt install xvfb`。`doctor` 会提示缺失。
+
+**stdin/stdout 管道支持?** 仅 tool 层部分工具支持（/dev/stdin）;绘图命令需真实文件路径（Java 引擎不认 /dev/stdin）。
+
+**为什么命令有大小写混用?** 小写 camelCase 为规范名,旧大写名作兼容别名（见 Naming Convention）。
+
+**如何升级?** `git pull && pip install -e .`（源码安装）;JAR 用 `tbtools fetch-jar --yes` 更新。
+
 ## 🙏 Credits
 
 - [TBtools](https://github.com/CJ-Chen/TBtools) — the underlying toolkit by Chengjie Chen
@@ -321,5 +369,7 @@ This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MI
 
 
 ## 📄 许可
+
+> 文档以英文版为准（中文节仅为补充;命令帮助信息以 `tbtools <cmd> --help` 输出为准）。
 
 本 CLI 封装为 MIT License。TBtools 本身由其作者 Chengjie Chen 以 MIT 许可发布。
