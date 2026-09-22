@@ -725,7 +725,48 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     # 成功时 ec_out = 0
     if ec == 0:
         ec_out = 0
+    # 运行 provenance(报告2 P1): 识别输出文件, 旁写 <out>.tbtools.json
+    _write_provenance(java_args, command_name, ec_out)
     return ec_out
+
+
+def _write_provenance(java_args, command_name, ec):
+    """运行记录旁文件: <输出>.tbtools.json(命令/版本/参数/输入 sha/时间)。
+
+    仅成功(ec==0)且能识别输出文件时写;失败不影响主流程。
+    """
+    if ec != 0 or not command_name:
+        return
+    # 输出识别: 反向第一个图形参数即视为输出(重跑时文件已存在也当输出), 排除选项
+    out = None
+    for a in reversed(java_args):
+        if a.endswith((".svg", ".png", ".pdf")) and not a.startswith("-"):
+            out = a
+            break
+    if not out or not os.path.isdir(os.path.dirname(os.path.abspath(out))):
+        return
+    try:
+        import json as _json
+        import hashlib as _hl
+        import time as _tm
+        from tbtools_cli import __version__ as _pkg_ver
+        inputs = [a for a in java_args
+                  if os.path.isfile(a) and not a.startswith("-")
+                  and a != out and not a.endswith((".jar", ".class", ".svg", ".png", ".pdf"))]
+        prov = {
+            "command": command_name,
+            "invocation": " ".join(java_args[:8]) + (" ..." if len(java_args) > 8 else ""),
+            "tbtools_cli": _pkg_ver,
+            "exit_code": 0,
+            "outputs": [out],
+            "inputs": [{"path": i, "sha256": _hl.sha256(open(i, "rb").read()).hexdigest()[:16]} for i in inputs[:10]],
+            "timestamp": _tm.strftime("%Y-%m-%dT%H:%M:%S"),
+            "java_args_count": len(java_args),
+        }
+        with open(out + ".tbtools.json", "w", encoding="utf-8") as f:
+            _json.dump(prov, f, ensure_ascii=False, indent=1)
+    except Exception:
+        pass  # provenance 是附加信息, 失败不影响命令
 
 def get_java() -> str | None:
     """定位 java 可执行文件（N1：tool 层 PATH 依赖误导报错）。
