@@ -447,9 +447,9 @@ def register_top(cli, _LG):
             click.echo(f"❌ 未知命令: {command}(见 tbtools list / search)", err=True)
             sys.exit(1)
         v = meta[command]
-        # 分组: 运行时 _groups 优先(cli.py 手动命令注册在装饰器分组), metadata CATEGORY_MAP 兜底
-        group = next((g for g, grp in _LG._groups.items() if command in grp.commands),
-                     _LG.CATEGORY_MAP.get(command, "engine"))
+        # 分组: metadata group 字段优先(gen_metadata 注入), 运行时 _groups 兜底
+        group = v.get("group") or next((g for g, grp in _LG._groups.items() if command in grp.commands),
+                                       _LG.CATEGORY_MAP.get(command, "engine"))
         # help: metadata 优先, 回退点击命令对象(手动命令)
         help_txt = (v.get("help", "") or "").split("#")[-1].strip()
         if not help_txt:
@@ -560,15 +560,28 @@ def register_top(cli, _LG):
             click.echo(f"❌ 元数据缺失: {meta_path}", err=True)
             sys.exit(1)
         meta = _json.load(open(meta_path, encoding="utf-8"))
-        kw = keyword.lower()
+        # 多词查询: 空格拆分, 全部词须命中(名/help/class)——Agent 自然语言("gene structure")
+        kws = [w for w in keyword.lower().split() if w]
         hits = []
         for name, v in meta.items():
-            help_txt = (v.get("help", "") or "")[:200].lower()
-            if kw in name.lower() or kw in help_txt:
+            hay = " ".join([name.lower(),
+                            (v.get("help", "") or "")[:300].lower(),
+                            (v.get("class", "") or "").lower()])
+            if all(w in hay for w in kws):
                 cat = _LG.CATEGORY_MAP.get(name, "engine")
                 kind = v.get("kind", "?")
                 desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
                 hits.append((name, cat, kind, desc))
+        if not hits and len(kws) > 1:
+            # AND 无果回退 OR(Agent 宽松匹配优于无结果)
+            for name, v in meta.items():
+                hay = " ".join([name.lower(), (v.get("help", "") or "")[:300].lower(),
+                                (v.get("class", "") or "").lower()])
+                if any(w in hay for w in kws):
+                    cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
+                    kind = v.get("kind", "?")
+                    desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
+                    hits.append((name, cat, kind, desc))
         if not hits:
             click.echo(_json.dumps({"query": keyword, "hits": []}, ensure_ascii=False) if as_json
                        else f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")

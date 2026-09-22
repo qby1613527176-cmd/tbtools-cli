@@ -932,7 +932,7 @@ def _mirnatarget_impl(args, verbose=False, quiet=False):
 
 def _msy_impl(args, verbose=False, quiet=False):
     """msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]
-       # 多物种微共线性图（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当
+       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当
        #   engineClass 导致 ClassNotFoundException——现按 tbplot.sh 已验证调用方式显式拼参数）
        # 格式: pos=Chr\\tGene\\tStart\\tEnd；links=GeneA\\tGeneB\\t[r,g,b]；layout=Genome: chr1 chr2"""
     if len(args) < 4:
