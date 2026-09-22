@@ -27,14 +27,28 @@ def register_top(cli, _LG):
     """注册顶层命令。cli=主 CLI group；_LG=cli_load 模块（提供 _groups/GROUPS/CATEGORY_MAP）。"""
     # ---- 通用命令 ----
     @cli.command()
-    def version():
-        """显示版本信息"""
-        # 动态统计
+    @click.option("--json", "as_json", is_flag=True, help="输出结构化统计(JSON, 供脚本/Agent 使用)")
+    def version(as_json):
+        """显示版本与命令统计(权威数字; --json 输出结构化)"""
+        import json as _json
+        # 动态统计(数量哲学统一: 唯一统计 API, README/badge/文档口径均以此为准)
         plot_count = sum(len(g.commands) for g in _LG._groups.values())
         auto_count = sum(1 for n in dir(_ac) if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'))
         from tbtools_cli.core import BRIDGES_DIR, PITFALL_HINTS
         bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 80
         from tbtools_cli import __version__ as _pkg_ver
+        if as_json:
+            click.echo(_json.dumps({
+                "version": _pkg_ver,
+                "cli_commands": plot_count,
+                "auto_commands": auto_count,
+                "rpc_methods": 188,
+                "tools": len(CLI_TOOLS),
+                "bridges": bridge_count,
+                "pitfall_hints": len(PITFALL_HINTS),
+                "metadata_commands": len(_json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))) if os.path.isfile(os.path.join(ROOT, "tbtools_cli", "command_metadata.json")) else 0,
+            }, ensure_ascii=False, indent=1))
+            return
         click.echo(f"tbtools-cli v{_pkg_ver}")
         click.echo(f"  {plot_count} 绘图/分析命令 + {auto_count} auto_commands + 188 RPC 方法")
         click.echo(f"  bridges: {bridge_count} | pitfall hints: {len(PITFALL_HINTS)}")
