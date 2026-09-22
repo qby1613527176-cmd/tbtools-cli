@@ -126,24 +126,39 @@ def _infer_group(name, kind, src=""):
     return "engine"
 
 
+def _build_specs(reg, tools, manual):
+    """扫描结果 → CommandSpec 模型 → metadata 投影(二期: 单一命令模型接管生成)"""
+    sys.path.insert(0, ROOT)
+    from tbtools_cli.command_spec import (CommandSpec, KNOWN_ALIASES, KNOWN_STATUS,
+                                          KNOWN_SCHEMAS, to_metadata_entry)
+    from tbtools_cli.cli_load import CATEGORY_MAP as _CM
+    specs = {}
+    for name, e in reg.items():
+        specs[name] = CommandSpec(name, _CM.get(name, "engine"), e.get("kind", "direct"),
+                                  e.get("class", ""), e.get("runner") or "plot",
+                                  e.get("xmx") or "2g", e.get("help", ""))
+    for name, e in tools.items():
+        specs.setdefault(name, CommandSpec(name, "tool", "tool", e.get("class", ""),
+                                           "java", "3g", e.get("help", "")))
+    for name, e in manual.items():
+        specs.setdefault(name, CommandSpec(name, e.get("group") or _infer_group(name, "manual", e.get("src", "")),
+                                           "manual", runner="plot", doc=e.get("help", "")))
+    for name, s in specs.items():
+        s.aliases = [a for a, t in KNOWN_ALIASES.items() if t == name]
+        s.status = KNOWN_STATUS.get(name, "stable")
+        if name in KNOWN_SCHEMAS:
+            s.inputs, s.outputs = KNOWN_SCHEMAS[name]
+    return {n: to_metadata_entry(s) for n, s in specs.items()}
+
+
 def build():
     reg = scan_engine_registry()
     tools = scan_cli_tools()
     manual = scan_manual_commands()
     bridges = scan_bridges()
 
-    # 完全重建(第八轮评审): 不读旧 metadata——消除已删除命令的残影条目(统计污染源)
-    meta = {}
-
-    for name, entry in reg.items():
-        meta[name] = entry
-    for name, entry in tools.items():
-        if name not in meta:
-            meta[name] = entry
-    for name, entry in manual.items():
-        old = meta.get(name, {})
-        entry.setdefault("help", old.get("help", ""))
-        meta[name] = entry  # 覆盖: 手动命令补 kind=manual（保留旧 help）
+    # 模型接管(二期): 扫描 → CommandSpec 统一模型 → metadata 投影(完全重建, 无残影)
+    meta = _build_specs(reg, tools, manual)
     # tree 分组别名（显示名 ≠ 函数名）: draw→tree, one-step→onesteptree, rooting→treeRooting
     for alias, disp in (("tree", "draw"), ("onesteptree", "one-step"), ("treeRooting", "rooting")):
         if alias not in meta and disp in meta:

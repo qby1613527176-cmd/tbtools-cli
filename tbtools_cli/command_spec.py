@@ -98,9 +98,10 @@ def build_command_specs() -> dict[str, CommandSpec]:
             kind=kind, class_name=cls, runner=runner, xmx=xmx, doc=doc,
         )
 
-    # 2. CLI 工具
+    # 2. CLI 工具(runner/xmx 对齐现 metadata 条目: java/3g)
     for name, cls in CLI_TOOLS.items():
-        specs.setdefault(name, CommandSpec(name=name, group="tool", kind="tool", class_name=cls))
+        specs.setdefault(name, CommandSpec(name=name, group="tool", kind="tool", class_name=cls,
+                                           runner="java", xmx="3g"))
 
 
     # 3. 手动命令: 从现有 metadata 回退(kind=manual 且未被表驱动/工具覆盖)
@@ -133,14 +134,9 @@ def build_command_specs() -> dict[str, CommandSpec]:
 
 def to_metadata_entry(spec: CommandSpec) -> dict:
     """CommandSpec → metadata 条目(与现有 command_metadata.json 结构兼容)"""
-    e: dict[str, object] = {"group": spec.group, "kind": spec.kind}
-    if spec.class_name:
-        e["class"] = spec.class_name
-    if spec.runner:
-        e["runner"] = spec.runner
-    if spec.xmx and spec.xmx != "2g":
-        e["xmx"] = spec.xmx
-    e["help"] = spec.doc
+    e: dict[str, object] = {"name": spec.name, "kind": spec.kind, "mode": spec.kind,
+                            "class": spec.class_name, "xmx": spec.xmx, "runner": spec.runner,
+                            "group": spec.group, "help": spec.doc}
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note} for i in spec.inputs]
