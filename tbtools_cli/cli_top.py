@@ -97,6 +97,18 @@ def register_top(cli, _LG):
             click.echo(f"  ✅ 可选依赖: {', '.join(avail[:5])}")
             ok += 1
         click.echo(f"\n  汇总: ✅ {ok}  ⚠️ {warn}  ❌ {err}")
+
+        # 平台能力矩阵（第三轮审查：让用户第一分钟知道能力边界）
+        click.echo("\n  ── 平台能力矩阵 ──")
+        is_win = sys.platform.startswith("win")
+        have_xvfb = shutil.which("xvfb-run") is not None
+        jar_ready = bool(JAR) and os.path.isfile(JAR)
+        click.echo(f"  工具类命令        {'✅' if jar_ready else '❌'}")
+        click.echo(f"  RPC 数据工具      {'✅' if jar_ready else '❌'}")
+        click.echo(f"  绘图（SVG）       {'✅' if (not is_win or have_xvfb) and jar_ready else '⚠️ Windows 无 xvfb 部分受限 / JAR 缺失'}")
+        click.echo(f"  管道 stdin/stdout {'⚠️ 仅部分 tool 层'}")
+        click.echo("  （Linux 绘图需 xvfb;Windows 限制见 README Known Limitations）")
+
         if err:
             sys.exit(1)
 

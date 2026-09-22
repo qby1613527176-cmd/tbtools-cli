@@ -61,4 +61,4 @@ python3 scripts/gen_metadata.py --check   # metadata 与运行时一致（防漂
 ## 已知边界(别浪费时间去"修")
 
 - 引擎级缺陷(上游 TBtools jar 内):Gxf 族 GENCODE GTF NPE、OneStepBuildATree 超时、GxfGeneDensityProfiler NPE 等——记录到 PITFALL/docs 即可
-- `tbplot.sh`/`tbcli.py` 是兼容层,新功能一律走 Python 入口
+- `tbplot.sh`/`tbcli.py`/`tbengine.sh`/`tbtools_rpc.sh` 是兼容层(已打 deprecation 警告),**计划 v2.0.0 移除**;新功能一律走 Python 入口

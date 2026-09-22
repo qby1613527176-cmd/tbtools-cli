@@ -46,6 +46,34 @@ def common_options(f):
     f = click.option("--threads", "-t", type=int, default=None, help="线程数")(f)
     return f
 
+
+
+def _plot_prelude(cmd, in_file, out_file, preset, width, height, fmt, bridge):
+    """绘图命令公共前奏: pre_flight → preset → resolve_output → ensure_bridge。
+    （第三轮审查:消除 volcano/heatmap 等命令前缀的逐字复制）返回 (out_file, width, height)。"""
+    pre_flight(cmd, in_file)
+    if preset:
+        p = apply_preset(preset, width=width, height=height)
+        if not p:
+            print(f"❌ 未知预设: {preset}", file=sys.stderr)
+            sys.exit(1)
+        if 'width' in p and not width:
+            width = p['width']
+        if 'height' in p and not height:
+            height = p['height']
+    out_file = resolve_output(out_file, fmt)
+    if bridge:
+        ensure_bridge(bridge)
+    return out_file, width, height
+
+
+def _append_size(args, width, height):
+    """公共尾部: width/height 拼装(--width/--height 风格)"""
+    if width:
+        args += ["--width", str(width)]
+    if height:
+        args += ["--height", str(height)]
+    return args
 # ---- 主命令组 ----
 class RootGroup(click.Group):
     """顶层：未知命令时给分组建议 + 拼写纠错"""
@@ -101,8 +129,7 @@ def seq_group():
 @common_options
 def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, preset, height, width, threads):
     """序列 LOGO 图"""
-    pre_flight("logo", input_file)
-    output_file = resolve_output(output_file, fmt)
+    output_file, width, height = _plot_prelude("logo", input_file, output_file, preset, width, height, fmt, None)
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioDoer.seqLogo.makeSeqLogo",
             "--inFile", input_file, "--OutGraph", output_file]
@@ -120,9 +147,7 @@ def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, pr
 @common_options
 def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, height, width, threads):
     """多序列比对可视化"""
-    pre_flight("msa", aligned_fasta)
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("MSACli")
+    output_file, width, height = _plot_prelude("msa", aligned_fasta, output_file, preset, width, height, fmt, "MSACli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "MSACli", aligned_fasta, output_file]
     if padding:
@@ -138,9 +163,7 @@ def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, he
 @common_options
 def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, preset, height, width, threads):
     """基因结构图（外显子/UTR 从 GFF）"""
-    pre_flight("structure", gff_file)
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("GeneStructureCli")
+    output_file, width, height = _plot_prelude("structure", gff_file, output_file, preset, width, height, fmt, "GeneStructureCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "GeneStructureCli", gff_file, id_list, output_file]
     if genome:
@@ -161,9 +184,7 @@ seq_group.add_command(seq_structure, name="genestructure")
 @common_options
 def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """Motif 分布图（MEME XML）"""
-    pre_flight("motif", meme_xml)
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("MotifCli")
+    output_file, width, height = _plot_prelude("motif", meme_xml, output_file, preset, width, height, fmt, "MotifCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "MotifCli", meme_xml, id_list, output_file]
     if width: args += [str(width)]
@@ -184,14 +205,7 @@ def expr_group():
 @common_options
 def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, preset, height, width, threads):
     """火山图（DEG: GeneID Log2FC pvalue）"""
-    pre_flight("volcano", deg_file)
-    if preset:
-        p = apply_preset(preset, width=width, height=height)
-        if not p: print(f"❌ 未知预设: {preset}", file=sys.stderr); sys.exit(1)
-        if 'width' in p and not width: width = p['width']
-        if 'height' in p and not height: height = p['height']
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("GenericCli")
+    output_file, width, height = _plot_prelude("volcano", deg_file, output_file, preset, width, height, fmt, "GenericCli")
     args = ["java", "-Xmx2g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "GenericCli", "biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot", "show",
             output_file, "--set", "inData", deg_file]
@@ -214,17 +228,8 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
 @click.option("--cluster-col/--no-cluster-col", default=False, help="列聚类")
 @common_options
 def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col, verbose, quiet, fmt, preset, height, width, threads):
-    pre_flight("heatmap", matrix_file)
     """热图（表达矩阵）"""
-    # N12: heatmap 应用 --preset（同 volcano 通用选项一致性）
-    if preset:
-        p = apply_preset(preset, width=width, height=height)
-        if not p:
-            print(f"❌ 未知预设: {preset}", file=sys.stderr); sys.exit(1)
-        if 'width' in p and not width: width = p['width']
-        if 'height' in p and not height: height = p['height']
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("HeatmapCli")
+    output_file, width, height = _plot_prelude("heatmap", matrix_file, output_file, preset, width, height, fmt, "HeatmapCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "HeatmapCli", matrix_file, output_file]
     if log2:
@@ -250,9 +255,7 @@ def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col,
 @common_options
 def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, preset, height, width, threads):
     """PCA 图"""
-    pre_flight("pca", matrix_file)
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("GenericCli")
+    output_file, width, height = _plot_prelude("pca", matrix_file, output_file, preset, width, height, fmt, "GenericCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "GenericCli", "biocjava.bioDoer.JIGplotToolkit.PCAanalysis.PCAanalysis",
             "doPCA+postGraph", output_file,
@@ -272,9 +275,7 @@ def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, pr
 @common_options
 def expr_hclust(distance_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """层次聚类树（三列距离文件 GeneA\tGeneB\tdist）"""
-    pre_flight("hclust", distance_file)
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("HclustCli")
+    output_file, width, height = _plot_prelude("hclust", distance_file, output_file, preset, width, height, fmt, "HclustCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "HclustCli", distance_file, output_file]
     ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="hclust")
@@ -309,9 +310,7 @@ def tree_group():
 @common_options
 def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """树+注释图（TreeTreeTree 多轨道）"""
-    pre_flight("draw", config_file)  # draw 输入是 TreeTab 配置文件，不适用格式表
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("TreeCli")
+    output_file, width, height = _plot_prelude("draw", config_file, output_file, preset, width, height, fmt, "TreeCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "TreeCli", config_file, output_file]
     ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="draw")
@@ -323,9 +322,7 @@ def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, wid
 @common_options
 def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """无根树可视化"""
-    pre_flight("unrooted", newick_file)
-    output_file = resolve_output(output_file, fmt)
-    ensure_bridge("UnrootedTreeCli")
+    output_file, width, height = _plot_prelude("unrooted", newick_file, output_file, preset, width, height, fmt, "UnrootedTreeCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "UnrootedTreeCli", newick_file, output_file]
     if width: args += ["--width", str(width)]

@@ -3,7 +3,7 @@
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![engines](https://img.shields.io/badge/engines-218-orange.svg)]()
+[![engines](https://img.shields.io/badge/engines-200+-orange.svg)]()
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
 > **218 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 118 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
@@ -11,7 +11,7 @@
 
 <div align="center">
 
-**English** | [中文](#中文)
+**English** | 中文说明见文末（以英文版为准）
 
 </div>
 
@@ -108,7 +108,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 ## 📖 Documentation
 
-> **每次调用前先查 `docs/COMMAND_REFERENCE.md`**（命令参考手册，2153 行）——每个命令的输入格式、参数、示例、已知坑都在里面。
+> **每次调用前先查 `docs/COMMAND_REFERENCE.md`**（命令参考手册,自动生成命令清单见 `docs/_generated/commands.md`）——每个命令的输入格式、参数、示例、已知坑都在里面。
 
 | 文档 | 内容 |
 |:-----|:-----|
@@ -295,9 +295,9 @@ tbtools-cli/
 │   └── tbcli.py           # 旧工具入口（已由 cli_tools_registry 替代，保留兼容）
 ├── tbtools_cli/           # ✅ Python 包（真正的入口）
 │   ├── cli.py             # click 主 CLI（全命令注册 + rpc 自愈 + 纠错）
-│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂（201 命令）
+│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂（201 命令:172 表驱动 + 29 手写）
 │   ├── cli_tools_registry.py  # 82 个 CLI 工具共享注册表
-│   ├── command_metadata.json  # 143 命令完整元数据（help 权威来源）
+│   ├── command_metadata.json  # 276 命令元数据（gen_metadata 生成,唯一数据源）
 │   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
 │   ├── presets.py / scenarios.py / config.py
 ├── pyproject.toml         # ✅ pip 安装（tbtools console_script）
@@ -346,7 +346,7 @@ tbtools-cli/
 
 ## ❓ FAQ
 
-**Java 版本要求?** 需要 JRE 8+（推荐 11/17;引擎为 Java 8 编译,JDK 9+ 移除部分 javax.xml 类,`--verbose` 报 ClassNotFoundException 时见 `docs/_worklog` 的 N27 修复记录）。`tbtools doctor` 会自动检测。
+**Java 版本要求?** 需要 JRE 8+（推荐 11/17;引擎为 Java 8 编译,JDK 9+ 移除部分 javax.xml 类,`--verbose` 报 ClassNotFoundException 时见 `docs/_worklog` 修复记录）。`tbtools doctor` 会自动检测。
 
 **Windows 支持?** 双击/终端可用（v2.475 实测）;绘图命令在 Windows 无 xvfb 时部分受限（见「Known Limitations」）。WSL2 经 /mnt/d 挂载 JAR 亦可。
 
