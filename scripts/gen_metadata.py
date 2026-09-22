@@ -73,13 +73,10 @@ def build():
     manual = scan_manual_commands()
     bridges = scan_bridges()
 
+    # 完全重建(第八轮评审): 不读旧 metadata——消除已删除命令的残影条目(统计污染源)
     meta = {}
-    if os.path.isfile(META):
-        meta = json.load(open(META, encoding="utf-8"))
 
     for name, entry in reg.items():
-        old = meta.get(name, {})
-        entry.setdefault("help", old.get("help", entry.get("help", "")))
         meta[name] = entry
     for name, entry in tools.items():
         if name not in meta:

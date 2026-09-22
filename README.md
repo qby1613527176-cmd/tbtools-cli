@@ -15,11 +15,6 @@
 
 **English** | 中文要点见各节说明（命令输出默认中文,`LC_ALL=en` 切换英文）
 
-[![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)]()
-[![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
-[![commands](https://img.shields.io/badge/commands-200%2B-blueviolet.svg)]()
 
 </div>
 
