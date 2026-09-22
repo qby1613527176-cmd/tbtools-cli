@@ -109,7 +109,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "expr",
-  "help": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>"
+  "help": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "synteny",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "batchReplace": {
   "name": "batchReplace",
@@ -130,6 +149,18 @@
   "runner": "plot",
   "group": "engine",
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
+  "inputs": [
+   {
+    "name": "fasta",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ],
   "status": "platform-limited"
  },
  "cddmotif": {
@@ -484,7 +515,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "seq",
-  "help": "gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）"
+  "help": "gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
+  "inputs": [
+   {
+    "name": "lanes",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "LaneLabels 逗号分隔"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "genedensity": {
   "name": "genedensity",
@@ -1060,7 +1103,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star"
+  "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "简化 GFF"
+   },
+   {
+    "name": "links",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "mirnaIdentify": {
   "name": "mirnaIdentify",
@@ -1139,7 +1201,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt"
+  "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "gxf_lst",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "nwAlign": {
   "name": "nwAlign",
@@ -1170,7 +1251,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>"
+  "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
+  "inputs": [
+   {
+    "name": "paf",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "含 cg:Z CIGAR"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "pafviz": {
   "name": "pafviz",
@@ -1180,7 +1273,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）"
+  "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
+  "inputs": [
+   {
+    "name": "paf",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "13 列 PAF"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "partitionconflict": {
   "name": "partitionconflict",
@@ -1200,7 +1305,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "chipseq",
-  "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]"
+  "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
+  "inputs": [
+   {
+    "name": "peaks",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "MACS2, 百万级坐标"
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "peakdist": {
   "name": "peakdist",
@@ -1249,7 +1366,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "seq",
-  "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>"
+  "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
+  "inputs": [
+   {
+    "name": "cds",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "pep_aln",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "fa"
+  ]
  },
  "pfammotif": {
   "name": "pfammotif",
@@ -1289,7 +1425,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "seq",
-  "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]"
+  "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
+  "inputs": [
+   {
+    "name": "seq",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "pdf"
+  ]
  },
  "preparespecies": {
   "name": "preparespecies",
@@ -1299,7 +1447,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "asm",
-  "help": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>"
+  "help": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
+  "inputs": [
+   {
+    "name": "genome",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "fasta"
+  ]
  },
  "qdot": {
   "name": "qdot",
@@ -1421,6 +1588,18 @@
   "runner": "plot",
   "group": "seq",
   "help": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
+  "inputs": [
+   {
+    "name": "seq",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ],
   "status": "platform-limited"
  },
  "sambamcov": {
@@ -1492,7 +1671,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "supercircos: supercircos <config.cfg> <out> [width] [height]"
+  "help": "supercircos: supercircos <config.cfg> <out> [width] [height]",
+  "inputs": [
+   {
+    "name": "config",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": "[chrLen] 等节"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "tableAppend": {
   "name": "tableAppend",
@@ -3251,7 +3442,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "expr",
-  "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 "
+  "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 ",
+  "inputs": [
+   {
+    "name": "fastq",
+    "role": "file",
+    "format": "fastq",
+    "required": true,
+    "note": "RNA-seq"
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "fimo": {
   "name": "fimo",
@@ -3363,7 +3566,26 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "tree",
-  "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）"
+  "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
+  "inputs": [
+   {
+    "name": "tree",
+    "role": "file",
+    "format": "newick",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "gene_tree",
+    "role": "file",
+    "format": "newick",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "nwk"
+  ]
  },
  "newickRename": {
   "name": "newickRename",
@@ -3373,7 +3595,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "tree",
-  "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）"
+  "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
+  "inputs": [
+   {
+    "name": "nwk",
+    "role": "file",
+    "format": "newick",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "nwk"
+  ]
  },
  "hmmerSearch": {
   "name": "hmmerSearch",
@@ -3383,7 +3617,26 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "hmm",
-  "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）"
+  "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
+  "inputs": [
+   {
+    "name": "hmm",
+    "role": "file",
+    "format": "hmm",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "seq",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "memeViz": {
   "name": "memeViz",
@@ -3393,7 +3646,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "seq",
-  "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）"
+  "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
+  "inputs": [
+   {
+    "name": "meme",
+    "role": "file",
+    "format": "meme",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "gsea": {
   "name": "gsea",
@@ -3432,7 +3697,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "seq",
-  "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）"
+  "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
+  "inputs": [
+   {
+    "name": "motif",
+    "role": "file",
+    "format": "meme",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "mcscanxd": {
   "name": "mcscanxd",
@@ -3442,7 +3719,26 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "syn",
-  "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）"
+  "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "blast",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "collinearity"
+  ]
  },
  "quickAnno": {
   "name": "quickAnno",
@@ -3462,7 +3758,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "seq",
-  "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）"
+  "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
+  "inputs": [
+   {
+    "name": "seq",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "mirnatarget": {
   "name": "mirnatarget",
