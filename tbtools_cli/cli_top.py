@@ -557,7 +557,8 @@ def register_top(cli, _LG):
     @cli.command(name="tool-run")
     @click.argument("args", nargs=-1, required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化结果回显(Agent 能力4)")
-    def tool_run(args, as_json):
+    @click.option("--timeout", "timeout_s", type=int, default=0, help="超时秒数(0=不超时; 超时杀进程树并返回 TB007)")
+    def tool_run(args, as_json, timeout_s):
         """统一执行接口: 转发任意 tbtools 命令 + 结构化结果(退出码/时长/产物)"""
         import json as _json
         import time as _time
@@ -570,16 +571,29 @@ def register_top(cli, _LG):
             _os.dup2(_devnull, 1)
             _os.close(_devnull)
         t0 = _time.time()
+        _timed_out = False
         try:
-            ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
-        except SystemExit as _e:
-            ec = _e.code or 0  # 命令内部 sys.exit(0/2) 在嵌套调用下逃逸——捕获
+            if timeout_s and timeout_s > 0:
+                # 超时模式: 独立进程执行, 可整体杀进程树(含 java/xvfb 子进程)
+                import subprocess as _sp, sys as _sys
+                try:
+                    _r = _sp.run([_sys.executable, "-m", "tbtools_cli.cli"] + list(args),
+                                 timeout=timeout_s)
+                    ec = _r.returncode or 0
+                except _sp.TimeoutExpired:
+                    _timed_out = True
+                    ec = 1
+            else:
+                try:
+                    ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
+                except SystemExit as _e:
+                    ec = _e.code or 0  # 命令内部 sys.exit(0/2) 在嵌套调用下逃逸——捕获
+                ec = ec or 0
         finally:
             if _saved_fd is not None:
                 import os as _os
                 _os.dup2(_saved_fd, 1)
                 _os.close(_saved_fd)
-        ec = ec or 0
         dt = round(_time.time() - t0, 2)
         # 产物+错误: 明确输出识别(args 中最后图形参数 → 其 provenance), 非扫描猜测
         artifacts, error = [], None
@@ -594,8 +608,11 @@ def register_top(cli, _LG):
                     except Exception:
                         pass
                 break
+        if _timed_out:
+            error = {"code": "TB007_TOOL_TIMEOUT", "retryable": True,
+                     "suggested_action": "retry with --timeout higher or smaller input"}
         result = {"schema_version": "1.0", "exit_code": ec, "duration_s": dt,
-                  "artifacts": artifacts, "error": error}
+                  "artifacts": artifacts, "error": error, "timed_out": _timed_out}
         if as_json:
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
         else:
