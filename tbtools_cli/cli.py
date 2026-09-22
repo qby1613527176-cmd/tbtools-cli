@@ -5,7 +5,9 @@ import sys
 import click
 
 # ---- 配置 ----
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# 仅源码直跑时(父目录有 pyproject.toml)才插入搜索路径;pip 安装后不需要(评审: 避免污染搜索路径)
+if os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pyproject.toml")):
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import tbtools_cli.auto_commands as _ac
 from tbtools_cli.cli_tools_registry import CLI_TOOLS
 from tbtools_cli.core import (
@@ -15,6 +17,7 @@ from tbtools_cli.core import (
     ensure_bridge,
     get_pitfall_hint,
     pre_flight,
+    safe_temp,
     resolve_output,
     run_java,
     run_plot,
@@ -458,8 +461,7 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, preset, height
     """FASTA 序列统计"""
     # stdin 管道支持
     if input_file == "-":
-        import tempfile
-        tmp = tempfile.mktemp(suffix=".fa")
+        tmp = safe_temp(suffix=".fa")
         with open(tmp, "wb") as f:
             f.write(sys.stdin.buffer.read())
         input_file = tmp
@@ -494,7 +496,7 @@ def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, preset, height
 def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, preset, height, width, threads):
     """按 ID 列表提取 FASTA 序列（idList: 一行一个 ID,不带 > 号;与原始 header 精确匹配）"""
     if input_fasta == "-":
-        import tempfile; tmp = tempfile.mktemp(suffix=".fa")
+        tmp = safe_temp(suffix=".fa")
         with open(tmp, "wb") as f: f.write(sys.stdin.buffer.read())
         input_fasta = tmp
     if output_file == "-": output_file = stdout_path()

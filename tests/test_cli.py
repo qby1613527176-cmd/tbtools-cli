@@ -598,3 +598,54 @@ class TestSearchCommand:
     def test_search_requires_arg(self):
         ec, out, err = run_cli("search")
         assert ec != 0, "缺关键词应非零退出"
+
+
+class TestReadmeStructure:
+    """README 结构健全(第六轮评审: 围栏配对/TOC 锚点/License)"""
+
+    def _readme(self):
+        import os as _os
+        p = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), "README.md")
+        return open(p, encoding="utf-8").read()
+
+    def test_fence_strict_pairing(self):
+        """代码围栏必须严格交替(```bash 开 → ``` 闭),防止标题被吞渲染"""
+        state = None
+        for i, ln in enumerate(self._readme().split('\n'), 1):
+            s = ln.strip()
+            if s.startswith('```'):
+                if state is None:
+                    state = s
+                else:
+                    assert s == '```', f"L{i}: 开围栏未用 ``` 闭合({s})"
+                    state = None
+        assert state is None, "存在未闭合围栏"
+
+    def test_toc_anchors_exist(self):
+        """TOC 锚点必须对应真实标题(死链检查, GitHub 锚点近似规则)"""
+        import re
+        r = self._readme()
+        headers = []
+        for ln in r.split('\n'):
+            if ln.startswith('## '):
+                headers.append(ln[3:].strip())
+
+        def gh_anchor(title):
+            # GitHub GFM 锚点近似: 去 emoji/标点(非 \w), 小写, 空格→-
+            t = re.sub(r'[^\w\s-]', '', title, flags=re.UNICODE).lower().replace(' ', '-')
+            t = t.strip('-')
+            # 纯 ASCII 标题(GitHub 规则确定), 中文标题保留
+            return (t or title.lower()) if t.isascii() else title.lower()
+
+        for m in re.finditer(r'\[[^\]]*\]\(#([^)]+)\)', r):
+            anchor = m.group(1)
+            if anchor.isascii():
+                assert anchor in {gh_anchor(h) for h in headers}, f"TOC 死锚点: #{anchor}"
+            else:
+                assert any(anchor in h or anchor == h for h in headers), f"TOC 中文锚点无对应标题: #{anchor}"
+
+    def test_license_single(self):
+        """License 只出现一次(英文完整说明, 不重复中文节)"""
+        r = self._readme()
+        assert r.count('## 📄 License') == 1
+        assert '## 📄 许可' not in r, "中文许可节已合并, 不应残留"

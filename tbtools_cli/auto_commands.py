@@ -15,7 +15,7 @@ import subprocess
 import sys
 import tempfile
 
-from tbtools_cli.core import BUILD_DIR, JAR, ROOT, cp, ensure_bridge, run_java, run_plot
+from tbtools_cli.core import BUILD_DIR, JAR, ROOT, cp, ensure_bridge, run_java, run_plot, safe_temp
 
 
 # ── ENGINE_REGISTRY ──────────────────────────────────────────────
@@ -110,10 +110,8 @@ ENGINE_REGISTRY = [
     ('microsyn', 'bridge', 'MicroSynCli', '3g', 'plot', 'microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star'),
     ('mirnaIdentify', 'bridge', 'MirIdentifyCli', '3g', 'plot', 'mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> <outChecklog.txt> [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxBulge N]   # miRNA 前体鉴定（GUI 逆向 #78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）'),
     ('mirnaTarget2', 'direct', 'biocjava.bioDoer.miRNA.Target2TablePipe', '3g', 'plot', 'mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true'),
-    ('mirnatarget', 'bridge', 'TargetScoreCli', '3g', 'plot', 'mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] [-'),
     ('mountain', 'bridge', 'MountainPlotCli', '3g', 'plot', 'mountain: mountain <fold.txt> <out.tsv>'),
     ('mpattern', 'bridge', 'MotifPatternCli', '3g', 'plot', 'mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）'),
-    ('msy', 'bridge', 'GenericCli', '3g', 'plot', 'msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w'),
     ('multiEfp', 'bridge', 'MultiSuperHeatCli', '3g', 'plot', 'multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId'),
     ('multisyn', 'bridge', 'SeveralSpeciesCli', '3g', 'plot', 'multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt'),
     ('nwAlign', 'bridge', 'NeedlemanWunschCli', '3g', 'plot', 'nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA] [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   # Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）'),
@@ -278,7 +276,11 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
     return impl
 
 
+_HANDWRITTEN = {} if False else None  # placeholder
 for _cmd, _kind, _cls, _xmx, _runner, _doc in ENGINE_REGISTRY:
+    if hasattr(sys.modules[__name__], f"_{_cmd}_impl"):
+        # 手写实现在 ENGINE_REGISTRY 后同文件定义时会覆盖注册; 冲突条目应在注册表删除(mirnatarget/msy 已删)
+        raise SystemError(f"注册表与手写实现冲突: {_cmd}(手写 {f'_{_cmd}_impl'} 存在)——请从 ENGINE_REGISTRY 删除该条目")
     # 设计说明(第三轮审查评估): 表驱动工厂统一产出 _<name>_impl,cli_load 按名查找;
     # 命令清单的单一数据源是 ENGINE_REGISTRY,command_metadata.json 是其投影(gen_metadata 生成,--check 防漂移),
     # 不再反向依赖 JSON 生成 click(避免运行时依赖生成物、且 JSON 不含 runner/xmx/doc 等运行时信息)。
@@ -384,7 +386,6 @@ def _kallisto_impl(args, verbose=False, quiet=False):
     tx, reads_str, out_ab = pos[0], pos[1], pos[2]
     reads = [r.strip() for r in reads_str.split(",")]
     import shutil
-    import tempfile
     env = dict(os.environ)
     env["PATH"] = os.path.dirname(bin_path) + os.pathsep + env.get("PATH", "")
     if os.path.isdir(libs_dir):
@@ -566,7 +567,6 @@ def _getseqdb_impl(args, verbose=False, quiet=False):
 
 def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
-    import tempfile
     pos, min_len, gxf = [], None, None
     _kw, pos, _ = parse_kv_args(args, {"--min-len": ("min_len", int), "--gxf": ("gxf", None)})
     min_len = _kw.get("min_len"); gxf = _kw.get("gxf")
@@ -799,7 +799,7 @@ def _findBestHomologyBatch_impl(args, verbose=False, quiet=False):
         if not ids:
             print("❌ query FASTA 无序列头", file=sys.stderr)
             return 3
-        tmp_targets = tempfile.mktemp(prefix="tb_fbh.", suffix=".tsv")
+        tmp_targets = safe_temp(prefix="tb_fbh.", suffix=".tsv")
         with open(tmp_targets, "w") as fh:
             fh.write(f"{kw.get('targetName') or 'All'}\t{','.join(ids)}\n")
         target_list = tmp_targets
@@ -906,7 +906,7 @@ def _mirnatarget_impl(args, verbose=False, quiet=False):
     od = os.path.dirname(os.path.abspath(out))
     if od:
         os.makedirs(od, exist_ok=True)
-    tmp_m10 = tempfile.mktemp(prefix="tb_mirna.", suffix=".m10")
+    tmp_m10 = safe_temp(prefix="tb_mirna.", suffix=".m10")
     try:
         with open(tmp_m10, "w") as fh:
             r = subprocess.run([ssearch, "-w", "100", "-W", "25", "-E", str(evalue),

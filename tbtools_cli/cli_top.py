@@ -17,6 +17,7 @@ from tbtools_cli.core import (
     c,
     detect_format,
     get_pitfall_hint,
+    safe_temp,
     validate_file,
 )
 from tbtools_cli.presets import PRESETS, list_presets
@@ -183,7 +184,6 @@ def register_top(cli, _LG):
     @click.option('--yes', is_flag=True, help="跳过确认")
     def fetch_jar(ver, yes):
         """自动下载并提取 TBtools_JRE1.6.jar（官方只发 portable zip，需解包）"""
-        import tempfile
         import urllib.request
         import zipfile
         # 确定版本
@@ -233,7 +233,7 @@ def register_top(cli, _LG):
                 click.echo("已取消")
                 sys.exit(0)
         # 下载
-        tmp = tempfile.mktemp(suffix=".zip")
+        tmp = safe_temp(suffix=".zip")
         click.echo("  ⏳ 下载中（约 300MB，请稍候）...")
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "tbtools-cli"})

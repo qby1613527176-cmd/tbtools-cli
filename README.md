@@ -3,7 +3,7 @@
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![engines](https://img.shields.io/badge/engines-200+-orange.svg)]()
+[![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
@@ -17,14 +17,14 @@
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)]()
-[![engines](https://img.shields.io/badge/engines-200+-orange.svg)]()
+[![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
 [![commands](https://img.shields.io/badge/commands-276-blueviolet.svg)]()
 
 </div>
 
 ---
 
-## 📺 Demo（终端录屏）
+## 📺 Demo
 
 [`docs/images/demo.cast`](docs/images/demo.cast) — asciinema 格式,10 秒演示:
 `tbtools version` → `doctor` → `search volcano` → `volcano 实跑出图`。
@@ -37,21 +37,23 @@ asciinema play docs/images/demo.cast
 
 ## 📑 Table of Contents
 
+- [Demo](#demo)
 - [Quick Start](#quick-start)
 - [Features](#features)
 - [Documentation](#documentation)
 - [Installation](#installation)
-- [️ Example Outputs（示例输出，fulltest 合成数据实测）](#️-example-outputs（示例输出，fulltest-合成数据实测）)
+- [Example Outputs](#example-outputs)
 - [Plotting Engines (218)](#plotting-engines-218)
-- [RPC Data Tools (188 methods)](#rpc-data-tools-188-methods)
-- [️ CLI Tools (82)](#️-cli-tools-82)
-- [Any Engine Reflection (universal fallback)](#any-engine-reflection-universal-fallback)
+- [RPC Data Tools](#rpc-data-tools-188-methods)
+- [CLI Tools](#cli-tools-82)
+- [Any Engine Reflection](#any-engine-reflection-universal-fallback)
 - [Project Structure](#project-structure)
-- [️ Naming Convention](#️-naming-convention)
-- [️ Known Limitations](#️-known-limitations)
+- [兼容层退役计划](#兼容层退役计划)
+- [Naming Convention](#naming-convention)
+- [Known Limitations](#known-limitations)
+- [FAQ](#faq)
 - [Credits](#credits)
 - [License](#license)
-- [许可](#许可)
 
 ## 🚀 Quick Start
 
@@ -214,7 +216,7 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 
 ---
 
-## 🖼️ Example Outputs（示例输出，fulltest 合成数据实测）
+## 🖼️ Example Outputs
 
 | Heatmap | Venn / UpSet |
 |:--|:--|
@@ -285,9 +287,10 @@ tbtools rpc start                       # 启动 RPC 服务器 (port 8765)
 tbtools rpc methods                     # list all 188 methods
 tbtools rpc FastaStat.process '{"inputPath":"in.fa","outputPath":"out.xls"}'
 tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outdir","options":{"ultraFastBS":true}}'
-tbtools expr heatmap matrix.tsv out.png [group.tsv]   # quick heatmap
+```
 
 > 全部 188 方法见 [docs/rpc_methods_reference.md](docs/rpc_methods_reference.md) 或 `tbtools list rpc`
+
 ## 🛠️ CLI Tools (82)
 
 ```bash
@@ -296,8 +299,10 @@ tbtools tool <name> [args...]      # run any CLI tool; full help: tbtools list t
 # --- Fasta / Fastq ---
 tbtools tool statFasta             # sequence statistics
 tbtools tool extractFasta          # extract/filter FASTA by ID list
+```
 
 > 全部 82 个工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`
+
 ## 🔬 Any Engine Reflection (universal fallback)
 
 ```bash
@@ -389,13 +394,11 @@ tbtools-cli/
 
 ## 📄 License
 
-This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MIT-licensed by its authors.
+This CLI wrapper is released under the **MIT License** (see [LICENSE](LICENSE)):
+you may use, copy, modify, and distribute it freely, provided the copyright notice and
+this permission notice are preserved in all copies or substantial portions.
 
----
+The underlying [TBtools](https://github.com/CJ-Chen/TBtools) toolkit is also MIT-licensed
+by its author Chengjie Chen. This project is an independent wrapper and is not affiliated with TBtools.
 
-
-## 📄 许可
-
-> 文档以英文版为准（中文节仅为补充;命令帮助信息以 `tbtools <cmd> --help` 输出为准）。
-
-本 CLI 封装为 MIT License。TBtools 本身由其作者 Chengjie Chen 以 MIT 许可发布。
+> 文档以英文版为准;命令帮助信息以 `tbtools <cmd> --help` 输出为准。

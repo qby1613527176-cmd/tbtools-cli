@@ -11,6 +11,13 @@ import click
 
 # ---- 平台常量（Windows 主战场：classpath 分隔符；Linux/WSL 用 :）----
 CP_SEP = ";" if os.name == "nt" else ":"
+
+
+def safe_temp(prefix="tmp.", suffix="", dir=None, text=True):
+    """mkstemp 封装(替代有竞态的 tempfile.mktemp, 第六轮评审): 返回已关 fd 的路径"""
+    fd, path = tempfile.mkstemp(prefix=prefix, suffix=suffix, dir=dir, text=text)
+    os.close(fd)
+    return path
 def cp(*parts):
     """平台安全的 classpath 拼接（Windows ; / POSIX :）"""
     return CP_SEP.join(p for p in parts if p)
@@ -146,7 +153,7 @@ def detect_format(path: str, max_lines: int = 3) -> tuple[str, int, list[str]]:
     if lines[0].startswith('(') or lines[0].endswith(';'):
         return ("newick", 0, lines)
     # MEME XML
-    if '<' in lines[0] and '?' in lines[0]:
+    if lines[0].lstrip().startswith('<?xml'):  # 收紧: 仅真 XML 声明(评审: 含<和?的任何文本误判)
         return ("xml", 0, lines)
     # TSV/CSV
     delim = '\t' if '\t' in lines[0] else (',' if ',' in lines[0] else None)
@@ -440,7 +447,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     退出码: 0=成功, 1=参数错误, 2=文件不存在, 3=格式错误
     P0 保护：调用前快照输入，调用后恢复被改写输入 + 清理副作用文件。
     """
-    err_file = tempfile.mktemp(prefix="tbtools_err.")
+    err_file = safe_temp(prefix="tbtools_err.")
     import time as _time
     _t0 = _time.perf_counter()
     
@@ -471,7 +478,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
             elif _a == "--outTable":
                 oidx = _i
         if qidx is not None and qidx + 1 < len(java_args) and os.path.isfile(java_args[qidx + 1]):
-            n19_tmp = tempfile.mktemp(prefix="tbq.", suffix=".fa", dir=os.path.dirname(os.path.abspath(java_args[qidx + 1])) or None)
+            n19_tmp = safe_temp(prefix="tbq.", suffix=".fa", dir=os.path.dirname(os.path.abspath(java_args[qidx + 1])) or None)
             try:
                 shutil.copy2(java_args[qidx + 1], n19_tmp)
                 n19_orig_sha = _sha1_file(n19_tmp)
