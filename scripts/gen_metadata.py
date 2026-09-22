@@ -267,7 +267,8 @@ def render_ai_manifest(meta):
 
     由 gen_metadata --render 统一生成, 与 metadata 单一数据源联动。
     """
-    import json as _json, os as _os
+    import json as _json
+    import os as _os
     ai_dir = _os.path.join(ROOT, "ai")
     _os.makedirs(_os.path.join(ai_dir, "tools"), exist_ok=True)
     import shutil as _sh

@@ -86,7 +86,7 @@
 | `emblToFasta` | 工具 | emblToFasta (tool, emblToFasta) — embl To Fasta |
 | `extractFasta` | 工具 | extractFasta (tool, ExtractFasta) — Extract Fasta |
 | `extractFastaSub` | 工具 | extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta S |
-| `extractFeatureFromGTF` | 手动 | extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa |
+| `extractFeatureFromGTF` | 工具 | extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome) |
 | `extractGff3Region` | 工具 | extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 R |
 | `fastaFragmenter` | 工具 | fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter |
 | `fastaIDAppender` | 工具 | fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender |
@@ -95,16 +95,16 @@
 | `fastqParallelTrimmer` | 工具 | fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Pa |
 | `filesplit` | 桥 | filesplit <inFile> <numParts> |
 | `findBestForkerRootTree` | 工具 | findBestForkerRootTree (tool, FindBestForkerRootTree) — Find |
-| `findBestHomologyBatch` | 手动 | findBestHomologyBatch <query.pep> <subject.pep> <outDir> [-- |
+| `findBestHomologyBatch` | 工具 | findBestHomologyBatch (tool, FindBestHomologyBatch) — Find B |
 | `fpkmToTpm` | 工具 | fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M |
 | `gbff2gff` | 工具 | gbff2gff (tool, gbff2gff) — gbff2gff |
 | `geneExpFilter` | 工具 | geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter |
 | `genePairExpCorr` | 工具 | genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr |
 | `generateMotifFromSequences` | 工具 | generateMotifFromSequences (tool, GenerateMotifFromSequences |
 | `generic` | 桥 | generic <engineClass> <method[+method2]> <out> [--set field |
-| `getLongestCompleteORF` | 手动 | getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa> |
+| `getLongestCompleteORF` | 工具 | getLongestCompleteORF (tool, ORF) — O R F |
 | `getLongestORF` | 工具 | getLongestORF (tool, GetLongestORF) — Get Longest O R F |
-| `gffCdsPhaseCorrector` | 手动 | gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [ |
+| `gffCdsPhaseCorrector` | 工具 | gffCdsPhaseCorrector (tool, GffCdsPhaseCorrector) — Gff Cds  |
 | `goAnnoPipe` | 工具 | goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe |
 | `goEnrichMerge` | 工具 | goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichme |
 | `gsadiag` | 桥 | gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax |
@@ -122,7 +122,7 @@
 | `mirIdentifierBasedOnTargetSo` | 工具 | mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTarg |
 | `pafRefBaseCoverCalc` | 工具 | pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Ba |
 | `pairWiseKaKsCalculator` | 工具 | pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair |
-| `parallelMD5Check` | 手动 | parallelMD5Check <md5_list.txt> [threads] |
+| `parallelMD5Check` | 工具 | parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5 Ch |
 | `plotRNAfoldloci` | 工具 | plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold |
 | `prepareFileFromMCScanXtoTBtools` | 工具 | prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScan |
 | `qpcrproc` | 桥 | qpcrproc <in.qpcr.tab> <out.xls> |
@@ -167,7 +167,7 @@
 | `cubeheatmap` | 桥 | group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBou |
 | `dehist` | 手动 | 差异表达双直方图 |
 | `distance` | 桥 | distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi |
-| `efpHeat` | 手动 | efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> -- |
+| `efpHeat` | 直连 | efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s |
 | `exprCorr` | 桥 | exprCorr <inFPKM> <outCorrMat> |
 | `gbar` | 桥 | 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value） |
 | `groupCol` | 直连 | groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean| |
@@ -213,7 +213,7 @@
 | `gxfAttr` | 手动 | GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎） |
 | `gxfFix` | 直连 | GFF 修复（重复ID前缀/CDS phase/dang |
 | `gxfGenepos` | 直连 | G |
-| `gxfIdAppender` | 手动 | gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix> |
+| `gxfIdAppender` | 手动 | GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process |
 | `gxfMatch` | 直连 | gxfMatch <in.gff3> <inGenome.fa> |
 | `gxfOverlap` | 直连 | gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand |
 | `gxfRecall` | 直连 | 从 gene 行恢复 mRNA 特征（第82引擎， |
@@ -221,7 +221,7 @@
 | `gxfRename` | 直连 | gxfRename <in.gff3> <out.gff3> <renameMap.tsv> |
 | `gxfRepGXF` | 直连 | gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID |
 | `gxfRepIDs` | 直连 | gxfRepIDs <in.gff3> <out.txt> |
-| `gxfSplit` | 手动 | gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N] |
+| `gxfSplit` | 手动 | GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉 |
 | `gxfStat` | 直连 | GFF 统计（基因/mRNA/外显子/内含子/C |
 | `regionAnno` | 直连 | regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [- |
 
@@ -239,7 +239,7 @@
 |---|---|---|
 | `mirnaIdentify` | 桥 | 78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29） |
 | `mirnaTarget2` | 直连 | mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true |
-| `mirnatarget` | 手动 | mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X] |
+| `mirnatarget` | 手动 | 原表驱动误把本 |
 
 ## seq — 序列/结构/域（43 个）
 
@@ -316,7 +316,7 @@
 | `mcscanxd` | 手动 | OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包） |
 | `microgenome` | 直连 | microgenome <inGBK> <anno.tsv> <out> [micro|macro] |
 | `microsyn` | 桥 | microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star |
-| `msy` | 手动 | msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w |
+| `msy` | 手动 | engineClass 导致 ClassNo |
 | `multisyn` | 桥 | multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt |
 | `pafcomp` | 桥 | pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q |
 | `pafref` | 直连 | pafref --inPaf <paf> --outTab <out.tsv> |
@@ -350,7 +350,7 @@
 | `tableColSelect` | 桥 | tableColSelect <inTable> <outTable> <colName1> [colName2...] |
 | `tableCollapse` | 桥 | tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader |
 | `tableMelt` | 直连 | 宽表转长表（第88引擎，TableMelt） |
-| `tableMerge` | 手动 | tableMerge --inFileArr \ |
+| `tableMerge` | 直连 | 按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N |
 | `tableSplit` | 直连 | tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt] |
 | `tableTranspose` | 直连 | 表格转置（第95引擎，TableTran |
 | `tableUniq` | 直连 | tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true| |
@@ -376,6 +376,6 @@
 
 - 命令总数: 294
 - bridge: 100
-- tool: 75
-- direct: 68
-- manual: 51
+- tool: 80
+- direct: 70
+- manual: 44
