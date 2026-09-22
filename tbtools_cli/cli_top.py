@@ -670,7 +670,8 @@ def register_top(cli, _LG):
                 {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in sorted(hits)
             ]}, ensure_ascii=False, indent=1))
             return
-        click.echo(f"🔍 匹配 '{keyword or ""}' 的命令（{len(hits)} 个）:")
+        kw_disp = keyword or ""
+        click.echo(f"🔍 匹配 '{kw_disp}' 的命令（{len(hits)} 个）:")
         for name, cat, kind, desc in sorted(hits):
             click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")
         click.echo("\n查看详情: tbtools help <命令> | 全量: tbtools list")
