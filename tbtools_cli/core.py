@@ -442,6 +442,29 @@ def find_empty_inputs(java_args):
     return empties
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
+
+def _n19_move_result(n19_tmp, n19_out, n19_orig_sha):
+    """N19: findBestHomologyBatch 引擎改写了临时副本时才搬结果到 outTable。
+    独立函数(第六轮评审: 引擎特判不寄生在 run_java 主干,便于单独测试)。"""
+    if not n19_tmp:
+        return
+    try:
+        _modified = (os.path.isfile(n19_tmp) and os.path.getsize(n19_tmp) > 0
+                     and _sha1_file(n19_tmp) != n19_orig_sha)
+        if _modified:
+            if n19_out:
+                _od = os.path.dirname(os.path.abspath(n19_out))
+                if _od:
+                    os.makedirs(_od, exist_ok=True)
+                shutil.copy2(n19_tmp, n19_out)
+                print(f"✅ findBestHomologyBatch 结果已写入: {n19_out}", file=sys.stderr)
+            else:
+                print(f"⚠️ findBestHomologyBatch 未指定 --outTable，结果留在: {n19_tmp}", file=sys.stderr)
+        os.unlink(n19_tmp)
+    except Exception as _e:
+        print(f"⚠️ findBestHomologyBatch 结果搬移失败: {_e}", file=sys.stderr)
+
+
 def run_java(java_args: list, verbose: bool = False, quiet: bool = False, command_name: str | None = None) -> int:
     ec_out = 0
     # 堆内存可配置(第六轮评审: 注册表 -Xmx 硬编码,低配机器直接 OOM):
@@ -530,23 +553,8 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     if _clean_n:
         print(f"⚠️ 已清理引擎副作用文件 {_clean_n} 个（临时索引/建库残留）", file=sys.stderr)
     
-    # ── N19：仅当引擎改写了临时副本时才把结果搬到 outTable ──
-    if n19_tmp:
-        try:
-            _modified = (os.path.isfile(n19_tmp) and os.path.getsize(n19_tmp) > 0
-                         and _sha1_file(n19_tmp) != n19_orig_sha)
-            if _modified:
-                if n19_out:
-                    _od = os.path.dirname(os.path.abspath(n19_out))
-                    if _od:
-                        os.makedirs(_od, exist_ok=True)
-                    shutil.copy2(n19_tmp, n19_out)
-                    print(f"✅ findBestHomologyBatch 结果已写入: {n19_out}", file=sys.stderr)
-                else:
-                    print(f"⚠️ findBestHomologyBatch 未指定 --outTable，结果留在: {n19_tmp}", file=sys.stderr)
-            os.unlink(n19_tmp)
-        except Exception as _e:
-            print(f"⚠️ findBestHomologyBatch 结果搬移失败: {_e}", file=sys.stderr)
+    # ── N19：仅当引擎改写了临时副本时才把结果搬到 outTable（独立 hook 函数）──
+    _n19_move_result(n19_tmp, n19_out, n19_orig_sha)
     
     if ec != 0:
         ec_out = ec
