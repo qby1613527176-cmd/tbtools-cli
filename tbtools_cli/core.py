@@ -284,7 +284,9 @@ PITFALL_HINTS = {
 }
 
 def get_pitfall_hint(command_name: str) -> str | None:
-    """获取已知坑位提示"""
+    """获取已知坑位提示;en 模式优先英文版(未翻译回退中文)"""
+    if _use_en():
+        return PITFALL_HINTS_EN.get(command_name) or PITFALL_HINTS.get(command_name, "")
     return PITFALL_HINTS.get(command_name, "")
 
 # ---- 统一输出格式处理 ----
