@@ -14,7 +14,7 @@ import sys
 import click
 
 from tbtools_cli import auto_commands as _ac
-from tbtools_cli.core import ROOT, check_input_format, get_pitfall_hint, validate_file
+from tbtools_cli.core import ROOT, _, check_input_format, get_pitfall_hint, validate_file
 from tbtools_cli.presets import PRESETS, apply_preset
 
 
@@ -200,10 +200,10 @@ def _load_dynamic_commands():
             prefix_hits = [c for c in cmds if c.startswith(name)]
             close = prefix_hits[:5] or difflib.get_close_matches(name, cmds, n=3, cutoff=0.6)
             if close:
-                click.echo(f"❌ '{name}' 不是 '{self.name}' 分组内的命令", err=True)
+                click.echo(_("❌ '{n}' 不是 '{g}' 分组内的命令", "❌ '{n}' is not a command in group '{g}'").format(n=name, g=self.name), err=True)
                 click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
             else:
-                click.echo(f"❌ '{name}' 不是 '{self.name}' 分组内的命令", err=True)
+                click.echo(_("❌ '{n}' 不是 '{g}' 分组内的命令", "❌ '{n}' is not a command in group '{g}'").format(n=name, g=self.name), err=True)
                 click.echo(f"   查看: tbtools {self.name} --help", err=True)
             ctx.exit(2)
     for gname, g in _groups.items():

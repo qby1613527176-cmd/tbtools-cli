@@ -11,6 +11,7 @@ if os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(_
 import tbtools_cli.auto_commands as _ac
 from tbtools_cli.cli_tools_registry import CLI_TOOLS
 from tbtools_cli.core import (
+    _,
     JAR,
     ROOT,
     cp,
@@ -99,10 +100,10 @@ class RootGroup(click.Group):
             prefix_hits = [c for c in candidates if c.startswith(name)]
             close = prefix_hits[:5] or difflib.get_close_matches(name, candidates, n=3, cutoff=0.6)
             if close:
-                click.echo(f"❌ 未知命令: {name}", err=True)
+                click.echo(_("❌ 未知命令: {n}", "❌ Unknown command: {n}").format(n=name), err=True)
                 click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
             else:
-                click.echo(f"❌ 未知命令: {name}", err=True)
+                click.echo(_("❌ 未知命令: {n}", "❌ Unknown command: {n}").format(n=name), err=True)
                 click.echo("   查看: tbtools list", err=True)
             ctx.exit(2)
 

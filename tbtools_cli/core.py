@@ -11,6 +11,28 @@ import click
 
 from tbtools_cli.config import get_default  # heap 可配置(第六轮评审)
 
+# ── 轻量 i18n(--lang en / LC_ALL / config [defaults] lang)──
+_LANG_EN = None
+
+def _use_en() -> bool:
+    """是否英文输出: config [defaults] lang=en 或 LC_ALL/LANG 含 en|c。中文默认。"""
+    global _LANG_EN
+    if _LANG_EN is None:
+        cfg = get_default("lang", "")
+        env = (os.environ.get("LC_ALL", "") + " " + os.environ.get("LANG", "")).lower()
+        _LANG_EN = bool(cfg and str(cfg).lower().startswith("en")) or "en" in env or env.lstrip().startswith("c ")
+    return _LANG_EN
+
+
+def _lang_cache_clear():
+    global _LANG_EN
+    _LANG_EN = None
+
+
+def _(zh: str, en: str) -> str:
+    """双语消息选择(中文默认;英文开关)"""
+    return en if _use_en() else zh
+
 # ---- 平台常量（Windows 主战场：classpath 分隔符；Linux/WSL 用 :）----
 CP_SEP = ";" if os.name == "nt" else ":"
 
@@ -525,8 +547,9 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     _empties = find_empty_inputs(java_args)
     if _empties:
         for _e in _empties:
-            print(f"❌ 输入文件为空（0 字节）: {_e}", file=sys.stderr)
-        print("   💡 数据可能未生成或路径指向了空文件", file=sys.stderr)
+            print(_("❌ 输入文件为空（0 字节）: {e}", "❌ Input file is empty (0 bytes): {e}").format(e=_e), file=sys.stderr)
+        print(_("   💡 数据可能未生成或路径指向了空文件",
+                "   💡 Data may not have been generated, or the path points to an empty file"), file=sys.stderr)
         return 3
     
     try:
@@ -547,11 +570,13 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     _clean_n = cleanup_side_effects(_wall_t0)
     if _problems:
         print(file=sys.stderr)
-        print("⚠️ 输入保护：检测到引擎修改/删除了输入文件，已自动恢复：", file=sys.stderr)
+        print(_("⚠️ 输入保护：检测到引擎修改/删除了输入文件，已自动恢复：",
+                 "⚠️ Input protection: engine modified/deleted input files — auto-restored:"), file=sys.stderr)
         for _p, _st in _problems:
             print(f"   {_p} [{_st}]", file=sys.stderr)
     if _clean_n:
-        print(f"⚠️ 已清理引擎副作用文件 {_clean_n} 个（临时索引/建库残留）", file=sys.stderr)
+        print(_("⚠️ 已清理引擎副作用文件 {n} 个（临时索引/建库残留）",
+                 "⚠️ Cleaned up {n} engine side-effect files (temp index/db residue)").format(n=_clean_n), file=sys.stderr)
     
     # ── N19：仅当引擎改写了临时副本时才把结果搬到 outTable（独立 hook 函数）──
     _n19_move_result(n19_tmp, n19_out, n19_orig_sha)
@@ -561,7 +586,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
         # 错误处理
         err_text = open(err_file).read() if os.path.isfile(err_file) else ""
         print(file=sys.stderr)
-        print(f"❌ 执行失败（退出码 {ec}）", file=sys.stderr)
+        print(_("❌ 执行失败（退出码 {ec}）", "❌ Execution failed (exit code {ec})").format(ec=ec), file=sys.stderr)
         
         # 提取异常关键行
         exc_lines = [ln for ln in err_text.splitlines()
@@ -575,22 +600,28 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
                 print(f"   {line}", file=sys.stderr)
         
         # 智能异常分类 + 退出码(默认 1: 未匹配分类的异常也非零退出,防假成功)
-        hint = "参数缺失/格式不对/文件路径错误/数据不匹配"
+        hint = _("参数缺失/格式不对/文件路径错误/数据不匹配",
+                 "Missing/invalid arguments, wrong format, bad path, or data mismatch")
         ec_out = 1
         if "FileNotFoundException" in err_text:
-            hint = "文件不存在或路径错误，检查输入文件路径"
+            hint = _("文件不存在或路径错误，检查输入文件路径",
+                     "File not found or wrong path — check the input file path")
             ec_out = 2
         elif "NullPointerException" in err_text:
-            hint = "可能缺少必需参数或数据格式不匹配"
+            hint = _("可能缺少必需参数或数据格式不匹配",
+                     "Possibly missing a required argument or data format mismatch")
             ec_out = 1
         elif "NumberFormatException" in err_text:
-            hint = "数据格式不匹配，检查输入文件列数/类型/分隔符"
+            hint = _("数据格式不匹配，检查输入文件列数/类型/分隔符",
+                     "Data format mismatch — check column count/types/separator of the input")
             ec_out = 3
         elif "ArrayIndexOutOfBoundsException" in err_text:
-            hint = "可能缺少必需参数或输入数据行列数不足"
+            hint = _("可能缺少必需参数或输入数据行列数不足",
+                     "Possibly missing required arguments or too few rows/columns in input data")
             ec_out = 3
         elif "OutOfMemoryError" in err_text:
-            hint = "内存不足: 在 ~/.config/tbtools-cli/config.toml 加 [defaults] memory = \"4g\"(或按机器内存调)后重试"
+            hint = _("内存不足: 在 ~/.config/tbtools-cli/config.toml 加 [defaults] memory = \"4g\"(或按机器内存调)后重试",
+                     "Out of memory: set [defaults] memory = \"4g\" in ~/.config/tbtools-cli/config.toml (adjust to your RAM) and retry")
             ec_out = 4
         
         print(file=sys.stderr)
