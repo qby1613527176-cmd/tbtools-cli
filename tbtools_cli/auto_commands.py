@@ -200,6 +200,8 @@ ENGINE_REGISTRY = [
 
 
 
+_IMPL_REGISTRY = {}  # 第四轮评审: 显式 impl 注册表(替代隐式 globals 注入)
+
 def parse_kv_args(args, spec, raw_flags=()):
     """通用参数解析(替代各 impl 重复的 while 循环)。
 
@@ -276,10 +278,13 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
 
 
 for _cmd, _kind, _cls, _xmx, _runner, _doc in ENGINE_REGISTRY:
-    # 设计说明(第三轮审查评估): 表驱动工厂统一产出 _<name>_impl,cli_load 按名反射查找;
+    # 设计说明(第三轮审查评估): 表驱动工厂统一产出 _<name>_impl,cli_load 按名查找;
     # 命令清单的单一数据源是 ENGINE_REGISTRY,command_metadata.json 是其投影(gen_metadata 生成,--check 防漂移),
     # 不再反向依赖 JSON 生成 click(避免运行时依赖生成物、且 JSON 不含 runner/xmx/doc 等运行时信息)。
-    globals()[f"_{_cmd}_impl"] = _make_impl(_cmd, _kind, _cls, _xmx, _runner, _doc)
+    # 第四轮评审: 显式注册表(替代隐式 globals 注入),cli_load 优先查 _IMPL_REGISTRY
+    _fn = _make_impl(_cmd, _kind, _cls, _xmx, _runner, _doc)
+    _IMPL_REGISTRY[_cmd] = _fn
+    globals()[f"_{_cmd}_impl"] = _fn
 
 
 # ── 特殊实现（手写保留）──────────────────────────────────────────
