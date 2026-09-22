@@ -270,7 +270,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "efpHeat: efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> --expMat <expMat.tsv> --geneId <ID> --outImg <out>",
+  "help": "efpHeat: efpHeat --inTGA <plant.tga> --inSample2CC <sample2cc.txt> --expMat <expMat.tsv> --geneId <ID> --outImg <out>\n       # eFP 组织表达热图（单矩阵，generateSuperHeatMap）——N27 附带修复：引擎是 --key value 式，\n       ",
   "src": "auto_manual",
   "group": "expr"
  },
@@ -1975,7 +1975,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "getLongestCompleteORF: getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa>",
+  "help": "getLongestCompleteORF: getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa>\n       # 批量最长完整 ORF 预测（N24 修复：原注册到 JavaFX 无 main 的 biocjava.bioIO.ORF.ORF，\n       #   改映射到 GetLongestORF（longestorf 同引擎，",
   "src": "auto_manual",
   "group": "engine"
  },
@@ -2514,7 +2514,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "findBestHomologyBatch: findBestHomologyBatch <query.pep> <subject.pep> <outDir> [--targetIds ID[,ID2...]] [--threads N] [--plot false] [--sensitive 5,10]",
+  "help": "findBestHomologyBatch: findBestHomologyBatch <query.pep> <subject.pep> <outDir> [--targetIds ID[,ID2...]] [--threads N] [--plot false] [--sensitive 5,10]\n       # 最优同源批量查找（FindBestHomologyBatch；N19 修复",
   "src": "auto_manual",
   "group": "engine"
  },
@@ -2569,7 +2569,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [--problemGff <p.gff3>] [--report <r.txt>]",
+  "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector --inGff <in.gff3> --outGff <out.gff3> [--problemGff <p.gff3>] [--report <r.txt>]\n       # CDS phase 校正（GffCdsPhaseCorrector；N25 修复：引擎为位置参数式 <in> <correct> <p",
   "src": "auto_manual",
   "group": "engine"
  },
@@ -2580,7 +2580,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "parallelMD5Check: parallelMD5Check <md5_list.txt> [threads]",
+  "help": "parallelMD5Check: parallelMD5Check <md5_list.txt> [threads]\n       # 并行校验 MD5 列表（N6 修复：位置参数式 <md5_list_file> [threads]；\n       #   每行 `md5sum  文件名`，与 md5sum -c 同格式；原 registry 直通在参数形态错误时 ec=3）",
   "src": "auto_manual",
   "group": "engine"
  },
@@ -2668,7 +2668,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "extractFeatureFromGTF: extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa> --outFile <out> [--targetFeature CDS|exon|...] [--targetIdTag transcript_id] [--retainAttr true|false]",
+  "help": "extractFeatureFromGTF: extractFeatureFromGTF --inGtf <in.gtf> --inGenome <genome.fa> --outFile <out> [--targetFeature CDS|exon|...] [--targetIdTag transcript_id] [--retainAttr true|false]\n       # GTF",
   "src": "auto_manual",
   "group": "engine"
  },
@@ -3141,7 +3141,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]",
+  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]\n       # miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli\n       #   原表驱动误把本",
   "src": "auto_manual",
   "group": "mirna"
  },
@@ -3152,7 +3152,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]",
+  "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n       #   engineClass 导致 ClassNo",
   "src": "auto_manual",
   "group": "syn"
  },
@@ -3163,7 +3163,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]",
+  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）",
   "src": "auto_manual",
   "group": "gxf"
  },
@@ -3174,7 +3174,7 @@
   "class": "",
   "xmx": "",
   "runner": "plot",
-  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>",
+  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
   "src": "auto_manual",
   "group": "gxf"
  },

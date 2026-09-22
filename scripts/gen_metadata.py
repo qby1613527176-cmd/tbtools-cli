@@ -62,15 +62,15 @@ def scan_manual_commands():
     # 2) docstring 首行(跨 click 装饰器): 装饰器+def+docstring
     for m in re.finditer(
         r'@(?:\w+_group|\w+)\.command\(\s*[\"\']([a-zA-Z][a-zA-Z0-9_]*)[\"\']\)'
-        r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*\"\"\"([^\n\"]*)',
-        src, re.M):
+        r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*\"\"\"([^\"]{0,300})',
+        src, re.M | re.S):
         cmd, d = m.group(1), m.group(2).strip()[:200]
         if cmd in cmds and d:
             cmds[cmd]["help"] = d
     # 3) auto_commands 手写 impl(N23/N26 后 msy/mirnatarget 等必须可发现)
     try:
         ac_src = open(os.path.join(os.path.dirname(CLI), "auto_commands.py"), encoding="utf-8").read()
-        for m in re.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\n\"]*)", ac_src, re.M):
+        for m in re.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\"]{0,300})", ac_src, re.M | re.S):
             name, docfirst = m.group(1), m.group(2).strip()
             if name in cmds or name in ("simplehmmscan", "longestorf"):
                 continue
