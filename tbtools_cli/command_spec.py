@@ -102,7 +102,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
 
 def to_metadata_entry(spec: CommandSpec) -> dict:
     """CommandSpec → metadata 条目(与现有 command_metadata.json 结构兼容)"""
-    e = {"group": spec.group, "kind": spec.kind}
+    e: dict[str, object] = {"group": spec.group, "kind": spec.kind}
     if spec.class_name:
         e["class"] = spec.class_name
     if spec.runner:
