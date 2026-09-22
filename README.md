@@ -7,7 +7,8 @@
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **218 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 118 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
+> **218 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 118 个 Java 桥 + 任意引擎反射**，全部实测出图。
+> 数字口径: 运行时统计以 `tbtools version` 为准;静态注册口径(276 命令/196 绘图)见 [docs/_generated/counts.md](docs/_generated/counts.md)（自动生成,防漂移）。
 > 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），118 个 Java 桥，218 命令。10 批回归 162/162 PASS。
 
 <div align="center">

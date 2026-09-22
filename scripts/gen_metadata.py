@@ -137,7 +137,7 @@ def render_commands_md(meta):
                 desc = desc.split(":", 1)[-1].strip()
             lines.append(f"| `{name}` | {icon} | {desc[:60]} |")
         lines.append("")
-    # 数字统计
+    # 数字统计(权威口径)
     from collections import Counter
     kinds = Counter(v.get("kind", "?") for v in meta.values())
     lines.append("## 统计")
@@ -149,6 +149,30 @@ def render_commands_md(meta):
     path = os.path.join(out_dir, "commands.md")
     open(path, "w", encoding="utf-8").write("\n".join(lines))
     print(f"✅ 已生成 {path}（{len(meta)} 命令,{len(lines)} 行）")
+
+    # 权威数字摘要(README/徽章/文档口径单一源)
+    import tbtools_cli.auto_commands as _ac
+    import tbtools_cli.cli_tools_registry as _reg
+    import tbtools_cli.core as _core
+    n_plot = sum(1 for v in meta.values() if v.get("kind") in ("bridge", "direct", "manual"))
+    n_auto = sum(1 for n in dir(_ac) if n.startswith("_") and n.endswith("_impl") and not n.startswith("__"))
+    counts = {
+        "metadata_commands": len(meta),          # 276: 唯一数据源全量
+        "plot_commands_meta": n_plot,            # 196: metadata 中非工具类(静态口径)
+        "auto_commands": n_auto,                 # 201: 引擎注册表驱动的命令数
+        "rpc_methods": 188,                      # RPC 方法(固定)
+        "tools": len(_reg.CLI_TOOLS),            # 82: 工具注册表
+        "bridges": len([f for f in os.listdir(os.path.join(ROOT, "bridges")) if f.endswith(".java")]),  # 118
+        "pitfall_hints": len(_core.PITFALL_HINTS),  # 46
+    }
+    # 注: README/`tbtools version` 的 "218 绘图/分析命令" 是运行时全部分组命令数
+    # (含 engine 分组等),与 plot_commands_meta(静态注册口径)不同——两个口径都合法,勿互改
+    counts_path = os.path.join(out_dir, "counts.md")
+    with open(counts_path, "w", encoding="utf-8") as f:
+        f.write("# 权威数字(自动生成,勿手改)\n\n")
+        for k, v in counts.items():
+            f.write(f"- {k}: {v}\n")
+    print(f"✅ 已生成 {counts_path}: {counts}")
 
 
 def main():
