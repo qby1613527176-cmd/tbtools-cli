@@ -25,7 +25,7 @@ import sys; sys.path.insert(0, '$PWD')
 import tbtools_cli.auto_commands as ac
 plot = {'seq','expr','tree','syn','sets','chipseq'}
 try:
-    from tbtools_cli.cli import CATEGORY_MAP
+    from tbtools_cli.cli_load import CATEGORY_MAP
 except Exception:
     CATEGORY_MAP = {}
 for n in sorted(dir(ac)):
@@ -40,7 +40,7 @@ for n in sorted(dir(ac)):
                 # help 补全：所有分组命令
                 local all_cmds=$(python3 -c "
 import sys; sys.path.insert(0, '$PWD')
-from tbtools_cli.cli import _groups
+from tbtools_cli.cli_load import _groups
 for gname, g in _groups.items():
     for c in g.commands:
         print(c, end=' ')
@@ -60,7 +60,7 @@ for gname, g in _groups.items():
                 # 分组子命令补全
                 local subs=$(python3 -c "
 import sys; sys.path.insert(0, '$PWD')
-from tbtools_cli.cli import _groups
+from tbtools_cli.cli_load import _groups
 g = _groups.get('$cmd')
 if g:
     print(' '.join(g.commands.keys()))

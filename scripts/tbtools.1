@@ -1,102 +1,91 @@
-.\" Man page for tbtools-cli
-.TH TBTOOLS 1 "September 2026" "tbtools-cli v1.0.0" "TBtools-II CLI"
+.TH TBTools 1 "2026-09-22" "tbtools-cli 1.1.0" "User Commands"
 .SH NAME
-tbtools \- TBtools-II 全功能命令行封装（140 绘图 + 82 工具 + 188 RPC）
+tbtools \- TBtools-II 全功能命令行封装（218 绘图引擎 + 188 RPC 方法 + 82 工具）
 .SH SYNOPSIS
 .B tbtools
-[\fIGROUP\fR] \fICOMMAND\fR [\fIARGS\fR...] [\fIOPTIONS\fR]
+[\fIgroup\fR] \fIcommand\fR [\fIargs...\fR]
+.br
+.B tbtools
+\fBversion\fR | \fBdoctor\fR | \fBsetup\fR | \fBlist\fR | \fBsearch\fR | \fBnew\fR | \fBcheck\fR | \fBcompletion\fR | \fBfetch-jar\fR
 .SH DESCRIPTION
-TBtools-II 2.535 的全部功能封装为 headless 命令行，Linux/WSL 下免 GUI 直接使用。
-140 个绘图/分析命令 + 82 个命令行工具 + 188 个 RPC 数据工具 + 任意引擎反射。
-.SH COMMANDS
+.B tbtools
+把 TBtools-II（Java 桌面套件）的全部绘图引擎、RPC 数据工具与命令行工具封装成无 GUI 的 CLI。
+支持 218 个绘图/分析命令、188 个 RPC 方法、82 个工具与任意引擎反射（\fBtbtools engine <类> key=value\fR）。
+.SH 常用命令
 .TP
-.B version
-显示版本信息
+\fBtbtools version\fR
+显示版本与动态命令统计（218 绘图 + 201 auto_commands + 188 RPC）
 .TP
-.B doctor
-环境诊断（Java/javac/xvfb/JAR/可选依赖）
+\fBtbtools doctor\fR
+环境自检：Java/javac/xvfb/JAR/可选依赖 + 平台能力矩阵，缺失项给复制即用修复命令
 .TP
-.B list [plots|tools|rpc]
-列出可用命令
+\fBtbtools setup [--auto] [jar路径]\fR
+配置 TBtools JAR（自动搜索或指定路径）
 .TP
-.B presets [NAME]
-列出或查看出版预设
+\fBtbtools fetch-jar [--yes]\fR
+自动下载官方 portable 包并提取 JAR（首次使用推荐）
 .TP
-.B examples [COMMAND]
-显示命令示例
-.SH GROUPS
+\fBtbtools list [plots|tools|rpc]\fR
+列出全部命令/工具/RPC 方法
+.TP
+\fBtbtools search <关键词>\fR
+模糊搜索命令（匹配名称 + 帮助文本，276 命令可发现性）
+.TP
+\fBtbtools <group> <cmd> --help\fR
+单个命令详细帮助（含坑位提示 PITFALL）
+.TP
+\fBtbtools new\fR
+交互式命令向导（按场景生成）
+.TP
+\fBtbtools completion bash|zsh|fish\fR
+生成 shell 补全脚本
+.SH 命令分组
 .TP
 .B seq
-序列/结构域命令（logo/msa/structure/motif/...）
+序列/结构/域（seqlogo/msa/structure/motif/genestructure/sixframe/longestorf...）
 .TP
 .B expr
-表达/统计命令（volcano/heatmap/pca/hclust/...）
+表达/统计（volcano/heatmap/pca/hclust/dehist/qpcr/groupedbar...）
 .TP
 .B tree
-树/进化命令（draw/unrooted/rooting/one-step/...）
+树/进化（draw/rooting/onesteptree...）
 .TP
 .B syn
-共线性/基因组命令（circos/dotplot/microsyn/dualsyn/...）
+共线性/基因组（msy/dualsyn/dotplot...）
 .TP
-.B sets
-集合/韦恩命令（venn2-6/upset）
+.B sets / chipseq / asm / gxf / mirna / table / blast / fastq / hmm / gwas / engine
+集合、ChIP-seq、组装、GXF、miRNA、表格、BLAST、FASTQ、HMM、GWAS、通用反射
+.SH 示例
 .TP
-.B tool
-命令行工具（82 个：stat-fasta/cds2protein/fasta-extract/...）
-.SH OPTIONS
+火山图（DEG: GeneID Log2FC pvalue）
+.B tbtools expr volcano examples/data/deg.txt volcano.svg --pval-cutoff 0.05
 .TP
-.BR \-V, " \-\-verbose"
-显示完整堆栈（debug 模式）
+Venn 图
+.B tbtools sets venn2 --List1 A.txt --List2 B.txt --label1 A --label2 B --graph venn.svg --prefix out
 .TP
-.BR \-q, " \-\-quiet"
-静默模式（只显示错误）
+启动 RPC 服务器并调用
+.B tbtools rpc start && tbtools rpc call system.ping
+.SH 环境变量
 .TP
-.BR \-f, " \-\-format " \fIFMT\fR
-输出格式: svg|png|pdf
+.B TBTOOLS_JAR
+TBtools JAR 路径（优先级：环境变量 > 配置文件 > 自动探测）
 .TP
-.BR \-p, " \-\-preset " \fINAME\fR
-出版预设: nature|cell|plant_journal|new_phytologist|wide|poster|gras
+.B TBTOOLS_CONFIG
+配置文件路径（默认 ~/.config/tbtools-cli/config.toml）
 .TP
-.BR \-W, " \-\-width " \fIPX\fR
-画布宽度
+.B TBTOOLS_JAVA
+Java 可执行文件路径（默认 PATH 搜索）
+.SH 文件
 .TP
-.BR \-H, " \-\-height " \fIPX\fR
-画布高度
+.I ~/.config/tbtools-cli/config.toml
+配置文件（jar 路径 / [defaults] 默认参数）
 .TP
-.BR \-t, " \-\-threads " \fIN\fR
-线程数
-.SH EXAMPLES
-.TP
-火山图:
-tbtools expr volcano deg.txt volcano.svg
-.TP
-热图（log2 + 行聚类）:
-tbtools expr heatmap expr.tsv heatmap.svg --log2 --cluster-row
-.TP
-基因结构图:
-tbtools seq structure genes.gff id_list.txt out.svg
-.TP
-三集合韦恩图:
-tbtools sets venn2 --List1 a.txt --List2 b.txt --label1 A --label2 B --graph out.svg --prefix out
-.TP
-FASTA 统计:
-tbtools tool stat-fasta input.fa output.xls
-.SH FILES
-.TP
-.I bin/tbtools
-主入口（bash → Python click）
-.TP
-.I bin/tbplot.sh
-绘图引擎兼容层
-.TP
-.I bridges/
-Java 桥源码（80 个）
-.TP
-.I docs/COMMAND_REFERENCE.md
-完整命令参考手册（2531 行）
-.SH SEE ALSO
-.PP
-.BR tbplot.sh (1),
-.BR tbtools_rpc.sh (1)
-.SH AUTHOR
-tbtools-cli project
+.I ~/.config/tbtools-cli/config.sh
+JAR 配置（shell 环境，install.sh 生成）
+.SH 注意
+Linux 绘图需要 xvfb（\fBsudo apt install xvfb\fR）；Windows 绘图部分受限。
+JAR 未配置时多数命令不可用——先跑 \fBtbtools doctor\fR 看指引。
+.SH 参见
+完整文档: https://github.com/qby1613527176-cmd/tbtools-cli
+.SH 退出码
+0 成功 / 1 参数或数据错误 / 2 文件缺失或未知命令 / 3 数据格式不匹配 / 4 内存不足
