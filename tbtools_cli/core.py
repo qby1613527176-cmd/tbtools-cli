@@ -86,8 +86,13 @@ def find_jar_deep():
 
 JAR = get_jar()
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BRIDGES_DIR = os.path.join(ROOT, "bridges")
-BUILD_DIR = os.path.join(ROOT, "build")
+_SRC_BRIDGES = os.path.join(ROOT, "bridges")
+BRIDGES_DIR = _SRC_BRIDGES if os.path.isdir(_SRC_BRIDGES) else next(
+    (p for p in (os.path.join(os.path.dirname(__file__), "bridges"),
+                 os.path.join(sys.prefix, "tbtools_cli", "bridges")) if os.path.isdir(p)), None)
+# bridges 位置: 源码环境 ROOT/bridges;pip data-files 装到 sys.prefix/tbtools_cli/bridges(实测);包内路径兜底
+_SRC_BUILD = os.path.join(ROOT, "build")
+BUILD_DIR = _SRC_BUILD if (os.path.isdir(_SRC_BUILD) or os.access(ROOT, os.W_OK)) else     os.path.join(os.path.expanduser("~/.cache/tbtools-cli/build"))
 
 # ---- 输入校验 ----
 def validate_file(path: str, desc: str = "输入文件", check_readable: bool = True) -> tuple[bool, str]:

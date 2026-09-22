@@ -39,6 +39,10 @@ tbtools = "tbtools_cli.cli:cli"
 [tool.setuptools]
 packages = ["tbtools_cli"]
 
+[tool.setuptools.data-files]
+# pip 安装后桥源码必须存在于包内(ensure_bridge 运行时编译;118 桥)
+"tbtools_cli/bridges" = ["bridges/*.java"]
+
 [tool.setuptools.package-data]
 tbtools_cli = ["command_metadata.json", "config.example.toml"]
 
