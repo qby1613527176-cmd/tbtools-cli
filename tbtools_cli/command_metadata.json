@@ -325,7 +325,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "expr",
-  "help": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s"
+  "help": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
+  "inputs": [
+   {
+    "name": "tga",
+    "role": "file",
+    "format": "tga",
+    "required": true,
+    "note": "TrueColor type2"
+   },
+   {
+    "name": "expMat",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "eggnog": {
   "name": "eggnog",
@@ -498,7 +517,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "gxf",
-  "help": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam"
+  "help": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "ids",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "generic": {
   "name": "generic",
@@ -538,7 +576,26 @@
   "xmx": "4g",
   "runner": "java",
   "group": "table",
-  "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）"
+  "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
+  "inputs": [
+   {
+    "name": "background",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "target",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "goParse": {
   "name": "goParse",
@@ -762,7 +819,26 @@
   "xmx": "4g",
   "runner": "java",
   "group": "table",
-  "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）"
+  "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
+  "inputs": [
+   {
+    "name": "background",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "target",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "layoutheatmap": {
   "name": "layoutheatmap",
@@ -772,7 +848,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "expr",
-  "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]"
+  "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
+  "inputs": [
+   {
+    "name": "expr",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "layout",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "levelGo": {
   "name": "levelGo",
@@ -852,7 +947,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "seq",
-  "help": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--"
+  "help": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--",
+  "inputs": [
+   {
+    "name": "meme",
+    "role": "file",
+    "format": "meme",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "xml"
+  ]
  },
  "mcscanx": {
   "name": "mcscanx",
@@ -911,7 +1018,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "seq",
-  "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma"
+  "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
+  "inputs": [
+   {
+    "name": "fasta",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "meme"
+  ]
  },
  "mggxf": {
   "name": "mggxf",
@@ -991,7 +1110,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "expr",
-  "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId"
+  "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
+  "inputs": [
+   {
+    "name": "tga",
+    "role": "file",
+    "format": "tga",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "expMat",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "multisyn": {
   "name": "multisyn",
@@ -1233,7 +1371,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "blast",
-  "help": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i"
+  "help": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
+  "inputs": [
+   {
+    "name": "db",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "query",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "regionAnno": {
   "name": "regionAnno",
@@ -1490,7 +1647,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "sets",
-  "help": "upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）"
+  "help": "upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
+  "inputs": [
+   {
+    "name": "sets",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": "多个集合文件, 末参为输出"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "venn2": {
   "name": "venn2",
@@ -1529,7 +1698,33 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "sets",
-  "help": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>"
+  "help": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>",
+  "inputs": [
+   {
+    "name": "list1",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "list2",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "list3",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "venn4": {
   "name": "venn4",
@@ -1539,7 +1734,40 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "sets",
-  "help": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>"
+  "help": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
+  "inputs": [
+   {
+    "name": "list1",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "list2",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "list3",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "list4",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "venn5": {
   "name": "venn5",
@@ -1974,7 +2202,26 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator"
+  "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
+  "inputs": [
+   {
+    "name": "counts",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "lenInfo",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "autoMakeBlastDb": {
   "name": "autoMakeBlastDb",
@@ -1984,7 +2231,19 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb"
+  "help": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb",
+  "inputs": [
+   {
+    "name": "fasta",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "db"
+  ]
  },
  "autoRemoteBlast": {
   "name": "autoRemoteBlast",
@@ -2970,7 +3229,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "gxf",
-  "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）"
+  "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "kallisto": {
   "name": "kallisto",
@@ -3132,7 +3403,26 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "table",
-  "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）"
+  "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
+  "inputs": [
+   {
+    "name": "expr",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "cls",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "xls"
+  ]
  },
  "tfbsShift": {
   "name": "tfbsShift",
@@ -3228,7 +3518,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "gxf",
-  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）"
+  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "gxfIdAppender": {
   "name": "gxfIdAppender",
@@ -3238,7 +3540,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "gxf",
-  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）"
+  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "gff3"
+  ]
  },
  "genestructure": {
   "name": "genestructure",
@@ -3277,7 +3591,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "tree",
-  "help": "(alias of rooting) MAD 系统发育定根"
+  "help": "(alias of rooting) MAD 系统发育定根",
+  "inputs": [
+   {
+    "name": "nwk",
+    "role": "file",
+    "format": "newick",
+    "required": true,
+    "note": "需枝长"
+   }
+  ],
+  "outputs": [
+   "nwk"
+  ]
  },
  "seqlogo": {
   "name": "seqlogo",

@@ -70,6 +70,28 @@ KNOWN_SCHEMAS = {
     "longestorf": ([InputSpec("seq", format="fasta", note="核酸输入")], ["fa"]),
     "seqlogo": ([InputSpec("seqs", format="fasta")], ["svg"]),
     "stat-fasta": ([InputSpec("fasta", format="fasta")], ["xls"]),
+    # 三期批次(schema 标注继续)
+    "venn3": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt"),
+               InputSpec("list3", format="txt")], ["svg"]),
+    "venn4": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt"),
+               InputSpec("list3", format="txt"), InputSpec("list4", format="txt")], ["svg"]),
+    "upset": ([InputSpec("sets", format="txt", note="多个集合文件, 末参为输出")], ["svg"]),
+    "tpmCalc": ([InputSpec("counts", format="tsv"), InputSpec("lenInfo", format="tsv")], ["tsv"]),
+    "gxfSplit": ([InputSpec("gff", format="gff3")], ["tsv"]),
+    "gxfAttr": ([InputSpec("gff", format="gff3")], ["tsv"]),
+    "gxfIdAppender": ([InputSpec("gff", format="gff3")], ["gff3"]),
+    "recipBlast": ([InputSpec("db", format="fasta"), InputSpec("query", format="fasta")], ["tsv"]),
+    "autoMakeBlastDb": ([InputSpec("fasta", format="fasta")], ["db"]),
+    "genelocgff": ([InputSpec("gff", format="gff3"), InputSpec("ids", format="txt")], ["svg"]),
+    "treeRooting": ([InputSpec("nwk", format="newick", note="需枝长")], ["nwk"]),
+    "memerun": ([InputSpec("fasta", format="fasta")], ["meme"]),
+    "mastrun": ([InputSpec("meme", format="meme")], ["xml"]),
+    "goEnrich": ([InputSpec("background", format="tsv"), InputSpec("target", format="tsv")], ["tsv"]),
+    "keggEnrich": ([InputSpec("background", format="tsv"), InputSpec("target", format="tsv")], ["tsv"]),
+    "gsea": ([InputSpec("expr", format="tsv"), InputSpec("cls", format="txt")], ["xls"]),
+    "efpHeat": ([InputSpec("tga", format="tga", note="TrueColor type2"), InputSpec("expMat", format="tsv")], ["svg"]),
+    "multiEfp": ([InputSpec("tga", format="tga"), InputSpec("expMat", format="tsv")], ["svg"]),
+    "layoutheatmap": ([InputSpec("expr", format="tsv"), InputSpec("layout", format="tsv")], ["svg"]),
 }
 
 
