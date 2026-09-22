@@ -1,0 +1,14 @@
+site_name: tbtools-cli
+site_description: TBtools-II 全功能命令行封装(TBtools CLI wrapper)
+repo_url: https://github.com/qby1613527176-cmd/tbtools-cli
+theme:
+  name: material
+  features: [navigation.sections, search.suggest]
+markdown_extensions: [tables, admonition]
+nav:
+  - Home: index.md
+  - 快速开始: quickstart.md
+  - 命令清单: commands.md
+  - 命令参考: reference.md
+  - RPC 方法: rpc.md
+  - FAQ: faq.md

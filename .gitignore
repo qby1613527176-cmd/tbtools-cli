@@ -39,3 +39,6 @@ test_reports/data_*/
 
 # 插件引擎 jar 为有意发行的依赖（小体积）
 !plugins/lib/*.jar
+
+# mkdocs 构建产物
+site/
