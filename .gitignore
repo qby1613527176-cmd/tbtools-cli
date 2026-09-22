@@ -12,6 +12,9 @@ examples/output/
 *.png
 *.pdf
 
+# 但 README 示例图(docs/images/)是文档资产,豁免入库
+!docs/images/*.svg
+
 # Python
 __pycache__/
 *.pyc
