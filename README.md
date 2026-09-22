@@ -127,6 +127,8 @@ java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参�
 
 ## 📦 Installation
 
+> **推荐路径**: `pip install tbtools-cli`（见 0;受限环境加 `--user` 或 venv）; **备用路径**: `git clone` + `install.sh`（见 1）。其余方式为历史兼容。
+
 ### 0. pip 安装（推荐，Python 包入口）
 
 > 系统 Python 受 PEP 668 保护时（Debian/Ubuntu 23+），先建虚拟环境或加 `--user`：

@@ -90,7 +90,7 @@ BRIDGES_DIR = os.path.join(ROOT, "bridges")
 BUILD_DIR = os.path.join(ROOT, "build")
 
 # ---- 输入校验 ----
-def validate_file(path, desc="输入文件", check_readable=True):
+def validate_file(path: str, desc: str = "输入文件", check_readable: bool = True) -> tuple[bool, str]:
     """校验文件存在性 + 可读性。返回 (ok, msg)"""
     if not path:
         return False, f"❌ {desc}: 路径为空"
@@ -107,7 +107,7 @@ def validate_file(path, desc="输入文件", check_readable=True):
         return False, f"❌ {desc}: 文件为空（0 字节）→ {path}"
     return True, ""
 
-def detect_format(path, max_lines=3):
+def detect_format(path: str, max_lines: int = 3) -> str:
     """探测文件格式（peek 前 N 行）。返回 (format_hint, ncols, sample_lines)"""
     if path in ("-", "/dev/stdin"):
         return ("stdin", 0, [])
@@ -239,12 +239,12 @@ PITFALL_HINTS = {
     "venn6": "首参是输出文件（非输入）；setA..F.txt 才是输入",
 }
 
-def get_pitfall_hint(command_name):
+def get_pitfall_hint(command_name: str) -> str | None:
     """获取已知坑位提示"""
     return PITFALL_HINTS.get(command_name, "")
 
 # ---- 统一输出格式处理 ----
-def resolve_output(output, fmt="svg", width=None, height=None):
+def resolve_output(output: str, fmt: str = "svg", width: int | None = None, height: int | None = None) -> tuple[str, str]:
     """处理输出文件路径 + 格式推断/覆盖 + 父目录提前校验"""
     if not output:
         # 无输出文件 → 生成默认文件名
@@ -421,7 +421,7 @@ def find_empty_inputs(java_args):
     return empties
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
-def run_java(java_args, verbose=False, quiet=False, command_name=None):
+def run_java(java_args: list, verbose: bool = False, quiet: bool = False, command_name: str | None = None) -> int:
     """执行 Java 命令，失败时输出友好提示
     
     退出码: 0=成功, 1=参数错误, 2=文件不存在, 3=格式错误
@@ -603,7 +603,7 @@ def run_java(java_args, verbose=False, quiet=False, command_name=None):
         ec_out = 0
     return ec_out
 
-def get_java():
+def get_java() -> str | None:
     """定位 java 可执行文件（N1：tool 层 PATH 依赖误导报错）。
 
     优先级: TBTOOLS_JAVA 环境变量 > PATH 搜索 > 常见位置。

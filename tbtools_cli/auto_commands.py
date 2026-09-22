@@ -199,6 +199,32 @@ ENGINE_REGISTRY = [
 ]
 
 
+
+def parse_kv_args(args, spec, raw_flags=()):
+    """通用参数解析(替代各 impl 重复的 while 循环)。
+
+    spec: {flag: (attr, converter)} —— 取值 flag,converter 可选(如 int);
+    raw_flags: 出现即收集到 raw 的 flag(如 --super5)。
+    返回 (kwargs, positional, raw);kwargs 只含出现的 flag,缺省值由调用方自行默认。
+    """
+    kwargs, pos, raw = {}, [], []
+    i = 0
+    n = len(args)
+    while i < n:
+        a = args[i]
+        if a in spec and i + 1 < n:
+            attr, conv = spec[a]
+            val = args[i + 1]
+            kwargs[attr] = conv(val) if conv else val
+            i += 2
+        elif a in raw_flags:
+            raw.append(a)
+            i += 1
+        else:
+            pos.append(a)
+            i += 1
+    return kwargs, pos, raw
+
 def _warn_gtf_input(args, cmd):
     """N28/N22/N36: Gxf 族命令输入格式预检——GTF 引擎 NPE、BED 误报 GFF3/GTF 识别。"""
     for a in args:
@@ -250,6 +276,9 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
 
 
 for _cmd, _kind, _cls, _xmx, _runner, _doc in ENGINE_REGISTRY:
+    # 设计说明(第三轮审查评估): 表驱动工厂统一产出 _<name>_impl,cli_load 按名反射查找;
+    # 命令清单的单一数据源是 ENGINE_REGISTRY,command_metadata.json 是其投影(gen_metadata 生成,--check 防漂移),
+    # 不再反向依赖 JSON 生成 click(避免运行时依赖生成物、且 JSON 不含 runner/xmx/doc 等运行时信息)。
     globals()[f"_{_cmd}_impl"] = _make_impl(_cmd, _kind, _cls, _xmx, _runner, _doc)
 
 
@@ -265,14 +294,10 @@ def _gxfAttr_impl(args, verbose=False, quiet=False):
     import re as _re
     # 解析参数
     pos, feature, attrs = [], "mRNA", None
-    i = 0
-    while i < len(args):
-        if args[i] == "--feature" and i + 1 < len(args):
-            feature = args[i + 1]; i += 2
-        elif args[i] == "--attrs" and i + 1 < len(args):
-            attrs = [a.strip() for a in args[i + 1].split(",") if a.strip()]; i += 2
-        else:
-            pos.append(args[i]); i += 1
+    _kw, pos, _ = parse_kv_args(args, {
+        "--feature": ("feature", None),
+        "--attrs": ("attrs", lambda s: [a.strip() for a in s.split(",") if a.strip()])})
+    feature = _kw.get("feature", "mRNA"); attrs = _kw.get("attrs")
     if len(pos) < 2:
         print("用法: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]", file=sys.stderr)
         return 1
@@ -340,17 +365,13 @@ def _kallisto_impl(args, verbose=False, quiet=False):
     libs_dir = os.path.join(ROOT, "plugins", "lib", "kallisto-libs")
     # 解析参数
     pos, kmer, threads, bootstrap, bias, single, frag_len, frag_sd = [], 31, 4, 0, False, False, 200, 30
-    i = 0
-    while i < len(args):
-        a = args[i]
-        if a == "--kmer" and i + 1 < len(args): kmer = int(args[i + 1]); i += 2
-        elif a == "--threads" and i + 1 < len(args): threads = int(args[i + 1]); i += 2
-        elif a == "--bootstrap" and i + 1 < len(args): bootstrap = int(args[i + 1]); i += 2
-        elif a == "--frag-len" and i + 1 < len(args): frag_len = int(args[i + 1]); i += 2
-        elif a == "--frag-sd" and i + 1 < len(args): frag_sd = int(args[i + 1]); i += 2
-        elif a == "--bias": bias = True; i += 1
-        elif a == "--single": single = True; i += 1
-        else: pos.append(a); i += 1
+    _kw, pos, _raw = parse_kv_args(args, {
+        "--kmer": ("kmer", int), "--threads": ("threads", int),
+        "--bootstrap": ("bootstrap", int), "--frag-len": ("frag_len", int),
+        "--frag-sd": ("frag_sd", int)}, raw_flags=("--bias", "--single"))
+    kmer = _kw.get("kmer", 21); threads = _kw.get("threads", 2)
+    bootstrap = _kw.get("bootstrap", 100); frag_len = _kw.get("frag_len", 400)
+    frag_sd = _kw.get("frag_sd", 20); bias = "--bias" in _raw; single = "--single" in _raw
     if len(pos) < 3:
         print("用法: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]", file=sys.stderr)
         return 1
@@ -539,15 +560,8 @@ def _genomefilter_impl(args, verbose=False, quiet=False):
     """genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）"""
     import tempfile
     pos, min_len, gxf = [], None, None
-    i = 0
-    while i < len(args):
-        a = args[i]
-        if a == "--min-len" and i + 1 < len(args):
-            min_len = int(args[i + 1]); i += 2
-        elif a == "--gxf" and i + 1 < len(args):
-            gxf = args[i + 1]; i += 2
-        else:
-            pos.append(a); i += 1
+    _kw, pos, _ = parse_kv_args(args, {"--min-len": ("min_len", int), "--gxf": ("gxf", None)})
+    min_len = _kw.get("min_len"); gxf = _kw.get("gxf")
     if len(pos) < 2 or min_len is None:
         print("用法: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]", file=sys.stderr)
         return 1
