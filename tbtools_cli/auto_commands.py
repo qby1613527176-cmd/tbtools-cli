@@ -8,6 +8,7 @@ mcscanxd / quickAnno / smart —— 各含独立预检/环境/参考数据逻辑
 cli.py 通过 dir(_ac) 反射 _xxx_impl 名字注册命令，函数形态必须保留。
 doc 值为旧模块运行时 __doc__（已含编译器 docstring 处理后的真实字符）。
 """
+import logging
 import os
 import shutil
 import subprocess
@@ -422,7 +423,9 @@ def _kallisto_impl(args, verbose=False, quiet=False):
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
         try: os.unlink(idx)
-        except OSError: pass
+        except OSError as _e:
+            logging.getLogger(__name__).debug("io: %s", _e)  # 静默容错(第五轮评审:留痕)
+            pass
 
 
 def _fimo_impl(args, verbose=False, quiet=False):
@@ -618,7 +621,9 @@ def _genomefilter_impl(args, verbose=False, quiet=False):
                        capture_output=True, text=True)
     os.unlink(id_list)
     try: os.unlink(stat_out)
-    except OSError: pass
+    except OSError as _e:
+        logging.getLogger(__name__).debug("io: %s", _e)
+        pass
     if r.returncode != 0 or not os.path.isfile(out_fa):
         print(f"❌ ExtractFasta 失败:\n{r.stderr[-400:]}", file=sys.stderr)
         return r.returncode or 1

@@ -13,6 +13,12 @@
 
 **English** | 中文说明见文末（以英文版为准）
 
+[![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)]()
+[![engines](https://img.shields.io/badge/engines-200+-orange.svg)]()
+[![commands](https://img.shields.io/badge/commands-276-blueviolet.svg)]()
+
 </div>
 
 ---

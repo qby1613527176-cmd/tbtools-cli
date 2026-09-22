@@ -51,12 +51,19 @@ def register_top(cli, _LG):
             ("javac", "javac", False),
             ("xvfb-run", "xvfb-run（Linux 绘图必需）", os.name != "nt"),  # N14: Windows 无 xvfb 且不需要
         ]
+        fix_cmds = {
+            "java": "sudo apt install -y openjdk-17-jre-headless",
+            "javac": "sudo apt install -y openjdk-17-jdk-headless",
+            "xvfb-run": "sudo apt install -y xvfb",
+        }
         for cmd_name, desc, required in checks:
             if shutil.which(cmd_name):
                 click.echo(f"  ✅ {desc}: 可用")
                 ok += 1
             elif required:
                 click.echo(f"  ❌ {desc}: 未安装")
+                if cmd_name in fix_cmds:
+                    click.echo(f"      📋 复制即用: {fix_cmds[cmd_name]}")
                 err += 1
             else:
                 click.echo(f"  ⚠️ {desc}: 未安装")
@@ -367,6 +374,33 @@ def register_top(cli, _LG):
                             "zsh": "tbtools completion zsh > ~/.zshrc",
                             "fish": "tbtools completion fish > ~/.config/fish/completions/tbtools.fish"}.items():
                 click.echo(f"  {s:6s} {inst}")
+
+    @cli.command(name="search")
+    @click.argument("keyword", required=True)
+    def search_cmd(keyword):
+        """模糊搜索命令（匹配名称+doc，276 命令可发现性）: tbtools search <关键词>"""
+        import json as _json
+        meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+        if not os.path.isfile(meta_path):
+            click.echo(f"❌ 元数据缺失: {meta_path}", err=True)
+            sys.exit(1)
+        meta = _json.load(open(meta_path, encoding="utf-8"))
+        kw = keyword.lower()
+        hits = []
+        for name, v in meta.items():
+            help_txt = (v.get("help", "") or "")[:200].lower()
+            if kw in name.lower() or kw in help_txt:
+                cat = _LG.CATEGORY_MAP.get(name, "engine")
+                kind = v.get("kind", "?")
+                desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
+                hits.append((name, cat, kind, desc))
+        if not hits:
+            click.echo(f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")
+            sys.exit(1)
+        click.echo(f"🔍 匹配 '{keyword}' 的命令（{len(hits)} 个）:")
+        for name, cat, kind, desc in sorted(hits):
+            click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")
+        click.echo("\n查看详情: tbtools help <命令> | 全量: tbtools list")
 
     @cli.command(name='list')
     @click.argument('category', required=False)

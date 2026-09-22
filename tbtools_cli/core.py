@@ -107,7 +107,7 @@ def validate_file(path: str, desc: str = "输入文件", check_readable: bool = 
         return False, f"❌ {desc}: 文件为空（0 字节）→ {path}"
     return True, ""
 
-def detect_format(path: str, max_lines: int = 3) -> str:
+def detect_format(path: str, max_lines: int = 3) -> tuple[str, int, list[str]]:
     """探测文件格式（peek 前 N 行）。返回 (format_hint, ncols, sample_lines)"""
     if path in ("-", "/dev/stdin"):
         return ("stdin", 0, [])
@@ -118,7 +118,8 @@ def detect_format(path: str, max_lines: int = 3) -> str:
                 if i >= max_lines:
                     break
                 lines.append(line.rstrip('\n'))
-    except Exception:
+    except Exception as e:
+        import logging; logging.getLogger(__name__).debug("detect_format %s: %s", path, e)
         return ("unknown", 0, [])
     if not lines:
         return ("empty", 0, [])
@@ -166,7 +167,7 @@ EXPECTED_INPUT_FORMATS = {
     "barplot":   ("tsv", 2, "富集表（term\tP值...）"),
 }
 
-def check_input_format(cmd_name, path):
+def check_input_format(cmd_name: str, path: str) -> None:
     """早期格式检测：期望格式与实际不符时返回警告文本（不阻断）"""
     exp = EXPECTED_INPUT_FORMATS.get(cmd_name)
     if not exp:
@@ -287,7 +288,7 @@ def _sha1_file(f):
             h.update(_chunk)
     return h.hexdigest()
 
-def snapshot_inputs(java_args):
+def snapshot_inputs(java_args: list) -> list:
     """识别 java_args 中的输入文件并快照。
 
     返回 [(path, backup|None, size, mtime)]；
@@ -334,7 +335,7 @@ def snapshot_inputs(java_args):
         snaps.append([_a, backup, size, mtime])
     return snaps
 
-def verify_and_restore(snaps):
+def verify_and_restore(snaps: list) -> list:
     """调用后比对快照；被引擎改写的输入自动恢复。返回问题清单 [(path, 状态)]。"""
     problems = []
     for path, backup, size, mtime in snaps:
@@ -356,7 +357,7 @@ def verify_and_restore(snaps):
                 problems.append((path, "verify-error"))
     return problems
 
-def cleanup_side_effects(t0):
+def cleanup_side_effects(t0: float) -> list:
     """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。"""
     try:
         cwd = os.getcwd()
@@ -382,7 +383,7 @@ _STRONG_OUT_RE = re.compile(
     r'outTxt|outXml|outXls|outSvg|outPng|outPdf|outNwk|outGraph|outORFs|outImg)$',
     re.IGNORECASE)
 
-def check_missing_outputs(java_args):
+def check_missing_outputs(java_args: list) -> list:
     """调用成功后检查强输出参数对应文件是否生成。返回缺失列表。"""
     missing = []
     prev = None
@@ -634,7 +635,7 @@ def get_java() -> str | None:
 
 
 # ---- 桥编译 ----
-def ensure_bridge(bridge_name):
+def ensure_bridge(bridge_name: str) -> str | None:
     """确保桥 Java 文件已编译到 build/ 目录"""
     src = os.path.join(BRIDGES_DIR, f"{bridge_name}.java")
     dst = os.path.join(BUILD_DIR, f"{bridge_name}.java")
@@ -672,7 +673,7 @@ def ensure_bridge(bridge_name):
             subprocess.run(["javac", "-d", BUILD_DIR, fake_src], capture_output=True)
 
 # ---- xvfb-run 包装 ----
-def run_plot(java_args, verbose=False, quiet=False, use_xvfb=True, command_name=None):
+def run_plot(java_args: list, verbose: bool = False, quiet: bool = False, use_xvfb: bool = True, command_name: str | None = None) -> int:
     """执行绘图引擎（需要 xvfb-run）"""
     if use_xvfb and shutil.which("xvfb-run"):
         full_args = ["xvfb-run", "-a"] + java_args
@@ -703,7 +704,7 @@ def c(text, color=None, bold=False):
         return text
     return f"\033[{';'.join(out)}m{text}\033[0m"
 
-def pre_flight(cmd_name, first_file):
+def pre_flight(cmd_name: str, first_file: str) -> None:
     """手动注册命令的早期格式检查（打印警告，不阻断）"""
     if not first_file or str(first_file).startswith('-'):
         return
