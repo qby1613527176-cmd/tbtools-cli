@@ -64,3 +64,9 @@ ignore = ["E501", "E722", "E701", "E702"]
 "bin/tbcli.py" = ["E401", "E402", "E741", "F541"]
 # tests/rpc_regression_linux/: 转换生成的回归脚本(Windows 路径参数化产物,非手写)
 "tests/rpc_regression_linux/*.py" = ["E401", "E402", "E741", "F401", "F541", "E743"]
+
+[tool.mypy]
+ignore_missing_imports = true
+check_untyped_defs = false
+disallow_any_generics = false
+no_implicit_optional = false

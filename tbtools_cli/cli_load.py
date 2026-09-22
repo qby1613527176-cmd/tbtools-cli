@@ -147,7 +147,7 @@ GROUPS = {
 }
 
 # 全局分组表（build_and_load → _ensure_groups(cli) 填充；cli.py/list 等 import 使用）
-_groups = {}
+_groups: dict[str, click.Group] = {}
 def _load_auto_commands():
     """从 auto_commands.py 加载所有命令到对应分组（弥补 tbplot.sh 遗漏的命令）"""
     skip = {"seqlogo", "msa", "motif", "genestructure",  # seq manual

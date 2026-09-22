@@ -4,7 +4,7 @@ import os
 try:
     import tomllib
 except ImportError:
-    tomllib = None
+    tomllib = None  # type: ignore[assignment]
 
 DEFAULT_CONFIG_PATH = os.path.expanduser("~/.config/tbtools-cli/config.toml")
 

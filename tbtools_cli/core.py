@@ -167,7 +167,7 @@ EXPECTED_INPUT_FORMATS = {
     "barplot":   ("tsv", 2, "富集表（term\tP值...）"),
 }
 
-def check_input_format(cmd_name: str, path: str) -> None:
+def check_input_format(cmd_name: str, path: str) -> str | None:
     """早期格式检测：期望格式与实际不符时返回警告文本（不阻断）"""
     exp = EXPECTED_INPUT_FORMATS.get(cmd_name)
     if not exp:
@@ -245,7 +245,7 @@ def get_pitfall_hint(command_name: str) -> str | None:
     return PITFALL_HINTS.get(command_name, "")
 
 # ---- 统一输出格式处理 ----
-def resolve_output(output: str, fmt: str = "svg", width: int | None = None, height: int | None = None) -> tuple[str, str]:
+def resolve_output(output: str, fmt: str = "svg", width: int | None = None, height: int | None = None) -> str:
     """处理输出文件路径 + 格式推断/覆盖 + 父目录提前校验"""
     if not output:
         # 无输出文件 → 生成默认文件名
@@ -289,6 +289,7 @@ def _sha1_file(f):
     return h.hexdigest()
 
 def snapshot_inputs(java_args: list) -> list:
+    snaps: list = []
     """识别 java_args 中的输入文件并快照。
 
     返回 [(path, backup|None, size, mtime)]；
@@ -335,7 +336,7 @@ def snapshot_inputs(java_args: list) -> list:
         snaps.append([_a, backup, size, mtime])
     return snaps
 
-def verify_and_restore(snaps: list) -> list:
+def verify_and_restore(snaps: list) -> list[tuple[str, str]]:
     """调用后比对快照；被引擎改写的输入自动恢复。返回问题清单 [(path, 状态)]。"""
     problems = []
     for path, backup, size, mtime in snaps:
@@ -357,7 +358,7 @@ def verify_and_restore(snaps: list) -> list:
                 problems.append((path, "verify-error"))
     return problems
 
-def cleanup_side_effects(t0: float) -> list:
+def cleanup_side_effects(t0: float) -> int:
     """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。"""
     try:
         cwd = os.getcwd()
@@ -423,6 +424,7 @@ def find_empty_inputs(java_args):
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 def run_java(java_args: list, verbose: bool = False, quiet: bool = False, command_name: str | None = None) -> int:
+    ec_out = 0
     """执行 Java 命令，失败时输出友好提示
     
     退出码: 0=成功, 1=参数错误, 2=文件不存在, 3=格式错误
@@ -540,7 +542,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
             for line in nonblank[-3:]:
                 print(f"   {line}", file=sys.stderr)
         
-        # 智能异常分类 + 退出码
+        # 智能异常分类 + 退出码(默认 1: 未匹配分类的异常也非零退出,防假成功)
         hint = "参数缺失/格式不对/文件路径错误/数据不匹配"
         ec_out = 1
         if "FileNotFoundException" in err_text:
@@ -635,7 +637,7 @@ def get_java() -> str | None:
 
 
 # ---- 桥编译 ----
-def ensure_bridge(bridge_name: str) -> str | None:
+def ensure_bridge(bridge_name: str) -> None:
     """确保桥 Java 文件已编译到 build/ 目录"""
     src = os.path.join(BRIDGES_DIR, f"{bridge_name}.java")
     dst = os.path.join(BUILD_DIR, f"{bridge_name}.java")

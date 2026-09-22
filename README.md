@@ -43,6 +43,11 @@
 
 ## 🚀 Quick Start
 
+> **最小示例数据**（新人入门防格式坑）: 本仓库 `examples/data/` 为官方数据,`git clone` 或直接下载:
+> `git clone --depth 1 https://github.com/qby1613527176-cmd/tbtools-cli` → `examples/data/` 即可复现本文所有命令。
+
+
+
 ```bash
 tbtools version          # 查看版本（动态统计）
 tbtools doctor           # 环境诊断（检查 Java/JAR/xvfb/依赖）
@@ -137,6 +142,7 @@ java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参�
 
 ### 0. pip 安装（推荐，Python 包入口）
 
+> ⚠️ **Windows 用户注意**: 绘图类命令在无 xvfb 时部分受限（工具类/RPC 全可用）;WSL2 推荐。详见 [FAQ](#faq)。
 > 系统 Python 受 PEP 668 保护时（Debian/Ubuntu 23+），先建虚拟环境或加 `--user`：
 > `python3 -m venv ~/.venv && source ~/.venv/bin/activate` 或 `pip install --user tbtools-cli`
 ```bash
