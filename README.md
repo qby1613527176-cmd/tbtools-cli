@@ -27,8 +27,10 @@
 
 ## 📺 Demo
 
-[`docs/images/demo.cast`](docs/images/demo.cast) — asciinema 格式,10 秒演示:
-`tbtools version` → `doctor` → `search volcano` → `volcano 实跑出图`。
+![tbtools-cli demo](docs/images/demo.gif)
+
+10 秒演示: `tbtools version` → `doctor` → `search volcano` → `volcano 实跑出图`。
+(`docs/images/demo.cast` 为 asciinema 原始录制,可 `asciinema play` 播放。)
 
 ```bash
 # 本地播放
