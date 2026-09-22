@@ -18,9 +18,6 @@
 - README 示例图入库（.gitignore 全局 *.svg 曾导致 GitHub 死链,已豁免）
 - 命名规范/示例表/中文节/漂移修正
 
-### 修复（RPC 测试交付包 N1-N41,09/21 · 批次 0-4 全部落地）
-
-
 ### 修复（RPC 测试交付包 N1-N41，09/21 · 批次 0-4 全部落地）
 
 > 来源：WorkBuddy Windows 17 轮穷举测试（~1665 项/~812 通过），证据链与回归脚本见交付包 `workflows/tbtools_cli化_修复清单.md` + `tbtools-cli/docs/_worklog/RPC_FIX_STATUS.md`。
@@ -190,7 +187,7 @@
 - TBtools-II 2.535+（CJ-Chen）主 jar 需用户自备（install.sh 引导）
 - 桥/引擎签名基于 2026-08 全量逆向（CFR 反编译 + jstack + 窗口遍历方案）
 
-## [1.1.0] - 2026-09-04
+## [0.9.0] - 2026-09-04
 
 ### Added
 - `tbtools completion bash|zsh|fish` 内建补全生成（A1）

@@ -12,13 +12,13 @@
 
 <div align="center">
 
-**English** | 中文说明见文末（以英文版为准）
+**English** | 中文要点见各节说明（命令输出默认中文,`LC_ALL=en` 切换英文）
 
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)]()
 [![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
-[![commands](https://img.shields.io/badge/commands-276-blueviolet.svg)]()
+[![commands](https://img.shields.io/badge/commands-200%2B-blueviolet.svg)]()
 
 </div>
 
@@ -324,7 +324,7 @@ tbtools-cli/
 │   └── tbcli.py           # 旧工具入口（已由 cli_tools_registry 替代，保留兼容）
 ├── tbtools_cli/           # ✅ Python 包（真正的入口）
 │   ├── cli.py             # click 主 CLI（全命令注册 + rpc 自愈 + 纠错）
-│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂（201 命令:172 表驱动 + 29 手写）
+│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂(命令数以 `tbtools version` 为准)
 │   ├── cli_tools_registry.py  # 82 个 CLI 工具共享注册表
 │   ├── command_metadata.json  # 276 命令元数据（gen_metadata 生成,唯一数据源）
 │   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
@@ -333,7 +333,7 @@ tbtools-cli/
 ├── bridges/               # 118 Java bridge sources
 ├── build/                 # compiled bridges (auto-generated)
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
-├── completions/           # bash completion + man page
+├── scripts/               # tbtools-completion.bash + tbtools.1 + 工具脚本
 ├── examples/              # example data + scripts
 ├── scripts/               # rpc_regression_linux.sh 等工具脚本
 ├── tests/                 # pytest（83 passed：框架/命令/防漂移/输入保护）

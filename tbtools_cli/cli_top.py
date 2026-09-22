@@ -38,8 +38,12 @@ def register_top(cli, _LG):
         click.echo(f"tbtools-cli v{_pkg_ver}")
         click.echo(f"  {plot_count} 绘图/分析命令 + {auto_count} auto_commands + 188 RPC 方法")
         click.echo(f"  bridges: {bridge_count} | pitfall hints: {len(PITFALL_HINTS)}")
-        r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
-        java_ver = r.stderr.splitlines()[0] if r.stderr else "unknown"
+        # P0(第七轮评审实测): 无 Java 环境不能崩——version 是新人第一条命令
+        try:
+            r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
+            java_ver = r.stderr.splitlines()[0] if r.stderr else "unknown"
+        except FileNotFoundError:
+            java_ver = "❌ 未安装(apt install openjdk-17-jre-headless)"
         click.echo(f"  Java: {java_ver}")
         click.echo(f"  JAR: {JAR}" if JAR else "  JAR: ⚠️ 未配置")
 

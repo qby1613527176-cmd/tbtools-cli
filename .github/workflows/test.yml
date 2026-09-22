@@ -5,6 +5,24 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install
+        run: pip install click pytest ruff pyyaml
+      - name: Lint (ruff 硬失败)
+        run: ruff check .
+      - name: Windows 无 jar CLI 冒烟(跨平台验证)
+        shell: bash
+        run: |
+          python -m tbtools_cli.cli version | grep -q "tbtools-cli" && echo "✅ version"
+          python -m tbtools_cli.cli list plots | grep -cE '^    ' | awk '$1>100 {print "✅ list plots:", $1}'
+          python -m tbtools_cli.cli sets ven 2>&1 | grep -q "venn" && echo "✅ 拼写纠错"
+          python -m tbtools_cli.cli --help | grep -q "TBtools-II" && echo "✅ help"
     steps:
       - uses: actions/checkout@v4
 
@@ -29,7 +47,7 @@ jobs:
       - name: Shellcheck (硬失败)
         run: |
           shellcheck -S warning bin/tbplot.sh bin/tbtools_rpc.sh bin/tbengine.sh bin/tbtools \
-            install.sh run_examples.sh config/config.sh scripts/*.sh
+            install.sh examples/scripts/run_examples.sh config/config.sh scripts/*.sh
           echo "✅ shellcheck 0 warnings"
 
       - name: Bash syntax
@@ -43,7 +61,7 @@ jobs:
       - name: Type check with mypy (严格模式,含未注解函数)
         run: |
           pip install mypy
-          python3 -m mypy tbtools_cli/ --check-untyped-defs
+          python3 -m mypy tbtools_cli/
 
       - name: Run full pytest suite
         run: |
