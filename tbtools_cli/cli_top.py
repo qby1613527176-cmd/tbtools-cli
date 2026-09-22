@@ -579,18 +579,21 @@ def register_top(cli, _LG):
                 _os.close(_saved_fd)
         ec = ec or 0
         dt = round(_time.time() - t0, 2)
-        # 产物: 明确输出识别(args 中最后图形参数 → 其 provenance), 非扫描猜测
-        artifacts = []
+        # 产物+错误: 明确输出识别(args 中最后图形参数 → 其 provenance), 非扫描猜测
+        artifacts, error = [], None
         for a in reversed(args):
             if a.endswith((".svg", ".png", ".pdf")):
                 _po = a + ".tbtools.json"
                 if os.path.isfile(_po):
                     try:
-                        artifacts = _json.load(open(_po, encoding="utf-8")).get("outputs", [])
+                        _prov = _json.load(open(_po, encoding="utf-8"))
+                        artifacts = _prov.get("outputs", [])
+                        error = _prov.get("error")
                     except Exception:
                         pass
                 break
-        result = {"exit_code": ec, "duration_s": dt, "artifacts": artifacts, "schema_version": "1.0"}
+        result = {"schema_version": "1.0", "exit_code": ec, "duration_s": dt,
+                  "artifacts": artifacts, "error": error}
         if as_json:
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
         else:

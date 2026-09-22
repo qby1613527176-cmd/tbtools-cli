@@ -523,6 +523,40 @@ def find_empty_inputs(java_args):
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 
+# ── Error Code Registry(GLM 评审: 结构化错误契约, AI 可编程处理)──
+ERROR_CODES = {
+    "TB001_INVALID_ARGUMENT":   {"exit": 1, "retryable": False, "action": "check argument names/values, see --help"},
+    "TB002_FILE_NOT_FOUND":     {"exit": 2, "retryable": False, "action": "check the input file path exists"},
+    "TB003_INPUT_FORMAT_ERROR": {"exit": 3, "retryable": False, "action": "check input format/columns/separator"},
+    "TB004_INPUT_SCHEMA_ERROR": {"exit": 3, "retryable": False, "action": "input does not match required schema"},
+    "TB005_DEPENDENCY_MISSING": {"exit": 1, "retryable": False, "action": "install missing dependency (see doctor)"},
+    "TB007_TOOL_TIMEOUT":       {"exit": 1, "retryable": True,  "action": "retry with more time or smaller input"},
+    "TB008_OUT_OF_MEMORY":      {"exit": 4, "retryable": True,  "action": "increase memory in config.toml [defaults]"},
+    "TB009_ENGINE_CRASH":       {"exit": 1, "retryable": False, "action": "engine-level defect; see PITFALL/docs"},
+    "TB010_OUTPUT_MISSING":     {"exit": 1, "retryable": False, "action": "output not produced; check engine"},
+    "TB012_INTERNAL_ERROR":     {"exit": 1, "retryable": False, "action": "wrapper bug; report with --verbose"},
+}
+
+
+def classify_error(err_text: str) -> tuple[str, int, str]:
+    """异常文本 → (错误码, 退出码, hint)。退出码与现分类一致(0/2/3/4... 语义化)。"""
+    if "FileNotFoundException" in err_text:
+        return "TB002_FILE_NOT_FOUND", 2, "文件不存在或路径错误，检查输入文件路径"
+    if "ClassNotFoundException" in err_text:
+        return "TB009_ENGINE_CRASH", 1, "引擎类不存在(版本不匹配或死命令)"
+    if "NumberFormatException" in err_text:
+        return "TB003_INPUT_FORMAT_ERROR", 3, "数据格式不匹配，检查列数/类型/分隔符"
+    if "ArrayIndexOutOfBoundsException" in err_text:
+        return "TB003_INPUT_FORMAT_ERROR", 3, "行列数不足或参数缺省"
+    if "OutOfMemoryError" in err_text:
+        return "TB008_OUT_OF_MEMORY", 4, "内存不足: config.toml [defaults] memory 调大"
+    if "NullPointerException" in err_text:
+        return "TB001_INVALID_ARGUMENT", 1, "可能缺少必需参数或格式不匹配"
+    if "NoClassDefFoundError|DatatypeConverter" in err_text:
+        return "TB005_DEPENDENCY_MISSING", 1, "缺 javax.xml 类(ensure_bridge 应已编译 fake DatatypeConverter)"
+    return "TB001_INVALID_ARGUMENT", 1, "参数缺失/格式不对/路径错误/数据不匹配"
+
+
 def _n19_move_result(n19_tmp, n19_out, n19_orig_sha):
     """N19: findBestHomologyBatch 引擎改写了临时副本时才搬结果到 outTable。
     独立函数(第六轮评审: 引擎特判不寄生在 run_java 主干,便于单独测试)。"""
@@ -657,30 +691,11 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
             for line in nonblank[-3:]:
                 print(f"   {line}", file=sys.stderr)
         
-        # 智能异常分类 + 退出码(默认 1: 未匹配分类的异常也非零退出,防假成功)
-        hint = _("参数缺失/格式不对/文件路径错误/数据不匹配",
-                 "Missing/invalid arguments, wrong format, bad path, or data mismatch")
-        ec_out = 1
-        if "FileNotFoundException" in err_text:
-            hint = _("文件不存在或路径错误，检查输入文件路径",
-                     "File not found or wrong path — check the input file path")
-            ec_out = 2
-        elif "NullPointerException" in err_text:
-            hint = _("可能缺少必需参数或数据格式不匹配",
-                     "Possibly missing a required argument or data format mismatch")
-            ec_out = 1
-        elif "NumberFormatException" in err_text:
-            hint = _("数据格式不匹配，检查输入文件列数/类型/分隔符",
-                     "Data format mismatch — check column count/types/separator of the input")
-            ec_out = 3
-        elif "ArrayIndexOutOfBoundsException" in err_text:
-            hint = _("可能缺少必需参数或输入数据行列数不足",
-                     "Possibly missing required arguments or too few rows/columns in input data")
-            ec_out = 3
-        elif "OutOfMemoryError" in err_text:
-            hint = _("内存不足: 在 ~/.config/tbtools-cli/config.toml 加 [defaults] memory = \"4g\"(或按机器内存调)后重试",
-                     "Out of memory: set [defaults] memory = \"4g\" in ~/.config/tbtools-cli/config.toml (adjust to your RAM) and retry")
-            ec_out = 4
+        # 智能异常分类 + 错误码(结构化错误契约: code/exit/retryable 供 AI 处理)
+        _code, ec_out_from_code, _hint_zh = classify_error(err_text)
+        _err_meta = ERROR_CODES.get(_code, ERROR_CODES["TB001_INVALID_ARGUMENT"])
+        ec_out = ec_out_from_code
+        hint = _(_hint_zh, _err_meta["action"])
         
         print(file=sys.stderr)
         print(f"   💡 {hint}", file=sys.stderr)
@@ -725,17 +740,17 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     # 成功时 ec_out = 0
     if ec == 0:
         ec_out = 0
-    # 运行 provenance(报告2 P1): 识别输出文件, 旁写 <out>.tbtools.json
-    _write_provenance(java_args, command_name, ec_out)
+    # 运行 provenance: 识别输出文件, 旁写 <out>.tbtools.json(成功/失败都写, 含结构化 error)
+    _write_provenance(java_args, command_name, ec_out, err_text if ec_out != 0 else "")
     return ec_out
 
 
-def _write_provenance(java_args, command_name, ec):
-    """运行记录旁文件: <输出>.tbtools.json(命令/版本/参数/输入 sha/时间)。
+def _write_provenance(java_args, command_name, ec, err_text=""):
+    """运行记录旁文件: <输出>.tbtools.json(命令/版本/参数/输入 sha/时间/错误)。
 
-    仅成功(ec==0)且能识别输出文件时写;失败不影响主流程。
+    成功(ec==0)与失败(ec!=0, 含结构化 error)都写;失败不影响主流程。
     """
-    if ec != 0 or not command_name:
+    if command_name is None:
         return
     # 输出识别: 反向第一个图形参数即视为输出(重跑时文件已存在也当输出), 排除选项
     out = None
@@ -753,11 +768,17 @@ def _write_provenance(java_args, command_name, ec):
         inputs = [a for a in java_args
                   if os.path.isfile(a) and not a.startswith("-")
                   and a != out and not a.endswith((".jar", ".class", ".svg", ".png", ".pdf"))]
+        _code, _ec, _hint = classify_error(err_text) if ec != 0 else ("TB000_OK", 0, "")
         prov = {
             "command": command_name,
             "invocation": " ".join(java_args[:8]) + (" ..." if len(java_args) > 8 else ""),
             "tbtools_cli": _pkg_ver,
-            "exit_code": 0,
+            "exit_code": ec,
+            "error": None if ec == 0 else {
+                "code": _code,
+                "retryable": ERROR_CODES.get(_code, {}).get("retryable", False),
+                "suggested_action": ERROR_CODES.get(_code, {}).get("action", ""),
+            },
             "outputs": [out],
             "inputs": [{"path": i, "sha256": _hl.sha256(open(i, "rb").read()).hexdigest()[:16]} for i in inputs[:10]],
             "timestamp": _tm.strftime("%Y-%m-%dT%H:%M:%S"),
