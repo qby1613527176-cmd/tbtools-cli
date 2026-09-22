@@ -622,7 +622,6 @@ def register_top(cli, _LG):
 
     # ── Job 模型(GLM P1: 异步提交/查询/取消; Agent 长任务)──
     def _jobs_dir():
-        import os as _os
         d = os.path.join(os.path.expanduser("~"), ".config", "tbtools-cli", "jobs")
         os.makedirs(d, exist_ok=True)
         return d
@@ -631,7 +630,11 @@ def register_top(cli, _LG):
     @click.argument("args", nargs=-1, required=True)
     def tool_submit(args):
         """异步提交任务: 后台执行, 返回 job_id(Agent 长任务)"""
-        import json as _json, subprocess as _sp, sys as _sys, uuid as _uuid, time as _time
+        import json as _json
+        import subprocess as _sp
+        import sys as _sys
+        import uuid as _uuid
+        import time as _time
         jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
         jdir = _jobs_dir()
         log = os.path.join(jdir, f"{jid}.log")
@@ -647,7 +650,7 @@ def register_top(cli, _LG):
     @click.argument("job_id")
     def job_status(job_id):
         """查询任务状态(运行中/成功/失败/耗时)"""
-        import json as _json, os as _os
+        import json as _json
         jf = os.path.join(_jobs_dir(), f"{job_id}.json")
         if not os.path.isfile(jf):
             click.echo(f"❌ 未知 job: {job_id}", err=True)
@@ -669,7 +672,6 @@ def register_top(cli, _LG):
     @click.option("--tail", "n", type=int, default=30)
     def job_log(job_id, n):
         """查看任务日志(尾部 N 行)"""
-        import os as _os
         lf = os.path.join(_jobs_dir(), f"{job_id}.log")
         if not os.path.isfile(lf):
             click.echo(f"❌ 无日志: {job_id}", err=True)
@@ -681,7 +683,7 @@ def register_top(cli, _LG):
     @click.argument("job_id")
     def job_result(job_id):
         """任务结构化结果(从 provenance 读; Agent 结果验证)"""
-        import json as _json, os as _os
+        import json as _json
         jf = os.path.join(_jobs_dir(), f"{job_id}.json")
         if not os.path.isfile(jf):
             click.echo(f"❌ 未知 job: {job_id}", err=True)
@@ -706,7 +708,8 @@ def register_top(cli, _LG):
     @click.argument("job_id")
     def job_cancel(job_id):
         """取消任务(杀进程树, 含 java/xvfb 子进程)"""
-        import json as _json, os as _os, signal as _sig
+        import json as _json
+        import signal as _sig
         jf = os.path.join(_jobs_dir(), f"{job_id}.json")
         if not os.path.isfile(jf):
             click.echo(f"❌ 未知 job: {job_id}", err=True)
