@@ -20,7 +20,9 @@ def _use_en() -> bool:
     if _LANG_EN is None:
         cfg = get_default("lang", "")
         env = (os.environ.get("LC_ALL", "") + " " + os.environ.get("LANG", "")).lower()
-        _LANG_EN = bool(cfg and str(cfg).lower().startswith("en")) or "en" in env or env.lstrip().startswith("c ")
+        lang_code = env.split()[0].split(".")[0] if env.split() else ""
+        # en 开头 → 英文; C/POSIX locale(如 C.UTF-8)也是英文环境
+        _LANG_EN = bool(cfg and str(cfg).lower().startswith("en")) or "en" in env or lang_code in ("c", "posix")
     return _LANG_EN
 
 
