@@ -142,7 +142,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 # 快速查用法（不用翻手册）：
 tbtools --help              # 绘图命令一屏预览
 tbtools list tools          # CLI 工具列表
-tbtools methods             # RPC 方法列表
+tbtools rpc methods         # RPC 方法列表
 java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参数表（含默认值）
 ```
 
@@ -233,9 +233,9 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 ### Gene structure / Motif / Sequence logo
 ```bash
 # Gene structure (exons/UTR from GFF)
-tbtools genestructure <input.gff> <mRNA_ids.txt> <out.svg> [genome.fa] [w] [h]
+tbtools seq genestructure <input.gff> <mRNA_ids.txt> <out.svg> [genome.fa] [w] [h]
 # Motif distribution (MEME XML)
-tbtools motif <meme.xml> <idList.txt> <out.svg> [w] [h]
+tbtools seq motif <meme.xml> <idList.txt> <out.svg> [w] [h]
 ```
 > 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Expression / Statistics
@@ -249,15 +249,15 @@ tbtools tool rpkmCal    --countsTable counts.tsv --lenInfo gene_len.tsv --outTab
 ### Phylogeny / Tree
 ```bash
 # Tree + annotation tracks (TextAnno/HeatMap/BarPlot/Tile/StackBar/Domain...)
-tbtools tree <treeMeta.cfg> <out.svg> [pad]
+tbtools tree draw <treeMeta.cfg> <out.svg> [pad]
 # Hclust → Newick
-tbtools hclust <distance_matrix.tsv> <out.nwk>
+tbtools expr hclust <distance_matrix.tsv> <out.nwk>
 ```
 > 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Genomic location / Circos / Synteny
 ```bash
 # Gene chromosome location (GFF + IDs)
-tbtools genelocgff <gff3> <ids.txt> <out.svg> [--chrLen l.tsv --pairs p.tsv ...]
+tbtools gxf genelocgff <gff3> <ids.txt> <out.svg> [--chrLen l.tsv --pairs p.tsv ...]
 # Gene location (native CLI)
 tbtools genelocation --ChrLen <chrlen.tsv> --FeaturePos <pos.tsv> --OutGraph <out.svg>
 ```
@@ -273,19 +273,19 @@ tbtools sets venn4 --List1 a.txt --List2 b.txt --List3 c.txt --List4 d.txt --lab
 ### ChIP-seq / Others
 ```bash
 # Peak-TSS heatmap
-tbtools peaktss <gxf> <macs2_peak.xls> <out.svg> [--dist N]
+tbtools chipseq peaktss <gxf> <macs2_peak.xls> <out.svg> [--dist N]
 # Peak chromosome distribution
-tbtools peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --height H]
+tbtools chipseq peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --height H]
 ```
 > 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ## 📊 RPC Data Tools (188 methods)
 
 ```bash
 tbtools rpc start                       # 启动 RPC 服务器 (port 8765)
-tbtools methods                            # list all 188 methods
+tbtools rpc methods                     # list all 188 methods
 tbtools rpc FastaStat.process '{"inputPath":"in.fa","outputPath":"out.xls"}'
 tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outdir","options":{"ultraFastBS":true}}'
-tbtools heatmap matrix.tsv out.png [group.tsv]   # quick heatmap
+tbtools expr heatmap matrix.tsv out.png [group.tsv]   # quick heatmap
 
 > 全部 188 方法见 [docs/rpc_methods_reference.md](docs/rpc_methods_reference.md) 或 `tbtools list rpc`
 ## 🛠️ CLI Tools (82)

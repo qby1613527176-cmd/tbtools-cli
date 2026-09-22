@@ -577,3 +577,24 @@ class TestProbeWithFakeJar:
         missing = [m.group(1) for m in pat.finditer(src_text)
                    if m.group(1).replace(".", "/") + ".class" not in names]
         assert missing == [], f"全部应存在，实际缺失 {missing}"
+
+
+class TestSearchCommand:
+    """tbtools search 模糊搜索(第十轮审计: 新功能无测试盲区)"""
+
+    def test_search_exact(self):
+        ec, out, err = run_cli("search", "volcano")
+        assert ec == 0 and "volcano" in out
+
+    def test_search_partial(self):
+        ec, out, err = run_cli("search", "venn")
+        assert ec == 0 and "venn2" in out
+
+    def test_search_no_match(self):
+        ec, out, err = run_cli("search", "zzzz_nonexist_xyz")
+        assert ec != 0, "无匹配应非零退出"
+        assert "没有匹配" in out or "没有匹配" in err
+
+    def test_search_requires_arg(self):
+        ec, out, err = run_cli("search")
+        assert ec != 0, "缺关键词应非零退出"
