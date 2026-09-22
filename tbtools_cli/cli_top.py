@@ -33,7 +33,8 @@ def register_top(cli, _LG):
         auto_count = sum(1 for n in dir(_ac) if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'))
         from tbtools_cli.core import BRIDGES_DIR, PITFALL_HINTS
         bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 80
-        click.echo("tbtools-cli v1.0.0")
+        from tbtools_cli import __version__ as _pkg_ver
+        click.echo(f"tbtools-cli v{_pkg_ver}")
         click.echo(f"  {plot_count} 绘图/分析命令 + {auto_count} auto_commands + 188 RPC 方法")
         click.echo(f"  bridges: {bridge_count} | pitfall hints: {len(PITFALL_HINTS)}")
         r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)

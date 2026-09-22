@@ -26,7 +26,7 @@ tbcli — TBtools-II 2.535 全功能 CLI 统一入口（完整版）
   tbcli server start|stop     # RPC 服务器管理
 """
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 import subprocess
 import sys
