@@ -106,7 +106,7 @@ try:
     _CLI_VERSION = _pkg_version("tbtools-cli")  # pyproject 单一来源
     del _pkg_version
 except Exception:
-    _CLI_VERSION = "1.0.0"
+    _CLI_VERSION = "1.1.0"
 
 @click.group(cls=RootGroup, invoke_without_command=True)
 @click.version_option(_CLI_VERSION, prog_name="tbtools-cli")

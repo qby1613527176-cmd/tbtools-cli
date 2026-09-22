@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tbtools-cli"
-version = "1.0.0"
+version = "1.1.0"
 description = "TBtools-II command-line wrapper: 218 engines, 188 RPC methods, journal presets, pitfall hints"
 readme = "README.md"
 requires-python = ">=3.10"

@@ -2,7 +2,7 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
-## [Unreleased]
+## [1.1.0] - 2026-09-22
 
 ### 架构重构（09/22 · 批次 A/B/C 全量落地,commit 384ddee..1b0c716）
 
