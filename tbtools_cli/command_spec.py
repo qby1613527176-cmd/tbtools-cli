@@ -37,6 +37,7 @@ class CommandSpec:
     aliases: list[str] = field(default_factory=list)
     inputs: list[InputSpec] = field(default_factory=list)
     outputs: list[str] = field(default_factory=list)  # 输出类型(如 svg/png/tsv)
+    capabilities: list[str] = field(default_factory=list)  # 能力标签(能力图搜索)
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -119,6 +120,35 @@ KNOWN_SCHEMAS = {
 
 
 # 已知别名(兼容层命名; canonical → 命令)
+KNOWN_CAPABILITIES = {
+    "volcano": ["differential_expression", "visualization"],
+    "heatmap": ["expression_matrix", "clustering", "visualization"],
+    "dehist": ["differential_expression", "visualization"],
+    "pca": ["dimension_reduction", "expression_matrix"],
+    "hclust": ["clustering", "distance"],
+    "genestructure": ["gene_structure", "annotation", "visualization"],
+    "seqlogo": ["motif", "visualization"],
+    "msa": ["alignment", "visualization"],
+    "motif": ["motif", "visualization"],
+    "sixframe": ["translation", "sequence"],
+    "longestorf": ["orf_prediction", "sequence"],
+    "blastp": ["homology", "alignment"],
+    "mcscanx": ["synteny", "collinearity"],
+    "dualsyn": ["synteny", "visualization"],
+    "dotplot": ["synteny", "visualization"],
+    "msy": ["microsynteny", "visualization"],
+    "iqtree": ["phylogeny"],
+    "muscle": ["alignment"],
+    "trimal": ["alignment", "filtering"],
+    "kallisto": ["rna_seq", "quantification"],
+    "gsea": ["enrichment"],
+    "goEnrich": ["enrichment"],
+    "keggEnrich": ["enrichment"],
+    "tpmCalc": ["rna_seq", "normalization"],
+    "peaktss": ["chip_seq"],
+}
+
+
 KNOWN_ALIASES = {
     "treeRooting": "rooting",
     "TableCast": "tableCast",
@@ -192,6 +222,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
         if name in KNOWN_SCHEMAS:
             ins, outs = KNOWN_SCHEMAS[name]
             spec.inputs, spec.outputs = ins, outs
+        spec.capabilities = KNOWN_CAPABILITIES.get(name, [])
     return specs
 
 
@@ -218,6 +249,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
+        s.capabilities = KNOWN_CAPABILITIES.get(name, [])
     return {n: to_metadata_entry(s) for n, s in specs.items()}
 
 
