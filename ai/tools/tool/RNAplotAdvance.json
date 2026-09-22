@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.RNAplotAdvance",
+ "name": "RNAplotAdvance",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.RNAplotAdvance",
+ "description": "RNAplotAdvance: RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance",
+ "invoke": "tbtools tool RNAplotAdvance <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

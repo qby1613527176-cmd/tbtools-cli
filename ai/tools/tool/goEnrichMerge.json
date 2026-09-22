@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.goEnrichMerge",
+ "name": "goEnrichMerge",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble",
+ "description": "goEnrichMerge: goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichment Merge Bubble",
+ "invoke": "tbtools tool goEnrichMerge <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

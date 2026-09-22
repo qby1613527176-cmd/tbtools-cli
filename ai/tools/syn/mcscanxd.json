@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.mcscanxd",
+ "name": "mcscanxd",
+ "group": "syn",
+ "kind": "manual",
+ "class": "",
+ "description": "OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
+ "invoke": "tbtools syn mcscanxd <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "blast",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "collinearity"
+ ],
+ "status": "stable"
+}

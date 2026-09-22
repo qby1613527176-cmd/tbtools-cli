@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.layoutheatmap",
+ "name": "layoutheatmap",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "LayoutHeatmapCli",
+ "description": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
+ "invoke": "tbtools expr layoutheatmap <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "expr",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "layout",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.slurmScriptPrepare",
+ "name": "slurmScriptPrepare",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.SlurmScriptPrepare",
+ "description": "slurmScriptPrepare: slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script Prepare",
+ "invoke": "tbtools tool slurmScriptPrepare <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.sixframe",
+ "name": "sixframe",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "SixFrameTranlaterCli",
+ "description": "16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
+ "invoke": "tbtools seq sixframe <args...>",
+ "capabilities": [
+  "translation",
+  "sequence"
+ ],
+ "inputs": [
+  {
+   "name": "pep",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": "蛋白(输出核酸)"
+  }
+ ],
+ "outputs": [
+  "fa"
+ ],
+ "status": "stable"
+}

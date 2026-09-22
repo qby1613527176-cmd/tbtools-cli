@@ -1,0 +1,41 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.msy",
+ "name": "msy",
+ "group": "syn",
+ "kind": "manual",
+ "class": "",
+ "description": "engineClass 导致 ClassNo",
+ "invoke": "tbtools syn msy <args...>",
+ "capabilities": [
+  "microsynteny",
+  "visualization"
+ ],
+ "inputs": [
+  {
+   "name": "pos",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "Chr\tGene\tStart\tEnd"
+  },
+  {
+   "name": "links",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "layout",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

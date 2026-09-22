@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.fastq.fastaExtract",
+ "name": "fastaExtract",
+ "group": "fastq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Fasta.ExtractFasta",
+ "description": "fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con",
+ "invoke": "tbtools fastq fastaExtract <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

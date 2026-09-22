@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.translater",
+ "name": "translater",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.ORF.Translater",
+ "description": "translater: translater (tool, Translater) — Translater",
+ "invoke": "tbtools tool translater <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

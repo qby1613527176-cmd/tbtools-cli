@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.tfbsShift",
+ "name": "tfbsShift",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
+ "invoke": "tbtools seq tfbsShift <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "motif",
+   "role": "file",
+   "format": "meme",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

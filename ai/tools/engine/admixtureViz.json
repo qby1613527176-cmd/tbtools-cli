@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.admixtureViz",
+ "name": "admixtureViz",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "AdmixtureCli",
+ "description": "ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id）",
+ "invoke": "tbtools engine AdmixtureCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.phylotree",
+ "name": "phylotree",
+ "group": "tree",
+ "kind": "bridge",
+ "class": "PhyloTreeCli",
+ "description": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
+ "invoke": "tbtools tree phylotree <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

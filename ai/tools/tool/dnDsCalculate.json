@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.dnDsCalculate",
+ "name": "dnDsCalculate",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.KaKs.DnDsCalculate",
+ "description": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
+ "invoke": "tbtools tool dnDsCalculate <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

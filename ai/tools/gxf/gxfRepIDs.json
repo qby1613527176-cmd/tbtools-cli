@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfRepIDs",
+ "name": "gxfRepIDs",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs",
+ "description": "gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>",
+ "invoke": "tbtools gxf gxfRepIDs <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

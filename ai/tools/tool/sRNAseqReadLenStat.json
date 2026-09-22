@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.sRNAseqReadLenStat",
+ "name": "sRNAseqReadLenStat",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.sRNA.Tools.sRNAseqReadLenStat",
+ "description": "sRNAseqReadLenStat: sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq Read Len Stat",
+ "invoke": "tbtools tool sRNAseqReadLenStat <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

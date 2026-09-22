@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.pafref",
+ "name": "pafref",
+ "group": "syn",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc",
+ "description": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
+ "invoke": "tbtools syn pafref <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "paf",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "含 cg:Z CIGAR"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

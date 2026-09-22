@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.bamindex",
+ "name": "bamindex",
+ "group": "asm",
+ "kind": "bridge",
+ "class": "BamIndexCli",
+ "description": "bamindex: bamindex <in.sorted.bam> [out.bai]",
+ "invoke": "tbtools asm bamindex <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.vcfBinCount",
+ "name": "vcfBinCount",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.HTSData.VCF.VCFBINCount",
+ "description": "vcfBinCount: vcfBinCount (tool, VCFBINCount) — V C F B I N Count",
+ "invoke": "tbtools tool vcfBinCount <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

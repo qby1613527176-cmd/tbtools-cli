@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableCast",
+ "name": "tableCast",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableCast",
+ "description": "tableCast: tableCast <inLong.txt> <outMatrix>",
+ "invoke": "tbtools table tableCast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

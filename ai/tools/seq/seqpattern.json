@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.seqpattern",
+ "name": "seqpattern",
+ "group": "seq",
+ "kind": "direct",
+ "class": "biocjava.bioIO.FastX.QuickLocateSeqPattern",
+ "description": "20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
+ "invoke": "tbtools seq seqpattern <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.FoldStructureStater",
+ "name": "FoldStructureStater",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.RNAfold.FoldStructureStater",
+ "description": "FoldStructureStater: FoldStructureStater (tool, FoldStructureStater) — Fold Structure Stater",
+ "invoke": "tbtools tool FoldStructureStater <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

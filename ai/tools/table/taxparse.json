@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.taxparse",
+ "name": "taxparse",
+ "group": "table",
+ "kind": "bridge",
+ "class": "TaxonomyBatchCli",
+ "description": "38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）",
+ "invoke": "tbtools table taxparse <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

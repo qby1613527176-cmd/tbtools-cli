@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.statFasta",
+ "name": "statFasta",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
+ "description": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
+ "invoke": "tbtools tool statFasta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

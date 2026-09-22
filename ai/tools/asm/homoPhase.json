@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.homoPhase",
+ "name": "homoPhase",
+ "group": "asm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition",
+ "description": "homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>",
+ "invoke": "tbtools asm homoPhase <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

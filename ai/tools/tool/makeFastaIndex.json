@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.makeFastaIndex",
+ "name": "makeFastaIndex",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.MakeFastaIndex",
+ "description": "makeFastaIndex: makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index",
+ "invoke": "tbtools tool makeFastaIndex <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

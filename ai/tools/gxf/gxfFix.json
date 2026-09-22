@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfFix",
+ "name": "gxfFix",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix",
+ "description": "GFF 修复（重复ID前缀/CDS phase/dang",
+ "invoke": "tbtools gxf gxfFix <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.kaks",
+ "name": "kaks",
+ "group": "tree",
+ "kind": "direct",
+ "class": "biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator",
+ "description": "成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）",
+ "invoke": "tbtools tree kaks <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

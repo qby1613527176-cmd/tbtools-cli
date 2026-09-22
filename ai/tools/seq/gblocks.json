@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.gblocks",
+ "name": "gblocks",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "JgblocksCli",
+ "description": "30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）",
+ "invoke": "tbtools seq gblocks <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

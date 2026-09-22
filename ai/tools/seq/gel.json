@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.gel",
+ "name": "gel",
+ "group": "seq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JIGplotToolkit.GelImage.Marker",
+ "description": "凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
+ "invoke": "tbtools seq gel <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "lanes",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "LaneLabels 逗号分隔"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

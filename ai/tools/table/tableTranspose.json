@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableTranspose",
+ "name": "tableTranspose",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableTransposer",
+ "description": "表格转置（第95引擎，TableTran",
+ "invoke": "tbtools table tableTranspose <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

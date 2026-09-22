@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.chipseq.peakdist",
+ "name": "peakdist",
+ "group": "chipseq",
+ "kind": "bridge",
+ "class": "PeakDistCli",
+ "description": "peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]",
+ "invoke": "tbtools chipseq peakdist <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

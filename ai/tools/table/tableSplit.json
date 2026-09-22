@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableSplit",
+ "name": "tableSplit",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableSplitByCol",
+ "description": "tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]",
+ "invoke": "tbtools table tableSplit <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

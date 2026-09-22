@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.makemotif",
+ "name": "makemotif",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "MakeMotifCli",
+ "description": "等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）",
+ "invoke": "tbtools seq makemotif <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

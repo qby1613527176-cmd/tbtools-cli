@@ -1,0 +1,38 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.sets.venn3",
+ "name": "venn3",
+ "group": "sets",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn3",
+ "description": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>",
+ "invoke": "tbtools sets venn3 <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "list1",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "list2",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "list3",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

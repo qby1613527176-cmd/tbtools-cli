@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.filesplit",
+ "name": "filesplit",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "FileSplitCli",
+ "description": "filesplit: filesplit <inFile> <numParts>",
+ "invoke": "tbtools engine FileSplitCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

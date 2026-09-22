@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.mountain",
+ "name": "mountain",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "MountainPlotCli",
+ "description": "mountain: mountain <fold.txt> <out.tsv>",
+ "invoke": "tbtools expr mountain <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

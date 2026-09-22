@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.FastaIDRenamer",
+ "name": "FastaIDRenamer",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.FastaIDRenamer",
+ "description": "FastaIDRenamer: FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer",
+ "invoke": "tbtools tool FastaIDRenamer <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

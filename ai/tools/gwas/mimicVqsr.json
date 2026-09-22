@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gwas.mimicVqsr",
+ "name": "mimicVqsr",
+ "group": "gwas",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GWAS.MimicVqsrCutoffFind",
+ "description": "VCF 质量指标（QD/MQ/FS/SOR；GWAS）",
+ "invoke": "tbtools gwas mimicVqsr <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

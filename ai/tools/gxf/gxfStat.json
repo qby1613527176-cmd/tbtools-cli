@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfStat",
+ "name": "gxfStat",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat",
+ "description": "GFF 统计（基因/mRNA/外显子/内含子/C",
+ "invoke": "tbtools gxf gxfStat <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.exprCorr",
+ "name": "exprCorr",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "ExprCorrCli",
+ "description": "exprCorr: exprCorr <inFPKM> <outCorrMat>",
+ "invoke": "tbtools expr exprCorr <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

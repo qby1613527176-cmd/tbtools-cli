@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.chipseq.pileup",
+ "name": "pileup",
+ "group": "chipseq",
+ "kind": "bridge",
+ "class": "PileUpCli",
+ "description": "pileup: pileup <blast.xml> <out.svg> [--query NAME]",
+ "invoke": "tbtools chipseq pileup <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

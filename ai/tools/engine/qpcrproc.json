@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.qpcrproc",
+ "name": "qpcrproc",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "QpcrProcCli",
+ "description": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>",
+ "invoke": "tbtools engine QpcrProcCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

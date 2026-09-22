@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.extractGff3Region",
+ "name": "extractGff3Region",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.GFF.ExtractGff3Region",
+ "description": "extractGff3Region: extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 Region",
+ "invoke": "tbtools tool extractGff3Region <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

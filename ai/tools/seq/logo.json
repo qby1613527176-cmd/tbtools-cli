@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.logo",
+ "name": "logo",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "序列 LOGO 图",
+ "invoke": "tbtools seq logo <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

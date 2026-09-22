@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.qpcrExp",
+ "name": "qpcrExp",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "QpcrDdctCli",
+ "description": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
+ "invoke": "tbtools expr qpcrExp <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

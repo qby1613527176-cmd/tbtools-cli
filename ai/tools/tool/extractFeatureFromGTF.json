@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.extractFeatureFromGTF",
+ "name": "extractFeatureFromGTF",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.GTF.ExtractFeaturefromGTFandGenome",
+ "description": "extractFeatureFromGTF: extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome) — Extract Featurefrom G T Fand Genome",
+ "invoke": "tbtools tool extractFeatureFromGTF <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

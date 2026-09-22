@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.treeRooting",
+ "name": "treeRooting",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "(alias of rooting) MAD 系统发育定根",
+ "invoke": "tbtools tree treeRooting <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "nwk",
+   "role": "file",
+   "format": "newick",
+   "required": true,
+   "note": "需枝长"
+  }
+ ],
+ "outputs": [
+  "nwk"
+ ],
+ "status": "stable"
+}

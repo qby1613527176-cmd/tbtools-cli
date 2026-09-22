@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.notung",
+ "name": "notung",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
+ "invoke": "tbtools tree notung <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "tree",
+   "role": "file",
+   "format": "newick",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "gene_tree",
+   "role": "file",
+   "format": "newick",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "nwk"
+ ],
+ "status": "stable"
+}

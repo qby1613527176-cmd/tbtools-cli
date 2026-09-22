@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.genePairExpCorr",
+ "name": "genePairExpCorr",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.GenePairExpCorr",
+ "description": "genePairExpCorr: genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr",
+ "invoke": "tbtools tool genePairExpCorr <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

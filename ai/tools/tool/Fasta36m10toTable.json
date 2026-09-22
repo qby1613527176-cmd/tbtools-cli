@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.Fasta36m10toTable",
+ "name": "Fasta36m10toTable",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastaAligner.Fasta36m10toTable",
+ "description": "Fasta36m10toTable: Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to Table",
+ "invoke": "tbtools tool Fasta36m10toTable <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

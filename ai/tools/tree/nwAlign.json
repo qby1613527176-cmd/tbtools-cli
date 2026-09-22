@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.nwAlign",
+ "name": "nwAlign",
+ "group": "tree",
+ "kind": "bridge",
+ "class": "NeedlemanWunschCli",
+ "description": "Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）",
+ "invoke": "tbtools tree nwAlign <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "beta"
+}

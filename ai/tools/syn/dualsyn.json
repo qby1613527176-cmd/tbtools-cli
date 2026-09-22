@@ -1,0 +1,34 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.dualsyn",
+ "name": "dualsyn",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "DualSynCli",
+ "description": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"]",
+ "invoke": "tbtools syn dualsyn <args...>",
+ "capabilities": [
+  "synteny",
+  "visualization"
+ ],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "简化 GFF"
+  },
+  {
+   "name": "pairs",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

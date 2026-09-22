@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.famerge",
+ "name": "famerge",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "FastaMergerCli",
+ "description": "33 FastaMergerAndSpliter.Merge）",
+ "invoke": "tbtools seq famerge <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.quickGeneFamilyIdentification",
+ "name": "quickGeneFamilyIdentification",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
+ "description": "quickGeneFamilyIdentification: quickGeneFamilyIdentification (tool, QuickGeneFamilyIdentification) — Quick Gene Family Identification",
+ "invoke": "tbtools tool quickGeneFamilyIdentification <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

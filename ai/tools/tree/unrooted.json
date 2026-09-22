@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.unrooted",
+ "name": "unrooted",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "无根树可视化",
+ "invoke": "tbtools tree unrooted <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

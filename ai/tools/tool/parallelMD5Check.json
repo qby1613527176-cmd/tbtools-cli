@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.parallelMD5Check",
+ "name": "parallelMD5Check",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.FileUtils.ParallelMD5Check",
+ "description": "parallelMD5Check: parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5 Check",
+ "invoke": "tbtools tool parallelMD5Check <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

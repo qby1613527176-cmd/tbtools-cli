@@ -1,0 +1,52 @@
+{
+ "TB001_INVALID_ARGUMENT": {
+  "exit": 1,
+  "retryable": false,
+  "action": "check argument names/values, see --help"
+ },
+ "TB002_FILE_NOT_FOUND": {
+  "exit": 2,
+  "retryable": false,
+  "action": "check the input file path exists"
+ },
+ "TB003_INPUT_FORMAT_ERROR": {
+  "exit": 3,
+  "retryable": false,
+  "action": "check input format/columns/separator"
+ },
+ "TB004_INPUT_SCHEMA_ERROR": {
+  "exit": 3,
+  "retryable": false,
+  "action": "input does not match required schema"
+ },
+ "TB005_DEPENDENCY_MISSING": {
+  "exit": 1,
+  "retryable": false,
+  "action": "install missing dependency (see doctor)"
+ },
+ "TB007_TOOL_TIMEOUT": {
+  "exit": 1,
+  "retryable": true,
+  "action": "retry with more time or smaller input"
+ },
+ "TB008_OUT_OF_MEMORY": {
+  "exit": 4,
+  "retryable": true,
+  "action": "increase memory in config.toml [defaults]"
+ },
+ "TB009_ENGINE_CRASH": {
+  "exit": 1,
+  "retryable": false,
+  "action": "engine-level defect; see PITFALL/docs"
+ },
+ "TB010_OUTPUT_MISSING": {
+  "exit": 1,
+  "retryable": false,
+  "action": "output not produced; check engine"
+ },
+ "TB012_INTERNAL_ERROR": {
+  "exit": 1,
+  "retryable": false,
+  "action": "wrapper bug; report with --verbose"
+ }
+}

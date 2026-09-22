@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.draw",
+ "name": "draw",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "树+注释图（TreeTreeTree 多轨道）",
+ "invoke": "tbtools tree draw <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

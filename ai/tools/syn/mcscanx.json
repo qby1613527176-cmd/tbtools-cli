@@ -1,0 +1,34 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.mcscanx",
+ "name": "mcscanx",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "MCScanXCli",
+ "description": "共线性检测",
+ "invoke": "tbtools syn mcscanx <args...>",
+ "capabilities": [
+  "synteny",
+  "collinearity"
+ ],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "chr\tgene\tstart\tend"
+  },
+  {
+   "name": "blast",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "tab6"
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

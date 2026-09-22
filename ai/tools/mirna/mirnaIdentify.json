@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.mirna.mirnaIdentify",
+ "name": "mirnaIdentify",
+ "group": "mirna",
+ "kind": "bridge",
+ "class": "MirIdentifyCli",
+ "description": "78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）",
+ "invoke": "tbtools mirna mirnaIdentify <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

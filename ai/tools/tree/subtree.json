@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.subtree",
+ "name": "subtree",
+ "group": "tree",
+ "kind": "bridge",
+ "class": "GetSubNewickTreeCli",
+ "description": "23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）",
+ "invoke": "tbtools tree subtree <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.tandemDupFinder",
+ "name": "tandemDupFinder",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.TandemDupFinder",
+ "description": "tandemDupFinder: tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder",
+ "invoke": "tbtools tool tandemDupFinder <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

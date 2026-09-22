@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.fastq.fqTrim",
+ "name": "fqTrim",
+ "group": "fastq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Fastq.FastqParallelTrimmer",
+ "description": "fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]",
+ "invoke": "tbtools fastq fqTrim <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

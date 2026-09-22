@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.goParse",
+ "name": "goParse",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GeneOntology.littleTools.GOtermParser",
+ "description": "GO 词典解析（第103",
+ "invoke": "tbtools table goParse <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.mggxf",
+ "name": "mggxf",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "MgGxfCli",
+ "description": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked",
+ "invoke": "tbtools engine MgGxfCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

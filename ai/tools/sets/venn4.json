@@ -1,0 +1,45 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.sets.venn4",
+ "name": "venn4",
+ "group": "sets",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn4Ellipse",
+ "description": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
+ "invoke": "tbtools sets venn4 <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "list1",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "list2",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "list3",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "list4",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

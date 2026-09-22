@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.blastXmlToTable",
+ "name": "blastXmlToTable",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BlastXml.BlastXmlToSelfDefinedTable",
+ "description": "blastXmlToTable: blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast Xml To Self Defined Table",
+ "invoke": "tbtools tool blastXmlToTable <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

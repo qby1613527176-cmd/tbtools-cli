@@ -1,0 +1,35 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.genestructure",
+ "name": "genestructure",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
+ "invoke": "tbtools seq genestructure <args...>",
+ "capabilities": [
+  "gene_structure",
+  "annotation",
+  "visualization"
+ ],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "ids",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

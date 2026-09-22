@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.goAnnoPipe",
+ "name": "goAnnoPipe",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe",
+ "description": "goAnnoPipe: goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe",
+ "invoke": "tbtools tool goAnnoPipe <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

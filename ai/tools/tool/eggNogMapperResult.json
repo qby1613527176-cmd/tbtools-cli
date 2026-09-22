@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.eggNogMapperResult",
+ "name": "eggNogMapperResult",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.eggNogMapperResult",
+ "description": "eggNogMapperResult: eggNogMapperResult (tool, eggNogMapperResult) — egg Nog Mapper Result",
+ "invoke": "tbtools tool eggNogMapperResult <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,38 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.circos",
+ "name": "circos",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "CircosCli",
+ "description": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
+ "invoke": "tbtools syn circos <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "chrLen",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "link",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "genePos",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

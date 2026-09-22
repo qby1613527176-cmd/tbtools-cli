@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.eggnog",
+ "name": "eggnog",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "EggnogCli",
+ "description": "eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）",
+ "invoke": "tbtools engine EggnogCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

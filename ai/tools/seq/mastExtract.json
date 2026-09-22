@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.mastExtract",
+ "name": "mastExtract",
+ "group": "seq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML",
+ "description": "从 MAST XML 提取命中",
+ "invoke": "tbtools seq mastExtract <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

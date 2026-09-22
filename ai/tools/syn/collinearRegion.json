@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.collinearRegion",
+ "name": "collinearRegion",
+ "group": "syn",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
+ "description": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
+ "invoke": "tbtools syn collinearRegion <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.autoRemoteBlast",
+ "name": "autoRemoteBlast",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.BLAST.remoteblast",
+ "description": "autoRemoteBlast: autoRemoteBlast (tool, remoteblast) — remoteblast",
+ "invoke": "tbtools tool autoRemoteBlast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

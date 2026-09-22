@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.multiEfp",
+ "name": "multiEfp",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "MultiSuperHeatCli",
+ "description": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
+ "invoke": "tbtools expr multiEfp <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "tga",
+   "role": "file",
+   "format": "tga",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "expMat",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

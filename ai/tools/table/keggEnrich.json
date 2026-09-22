@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.keggEnrich",
+ "name": "keggEnrich",
+ "group": "table",
+ "kind": "bridge",
+ "class": "KeggEnrichCli",
+ "description": "KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
+ "invoke": "tbtools table keggEnrich <args...>",
+ "capabilities": [
+  "enrichment"
+ ],
+ "inputs": [
+  {
+   "name": "background",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "target",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.hmm.hmmerSearch",
+ "name": "hmmerSearch",
+ "group": "hmm",
+ "kind": "manual",
+ "class": "",
+ "description": "Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
+ "invoke": "tbtools hmm hmmerSearch <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "hmm",
+   "role": "file",
+   "format": "hmm",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "seq",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

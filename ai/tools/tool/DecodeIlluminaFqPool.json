@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.DecodeIlluminaFqPool",
+ "name": "DecodeIlluminaFqPool",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Fastq.DecodeIlluminaFqPool",
+ "description": "DecodeIlluminaFqPool: DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode Illumina Fq Pool",
+ "invoke": "tbtools tool DecodeIlluminaFqPool <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.findblockmultiple",
+ "name": "findblockmultiple",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "FindBlockMultipleCli",
+ "description": "findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou",
+ "invoke": "tbtools syn findblockmultiple <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

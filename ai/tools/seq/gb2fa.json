@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.gb2fa",
+ "name": "gb2fa",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "GenBank2FastaCli",
+ "description": "36 genBank2Fasta；头含 locus/accession/organism/definition）",
+ "invoke": "tbtools seq gb2fa <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

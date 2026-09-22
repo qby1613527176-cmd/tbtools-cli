@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.newickRename",
+ "name": "newickRename",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
+ "invoke": "tbtools tree newickRename <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "nwk",
+   "role": "file",
+   "format": "newick",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "nwk"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.pca",
+ "name": "pca",
+ "group": "expr",
+ "kind": "manual",
+ "class": "",
+ "description": "PCA 图",
+ "invoke": "tbtools expr pca <args...>",
+ "capabilities": [
+  "dimension_reduction",
+  "expression_matrix"
+ ],
+ "inputs": [
+  {
+   "name": "matrix",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "表达矩阵"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

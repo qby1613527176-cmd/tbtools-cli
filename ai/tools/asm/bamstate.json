@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.bamstate",
+ "name": "bamstate",
+ "group": "asm",
+ "kind": "bridge",
+ "class": "BamStateCli",
+ "description": "bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]",
+ "invoke": "tbtools asm bamstate <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

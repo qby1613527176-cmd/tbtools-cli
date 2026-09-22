@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfGenepos",
+ "name": "gxfGenepos",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GXFToGenePosFile",
+ "description": "G",
+ "invoke": "tbtools gxf gxfGenepos <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

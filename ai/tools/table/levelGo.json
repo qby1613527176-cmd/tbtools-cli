@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.levelGo",
+ "name": "levelGo",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GeneOntology.Grapher.LevelDoer",
+ "description": "levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]",
+ "invoke": "tbtools table levelGo <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

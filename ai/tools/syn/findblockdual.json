@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.findblockdual",
+ "name": "findblockdual",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "FindBlockDualCli",
+ "description": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
+ "invoke": "tbtools syn findblockdual <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

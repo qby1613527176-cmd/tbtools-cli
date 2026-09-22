@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.gfa",
+ "name": "gfa",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "VizGFACli",
+ "description": "gfa: gfa <in.gfa> <out> [width] [height]",
+ "invoke": "tbtools seq gfa <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

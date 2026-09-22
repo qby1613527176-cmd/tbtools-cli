@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.colorscheme",
+ "name": "colorscheme",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "ColorSchemeCli",
+ "description": "colorscheme: colorscheme <inTab> <outTab> <refColIndex>",
+ "invoke": "tbtools expr colorscheme <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

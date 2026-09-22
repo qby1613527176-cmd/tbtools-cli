@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.batchReplace",
+ "name": "batchReplace",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.BatchStringReplace",
+ "description": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
+ "invoke": "tbtools table batchReplace <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

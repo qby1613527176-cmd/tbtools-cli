@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.rnaplot",
+ "name": "rnaplot",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "RNAplotCli",
+ "description": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
+ "invoke": "tbtools seq rnaplot <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "seq",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "platform-limited"
+}

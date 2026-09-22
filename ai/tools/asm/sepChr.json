@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.sepChr",
+ "name": "sepChr",
+ "group": "asm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles",
+ "description": "sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>",
+ "invoke": "tbtools asm sepChr <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

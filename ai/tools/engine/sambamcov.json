@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.sambamcov",
+ "name": "sambamcov",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "SamBamCovCli",
+ "description": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]",
+ "invoke": "tbtools engine SamBamCovCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.regionBlast",
+ "name": "regionBlast",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.BLAST.wholeGenomeBlastN.regionBlast",
+ "description": "regionBlast: regionBlast (tool, regionBlast) — region Blast",
+ "invoke": "tbtools tool regionBlast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

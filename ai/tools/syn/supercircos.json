@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.supercircos",
+ "name": "supercircos",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "SuperCircosCli",
+ "description": "supercircos: supercircos <config.cfg> <out> [width] [height]",
+ "invoke": "tbtools syn supercircos <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "config",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": "[chrLen] 等节"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

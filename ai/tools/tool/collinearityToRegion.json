@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.collinearityToRegion",
+ "name": "collinearityToRegion",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
+ "description": "collinearityToRegion: collinearityToRegion (tool, CollinearityToRegion) — Collinearity To Region",
+ "invoke": "tbtools tool collinearityToRegion <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

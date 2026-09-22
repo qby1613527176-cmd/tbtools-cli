@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.visualizeblock",
+ "name": "visualizeblock",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "VisualizeCli",
+ "description": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
+ "invoke": "tbtools syn visualizeblock <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

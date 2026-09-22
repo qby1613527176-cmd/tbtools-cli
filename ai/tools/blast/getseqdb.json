@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.blast.getseqdb",
+ "name": "getseqdb",
+ "group": "blast",
+ "kind": "manual",
+ "class": "",
+ "description": "35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，",
+ "invoke": "tbtools blast getseqdb <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.gbar",
+ "name": "gbar",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "GroupedBarCli",
+ "description": "分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）",
+ "invoke": "tbtools expr gbar <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

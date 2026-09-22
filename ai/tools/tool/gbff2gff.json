@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.gbff2gff",
+ "name": "gbff2gff",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.GBff.gbff2gff",
+ "description": "gbff2gff: gbff2gff (tool, gbff2gff) — gbff2gff",
+ "invoke": "tbtools tool gbff2gff <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

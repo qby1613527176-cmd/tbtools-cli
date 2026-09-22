@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableUniq",
+ "name": "tableUniq",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableUniq",
+ "description": "tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|",
+ "invoke": "tbtools table tableUniq <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

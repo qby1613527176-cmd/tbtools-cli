@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.ctgGroup",
+ "name": "ctgGroup",
+ "group": "asm",
+ "kind": "bridge",
+ "class": "CtgGroupCli",
+ "description": "ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>",
+ "invoke": "tbtools asm ctgGroup <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.rooting",
+ "name": "rooting",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "MAD 系统发育定根",
+ "invoke": "tbtools tree rooting <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

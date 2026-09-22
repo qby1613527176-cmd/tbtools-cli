@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.hmm.hmmExtract",
+ "name": "hmmExtract",
+ "group": "hmm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.LinuxPipe.hmmInfoExtracter",
+ "description": "从 HMM 文件按 NAM",
+ "invoke": "tbtools hmm hmmExtract <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

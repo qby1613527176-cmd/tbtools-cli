@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.sRNAseqCollasper",
+ "name": "sRNAseqCollasper",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.sRNA.Tools.sRNAseqCollasper",
+ "description": "sRNAseqCollasper: sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq Collasper",
+ "invoke": "tbtools tool sRNAseqCollasper <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

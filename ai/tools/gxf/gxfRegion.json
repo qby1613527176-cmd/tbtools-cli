@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfRegion",
+ "name": "gxfRegion",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GXFRegionSummary",
+ "description": "gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]",
+ "invoke": "tbtools gxf gxfRegion <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.mirna.mirnatarget",
+ "name": "mirnatarget",
+ "group": "mirna",
+ "kind": "manual",
+ "class": "",
+ "description": "原表驱动误把本",
+ "invoke": "tbtools mirna mirnatarget <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

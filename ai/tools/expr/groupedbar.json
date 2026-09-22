@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.groupedbar",
+ "name": "groupedbar",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "GroupedBarCli",
+ "description": "分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load 崩溃——引擎缺陷）",
+ "invoke": "tbtools expr groupedbar <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "beta"
+}

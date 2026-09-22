@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.hicEnzyme",
+ "name": "hicEnzyme",
+ "group": "asm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GenomeAssembly.HiCRestrictionEnzymePrediction",
+ "description": "HiC 限制酶预测（第76引擎）",
+ "invoke": "tbtools asm hicEnzyme <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

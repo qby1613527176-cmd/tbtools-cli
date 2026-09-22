@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.seqlentrack",
+ "name": "seqlentrack",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "SeqLenTrackCli",
+ "description": "seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]",
+ "invoke": "tbtools seq seqlentrack <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

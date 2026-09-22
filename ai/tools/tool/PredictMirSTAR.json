@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.PredictMirSTAR",
+ "name": "PredictMirSTAR",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.RNAfold.PredictMirSTAR",
+ "description": "PredictMirSTAR: PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R",
+ "invoke": "tbtools tool PredictMirSTAR <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

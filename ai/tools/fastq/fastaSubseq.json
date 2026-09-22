@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.fastq.fastaSubseq",
+ "name": "fastaSubseq",
+ "group": "fastq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Fasta.ExtractFastaSubseq",
+ "description": "按坐标提子序列（第92引擎，Ext",
+ "invoke": "tbtools fastq fastaSubseq <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

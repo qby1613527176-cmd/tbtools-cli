@@ -1,0 +1,34 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.motif",
+ "name": "motif",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "Motif 分布图（MEME XML）",
+ "invoke": "tbtools seq motif <args...>",
+ "capabilities": [
+  "motif",
+  "visualization"
+ ],
+ "inputs": [
+  {
+   "name": "meme_xml",
+   "role": "file",
+   "format": "xml",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "ids",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

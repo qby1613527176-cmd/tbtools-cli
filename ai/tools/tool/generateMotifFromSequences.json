@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.generateMotifFromSequences",
+ "name": "generateMotifFromSequences",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.MEMEsuiteWrapper.GenerateMotifFromSequences",
+ "description": "generateMotifFromSequences: generateMotifFromSequences (tool, GenerateMotifFromSequences) — Generate Motif From Sequences",
+ "invoke": "tbtools tool generateMotifFromSequences <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

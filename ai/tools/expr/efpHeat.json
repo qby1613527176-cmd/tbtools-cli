@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.efpHeat",
+ "name": "efpHeat",
+ "group": "expr",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap",
+ "description": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
+ "invoke": "tbtools expr efpHeat <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "tga",
+   "role": "file",
+   "format": "tga",
+   "required": true,
+   "note": "TrueColor type2"
+  },
+  {
+   "name": "expMat",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

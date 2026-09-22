@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableAppend",
+ "name": "tableAppend",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableAppend",
+ "description": "",
+ "invoke": "tbtools table tableAppend <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

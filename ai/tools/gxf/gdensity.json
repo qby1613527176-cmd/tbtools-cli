@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gdensity",
+ "name": "gdensity",
+ "group": "gxf",
+ "kind": "bridge",
+ "class": "GeneDensityCli",
+ "description": "基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）",
+ "invoke": "tbtools gxf gdensity <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.extractFasta",
+ "name": "extractFasta",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Fasta.ExtractFasta",
+ "description": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
+ "invoke": "tbtools tool extractFasta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

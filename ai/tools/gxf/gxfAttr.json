@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfAttr",
+ "name": "gxfAttr",
+ "group": "gxf",
+ "kind": "manual",
+ "class": "",
+ "description": "GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
+ "invoke": "tbtools gxf gxfAttr <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

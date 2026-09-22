@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.structure",
+ "name": "structure",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "基因结构图（外显子/UTR 从 GFF）",
+ "invoke": "tbtools seq structure <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

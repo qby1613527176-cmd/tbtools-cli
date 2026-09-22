@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.amazingmeta",
+ "name": "amazingmeta",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "AmazingMetaCli",
+ "description": "amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [",
+ "invoke": "tbtools seq amazingmeta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

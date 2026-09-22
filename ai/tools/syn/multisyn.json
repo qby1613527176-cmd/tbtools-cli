@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.multisyn",
+ "name": "multisyn",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "SeveralSpeciesCli",
+ "description": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
+ "invoke": "tbtools syn multisyn <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "gxf_lst",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.preparespecies",
+ "name": "preparespecies",
+ "group": "asm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.ComparativeGenomics.PrepareSpecies",
+ "description": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
+ "invoke": "tbtools asm preparespecies <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "genome",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "fasta"
+ ],
+ "status": "stable"
+}

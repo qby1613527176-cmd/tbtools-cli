@@ -259,7 +259,60 @@ def main():
     print(f"✅ 已写入 {META}: {len(meta)} 命令")
     if render:
         render_commands_md(meta)
+        render_ai_manifest(meta)
     return 0
+
+def render_ai_manifest(meta):
+    """AI 机器接口层(ai/): 工具索引/能力索引/单工具 schema/错误码(GLM P1 #38-39)。
+
+    由 gen_metadata --render 统一生成, 与 metadata 单一数据源联动。
+    """
+    import json as _json, os as _os
+    ai_dir = _os.path.join(ROOT, "ai")
+    _os.makedirs(_os.path.join(ai_dir, "tools"), exist_ok=True)
+    import shutil as _sh
+    for _sub in _os.listdir(_os.path.join(ai_dir, "tools")):
+        _sh.rmtree(_os.path.join(ai_dir, "tools", _sub), ignore_errors=True)  # 防残影(与 metadata 全重建一致)
+    with open(_os.path.join(ai_dir, "tool-index.jsonl"), "w", encoding="utf-8") as f:
+        for name, v in meta.items():
+            entry = {"id": f"tbtools.{v.get('group','engine')}.{name}", "name": name,
+                     "group": v.get('group', 'engine'), "kind": v.get('kind', '?'),
+                     "capabilities": v.get('capabilities', []),
+                     "input_formats": sorted({i.get('format','') for i in v.get('inputs', []) if i.get('format')}),
+                     "output_formats": v.get('outputs', []),
+                     "description": (v.get('help','') or '').replace('\n', ' ')[:160]}
+            f.write(_json.dumps(entry, ensure_ascii=False) + '\n')
+    cap_idx = {}
+    for name, v in meta.items():
+        for c in v.get('capabilities', []):
+            cap_idx.setdefault(c, []).append(name)
+    _json.dump(cap_idx, open(_os.path.join(ai_dir, "capability-index.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    for name, v in meta.items():
+        g = v.get('group', 'engine')
+        d = _os.path.join(ai_dir, "tools", g)
+        _os.makedirs(d, exist_ok=True)
+        schema = {"schema_version": "1.0", "id": f"tbtools.{g}.{name}", "name": name, "group": g,
+                  "kind": v.get('kind', '?'), "class": v.get('class', ''),
+                  "description": (v.get('help','') or '').split('#')[-1].strip(),
+                  "invoke": f"tbtools {g} {name} <args...>" if g != 'engine' else f"tbtools engine {v.get('class','')} key=value",
+                  "capabilities": v.get('capabilities', []), "inputs": v.get('inputs', []),
+                  "outputs": v.get('outputs', []), "status": v.get('status', 'stable')}
+        _json.dump(schema, open(_os.path.join(d, f"{name}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    try:
+        from tbtools_cli.core import ERROR_CODES
+        _json.dump(ERROR_CODES, open(_os.path.join(ai_dir, "error-codes.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    except Exception:
+        pass
+    manifest = {"schema_version": "1.0",
+                "description": "tbtools-cli AI 机器接口层(Agent 程序化发现/理解/调用工具)",
+                "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "tools/<group>/<cmd>.json"],
+                "usage": {"discover": "tbtools search --input gff3 --output svg --json",
+                          "describe": "tbtools tool-describe <cmd> --json",
+                          "preflight": "tbtools tool-validate <cmd> <inputs...> --json",
+                          "execute": "tbtools tool-run <args...> --json",
+                          "provenance": "tbtools tool-provenance <output>"}}
+    _json.dump(manifest, open(_os.path.join(ai_dir, "manifest.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    print(f"✅ ai/ 生成: 工具索引 {len(meta)} + 能力 {len(cap_idx)} + 单工具 schema + 错误码")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.gxffilter",
+ "name": "gxffilter",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "GxfFilterCli",
+ "description": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>",
+ "invoke": "tbtools engine GxfFilterCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.markertools",
+ "name": "markertools",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "MarkerToolsCli",
+ "description": "markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi",
+ "invoke": "tbtools engine MarkerToolsCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.chipseq.peaktss",
+ "name": "peaktss",
+ "group": "chipseq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakTssHeatMap",
+ "description": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
+ "invoke": "tbtools chipseq peaktss <args...>",
+ "capabilities": [
+  "chip_seq"
+ ],
+ "inputs": [
+  {
+   "name": "gxf",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "peaks",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "MACS2"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.ReciprocalBlast",
+ "name": "ReciprocalBlast",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
+ "description": "ReciprocalBlast: ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast",
+ "invoke": "tbtools tool ReciprocalBlast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

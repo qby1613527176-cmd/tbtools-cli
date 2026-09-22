@@ -1,0 +1,92 @@
+{
+ "synteny": [
+  "dotplot",
+  "dualsyn",
+  "mcscanx"
+ ],
+ "visualization": [
+  "dotplot",
+  "dualsyn",
+  "msa",
+  "motif",
+  "volcano",
+  "heatmap",
+  "dehist",
+  "msy",
+  "genestructure",
+  "seqlogo"
+ ],
+ "enrichment": [
+  "goEnrich",
+  "keggEnrich",
+  "gsea"
+ ],
+ "collinearity": [
+  "mcscanx"
+ ],
+ "chip_seq": [
+  "peaktss"
+ ],
+ "translation": [
+  "sixframe"
+ ],
+ "sequence": [
+  "sixframe",
+  "longestorf"
+ ],
+ "orf_prediction": [
+  "longestorf"
+ ],
+ "phylogeny": [
+  "iqtree"
+ ],
+ "alignment": [
+  "trimal",
+  "msa",
+  "muscle"
+ ],
+ "filtering": [
+  "trimal"
+ ],
+ "rna_seq": [
+  "tpmCalc",
+  "kallisto"
+ ],
+ "normalization": [
+  "tpmCalc"
+ ],
+ "motif": [
+  "motif",
+  "seqlogo"
+ ],
+ "differential_expression": [
+  "volcano",
+  "dehist"
+ ],
+ "expression_matrix": [
+  "heatmap",
+  "pca"
+ ],
+ "clustering": [
+  "heatmap",
+  "hclust"
+ ],
+ "dimension_reduction": [
+  "pca"
+ ],
+ "distance": [
+  "hclust"
+ ],
+ "quantification": [
+  "kallisto"
+ ],
+ "microsynteny": [
+  "msy"
+ ],
+ "gene_structure": [
+  "genestructure"
+ ],
+ "annotation": [
+  "genestructure"
+ ]
+}

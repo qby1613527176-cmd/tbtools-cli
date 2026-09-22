@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.blast.quickAnno",
+ "name": "quickAnno",
+ "group": "blast",
+ "kind": "manual",
+ "class": "",
+ "description": "diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）",
+ "invoke": "tbtools blast quickAnno <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.blastXmlSummaryTable",
+ "name": "blastXmlSummaryTable",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BlastXml.BlastXMLSummaryTable",
+ "description": "blastXmlSummaryTable: blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X M L Summary Table",
+ "invoke": "tbtools tool blastXmlSummaryTable <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

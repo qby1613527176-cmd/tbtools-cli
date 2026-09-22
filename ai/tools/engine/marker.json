@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.marker",
+ "name": "marker",
+ "group": "engine",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign",
+ "description": "marker: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe",
+ "invoke": "tbtools engine biocjava.bioDoer.markerDesign.BigMarkerRandomDesign key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.smart",
+ "name": "smart",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
+ "invoke": "tbtools seq smart <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "seq",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.genelocation",
+ "name": "genelocation",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation",
+ "description": "genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph",
+ "invoke": "tbtools gxf genelocation <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.gsea",
+ "name": "gsea",
+ "group": "table",
+ "kind": "manual",
+ "class": "",
+ "description": "GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
+ "invoke": "tbtools table gsea <args...>",
+ "capabilities": [
+  "enrichment"
+ ],
+ "inputs": [
+  {
+   "name": "expr",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "cls",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "xls"
+ ],
+ "status": "stable"
+}

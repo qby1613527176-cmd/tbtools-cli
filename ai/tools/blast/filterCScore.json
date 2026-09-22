@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.blast.filterCScore",
+ "name": "filterCScore",
+ "group": "blast",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.BLAST.FilterBlastResultByCScore",
+ "description": "filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]",
+ "invoke": "tbtools blast filterCScore <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

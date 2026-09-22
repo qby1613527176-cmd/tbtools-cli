@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.keggEnrichment",
+ "name": "keggEnrichment",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment",
+ "description": "keggEnrichment: keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment",
+ "invoke": "tbtools tool keggEnrichment <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

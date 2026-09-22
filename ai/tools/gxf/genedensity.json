@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.genedensity",
+ "name": "genedensity",
+ "group": "gxf",
+ "kind": "bridge",
+ "class": "GeneDensityCli",
+ "description": "genedensity: genedensity <in.gff3> <out.tsv> [binSize]",
+ "invoke": "tbtools gxf genedensity <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

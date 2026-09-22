@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.simpleBatchProcess",
+ "name": "simpleBatchProcess",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Aligner.NeedleMan.SimpleBatchProcess",
+ "description": "simpleBatchProcess: simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch Process",
+ "invoke": "tbtools tool simpleBatchProcess <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

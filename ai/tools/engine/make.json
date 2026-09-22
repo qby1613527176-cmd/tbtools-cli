@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.make",
+ "name": "make",
+ "group": "engine",
+ "kind": "manual",
+ "class": "",
+ "description": "工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）",
+ "invoke": "tbtools engine  key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

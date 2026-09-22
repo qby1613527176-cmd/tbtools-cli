@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.fastqParallelTrimmer",
+ "name": "fastqParallelTrimmer",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Fastq.FastqParallelTrimmer",
+ "description": "fastqParallelTrimmer: fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Parallel Trimmer",
+ "invoke": "tbtools tool fastqParallelTrimmer <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,17 @@
+{
+ "schema_version": "1.0",
+ "description": "tbtools-cli AI 机器接口层(Agent 程序化发现/理解/调用工具)",
+ "files": [
+  "tool-index.jsonl",
+  "capability-index.json",
+  "error-codes.json",
+  "tools/<group>/<cmd>.json"
+ ],
+ "usage": {
+  "discover": "tbtools search --input gff3 --output svg --json",
+  "describe": "tbtools tool-describe <cmd> --json",
+  "preflight": "tbtools tool-validate <cmd> <inputs...> --json",
+  "execute": "tbtools tool-run <args...> --json",
+  "provenance": "tbtools tool-provenance <output>"
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.sets.upset",
+ "name": "upset",
+ "group": "sets",
+ "kind": "bridge",
+ "class": "UpSetCli",
+ "description": "UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
+ "invoke": "tbtools sets upset <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "sets",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": "多个集合文件, 末参为输出"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

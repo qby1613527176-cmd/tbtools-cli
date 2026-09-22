@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.barplotter",
+ "name": "barplotter",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "BarPlotterCli",
+ "description": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
+ "invoke": "tbtools expr barplotter <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "synteny",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

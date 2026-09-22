@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.blast.xml2pairwise",
+ "name": "xml2pairwise",
+ "group": "blast",
+ "kind": "manual",
+ "class": "",
+ "description": "25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
+ "invoke": "tbtools blast xml2pairwise <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

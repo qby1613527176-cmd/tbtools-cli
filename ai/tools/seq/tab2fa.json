@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.tab2fa",
+ "name": "tab2fa",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "26 FastaTable.tab2fa）",
+ "invoke": "tbtools seq tab2fa <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.qdot",
+ "name": "qdot",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "QuickGenomeDotCli",
+ "description": "基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
+ "invoke": "tbtools syn qdot <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "4 列简化: Chr\tGene\tStart\tEnd"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

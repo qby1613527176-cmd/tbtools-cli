@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.pafcomp",
+ "name": "pafcomp",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "PafGC",
+ "description": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
+ "invoke": "tbtools syn pafcomp <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

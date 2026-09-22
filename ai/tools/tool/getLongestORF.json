@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.getLongestORF",
+ "name": "getLongestORF",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.ORF.GetLongestORF",
+ "description": "getLongestORF: getLongestORF (tool, GetLongestORF) — Get Longest O R F",
+ "invoke": "tbtools tool getLongestORF <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

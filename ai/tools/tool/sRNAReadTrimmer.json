@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.sRNAReadTrimmer",
+ "name": "sRNAReadTrimmer",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.sRNA.Tools.sRNAReadTrimmer",
+ "description": "sRNAReadTrimmer: sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read Trimmer",
+ "invoke": "tbtools tool sRNAReadTrimmer <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

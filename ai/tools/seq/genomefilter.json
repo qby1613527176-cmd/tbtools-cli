@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.genomefilter",
+ "name": "genomefilter",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
+ "invoke": "tbtools seq genomefilter <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

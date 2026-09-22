@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.bigMarkerRandomDesign",
+ "name": "bigMarkerRandomDesign",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign",
+ "description": "bigMarkerRandomDesign: bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big Marker Random Design",
+ "invoke": "tbtools tool bigMarkerRandomDesign <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

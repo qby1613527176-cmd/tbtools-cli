@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfRename",
+ "name": "gxfRename",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GXFRenamer",
+ "description": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
+ "invoke": "tbtools gxf gxfRename <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

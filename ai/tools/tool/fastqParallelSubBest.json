@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.fastqParallelSubBest",
+ "name": "fastqParallelSubBest",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Fastq.FastqParallelSubBest",
+ "description": "fastqParallelSubBest: fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq Parallel Sub Best",
+ "invoke": "tbtools tool fastqParallelSubBest <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

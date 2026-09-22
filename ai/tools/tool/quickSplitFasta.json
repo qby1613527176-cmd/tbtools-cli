@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.quickSplitFasta",
+ "name": "quickSplitFasta",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.QuickSpiltFasta",
+ "description": "quickSplitFasta: quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta",
+ "invoke": "tbtools tool quickSplitFasta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

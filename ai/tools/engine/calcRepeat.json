@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.calcRepeat",
+ "name": "calcRepeat",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "CalcRepeatCli",
+ "description": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
+ "invoke": "tbtools engine CalcRepeatCli key=value",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "fasta",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "platform-limited"
+}

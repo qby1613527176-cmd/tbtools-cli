@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.degramdom",
+ "name": "degramdom",
+ "group": "tree",
+ "kind": "bridge",
+ "class": "DegramdomCli",
+ "description": "degramdom: degramdom <in.tsv> [out.nwk]",
+ "invoke": "tbtools tree degramdom <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

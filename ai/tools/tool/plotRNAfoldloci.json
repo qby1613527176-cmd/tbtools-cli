@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.plotRNAfoldloci",
+ "name": "plotRNAfoldloci",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold",
+ "description": "plotRNAfoldloci: plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold",
+ "invoke": "tbtools tool plotRNAfoldloci <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

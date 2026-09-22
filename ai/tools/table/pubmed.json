@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.pubmed",
+ "name": "pubmed",
+ "group": "table",
+ "kind": "bridge",
+ "class": "PubmedSearchCli",
+ "description": "45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）",
+ "invoke": "tbtools table pubmed <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "network-required"
+}

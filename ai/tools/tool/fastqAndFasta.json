@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.fastqAndFasta",
+ "name": "fastqAndFasta",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.LinuxPipe.FastqAndFasta",
+ "description": "fastqAndFasta: fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta",
+ "invoke": "tbtools tool fastqAndFasta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

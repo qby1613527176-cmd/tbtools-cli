@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.seqrecommend",
+ "name": "seqrecommend",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "AssemblyRecommandCli",
+ "description": "43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）",
+ "invoke": "tbtools engine AssemblyRecommandCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

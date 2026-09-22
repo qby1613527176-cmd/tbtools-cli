@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.checkPrimer",
+ "name": "checkPrimer",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.Primer.CheckPrimer",
+ "description": "checkPrimer: checkPrimer (tool, CheckPrimer) — Check Primer",
+ "invoke": "tbtools tool checkPrimer <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

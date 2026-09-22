@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.goAnno",
+ "name": "goAnno",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe",
+ "description": "32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️ idmappingDb 须 gzip 格式「ID; ID\\tGO:num; GO:num」；产物 outDir/<输入名>.xls）",
+ "invoke": "tbtools table goAnno <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

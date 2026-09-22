@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.autoMakeBlastDb",
+ "name": "autoMakeBlastDb",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.BLAST.makeblastdb",
+ "description": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb",
+ "invoke": "tbtools tool autoMakeBlastDb <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "fasta",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "db"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.mast2tab",
+ "name": "mast2tab",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "Mast2TabCli",
+ "description": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
+ "invoke": "tbtools seq mast2tab <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

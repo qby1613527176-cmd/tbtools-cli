@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.memerun",
+ "name": "memerun",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "MemeRunCli",
+ "description": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
+ "invoke": "tbtools seq memerun <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "fasta",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "meme"
+ ],
+ "status": "stable"
+}

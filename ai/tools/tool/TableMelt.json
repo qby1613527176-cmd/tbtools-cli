@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.TableMelt",
+ "name": "TableMelt",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Table.TableMelt",
+ "description": "TableMelt: TableMelt (tool, TableMelt) — Table Melt",
+ "invoke": "tbtools tool TableMelt <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

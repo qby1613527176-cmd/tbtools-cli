@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.tauIndex",
+ "name": "tauIndex",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "TauCalcCli",
+ "description": "tauIndex: tauIndex <inExpTab> <outTAU>",
+ "invoke": "tbtools expr tauIndex <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

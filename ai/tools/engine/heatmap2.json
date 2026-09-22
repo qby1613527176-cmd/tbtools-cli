@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.heatmap2",
+ "name": "heatmap2",
+ "group": "engine",
+ "kind": "manual",
+ "class": "",
+ "description": "(alias of heatmap) 热图（表达矩阵）",
+ "invoke": "tbtools engine  key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.target2TablePipe",
+ "name": "target2TablePipe",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.miRNA.Target2TablePipe",
+ "description": "target2TablePipe: target2TablePipe (tool, Target2TablePipe) — Target2 Table Pipe",
+ "invoke": "tbtools tool target2TablePipe <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

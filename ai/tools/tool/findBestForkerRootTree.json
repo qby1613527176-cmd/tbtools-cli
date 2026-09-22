@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.findBestForkerRootTree",
+ "name": "findBestForkerRootTree",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.JIGplotToolkit.newickParser.FindBestForkerRootTree",
+ "description": "findBestForkerRootTree: findBestForkerRootTree (tool, FindBestForkerRootTree) — Find Best Forker Root Tree",
+ "invoke": "tbtools tool findBestForkerRootTree <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

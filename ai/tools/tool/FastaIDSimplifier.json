@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.FastaIDSimplifier",
+ "name": "FastaIDSimplifier",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.FastaIDSimplifier",
+ "description": "FastaIDSimplifier: FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D Simplifier",
+ "invoke": "tbtools tool FastaIDSimplifier <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

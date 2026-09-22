@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.cds2protein",
+ "name": "cds2protein",
+ "group": "tool",
+ "kind": "manual",
+ "class": "",
+ "description": "CDS → 蛋白质翻译",
+ "invoke": "tbtools tool cds2protein <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

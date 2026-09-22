@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.findpath",
+ "name": "findpath",
+ "group": "tree",
+ "kind": "bridge",
+ "class": "FindPathCli",
+ "description": "findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --",
+ "invoke": "tbtools tree findpath <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

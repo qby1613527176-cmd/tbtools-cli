@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.trimal",
+ "name": "trimal",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "QuickTrimALCli",
+ "description": "29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）",
+ "invoke": "tbtools seq trimal <args...>",
+ "capabilities": [
+  "alignment",
+  "filtering"
+ ],
+ "inputs": [
+  {
+   "name": "aln",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "aln"
+ ],
+ "status": "stable"
+}

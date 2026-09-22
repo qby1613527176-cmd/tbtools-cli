@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.partitionconflict",
+ "name": "partitionconflict",
+ "group": "syn",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GenomeAssembly.ParititionByConflictFreq",
+ "description": "partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste",
+ "invoke": "tbtools syn partitionconflict <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.clearchar",
+ "name": "clearchar",
+ "group": "table",
+ "kind": "bridge",
+ "class": "FileCleanerCli",
+ "description": "34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）",
+ "invoke": "tbtools table clearchar <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.prepareFileFromMCScanXtoTBtools",
+ "name": "prepareFileFromMCScanXtoTBtools",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.JIGplotToolkit.Synteny.PrepareFileFromMCScanXtoTBtools",
+ "description": "prepareFileFromMCScanXtoTBtools: prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScanXtoTBtools) — Prepare File From M C Scan Xto T Btools",
+ "invoke": "tbtools tool prepareFileFromMCScanXtoTBtools <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

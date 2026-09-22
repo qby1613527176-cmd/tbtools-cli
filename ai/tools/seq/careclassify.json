@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.careclassify",
+ "name": "careclassify",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "PlantCAREResultClassifyCli",
+ "description": "22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
+ "invoke": "tbtools seq careclassify <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

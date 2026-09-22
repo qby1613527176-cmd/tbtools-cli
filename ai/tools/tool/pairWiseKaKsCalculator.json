@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.pairWiseKaKsCalculator",
+ "name": "pairWiseKaKsCalculator",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator",
+ "description": "pairWiseKaKsCalculator: pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair Wise Ka Ks Calculator",
+ "invoke": "tbtools tool pairWiseKaKsCalculator <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

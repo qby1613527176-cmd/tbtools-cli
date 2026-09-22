@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.distance",
+ "name": "distance",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "DistanceCli",
+ "description": "distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi",
+ "invoke": "tbtools expr distance <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.mirIdentifierBasedOnTargetSo",
+ "name": "mirIdentifierBasedOnTargetSo",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.miRNA.MIRidentifierBasedOnTargetSoResult",
+ "description": "mirIdentifierBasedOnTargetSo: mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTargetSoResult) — M I Ridentifier Based On Target So Result",
+ "invoke": "tbtools tool mirIdentifierBasedOnTargetSo <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

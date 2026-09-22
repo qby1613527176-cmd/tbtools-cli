@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.circlegene",
+ "name": "circlegene",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "CircleGeneViewerCli",
+ "description": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
+ "invoke": "tbtools syn circlegene <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

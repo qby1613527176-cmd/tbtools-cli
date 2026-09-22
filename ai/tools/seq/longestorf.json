@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.longestorf",
+ "name": "longestorf",
+ "group": "seq",
+ "kind": "direct",
+ "class": "biocjava.bioIO.ORF.GetLongestORF",
+ "description": "17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
+ "invoke": "tbtools seq longestorf <args...>",
+ "capabilities": [
+  "orf_prediction",
+  "sequence"
+ ],
+ "inputs": [
+  {
+   "name": "seq",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": "核酸输入"
+  }
+ ],
+ "outputs": [
+  "fa"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.virusRecomb",
+ "name": "virusRecomb",
+ "group": "asm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.VirusDetect.RecombinationAnalysis",
+ "description": "病毒重组分析（第77引",
+ "invoke": "tbtools asm virusRecomb <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

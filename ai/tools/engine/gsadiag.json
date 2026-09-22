@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.gsadiag",
+ "name": "gsadiag",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "GsaDiagCli",
+ "description": "gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax",
+ "invoke": "tbtools engine GsaDiagCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

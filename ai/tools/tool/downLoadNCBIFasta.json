@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.downLoadNCBIFasta",
+ "name": "downLoadNCBIFasta",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioWeb.DownLoadNCBIFasta",
+ "description": "downLoadNCBIFasta: downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C B I Fasta",
+ "invoke": "tbtools tool downLoadNCBIFasta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

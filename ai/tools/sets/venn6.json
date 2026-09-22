@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.sets.venn6",
+ "name": "venn6",
+ "group": "sets",
+ "kind": "bridge",
+ "class": "Venn6Cli",
+ "description": "venn6: venn6 <out> <setA..F.txt> [labels]",
+ "invoke": "tbtools sets venn6 <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

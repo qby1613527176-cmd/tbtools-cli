@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.trimmsa",
+ "name": "trimmsa",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "TrimMSACli",
+ "description": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]",
+ "invoke": "tbtools engine TrimMSACli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

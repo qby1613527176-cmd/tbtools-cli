@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.cddmotif",
+ "name": "cddmotif",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "CddMotifCli",
+ "description": "cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new",
+ "invoke": "tbtools seq cddmotif <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

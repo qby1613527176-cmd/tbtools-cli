@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.fastaIDAppender",
+ "name": "fastaIDAppender",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.FastaIDAppender",
+ "description": "fastaIDAppender: fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender",
+ "invoke": "tbtools tool fastaIDAppender <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.fastq.fqfaConv",
+ "name": "fqfaConv",
+ "group": "fastq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.LinuxPipe.FastqAndFasta",
+ "description": "FASTQ/FASTA 互转（第",
+ "invoke": "tbtools fastq fqfaConv <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

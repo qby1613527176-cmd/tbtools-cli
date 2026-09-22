@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.pafRefBaseCoverCalc",
+ "name": "pafRefBaseCoverCalc",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc",
+ "description": "pafRefBaseCoverCalc: pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Base Cover Calc",
+ "invoke": "tbtools tool pafRefBaseCoverCalc <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

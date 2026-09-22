@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableCollapse",
+ "name": "tableCollapse",
+ "group": "table",
+ "kind": "bridge",
+ "class": "TableCollapseCli",
+ "description": "tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader",
+ "invoke": "tbtools table tableCollapse <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

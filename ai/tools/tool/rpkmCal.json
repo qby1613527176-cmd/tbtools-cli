@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.rpkmCal",
+ "name": "rpkmCal",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.ExpressionLevelCalculator.RPKMcalculator",
+ "description": "rpkmCal: rpkmCal (tool, RPKMcalculator) — R P K Mcalculator",
+ "invoke": "tbtools tool rpkmCal <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

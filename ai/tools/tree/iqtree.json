@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.iqtree",
+ "name": "iqtree",
+ "group": "tree",
+ "kind": "bridge",
+ "class": "QuickRunIQtreeCli",
+ "description": "28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
+ "invoke": "tbtools tree iqtree <args...>",
+ "capabilities": [
+  "phylogeny"
+ ],
+ "inputs": [
+  {
+   "name": "aln",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "nwk",
+  "treefile"
+ ],
+ "status": "stable"
+}

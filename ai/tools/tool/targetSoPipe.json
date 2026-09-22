@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.targetSoPipe",
+ "name": "targetSoPipe",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.miRNA.TargetSoPipe",
+ "description": "targetSoPipe: targetSoPipe (tool, TargetSoPipe) — Target So Pipe",
+ "invoke": "tbtools tool targetSoPipe <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

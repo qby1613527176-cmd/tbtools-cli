@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.hmm.hmmsearch",
+ "name": "hmmsearch",
+ "group": "hmm",
+ "kind": "manual",
+ "class": "",
+ "description": "HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
+ "invoke": "tbtools hmm hmmsearch <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "platform-limited"
+}

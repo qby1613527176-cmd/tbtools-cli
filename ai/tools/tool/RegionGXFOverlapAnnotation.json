@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.RegionGXFOverlapAnnotation",
+ "name": "RegionGXFOverlapAnnotation",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
+ "description": "RegionGXFOverlapAnnotation: RegionGXFOverlapAnnotation (tool, RegionGXFOverlapAnnotation) — Region G X F Overlap Annotation",
+ "invoke": "tbtools tool RegionGXFOverlapAnnotation <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.NCBITaxonomy",
+ "name": "NCBITaxonomy",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioWeb.NCBITaxonomy.NCBITaxonomy",
+ "description": "NCBITaxonomy: NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy",
+ "invoke": "tbtools tool NCBITaxonomy <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

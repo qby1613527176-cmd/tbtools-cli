@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.meme",
+ "name": "meme",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "MemeCli",
+ "description": "MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）",
+ "invoke": "tbtools seq meme <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

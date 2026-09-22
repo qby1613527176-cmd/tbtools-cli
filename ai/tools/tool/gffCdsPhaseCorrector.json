@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.gffCdsPhaseCorrector",
+ "name": "gffCdsPhaseCorrector",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.GXFUtils.GffCdsPhase.GffCdsPhaseCorrector",
+ "description": "gffCdsPhaseCorrector: gffCdsPhaseCorrector (tool, GffCdsPhaseCorrector) — Gff Cds Phase Corrector",
+ "invoke": "tbtools tool gffCdsPhaseCorrector <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

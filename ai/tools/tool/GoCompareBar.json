@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.GoCompareBar",
+ "name": "GoCompareBar",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.GeneOntology.Grapher.GoCompare",
+ "description": "GoCompareBar: GoCompareBar (tool, GoCompare) — Go Compare",
+ "invoke": "tbtools tool GoCompareBar <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

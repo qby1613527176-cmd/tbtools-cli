@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.mast",
+ "name": "mast",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "MastCli",
+ "description": "MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）",
+ "invoke": "tbtools seq mast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

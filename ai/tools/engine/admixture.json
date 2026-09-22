@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.admixture",
+ "name": "admixture",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "AdmixtureCli",
+ "description": "admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor",
+ "invoke": "tbtools engine AdmixtureCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

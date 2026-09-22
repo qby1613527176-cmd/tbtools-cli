@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.generic",
+ "name": "generic",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "GenericCli",
+ "description": "generic: generic <engineClass> <method[+method2]> <out> [--set field",
+ "invoke": "tbtools engine GenericCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

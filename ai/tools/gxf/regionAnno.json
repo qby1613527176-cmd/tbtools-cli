@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.regionAnno",
+ "name": "regionAnno",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
+ "description": "regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-",
+ "invoke": "tbtools gxf regionAnno <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

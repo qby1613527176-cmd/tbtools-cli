@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.blast.recipBlast",
+ "name": "recipBlast",
+ "group": "blast",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
+ "description": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
+ "invoke": "tbtools blast recipBlast <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "db",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "query",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

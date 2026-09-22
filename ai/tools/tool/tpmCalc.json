@@ -1,0 +1,34 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.tpmCalc",
+ "name": "tpmCalc",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator",
+ "description": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
+ "invoke": "tbtools tool tpmCalc <args...>",
+ "capabilities": [
+  "rna_seq",
+  "normalization"
+ ],
+ "inputs": [
+  {
+   "name": "counts",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "lenInfo",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

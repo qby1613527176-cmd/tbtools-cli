@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.gxfsort",
+ "name": "gxfsort",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "GxfSortCli",
+ "description": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>",
+ "invoke": "tbtools engine GxfSortCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

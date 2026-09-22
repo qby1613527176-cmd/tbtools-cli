@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.fa2tab",
+ "name": "fa2tab",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "26 FastaTable.fa2tab；与 tab2fa 往返一致）",
+ "invoke": "tbtools seq fa2tab <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

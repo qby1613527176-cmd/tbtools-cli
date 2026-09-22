@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfMatch",
+ "name": "gxfMatch",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GxfGenomeMatch",
+ "description": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
+ "invoke": "tbtools gxf gxfMatch <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

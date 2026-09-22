@@ -1,0 +1,17 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.msa",
+ "name": "msa",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "多序列比对可视化",
+ "invoke": "tbtools seq msa <args...>",
+ "capabilities": [
+  "alignment",
+  "visualization"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

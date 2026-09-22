@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.pfammotif",
+ "name": "pfammotif",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "PfamMotifCli",
+ "description": "pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic",
+ "invoke": "tbtools seq pfammotif <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

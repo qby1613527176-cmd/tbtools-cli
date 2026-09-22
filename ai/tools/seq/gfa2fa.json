@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.gfa2fa",
+ "name": "gfa2fa",
+ "group": "seq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Fasta.Tools.GFAtoFasta",
+ "description": "GFA 组装图 → FASTA（第91引擎，GFAtoFast",
+ "invoke": "tbtools seq gfa2fa <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

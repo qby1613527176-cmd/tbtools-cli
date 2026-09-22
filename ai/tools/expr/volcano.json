@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.volcano",
+ "name": "volcano",
+ "group": "expr",
+ "kind": "manual",
+ "class": "",
+ "description": "火山图（DEG: GeneID Log2FC pvalue）",
+ "invoke": "tbtools expr volcano <args...>",
+ "capabilities": [
+  "differential_expression",
+  "visualization"
+ ],
+ "inputs": [
+  {
+   "name": "deg",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "GeneID\tLog2FC\tpvalue"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

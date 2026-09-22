@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.MIRPrediionResultStat",
+ "name": "MIRPrediionResultStat",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.miRNA.MIRPrediionResultStat",
+ "description": "MIRPrediionResultStat: MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R Prediion Result Stat",
+ "invoke": "tbtools tool MIRPrediionResultStat <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

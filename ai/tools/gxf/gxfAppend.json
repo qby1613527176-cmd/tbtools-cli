@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfAppend",
+ "name": "gxfAppend",
+ "group": "gxf",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GXFUtils.GxfIDAppender",
+ "description": "GFF seqid+ID 加前缀",
+ "invoke": "tbtools gxf gxfAppend <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

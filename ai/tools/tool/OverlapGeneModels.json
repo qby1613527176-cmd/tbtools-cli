@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.OverlapGeneModels",
+ "name": "OverlapGeneModels",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.GXF.gxfTree.OverlapGeneModels",
+ "description": "OverlapGeneModels: OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene Models",
+ "invoke": "tbtools tool OverlapGeneModels <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

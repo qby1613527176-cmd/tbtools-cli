@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.seqlogo",
+ "name": "seqlogo",
+ "group": "engine",
+ "kind": "manual",
+ "class": "",
+ "description": "(alias of logo) 序列 LOGO 图",
+ "invoke": "tbtools engine  key=value",
+ "capabilities": [
+  "motif",
+  "visualization"
+ ],
+ "inputs": [
+  {
+   "name": "seqs",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

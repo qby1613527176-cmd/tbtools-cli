@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.bamsort",
+ "name": "bamsort",
+ "group": "asm",
+ "kind": "bridge",
+ "class": "BamSortCli",
+ "description": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
+ "invoke": "tbtools asm bamsort <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

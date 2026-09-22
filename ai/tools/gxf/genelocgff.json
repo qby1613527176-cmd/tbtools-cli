@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.genelocgff",
+ "name": "genelocgff",
+ "group": "gxf",
+ "kind": "bridge",
+ "class": "GeneLocGffCli",
+ "description": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
+ "invoke": "tbtools gxf genelocgff <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "gff",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "ids",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

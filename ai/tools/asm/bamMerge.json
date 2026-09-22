@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.bamMerge",
+ "name": "bamMerge",
+ "group": "asm",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage",
+ "description": "按区域覆盖合并 BAM（多样本择优）",
+ "invoke": "tbtools asm bamMerge <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

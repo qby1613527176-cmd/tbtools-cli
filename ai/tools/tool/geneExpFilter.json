@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.geneExpFilter",
+ "name": "geneExpFilter",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.BioSoftPipeServer.GeneExpFilter",
+ "description": "geneExpFilter: geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter",
+ "invoke": "tbtools tool geneExpFilter <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

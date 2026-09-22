@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.violin",
+ "name": "violin",
+ "group": "expr",
+ "kind": "bridge",
+ "class": "ViolinCli",
+ "description": "violin: violin <in.tsv> <out> [width] [height]",
+ "invoke": "tbtools expr violin <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

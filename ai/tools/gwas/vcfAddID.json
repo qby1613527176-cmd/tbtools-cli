@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gwas.vcfAddID",
+ "name": "vcfAddID",
+ "group": "gwas",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GWAS.VCFAddID",
+ "description": "VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz）",
+ "invoke": "tbtools gwas vcfAddID <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

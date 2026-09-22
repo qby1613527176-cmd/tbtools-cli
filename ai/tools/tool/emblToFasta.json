@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.emblToFasta",
+ "name": "emblToFasta",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.Embl.emblToFasta",
+ "description": "emblToFasta: emblToFasta (tool, emblToFasta) — embl To Fasta",
+ "invoke": "tbtools tool emblToFasta <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.conflictpaf",
+ "name": "conflictpaf",
+ "group": "syn",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF",
+ "description": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
+ "invoke": "tbtools syn conflictpaf <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

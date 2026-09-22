@@ -1,0 +1,27 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.expr.kallisto",
+ "name": "kallisto",
+ "group": "expr",
+ "kind": "manual",
+ "class": "",
+ "description": "RNA-seq 定量（插件 P00740 CLI 化，直调",
+ "invoke": "tbtools expr kallisto <args...>",
+ "capabilities": [
+  "rna_seq",
+  "quantification"
+ ],
+ "inputs": [
+  {
+   "name": "fastq",
+   "role": "file",
+   "format": "fastq",
+   "required": true,
+   "note": "RNA-seq"
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

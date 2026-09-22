@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.seqconvert",
+ "name": "seqconvert",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "SeqConverterCli",
+ "description": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>",
+ "invoke": "tbtools engine SeqConverterCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

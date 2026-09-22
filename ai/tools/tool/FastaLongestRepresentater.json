@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.FastaLongestRepresentater",
+ "name": "FastaLongestRepresentater",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.FastaLongestRepresentater",
+ "description": "FastaLongestRepresentater: FastaLongestRepresentater (tool, FastaLongestRepresentater) — Fasta Longest Representater",
+ "invoke": "tbtools tool FastaLongestRepresentater <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableColSel",
+ "name": "tableColSel",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableColSelector",
+ "description": "tableColSel: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|",
+ "invoke": "tbtools table tableColSel <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

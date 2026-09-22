@@ -1,0 +1,31 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.pep2codon",
+ "name": "pep2codon",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "Pep2CodonCli",
+ "description": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
+ "invoke": "tbtools seq pep2codon <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "cds",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  },
+  {
+   "name": "pep_aln",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "fa"
+ ],
+ "status": "stable"
+}

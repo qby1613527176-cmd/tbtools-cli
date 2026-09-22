@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.syn.pafviz",
+ "name": "pafviz",
+ "group": "syn",
+ "kind": "bridge",
+ "class": "PafVizCli",
+ "description": "PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
+ "invoke": "tbtools syn pafviz <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "paf",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "13 列 PAF"
+  }
+ ],
+ "outputs": [
+  "svg"
+ ],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.engine.regiondepth",
+ "name": "regiondepth",
+ "group": "engine",
+ "kind": "bridge",
+ "class": "RegionDepthCli",
+ "description": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]",
+ "invoke": "tbtools engine RegionDepthCli key=value",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

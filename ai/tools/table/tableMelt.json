@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.tableMelt",
+ "name": "tableMelt",
+ "group": "table",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.Table.TableMelt",
+ "description": "宽表转长表（第88引擎，TableMelt）",
+ "invoke": "tbtools table tableMelt <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

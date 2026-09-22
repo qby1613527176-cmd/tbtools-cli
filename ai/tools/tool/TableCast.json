@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.TableCast",
+ "name": "TableCast",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.Table.TableCast",
+ "description": "TableCast: TableCast (tool, TableCast) — Table Cast",
+ "invoke": "tbtools tool TableCast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

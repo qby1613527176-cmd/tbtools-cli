@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.fastaFragmenter",
+ "name": "fastaFragmenter",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.Fragment.FastaFragmenter",
+ "description": "fastaFragmenter: fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter",
+ "invoke": "tbtools tool fastaFragmenter <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

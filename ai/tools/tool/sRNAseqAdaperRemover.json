@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.sRNAseqAdaperRemover",
+ "name": "sRNAseqAdaperRemover",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.sRNA.Tools.sRNAseqAdaperRemover",
+ "description": "sRNAseqAdaperRemover: sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N Aseq Adaper Remover",
+ "invoke": "tbtools tool sRNAseqAdaperRemover <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

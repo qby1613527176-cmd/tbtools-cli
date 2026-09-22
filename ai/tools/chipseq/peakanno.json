@@ -1,0 +1,24 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.chipseq.peakanno",
+ "name": "peakanno",
+ "group": "chipseq",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno",
+ "description": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
+ "invoke": "tbtools chipseq peakanno <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "peaks",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "MACS2, 百万级坐标"
+  }
+ ],
+ "outputs": [
+  "tsv"
+ ],
+ "status": "stable"
+}

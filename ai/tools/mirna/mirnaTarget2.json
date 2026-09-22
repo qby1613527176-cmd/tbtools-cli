@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.mirna.mirnaTarget2",
+ "name": "mirnaTarget2",
+ "group": "mirna",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.miRNA.Target2TablePipe",
+ "description": "mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true",
+ "invoke": "tbtools mirna mirnaTarget2 <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.ssrMiner",
+ "name": "ssrMiner",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.FastX.FastaIndex.SSRminer",
+ "description": "ssrMiner: ssrMiner (tool, SSRminer) — S S Rminer",
+ "invoke": "tbtools tool ssrMiner <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

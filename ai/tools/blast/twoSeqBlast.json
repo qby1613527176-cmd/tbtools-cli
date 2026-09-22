@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.blast.twoSeqBlast",
+ "name": "twoSeqBlast",
+ "group": "blast",
+ "kind": "direct",
+ "class": "biocjava.bioDoer.BLAST.CompareTwoSeqSet",
+ "description": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
+ "invoke": "tbtools blast twoSeqBlast <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

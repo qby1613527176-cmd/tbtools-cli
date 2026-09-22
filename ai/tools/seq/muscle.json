@@ -1,0 +1,26 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.muscle",
+ "name": "muscle",
+ "group": "seq",
+ "kind": "manual",
+ "class": "",
+ "description": "27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
+ "invoke": "tbtools seq muscle <args...>",
+ "capabilities": [
+  "alignment"
+ ],
+ "inputs": [
+  {
+   "name": "fasta",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "aln"
+ ],
+ "status": "stable"
+}

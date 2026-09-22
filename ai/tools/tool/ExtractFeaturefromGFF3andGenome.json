@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.ExtractFeaturefromGFF3andGenome",
+ "name": "ExtractFeaturefromGFF3andGenome",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioIO.GFF.ExtractFeaturefromGFF3andGenome",
+ "description": "ExtractFeaturefromGFF3andGenome: ExtractFeaturefromGFF3andGenome (tool, ExtractFeaturefromGFF3andGenome) — Extract Featurefrom G F F3and Genome",
+ "invoke": "tbtools tool ExtractFeaturefromGFF3andGenome <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}

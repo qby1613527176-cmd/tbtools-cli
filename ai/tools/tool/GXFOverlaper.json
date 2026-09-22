@@ -1,0 +1,14 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.GXFOverlaper",
+ "name": "GXFOverlaper",
+ "group": "tool",
+ "kind": "tool",
+ "class": "biocjava.bioDoer.GXFUtils.GXFOverlaper",
+ "description": "GXFOverlaper: GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper",
+ "invoke": "tbtools tool GXFOverlaper <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable"
+}
