@@ -1,6 +1,6 @@
 # 命令清单(自动生成)
 
-> 由 `python3 scripts/gen_metadata.py --render` 从 command_metadata.json 生成,勿手改。
+> 由 `scripts/gen_metadata.py --render` 生成,构建时刷新,勿手改。
 
 # 命令全量清单（自动生成,勿手改）
 

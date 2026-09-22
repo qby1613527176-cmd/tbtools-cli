@@ -25,6 +25,15 @@ jobs:
         run: |
           pip install -q .
           python3 scripts/gen_metadata.py --render
+          # 同步 docs/commands.md(mkdocs 页面)——防 metadata 更新后快照漂移
+          python3 - <<'PYEOF'
+gen = open('docs/_generated/commands.md', encoding='utf-8').read()
+open('docs/commands.md', 'w', encoding='utf-8').write('# 命令清单(自动生成)
+
+> 由 `scripts/gen_metadata.py --render` 生成,构建时刷新,勿手改。
+
+' + gen)
+PYEOF
       - name: Build docs
         run: |
           pip install -q mkdocs mkdocs-material
