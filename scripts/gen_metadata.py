@@ -178,6 +178,20 @@ def main():
     meta, counts = build()
     print(json.dumps(counts, ensure_ascii=False, indent=1))
     if check:
+        # CommandSpec 模型一致性(第八轮评审: 单一模型接管的第一步校验)
+        try:
+            import sys as _sys
+            _sys.path.insert(0, ROOT)
+            from tbtools_cli.command_spec import build_command_specs
+            specs = build_command_specs()
+            spec_names = set(specs)
+            meta_names = set(meta)
+            if spec_names != meta_names:
+                print(f"❌ CommandSpec 模型与 metadata 不一致: 模型多 {len(spec_names - meta_names)} 个, 缺 {len(meta_names - spec_names)} 个")
+                return 1
+            print(f"✅ CommandSpec 模型一致性: {len(spec_names)} 命令对齐")
+        except ImportError:
+            pass
         print("check mode: 不写文件")
         return 0
     json.dump(meta, open(META, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
