@@ -24,7 +24,7 @@ class CommandSpec:
     xmx: str = "2g"
     doc: str = ""
     status: str = "stable"       # 预留: stable|beta|legacy|platform-limited|network-required
-    aliases: list = field(default_factory=list)
+    aliases: list[str] = field(default_factory=list)
 
 
 # 已知别名(兼容层命名; canonical → 命令)
