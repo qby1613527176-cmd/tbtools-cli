@@ -13,6 +13,7 @@ import urllib.request
 import click
 
 from tbtools_cli.core import JAR
+from tbtools_cli.core import _ as _tr
 
 @click.group('rpc')
 def rpc_group():
@@ -123,7 +124,7 @@ def _ensure_rpc(port, mem="4g", wait_s=30, quiet=False):
         _rpc_remove_pid(port)
         _t.sleep(1)
     elif not quiet:
-        click.echo(f"⚠️ RPC 服务器不可达（端口 {port}），自动拉起...", err=True)
+        click.echo(_tr("⚠️ RPC 服务器不可达（端口 {p}），自动拉起...", "⚠️ RPC server unreachable (port {p}) — auto-restarting...").format(p=port), err=True)
     try:
         _rpc_launch(port, mem)
     except FileNotFoundError as e:
@@ -133,7 +134,7 @@ def _ensure_rpc(port, mem="4g", wait_s=30, quiet=False):
         _t.sleep(1)
         if _rpc_ping(port):
             return True
-    click.echo(f"❌ RPC 服务器 {wait_s}s 内未就绪，日志: {_rpc_log_file(port)}", err=True)
+    click.echo(_tr("❌ RPC 服务器 {s}s 内未就绪，日志: {log}", "❌ RPC server not ready within {s}s, log: {log}").format(s=wait_s, log=_rpc_log_file(port)), err=True)
     return False
 
 @rpc_group.command('start')
@@ -145,7 +146,7 @@ def rpc_start(port, mem, force):
     if _rpc_ping(port):
         if not force:
             pid = _rpc_read_pid(port)
-            click.echo(f"✅ RPC 服务器已在运行（端口 {port}, PID {pid or '?'}）")
+            click.echo(_tr("✅ RPC 服务器已在运行（端口 {p}, PID {pid}）", "✅ RPC server already running (port {p}, PID {pid})").format(p=port, pid=pid or '?'))
             return
         old = _rpc_read_pid(port)
         click.echo(f"🔄 --force：终止旧实例 (PID {old or '?'})...")
@@ -167,7 +168,7 @@ def rpc_start(port, mem, force):
                 pass
             _rpc_remove_pid(port)
         _t.sleep(1)
-    click.echo(f"🚀 启动 RPC 服务器（端口 {port}，堆 {mem}）...")
+    click.echo(_tr("🚀 启动 RPC 服务器（端口 {p}，堆 {m}）...", "🚀 Starting RPC server (port {p}, heap {m})...").format(p=port, m=mem))
     try:
         proc = _rpc_launch(port, mem)
     except FileNotFoundError as e:
@@ -195,7 +196,7 @@ def rpc_stop(port):
         return
     try:
         os.kill(pid, 15)
-        click.echo(f"✅ 已发送 SIGTERM (PID {pid})")
+        click.echo(_tr("✅ 已发送 SIGTERM (PID {p})", "✅ SIGTERM sent (PID {p})").format(p=pid))
     except OSError as e:
         click.echo(f"❌ 终止失败: {e}", err=True)
         sys.exit(1)
