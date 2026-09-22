@@ -258,6 +258,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     e: dict[str, object] = {"name": spec.name, "kind": spec.kind, "mode": spec.kind,
                             "class": spec.class_name, "xmx": spec.xmx, "runner": spec.runner,
                             "group": spec.group, "help": spec.doc}
+    if spec.capabilities:
+        e["capabilities"] = spec.capabilities
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note} for i in spec.inputs]

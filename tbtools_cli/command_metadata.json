@@ -299,6 +299,10 @@
   "runner": "plot",
   "group": "syn",
   "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout",
+  "capabilities": [
+   "synteny",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "gff",
@@ -328,6 +332,10 @@
   "runner": "plot",
   "group": "syn",
   "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] ",
+  "capabilities": [
+   "synteny",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "gff",
@@ -620,6 +628,9 @@
   "runner": "java",
   "group": "table",
   "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
+  "capabilities": [
+   "enrichment"
+  ],
   "inputs": [
    {
     "name": "background",
@@ -863,6 +874,9 @@
   "runner": "java",
   "group": "table",
   "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
+  "capabilities": [
+   "enrichment"
+  ],
   "inputs": [
    {
     "name": "background",
@@ -1013,6 +1027,10 @@
   "runner": "plot",
   "group": "syn",
   "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测",
+  "capabilities": [
+   "synteny",
+   "collinearity"
+  ],
   "inputs": [
    {
     "name": "gff",
@@ -1338,6 +1356,9 @@
   "runner": "plot",
   "group": "chipseq",
   "help": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
+  "capabilities": [
+   "chip_seq"
+  ],
   "inputs": [
    {
     "name": "gxf",
@@ -2029,6 +2050,10 @@
   "runner": "java",
   "group": "seq",
   "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
+  "capabilities": [
+   "translation",
+   "sequence"
+  ],
   "inputs": [
    {
     "name": "pep",
@@ -2051,6 +2076,10 @@
   "runner": "java",
   "group": "seq",
   "help": "longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
+  "capabilities": [
+   "orf_prediction",
+   "sequence"
+  ],
   "inputs": [
    {
     "name": "seq",
@@ -2136,6 +2165,9 @@
   "runner": "java",
   "group": "tree",
   "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
+  "capabilities": [
+   "phylogeny"
+  ],
   "inputs": [
    {
     "name": "aln",
@@ -2159,6 +2191,10 @@
   "runner": "java",
   "group": "seq",
   "help": "trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）",
+  "capabilities": [
+   "alignment",
+   "filtering"
+  ],
   "inputs": [
    {
     "name": "aln",
@@ -2394,6 +2430,10 @@
   "runner": "java",
   "group": "tool",
   "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
+  "capabilities": [
+   "rna_seq",
+   "normalization"
+  ],
   "inputs": [
    {
     "name": "counts",
@@ -3194,7 +3234,11 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "seq",
-  "help": "多序列比对可视化"
+  "help": "多序列比对可视化",
+  "capabilities": [
+   "alignment",
+   "visualization"
+  ]
  },
  "structure": {
   "name": "structure",
@@ -3218,6 +3262,10 @@
   "runner": "plot",
   "group": "seq",
   "help": "Motif 分布图（MEME XML）",
+  "capabilities": [
+   "motif",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "meme_xml",
@@ -3247,6 +3295,10 @@
   "runner": "plot",
   "group": "expr",
   "help": "火山图（DEG: GeneID Log2FC pvalue）",
+  "capabilities": [
+   "differential_expression",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "deg",
@@ -3269,6 +3321,11 @@
   "runner": "plot",
   "group": "expr",
   "help": "热图（表达矩阵）",
+  "capabilities": [
+   "expression_matrix",
+   "clustering",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "matrix",
@@ -3291,6 +3348,10 @@
   "runner": "plot",
   "group": "expr",
   "help": "PCA 图",
+  "capabilities": [
+   "dimension_reduction",
+   "expression_matrix"
+  ],
   "inputs": [
    {
     "name": "matrix",
@@ -3313,6 +3374,10 @@
   "runner": "plot",
   "group": "expr",
   "help": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
+  "capabilities": [
+   "clustering",
+   "distance"
+  ],
   "inputs": [
    {
     "name": "distance",
@@ -3335,6 +3400,10 @@
   "runner": "plot",
   "group": "expr",
   "help": "差异表达双直方图",
+  "capabilities": [
+   "differential_expression",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "deg",
@@ -3443,6 +3512,10 @@
   "runner": "plot",
   "group": "expr",
   "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 ",
+  "capabilities": [
+   "rna_seq",
+   "quantification"
+  ],
   "inputs": [
    {
     "name": "fastq",
@@ -3515,6 +3588,9 @@
   "runner": "plot",
   "group": "seq",
   "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
+  "capabilities": [
+   "alignment"
+  ],
   "inputs": [
    {
     "name": "fasta",
@@ -3669,6 +3745,9 @@
   "runner": "plot",
   "group": "table",
   "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
+  "capabilities": [
+   "enrichment"
+  ],
   "inputs": [
    {
     "name": "expr",
@@ -3791,6 +3870,10 @@
   "runner": "plot",
   "group": "syn",
   "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n       #   engineClass 导致 ClassNo",
+  "capabilities": [
+   "microsynteny",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "pos",
@@ -3871,6 +3954,11 @@
   "runner": "plot",
   "group": "seq",
   "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
+  "capabilities": [
+   "gene_structure",
+   "annotation",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "gff",
@@ -3922,6 +4010,10 @@
   "runner": "plot",
   "group": "engine",
   "help": "(alias of logo) 序列 LOGO 图",
+  "capabilities": [
+   "motif",
+   "visualization"
+  ],
   "inputs": [
    {
     "name": "seqs",
