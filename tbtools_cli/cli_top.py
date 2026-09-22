@@ -549,6 +549,34 @@ def register_top(cli, _LG):
         }
         click.echo(_json.dumps(summary, ensure_ascii=False, indent=1))
 
+    @cli.command(name="tool-run")
+    @click.argument("args", nargs=-1, required=True)
+    @click.option("--json", "as_json", is_flag=True, help="结构化结果回显(Agent 能力4)")
+    def tool_run(args, as_json):
+        """统一执行接口: 转发任意 tbtools 命令 + 结构化结果(退出码/时长/产物)"""
+        import json as _json
+        import time as _time
+        t0 = _time.time()
+        ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
+        ec = ec or 0
+        dt = round(_time.time() - t0, 2)
+        # 从 provenance 读产物(命令成功时)
+        artifacts = []
+        import glob as _glob
+        for p in _glob.glob("*.tbtools.json") + _glob.glob("**/*.tbtools.json", recursive=True)[:3]:
+            try:
+                d = _json.load(open(p, encoding="utf-8"))
+                if d.get("command") == (args[-1] if args else ""):
+                    artifacts = d.get("outputs", [])
+            except Exception:
+                pass
+        result = {"exit_code": ec, "duration_s": dt, "artifacts": artifacts}
+        if as_json:
+            click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
+        else:
+            click.echo(f"  exit: {ec} | {dt}s | 产物: {artifacts or '无'}")
+        sys.exit(ec if ec else 0)
+
     @cli.command(name="search")
     @click.argument("keyword", required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
