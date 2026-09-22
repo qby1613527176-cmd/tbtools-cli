@@ -468,6 +468,8 @@ def register_top(cli, _LG):
             "class": cls,
             "pitfall": get_pitfall_hint(command),
         }
+        if v.get("capabilities"):
+            desc["capabilities"] = v["capabilities"]
         if v.get("inputs"):
             desc["inputs"] = v["inputs"]
         if v.get("outputs"):
