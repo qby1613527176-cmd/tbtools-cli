@@ -99,6 +99,9 @@ java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参�
 ## 📦 Installation
 
 ### 0. pip 安装（推荐，Python 包入口）
+
+> 系统 Python 受 PEP 668 保护时（Debian/Ubuntu 23+），先建虚拟环境或加 `--user`：
+> `python3 -m venv ~/.venv && source ~/.venv/bin/activate` 或 `pip install --user tbtools-cli`
 ```bash
 pip install .            # 或 pipx install . / pip install git+https://github.com/qby1613527176-cmd/tbtools-cli
 # 安装后 `tbtools` 直接可用（console_script）；JAR 仍需就位（见下）

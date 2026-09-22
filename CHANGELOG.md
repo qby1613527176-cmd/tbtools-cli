@@ -4,6 +4,23 @@
 
 ## [Unreleased]
 
+### 架构重构（09/22 · 批次 A/B/C 全量落地,commit 384ddee..1b0c716）
+
+- **metadata 单一数据源**：`scripts/gen_metadata.py` 生成 `command_metadata.json`（276 命令;ENGINE_REGISTRY 172 + CLI_TOOLS 82 + 手动 + bridges 118 合并）+ `--check` 防漂移 + `--render` 生成命令清单
+- **拆 cli.py 1642→533 行**：cli_rpc（自愈基础设施）/ cli_load（动态注册）/ cli_top（顶层命令）
+- **CI 真实化**：ruff 全仓库硬阻断（0 errors）/ shellcheck 0 / 全量 pytest / 无 jar CLI 冒烟 / onboarding-e2e 真实 jar 8 命令出图断言
+- **质量修复**：PITFALL 6 个重复键（barplot 列名实测修正）、版本号单一源（importlib.metadata）、Homepage 指向本仓库
+
+### 第二轮外部审查修复（09/22 · 评分 美观 7 / 易用 7.5 / 可维护 6.5 / 生态 5）
+
+- README 精简 701→322 行（命令罗列改自动生成清单 docs/_generated/commands.md）
+- docs/_worklog/ 收拢工作日志;CONTRIBUTING.md + issue 模板
+- README 示例图入库（.gitignore 全局 *.svg 曾导致 GitHub 死链,已豁免）
+- 命名规范/示例表/中文节/漂移修正
+
+### 修复（RPC 测试交付包 N1-N41,09/21 · 批次 0-4 全部落地）
+
+
 ### 修复（RPC 测试交付包 N1-N41，09/21 · 批次 0-4 全部落地）
 
 > 来源：WorkBuddy Windows 17 轮穷举测试（~1665 项/~812 通过），证据链与回归脚本见交付包 `workflows/tbtools_cli化_修复清单.md` + `tbtools-cli/docs/_worklog/RPC_FIX_STATUS.md`。

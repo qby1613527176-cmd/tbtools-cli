@@ -499,7 +499,7 @@ def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, preset, height
 @click.argument("output_file")
 @common_options
 def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, preset, height, width, threads):
-    """按 ID 列表提取 FASTA 序列"""
+    """按 ID 列表提取 FASTA 序列（idList: 一行一个 ID,不带 > 号;与原始 header 精确匹配）"""
     if input_fasta == "-":
         import tempfile; tmp = tempfile.mktemp(suffix=".fa")
         with open(tmp, "wb") as f: f.write(sys.stdin.buffer.read())
