@@ -60,6 +60,17 @@ def scan_manual_commands():
         if name not in cmds:
             cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
                           "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
+    # auto_commands 手写 impl(注册为命令但不在 ENGINE_REGISTRY——N23/N26 后 msy/mirnatarget 等)
+    # 否则这些命令从 metadata/search/help 消失(2026-09-22 二期发现)
+    try:
+        ac_src = open(os.path.join(os.path.dirname(CLI), "auto_commands.py"), encoding="utf-8").read()
+        for name in re.findall(r"^def _([a-zA-Z0-9]+)_impl\(", ac_src, re.M):
+            if name in cmds or name in ("simplehmmscan", "longestorf"):
+                continue
+            cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
+                          "xmx": "", "runner": "plot", "help": "", "src": "auto_manual"}
+    except Exception:
+        pass
     return cmds
 
 

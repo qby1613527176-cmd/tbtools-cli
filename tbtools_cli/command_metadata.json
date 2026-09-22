@@ -241,13 +241,13 @@
  },
  "efpHeat": {
   "name": "efpHeat",
-  "kind": "direct",
-  "mode": "direct",
-  "class": "biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap",
-  "xmx": "3g",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
   "runner": "plot",
-  "help": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
-  "src": "engine_registry"
+  "help": "",
+  "src": "auto_manual"
  },
  "eggnog": {
   "name": "eggnog",
@@ -1261,13 +1261,13 @@
  },
  "tableMerge": {
   "name": "tableMerge",
-  "kind": "direct",
-  "mode": "direct",
-  "class": "biocjava.bioDoer.Table.TableMerger",
-  "xmx": "3g",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
   "runner": "plot",
-  "help": "tableMerge: tableMerge --inFileArr \"f1,f2,...\" --inColIndexArr \"0,1,...\" --outTable <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   # 按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)",
-  "src": "engine_registry"
+  "help": "",
+  "src": "auto_manual"
  },
  "tableSplit": {
   "name": "tableSplit",
@@ -1791,13 +1791,13 @@
  },
  "getLongestCompleteORF": {
   "name": "getLongestCompleteORF",
-  "kind": "tool",
-  "mode": "tool",
-  "class": "biocjava.bioIO.ORF.ORF",
-  "xmx": "3g",
-  "runner": "java",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
   "help": "",
-  "src": "cli_tools_registry"
+  "src": "auto_manual"
  },
  "ExtractFeaturefromGFF3andGenome": {
   "name": "ExtractFeaturefromGFF3andGenome",
@@ -2281,13 +2281,13 @@
  },
  "findBestHomologyBatch": {
   "name": "findBestHomologyBatch",
-  "kind": "tool",
-  "mode": "tool",
-  "class": "biocjava.bioIO.BioSoftPipeServer.FindBestHomologyBatch",
-  "xmx": "3g",
-  "runner": "java",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
   "help": "",
-  "src": "cli_tools_registry"
+  "src": "auto_manual"
  },
  "collinearityToRegion": {
   "name": "collinearityToRegion",
@@ -2331,23 +2331,23 @@
  },
  "gffCdsPhaseCorrector": {
   "name": "gffCdsPhaseCorrector",
-  "kind": "tool",
-  "mode": "tool",
-  "class": "biocjava.bioDoer.GXFUtils.GffCdsPhase.GffCdsPhaseCorrector",
-  "xmx": "3g",
-  "runner": "java",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
   "help": "",
-  "src": "cli_tools_registry"
+  "src": "auto_manual"
  },
  "parallelMD5Check": {
   "name": "parallelMD5Check",
-  "kind": "tool",
-  "mode": "tool",
-  "class": "biocjava.bioDoer.FileUtils.ParallelMD5Check",
-  "xmx": "3g",
-  "runner": "java",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
   "help": "",
-  "src": "cli_tools_registry"
+  "src": "auto_manual"
  },
  "pafRefBaseCoverCalc": {
   "name": "pafRefBaseCoverCalc",
@@ -2421,13 +2421,13 @@
  },
  "extractFeatureFromGTF": {
   "name": "extractFeatureFromGTF",
-  "kind": "tool",
-  "mode": "tool",
-  "class": "biocjava.bioIO.GTF.ExtractFeaturefromGTFandGenome",
-  "xmx": "3g",
-  "runner": "java",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
   "help": "",
-  "src": "cli_tools_registry"
+  "src": "auto_manual"
  },
  "sRNAseqCollasper": {
   "name": "sRNAseqCollasper",
@@ -2668,6 +2668,266 @@
   "runner": "plot",
   "help": "",
   "src": "cli_manual"
+ },
+ "make": {
+  "name": "make",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "hmmsearch": {
+  "name": "hmmsearch",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "gxfAttr": {
+  "name": "gxfAttr",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "kallisto": {
+  "name": "kallisto",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "fimo": {
+  "name": "fimo",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "xml2blasttab": {
+  "name": "xml2blasttab",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "xml2pairwise": {
+  "name": "xml2pairwise",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "fa2tab": {
+  "name": "fa2tab",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "tab2fa": {
+  "name": "tab2fa",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "muscle": {
+  "name": "muscle",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "bestid": {
+  "name": "bestid",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "getseqdb": {
+  "name": "getseqdb",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "genomefilter": {
+  "name": "genomefilter",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "notung": {
+  "name": "notung",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "newickRename": {
+  "name": "newickRename",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "hmmerSearch": {
+  "name": "hmmerSearch",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "memeViz": {
+  "name": "memeViz",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "gsea": {
+  "name": "gsea",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "tfbsShift": {
+  "name": "tfbsShift",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "mcscanxd": {
+  "name": "mcscanxd",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "quickAnno": {
+  "name": "quickAnno",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "smart": {
+  "name": "smart",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "mirnatarget": {
+  "name": "mirnatarget",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "msy": {
+  "name": "msy",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "gxfSplit": {
+  "name": "gxfSplit",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
+ },
+ "gxfIdAppender": {
+  "name": "gxfIdAppender",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "",
+  "src": "auto_manual"
  },
  "tree": {
   "name": "tree",
