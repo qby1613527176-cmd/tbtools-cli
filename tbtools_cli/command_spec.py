@@ -52,6 +52,24 @@ KNOWN_SCHEMAS = {
     "peaktss": ([InputSpec("gxf", format="gff3"), InputSpec("peaks", format="tsv", note="MACS2")], ["svg"]),
     "tableMerge": ([InputSpec("tables", format="tsv", note="多个输入表")], ["tsv"]),
     "qdot": ([InputSpec("gff", format="tsv", note="4 列简化: Chr\tGene\tStart\tEnd")], ["svg"]),
+    # 二期扩展批(高频绘图/工具)
+    "dehist": ([InputSpec("deg", format="tsv", note="DEG 表")], ["svg"]),
+    "pca": ([InputSpec("matrix", format="tsv", note="表达矩阵")], ["svg"]),
+    "barplot": ([InputSpec("enrichment", format="tsv", note="富集表: 列名 Term/Pvalue")], ["svg"]),
+    "circos": ([InputSpec("chrLen", format="tsv"), InputSpec("link", format="tsv"),
+                InputSpec("genePos", format="tsv")], ["svg"]),
+    "dotplot": ([InputSpec("gff", format="tsv", note="4 列简化"), InputSpec("pairs", format="tsv")], ["svg"]),
+    "dualsyn": ([InputSpec("gff", format="tsv", note="简化 GFF"), InputSpec("pairs", format="tsv")], ["svg"]),
+    "mcscanx": ([InputSpec("gff", format="tsv", note="chr\tgene\tstart\tend"),
+                 InputSpec("blast", format="tsv", note="tab6")], ["tsv"]),
+    "iqtree": ([InputSpec("aln", format="fasta")], ["nwk", "treefile"]),
+    "muscle": ([InputSpec("fasta", format="fasta")], ["aln"]),
+    "trimal": ([InputSpec("aln", format="fasta")], ["aln"]),
+    "blastp": ([InputSpec("query", format="fasta"), InputSpec("db", format="fasta")], ["out"]),
+    "sixframe": ([InputSpec("pep", format="fasta", note="蛋白(输出核酸)")], ["fa"]),
+    "longestorf": ([InputSpec("seq", format="fasta", note="核酸输入")], ["fa"]),
+    "seqlogo": ([InputSpec("seqs", format="fasta")], ["svg"]),
+    "stat-fasta": ([InputSpec("fasta", format="fasta")], ["xls"]),
 }
 
 

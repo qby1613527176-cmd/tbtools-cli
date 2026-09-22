@@ -87,7 +87,19 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "expr",
-  "help": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol"
+  "help": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol",
+  "inputs": [
+   {
+    "name": "enrichment",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "富集表: 列名 Term/Pvalue"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "barplotter": {
   "name": "barplotter",
@@ -148,7 +160,33 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] ["
+  "help": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
+  "inputs": [
+   {
+    "name": "chrLen",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "link",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   },
+   {
+    "name": "genePos",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "collinearRegion": {
   "name": "collinearRegion",
@@ -229,7 +267,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout"
+  "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "4 列简化"
+   },
+   {
+    "name": "pairs",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "dualsyn": {
   "name": "dualsyn",
@@ -239,7 +296,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] "
+  "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] ",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "简化 GFF"
+   },
+   {
+    "name": "pairs",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "efpHeat": {
   "name": "efpHeat",
@@ -786,7 +862,26 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "syn",
-  "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测"
+  "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测",
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "chr\tgene\tstart\tend"
+   },
+   {
+    "name": "blast",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "tab6"
+   }
+  ],
+  "outputs": [
+   "tsv"
+  ]
  },
  "meme": {
   "name": "meme",
@@ -1514,7 +1609,19 @@
   "xmx": "2g",
   "runner": "java",
   "group": "seq",
-  "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）"
+  "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
+  "inputs": [
+   {
+    "name": "pep",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": "蛋白(输出核酸)"
+   }
+  ],
+  "outputs": [
+   "fa"
+  ]
  },
  "longestorf": {
   "name": "longestorf",
@@ -1525,6 +1632,18 @@
   "runner": "java",
   "group": "seq",
   "help": "longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
+  "inputs": [
+   {
+    "name": "seq",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": "核酸输入"
+   }
+  ],
+  "outputs": [
+   "fa"
+  ],
   "aliases": [
    "getLongestCompleteORF"
   ]
@@ -1597,7 +1716,20 @@
   "xmx": "2g",
   "runner": "java",
   "group": "tree",
-  "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）"
+  "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
+  "inputs": [
+   {
+    "name": "aln",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "nwk",
+   "treefile"
+  ]
  },
  "trimal": {
   "name": "trimal",
@@ -1607,7 +1739,19 @@
   "xmx": "2g",
   "runner": "java",
   "group": "seq",
-  "help": "trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）"
+  "help": "trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）",
+  "inputs": [
+   {
+    "name": "aln",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "aln"
+  ]
  },
  "gblocks": {
   "name": "gblocks",
@@ -2696,7 +2840,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "expr",
-  "help": "PCA 图"
+  "help": "PCA 图",
+  "inputs": [
+   {
+    "name": "matrix",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "表达矩阵"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "hclust": {
   "name": "hclust",
@@ -2728,7 +2884,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "expr",
-  "help": "差异表达双直方图"
+  "help": "差异表达双直方图",
+  "inputs": [
+   {
+    "name": "deg",
+    "role": "file",
+    "format": "tsv",
+    "required": true,
+    "note": "DEG 表"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "draw": {
   "name": "draw",
@@ -2872,7 +3040,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "seq",
-  "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）"
+  "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
+  "inputs": [
+   {
+    "name": "fasta",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "aln"
+  ]
  },
  "bestid": {
   "name": "bestid",
@@ -3107,7 +3287,19 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "engine",
-  "help": "(alias of logo) 序列 LOGO 图"
+  "help": "(alias of logo) 序列 LOGO 图",
+  "inputs": [
+   {
+    "name": "seqs",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": ""
+   }
+  ],
+  "outputs": [
+   "svg"
+  ]
  },
  "heatmap2": {
   "name": "heatmap2",
