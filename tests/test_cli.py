@@ -649,3 +649,27 @@ class TestReadmeStructure:
         r = self._readme()
         assert r.count('## 📄 License') == 1
         assert '## 📄 许可' not in r, "中文许可节已合并, 不应残留"
+
+
+class TestWorkflowYaml:
+    """所有 GitHub workflow YAML 必须有效(第十五轮审计: docs.yml 曾被 heredoc 破坏,需固化)"""
+
+    def test_all_workflows_valid(self):
+        import glob
+        import os as _os
+        import yaml
+        root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+        files = sorted(glob.glob(_os.path.join(root, ".github", "workflows", "*.yml")))
+        assert files, "无 workflow 文件?"
+        for f in files:
+            yaml.safe_load(open(f, encoding="utf-8"))  # 无效则抛异常
+        print(f"✅ {len(files)} 个 workflow YAML 有效: {[_os.path.basename(f) for f in files]}")
+
+    def test_workflow_refs_exist(self):
+        """workflow 引用的关键脚本/文件存在(防 docs.yml 引错路径)"""
+        import os as _os
+        root = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+        for rel in ["scripts/gen_metadata.py", "scripts/sync_docs_commands.py",
+                    "scripts/rpc_regression_linux.sh", "examples/scripts/run_examples.sh",
+                    "mkdocs.yml", "config/config.sh"]:
+            assert _os.path.exists(_os.path.join(root, rel)), f"workflow 引用缺失: {rel}"

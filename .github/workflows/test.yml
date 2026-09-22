@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb shellcheck
-          pip install click pytest ruff
+          pip install click pytest ruff pyyaml
 
       # ── L1: 框架/静态/lint（无 TBtools jar 依赖）────────────────────────
       - name: Lint with ruff (硬失败)
