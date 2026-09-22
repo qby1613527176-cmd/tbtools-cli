@@ -292,7 +292,7 @@ for _cmd, _kind, _cls, _xmx, _runner, _doc in ENGINE_REGISTRY:
 
 def _hmmsearch_impl(args, verbose=False, quiet=False):
     """hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）"""
-    return _simplehmmscan_impl(args, verbose=verbose, quiet=quiet)  # noqa: F821  # 注册表动态生成，运行时存在
+    return _simplehmmscan_impl(args, verbose=verbose, quiet=quiet)  # type: ignore[name-defined]  # noqa: F821  # 注册表动态生成
 
 
 def _gxfAttr_impl(args, verbose=False, quiet=False):
@@ -960,7 +960,7 @@ def _getLongestCompleteORF_impl(args, verbose=False, quiet=False):
     """getLongestCompleteORF: getLongestCompleteORF --inFa <seq.fa> --outORFs <out.fa>
        # 批量最长完整 ORF 预测（N24 修复：原注册到 JavaFX 无 main 的 biocjava.bioIO.ORF.ORF，
        #   改映射到 GetLongestORF（longestorf 同引擎，ArgsParser --inFa/--outORFs 实测可用））"""
-    return _longestorf_impl(args, verbose=verbose, quiet=quiet)  # noqa: F821
+    return _longestorf_impl(args, verbose=verbose, quiet=quiet)  # type: ignore[name-defined]  # noqa: F821
 
 
 def _efpHeat_impl(args, verbose=False, quiet=False):

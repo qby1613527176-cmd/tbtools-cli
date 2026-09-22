@@ -291,7 +291,7 @@ def register_top(cli, _LG):
                     click.echo(f"\n  ⚠️ 坑位: {pit}")
                 # 示例（若存在）
                 try:
-                    from tbtools_cli.auto_commands import EXAMPLES
+                    from tbtools_cli.auto_commands import EXAMPLES  # type: ignore[attr-defined]  # 可选属性,hasattr 兜底
                     ex = EXAMPLES.get(name)
                     if ex:
                         click.echo(f"\n  示例: {ex}")

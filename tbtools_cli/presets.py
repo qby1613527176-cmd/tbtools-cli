@@ -3,7 +3,7 @@ import json
 import os
 
 # 预设定义
-PRESETS = {
+PRESETS: dict[str, dict] = {
     # ── 期刊预设 ──
     "nature": {
         "desc": "Nature: 单栏 89mm, 双栏 183mm, 8pt, Arial, 300dpi",

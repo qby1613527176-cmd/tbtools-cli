@@ -736,7 +736,7 @@ def probe_dead_engines():
     except Exception:
         return []
     pat = _re.compile(r'"(biocjava\.[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+)"')
-    dead = {}
+    dead: dict[str, str] = {}
     srcs = [os.path.join(ROOT, "tbtools_cli", "auto_commands.py"),
             os.path.join(ROOT, "tbtools_cli", "cli.py"),
             os.path.join(ROOT, "tbtools_cli", "cli_tools_registry.py")]

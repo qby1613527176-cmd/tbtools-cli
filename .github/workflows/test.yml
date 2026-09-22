@@ -40,10 +40,10 @@ jobs:
             bash -n "$f" && echo "✅ $f syntax OK"
           done
 
-      - name: Type check with mypy (宽松模式)
+      - name: Type check with mypy (严格模式,含未注解函数)
         run: |
           pip install mypy
-          python3 -m mypy tbtools_cli/
+          python3 -m mypy tbtools_cli/ --check-untyped-defs
 
       - name: Run full pytest suite
         run: |

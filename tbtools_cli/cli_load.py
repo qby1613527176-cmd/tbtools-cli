@@ -318,7 +318,7 @@ def _make_passthrough(name, group=None):
         (("--width", "-W"), {"type": int, "default": None, "help": "画布宽度"}),
         (("--threads", "-t"), {"type": int, "default": None, "help": "线程数"}),
     ]:
-        _cmd_impl = click.option(*opt_args, **opt_kwargs)(_cmd_impl)
+        _cmd_impl = click.option(*opt_args, **opt_kwargs)(_cmd_impl)  # type: ignore[arg-type]
     
     # 提取 click.option 装饰器注册的参数（__click_params__）
     params = getattr(_cmd_impl, '__click_params__', [])
