@@ -111,7 +111,7 @@
 | `gxffilter` | 桥 | gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf> |
 | `gxfsort` | 桥 | gxfsort <in.gff3|gtf> <out.sorted> |
 | `heatmap` | 手动 | 热图（表达矩阵） |
-| `heatmap2` | 手动 |  |
+| `heatmap2` | 手动 | (alias of heatmap) 热图（表达矩阵） |
 | `keggEnrichment` | 工具 | keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment |
 | `logo` | 手动 | 序列 LOGO 图 |
 | `make` | 手动 | 工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名） |
@@ -140,7 +140,7 @@
 | `sRNAseqReadLenStat` | 工具 | sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq R |
 | `sambamcov` | 桥 | sambamcov <in.bam> <out.tsv> [binSize] [countMode] |
 | `seqconvert` | 桥 | seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt> |
-| `seqlogo` | 手动 |  |
+| `seqlogo` | 手动 | (alias of logo) 序列 LOGO 图 |
 | `seqrecommend` | 桥 | 43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量） |
 | `simpleBatchProcess` | 工具 | simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch |
 | `slurmScriptPrepare` | 工具 | slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script |
@@ -255,7 +255,7 @@
 | `gb2fa` | 桥 | 36 genBank2Fasta；头含 locus/accession/organism/definition） |
 | `gblocks` | 桥 | 30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 v |
 | `gel` | 直连 | 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32） |
-| `genestructure` | 手动 |  |
+| `genestructure` | 手动 | (alias of structure) 基因结构图（外显子/UTR 从 GFF） |
 | `genomefilter` | 手动 | 19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过 |
 | `gfa` | 桥 | gfa <in.gfa> <out> [width] [height] |
 | `gfa2fa` | 直连 | GFA 组装图 → FASTA（第91引擎，GFAtoFast |
@@ -369,7 +369,7 @@
 | `nwAlign` | 桥 | Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 Simple |
 | `phylotree` | 桥 | phylotree <in.nwk> <out> [vertical] [width] [height] |
 | `subtree` | 桥 | 23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contai |
-| `treeRooting` | 手动 |  |
+| `treeRooting` | 手动 | (alias of rooting) MAD 系统发育定根 |
 | `unrooted` | 手动 | 无根树可视化 |
 
 ## 统计

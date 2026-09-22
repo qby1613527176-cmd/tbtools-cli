@@ -2629,46 +2629,6 @@
   "help": "CDS → 蛋白质翻译",
   "src": "cli_manual"
  },
- "genestructure": {
-  "name": "genestructure",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "",
-  "runner": "plot",
-  "help": "",
-  "src": "cli_manual"
- },
- "treeRooting": {
-  "name": "treeRooting",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "",
-  "runner": "plot",
-  "help": "",
-  "src": "cli_manual"
- },
- "seqlogo": {
-  "name": "seqlogo",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "",
-  "runner": "plot",
-  "help": "",
-  "src": "cli_manual"
- },
- "heatmap2": {
-  "name": "heatmap2",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "",
-  "runner": "plot",
-  "help": "",
-  "src": "cli_manual"
- },
  "make": {
   "name": "make",
   "kind": "manual",
@@ -2928,6 +2888,46 @@
   "runner": "plot",
   "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>",
   "src": "auto_manual"
+ },
+ "genestructure": {
+  "name": "genestructure",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
+  "src": "cli_manual"
+ },
+ "treeRooting": {
+  "name": "treeRooting",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "(alias of rooting) MAD 系统发育定根",
+  "src": "cli_manual"
+ },
+ "seqlogo": {
+  "name": "seqlogo",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "(alias of logo) 序列 LOGO 图",
+  "src": "cli_manual"
+ },
+ "heatmap2": {
+  "name": "heatmap2",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "",
+  "runner": "plot",
+  "help": "(alias of heatmap) 热图（表达矩阵）",
+  "src": "cli_manual"
  },
  "tree": {
   "name": "tree",

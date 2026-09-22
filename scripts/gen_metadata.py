@@ -51,31 +51,15 @@ def scan_cli_tools():
 
 def scan_manual_commands():
     src = open(CLI, encoding="utf-8").read()
-    # 匹配 @seq_group.command("seqlogo") / @expr_group.command("heatmap2") / @cli.command()(顶层, 跳过)
-    manual = re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_]*)['\"]", src)
     cmds = {}
-    for name in manual:
-        if name in ("list", "check", "doctor", "version", "new", "completion", "examples", "presets", "help", "setup", "fetch-jar"):
-            continue  # 顶层命令(非分组绘图)
+    # 1) 装饰器命令(顶层管理命令跳过)
+    for name in re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_]*)['\"]", src):
+        if name in ("list", "check", "doctor", "version", "new", "completion", "examples",
+                    "presets", "help", "setup", "fetch-jar"):
+            continue
         cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
                       "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
-    # add_command 别名方式: @group.add_command(fn, name="alias")
-    # 格式: seq_group.add_command(seqlogo, name="seqlogo") → 目标 fn 的命令名可查
-    alias_map = {}
-    for m in re.finditer(r"(\w+_group)\.add_command\((\w+),\s*name=[\"']([a-zA-Z][a-zA-Z0-9_]*)[\"']\)", src):
-        grp, fn, alias = m.group(1), m.group(2), m.group(3)
-        alias_map[alias] = (grp, fn)
-    for alias, (grp, fn) in alias_map.items():
-        if alias not in cmds:
-            cmds[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
-                           "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
-        # 别名 help: 从主命令 docstring 或 fn 名对应命令借用
-        if not cmds[alias].get("help"):
-            for other, oc in cmds.items():
-                if oc.get("src") == "cli_manual" and oc.get("help") and fn in (other, f"_{other}"):
-                    cmds[alias]["help"] = f"(alias of {other}) " + oc["help"]
-                    break
-    # cli.py 手动命令 docstring 首行(补 help 空洞): 装饰器+def+docstring 联合匹配
+    # 2) docstring 首行(跨 click 装饰器): 装饰器+def+docstring
     for m in re.finditer(
         r'@(?:\w+_group|\w+)\.command\(\s*[\"\']([a-zA-Z][a-zA-Z0-9_]*)[\"\']\)'
         r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*\"\"\"([^\n\"]*)',
@@ -83,8 +67,7 @@ def scan_manual_commands():
         cmd, d = m.group(1), m.group(2).strip()[:200]
         if cmd in cmds and d:
             cmds[cmd]["help"] = d
-    # auto_commands 手写 impl(注册为命令但不在 ENGINE_REGISTRY——N23/N26 后 msy/mirnatarget 等)
-    # 否则这些命令从 metadata/search/help 消失(2026-09-22 二期发现)
+    # 3) auto_commands 手写 impl(N23/N26 后 msy/mirnatarget 等必须可发现)
     try:
         ac_src = open(os.path.join(os.path.dirname(CLI), "auto_commands.py"), encoding="utf-8").read()
         for m in re.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\n\"]*)", ac_src, re.M):
@@ -95,6 +78,23 @@ def scan_manual_commands():
                           "xmx": "", "runner": "plot", "help": docfirst[:200], "src": "auto_manual"}
     except Exception:
         pass
+    # 4) add_command 别名(help 借用须在 1-3 之后, 目标 help 已填)
+    for m in re.finditer(r"(\w+_group)\.add_command\((\w+),\s*name=[\"']([a-zA-Z][a-zA-Z0-9_]*)[\"']\)", src):
+        fn, alias = m.group(2), m.group(3)
+        if alias not in cmds:
+            cmds[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
+                           "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
+        if not cmds[alias].get("help"):
+            # 函数名→命令名: 分组前缀去除 + 已知特例(seqlogo 函数 → logo 命令)
+            target = {"seqlogo": "logo"}.get(fn, fn)
+            for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
+                if target.startswith(_p):
+                    target = target[len(_p):]
+                    break
+            if target in cmds and cmds[target].get("help"):
+                cmds[alias]["help"] = f"(alias of {target}) " + cmds[target]["help"]
+            elif fn in cmds and cmds[fn].get("help"):
+                cmds[alias]["help"] = f"(alias of {fn}) " + cmds[fn]["help"]
     return cmds
 
 
