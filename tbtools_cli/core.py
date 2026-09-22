@@ -695,7 +695,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
         _code, ec_out_from_code, _hint_zh = classify_error(err_text)
         _err_meta = ERROR_CODES.get(_code, ERROR_CODES["TB001_INVALID_ARGUMENT"])
         ec_out = ec_out_from_code
-        hint = _(_hint_zh, _err_meta["action"])
+        hint = _(_hint_zh, str(_err_meta["action"]))
         
         print(file=sys.stderr)
         print(f"   💡 {hint}", file=sys.stderr)
