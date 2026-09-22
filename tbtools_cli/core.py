@@ -9,6 +9,8 @@ import tempfile
 
 import click
 
+from tbtools_cli.config import get_default  # heap 可配置(第六轮评审)
+
 # ---- 平台常量（Windows 主战场：classpath 分隔符；Linux/WSL 用 :）----
 CP_SEP = ";" if os.name == "nt" else ":"
 
@@ -442,6 +444,11 @@ def find_empty_inputs(java_args):
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 def run_java(java_args: list, verbose: bool = False, quiet: bool = False, command_name: str | None = None) -> int:
     ec_out = 0
+    # 堆内存可配置(第六轮评审: 注册表 -Xmx 硬编码,低配机器直接 OOM):
+    # config.toml [defaults] memory = "2g" 全局覆盖;未配置保持注册表值
+    _mem = get_default("memory")
+    if _mem and any(a.startswith("-Xmx") for a in java_args):
+        java_args = [f"-Xmx{_mem}" if a.startswith("-Xmx") else a for a in java_args]
     """执行 Java 命令，失败时输出友好提示
     
     退出码: 0=成功, 1=参数错误, 2=文件不存在, 3=格式错误
@@ -575,7 +582,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
             hint = "可能缺少必需参数或输入数据行列数不足"
             ec_out = 3
         elif "OutOfMemoryError" in err_text:
-            hint = "内存不足，尝试 -Xmx4g 或更大堆内存"
+            hint = "内存不足: 在 ~/.config/tbtools-cli/config.toml 加 [defaults] memory = \"4g\"(或按机器内存调)后重试"
             ec_out = 4
         
         print(file=sys.stderr)
