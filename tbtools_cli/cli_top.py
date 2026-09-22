@@ -620,6 +620,106 @@ def register_top(cli, _LG):
             click.echo(f"  exit: {ec} | {dt}s | 产物: {artifacts or '无'}")
         sys.exit(ec if ec else 0)
 
+    # ── Job 模型(GLM P1: 异步提交/查询/取消; Agent 长任务)──
+    def _jobs_dir():
+        import os as _os
+        d = os.path.join(os.path.expanduser("~"), ".config", "tbtools-cli", "jobs")
+        os.makedirs(d, exist_ok=True)
+        return d
+
+    @cli.command(name="tool-submit")
+    @click.argument("args", nargs=-1, required=True)
+    def tool_submit(args):
+        """异步提交任务: 后台执行, 返回 job_id(Agent 长任务)"""
+        import json as _json, subprocess as _sp, sys as _sys, uuid as _uuid, time as _time
+        jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
+        jdir = _jobs_dir()
+        log = os.path.join(jdir, f"{jid}.log")
+        lf = open(log, "w", encoding="utf-8")
+        p = _sp.Popen([_sys.executable, "-m", "tbtools_cli.cli"] + list(args),
+                      stdout=lf, stderr=_sp.STDOUT, start_new_session=True)
+        job = {"id": jid, "status": "running", "pid": p.pid, "args": list(args),
+               "started_at": _time.strftime("%Y-%m-%dT%H:%M:%S"), "log": log}
+        _json.dump(job, open(os.path.join(jdir, f"{jid}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        click.echo(_json.dumps({"job_id": jid, "status": "running", "pid": p.pid}, ensure_ascii=False, indent=1))
+
+    @cli.command(name="job-status")
+    @click.argument("job_id")
+    def job_status(job_id):
+        """查询任务状态(运行中/成功/失败/耗时)"""
+        import json as _json, os as _os
+        jf = os.path.join(_jobs_dir(), f"{job_id}.json")
+        if not os.path.isfile(jf):
+            click.echo(f"❌ 未知 job: {job_id}", err=True)
+            sys.exit(1)
+        job = _json.load(open(jf, encoding="utf-8"))
+        alive = os.path.exists(f"/proc/{job['pid']}") if os.path.isdir("/proc") else True
+        if alive and job["status"] == "running":
+            st = "running"
+        elif job["status"] == "running":
+            job["status"] = "done"; st = "done"
+        else:
+            st = job["status"]
+        click.echo(_json.dumps({"job_id": job_id, "status": st, "pid": job["pid"],
+                                "started_at": job["started_at"], "log": job["log"]},
+                               ensure_ascii=False, indent=1))
+
+    @cli.command(name="job-log")
+    @click.argument("job_id")
+    @click.option("--tail", "n", type=int, default=30)
+    def job_log(job_id, n):
+        """查看任务日志(尾部 N 行)"""
+        import os as _os
+        lf = os.path.join(_jobs_dir(), f"{job_id}.log")
+        if not os.path.isfile(lf):
+            click.echo(f"❌ 无日志: {job_id}", err=True)
+            sys.exit(1)
+        lines = open(lf, encoding="utf-8", errors="replace").read().splitlines()
+        click.echo("\n".join(lines[-n:]))
+
+    @cli.command(name="job-result")
+    @click.argument("job_id")
+    def job_result(job_id):
+        """任务结构化结果(从 provenance 读; Agent 结果验证)"""
+        import json as _json, os as _os
+        jf = os.path.join(_jobs_dir(), f"{job_id}.json")
+        if not os.path.isfile(jf):
+            click.echo(f"❌ 未知 job: {job_id}", err=True)
+            sys.exit(1)
+        job = _json.load(open(jf, encoding="utf-8"))
+        # 输出识别: args 中最后图形参数
+        artifacts, error = [], None
+        for a in reversed(job.get("args", [])):
+            if a.endswith((".svg", ".png", ".pdf")):
+                _po = a + ".tbtools.json"
+                if os.path.isfile(_po):
+                    try:
+                        _pr = _json.load(open(_po, encoding="utf-8"))
+                        artifacts, error = _pr.get("outputs", []), _pr.get("error")
+                    except Exception:
+                        pass
+                break
+        click.echo(_json.dumps({"schema_version": "1.0", "job_id": job_id, "status": job.get("status"),
+                                "artifacts": artifacts, "error": error}, ensure_ascii=False, indent=1))
+
+    @cli.command(name="job-cancel")
+    @click.argument("job_id")
+    def job_cancel(job_id):
+        """取消任务(杀进程树, 含 java/xvfb 子进程)"""
+        import json as _json, os as _os, signal as _sig
+        jf = os.path.join(_jobs_dir(), f"{job_id}.json")
+        if not os.path.isfile(jf):
+            click.echo(f"❌ 未知 job: {job_id}", err=True)
+            sys.exit(1)
+        job = _json.load(open(jf, encoding="utf-8"))
+        try:
+            os.killpg(os.getpgid(job["pid"]), _sig.SIGKILL)  # 进程组整杀
+            job["status"] = "cancelled"
+            _json.dump(job, open(jf, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            click.echo(f"✅ 已取消 {job_id}(PID {job['pid']} 进程组)")
+        except Exception as e:
+            click.echo(f"⚠️ 取消失败(可能已结束): {e}", err=True)
+
     @cli.command(name="search")
     @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
