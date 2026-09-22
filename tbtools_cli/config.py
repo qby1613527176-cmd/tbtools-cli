@@ -11,25 +11,25 @@ DEFAULT_CONFIG_PATH = os.path.expanduser("~/.config/tbtools-cli/config.toml")
 _config_cache: dict | None = None
 
 def load_config():
-    """加载配置文件。返回 dict（可能为空）"""
+    """加载配置文件。返回 dict（可能为空）。
+
+    _config_cache 缓存 (路径, 数据)——TBTOOLS_CONFIG env 变化时自动重读
+    (第十四轮审计: 原缓存不感知 env 变化,测试/库场景拿旧配置)。
+    """
     global _config_cache
-    if _config_cache is not None:
-        return _config_cache
-    
-    _config_cache = {}
-    if not tomllib:
-        return _config_cache
-    
     path = os.environ.get("TBTOOLS_CONFIG", DEFAULT_CONFIG_PATH)
+    if _config_cache is not None and _config_cache[0] == path:
+        return _config_cache[1]
+    if not tomllib:
+        return {}
     if not os.path.isfile(path):
-        return _config_cache
-    
+        return {}
     try:
         with open(path, "rb") as f:
-            _config_cache = tomllib.load(f)
+            _config_cache = (path, tomllib.load(f))
     except Exception:
-        pass
-    return _config_cache
+        _config_cache = (path, {})
+    return _config_cache[1]
 
 def get_default(key, fallback=None):
     """获取默认值（配置文件 < 环境变量 < 命令行）"""
