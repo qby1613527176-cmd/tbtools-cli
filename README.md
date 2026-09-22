@@ -23,6 +23,17 @@
 
 ---
 
+## 📺 Demo（终端录屏）
+
+[`docs/images/demo.cast`](docs/images/demo.cast) — asciinema 格式,10 秒演示:
+`tbtools version` → `doctor` → `search volcano` → `volcano 实跑出图`。
+
+```bash
+# 本地播放
+asciinema play docs/images/demo.cast
+# 或上传 asciinema.org 网页播放(asciinema upload)
+```
+
 ## 📑 Table of Contents
 
 - [Quick Start](#quick-start)

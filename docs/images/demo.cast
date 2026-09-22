@@ -1,0 +1,9 @@
+{"version": 2, "width": 100, "height": 25, "timestamp": 1790054619, "env": {"SHELL": null, "TERM": null}, "title": "tbtools-cli demo"}
+[0.00317, "o", "$ tbtools version\r\n"]
+[0.092604, "o", "tbtools-cli v1.0.0\r\n  218 绘图/分析命令 + 201 auto_commands + 188 RPC 方法\r\n"]
+[0.236499, "o", "$ tbtools doctor (JAR 行)\r\n"]
+[0.443134, "o", "  ✅ Java: 可用\r\n  ✅ JAR: /mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar (53MB)\r\n  汇总: ✅ 6  ⚠️ 0  ❌ 0\r\n"]
+[0.443438, "o", "$ tbtools search volcano\r\n"]
+[0.525282, "o", "🔍 匹配 'volcano' 的命令（1 个）:\r\n  volcano                  [engine/manual] \r\n\r\n"]
+[0.540031, "o", "$ tbtools expr volcano examples/data/deg.txt demo.svg\r\n"]
+[1.957445, "o", "⏱ 耗时 1.3s (volcano)\r\n"]
