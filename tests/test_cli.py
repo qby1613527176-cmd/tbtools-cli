@@ -353,12 +353,11 @@ class TestRpcAndHelp:
         assert ec == 1
         assert "❌" in out
 
-    def test_rpc_methods_no_autostart(self):
-        ec, out, err = run_cli("rpc", "methods", "-p", "9999", "--no-autostart")
-        # N34/N35 修复后：默认自动拉起（不再依赖手动 start）；--no-autostart 关闭自愈，
-        # 此时服务器不可达（9999 无服务）应报错退出（而非静默失败/连接拒绝裸奔）
+    def test_rpc_methods_static_discovery(self):
+        # GPT/GLM 评审: 发现操作应 side-effect free——默认不启动服务器(9999 无服务应报错非零)
+        ec, out, err = run_cli("rpc", "methods", "-p", "9999")
         assert ec != 0
-        assert "❌" in err or "❌" in out or "不可达" in out or "启动" in out or "拉起" in err
+        assert "❌" in err or "❌" in out or "不可达" in out or "refused" in err.lower()
 
 
 # ============ 10. help 文本质量 ============
