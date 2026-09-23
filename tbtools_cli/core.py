@@ -9,7 +9,8 @@ import tempfile
 
 import click
 
-from tbtools_cli.config import get_default  # heap 可配置(第六轮评审)
+from tbtools_cli.config import get_default
+from tbtools_cli.errors import ERROR_CODES, classify_error  # 错误契约独立模块(拆分第一步)  # heap 可配置(第六轮评审)
 
 # ── 轻量 i18n(--lang en / LC_ALL / config [defaults] lang)──
 _LANG_EN = None
@@ -524,9 +525,6 @@ def find_empty_inputs(java_args):
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 
 # ── Error Code Registry(GLM 评审: 结构化错误契约, AI 可编程处理)──
-from tbtools_cli.errors import ERROR_CODES, classify_error
-
-
 def _n19_move_result(n19_tmp, n19_out, n19_orig_sha):
     """N19: findBestHomologyBatch 引擎改写了临时副本时才搬结果到 outTable。
     独立函数(第六轮评审: 引擎特判不寄生在 run_java 主干,便于单独测试)。"""
