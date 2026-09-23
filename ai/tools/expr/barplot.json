@@ -16,7 +16,11 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "富集表: 列名 Term/Pvalue"
+   "note": "富集表",
+   "columns": [
+    "Term",
+    "Pvalue"
+   ]
   }
  ],
  "outputs": [

@@ -18,7 +18,10 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "表达矩阵 gene×sample"
+   "note": "首列 gene ID",
+   "columns": [
+    "gene_id"
+   ]
   }
  ],
  "outputs": [

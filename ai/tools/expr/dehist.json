@@ -17,7 +17,12 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "DEG 表"
+   "note": "DEG 表",
+   "columns": [
+    "GeneID",
+    "Log2FC",
+    "pvalue"
+   ]
   }
  ],
  "outputs": [

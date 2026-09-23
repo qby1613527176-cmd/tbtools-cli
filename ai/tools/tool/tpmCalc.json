@@ -17,14 +17,18 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "counts 表"
   },
   {
    "name": "lenInfo",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "",
+   "columns": [
+    "GeneID",
+    "Length"
+   ]
   }
  ],
  "outputs": [

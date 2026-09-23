@@ -47,7 +47,7 @@ class CommandSpec:
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
 KNOWN_SCHEMAS = {
     "volcano": ([InputSpec("deg", format="tsv", note="GeneID\tLog2FC\tpvalue", columns=["GeneID", "Log2FC", "pvalue"])], ["svg"]),
-    "heatmap": ([InputSpec("matrix", format="tsv", note="表达矩阵 gene×sample")], ["svg"]),
+    "heatmap": ([InputSpec("matrix", format="tsv", note="首列 gene ID", columns=["gene_id"])], ["svg"]),
     "hclust": ([InputSpec("distance", format="tsv", note="三列距离", columns=["GeneA", "GeneB", "distance"])], ["svg"]),
     "venn2": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt")], ["svg"]),
     "msy": ([InputSpec("pos", format="tsv", note="Chr\tGene\tStart\tEnd"),
@@ -58,9 +58,9 @@ KNOWN_SCHEMAS = {
     "tableMerge": ([InputSpec("tables", format="tsv", note="多个输入表")], ["tsv"]),
     "qdot": ([InputSpec("gff", format="tsv", note="4 列简化: Chr\tGene\tStart\tEnd")], ["svg"]),
     # 二期扩展批(高频绘图/工具)
-    "dehist": ([InputSpec("deg", format="tsv", note="DEG 表")], ["svg"]),
-    "pca": ([InputSpec("matrix", format="tsv", note="表达矩阵")], ["svg"]),
-    "barplot": ([InputSpec("enrichment", format="tsv", note="富集表: 列名 Term/Pvalue")], ["svg"]),
+    "dehist": ([InputSpec("deg", format="tsv", note="DEG 表", columns=["GeneID", "Log2FC", "pvalue"])], ["svg"]),
+    "pca": ([InputSpec("matrix", format="tsv", note="首列 gene ID", columns=["gene_id"])], ["svg"]),
+    "barplot": ([InputSpec("enrichment", format="tsv", note="富集表", columns=["Term", "Pvalue"])], ["svg"]),
     "circos": ([InputSpec("chrLen", format="tsv"), InputSpec("link", format="tsv"),
                 InputSpec("genePos", format="tsv")], ["svg"]),
     "dotplot": ([InputSpec("gff", format="tsv", note="4 列简化"), InputSpec("pairs", format="tsv")], ["svg"]),
@@ -81,7 +81,7 @@ KNOWN_SCHEMAS = {
     "venn4": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt"),
                InputSpec("list3", format="txt"), InputSpec("list4", format="txt")], ["svg"]),
     "upset": ([InputSpec("sets", format="txt", note="多个集合文件, 末参为输出")], ["svg"]),
-    "tpmCalc": ([InputSpec("counts", format="tsv"), InputSpec("lenInfo", format="tsv")], ["tsv"]),
+    "tpmCalc": ([InputSpec("counts", format="tsv", note="counts 表"), InputSpec("lenInfo", format="tsv", columns=["GeneID", "Length"])], ["tsv"]),
     "gxfSplit": ([InputSpec("gff", format="gff3")], ["tsv"]),
     "gxfAttr": ([InputSpec("gff", format="gff3")], ["tsv"]),
     "gxfIdAppender": ([InputSpec("gff", format="gff3")], ["gff3"]),

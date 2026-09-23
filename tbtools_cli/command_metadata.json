@@ -184,7 +184,11 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "富集表: 列名 Term/Pvalue"
+    "note": "富集表",
+    "columns": [
+     "Term",
+     "Pvalue"
+    ]
    }
   ],
   "outputs": [
@@ -4639,14 +4643,18 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "counts 表"
    },
    {
     "name": "lenInfo",
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "columns": [
+     "GeneID",
+     "Length"
+    ]
    }
   ],
   "outputs": [
@@ -5626,7 +5634,10 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "表达矩阵 gene×sample"
+    "note": "首列 gene ID",
+    "columns": [
+     "gene_id"
+    ]
    }
   ],
   "outputs": [
@@ -5660,7 +5671,10 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "表达矩阵"
+    "note": "首列 gene ID",
+    "columns": [
+     "gene_id"
+    ]
    }
   ],
   "outputs": [
@@ -5739,7 +5753,12 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "DEG 表"
+    "note": "DEG 表",
+    "columns": [
+     "GeneID",
+     "Log2FC",
+     "pvalue"
+    ]
    }
   ],
   "outputs": [

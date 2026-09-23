@@ -59,9 +59,21 @@ def tool_validate(command: str, inputs: list[str] | str = "") -> str:
 
 
 @mcp.tool()
-def tool_run(command: str, args: list[str] | str = "", timeout_s: int = 600) -> str:
-    """执行工具(同步): args 为参数 list(含空格路径安全)或兼容旧 string。返回纯 JSON(exit_code/artifacts/error)。"""
-    parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
+def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = None, timeout_s: int = 600) -> str:
+    """执行工具(同步)。
+
+    参数优先级: arguments(dict, Agent 结构化) > args(list 或 string 兼容)。
+    arguments 形式: {"inputs": [...], "outputs": [...], "parameters": {k: v}}
+    —— dict 会展开为 CLI 参数(空格路径安全; 评审 #21 Agent-native 结构化)。
+    返回纯 JSON(exit_code/artifacts/error)。
+    """
+    if arguments:
+        parts = list(arguments.get("inputs", []))
+        for k, v in arguments.get("parameters", {}).items():
+            parts += [f"--{k}", str(v)]
+        parts += list(arguments.get("outputs", []))
+    else:
+        parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
     return _cli("tool-run", command, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
 
 
