@@ -502,6 +502,8 @@ def register_top(cli, _LG):
             "class": cls,
             "pitfall": get_pitfall_hint(command),
         }
+        if v.get("alias_of"):
+            desc["alias_of"] = v["alias_of"]
         if v.get("capabilities"):
             desc["capabilities"] = v["capabilities"]
         if v.get("dependencies"):
@@ -815,6 +817,8 @@ def register_top(cli, _LG):
                 caps = v.get("capabilities", []) or []
                 if in_fmt and in_fmt not in ins:
                     continue
+                if v.get("alias_of") and not kws:
+                    continue  # 反向/能力搜索: alias 不污染工具空间(仅 canonical)
                 if out_fmt and out_fmt not in outs:
                     continue
                 if cap and cap not in caps:

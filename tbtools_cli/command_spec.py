@@ -34,7 +34,8 @@ class CommandSpec:
     xmx: str = "2g"
     doc: str = ""
     status: str = "stable"       # stable|beta|legacy|platform-limited|network-required
-    aliases: list[str] = field(default_factory=list)
+    aliases: list[str] = field(default_factory=list)  # 反向: canonical → 别名们
+    alias_of: str = ""           # 本命令是某 canonical 的兼容别名(如 treeRooting→rooting)
     inputs: list[InputSpec] = field(default_factory=list)
     outputs: list[str] = field(default_factory=list)  # 输出类型(如 svg/png/tsv)
     capabilities: list[str] = field(default_factory=list)  # 能力标签(能力图搜索)
@@ -234,6 +235,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
     # 别名/状态/schema 标注(统一模型增强; 在所有来源构建完成后)
     for name, spec in specs.items():
         spec.aliases = [a for a, target in KNOWN_ALIASES.items() if target == name]
+        spec.alias_of = KNOWN_ALIASES.get(name, "")
         spec.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             ins, outs = KNOWN_SCHEMAS[name]
@@ -263,6 +265,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         specs.setdefault(name, CommandSpec(name, grp, "manual", runner="plot", doc=e.get("help", "")))
     for name, s in specs.items():
         s.aliases = [a for a, t in KNOWN_ALIASES.items() if t == name]
+        s.alias_of = KNOWN_ALIASES.get(name, "")
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
@@ -276,6 +279,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     e: dict[str, object] = {"name": spec.name, "kind": spec.kind, "mode": spec.kind,
                             "class": spec.class_name, "xmx": spec.xmx, "runner": spec.runner,
                             "group": spec.group, "help": spec.doc}
+    if spec.alias_of:
+        e["alias_of"] = spec.alias_of
     if spec.capabilities:
         e["capabilities"] = spec.capabilities
     if spec.dependencies:

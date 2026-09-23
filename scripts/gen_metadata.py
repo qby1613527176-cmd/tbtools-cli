@@ -278,7 +278,7 @@ def render_ai_manifest(meta):
         for name, v in meta.items():
             entry = {"id": f"tbtools.{v.get('group','engine')}.{name}", "name": name,
                      "group": v.get('group', 'engine'), "kind": v.get('kind', '?'),
-                     "capabilities": v.get('capabilities', []),
+                     "alias_of": v.get('alias_of', ""), "capabilities": v.get('capabilities', []),
                      "input_formats": sorted({i.get('format','') for i in v.get('inputs', []) if i.get('format')}),
                      "output_formats": v.get('outputs', []),
                      "description": (v.get('help','') or '').replace('\n', ' ')[:160]}

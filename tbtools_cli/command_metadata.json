@@ -506,7 +506,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "expr",
-  "help": "gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）"
+  "help": "gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）",
+  "alias_of": "groupedbar"
  },
  "gdensity": {
   "name": "gdensity",
@@ -516,7 +517,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "gxf",
-  "help": "gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）"
+  "help": "gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）",
+  "alias_of": "genedensity"
  },
  "gel": {
   "name": "gel",
@@ -2532,7 +2534,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "getLongestCompleteORF: getLongestCompleteORF (tool, ORF) — O R F"
+  "help": "getLongestCompleteORF: getLongestCompleteORF (tool, ORF) — O R F",
+  "alias_of": "longestorf"
  },
  "ExtractFeaturefromGFF3andGenome": {
   "name": "ExtractFeaturefromGFF3andGenome",
@@ -2692,7 +2695,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "TableCast: TableCast (tool, TableCast) — Table Cast"
+  "help": "TableCast: TableCast (tool, TableCast) — Table Cast",
+  "alias_of": "tableCast"
  },
  "TableColSelector": {
   "name": "TableColSelector",
@@ -3984,6 +3988,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
+  "alias_of": "structure",
   "capabilities": [
    "gene_structure",
    "annotation",
@@ -4018,6 +4023,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "(alias of rooting) MAD 系统发育定根",
+  "alias_of": "rooting",
   "inputs": [
    {
     "name": "nwk",
