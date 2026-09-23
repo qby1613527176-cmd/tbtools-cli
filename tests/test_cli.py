@@ -497,19 +497,28 @@ class TestReadmeCounts:
         assert ec == 0
 
     def test_readme_plot_count(self):
-        """README 绘图命令数 = list plots 实际数（防漂移；2026-09-21 曾 174 vs 实际 218）"""
+        """README 数字机器化(GPT #7): 不手写精确计数; 权威源 counts.md 与运行时一致。
+
+        2026-09-23 改造: 精确数字全部移除(218/188/82/118/276), 改为范围口径 +
+        docs/_generated/counts.md(gen_metadata 自动生成)作为唯一权威。
+        """
         import os
-        import subprocess
-        import sys
-        import re
+        import json
         from tbtools_cli.core import ROOT
         readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
-        plots = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "list", "plots"],
-                               capture_output=True, text=True, timeout=60).stdout
-        actual = len([ln for ln in plots.splitlines() if ln.startswith("    ")])
-        m = re.search(r'(\d+) 个绘图/分析命令', readme)
-        assert m and int(m.group(1)) == actual, \
-            f"README 绘图命令数 {m.group(1) if m else '?'} != 实际 {actual}，同步 README"
+        # 1) README 不应含已废弃精确数字(范围口径时代)
+        for bad in ["218 个", "188 个", "82 个", "118 个", "276 命令", "196 绘图", "268 命令"]:
+            assert bad not in readme, f"README 含已废弃精确数字 {bad!r}"
+        # 2) 权威源: counts.md(机器生成)必须与 command_metadata.json 实际一致
+        counts_path = os.path.join(ROOT, "docs", "_generated", "counts.md")
+        assert os.path.isfile(counts_path), "counts.md 缺失(跑 gen_metadata --render)"
+        counts = open(counts_path, encoding="utf-8").read()
+        meta = json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
+        assert f"metadata_commands: {len(meta)}" in counts, \
+            "counts.md 与 command_metadata.json 不一致(跑 gen_metadata --render)"
+        # 3) README 头部应指向权威源(防回归到手写数字)
+        assert "counts.md" in readme and "version --json" in readme, \
+            "README 缺少数字权威源声明(应指向 counts.md / version --json)"
 
     def test_readme_pitfall_count(self):
         """README 坑位数 = PITFALL_HINTS 实际数"""
