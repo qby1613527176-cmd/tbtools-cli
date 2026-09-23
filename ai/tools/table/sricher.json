@@ -7,7 +7,9 @@
  "class": "SimpleEnricherCli",
  "description": "简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）",
  "invoke": "tbtools table sricher <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

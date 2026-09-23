@@ -7,7 +7,9 @@
  "class": "MastCli",
  "description": "MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）",
  "invoke": "tbtools seq mast <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

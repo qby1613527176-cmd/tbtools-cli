@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation",
  "description": "genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph",
  "invoke": "tbtools gxf genelocation <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioIO.FastX.FastaIndex.QuickSpiltFasta",
  "description": "33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）",
  "invoke": "tbtools seq fasplit <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

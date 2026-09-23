@@ -7,7 +7,9 @@
  "class": "RegionBedToGFF3Cli",
  "description": "21 RegionBedToGFF3；⚠️ BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）",
  "invoke": "tbtools gxf bed2gff3 <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

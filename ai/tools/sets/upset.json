@@ -7,7 +7,9 @@
  "class": "UpSetCli",
  "description": "UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
  "invoke": "tbtools sets upset <args...>",
- "capabilities": [],
+ "capabilities": [
+  "set_operations"
+ ],
  "inputs": [
   {
    "name": "sets",

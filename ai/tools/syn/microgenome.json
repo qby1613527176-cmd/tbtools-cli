@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot",
  "description": "microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]",
  "invoke": "tbtools syn microgenome <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

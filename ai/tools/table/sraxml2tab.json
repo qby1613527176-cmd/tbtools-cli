@@ -7,7 +7,9 @@
  "class": "biocjava.bioIO.SRAtools.ParseSRAXml2Table",
  "description": "40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
  "invoke": "tbtools table sraxml2tab <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

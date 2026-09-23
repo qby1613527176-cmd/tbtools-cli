@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableMerger",
  "description": "按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)",
  "invoke": "tbtools table tableMerge <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [
   {
    "name": "tables",

@@ -7,7 +7,9 @@
  "class": "MultiSuperHeatCli",
  "description": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
  "invoke": "tbtools expr multiEfp <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [
   {
    "name": "tga",

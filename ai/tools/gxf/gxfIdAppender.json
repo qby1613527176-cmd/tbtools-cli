@@ -7,7 +7,9 @@
  "class": "",
  "description": "GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
  "invoke": "tbtools gxf gxfIdAppender <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [
   {
    "name": "gff",

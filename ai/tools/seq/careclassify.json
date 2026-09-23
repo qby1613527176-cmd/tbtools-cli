@@ -7,7 +7,9 @@
  "class": "PlantCAREResultClassifyCli",
  "description": "22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
  "invoke": "tbtools seq careclassify <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

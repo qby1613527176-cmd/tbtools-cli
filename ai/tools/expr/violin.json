@@ -7,7 +7,9 @@
  "class": "ViolinCli",
  "description": "violin: violin <in.tsv> <out> [width] [height]",
  "invoke": "tbtools expr violin <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

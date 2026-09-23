@@ -7,7 +7,9 @@
  "class": "",
  "description": "序列 LOGO 图",
  "invoke": "tbtools seq logo <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

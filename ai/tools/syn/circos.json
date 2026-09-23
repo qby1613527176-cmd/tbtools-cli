@@ -7,7 +7,9 @@
  "class": "CircosCli",
  "description": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
  "invoke": "tbtools syn circos <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [
   {
    "name": "chrLen",

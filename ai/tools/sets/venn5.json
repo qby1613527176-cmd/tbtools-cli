@@ -7,7 +7,9 @@
  "class": "Venn5Cli",
  "description": "venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]",
  "invoke": "tbtools sets venn5 <args...>",
- "capabilities": [],
+ "capabilities": [
+  "set_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

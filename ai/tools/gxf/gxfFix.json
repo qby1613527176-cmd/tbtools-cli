@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix",
  "description": "GFF 修复（重复ID前缀/CDS phase/dang",
  "invoke": "tbtools gxf gxfFix <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableUniq",
  "description": "tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|",
  "invoke": "tbtools table tableUniq <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

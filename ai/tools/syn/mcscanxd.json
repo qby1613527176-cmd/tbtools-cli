@@ -7,7 +7,9 @@
  "class": "",
  "description": "OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
  "invoke": "tbtools syn mcscanxd <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [
   {
    "name": "gff",

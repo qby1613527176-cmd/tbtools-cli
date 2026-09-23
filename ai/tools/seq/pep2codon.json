@@ -7,7 +7,9 @@
  "class": "Pep2CodonCli",
  "description": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
  "invoke": "tbtools seq pep2codon <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "cds",

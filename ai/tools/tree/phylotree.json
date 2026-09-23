@@ -7,7 +7,9 @@
  "class": "PhyloTreeCli",
  "description": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
  "invoke": "tbtools tree phylotree <args...>",
- "capabilities": [],
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

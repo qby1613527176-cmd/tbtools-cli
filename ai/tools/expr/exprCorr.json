@@ -7,7 +7,9 @@
  "class": "ExprCorrCli",
  "description": "exprCorr: exprCorr <inFPKM> <outCorrMat>",
  "invoke": "tbtools expr exprCorr <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "",
  "description": "31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
  "invoke": "tbtools blast bestid <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

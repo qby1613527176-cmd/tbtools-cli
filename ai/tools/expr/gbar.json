@@ -7,7 +7,9 @@
  "class": "GroupedBarCli",
  "description": "分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）",
  "invoke": "tbtools expr gbar <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

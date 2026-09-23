@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.RecallmRNAFeature",
  "description": "从 gene 行恢复 mRNA 特征（第82引擎，",
  "invoke": "tbtools gxf gxfRecall <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

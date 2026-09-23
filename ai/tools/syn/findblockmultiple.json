@@ -7,7 +7,9 @@
  "class": "FindBlockMultipleCli",
  "description": "findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou",
  "invoke": "tbtools syn findblockmultiple <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

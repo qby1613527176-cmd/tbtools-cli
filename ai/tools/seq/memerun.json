@@ -7,7 +7,9 @@
  "class": "MemeRunCli",
  "description": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
  "invoke": "tbtools seq memerun <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "fasta",

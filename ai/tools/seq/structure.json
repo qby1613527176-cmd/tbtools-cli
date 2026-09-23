@@ -7,7 +7,9 @@
  "class": "",
  "description": "基因结构图（外显子/UTR 从 GFF）",
  "invoke": "tbtools seq structure <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

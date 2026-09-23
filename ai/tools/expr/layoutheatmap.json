@@ -7,7 +7,9 @@
  "class": "LayoutHeatmapCli",
  "description": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
  "invoke": "tbtools expr layoutheatmap <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [
   {
    "name": "expr",

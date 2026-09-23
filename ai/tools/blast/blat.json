@@ -7,7 +7,9 @@
  "class": "BlatExecutorCli",
  "description": "42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）",
  "invoke": "tbtools blast blat <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

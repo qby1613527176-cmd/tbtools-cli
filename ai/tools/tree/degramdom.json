@@ -7,7 +7,9 @@
  "class": "DegramdomCli",
  "description": "degramdom: degramdom <in.tsv> [out.nwk]",
  "invoke": "tbtools tree degramdom <args...>",
- "capabilities": [],
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

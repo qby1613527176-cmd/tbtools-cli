@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition",
  "description": "homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>",
  "invoke": "tbtools asm homoPhase <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

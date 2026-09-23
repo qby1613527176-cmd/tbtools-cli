@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableSplitByCol",
  "description": "tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]",
  "invoke": "tbtools table tableSplit <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

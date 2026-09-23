@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GXFOverlaper",
  "description": "gxfOverlap: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand",
  "invoke": "tbtools gxf gxfOverlap <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

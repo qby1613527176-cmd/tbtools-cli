@@ -7,7 +7,9 @@
  "class": "BarplotCli",
  "description": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol",
  "invoke": "tbtools expr barplot <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [
   {
    "name": "enrichment",

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.VirusDetect.RecombinationAnalysis",
  "description": "病毒重组分析（第77引",
  "invoke": "tbtools asm virusRecomb <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

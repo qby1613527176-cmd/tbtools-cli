@@ -7,7 +7,9 @@
  "class": "BarPlotterCli",
  "description": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
  "invoke": "tbtools expr barplotter <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [
   {
    "name": "gff",

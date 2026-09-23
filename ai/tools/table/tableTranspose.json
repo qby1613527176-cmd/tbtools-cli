@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableTransposer",
  "description": "表格转置（第95引擎，TableTran",
  "invoke": "tbtools table tableTranspose <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

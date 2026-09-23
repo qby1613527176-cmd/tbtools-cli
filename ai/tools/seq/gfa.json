@@ -7,7 +7,9 @@
  "class": "VizGFACli",
  "description": "gfa: gfa <in.gfa> <out> [width] [height]",
  "invoke": "tbtools seq gfa <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

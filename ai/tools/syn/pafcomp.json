@@ -7,7 +7,9 @@
  "class": "PafGC",
  "description": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
  "invoke": "tbtools syn pafcomp <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

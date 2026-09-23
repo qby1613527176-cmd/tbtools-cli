@@ -7,7 +7,9 @@
  "class": "FastaMergerCli",
  "description": "33 FastaMergerAndSpliter.Merge）",
  "invoke": "tbtools seq famerge <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

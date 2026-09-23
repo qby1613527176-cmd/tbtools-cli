@@ -7,7 +7,9 @@
  "class": "BamSortCli",
  "description": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
  "invoke": "tbtools asm bamsort <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

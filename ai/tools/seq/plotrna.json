@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold",
  "description": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
  "invoke": "tbtools seq plotrna <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "seq",

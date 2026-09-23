@@ -7,7 +7,9 @@
  "class": "CircleGeneViewerCli",
  "description": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
  "invoke": "tbtools syn circlegene <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

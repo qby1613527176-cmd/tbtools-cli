@@ -7,7 +7,9 @@
  "class": "GeneDensityCli",
  "description": "基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）",
  "invoke": "tbtools gxf gdensity <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

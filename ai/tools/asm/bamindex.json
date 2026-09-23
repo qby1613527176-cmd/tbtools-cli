@@ -7,7 +7,9 @@
  "class": "BamIndexCli",
  "description": "bamindex: bamindex <in.sorted.bam> [out.bai]",
  "invoke": "tbtools asm bamindex <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GeneOntology.Grapher.LevelDoer",
  "description": "levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]",
  "invoke": "tbtools table levelGo <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

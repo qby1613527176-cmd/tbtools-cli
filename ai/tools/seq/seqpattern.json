@@ -7,7 +7,9 @@
  "class": "biocjava.bioIO.FastX.QuickLocateSeqPattern",
  "description": "20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
  "invoke": "tbtools seq seqpattern <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

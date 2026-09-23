@@ -7,7 +7,9 @@
  "class": "GeneLocGffCli",
  "description": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
  "invoke": "tbtools gxf genelocgff <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [
   {
    "name": "gff",

@@ -7,7 +7,9 @@
  "class": "RNAplotCli",
  "description": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
  "invoke": "tbtools seq rnaplot <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "seq",

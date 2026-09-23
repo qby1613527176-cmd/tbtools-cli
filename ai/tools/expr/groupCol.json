@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableColCollaspe",
  "description": "groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|",
  "invoke": "tbtools expr groupCol <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

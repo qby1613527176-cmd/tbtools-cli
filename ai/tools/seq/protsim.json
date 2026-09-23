@@ -7,7 +7,9 @@
  "class": "CalculateSimilarityCli",
  "description": "24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）",
  "invoke": "tbtools seq protsim <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

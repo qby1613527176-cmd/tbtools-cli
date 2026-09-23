@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GenomeAssembly.SeperateChrByAlleles",
  "description": "sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>",
  "invoke": "tbtools asm sepChr <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
  "description": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
  "invoke": "tbtools blast recipBlast <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [
   {
    "name": "db",

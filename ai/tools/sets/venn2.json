@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn2",
  "description": "venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]",
  "invoke": "tbtools sets venn2 <args...>",
- "capabilities": [],
+ "capabilities": [
+  "set_operations"
+ ],
  "inputs": [
   {
    "name": "list1",

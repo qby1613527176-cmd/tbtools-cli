@@ -7,7 +7,9 @@
  "class": "",
  "description": "25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
  "invoke": "tbtools blast xml2pairwise <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

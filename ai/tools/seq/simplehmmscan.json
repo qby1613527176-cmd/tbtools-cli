@@ -7,7 +7,9 @@
  "class": "SimpleHmmscanCli",
  "description": "simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt",
  "invoke": "tbtools seq simplehmmscan <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "platform-limited"

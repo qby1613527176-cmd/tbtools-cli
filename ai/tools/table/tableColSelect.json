@@ -7,7 +7,9 @@
  "class": "TableColManipCli",
  "description": "tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]",
  "invoke": "tbtools table tableColSelect <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification",
  "description": "quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr",
  "invoke": "tbtools blast quickFamily <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

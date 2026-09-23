@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat",
  "description": "GFF 统计（基因/mRNA/外显子/内含子/C",
  "invoke": "tbtools gxf gxfStat <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation",
  "description": "regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-",
  "invoke": "tbtools gxf regionAnno <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

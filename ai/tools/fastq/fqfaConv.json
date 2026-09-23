@@ -7,7 +7,10 @@
  "class": "biocjava.bioDoer.LinuxPipe.FastqAndFasta",
  "description": "FASTQ/FASTA 互转（第",
  "invoke": "tbtools fastq fqfaConv <args...>",
- "capabilities": [],
+ "capabilities": [
+  "ngs",
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

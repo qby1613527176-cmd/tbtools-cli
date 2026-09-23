@@ -7,7 +7,9 @@
  "class": "TableCollapseCli",
  "description": "tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader",
  "invoke": "tbtools table tableCollapse <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

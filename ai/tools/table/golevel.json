@@ -7,7 +7,9 @@
  "class": "GoLevelCli",
  "description": "GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）",
  "invoke": "tbtools table golevel <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

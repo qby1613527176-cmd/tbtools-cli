@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno",
  "description": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
  "invoke": "tbtools chipseq peakanno <args...>",
- "capabilities": [],
+ "capabilities": [
+  "chip_seq"
+ ],
  "inputs": [
   {
    "name": "peaks",

@@ -7,7 +7,9 @@
  "class": "",
  "description": "树+注释图（TreeTreeTree 多轨道）",
  "invoke": "tbtools tree draw <args...>",
- "capabilities": [],
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "SeqLenTrackCli",
  "description": "seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]",
  "invoke": "tbtools seq seqlentrack <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

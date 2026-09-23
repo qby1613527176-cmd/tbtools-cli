@@ -7,7 +7,9 @@
  "class": "biocjava.bioIO.BioSoftPipeServer.FindBestHomology",
  "description": "37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）",
  "invoke": "tbtools blast findhomolog <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

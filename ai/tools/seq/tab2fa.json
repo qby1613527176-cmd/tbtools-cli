@@ -7,7 +7,9 @@
  "class": "",
  "description": "26 FastaTable.tab2fa）",
  "invoke": "tbtools seq tab2fa <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

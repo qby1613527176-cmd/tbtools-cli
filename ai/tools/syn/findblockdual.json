@@ -7,7 +7,9 @@
  "class": "FindBlockDualCli",
  "description": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
  "invoke": "tbtools syn findblockdual <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

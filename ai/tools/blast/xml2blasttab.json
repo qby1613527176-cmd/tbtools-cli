@@ -7,7 +7,9 @@
  "class": "",
  "description": "25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）",
  "invoke": "tbtools blast xml2blasttab <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

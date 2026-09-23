@@ -7,7 +7,9 @@
  "class": "CubeHeatmapCli",
  "description": "3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）",
  "invoke": "tbtools expr cubeheatmap <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "beta"

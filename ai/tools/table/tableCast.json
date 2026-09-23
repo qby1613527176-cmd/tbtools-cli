@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableCast",
  "description": "tableCast: tableCast <inLong.txt> <outMatrix>",
  "invoke": "tbtools table tableCast <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GXFRenamer",
  "description": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
  "invoke": "tbtools gxf gxfRename <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

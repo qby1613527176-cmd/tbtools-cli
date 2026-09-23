@@ -7,7 +7,9 @@
  "class": "FindPathCli",
  "description": "findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --",
  "invoke": "tbtools tree findpath <args...>",
- "capabilities": [],
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

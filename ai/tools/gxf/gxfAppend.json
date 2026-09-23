@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GxfIDAppender",
  "description": "GFF seqid+ID 加前缀",
  "invoke": "tbtools gxf gxfAppend <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

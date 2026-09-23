@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableMelt",
  "description": "宽表转长表（第88引擎，TableMelt）",
  "invoke": "tbtools table tableMelt <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "SuperCircosCli",
  "description": "supercircos: supercircos <config.cfg> <out> [width] [height]",
  "invoke": "tbtools syn supercircos <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [
   {
    "name": "config",

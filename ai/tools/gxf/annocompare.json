@@ -7,7 +7,9 @@
  "class": "StructAnnoCompareCli",
  "description": "annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r",
  "invoke": "tbtools gxf annocompare <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

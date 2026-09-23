@@ -7,7 +7,9 @@
  "class": "AmazingMetaCli",
  "description": "amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [",
  "invoke": "tbtools seq amazingmeta <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

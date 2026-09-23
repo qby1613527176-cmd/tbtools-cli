@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.BLAST.FilterBlastResultByCScore",
  "description": "filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]",
  "invoke": "tbtools blast filterCScore <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

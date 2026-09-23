@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap",
  "description": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
  "invoke": "tbtools expr efpHeat <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [
   {
    "name": "tga",

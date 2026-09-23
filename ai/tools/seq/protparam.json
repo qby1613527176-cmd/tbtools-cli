@@ -7,7 +7,9 @@
  "class": "biocjava.bioWeb.ProtParamWrapper",
  "description": "18 ProtParamWrapper.batchCalc；⚠️ 联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）",
  "invoke": "tbtools seq protparam <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GenomeAssembly.ParititionByConflictFreq",
  "description": "partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste",
  "invoke": "tbtools syn partitionconflict <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

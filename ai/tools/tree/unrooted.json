@@ -7,7 +7,9 @@
  "class": "",
  "description": "无根树可视化",
  "invoke": "tbtools tree unrooted <args...>",
- "capabilities": [],
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

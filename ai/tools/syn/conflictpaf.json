@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF",
  "description": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
  "invoke": "tbtools syn conflictpaf <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "",
  "description": "(alias of rooting) MAD 系统发育定根",
  "invoke": "tbtools tree treeRooting <args...>",
- "capabilities": [],
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [
   {
    "name": "nwk",

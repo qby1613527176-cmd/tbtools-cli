@@ -7,7 +7,9 @@
  "class": "DistanceCli",
  "description": "distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi",
  "invoke": "tbtools expr distance <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

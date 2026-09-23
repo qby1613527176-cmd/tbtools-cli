@@ -7,7 +7,9 @@
  "class": "",
  "description": "SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
  "invoke": "tbtools seq smart <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "seq",

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JIGplotToolkit.GelImage.Marker",
  "description": "凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
  "invoke": "tbtools seq gel <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "lanes",

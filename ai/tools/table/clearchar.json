@@ -7,7 +7,9 @@
  "class": "FileCleanerCli",
  "description": "34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）",
  "invoke": "tbtools table clearchar <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GXFRegionSummary",
  "description": "gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]",
  "invoke": "tbtools gxf gxfRegion <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

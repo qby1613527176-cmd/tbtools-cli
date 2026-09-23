@@ -7,7 +7,9 @@
  "class": "MotifPatternCli",
  "description": "MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）",
  "invoke": "tbtools seq mpattern <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

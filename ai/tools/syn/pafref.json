@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc",
  "description": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
  "invoke": "tbtools syn pafref <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [
   {
    "name": "paf",

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GxfGenomeMatch",
  "description": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
  "invoke": "tbtools gxf gxfMatch <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "CtgGroupCli",
  "description": "ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>",
  "invoke": "tbtools asm ctgGroup <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

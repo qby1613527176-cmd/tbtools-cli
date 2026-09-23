@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion",
  "description": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
  "invoke": "tbtools syn collinearRegion <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

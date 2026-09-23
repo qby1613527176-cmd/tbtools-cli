@@ -7,7 +7,9 @@
  "class": "VisualizeCli",
  "description": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
  "invoke": "tbtools syn visualizeblock <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

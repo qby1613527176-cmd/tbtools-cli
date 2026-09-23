@@ -7,7 +7,9 @@
  "class": "Mast2TabCli",
  "description": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
  "invoke": "tbtools seq mast2tab <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

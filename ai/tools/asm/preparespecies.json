@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.ComparativeGenomics.PrepareSpecies",
  "description": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
  "invoke": "tbtools asm preparespecies <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [
   {
    "name": "genome",

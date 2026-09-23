@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GeneOntology.littleTools.GOtermParser",
  "description": "GO 词典解析（第103",
  "invoke": "tbtools table goParse <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

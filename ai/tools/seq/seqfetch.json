@@ -7,7 +7,9 @@
  "class": "biocjava.bioWeb.EntrezUtils.NcbiSmartSeqFetchEntrezUtils",
  "description": "44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）",
  "invoke": "tbtools seq seqfetch <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "network-required"

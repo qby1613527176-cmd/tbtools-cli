@@ -136,6 +136,17 @@ KNOWN_DEPENDENCIES = {
 }
 
 
+# 组级能力兜底(无精确标注的命令按组归能力域; 优先精确标注, 后兜底)
+GROUP_CAPABILITIES = {
+    "expr": ["expression"], "syn": ["synteny"], "gxf": ["annotation"],
+    "table": ["table_operations"], "fastq": ["ngs", "sequence"],
+    "blast": ["homology"], "asm": ["assembly"], "chipseq": ["chip_seq"],
+    "tree": ["phylogeny"], "seq": ["sequence"], "efp": ["expression"],
+    "sets": ["set_operations"], "enrich": ["enrichment"], "virus": ["viral_analysis"],
+    "genome": ["genome_analysis"], "assembly": ["assembly"],
+}
+
+
 # 已知别名(兼容层命名; canonical → 命令)
 KNOWN_CAPABILITIES = {
     "volcano": ["differential_expression", "visualization"],
@@ -240,7 +251,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
         if name in KNOWN_SCHEMAS:
             ins, outs = KNOWN_SCHEMAS[name]
             spec.inputs, spec.outputs = ins, outs
-        spec.capabilities = KNOWN_CAPABILITIES.get(name, [])
+        spec.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(spec.group, [])
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
     return specs
 
@@ -269,7 +280,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
-        s.capabilities = KNOWN_CAPABILITIES.get(name, [])
+        s.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(s.group, [])
         s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
     return {n: to_metadata_entry(s) for n, s in specs.items()}
 

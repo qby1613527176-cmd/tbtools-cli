@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.TableAppend",
  "description": "",
  "invoke": "tbtools table tableAppend <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

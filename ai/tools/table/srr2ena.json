@@ -7,7 +7,9 @@
  "class": "GetENALinksCli",
  "description": "39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）",
  "invoke": "tbtools table srr2ena <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "network-required"

@@ -7,7 +7,9 @@
  "class": "PubmedSearchCli",
  "description": "45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）",
  "invoke": "tbtools table pubmed <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "network-required"

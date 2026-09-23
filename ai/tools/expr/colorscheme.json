@@ -7,7 +7,9 @@
  "class": "ColorSchemeCli",
  "description": "colorscheme: colorscheme <inTab> <outTab> <refColIndex>",
  "invoke": "tbtools expr colorscheme <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

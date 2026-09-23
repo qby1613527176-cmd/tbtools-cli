@@ -7,7 +7,9 @@
  "class": "Meme2TabCli",
  "description": "MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）",
  "invoke": "tbtools seq meme2tab <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

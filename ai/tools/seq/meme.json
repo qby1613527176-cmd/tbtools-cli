@@ -7,7 +7,9 @@
  "class": "MemeCli",
  "description": "MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）",
  "invoke": "tbtools seq meme <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

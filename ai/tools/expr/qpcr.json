@@ -7,7 +7,9 @@
  "class": "QpcrCli",
  "description": "qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)",
  "invoke": "tbtools expr qpcr <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

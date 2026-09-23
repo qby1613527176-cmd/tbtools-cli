@@ -7,7 +7,9 @@
  "class": "",
  "description": "26 FastaTable.fa2tab；与 tab2fa 往返一致）",
  "invoke": "tbtools seq fa2tab <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

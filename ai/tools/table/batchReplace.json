@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.Table.BatchStringReplace",
  "description": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
  "invoke": "tbtools table batchReplace <args...>",
- "capabilities": [],
+ "capabilities": [
+  "table_operations"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

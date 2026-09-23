@@ -7,7 +7,9 @@
  "class": "QpcrDdctCli",
  "description": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
  "invoke": "tbtools expr qpcrExp <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

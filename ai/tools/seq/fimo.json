@@ -7,7 +7,9 @@
  "class": "",
  "description": "MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）",
  "invoke": "tbtools seq fimo <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

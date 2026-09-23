@@ -7,7 +7,9 @@
  "class": "MountainPlotCli",
  "description": "mountain: mountain <fold.txt> <out.tsv>",
  "invoke": "tbtools expr mountain <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

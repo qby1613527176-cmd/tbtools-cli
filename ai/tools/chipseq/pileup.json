@@ -7,7 +7,9 @@
  "class": "PileUpCli",
  "description": "pileup: pileup <blast.xml> <out.svg> [--query NAME]",
  "invoke": "tbtools chipseq pileup <args...>",
- "capabilities": [],
+ "capabilities": [
+  "chip_seq"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

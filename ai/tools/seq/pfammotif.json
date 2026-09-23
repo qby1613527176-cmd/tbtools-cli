@@ -7,7 +7,9 @@
  "class": "PfamMotifCli",
  "description": "pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic",
  "invoke": "tbtools seq pfammotif <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

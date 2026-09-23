@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs",
  "description": "gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>",
  "invoke": "tbtools gxf gxfRepIDs <args...>",
- "capabilities": [],
+ "capabilities": [
+  "annotation"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

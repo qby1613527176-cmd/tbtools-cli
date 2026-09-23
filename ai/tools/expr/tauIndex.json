@@ -7,7 +7,9 @@
  "class": "TauCalcCli",
  "description": "tauIndex: tauIndex <inExpTab> <outTAU>",
  "invoke": "tbtools expr tauIndex <args...>",
- "capabilities": [],
+ "capabilities": [
+  "expression"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

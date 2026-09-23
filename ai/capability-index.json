@@ -1,8 +1,165 @@
 {
+ "sequence": [
+  "amazingmeta",
+  "cddmotif",
+  "fastaExtract",
+  "fastaSubseq",
+  "fqTrim",
+  "fqfaConv",
+  "gel",
+  "gfa",
+  "gfa2fa",
+  "makemotif",
+  "mast",
+  "mast2tab",
+  "mastExtract",
+  "mastrun",
+  "meme",
+  "meme2tab",
+  "memerun",
+  "mpattern",
+  "pep2codon",
+  "pfammotif",
+  "plotrna",
+  "rnaplot",
+  "seqlentrack",
+  "simplehmmscan",
+  "sixframe",
+  "longestorf",
+  "protparam",
+  "seqpattern",
+  "careclassify",
+  "protsim",
+  "gblocks",
+  "fasplit",
+  "famerge",
+  "gb2fa",
+  "seqfetch",
+  "logo",
+  "structure",
+  "fimo",
+  "fa2tab",
+  "tab2fa",
+  "genomefilter",
+  "memeViz",
+  "tfbsShift",
+  "smart"
+ ],
+ "annotation": [
+  "annocompare",
+  "gdensity",
+  "genedensity",
+  "genelocation",
+  "genelocgff",
+  "gxfAppend",
+  "gxfFix",
+  "gxfGenepos",
+  "gxfMatch",
+  "gxfOverlap",
+  "gxfRecall",
+  "gxfRegion",
+  "gxfRename",
+  "gxfRepGXF",
+  "gxfRepIDs",
+  "gxfStat",
+  "regionAnno",
+  "bed2gff3",
+  "gxfAttr",
+  "gxfSplit",
+  "gxfIdAppender",
+  "genestructure"
+ ],
+ "assembly": [
+  "bamMerge",
+  "bamindex",
+  "bamsort",
+  "bamstate",
+  "ctgGroup",
+  "hicEnzyme",
+  "homoPhase",
+  "preparespecies",
+  "sepChr",
+  "virusRecomb"
+ ],
+ "expression": [
+  "barplot",
+  "barplotter",
+  "colorscheme",
+  "cubeheatmap",
+  "distance",
+  "efpHeat",
+  "exprCorr",
+  "gbar",
+  "groupCol",
+  "groupedbar",
+  "layoutheatmap",
+  "mountain",
+  "multiEfp",
+  "qpcr",
+  "qpcrExp",
+  "tauIndex",
+  "violin"
+ ],
+ "table_operations": [
+  "batchReplace",
+  "goParse",
+  "golevel",
+  "levelGo",
+  "sricher",
+  "tableAppend",
+  "tableCast",
+  "tableColSel",
+  "tableColSelect",
+  "tableCollapse",
+  "tableMelt",
+  "tableMerge",
+  "tableSplit",
+  "tableTranspose",
+  "tableUniq",
+  "goAnno",
+  "clearchar",
+  "taxparse",
+  "srr2ena",
+  "sraxml2tab",
+  "sranum2info",
+  "pubmed"
+ ],
  "synteny": [
+  "circlegene",
+  "circos",
+  "collinearRegion",
+  "conflictpaf",
   "dotplot",
   "dualsyn",
-  "mcscanx"
+  "findblockdual",
+  "findblockmultiple",
+  "mcscanx",
+  "microgenome",
+  "microsyn",
+  "multisyn",
+  "pafcomp",
+  "pafref",
+  "pafviz",
+  "partitionconflict",
+  "qdot",
+  "supercircos",
+  "visualizeblock",
+  "mcscanxd"
+ ],
+ "phylogeny": [
+  "degramdom",
+  "findpath",
+  "nwAlign",
+  "phylotree",
+  "kaks",
+  "subtree",
+  "iqtree",
+  "draw",
+  "unrooted",
+  "rooting",
+  "notung",
+  "newickRename",
+  "treeRooting"
  ],
  "visualization": [
   "dotplot",
@@ -16,6 +173,25 @@
   "genestructure",
   "seqlogo"
  ],
+ "ngs": [
+  "fastaExtract",
+  "fastaSubseq",
+  "fqTrim",
+  "fqfaConv"
+ ],
+ "homology": [
+  "filterCScore",
+  "quickFamily",
+  "recipBlast",
+  "twoSeqBlast",
+  "findhomolog",
+  "blat",
+  "xml2blasttab",
+  "xml2pairwise",
+  "bestid",
+  "getseqdb",
+  "quickAnno"
+ ],
  "enrichment": [
   "goEnrich",
   "keggEnrich",
@@ -25,20 +201,24 @@
   "mcscanx"
  ],
  "chip_seq": [
-  "peaktss"
+  "peakanno",
+  "peakdist",
+  "peaktss",
+  "pileup"
+ ],
+ "set_operations": [
+  "upset",
+  "venn2",
+  "venn3",
+  "venn4",
+  "venn5",
+  "venn6"
  ],
  "translation": [
   "sixframe"
  ],
- "sequence": [
-  "sixframe",
-  "longestorf"
- ],
  "orf_prediction": [
   "longestorf"
- ],
- "phylogeny": [
-  "iqtree"
  ],
  "alignment": [
   "trimal",
@@ -84,9 +264,6 @@
   "msy"
  ],
  "gene_structure": [
-  "genestructure"
- ],
- "annotation": [
   "genestructure"
  ]
 }

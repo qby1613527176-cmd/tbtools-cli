@@ -7,7 +7,9 @@
  "class": "BamStateCli",
  "description": "bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]",
  "invoke": "tbtools asm bamstate <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

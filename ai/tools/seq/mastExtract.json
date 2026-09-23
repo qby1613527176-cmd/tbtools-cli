@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML",
  "description": "从 MAST XML 提取命中",
  "invoke": "tbtools seq mastExtract <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

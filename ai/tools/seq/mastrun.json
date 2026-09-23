@@ -7,7 +7,9 @@
  "class": "MastRunCli",
  "description": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--",
  "invoke": "tbtools seq mastrun <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence"
+ ],
  "inputs": [
   {
    "name": "meme",

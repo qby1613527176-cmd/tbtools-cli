@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.BLAST.CompareTwoSeqSet",
  "description": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
  "invoke": "tbtools blast twoSeqBlast <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "MicroSynCli",
  "description": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
  "invoke": "tbtools syn microsyn <args...>",
- "capabilities": [],
+ "capabilities": [
+  "synteny"
+ ],
  "inputs": [
   {
    "name": "gff",

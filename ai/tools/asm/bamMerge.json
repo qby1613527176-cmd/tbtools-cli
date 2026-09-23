@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage",
  "description": "按区域覆盖合并 BAM（多样本择优）",
  "invoke": "tbtools asm bamMerge <args...>",
- "capabilities": [],
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -7,7 +7,9 @@
  "class": "biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn4Ellipse",
  "description": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
  "invoke": "tbtools sets venn4 <args...>",
- "capabilities": [],
+ "capabilities": [
+  "set_operations"
+ ],
  "inputs": [
   {
    "name": "list1",
