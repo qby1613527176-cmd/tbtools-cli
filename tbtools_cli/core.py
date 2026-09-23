@@ -495,5 +495,14 @@ def probe_dead_engines():
 
 # ── core.py 拆分(GPT 评审 #8): Java 执行/输入保护/provenance 迁至 runtime/java.py, 此处重导出保持兼容 ──
 from tbtools_cli.runtime.java import (  # noqa: E402  # 延迟到模块加载完(避免循环 import)
+    _n19_move_result,
+    _sha1_file,
+    _write_provenance,
+    check_missing_outputs,
+    cleanup_side_effects,
+    find_empty_inputs,
+    resolve_output,
     run_java,
-)
+    snapshot_inputs,
+    verify_and_restore,
+)  # noqa: F401  # 重导出(拆分兼容)——配合 pyproject: 见 [tool.ruff.lint.per-file-ignores]
