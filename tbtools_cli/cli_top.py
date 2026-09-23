@@ -101,6 +101,25 @@ def register_top(cli, _LG):
         if JAR and os.path.isfile(JAR):
             size_mb = os.path.getsize(JAR) / 1024 / 1024
             click.echo(f"  ✅ JAR: {JAR} ({size_mb:.0f}MB)")
+            # 供应链校验(fetch-jar 记录 sha256; hashlib 流式, 300MB 约 1s)
+            import hashlib as _hl
+            import tomllib as _tl
+            _cfg_p = os.path.join(os.path.expanduser("~/.config/tbtools-cli"), "config.toml")
+            _exp = None
+            if os.path.isfile(_cfg_p):
+                try:
+                    _exp = _tl.load(open(_cfg_p, "rb")).get("jar_sha256")
+                except Exception:
+                    pass
+            if _exp:
+                h = _hl.sha256()
+                with open(JAR, "rb") as _f:
+                    for _c in iter(lambda: _f.read(1 << 20), b""):
+                        h.update(_c)
+                if h.hexdigest() == _exp:
+                    click.echo(f"  ✅ sha256 校验通过 ({_exp[:16]}...)")
+                else:
+                    click.echo(f"  ❌ sha256 不匹配! 期望 {_exp[:16]}... 实际 {h.hexdigest()[:16]}...", err=True)
             ok += 1
             # G5: 死命令探测（jar 版本与 CLI 注册类不匹配预警,外部测试 P1-1）
             from tbtools_cli.core import probe_dead_engines
@@ -271,10 +290,17 @@ def register_top(cli, _LG):
         except Exception as e:
             click.echo(f"❌ 下载失败: {e}", err=True)
             sys.exit(1)
+        # 供应链校验(GPT 评审 #9): 下载 zip 与提取 jar 均计算 SHA256, 记录进 config.toml 供复现校验
+        import hashlib as _hl
+        zip_sha = _hl.sha256()
+        with open(tmp, "rb") as _f:
+            for _chunk in iter(lambda: _f.read(1 << 20), b""):
+                zip_sha.update(_chunk)
         # 提取 jar
         jar_target = os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar")
         os.makedirs(os.path.dirname(jar_target), exist_ok=True)
         found = False
+        jar_sha = _hl.sha256()
         try:
             with zipfile.ZipFile(tmp) as z:
                 for n in z.namelist():
@@ -293,15 +319,23 @@ def register_top(cli, _LG):
         if not found:
             click.echo("❌ zip 中未找到 TBtools_JRE1.6.jar", err=True)
             sys.exit(1)
+        # jar sha256(流式)
+        h = _hl.sha256()
+        with open(jar_target, "rb") as _f:
+            for _chunk in iter(lambda: _f.read(1 << 20), b""):
+                h.update(_chunk)
+        jar_sha = h.hexdigest()
         click.echo(f"✅ 已提取: {jar_target}")
-        # 配置
+        click.echo(f"   sha256(zip) = {zip_sha.hexdigest()}")
+        click.echo(f"   sha256(jar) = {jar_sha}")
+        # 配置(含 checksum 与版本, 供验证/审计)
         cfg_dir = os.path.expanduser("~/.config/tbtools-cli")
         os.makedirs(cfg_dir, exist_ok=True)
         with open(os.path.join(cfg_dir, "config.sh"), "w") as f:
             f.write(f'export TBTOOLS_JAR="{jar_target}"\n')
         with open(os.path.join(cfg_dir, "config.toml"), "w") as f:
-            f.write(f'jar = "{jar_target}"\n\n[defaults]\nthreads = 4\nformat = "svg"\n')
-        click.echo("✅ 已配置。运行 tbtools doctor 验证")
+            f.write(f'jar = "{jar_target}"\njar_sha256 = "{jar_sha}"\njar_version = "{tag}"\n\n[defaults]\nthreads = 4\nformat = "svg"\n')
+        click.echo("✅ 已配置(sha256 已记录, 可用 doctor 验证)。运行 tbtools doctor 验证")
 
     @cli.command()
     @click.argument('name')
