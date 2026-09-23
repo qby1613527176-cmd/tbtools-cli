@@ -324,17 +324,17 @@ def register_top(cli, _LG):
         with open(jar_target, "rb") as _f:
             for _chunk in iter(lambda: _f.read(1 << 20), b""):
                 h.update(_chunk)
-        jar_sha = h.hexdigest()
+        jar_sha_hex = h.hexdigest()
         click.echo(f"✅ 已提取: {jar_target}")
         click.echo(f"   sha256(zip) = {zip_sha.hexdigest()}")
-        click.echo(f"   sha256(jar) = {jar_sha}")
+        click.echo(f"   sha256(jar) = {jar_sha_hex}")
         # 配置(含 checksum 与版本, 供验证/审计)
         cfg_dir = os.path.expanduser("~/.config/tbtools-cli")
         os.makedirs(cfg_dir, exist_ok=True)
         with open(os.path.join(cfg_dir, "config.sh"), "w") as f:
             f.write(f'export TBTOOLS_JAR="{jar_target}"\n')
         with open(os.path.join(cfg_dir, "config.toml"), "w") as f:
-            f.write(f'jar = "{jar_target}"\njar_sha256 = "{jar_sha}"\njar_version = "{tag}"\n\n[defaults]\nthreads = 4\nformat = "svg"\n')
+            f.write(f'jar = "{jar_target}"\njar_sha256 = "{jar_sha_hex}"\njar_version = "{tag}"\n\n[defaults]\nthreads = 4\nformat = "svg"\n')
         click.echo("✅ 已配置(sha256 已记录, 可用 doctor 验证)。运行 tbtools doctor 验证")
 
     @cli.command()

@@ -9,8 +9,8 @@ import tempfile
 
 import click
 
-from tbtools_cli.config import get_default
-from tbtools_cli.errors import ERROR_CODES, classify_error  # 错误契约独立模块(拆分第一步)  # heap 可配置(第六轮评审)
+from tbtools_cli.config import get_default  # heap 可配置(第六轮评审)
+from tbtools_cli.errors import ERROR_CODES, classify_error  # 错误契约独立模块(拆分第一步)
 
 # ── 轻量 i18n(--lang en / LC_ALL / config [defaults] lang)──
 _LANG_EN = None
