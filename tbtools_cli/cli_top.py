@@ -490,6 +490,7 @@ def register_top(cli, _LG):
             help_txt = (cmd_obj.help or "") if cmd_obj else ""
         cls = v.get("class") or ("" if command not in _LG._groups.get("engine", type("x", (), {"commands": {}})).commands else "")
         desc = {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
             "schema_version": "1.0",
             "id": f"tbtools.{group}.{command}",
             "name": command,
@@ -659,7 +660,8 @@ def register_top(cli, _LG):
         if _timed_out:
             error = {"code": "TB007_TOOL_TIMEOUT", "retryable": True,
                      "suggested_action": "retry with --timeout higher or smaller input"}
-        result = {"schema_version": "1.0", "exit_code": ec, "duration_s": dt,
+        result = {"$schema": "https://json-schema.org/draft/2020-12/schema",
+                  "schema_version": "1.0", "exit_code": ec, "duration_s": dt,
                   "artifacts": artifacts, "error": error, "timed_out": _timed_out}
         if as_json:
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
@@ -826,7 +828,8 @@ except Exception:
                 if os.path.isfile(a):
                     artifacts.append(os.path.abspath(a))
                 break
-        click.echo(_json.dumps({"schema_version": "1.0", "job_id": job_id,
+        click.echo(_json.dumps({"$schema": "https://json-schema.org/draft/2020-12/schema",
+                                "schema_version": "1.0", "job_id": job_id,
                                 "status": job.get("status"), "exit_code": job.get("exit_code"),
                                 "artifacts": artifacts, "error": job.get("error")},
                                ensure_ascii=False, indent=1))
