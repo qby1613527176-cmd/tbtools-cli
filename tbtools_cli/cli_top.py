@@ -592,7 +592,15 @@ def register_top(cli, _LG):
                 if _specs and _specs[0] and _specs[0][0].columns:
                     _expected = _specs[0][0].columns
                     _header = open(path, encoding="utf-8", errors="replace").readline().rstrip().split("	")
-                    if _header[:len(_expected)] != _expected:
+                    # 无表头文件(首行=数据行含数字)跳过列名校验(评审 #31 误报修复)
+                    def _looks_numeric(x):
+                        try:
+                            float(x.replace("e", "E"))
+                            return True
+                        except Exception:
+                            return False
+                    _is_header = not any(_looks_numeric(_c) for _c in _header[:len(_expected)])
+                    if _is_header and _header[:len(_expected)] != _expected:
                         _col_mismatch = f"列名不匹配: 期望 {_expected}, 实际 {_header[:len(_expected)]}"
             except Exception:
                 pass
