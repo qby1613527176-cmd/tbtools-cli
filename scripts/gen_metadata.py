@@ -54,8 +54,13 @@ def scan_manual_commands():
     cmds = {}
     # 1) 装饰器命令(顶层管理命令跳过)
     for name in re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_]*)['\"]", src):
+        # 顶层 Agent/管理命令(非生信工具, 不进 metadata 模型; 含 09/23 新增 Agent 接口层)
         if name in ("list", "check", "doctor", "version", "new", "completion", "examples",
-                    "presets", "help", "setup", "fetch-jar"):
+                    "presets", "help", "setup", "fetch-jar",
+                    "search", "mcp", "capabilities", "plugin", "provenance-graph",
+                    "tool-run", "tool-submit", "tool-describe", "tool-validate",
+                    "tool-result", "tool-provenance",
+                    "job-status", "job-result", "job-cancel", "job-log", "job-clean"):
             continue
         cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
                       "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}

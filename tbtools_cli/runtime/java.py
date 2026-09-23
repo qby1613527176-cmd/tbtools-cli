@@ -227,7 +227,32 @@ def _n19_move_result(n19_tmp, n19_out, n19_orig_sha):
         print(f"⚠️ findBestHomologyBatch 结果搬移失败: {_e}", file=sys.stderr)
 
 
+def _security_check_generic(java_args: list, command_name: str | None = None) -> str | None:
+    """execution policy(评审 #34/#35): engine reflection(GenericCli 任意类)安全门。
+
+    config.toml [security] allow_engine_reflection = false 时拒绝**裸反射命令**(generic——
+    用户直接传任意类名)。普通命令(volcano 等 bridge 固定类名)不受影响。
+    返回 None=放行; 返回错误消息=拒绝。
+    """
+    if command_name != "generic":
+        return None
+    try:
+        from tbtools_cli.config import load_config
+        sec = load_config().get("security", {})
+        allow = sec.get("allow_engine_reflection", True)
+    except Exception:
+        allow = True
+    if allow is False or str(allow).lower() in ("false", "0", "no"):
+        cls = java_args[java_args.index("GenericCli") + 1] if "GenericCli" in java_args and java_args.index("GenericCli") + 1 < len(java_args) else "?"
+        return f"🚫 engine reflection 被 config.toml [security] allow_engine_reflection=false 拒绝(类: {cls})"
+    return None
+
+
 def run_java(java_args: list, verbose: bool = False, quiet: bool = False, command_name: str | None = None) -> int:
+    _sec = _security_check_generic(java_args, command_name)
+    if _sec:
+        click.echo(_sec, err=True)
+        return 5  # POLICY_ERROR(engine reflection 被 config.toml [security] 拒绝)
     ec_out = 0
     # 堆内存可配置(第六轮评审: 注册表 -Xmx 硬编码,低配机器直接 OOM):
     # config.toml [defaults] memory = "2g" 全局覆盖;未配置保持注册表值

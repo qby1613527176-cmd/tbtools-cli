@@ -1040,6 +1040,40 @@ except Exception:
                 for e in edges:
                     click.echo(f"    {e['from']} ──{e['via']}──> {e['to']}")
 
+    @cli.command(name="plugin")
+    @click.argument("sub", default="list", required=False, type=click.Choice(["list"]))
+    @click.option("--json", "as_json", is_flag=True)
+    def plugin_cmd(sub, as_json):
+        """插件契约(评审 #33): 列出已 CLI 化的插件命令 + 来源/状态"""
+        import json as _json
+        # 插件命令 ↔ Plugin ID 映射(12 个 CLI 化插件)
+        PLUGINS = {
+            "gsea": ("P00342-Simple_GO_GSEA_Wrapper", "GSEA 富集"),
+            "mcscanxd": ("P00370-OneStepMCScanX-SuperFast", "MCScanX 加速"),
+            "quickAnno": ("P00480-Quick_Protein_Anno", "diamond 蛋白注释"),
+            "qdot": ("P00380-Quick_Genome_Dot_Plot", "基因组 dot plot"),
+            "tfbsShift": ("P00551-Plant_TF_Binding_Motif_Shift", "植物 TF motif 偏移"),
+            "hmmerSearch": ("P00680-Advanced_HMMer_Search", "HMMer 全库扫描"),
+            "newickRename": ("P00690-Newick_Rename", "Newick 重命名"),
+            "memeViz": ("P00700-Batch_MEME_Motif_Viz", "MEME 可视化"),
+            "kallisto": ("P00740-Kallisto_Super_Wrapper", "kallisto 定量"),
+            "smart": ("P00060-Batch_SMART", "SMART 域注释"),
+            "fimo": ("fimo(外部 FIMO)", "FIMO motif 扫描"),
+            "notung": ("notung(外部 Notung)", "Notung reconcile"),
+        }
+        rows = []
+        for cmd_name, (plugin_id, desc) in PLUGINS.items():
+            rows.append({"command": cmd_name, "plugin": plugin_id, "description": desc,
+                         "status": "cli_ready"})
+        if as_json:
+            click.echo(_json.dumps({"schema_version": "1.0", "plugin_count": len(rows), "plugins": rows},
+                                   ensure_ascii=False, indent=1))
+        else:
+            click.echo(f"  已 CLI 化插件 {len(rows)} 个:")
+            for r in rows:
+                click.echo(f"    {r['command']:<14} {r['description']:<20} ({r['plugin']})")
+            click.echo("  (plugin install/search 规划: plugins/src/ 原始存档 + PluginStore 122 插件/飞纪盘 64)")
+
     @cli.command(name="search")
     @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
