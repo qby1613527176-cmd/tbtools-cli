@@ -667,51 +667,108 @@ def register_top(cli, _LG):
             click.echo(f"  exit: {ec} | {dt}s | 产物: {artifacts or '无'}")
         sys.exit(ec if ec else 0)
 
-    # ── Job 模型(GLM P1: 异步提交/查询/取消; Agent 长任务)──
+    # ── Job 模型(GLM P1 + 状态机完善 2026-09-23)──
+    # 状态机: running → succeeded(exit 0) / failed(exit≠0) / cancelled / timed_out
     def _jobs_dir():
         d = os.path.join(os.path.expanduser("~"), ".config", "tbtools-cli", "jobs")
         os.makedirs(d, exist_ok=True)
         return d
 
+    def _job_save(job):
+        import json as _json
+        jf = os.path.join(_jobs_dir(), f"{job['id']}.json")
+        _json.dump(job, open(jf, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+    def _job_finish(job, status, exit_code):
+        """进程结束后: 从 provenance 读 exit_code/error 判 succeeded/failed 并落盘"""
+        import json as _json
+        job["status"] = status
+        job["exit_code"] = exit_code
+        job["finished_at"] = __import__("time").strftime("%Y-%m-%dT%H:%M:%S")
+        # 输出识别(args 中最后图形参数 → provenance, 取 error)
+        for a in reversed(job.get("args", [])):
+            if a.endswith((".svg", ".png", ".pdf")):
+                _po = a + ".tbtools.json"
+                if os.path.isfile(_po):
+                    try:
+                        job["error"] = _json.load(open(_po, encoding="utf-8")).get("error")
+                    except Exception:
+                        pass
+                break
+        _job_save(job)
+
     @cli.command(name="tool-submit")
     @click.argument("args", nargs=-1, required=True)
-    def tool_submit(args):
-        """异步提交任务: 后台执行, 返回 job_id(Agent 长任务)"""
+    @click.option("--timeout", "timeout_s", type=int, default=0, help="超时秒数(0=不超时; 超时杀进程树并置 timed_out)")
+    def tool_submit(args, timeout_s):
+        """异步提交任务: 后台执行, 返回 job_id(Agent 长任务; 状态机 running→succeeded/failed/cancelled/timed_out)"""
         import json as _json
+        import threading as _th
+        import time as _time
+        import uuid as _uuid
         import subprocess as _sp
         import sys as _sys
-        import uuid as _uuid
-        import time as _time
         jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
-        jdir = _jobs_dir()
-        log = os.path.join(jdir, f"{jid}.log")
-        lf = open(log, "w", encoding="utf-8")
-        p = _sp.Popen([_sys.executable, "-m", "tbtools_cli.cli"] + list(args),
-                      stdout=lf, stderr=_sp.STDOUT, start_new_session=True)
+        log = os.path.join(_jobs_dir(), f"{jid}.log")
+        # 主进程直接 Popen(独立子进程, 不受 submit 退出影响); 终态由 job-status 惰性判定
+        with open(log, "w", encoding="utf-8") as _lf:
+            p = _sp.Popen([_sys.executable, "-m", "tbtools_cli.cli"] + list(args),
+                          stdout=_lf, stderr=_sp.STDOUT, start_new_session=True)
         job = {"id": jid, "status": "running", "pid": p.pid, "args": list(args),
-               "started_at": _time.strftime("%Y-%m-%dT%H:%M:%S"), "log": log}
-        _json.dump(job, open(os.path.join(jdir, f"{jid}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+               "started_at": _time.strftime("%Y-%m-%dT%H:%M:%S"),
+               "timeout_s": timeout_s, "log": log}
+        _job_save(job)
         click.echo(_json.dumps({"job_id": jid, "status": "running", "pid": p.pid}, ensure_ascii=False, indent=1))
 
     @cli.command(name="job-status")
     @click.argument("job_id")
     def job_status(job_id):
-        """查询任务状态(运行中/成功/失败/耗时)"""
+        """查询任务状态(状态机: running/succeeded/failed/cancelled/timed_out + 退出码)"""
         import json as _json
         jf = os.path.join(_jobs_dir(), f"{job_id}.json")
         if not os.path.isfile(jf):
             click.echo(f"❌ 未知 job: {job_id}", err=True)
             sys.exit(1)
         job = _json.load(open(jf, encoding="utf-8"))
-        alive = os.path.exists(f"/proc/{job['pid']}") if os.path.isdir("/proc") else True
-        if alive and job["status"] == "running":
-            st = "running"
-        elif job["status"] == "running":
-            job["status"] = "done"; st = "done"
-        else:
-            st = job["status"]
-        click.echo(_json.dumps({"job_id": job_id, "status": st, "pid": job["pid"],
-                                "started_at": job["started_at"], "log": job["log"]},
+        import time as _t
+        # ① 超时惰性判定: running + elapsed > timeout_s → killpg + timed_out
+        if job["status"] == "running" and job.get("pid") and job.get("timeout_s", 0) > 0:
+            try:
+                _start = _t.mktime(_t.strptime(job["started_at"], "%Y-%m-%dT%H:%M:%S"))
+                if _t.time() - _start > job["timeout_s"]:
+                    import signal as _sig
+                    try:
+                        os.killpg(os.getpgid(job["pid"]), _sig.SIGKILL)
+                    except Exception:
+                        pass
+                    _job_finish(job, "timed_out", -1)
+            except Exception:
+                pass
+        # ② running 但 pid 已消失(子进程独立退出)→ 惰性终态判定(provenance)
+        if job["status"] == "running" and job.get("pid"):
+            alive = os.path.exists(f"/proc/{job['pid']}") if os.path.isdir("/proc") else True
+            if not alive:
+                # 从 provenance 判终态(子进程独立写; 无 provenance=失败)
+                _ec, _err = None, None
+                for a in reversed(job.get("args", [])):
+                    if a.endswith((".svg", ".png", ".pdf")) and os.path.isfile(a + ".tbtools.json"):
+                        try:
+                            _pr = _json.load(open(a + ".tbtools.json", encoding="utf-8"))
+                            _ec, _err = _pr.get("exit_code"), _pr.get("error")
+                        except Exception:
+                            pass
+                        break
+                if _ec is None:
+                    _job_finish(job, "failed", -1)
+                else:
+                    _job_finish(job, "succeeded" if _ec == 0 else "failed", _ec)
+                    job["error"] = _err
+                    _job_save(job)
+        click.echo(_json.dumps({"job_id": job_id, "status": job.get("status"),
+                                "exit_code": job.get("exit_code"),
+                                "started_at": job.get("started_at"),
+                                "finished_at": job.get("finished_at"),
+                                "log": job.get("log") or os.path.join(_jobs_dir(), f"{job_id}.log")},
                                ensure_ascii=False, indent=1))
 
     @cli.command(name="job-log")
@@ -729,32 +786,28 @@ def register_top(cli, _LG):
     @cli.command(name="job-result")
     @click.argument("job_id")
     def job_result(job_id):
-        """任务结构化结果(从 provenance 读; Agent 结果验证)"""
+        """任务结构化结果(状态机终态 + artifacts + error; Agent 结果验证)"""
         import json as _json
         jf = os.path.join(_jobs_dir(), f"{job_id}.json")
         if not os.path.isfile(jf):
             click.echo(f"❌ 未知 job: {job_id}", err=True)
             sys.exit(1)
         job = _json.load(open(jf, encoding="utf-8"))
-        # 输出识别: args 中最后图形参数
-        artifacts, error = [], None
+        artifacts = []
         for a in reversed(job.get("args", [])):
             if a.endswith((".svg", ".png", ".pdf")):
-                _po = a + ".tbtools.json"
-                if os.path.isfile(_po):
-                    try:
-                        _pr = _json.load(open(_po, encoding="utf-8"))
-                        artifacts, error = _pr.get("outputs", []), _pr.get("error")
-                    except Exception:
-                        pass
+                if os.path.isfile(a):
+                    artifacts.append(os.path.abspath(a))
                 break
-        click.echo(_json.dumps({"schema_version": "1.0", "job_id": job_id, "status": job.get("status"),
-                                "artifacts": artifacts, "error": error}, ensure_ascii=False, indent=1))
+        click.echo(_json.dumps({"schema_version": "1.0", "job_id": job_id,
+                                "status": job.get("status"), "exit_code": job.get("exit_code"),
+                                "artifacts": artifacts, "error": job.get("error")},
+                               ensure_ascii=False, indent=1))
 
     @cli.command(name="job-cancel")
     @click.argument("job_id")
     def job_cancel(job_id):
-        """取消任务(杀进程树, 含 java/xvfb 子进程)"""
+        """取消任务(杀进程树, 含 java/xvfb 子进程; 终态 cancelled)"""
         import json as _json
         import signal as _sig
         jf = os.path.join(_jobs_dir(), f"{job_id}.json")
@@ -762,13 +815,32 @@ def register_top(cli, _LG):
             click.echo(f"❌ 未知 job: {job_id}", err=True)
             sys.exit(1)
         job = _json.load(open(jf, encoding="utf-8"))
+        if job.get("status") != "running" or not job.get("pid"):
+            click.echo(f"⏹ {job_id} 非运行中(当前 {job.get('status')})", err=True)
+            sys.exit(1)
         try:
-            os.killpg(os.getpgid(job["pid"]), _sig.SIGKILL)  # 进程组整杀
-            job["status"] = "cancelled"
-            _json.dump(job, open(jf, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+            os.killpg(os.getpgid(job["pid"]), _sig.SIGKILL)
+            _job_finish(job, "cancelled", -1)
             click.echo(f"✅ 已取消 {job_id}(PID {job['pid']} 进程组)")
-        except Exception as e:
-            click.echo(f"⚠️ 取消失败(可能已结束): {e}", err=True)
+        except Exception:
+            # 进程已死(未落盘终态)→ 惰性判定(provenance)
+            _ec, _err = None, None
+            for a in reversed(job.get("args", [])):
+                if a.endswith((".svg", ".png", ".pdf")) and os.path.isfile(a + ".tbtools.json"):
+                    try:
+                        import json as _json
+                        _pr = _json.load(open(a + ".tbtools.json", encoding="utf-8"))
+                        _ec, _err = _pr.get("exit_code"), _pr.get("error")
+                    except Exception:
+                        pass
+                    break
+            if _ec is None:
+                _job_finish(job, "failed", -1)
+            else:
+                _job_finish(job, "succeeded" if _ec == 0 else "failed", _ec)
+                job["error"] = _err
+                _job_save(job)
+            click.echo(f"⏹ {job_id} 进程已结束(终态 {job['status']}, exit {job.get('exit_code')})")
 
     @cli.command(name="search")
     @click.argument("keyword", required=False)
