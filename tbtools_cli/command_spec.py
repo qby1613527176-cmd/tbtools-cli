@@ -122,7 +122,30 @@ KNOWN_SCHEMAS = {
 }
 
 
-# 命令外部依赖(env 工具级解析; 无依赖命令默认 [])
+# 命令外部依赖结构化(评审 #29: 类型/必需性/平台; env 工具级解析)
+# 格式: command -> [{"name": str, "type": binary|capability, "required": bool, "platforms": [str]}]
+KNOWN_DEPENDENCIES_STRUCT = {
+    "hmmsearch": [{"name": "hmmer", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "simplehmmscan": [{"name": "hmmer", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "calcRepeat": [{"name": "jellyfish", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "rnaplot": [{"name": "rnafold", "type": "binary", "required": True, "platforms": ["linux"]}],
+    "plotrna": [{"name": "rnafold", "type": "binary", "required": True, "platforms": ["linux"]}],
+    "kallisto": [{"name": "kallisto", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "diamond": [{"name": "diamond", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "mcscanxd": [{"name": "mcscanx", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "blastp": [{"name": "blast+", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "blastn": [{"name": "blast+", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "muscle": [{"name": "muscle", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "mafft": [{"name": "mafft", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "iqtree": [{"name": "iqtree2", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "onesteptree": [{"name": "iqtree2", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "trimal": [{"name": "trimal", "type": "binary", "required": True, "platforms": ["linux", "macos"]}],
+    "taxparse": [{"name": "internet", "type": "capability", "required": True, "platforms": ["linux", "macos", "windows"]}],
+    "sraxml2tab": [{"name": "internet", "type": "capability", "required": False, "platforms": ["linux", "macos", "windows"]}],
+}
+
+
+# 兼容层: 简单 list 形式(既有 KNOWN_DEPENDENCIES 消费方)
 KNOWN_DEPENDENCIES = {
     "hmmsearch": ["hmmer"], "simplehmmscan": ["hmmer"],
     "calcRepeat": ["jellyfish"],
@@ -401,6 +424,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["capabilities"] = spec.capabilities
     if spec.dependencies:
         e["dependencies"] = spec.dependencies
+    if spec.name in KNOWN_DEPENDENCIES_STRUCT:
+        e["dependency_manifest"] = KNOWN_DEPENDENCIES_STRUCT[spec.name]
     if spec.relations:
         e["relations"] = spec.relations
     if spec.inputs:

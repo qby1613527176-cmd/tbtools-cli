@@ -58,7 +58,7 @@ jobs:
             bash -n "$f" && echo "✅ $f syntax OK"
           done
 
-      - name: Type check with mypy (严格模式,含未注解函数)
+      - name: Type check with mypy (check_untyped_defs; 评审 #27 对齐)
         run: |
           pip install mypy
           python3 -m mypy tbtools_cli/

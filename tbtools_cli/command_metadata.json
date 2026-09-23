@@ -268,6 +268,17 @@
   "dependencies": [
    "jellyfish"
   ],
+  "dependency_manifest": [
+   {
+    "name": "jellyfish",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
+  ],
   "inputs": [
    {
     "name": "fasta",
@@ -2708,6 +2719,16 @@
   "dependencies": [
    "rnafold"
   ],
+  "dependency_manifest": [
+   {
+    "name": "rnafold",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux"
+    ]
+   }
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -2991,6 +3012,16 @@
   "dependencies": [
    "rnafold"
   ],
+  "dependency_manifest": [
+   {
+    "name": "rnafold",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux"
+    ]
+   }
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -3100,6 +3131,17 @@
   ],
   "dependencies": [
    "hmmer"
+  ],
+  "dependency_manifest": [
+   {
+    "name": "hmmer",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
   ],
   "relations": {
    "accepts": [
@@ -4055,6 +4097,17 @@
   "dependencies": [
    "iqtree2"
   ],
+  "dependency_manifest": [
+   {
+    "name": "iqtree2",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT"
@@ -4095,6 +4148,17 @@
   ],
   "dependencies": [
    "trimal"
+  ],
+  "dependency_manifest": [
+   {
+    "name": "trimal",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
   ],
   "relations": {
    "accepts": [
@@ -4302,6 +4366,18 @@
   "capabilities": [
    "table_operations"
   ],
+  "dependency_manifest": [
+   {
+    "name": "internet",
+    "type": "capability",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos",
+     "windows"
+    ]
+   }
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -4344,6 +4420,18 @@
   "help": "sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
   "capabilities": [
    "table_operations"
+  ],
+  "dependency_manifest": [
+   {
+    "name": "internet",
+    "type": "capability",
+    "required": false,
+    "platforms": [
+     "linux",
+     "macos",
+     "windows"
+    ]
+   }
   ],
   "relations": {
    "accepts": [
@@ -5762,6 +5850,17 @@
   "dependencies": [
    "hmmer"
   ],
+  "dependency_manifest": [
+   {
+    "name": "hmmer",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
+  ],
   "status": "platform-limited"
  },
  "gxfAttr": {
@@ -5812,6 +5911,17 @@
   ],
   "dependencies": [
    "kallisto"
+  ],
+  "dependency_manifest": [
+   {
+    "name": "kallisto",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
   ],
   "relations": {
    "accepts": [
@@ -5978,6 +6088,17 @@
   ],
   "dependencies": [
    "muscle"
+  ],
+  "dependency_manifest": [
+   {
+    "name": "muscle",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
   ],
   "relations": {
    "accepts": [
@@ -6323,6 +6444,17 @@
   ],
   "dependencies": [
    "mcscanx"
+  ],
+  "dependency_manifest": [
+   {
+    "name": "mcscanx",
+    "type": "binary",
+    "required": true,
+    "platforms": [
+     "linux",
+     "macos"
+    ]
+   }
   ],
   "relations": {
    "accepts": [

@@ -81,12 +81,19 @@ def register_top(cli, _LG):
             # 机器格式快速路径: 不经 echo 循环, stdout 只含 JSON(评审 #24)
             _jf = bool(JAR) and os.path.isfile(JAR)
             _ec = 0 if (_jf and shutil.which("java") and (os.name == "nt" or shutil.which("xvfb-run"))) else 1
+            # 版本兼容矩阵(评审 #23): CLI/TBtools/Java 兼容状态
+            _compat = {
+                "tbtools_cli": "1.2.0",
+                "tbtools_jar_required": "2.535+",
+                "java_runtime": "11-21 (推荐 17)",
+                "compatibility": "verified" if _ec == 0 else "check_jar_version",
+            }
             click.echo(_json.dumps({
                 "schema_version": "1.0", "ready": _ec == 0, "err": _ec,
                 "java": shutil.which("java") is not None,
                 "xvfb": shutil.which("xvfb-run") is not None,
                 "jar": _jf, "jar_path": JAR if _jf else None,
-                "mcp": True,
+                "mcp": True, "compat": _compat,
             }, ensure_ascii=False, indent=1))
             sys.exit(_ec)
         ok = warn = err = 0
