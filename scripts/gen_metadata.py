@@ -327,12 +327,19 @@ def render_ai_manifest(meta):
          "inputs": [{"name": "fasta", "type": "fasta"}],
          "outputs": ["nwk", "svg"]},
     ]
+    try:
+        from tbtools_cli.command_spec import KNOWN_RELATIONS
+        _json.dump({"schema_version": "1.0", "relations": KNOWN_RELATIONS},
+                   open(_os.path.join(ai_dir, "relations.json"), "w", encoding="utf-8"),
+                   ensure_ascii=False, indent=1)
+    except Exception:
+        pass
     _json.dump({"schema_version": "1.0", "workflows": workflows},
                open(_os.path.join(ai_dir, "workflows.json"), "w", encoding="utf-8"),
                ensure_ascii=False, indent=1)
     manifest = {"schema_version": "1.0",
                 "description": "tbtools-cli AI 机器接口层(Agent 程序化发现/理解/调用工具)",
-                "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "workflows.json", "tools/<group>/<cmd>.json"],
+                "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "workflows.json", "relations.json", "tools/<group>/<cmd>.json"],
                 "usage": {"discover": "tbtools search --input gff3 --output svg --json",
                           "describe": "tbtools tool-describe <cmd> --json",
                           "preflight": "tbtools tool-validate <cmd> <inputs...> --json",

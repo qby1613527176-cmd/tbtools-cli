@@ -147,6 +147,32 @@ GROUP_CAPABILITIES = {
 }
 
 
+# 工具语义关系(能力图: 输入输出衔接; GLM #24)——核心命令标注
+KNOWN_RELATIONS = {
+    "volcano":  {"accepts": ["DEG_TABLE"], "produces": ["VOLCANO_PLOT"],
+                 "next_step": ["goEnrich", "keggEnrich"], "related_to": ["dehist", "heatmap"]},
+    "dehist":   {"accepts": ["DEG_TABLE"], "produces": ["DEG_HISTOGRAM"],
+                 "related_to": ["volcano"]},
+    "heatmap":  {"accepts": ["EXPRESSION_MATRIX"], "produces": ["HEATMAP"],
+                 "next_step": ["hclust"], "related_to": ["pca"]},
+    "pca":      {"accepts": ["EXPRESSION_MATRIX"], "produces": ["PCA_PLOT"]},
+    "hclust":   {"accepts": ["DISTANCE_TABLE"], "produces": ["DENDROGRAM"],
+                 "related_to": ["heatmap"]},
+    "mcscanx":  {"accepts": ["GFF", "BLAST_TAB6"], "produces": ["COLLINEARITY"],
+                 "next_step": ["dualsyn", "dotplot"]},
+    "dualsyn":  {"accepts": ["SIMPLIFIED_GFF", "COLLINEARITY"], "produces": ["SYNTENY_PLOT"]},
+    "dotplot":  {"accepts": ["SIMPLIFIED_GFF", "COLLINEARITY"], "produces": ["DOTPLOT"]},
+    "muscle":   {"accepts": ["FASTA"], "produces": ["ALIGNMENT"], "next_step": ["trimal", "iqtree"]},
+    "trimal":   {"accepts": ["ALIGNMENT"], "produces": ["TRIMMED_ALIGNMENT"], "next_step": ["iqtree"]},
+    "iqtree":   {"accepts": ["ALIGNMENT"], "produces": ["PHYLOGENY_NWK"], "next_step": ["tree"]},
+    "tpmCalc":  {"accepts": ["COUNTS_TABLE", "GENE_LENGTH"], "produces": ["TPM_TABLE"],
+                 "next_step": ["pca", "heatmap", "volcano"]},
+    "gsea":     {"accepts": ["EXPRESSION_TABLE", "PHENOTYPE_CLS"], "produces": ["GSEA_REPORT"]},
+    "genestructure": {"accepts": ["GFF3", "GENE_ID_LIST"], "produces": ["GENE_STRUCTURE_PLOT"]},
+    "kallisto": {"accepts": ["FASTQ"], "produces": ["QUANT_TABLE"], "next_step": ["tpmCalc"]},
+}
+
+
 # 已知别名(兼容层命名; canonical → 命令)
 KNOWN_CAPABILITIES = {
     "volcano": ["differential_expression", "visualization"],
