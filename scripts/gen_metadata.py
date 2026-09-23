@@ -304,9 +304,35 @@ def render_ai_manifest(meta):
         _json.dump(ERROR_CODES, open(_os.path.join(ai_dir, "error-codes.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     except Exception:
         pass
+    workflows = [
+        {"id": "gene-family-analysis", "title": "基因家族分析(GRAS 实测)",
+         "steps": [{"tool": "muscle", "role": "msa"}, {"tool": "trimal", "role": "trim"},
+                   {"tool": "iqtree", "role": "phylogeny"}, {"tool": "motif", "role": "motif"},
+                   {"tool": "genestructure", "role": "gene_structure"}],
+         "inputs": [{"name": "family_fasta", "type": "fasta"}],
+         "outputs": ["aln", "nwk", "svg"]},
+        {"id": "rna-seq", "title": "RNA-seq 差异分析",
+         "steps": [{"tool": "tpmCalc", "role": "normalize"}, {"tool": "pca", "role": "qc"},
+                   {"tool": "heatmap", "role": "viz"}, {"tool": "volcano", "role": "deg"}],
+         "inputs": [{"name": "counts", "type": "tsv"}, {"name": "len_info", "type": "tsv"}],
+         "outputs": ["tsv", "svg"]},
+        {"id": "comparative-genomics", "title": "比较基因组学(共线性)",
+         "steps": [{"tool": "mcscanx", "role": "collinearity"}, {"tool": "dualsyn", "role": "viz"},
+                   {"tool": "dotplot", "role": "viz"}],
+         "inputs": [{"name": "gff", "type": "gff3"}, {"name": "blast", "type": "tsv"}],
+         "outputs": ["collinearity", "svg"]},
+        {"id": "phylogeny", "title": "系统发育",
+         "steps": [{"tool": "msa", "role": "align"}, {"tool": "trimal", "role": "trim"},
+                   {"tool": "onesteptree", "role": "phylogeny"}, {"tool": "tree", "role": "draw"}],
+         "inputs": [{"name": "fasta", "type": "fasta"}],
+         "outputs": ["nwk", "svg"]},
+    ]
+    _json.dump({"schema_version": "1.0", "workflows": workflows},
+               open(_os.path.join(ai_dir, "workflows.json"), "w", encoding="utf-8"),
+               ensure_ascii=False, indent=1)
     manifest = {"schema_version": "1.0",
                 "description": "tbtools-cli AI 机器接口层(Agent 程序化发现/理解/调用工具)",
-                "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "tools/<group>/<cmd>.json"],
+                "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "workflows.json", "tools/<group>/<cmd>.json"],
                 "usage": {"discover": "tbtools search --input gff3 --output svg --json",
                           "describe": "tbtools tool-describe <cmd> --json",
                           "preflight": "tbtools tool-validate <cmd> <inputs...> --json",

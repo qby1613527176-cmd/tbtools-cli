@@ -5,6 +5,7 @@
   "tool-index.jsonl",
   "capability-index.json",
   "error-codes.json",
+  "workflows.json",
   "tools/<group>/<cmd>.json"
  ],
  "usage": {
