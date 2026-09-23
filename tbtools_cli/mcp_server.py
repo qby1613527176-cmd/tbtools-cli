@@ -55,7 +55,8 @@ def tool_describe(command: str) -> str:
 def tool_validate(command: str, inputs: list[str] | str = "") -> str:
     """执行前预检: 文件存在/格式/列数。inputs 为输入路径 list 或兼容旧逗号串。"""
     parts = inputs if isinstance(inputs, list) else [p.strip() for p in inputs.split(",") if p.strip()]
-    return _cli("tool-validate", command, *parts, "--json")
+    _cp = command.split() if " " in command else [command]
+    return _cli("tool-validate", *_cp, *parts, "--json")
 
 
 @mcp.tool()
@@ -74,7 +75,9 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
         parts += list(arguments.get("outputs", []))
     else:
         parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
-    return _cli("tool-run", command, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
+    # command 含空格(如 "expr volcano")拆分为分组+命令(评审: CLI 需要独立 token)
+    cmd_parts = command.split() if " " in command else [command]
+    return _cli("tool-run", *cmd_parts, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
 
 
 @mcp.tool()
@@ -82,7 +85,8 @@ def job_submit(command: str, args: list[str] | str = "", timeout_s: int = 0) -> 
     """异步提交长任务: 返回 job_id(状态机 running→succeeded/failed/cancelled/timed_out)。"""
     parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
     t = [f"--timeout={timeout_s}"] if timeout_s > 0 else []
-    return _cli("tool-submit", command, *parts, *t)
+    _cp = command.split() if " " in command else [command]
+    return _cli("tool-submit", *_cp, *parts, *t)
 
 
 @mcp.tool()
