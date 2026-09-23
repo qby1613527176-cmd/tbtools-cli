@@ -1,0 +1,44 @@
+name: nightly-e2e
+
+# 真实引擎 nightly 回归(GPT 评审 #5): 5+ 代表命令 × 真实 JAR × 真实 examples 数据
+# 每日 01:00 UTC 自动跑; fetch-jar 静默下载真实 JAR → 每个命令断言出图/产物非空
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"   # 每日 01:00 UTC
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install xvfb + deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb
+          pip install click
+
+      - name: Fetch real JAR (silent)
+        run: |
+          python3 -m tbtools_cli.cli fetch-jar --yes 2>&1 | tail -3
+          python3 -m tbtools_cli.cli doctor 2>&1 | grep -E "✅ JAR|sha256" | head -2
+
+      - name: Nightly E2E (real engine plots)
+        run: |
+          xvfb-run -a bash scripts/e2e_nightly.sh
+
+      - name: Gate — pytest (wrapper layer)
+        run: |
+          pip install pytest ruff mypy
+          python3 -m pytest tests/ -q 2>&1 | tail -1
+          ruff check . 2>&1 | tail -1
