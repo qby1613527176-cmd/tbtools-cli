@@ -22,7 +22,11 @@ def _root() -> str:
 
 
 def _cli(*args: str, timeout: int = 300) -> str:
-    """调 CLI, 返回 stdout(纯 JSON 协议)。"""
+    """调 CLI, 返回 stdout(纯 JSON 协议)。
+
+    timeout 与 CLI --timeout 对齐(评审 #6: 唯一 timeout authority):
+    tool-run --timeout N 时 MCP 外层 subprocess timeout = N + 30s 缓冲(不抢先杀)。
+    """
     r = subprocess.run(
         [sys.executable, "-m", "tbtools_cli.cli", *args],
         capture_output=True, text=True, timeout=timeout, cwd=_root(),
@@ -48,23 +52,23 @@ def tool_describe(command: str) -> str:
 
 
 @mcp.tool()
-def tool_validate(command: str, inputs: str) -> str:
-    """执行前预检: 文件存在/格式/列数。inputs 为逗号分隔的输入路径。"""
-    parts = [p.strip() for p in inputs.split(",") if p.strip()]
+def tool_validate(command: str, inputs: list[str] | str = "") -> str:
+    """执行前预检: 文件存在/格式/列数。inputs 为输入路径 list 或兼容旧逗号串。"""
+    parts = inputs if isinstance(inputs, list) else [p.strip() for p in inputs.split(",") if p.strip()]
     return _cli("tool-validate", command, *parts, "--json")
 
 
 @mcp.tool()
-def tool_run(command: str, args: str, timeout_s: int = 600) -> str:
-    """执行工具(同步): args 为完整参数串(含输出路径)。返回纯 JSON(exit_code/artifacts/error)。"""
-    parts = [p.strip() for p in args.split() if p.strip()]
-    return _cli("tool-run", command, *parts, "--json", "--timeout", str(timeout_s))
+def tool_run(command: str, args: list[str] | str = "", timeout_s: int = 600) -> str:
+    """执行工具(同步): args 为参数 list(含空格路径安全)或兼容旧 string。返回纯 JSON(exit_code/artifacts/error)。"""
+    parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
+    return _cli("tool-run", command, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
 
 
 @mcp.tool()
-def job_submit(command: str, args: str, timeout_s: int = 0) -> str:
+def job_submit(command: str, args: list[str] | str = "", timeout_s: int = 0) -> str:
     """异步提交长任务: 返回 job_id(状态机 running→succeeded/failed/cancelled/timed_out)。"""
-    parts = [p.strip() for p in args.split() if p.strip()]
+    parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
     t = [f"--timeout={timeout_s}"] if timeout_s > 0 else []
     return _cli("tool-submit", command, *parts, *t)
 

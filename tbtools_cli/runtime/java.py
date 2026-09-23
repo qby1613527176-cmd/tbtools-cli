@@ -414,23 +414,42 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     if ec == 0:
         ec_out = 0
     # 运行 provenance: 识别输出文件, 旁写 <out>.tbtools.json(成功/失败都写, 含结构化 error)
-    _write_provenance(java_args, command_name, ec_out, err_text if ec_out != 0 else "")
+    _inputs_before = {s[0] for s in snaps} if "snaps" in dir() else None
+    _write_provenance(java_args, command_name, ec_out, err_text if ec_out != 0 else "",
+                      inputs_set=_inputs_before)
     return ec_out
 
 
-def _write_provenance(java_args, command_name, ec, err_text=""):
+def _write_provenance(java_args, command_name, ec, err_text="", inputs_set=None):
     """运行记录旁文件: <输出>.tbtools.json(命令/版本/参数/输入 sha/时间/错误)。
 
     成功(ec==0)与失败(ec!=0, 含结构化 error)都写;失败不影响主流程。
     """
     if command_name is None:
         return
-    # 输出识别: 反向第一个图形参数即视为输出(重跑时文件已存在也当输出), 排除选项
+    # 输出识别: 反向第一个"像文件且非输入"的参数即视为输出(评审 #7: 不止图形,
+    # TSV/GFF/FASTA/NWK/JSON 等任意 artifact 都纳入)。排除 jar/class/选项/输入参数。
     out = None
+    # _input_paths 用运行前收集的 inputs_set(快照)——运行后现收会把输出文件也当输入(评审 #7 bug)
+    if inputs_set is not None:
+        _input_paths = {os.path.abspath(p) for p in inputs_set}
+    else:
+        _input_paths = set()
+        for a in java_args:
+            if os.path.isfile(a):
+                _input_paths.add(os.path.abspath(a))
     for a in reversed(java_args):
-        if a.endswith((".svg", ".png", ".pdf")) and not a.startswith("-"):
-            out = a
-            break
+        if a.startswith("-"):
+            continue
+        if not os.path.isfile(a) and not a.endswith((".svg", ".png", ".pdf", ".tsv", ".txt", ".csv",
+                                                       ".json", ".gff", ".gff3", ".gtf", ".nwk", ".fa",
+                                                       ".fasta", ".fastq", ".fq", ".xls", ".out", ".log",
+                                                       ".gz", ".meme", ".tree", ".aln", ".collinearity")):
+            continue  # 路径存在(t 后产物)或已知生信产物后缀
+        if os.path.abspath(a) in _input_paths:
+            continue  # 输入参数不算输出
+        out = a
+        break
     if not out or not os.path.isdir(os.path.dirname(os.path.abspath(out))):
         return
     try:
@@ -453,7 +472,8 @@ def _write_provenance(java_args, command_name, ec, err_text=""):
                 "suggested_action": ERROR_CODES.get(_code, {}).get("action", ""),
             },
             "outputs": [out],
-            "inputs": [{"path": i, "sha256": _hl.sha256(open(i, "rb").read()).hexdigest()[:16]} for i in inputs[:10]],
+            "input_count": len(inputs),
+            "inputs": [{"path": i, "sha256": _sha1_file(i)[:16]} for i in inputs],
             "timestamp": _tm.strftime("%Y-%m-%dT%H:%M:%S"),
             "java_args_count": len(java_args),
         }

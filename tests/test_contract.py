@@ -84,3 +84,25 @@ def test_contract_dry_run_schema():
     d = json.loads(r.stdout)
     assert d["status"] in ("ready", "not_ready")
     assert "inputs_valid" in d and "estimated_artifacts" in d
+
+
+def test_manifest_contract():
+    """契约⑨(评审 #11): 核心命令 manifest 逐条验证——删除任何核心命令立即红。"""
+    expected = json.load(open(ROOT / "tests" / "expected_commands.json", encoding="utf-8"))
+    missing = [c for c in expected["commands"] if c not in META]
+    assert not missing, f"核心命令从 metadata 消失: {missing}"
+    # group/kind 与快照一致(分组漂移检测)
+    drift = [c for c, exp in expected["commands"].items()
+             if c in META and (META[c]["group"] != exp["group"] or META[c]["kind"] != exp["kind"])]
+    assert not drift, f"group/kind 漂移: {drift}"
+
+
+def test_contract_agent_commands_present():
+    """契约⑩: Agent 接口命令全部存在(search/describe/validate/run/result/provenance/job 系列)"""
+    import subprocess
+    for cmd in ["search", "tool-describe", "tool-validate", "tool-run", "tool-result",
+                "tool-provenance", "tool-submit", "job-status", "job-result",
+                "provenance-graph", "capabilities", "plugin", "mcp", "env"]:
+        r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", cmd, "--help"],
+                           capture_output=True, text=True, timeout=15, cwd=ROOT)
+        assert r.returncode == 0, f"{cmd} --help 失败"

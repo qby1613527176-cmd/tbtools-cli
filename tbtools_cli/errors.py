@@ -33,6 +33,6 @@ def classify_error(err_text: str) -> tuple[str, int, str]:
         return "TB008_OUT_OF_MEMORY", 4, "内存不足: config.toml [defaults] memory 调大"
     if "NullPointerException" in err_text:
         return "TB001_INVALID_ARGUMENT", 1, "可能缺少必需参数或格式不匹配"
-    if "NoClassDefFoundError|DatatypeConverter" in err_text:
+    if "NoClassDefFoundError" in err_text or "DatatypeConverter" in err_text:
         return "TB005_DEPENDENCY_MISSING", 1, "缺 javax.xml 类(ensure_bridge 应已编译 fake DatatypeConverter)"
     return "TB001_INVALID_ARGUMENT", 1, "参数缺失/格式不对/路径错误/数据不匹配"

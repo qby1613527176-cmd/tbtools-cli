@@ -1,0 +1,222 @@
+{
+ "schema_version": "1.0",
+ "expected_count": 54,
+ "commands": {
+  "volcano": {
+   "group": "expr",
+   "kind": "manual"
+  },
+  "heatmap": {
+   "group": "expr",
+   "kind": "manual"
+  },
+  "hclust": {
+   "group": "expr",
+   "kind": "manual"
+  },
+  "dehist": {
+   "group": "expr",
+   "kind": "manual"
+  },
+  "pca": {
+   "group": "expr",
+   "kind": "manual"
+  },
+  "groupedbar": {
+   "group": "expr",
+   "kind": "bridge"
+  },
+  "barplot": {
+   "group": "expr",
+   "kind": "bridge"
+  },
+  "qpcr": {
+   "group": "expr",
+   "kind": "bridge"
+  },
+  "genestructure": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "seqlogo": {
+   "group": "engine",
+   "kind": "manual"
+  },
+  "msa": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "motif": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "sixframe": {
+   "group": "seq",
+   "kind": "bridge"
+  },
+  "longestorf": {
+   "group": "seq",
+   "kind": "direct"
+  },
+  "mcscanx": {
+   "group": "syn",
+   "kind": "bridge"
+  },
+  "dualsyn": {
+   "group": "syn",
+   "kind": "bridge"
+  },
+  "dotplot": {
+   "group": "syn",
+   "kind": "direct"
+  },
+  "msy": {
+   "group": "syn",
+   "kind": "manual"
+  },
+  "circos": {
+   "group": "syn",
+   "kind": "bridge"
+  },
+  "qdot": {
+   "group": "syn",
+   "kind": "bridge"
+  },
+  "pafviz": {
+   "group": "syn",
+   "kind": "bridge"
+  },
+  "microsyn": {
+   "group": "syn",
+   "kind": "bridge"
+  },
+  "iqtree": {
+   "group": "tree",
+   "kind": "bridge"
+  },
+  "muscle": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "trimal": {
+   "group": "seq",
+   "kind": "bridge"
+  },
+  "treeRooting": {
+   "group": "tree",
+   "kind": "manual"
+  },
+  "kallisto": {
+   "group": "expr",
+   "kind": "manual"
+  },
+  "tpmCalc": {
+   "group": "tool",
+   "kind": "tool"
+  },
+  "gsea": {
+   "group": "table",
+   "kind": "manual"
+  },
+  "goEnrich": {
+   "group": "table",
+   "kind": "bridge"
+  },
+  "keggEnrich": {
+   "group": "table",
+   "kind": "bridge"
+  },
+  "venn2": {
+   "group": "sets",
+   "kind": "direct"
+  },
+  "venn3": {
+   "group": "sets",
+   "kind": "direct"
+  },
+  "upset": {
+   "group": "sets",
+   "kind": "bridge"
+  },
+  "gxfSplit": {
+   "group": "gxf",
+   "kind": "manual"
+  },
+  "gxfAttr": {
+   "group": "gxf",
+   "kind": "manual"
+  },
+  "efpHeat": {
+   "group": "expr",
+   "kind": "direct"
+  },
+  "layoutheatmap": {
+   "group": "expr",
+   "kind": "bridge"
+  },
+  "peaktss": {
+   "group": "chipseq",
+   "kind": "direct"
+  },
+  "peakanno": {
+   "group": "chipseq",
+   "kind": "direct"
+  },
+  "multiEfp": {
+   "group": "expr",
+   "kind": "bridge"
+  },
+  "gxfFix": {
+   "group": "gxf",
+   "kind": "direct"
+  },
+  "fastaExtract": {
+   "group": "fastq",
+   "kind": "direct"
+  },
+  "fqTrim": {
+   "group": "fastq",
+   "kind": "direct"
+  },
+  "recipBlast": {
+   "group": "blast",
+   "kind": "direct"
+  },
+  "filterCScore": {
+   "group": "blast",
+   "kind": "direct"
+  },
+  "hmmerSearch": {
+   "group": "hmm",
+   "kind": "manual"
+  },
+  "smart": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "fimo": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "memerun": {
+   "group": "seq",
+   "kind": "bridge"
+  },
+  "mastrun": {
+   "group": "seq",
+   "kind": "bridge"
+  },
+  "memeViz": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "tfbsShift": {
+   "group": "seq",
+   "kind": "manual"
+  },
+  "notung": {
+   "group": "tree",
+   "kind": "manual"
+  }
+ }
+}
