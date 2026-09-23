@@ -40,6 +40,7 @@ class CommandSpec:
     outputs: list[str] = field(default_factory=list)  # 输出类型(如 svg/png/tsv)
     capabilities: list[str] = field(default_factory=list)  # 能力标签(能力图搜索)
     dependencies: list[str] = field(default_factory=list)  # 外部依赖(环境解析, GLM #22)
+    relations: dict = field(default_factory=dict)          # 语义关系(能力图衔接, GLM #24)
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -170,6 +171,34 @@ KNOWN_RELATIONS = {
     "gsea":     {"accepts": ["EXPRESSION_TABLE", "PHENOTYPE_CLS"], "produces": ["GSEA_REPORT"]},
     "genestructure": {"accepts": ["GFF3", "GENE_ID_LIST"], "produces": ["GENE_STRUCTURE_PLOT"]},
     "kallisto": {"accepts": ["FASTQ"], "produces": ["QUANT_TABLE"], "next_step": ["tpmCalc"]},
+}
+
+
+# 组级关系兜底(无精确关系命令按组给默认衔接; 优先 KNOWN_RELATIONS)
+GROUP_RELATIONS = {
+    "syn":   {"accepts": ["SIMPLIFIED_GFF", "COLLINEARITY"], "produces": ["SYNTENY_PLOT"],
+              "next_step": ["dualsyn", "dotplot"], "related_to": ["mcscanx"]},
+    "expr":  {"accepts": ["EXPRESSION_TABLE"], "produces": ["PLOT"],
+              "related_to": ["volcano", "heatmap"]},
+    "tree":  {"accepts": ["ALIGNMENT", "NEWICK"], "produces": ["PHYLOGENY_NWK"],
+              "next_step": ["tree"]},
+    "seq":   {"accepts": ["FASTA", "GFF3"], "produces": ["SEQUENCE_ARTIFACT"],
+              "related_to": ["muscle", "trimal"]},
+    "gxf":   {"accepts": ["GFF3"], "produces": ["ANNOTATION_OUT"]},
+    "table": {"accepts": ["TABLE"], "produces": ["TABLE_OUT"]},
+    "blast": {"accepts": ["FASTA"], "produces": ["BLAST_HITS"],
+              "next_step": ["filterCScore"]},
+    "chipseq": {"accepts": ["ALIGNMENT", "PEAKS"], "produces": ["PEAK_ANNOTATION"]},
+    "fastq": {"accepts": ["FASTQ"], "produces": ["SEQUENCE_ARTIFACT"],
+              "next_step": ["kallisto", "tpmCalc"]},
+    "asm":     {"accepts": ["GENOME", "GFF"], "produces": ["ASSEMBLY_OUT"]},
+    "virus":   {"accepts": ["FASTA", "REF_DB"], "produces": ["VIRUS_ANNOTATION"]},
+    "efp":     {"accepts": ["TGA", "EXP_MATRIX"], "produces": ["EFP_HEATMAP"]},
+    "sets":    {"accepts": ["GENE_LISTS"], "produces": ["SET_DIAGRAM"],
+                "related_to": ["venn2", "venn3", "upset"]},
+    "enrich":  {"accepts": ["GENE_LISTS"], "produces": ["ENRICHMENT_REPORT"],
+                "next_step": ["barplot"]},
+    "genome":  {"accepts": ["GENOME"], "produces": ["GENOME_OUT"]},
 }
 
 
@@ -327,6 +356,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
             spec.inputs, spec.outputs = ins, outs
         spec.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(spec.group, [])
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
+        spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
     return specs
 
 
@@ -356,6 +386,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
         s.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(s.group, [])
         s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
+        s.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(s.group, {})
     return {n: to_metadata_entry(s) for n, s in specs.items()}
 
 
