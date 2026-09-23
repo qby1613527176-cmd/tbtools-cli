@@ -173,6 +173,55 @@ KNOWN_RELATIONS = {
 }
 
 
+# 精确标注补充(2026-09-23): 覆盖组级兜底的粗标签, 核心命令细化
+KNOWN_CAPABILITIES.update({
+    "mcscanx": ["synteny", "collinearity_detection"],
+    "dualsyn": ["synteny", "visualization"],
+    "dotplot": ["synteny", "visualization"],
+    "circos": ["visualization", "genome_circos"],
+    "collinearRegion": ["synteny", "visualization"],
+    "pafviz": ["synteny", "visualization"],
+    "pafref": ["synteny", "visualization"],
+    "microsyn": ["synteny", "visualization"],
+    "multisyn": ["synteny", "visualization"],
+    "qdot": ["synteny", "visualization"],
+    "fimo": ["motif", "scanning"],
+    "mastrun": ["motif", "scanning"],
+    "memerun": ["motif", "discovery"],
+    "memeViz": ["motif", "visualization"],
+    "seqlogo": ["motif", "visualization"],
+    "tfbsShift": ["motif", "genome_scan"],
+    "smart": ["domain", "annotation"],
+    "hmmsearch": ["homology", "hmm_scan"],
+    "diamond": ["homology", "alignment"],
+    "blastp": ["homology", "alignment"],
+    "blastn": ["homology", "alignment"],
+    "recipBlast": ["homology", "reciprocal_best_hit"],
+    "filterCScore": ["homology", "filtering"],
+    "kallisto": ["rna_seq", "quantification"],
+    "fqTrim": ["ngs", "preprocessing"],
+    "fqfaConv": ["sequence", "conversion"],
+    "fastaExtract": ["sequence", "extraction"],
+    "fastaSubseq": ["sequence", "extraction"],
+    "gffFix": ["annotation", "gff_fixing"],
+    "gxfAppend": ["annotation", "gff_ops"],
+    "genelocation": ["annotation", "visualization"],
+    "peaktss": ["chip_seq", "peak_calling"],
+    "peakanno": ["chip_seq", "peak_annotation"],
+    "tpmCalc": ["rna_seq", "normalization"],
+    "efpHeat": ["expression", "visualization"],
+    "layoutheatmap": ["expression", "visualization"],
+    "gsea": ["enrichment"],
+    "goEnrich": ["enrichment", "gene_ontology"],
+    "keggEnrich": ["enrichment", "pathway"],
+    "multiEfp": ["expression", "visualization"],
+    "treeRooting": ["phylogeny", "rooting"],
+    "onesteptree": ["phylogeny", "tree_building"],
+    "notung": ["phylogeny", "reconciliation"],
+    "newickRename": ["phylogeny", "tree_editing"],
+})
+
+
 # 已知别名(兼容层命名; canonical → 命令)
 KNOWN_CAPABILITIES = {
     "volcano": ["differential_expression", "visualization"],
