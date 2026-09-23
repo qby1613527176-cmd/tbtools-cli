@@ -72,9 +72,23 @@ def register_top(cli, _LG):
         click.echo(f"  JAR: {JAR}" if JAR else "  JAR: ⚠️ 未配置")
 
     @cli.command()
-    def doctor():
+    @click.option("--json", "as_json", is_flag=True, help="机器格式输出(环境快照, 供 Agent)")
+    def doctor(as_json):
         """环境诊断"""
         import shutil
+        import json as _json
+        if as_json:
+            # 机器格式快速路径: 不经 echo 循环, stdout 只含 JSON(评审 #24)
+            _jf = bool(JAR) and os.path.isfile(JAR)
+            _ec = 0 if (_jf and shutil.which("java") and (os.name == "nt" or shutil.which("xvfb-run"))) else 1
+            click.echo(_json.dumps({
+                "schema_version": "1.0", "ready": _ec == 0, "err": _ec,
+                "java": shutil.which("java") is not None,
+                "xvfb": shutil.which("xvfb-run") is not None,
+                "jar": _jf, "jar_path": JAR if _jf else None,
+                "mcp": True,
+            }, ensure_ascii=False, indent=1))
+            sys.exit(_ec)
         ok = warn = err = 0
         checks = [
             ("java", "Java", True),
@@ -164,6 +178,20 @@ def register_top(cli, _LG):
         click.echo(f"  绘图（SVG）       {'✅' if (not is_win or have_xvfb) and jar_ready else '⚠️ Windows 无 xvfb 部分受限 / JAR 缺失'}")
         click.echo(f"  管道 stdin/stdout {'⚠️ 仅部分 tool 层'}")
         click.echo("  （Linux 绘图需 xvfb;Windows 限制见 README Known Limitations）")
+
+        if as_json:
+            import json as _json
+            click.echo(_json.dumps({
+                "schema_version": "1.0",
+                "ready": err == 0,
+                "ok": ok, "warn": warn, "err": err,
+                "java": shutil.which("java") is not None,
+                "xvfb": shutil.which("xvfb-run") is not None,
+                "jar": jar_ready,
+                "jar_path": JAR if jar_ready else None,
+                "jar_sha_verified": "_exp" in dir() and bool(_exp),
+            }, ensure_ascii=False, indent=1))
+            sys.exit(0 if err == 0 else 1)
 
         if err:
             sys.exit(1)
@@ -602,18 +630,39 @@ def register_top(cli, _LG):
     @click.argument("args", nargs=-1, required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化结果回显(Agent 能力4)")
     @click.option("--timeout", "timeout_s", type=int, default=0, help="超时秒数(0=不超时; 超时杀进程树并返回 TB007)")
-    def tool_run(args, as_json, timeout_s):
+    @click.option("--dry-run", "dry", is_flag=True, help="不执行: 预检+预估产物(Agent 规划, 评审 #37)")
+    def tool_run(args, as_json, timeout_s, dry):
         """统一执行接口: 转发任意 tbtools 命令 + 结构化结果(退出码/时长/产物)"""
         import json as _json
         import time as _time
         # --json 时: stdout 是协议(纯 JSON)——执行期 stdout → /dev/null(日志丢弃, Java 详情在 err 文件)
         _saved_fd = None
+        if dry:
+            # dry-run: 输入存在性/格式预检 + 预估产物, 不执行(评审 #37)
+            import json as _json2
+            ok, probs = True, []
+            _skip = 2 if len(args) >= 3 else 1  # 跳过 <group> <cmd>(和 <cmd>)
+            for a in args[_skip:]:
+                if a.endswith((".svg", ".png", ".pdf", ".tsv", ".nwk")):
+                    continue  # 输出参数
+                if not os.path.isfile(a):
+                    ok = False
+                    probs.append(f"missing input: {a}")
+            est = [a for a in args[_skip:] if a.endswith((".svg", ".png", ".pdf"))]
+            click.echo(_json2.dumps({"schema_version": "1.0", "status": "ready" if ok else "not_ready",
+                                     "tool": args[-1] if args else "", "inputs_valid": ok,
+                                     "dependencies_ready": True if (JAR and os.path.isfile(JAR)) else False,
+                                     "estimated_artifacts": est,
+                                     "problems": probs}, ensure_ascii=False, indent=1))
+            sys.exit(0 if ok else 3)
+
         if as_json:
             import os as _os
             _saved_fd = _os.dup(1)
             _devnull = _os.open(_os.devnull, _os.O_WRONLY)
             _os.dup2(_devnull, 1)
             _os.close(_devnull)
+
         t0 = _time.time()
         _timed_out = False
         try:
@@ -910,6 +959,30 @@ except Exception:
         """启动 MCP server(stdio)——Claude/Cursor/任意 MCP 客户端即插即用"""
         from tbtools_cli.mcp_server import main as _mcp_main
         _mcp_main()
+
+    @cli.command(name="capabilities")
+    @click.option("--json", "as_json", is_flag=True, help="机器格式输出(供 Agent 环境选择)")
+    def capabilities_cmd(as_json):
+        """环境能力检测: 绘图/无头/RPC/MCP/网络 等能力状态(评审 #25)"""
+        import json as _json
+        import shutil as _sh
+        import subprocess as _sp
+        is_win = os.name == "nt"
+        caps = {
+            "plotting": bool(JAR) and (not is_win or _sh.which("xvfb-run")),
+            "headless": not is_win,
+            "rpc": bool(JAR),
+            "mcp": True,
+            "ncbi": _sh.which("blastdbcmd") is not None,
+            "sra": _sh.which("fastq-dump") is not None or _sh.which("fasterq-dump") is not None,
+            "external": sorted({d for d in ["mafft", "muscle", "iqtree2", "hmmsearch", "diamond", "kallisto", "trimal", "jellyfish", "blastp", "mcscanx"] if _sh.which(d)}),
+        }
+        if as_json:
+            click.echo(_json.dumps(caps, ensure_ascii=False, indent=1))
+        else:
+            for k, v in caps.items():
+                mark = "✅" if v else ("⚠️" if k != "external" else "-")
+                click.echo(f"  {mark} {k}: {v if isinstance(v, list) else ('可用' if v else '不可用')}")
 
     @cli.command(name="search")
     @click.argument("keyword", required=False)
