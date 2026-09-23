@@ -32,8 +32,22 @@ else
   FAIL=$((FAIL+1)); FAILED_LIST+=("syn dualsyn (ec=$?)"); echo "❌ syn dualsyn"
 fi
 run_case table tableCollapse coll.tsv     $DATA/table/tableCollapse.in.tsv 0
-# run_case gxf gxfSplit    gx              $DATA/synteny/gxf1.gff   # 待修: 输出前缀语义
-# run_case sets venn2      venn.svg       --List1 $DATA/table/uniq/m1.txt --List2 $DATA/table/uniq/m2.txt --label1 A --label2 B  # 待修: 输出位置
+
+# 2026-09-23 补录(本地验证通过后加入): hclust 三列距离 / gxfSplit 前缀 / venn2 --graph
+printf 'G1\tG2\t0.5\nG1\tG3\t1.2\nG2\tG3\t0.8\nG2\tG4\t1.5\nG3\tG4\t0.3\nG4\tG1\t2.0\n' > "$OUT/dist3.tsv"
+run_case expr hclust        hclust.svg    "$OUT/dist3.tsv"
+python3 -m tbtools_cli.cli gxf gxfSplit "$DATA/gxf/input.gff3" "$OUT/gx" >/dev/null 2>&1
+if [[ $? -eq 0 && -s "$OUT/gx.split.1.gxf" ]]; then
+  PASS=$((PASS+1)); echo "✅ gxf gxfSplit"
+else
+  FAIL=$((FAIL+1)); FAILED_LIST+=("gxf gxfSplit"); echo "❌ gxf gxfSplit"
+fi
+python3 -m tbtools_cli.cli sets venn2 --List1 "$DATA/table/uniq/m1.txt" --List2 "$DATA/table/uniq/m2.txt" --label1 A --label2 B --graph "$OUT/venn.svg" --prefix "$OUT/vp" >/dev/null 2>&1
+if [[ $? -eq 0 && -s "$OUT/venn.svg" ]]; then
+  PASS=$((PASS+1)); echo "✅ sets venn2"
+else
+  FAIL=$((FAIL+1)); FAILED_LIST+=("sets venn2"); echo "❌ sets venn2"
+fi
 
 echo ""
 echo "════════════════════════════════"
