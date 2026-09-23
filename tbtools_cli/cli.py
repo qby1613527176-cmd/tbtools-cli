@@ -49,7 +49,9 @@ def common_options(f):
     f = click.option("--preset", default=None, help="出版预设: nature|cell|plant_journal|wide|poster")(f)
     f = click.option("--height", "-H", type=int, default=None, help="画布高度")(f)
     f = click.option("--width", "-W", type=int, default=None, help="画布宽度")(f)
-    f = click.option("--threads", "-t", type=int, default=None, help="线程数")(f)
+    # 命名空间(评审 #12): --runtime-threads 显式命名空间(Agent 用);--threads/-t 保持引擎透传兼容
+    f = click.option("--threads", "-t", "--runtime-threads", type=int, default=None,
+                     help="线程数(--runtime-threads 为显式命名空间, 避免与引擎 --threads 歧义)")(f)
     return f
 
 
