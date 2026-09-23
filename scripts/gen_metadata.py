@@ -276,7 +276,8 @@ def render_ai_manifest(meta):
         _sh.rmtree(_os.path.join(ai_dir, "tools", _sub), ignore_errors=True)  # 防残影(与 metadata 全重建一致)
     with open(_os.path.join(ai_dir, "tool-index.jsonl"), "w", encoding="utf-8") as f:
         for name, v in meta.items():
-            entry = {"id": f"tbtools.{v.get('group','engine')}.{name}", "name": name,
+            entry = {"id": f"tbtools.{v.get('group','engine')}.{name}",
+                     "uri": f"tbtools://{v.get('group','engine')}/{name}", "name": name,
                      "group": v.get('group', 'engine'), "kind": v.get('kind', '?'),
                      "alias_of": v.get('alias_of', ""), "capabilities": v.get('capabilities', []),
                      "input_formats": sorted({i.get('format','') for i in v.get('inputs', []) if i.get('format')}),

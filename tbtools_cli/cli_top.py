@@ -521,6 +521,7 @@ def register_top(cli, _LG):
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             "schema_version": "1.0",
             "id": f"tbtools.{group}.{command}",
+            "uri": f"tbtools://{group}/{command}",  # 稳定标识(评审 #9 URI)
             "name": command,
             "group": group,
             "kind": v.get("kind", "?"),
@@ -631,7 +632,8 @@ def register_top(cli, _LG):
     @click.option("--json", "as_json", is_flag=True, help="结构化结果回显(Agent 能力4)")
     @click.option("--timeout", "timeout_s", type=int, default=0, help="超时秒数(0=不超时; 超时杀进程树并返回 TB007)")
     @click.option("--dry-run", "dry", is_flag=True, help="不执行: 预检+预估产物(Agent 规划, 评审 #37)")
-    def tool_run(args, as_json, timeout_s, dry):
+    @click.option("--quiet", "quiet", is_flag=True, help="静默: stdout 只出结构化结果(日志进 stderr)")
+    def tool_run(args, as_json, timeout_s, dry, quiet):
         """统一执行接口: 转发任意 tbtools 命令 + 结构化结果(退出码/时长/产物)"""
         import json as _json
         import time as _time
@@ -982,6 +984,61 @@ except Exception:
             for k, v in caps.items():
                 mark = "✅" if v else ("⚠️" if k != "external" else "-")
                 click.echo(f"  {mark} {k}: {v if isinstance(v, list) else ('可用' if v else '不可用')}")
+
+    @cli.command(name="provenance-graph")
+    @click.argument("dir", default=".", required=False)
+    @click.option("--json", "as_json", is_flag=True, help="结构化 DAG 输出")
+    @click.option("--mermaid", "mermaid", is_flag=True, help="mermaid 图代码")
+    def provenance_graph(dir, as_json, mermaid):
+        """运行链 DAG: 按 provenance 输入/输出路径关联, 连成工作流图(评审 #30/#54-9)"""
+        import glob as _glob
+        import json as _json
+        files = _glob.glob(os.path.join(dir, "**", "*.tbtools.json"), recursive=True)
+        provs = []
+        for p in files:
+            try:
+                d = _json.load(open(p, encoding="utf-8"))
+                d["_file"] = p
+                provs.append(d)
+            except Exception:
+                pass
+        # 输出路径 → prov 索引(abspath 归一)
+        out_map = {}
+        for d in provs:
+            for o in d.get("outputs", []):
+                out_map[os.path.abspath(o)] = d
+        nodes, edges = {}, []
+        for d in provs:
+            cmd = d.get("command", "?")
+            for inp in d.get("inputs", []):
+                ipath = os.path.abspath(inp.get("path", ""))
+                if ipath in out_map:
+                    parent = out_map[ipath]
+                    if parent is not d:
+                        edges.append({"from": parent.get("command"), "to": cmd,
+                                      "via": os.path.basename(ipath)})
+                        nodes[parent.get("command")] = {"type": "tool"}
+                        nodes[cmd] = {"type": "tool"}
+        # 孤立节点(无上游)
+        for d in provs:
+            nodes.setdefault(d.get("command", "?"), {"type": "tool"})
+        if mermaid:
+            lines = ["graph LR"]
+            for e in edges:
+                lines.append(f'    {e["from"]} -->|{e["via"]}| {e["to"]}')
+            click.echo("\n".join(lines))
+        elif as_json:
+            click.echo(_json.dumps({"schema_version": "1.0", "dir": os.path.abspath(dir),
+                                    "provenance_count": len(provs),
+                                    "nodes": [{"id": n, **v} for n, v in nodes.items()],
+                                    "edges": edges}, ensure_ascii=False, indent=1))
+        else:
+            if not edges:
+                click.echo(f"  目录 {dir} 下无运行链(仅 {len(provs)} 个孤立 provenance)")
+            else:
+                click.echo(f"  工作流 DAG({len(edges)} 条边, {len(provs)} 个运行):")
+                for e in edges:
+                    click.echo(f"    {e['from']} ──{e['via']}──> {e['to']}")
 
     @cli.command(name="search")
     @click.argument("keyword", required=False)
