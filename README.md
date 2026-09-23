@@ -108,6 +108,19 @@ tbtools tool-provenance out.svg               # 溯源验证
 - **系统发育**: FASTA → `msa` → `trimal` → `one-step`(IQ-TREE)→ `tree draw`
 - **Agent 调用**: `tbtools search <任务>` → `version --json` / `rpc <method>` → 结构化结果
 
+## 🤖 MCP Server(Claude/Cursor 即插即用)
+
+```bash
+tbtools mcp    # stdio MCP server
+```
+
+MCP 客户端配置示例(Claude Desktop / Cursor):
+```json
+{"mcpServers": {"tbtools": {"command": "tbtools", "args": ["mcp"]}}}
+```
+
+暴露 8 个原生工具: search / tool_describe / tool_validate / tool_run / job_submit / job_status / job_result / tool_provenance——AI 模型自动发现、自动调用,零提示词。
+
 ## 🚀 Quick Start
 
 > **最小示例数据**（新人入门防格式坑）: 本仓库 `examples/data/` 为官方数据,`git clone` 或直接下载:

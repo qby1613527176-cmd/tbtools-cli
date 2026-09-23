@@ -43,6 +43,8 @@ packages = ["tbtools_cli"]
 
 [tool.setuptools.data-files]
 # pip 安装后桥源码必须存在于包内(ensure_bridge 运行时编译;118 桥)
+# 2026-09-23 评估: setuptools 计划弃用 data-files 但未移除——保留(现状 wheel 验证 OK,
+# 迁移需包内双份维护 bridges, 风险>收益; 弃用真正生效时再迁 wheel 打包方式)
 "tbtools_cli/bridges" = ["bridges/*.java"]
 
 [tool.setuptools.package-data]

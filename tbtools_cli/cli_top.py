@@ -905,6 +905,12 @@ except Exception:
         else:
             click.echo("  无过期 job 可清理(running 任务保留)")
 
+    @cli.command(name="mcp")
+    def mcp_cmd():
+        """启动 MCP server(stdio)——Claude/Cursor/任意 MCP 客户端即插即用"""
+        from tbtools_cli.mcp_server import main as _mcp_main
+        _mcp_main()
+
     @cli.command(name="search")
     @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
