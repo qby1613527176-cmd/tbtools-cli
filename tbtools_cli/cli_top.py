@@ -966,7 +966,6 @@ except Exception:
         """环境能力检测: 绘图/无头/RPC/MCP/网络 等能力状态(评审 #25)"""
         import json as _json
         import shutil as _sh
-        import subprocess as _sp
         is_win = os.name == "nt"
         caps = {
             "plotting": bool(JAR) and (not is_win or _sh.which("xvfb-run")),
