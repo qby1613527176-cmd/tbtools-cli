@@ -2,6 +2,21 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.2.0] - 2026-09-23
+
+### Agent 运行时(2026-09-22 晚 - 09-23, GPT/GLM 两轮评审落地)
+
+- **Agent 能力 1-7 全显式**: search(多词/反向/能力图)、tool-describe(schema/能力/依赖/可用性/关系)、tool-validate(--force)、tool-run(--json 纯协议/--timeout)、tool-result、tool-provenance、rpc methods 默认静态发现(--autostart)
+- **单一命令模型(CommandSpec)**: 294 命令全模型化, metadata 由模型投影生成(无残影); 65 命令结构化 schema; 25→185 命令 capability 标注(29 能力域); 15 核心命令语义关系图(accepts/produces/next_step)
+- **ai/ 机器接口层**: tool-index.jsonl(294)/capability-index/workflows(4 可规划流程)/relations/单工具 schema/error-codes
+- **Error Contract**: TB001-TB012 错误码注册表 + classify_error; 失败也写 provenance(error: code/retryable/suggested_action); tool-run 失败返回结构化 error
+- **Job 模型**: tool-submit(--timeout)/job-status(状态机 running→succeeded/failed/cancelled/timed_out + 惰性终态判定)/job-log/job-result/job-cancel(进程组整杀)
+- **core.py 拆分**: 942→512 行(errors.py 独立 + runtime/java.py 执行/输入保护/provenance)
+- **供应链**: fetch-jar SHA256 校验(下载 zip+提取 jar, 记录 config.toml)+ doctor 校验现 jar
+- **CI**: nightly-e2e(每日 01:00 UTC 真实 JAR 5 命令出图断言 + pytest/ruff)
+- **README 数字机器化**: 30+ 处手写精确数字清零→范围口径 + counts.md/version --json 权威源; TestReadmeCounts 改造为权威源一致性
+- **兼容层治理**: alias_of 结构化(6 别名不污染工具空间); README Agent 接口节
+
 ## [1.1.0] - 2026-09-22
 
 ### 架构重构（09/22 · 批次 A/B/C 全量落地,commit 384ddee..1b0c716）
