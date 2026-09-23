@@ -841,6 +841,43 @@ def register_top(cli, _LG):
                 _job_save(job)
             click.echo(f"⏹ {job_id} 进程已结束(终态 {job['status']}, exit {job.get('exit_code')})")
 
+    @cli.command(name="job-clean")
+    @click.option("--days", "days", type=int, default=7, help="清理 N 天前已结束(非 running)的 job(默认 7)")
+    @click.option("--all", "all_flag", is_flag=True, help="清理全部已结束 job(忽略天数)")
+    def job_clean(days, all_flag):
+        """清理历史 job(已结束且超期的 json/log)"""
+        import json as _json
+        import time as _time
+        jdir = _jobs_dir()
+        now = _time.time()
+        removed = []
+        for f in os.listdir(jdir):
+            if not (f.endswith(".json") or f.endswith(".log")):
+                continue
+            jid = f.rsplit(".", 1)[0]
+            jp = os.path.join(jdir, f"{jid}.json")
+            try:
+                job = _json.load(open(jp, encoding="utf-8"))
+            except Exception:
+                continue
+            if job.get("status") == "running":
+                continue  # 运行中不碰
+            age = now - os.path.getmtime(jp)
+            if all_flag or age > days * 86400:
+                for ext in (".json", ".log"):
+                    p = os.path.join(jdir, jid + ext)
+                    if os.path.isfile(p):
+                        os.unlink(p)
+                        removed.append(os.path.basename(p))
+        if removed:
+            click.echo(f"🗑 清理 {len(removed)} 个文件(>={days} 天前已结束):")
+            for r in removed[:8]:
+                click.echo(f"   {r}")
+            if len(removed) > 8:
+                click.echo(f"   ... 等 {len(removed) - 8} 个")
+        else:
+            click.echo("  无过期 job 可清理(running 任务保留)")
+
     @cli.command(name="search")
     @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
