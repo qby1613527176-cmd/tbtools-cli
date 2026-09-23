@@ -470,6 +470,13 @@ def register_top(cli, _LG):
         }
         if v.get("capabilities"):
             desc["capabilities"] = v["capabilities"]
+        if v.get("dependencies"):
+            import shutil as _sh
+            desc["dependencies"] = v["dependencies"]
+            desc["availability"] = {
+                "status": "ready" if all(_sh.which(d) for d in v["dependencies"]) else "missing_dependencies",
+                "missing": [d for d in v["dependencies"] if not _sh.which(d)],
+            }
         if v.get("inputs"):
             desc["inputs"] = v["inputs"]
         if v.get("outputs"):

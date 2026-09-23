@@ -38,6 +38,7 @@ class CommandSpec:
     inputs: list[InputSpec] = field(default_factory=list)
     outputs: list[str] = field(default_factory=list)  # 输出类型(如 svg/png/tsv)
     capabilities: list[str] = field(default_factory=list)  # 能力标签(能力图搜索)
+    dependencies: list[str] = field(default_factory=list)  # 外部依赖(环境解析, GLM #22)
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -116,6 +117,21 @@ KNOWN_SCHEMAS = {
     "calcRepeat": ([InputSpec("fasta", format="fasta")], ["tsv"]),
     "rnaplot": ([InputSpec("seq", format="fasta")], ["svg"]),
     "preparespecies": ([InputSpec("genome", format="fasta"), InputSpec("gff", format="gff3")], ["fasta"]),
+}
+
+
+# 命令外部依赖(env 工具级解析; 无依赖命令默认 [])
+KNOWN_DEPENDENCIES = {
+    "hmmsearch": ["hmmer"], "simplehmmscan": ["hmmer"],
+    "calcRepeat": ["jellyfish"],
+    "rnaplot": ["rnafold"], "plotrna": ["rnafold"],
+    "kallisto": ["kallisto"],
+    "diamond": ["diamond"],
+    "mcscanxd": ["mcscanx"],
+    "blastp": ["blast+"], "blastn": ["blast+"],
+    "muscle": ["muscle"], "mafft": ["mafft"],
+    "iqtree": ["iqtree2"], "onesteptree": ["iqtree2"],
+    "trimal": ["trimal"],
 }
 
 
@@ -223,6 +239,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
             ins, outs = KNOWN_SCHEMAS[name]
             spec.inputs, spec.outputs = ins, outs
         spec.capabilities = KNOWN_CAPABILITIES.get(name, [])
+        spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
     return specs
 
 
@@ -250,6 +267,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
         s.capabilities = KNOWN_CAPABILITIES.get(name, [])
+        s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
     return {n: to_metadata_entry(s) for n, s in specs.items()}
 
 
@@ -260,6 +278,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
                             "group": spec.group, "help": spec.doc}
     if spec.capabilities:
         e["capabilities"] = spec.capabilities
+    if spec.dependencies:
+        e["dependencies"] = spec.dependencies
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note} for i in spec.inputs]

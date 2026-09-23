@@ -149,6 +149,9 @@
   "runner": "plot",
   "group": "engine",
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
+  "dependencies": [
+   "jellyfish"
+  ],
   "inputs": [
    {
     "name": "fasta",
@@ -1447,6 +1450,9 @@
   "runner": "plot",
   "group": "seq",
   "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
+  "dependencies": [
+   "rnafold"
+  ],
   "inputs": [
    {
     "name": "seq",
@@ -1609,6 +1615,9 @@
   "runner": "plot",
   "group": "seq",
   "help": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
+  "dependencies": [
+   "rnafold"
+  ],
   "inputs": [
    {
     "name": "seq",
@@ -1672,6 +1681,9 @@
   "runner": "plot",
   "group": "seq",
   "help": "simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt",
+  "dependencies": [
+   "hmmer"
+  ],
   "status": "platform-limited"
  },
  "sricher": {
@@ -2168,6 +2180,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "dependencies": [
+   "iqtree2"
+  ],
   "inputs": [
    {
     "name": "aln",
@@ -2194,6 +2209,9 @@
   "capabilities": [
    "alignment",
    "filtering"
+  ],
+  "dependencies": [
+   "trimal"
   ],
   "inputs": [
    {
@@ -3479,6 +3497,9 @@
   "runner": "plot",
   "group": "hmm",
   "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
+  "dependencies": [
+   "hmmer"
+  ],
   "status": "platform-limited"
  },
  "gxfAttr": {
@@ -3515,6 +3536,9 @@
   "capabilities": [
    "rna_seq",
    "quantification"
+  ],
+  "dependencies": [
+   "kallisto"
   ],
   "inputs": [
    {
@@ -3590,6 +3614,9 @@
   "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
   "capabilities": [
    "alignment"
+  ],
+  "dependencies": [
+   "muscle"
   ],
   "inputs": [
    {
@@ -3799,6 +3826,9 @@
   "runner": "plot",
   "group": "syn",
   "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
+  "dependencies": [
+   "mcscanx"
+  ],
   "inputs": [
    {
     "name": "gff",
