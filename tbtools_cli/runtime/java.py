@@ -454,7 +454,6 @@ def _write_provenance(java_args, command_name, ec, err_text="", inputs_set=None)
         return
     try:
         import json as _json
-        import hashlib as _hl
         import time as _tm
         from tbtools_cli import __version__ as _pkg_ver
         inputs = [a for a in java_args
