@@ -703,7 +703,6 @@ def register_top(cli, _LG):
     def tool_submit(args, timeout_s):
         """异步提交任务: 后台执行, 返回 job_id(Agent 长任务; 状态机 running→succeeded/failed/cancelled/timed_out)"""
         import json as _json
-        import threading as _th
         import time as _time
         import uuid as _uuid
         import subprocess as _sp
