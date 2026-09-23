@@ -24,7 +24,13 @@ run_case() {
 run_case expr volcano      outlier.svg    $DATA/deg.txt
 run_case syn  msy          msy.svg        $DATA/synteny/msy/genes2.pos $DATA/synteny/msy/genes3.pos $DATA/synteny/msy/links2.txt
 run_case tree rooting      rooted.nwk     $DATA/treeRooting/unrooted.nwk
-run_case syn  dualsyn      dual.svg       $DATA/synteny/dual.gff $DATA/synteny/dual.collinearity --chr1 1 --chr2 1
+# dualsyn: 输出须先于 --chr(click 位置参数在 option 前); 其余同 run_case
+python3 -m tbtools_cli.cli syn dualsyn $DATA/synteny/dual.gff $DATA/synteny/dual.collinearity $OUT/dual.svg --chr1 1 --chr2 1 >/dev/null 2>&1
+if [[ $? -eq 0 && -s "$OUT/dual.svg" ]]; then
+  PASS=$((PASS+1)); echo "✅ syn dualsyn"
+else
+  FAIL=$((FAIL+1)); FAILED_LIST+=("syn dualsyn (ec=$?)"); echo "❌ syn dualsyn"
+fi
 run_case table tableCollapse coll.tsv     $DATA/table/tableCollapse.in.tsv 0
 # run_case gxf gxfSplit    gx              $DATA/synteny/gxf1.gff   # 待修: 输出前缀语义
 # run_case sets venn2      venn.svg       --List1 $DATA/table/uniq/m1.txt --List2 $DATA/table/uniq/m2.txt --label1 A --label2 B  # 待修: 输出位置
