@@ -63,6 +63,11 @@ jobs:
           pip install mypy
           python3 -m mypy tbtools_cli/
 
+      - name: Coverage report (visible, non-blocking)
+        run: |
+          pip install -q pytest-cov
+          python3 -m pytest --cov=tbtools_cli --cov-report=term-missing tests/ -q 2>&1 | tail -6
+
       - name: Run full pytest suite
         run: |
           set -o pipefail
