@@ -31,7 +31,9 @@ test = ["pytest>=7.0"]
 [project.urls]
 Homepage = "https://github.com/qby1613527176-cmd/tbtools-cli"  # 本仓库
 upstream = "https://github.com/CJ-Chen/TBtools"  # TBtools-II 上游
-Documentation = "docs/COMMAND_REFERENCE.md"
+Documentation = "https://github.com/qby1613527176-cmd/tbtools-cli/blob/main/docs/COMMAND_REFERENCE.md"
+Source = "https://github.com/qby1613527176-cmd/tbtools-cli"
+Issues = "https://github.com/qby1613527176-cmd/tbtools-cli/issues"
 
 [project.scripts]
 tbtools = "tbtools_cli.cli:cli"
