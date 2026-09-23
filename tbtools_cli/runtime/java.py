@@ -253,6 +253,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     if _sec:
         click.echo(_sec, err=True)
         return 5  # POLICY_ERROR(engine reflection 被 config.toml [security] 拒绝)
+
     ec_out = 0
     # 堆内存可配置(第六轮评审: 注册表 -Xmx 硬编码,低配机器直接 OOM):
     # config.toml [defaults] memory = "2g" 全局覆盖;未配置保持注册表值
