@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.3.0] - 2026-09-24
+
+### Tool Contract 收敛(第 4-6 份外部评审全落地, 40+ commits)
+
+- **协议契约五层全闭合**: inputs(columns 列名契约 6 核心命令) + parameters(ParamSpec 类型/默认值 8 命令) + outputs(任意 artifact) + capabilities(186) + relations(184)/dependency_manifest(结构化依赖)
+- **MCP 增强**: arguments dict(inputs/outputs/parameters 结构化) + 分组命令空格拆分修复 + 结构化参数(空格路径安全) + MCP/CLI timeout 统一
+- **Agent 接口新增**: doctor --json(含 compat 矩阵)/capabilities(环境能力检测)/tool-run --dry-run(预检+预估产物)/--quiet/provenance-graph(运行链 DAG: 文本/JSON/mermaid)/plugin list/job-clean
+- **可靠性修复**: ensure_bridge 编译失败即中断(TB_BRIDGE_COMPILE_FAILED, 不再 ClassNotFound 掩盖)/RPC 启动互斥锁(flock 并发安全)/errors.py NoClassDefFoundError|DatatypeConverter bug/无图形输出命令 job 终态误判修复/provenance 任意 artifact(TSV/GFF/NWK 等)+运行后 inputs 误吞输出 bug
+- **安全**: config.toml [security] allow_engine_reflection(engine 反射可关, ec=5 策略错误码)
+- **测试**: tests/test_contract.py(294 命令契约 8+2 用例) + tests/test_jobs.py(5) + expected_commands.json manifest(54 核心命令)
+- **工程**: --runtime-threads 命名空间/mypy CI 文案对齐/coverage 基线可见/README 按任务索引(12 场景)/飞纪盘 64 插件评估报告
+
 ## [1.2.0] - 2026-09-23
 
 ### Agent 运行时(2026-09-22 晚 - 09-23, GPT/GLM 两轮评审落地)
