@@ -7,9 +7,8 @@
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **218 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 118 个 Java 桥 + 任意引擎反射**，全部实测出图。
-> 数字口径: 运行时统计以 `tbtools version` 为准;静态注册口径(276 命令/196 绘图)见 [docs/_generated/counts.md](docs/_generated/counts.md)（自动生成,防漂移）。
-> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），118 个 Java 桥，218 命令。10 批回归 162/162 PASS。
+> **200+ 绘图/分析命令 + 180+ RPC 数据工具 + 80+ 命令行工具 + 110+ Java 桥 + 任意引擎反射**，全部实测出图。
+> 数字权威源: `tbtools version --json`(运行时统计) / [docs/_generated/counts.md](docs/_generated/counts.md)(静态注册口径, 自动生成防漂移)。README 内数字为范围快照, 以二者为准。
 
 <div align="center">
 
@@ -64,7 +63,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [Documentation](#documentation)
 - [Installation](#installation)
 - [Example Outputs](#example-outputs)
-- [Plotting Engines (218)](#plotting-engines-218)
+- [Plotting Engines (200+)](#plotting-engines-218)
 - [RPC Data Tools](#rpc-data-tools-188-methods)
 - [CLI Tools](#cli-tools-82)
 - [Any Engine Reflection](#any-engine-reflection-universal-fallback)
@@ -89,7 +88,7 @@ tbtools tool-provenance out.svg               # 溯源验证
         │                 │
         └────────┬────────┘
                  ↓
-    统一注册层(metadata 单一数据源,268 命令)
+    统一注册层(metadata 单一数据源, 数量见 counts.md)
                  ↓
   ┌────────┬─────────┬─────────┐
   ↓        ↓         ↓         ↓
@@ -166,8 +165,8 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 
 | 能力 | 状态 | 说明 |
 |:---|:---:|:---|
-| 绘图引擎 CLI | ✅ | 218 个（无头 SVG/PNG 输出,Linux 需 xvfb） |
-| RPC 数据工具 | ✅ | 188 方法,自愈服务器（pid+健康检查+自动重启） |
+| 绘图引擎 CLI | ✅ | 200+ 个（无头 SVG/PNG 输出,Linux 需 xvfb） |
+| RPC 数据工具 | ✅ | 180+ 方法,自愈服务器（pid+健康检查+自动重启） |
 | 管道（stdin/stdout） | ⚠️ | 仅部分 tool 层命令;绘图命令需真实文件路径 |
 | Windows 绘图 | ⚠️ | 基本可用;无 xvfb 时部分绘图受限 |
 | 联网命令（NCBI/API） | ⚠️ | srr2ena/pubmed/seqfetch 等需外网,被墙环境请配代理 |
@@ -177,9 +176,9 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 218 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
-| 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
-| 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
+| 🎨 **绘图引擎** | 200+ 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
+| 📊 **RPC 数据工具** | 180+ 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
+| 🛠️ **命令行工具** | 80+ 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
 | 🧩 **插件命令** | 12 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名/基因组 dot plot/diamond 蛋白注释/SMART 域注释/FIMO motif 扫描） | `tbtools table gsea` / `tbtools tree notung` 等 |
 
@@ -191,8 +190,8 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 | 文档 | 内容 |
 |:-----|:-----|
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：218 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 118 个桥 Javadoc（输入格式权威来源）+ 46 条实测坑位 + engine 反射 + RPC 指引 |
-| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值，89KB） |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80+ 个 CLI 工具（18 类功能分组）+ 110+ 个桥 Javadoc（输入格式权威来源）+ 46 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 180+ 方法参考（参数/返回值,自动生成） |
 
 ```bash
 # 快速查用法（不用翻手册）：
@@ -338,7 +337,7 @@ tbtools chipseq peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --he
 
 ```bash
 tbtools rpc start                       # 启动 RPC 服务器 (port 8765)
-tbtools rpc methods                     # list all 188 methods
+tbtools rpc methods                     # list all RPC methods
 tbtools rpc FastaStat.process '{"inputPath":"in.fa","outputPath":"out.xls"}'
 tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outdir","options":{"ultraFastBS":true}}'
 ```
@@ -355,7 +354,7 @@ tbtools tool statFasta             # sequence statistics
 tbtools tool extractFasta          # extract/filter FASTA by ID list
 ```
 
-> 全部 82 个工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`
+> 全部工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`(数量见 counts.md)
 
 ## 🔬 Any Engine Reflection (universal fallback)
 
@@ -379,8 +378,8 @@ tbtools-cli/
 ├── tbtools_cli/           # ✅ Python 包（真正的入口）
 │   ├── cli.py             # click 主 CLI（全命令注册 + rpc 自愈 + 纠错）
 │   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂(命令数以 `tbtools version` 为准)
-│   ├── cli_tools_registry.py  # 82 个 CLI 工具共享注册表
-│   ├── command_metadata.json  # 276 命令元数据（gen_metadata 生成,唯一数据源）
+│   ├── cli_tools_registry.py  # CLI 工具共享注册表
+│   ├── command_metadata.json  # 命令元数据（gen_metadata 从 CommandSpec 生成,唯一数据源）
 │   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
 │   ├── presets.py / scenarios.py / config.py
 ├── pyproject.toml         # ✅ pip 安装（tbtools console_script）
