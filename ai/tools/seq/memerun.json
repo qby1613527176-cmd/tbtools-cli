@@ -8,7 +8,8 @@
  "description": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
  "invoke": "tbtools seq memerun <args...>",
  "capabilities": [
-  "sequence"
+  "motif",
+  "discovery"
  ],
  "inputs": [
   {

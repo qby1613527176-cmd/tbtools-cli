@@ -8,8 +8,8 @@
  "description": "FASTQ/FASTA 互转（第",
  "invoke": "tbtools fastq fqfaConv <args...>",
  "capabilities": [
-  "ngs",
-  "sequence"
+  "sequence",
+  "conversion"
  ],
  "inputs": [],
  "outputs": [],

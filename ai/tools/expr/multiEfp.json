@@ -8,7 +8,8 @@
  "description": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
  "invoke": "tbtools expr multiEfp <args...>",
  "capabilities": [
-  "expression"
+  "expression",
+  "visualization"
  ],
  "inputs": [
   {

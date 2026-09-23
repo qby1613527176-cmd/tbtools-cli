@@ -8,7 +8,8 @@
  "description": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
  "invoke": "tbtools syn collinearRegion <args...>",
  "capabilities": [
-  "synteny"
+  "synteny",
+  "visualization"
  ],
  "inputs": [],
  "outputs": [],

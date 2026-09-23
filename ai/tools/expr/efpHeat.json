@@ -8,7 +8,8 @@
  "description": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
  "invoke": "tbtools expr efpHeat <args...>",
  "capabilities": [
-  "expression"
+  "expression",
+  "visualization"
  ],
  "inputs": [
   {

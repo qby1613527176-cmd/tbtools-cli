@@ -8,7 +8,8 @@
  "description": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
  "invoke": "tbtools chipseq peakanno <args...>",
  "capabilities": [
-  "chip_seq"
+  "chip_seq",
+  "peak_annotation"
  ],
  "inputs": [
   {

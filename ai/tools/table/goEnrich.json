@@ -8,7 +8,8 @@
  "description": "GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
  "invoke": "tbtools table goEnrich <args...>",
  "capabilities": [
-  "enrichment"
+  "enrichment",
+  "gene_ontology"
  ],
  "inputs": [
   {

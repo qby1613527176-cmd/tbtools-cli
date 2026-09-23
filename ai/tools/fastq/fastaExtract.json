@@ -8,8 +8,8 @@
  "description": "fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con",
  "invoke": "tbtools fastq fastaExtract <args...>",
  "capabilities": [
-  "ngs",
-  "sequence"
+  "sequence",
+  "extraction"
  ],
  "inputs": [],
  "outputs": [],

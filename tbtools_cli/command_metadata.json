@@ -229,7 +229,8 @@
   "group": "syn",
   "help": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
   "capabilities": [
-   "synteny"
+   "visualization",
+   "genome_circos"
   ],
   "inputs": [
    {
@@ -268,7 +269,8 @@
   "group": "syn",
   "help": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
   "capabilities": [
-   "synteny"
+   "synteny",
+   "visualization"
   ]
  },
  "colorscheme": {
@@ -426,7 +428,8 @@
   "group": "expr",
   "help": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
   "capabilities": [
-   "expression"
+   "expression",
+   "visualization"
   ],
   "inputs": [
    {
@@ -481,8 +484,8 @@
   "group": "fastq",
   "help": "fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con",
   "capabilities": [
-   "ngs",
-   "sequence"
+   "sequence",
+   "extraction"
   ]
  },
  "fastaSubseq": {
@@ -495,8 +498,8 @@
   "group": "fastq",
   "help": "fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext",
   "capabilities": [
-   "ngs",
-   "sequence"
+   "sequence",
+   "extraction"
   ]
  },
  "filesplit": {
@@ -519,7 +522,8 @@
   "group": "blast",
   "help": "filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]",
   "capabilities": [
-   "homology"
+   "homology",
+   "filtering"
   ]
  },
  "findblockdual": {
@@ -572,7 +576,7 @@
   "help": "fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]",
   "capabilities": [
    "ngs",
-   "sequence"
+   "preprocessing"
   ]
  },
  "fqfaConv": {
@@ -585,8 +589,8 @@
   "group": "fastq",
   "help": "fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第",
   "capabilities": [
-   "ngs",
-   "sequence"
+   "sequence",
+   "conversion"
   ]
  },
  "gbar": {
@@ -668,7 +672,8 @@
   "group": "gxf",
   "help": "genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph",
   "capabilities": [
-   "annotation"
+   "annotation",
+   "visualization"
   ]
  },
  "genelocgff": {
@@ -749,7 +754,8 @@
   "group": "table",
   "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
   "capabilities": [
-   "enrichment"
+   "enrichment",
+   "gene_ontology"
   ],
   "inputs": [
    {
@@ -847,7 +853,8 @@
   "group": "gxf",
   "help": "gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀",
   "capabilities": [
-   "annotation"
+   "annotation",
+   "gff_ops"
   ]
  },
  "gxfFix": {
@@ -1046,7 +1053,8 @@
   "group": "table",
   "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
   "capabilities": [
-   "enrichment"
+   "enrichment",
+   "pathway"
   ],
   "inputs": [
    {
@@ -1078,7 +1086,8 @@
   "group": "expr",
   "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
   "capabilities": [
-   "expression"
+   "expression",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1195,7 +1204,8 @@
   "group": "seq",
   "help": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--",
   "capabilities": [
-   "sequence"
+   "motif",
+   "scanning"
   ],
   "inputs": [
    {
@@ -1221,7 +1231,7 @@
   "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测",
   "capabilities": [
    "synteny",
-   "collinearity"
+   "collinearity_detection"
   ],
   "inputs": [
    {
@@ -1279,7 +1289,8 @@
   "group": "seq",
   "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
   "capabilities": [
-   "sequence"
+   "motif",
+   "discovery"
   ],
   "inputs": [
    {
@@ -1327,7 +1338,8 @@
   "group": "syn",
   "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
   "capabilities": [
-   "synteny"
+   "synteny",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1405,7 +1417,8 @@
   "group": "expr",
   "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
   "capabilities": [
-   "expression"
+   "expression",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1437,7 +1450,8 @@
   "group": "syn",
   "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
   "capabilities": [
-   "synteny"
+   "synteny",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1496,7 +1510,8 @@
   "group": "syn",
   "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
   "capabilities": [
-   "synteny"
+   "synteny",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1521,7 +1536,8 @@
   "group": "syn",
   "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
   "capabilities": [
-   "synteny"
+   "synteny",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1559,7 +1575,8 @@
   "group": "chipseq",
   "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
   "capabilities": [
-   "chip_seq"
+   "chip_seq",
+   "peak_annotation"
   ],
   "inputs": [
    {
@@ -1597,7 +1614,8 @@
   "group": "chipseq",
   "help": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
   "capabilities": [
-   "chip_seq"
+   "chip_seq",
+   "peak_calling"
   ],
   "inputs": [
    {
@@ -1760,7 +1778,8 @@
   "group": "syn",
   "help": "qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
   "capabilities": [
-   "synteny"
+   "synteny",
+   "visualization"
   ],
   "inputs": [
    {
@@ -1834,7 +1853,8 @@
   "group": "blast",
   "help": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
   "capabilities": [
-   "homology"
+   "homology",
+   "reciprocal_best_hit"
   ],
   "inputs": [
    {
@@ -3931,6 +3951,10 @@
   "runner": "plot",
   "group": "hmm",
   "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
+  "capabilities": [
+   "homology",
+   "hmm_scan"
+  ],
   "dependencies": [
    "hmmer"
   ],
@@ -4000,7 +4024,8 @@
   "group": "seq",
   "help": "fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）",
   "capabilities": [
-   "sequence"
+   "motif",
+   "scanning"
   ]
  },
  "xml2blasttab": {
@@ -4132,7 +4157,8 @@
   "group": "tree",
   "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
   "capabilities": [
-   "phylogeny"
+   "phylogeny",
+   "reconciliation"
   ],
   "inputs": [
    {
@@ -4164,7 +4190,8 @@
   "group": "tree",
   "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
   "capabilities": [
-   "phylogeny"
+   "phylogeny",
+   "tree_editing"
   ],
   "inputs": [
    {
@@ -4218,7 +4245,8 @@
   "group": "seq",
   "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
   "capabilities": [
-   "sequence"
+   "motif",
+   "visualization"
   ],
   "inputs": [
    {
@@ -4275,7 +4303,8 @@
   "group": "seq",
   "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
   "capabilities": [
-   "sequence"
+   "motif",
+   "genome_scan"
   ],
   "inputs": [
    {
@@ -4348,7 +4377,8 @@
   "group": "seq",
   "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
   "capabilities": [
-   "sequence"
+   "domain",
+   "annotation"
   ],
   "inputs": [
    {
@@ -4509,7 +4539,8 @@
   "help": "(alias of rooting) MAD 系统发育定根",
   "alias_of": "rooting",
   "capabilities": [
-   "phylogeny"
+   "phylogeny",
+   "rooting"
   ],
   "inputs": [
    {

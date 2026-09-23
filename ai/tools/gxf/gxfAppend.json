@@ -8,7 +8,8 @@
  "description": "GFF seqid+ID 加前缀",
  "invoke": "tbtools gxf gxfAppend <args...>",
  "capabilities": [
-  "annotation"
+  "annotation",
+  "gff_ops"
  ],
  "inputs": [],
  "outputs": [],

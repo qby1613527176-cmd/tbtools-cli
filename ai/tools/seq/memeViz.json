@@ -8,7 +8,8 @@
  "description": "MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
  "invoke": "tbtools seq memeViz <args...>",
  "capabilities": [
-  "sequence"
+  "motif",
+  "visualization"
  ],
  "inputs": [
   {

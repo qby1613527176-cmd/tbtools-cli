@@ -8,7 +8,8 @@
  "description": "KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
  "invoke": "tbtools table keggEnrich <args...>",
  "capabilities": [
-  "enrichment"
+  "enrichment",
+  "pathway"
  ],
  "inputs": [
   {

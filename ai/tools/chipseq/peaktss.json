@@ -8,7 +8,8 @@
  "description": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
  "invoke": "tbtools chipseq peaktss <args...>",
  "capabilities": [
-  "chip_seq"
+  "chip_seq",
+  "peak_calling"
  ],
  "inputs": [
   {

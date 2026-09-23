@@ -173,6 +173,34 @@ KNOWN_RELATIONS = {
 }
 
 
+# 已知别名(兼容层命名; canonical → 命令)
+KNOWN_CAPABILITIES = {
+    "volcano": ["differential_expression", "visualization"],
+    "heatmap": ["expression_matrix", "clustering", "visualization"],
+    "dehist": ["differential_expression", "visualization"],
+    "pca": ["dimension_reduction", "expression_matrix"],
+    "hclust": ["clustering", "distance"],
+    "genestructure": ["gene_structure", "annotation", "visualization"],
+    "seqlogo": ["motif", "visualization"],
+    "msa": ["alignment", "visualization"],
+    "motif": ["motif", "visualization"],
+    "sixframe": ["translation", "sequence"],
+    "longestorf": ["orf_prediction", "sequence"],
+    "blastp": ["homology", "alignment"],
+    "mcscanx": ["synteny", "collinearity"],
+    "dualsyn": ["synteny", "visualization"],
+    "dotplot": ["synteny", "visualization"],
+    "msy": ["microsynteny", "visualization"],
+    "iqtree": ["phylogeny"],
+    "muscle": ["alignment"],
+    "trimal": ["alignment", "filtering"],
+    "kallisto": ["rna_seq", "quantification"],
+    "gsea": ["enrichment"],
+    "goEnrich": ["enrichment"],
+    "keggEnrich": ["enrichment"],
+    "tpmCalc": ["rna_seq", "normalization"],
+    "peaktss": ["chip_seq"],
+}
 # 精确标注补充(2026-09-23): 覆盖组级兜底的粗标签, 核心命令细化
 KNOWN_CAPABILITIES.update({
     "mcscanx": ["synteny", "collinearity_detection"],
@@ -221,35 +249,6 @@ KNOWN_CAPABILITIES.update({
     "newickRename": ["phylogeny", "tree_editing"],
 })
 
-
-# 已知别名(兼容层命名; canonical → 命令)
-KNOWN_CAPABILITIES = {
-    "volcano": ["differential_expression", "visualization"],
-    "heatmap": ["expression_matrix", "clustering", "visualization"],
-    "dehist": ["differential_expression", "visualization"],
-    "pca": ["dimension_reduction", "expression_matrix"],
-    "hclust": ["clustering", "distance"],
-    "genestructure": ["gene_structure", "annotation", "visualization"],
-    "seqlogo": ["motif", "visualization"],
-    "msa": ["alignment", "visualization"],
-    "motif": ["motif", "visualization"],
-    "sixframe": ["translation", "sequence"],
-    "longestorf": ["orf_prediction", "sequence"],
-    "blastp": ["homology", "alignment"],
-    "mcscanx": ["synteny", "collinearity"],
-    "dualsyn": ["synteny", "visualization"],
-    "dotplot": ["synteny", "visualization"],
-    "msy": ["microsynteny", "visualization"],
-    "iqtree": ["phylogeny"],
-    "muscle": ["alignment"],
-    "trimal": ["alignment", "filtering"],
-    "kallisto": ["rna_seq", "quantification"],
-    "gsea": ["enrichment"],
-    "goEnrich": ["enrichment"],
-    "keggEnrich": ["enrichment"],
-    "tpmCalc": ["rna_seq", "normalization"],
-    "peaktss": ["chip_seq"],
-}
 
 
 KNOWN_ALIASES = {

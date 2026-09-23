@@ -9,7 +9,7 @@
  "invoke": "tbtools syn mcscanx <args...>",
  "capabilities": [
   "synteny",
-  "collinearity"
+  "collinearity_detection"
  ],
  "inputs": [
   {

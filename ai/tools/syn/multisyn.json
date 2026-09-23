@@ -8,7 +8,8 @@
  "description": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
  "invoke": "tbtools syn multisyn <args...>",
  "capabilities": [
-  "synteny"
+  "synteny",
+  "visualization"
  ],
  "inputs": [
   {

@@ -9,7 +9,7 @@
  "invoke": "tbtools fastq fqTrim <args...>",
  "capabilities": [
   "ngs",
-  "sequence"
+  "preprocessing"
  ],
  "inputs": [],
  "outputs": [],

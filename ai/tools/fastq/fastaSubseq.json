@@ -8,8 +8,8 @@
  "description": "按坐标提子序列（第92引擎，Ext",
  "invoke": "tbtools fastq fastaSubseq <args...>",
  "capabilities": [
-  "ngs",
-  "sequence"
+  "sequence",
+  "extraction"
  ],
  "inputs": [],
  "outputs": [],

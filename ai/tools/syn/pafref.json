@@ -8,7 +8,8 @@
  "description": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
  "invoke": "tbtools syn pafref <args...>",
  "capabilities": [
-  "synteny"
+  "synteny",
+  "visualization"
  ],
  "inputs": [
   {

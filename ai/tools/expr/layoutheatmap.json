@@ -8,7 +8,8 @@
  "description": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
  "invoke": "tbtools expr layoutheatmap <args...>",
  "capabilities": [
-  "expression"
+  "expression",
+  "visualization"
  ],
  "inputs": [
   {

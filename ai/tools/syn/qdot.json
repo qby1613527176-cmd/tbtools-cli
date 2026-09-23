@@ -8,7 +8,8 @@
  "description": "基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
  "invoke": "tbtools syn qdot <args...>",
  "capabilities": [
-  "synteny"
+  "synteny",
+  "visualization"
  ],
  "inputs": [
   {

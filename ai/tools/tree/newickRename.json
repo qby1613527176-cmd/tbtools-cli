@@ -8,7 +8,8 @@
  "description": "树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
  "invoke": "tbtools tree newickRename <args...>",
  "capabilities": [
-  "phylogeny"
+  "phylogeny",
+  "tree_editing"
  ],
  "inputs": [
   {

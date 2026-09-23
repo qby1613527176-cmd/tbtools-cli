@@ -8,7 +8,8 @@
  "description": "PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
  "invoke": "tbtools syn pafviz <args...>",
  "capabilities": [
-  "synteny"
+  "synteny",
+  "visualization"
  ],
  "inputs": [
   {

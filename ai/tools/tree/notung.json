@@ -8,7 +8,8 @@
  "description": "基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
  "invoke": "tbtools tree notung <args...>",
  "capabilities": [
-  "phylogeny"
+  "phylogeny",
+  "reconciliation"
  ],
  "inputs": [
   {
