@@ -461,11 +461,21 @@ def _write_provenance(java_args, command_name, ec, err_text="", inputs_set=None)
                   if os.path.isfile(a) and not a.startswith("-")
                   and a != out and not a.endswith((".jar", ".class", ".svg", ".png", ".pdf"))]
         _code, _ec, _hint = classify_error(err_text) if ec != 0 else ("TB000_OK", 0, "")
+        # run manifest: 参数值提取(--k v 形式; 评审 #31 完整 run manifest)
+        _params = {}
+        _i = 0
+        while _i < len(java_args) - 1:
+            if java_args[_i].startswith("--") and not java_args[_i + 1].startswith("--"):
+                _params[java_args[_i][2:]] = java_args[_i + 1]
+                _i += 2
+            else:
+                _i += 1
         prov = {
             "command": command_name,
             "invocation": " ".join(java_args[:8]) + (" ..." if len(java_args) > 8 else ""),
             "tbtools_cli": _pkg_ver,
             "exit_code": ec,
+            "parameters": _params,
             "error": None if ec == 0 else {
                 "code": _code,
                 "retryable": ERROR_CODES.get(_code, {}).get("retryable", False),
