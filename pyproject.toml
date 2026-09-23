@@ -50,6 +50,9 @@ tbtools_cli = ["command_metadata.json", "config.example.toml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = [
+    "integration: requires real TBtools JAR (run in nightly-e2e / with TBTOOLS_JAR set)",
+]
 
 [tool.ruff]
 # core 正确性规则 + py310 目标（target-version 须在顶层；lint 段不支持）

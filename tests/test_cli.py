@@ -198,6 +198,7 @@ class TestPresetConsistency:
 # ============ 8. 退出码 ============
 
 class TestExitCodes:
+    @pytest.mark.integration
     def test_success(self):
         if not HAS_JAR:
             pytest.skip("No TBtools JAR")
