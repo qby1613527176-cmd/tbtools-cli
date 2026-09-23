@@ -669,6 +669,33 @@ def register_top(cli, _LG):
 
     # ── Job 模型(GLM P1 + 状态机完善 2026-09-23)──
     # 状态机: running → succeeded(exit 0) / failed(exit≠0) / cancelled / timed_out
+    _JOB_MONITOR = """import subprocess, sys, json, os, signal, time, traceback
+jf = sys.argv[1]
+try:
+    job = json.load(open(jf, encoding='utf-8'))
+    jd = os.path.dirname(jf)
+    log = open(os.path.join(jd, job['id'] + '.log'), 'w', encoding='utf-8')
+    p = subprocess.Popen([sys.executable, '-m', 'tbtools_cli.cli'] + job['args'], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
+    job['pid'] = p.pid; job['status'] = 'running'
+    json.dump(job, open(jf, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+    try:
+        ec = p.wait(timeout=job.get('timeout_s') or None)
+    except subprocess.TimeoutExpired:
+        try: os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+        except Exception: pass
+        p.wait(); job['status'] = 'timed_out'; job['exit_code'] = -1
+    else:
+        job['status'] = 'succeeded' if ec == 0 else 'failed'; job['exit_code'] = ec or 0
+    job['finished_at'] = time.strftime('%Y-%m-%dT%H:%M:%S')
+    json.dump(job, open(jf, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
+except Exception:
+    try:
+        tb = traceback.format_exc()
+        open(os.path.join(os.path.dirname(jf), os.path.basename(jf).replace('.json', '.err')), 'w', encoding='utf-8').write(tb)
+    except Exception:
+        pass
+"""
+
     def _jobs_dir():
         d = os.path.join(os.path.expanduser("~"), ".config", "tbtools-cli", "jobs")
         os.makedirs(d, exist_ok=True)
@@ -708,16 +735,17 @@ def register_top(cli, _LG):
         import subprocess as _sp
         import sys as _sys
         jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
-        log = os.path.join(_jobs_dir(), f"{jid}.log")
-        # 主进程直接 Popen(独立子进程, 不受 submit 退出影响); 终态由 job-status 惰性判定
-        with open(log, "w", encoding="utf-8") as _lf:
-            p = _sp.Popen([_sys.executable, "-m", "tbtools_cli.cli"] + list(args),
-                          stdout=_lf, stderr=_sp.STDOUT, start_new_session=True)
-        job = {"id": jid, "status": "running", "pid": p.pid, "args": list(args),
+        # 独立监控进程(非线程): wait 任务 + 按退出码落盘终态(不依赖图形 provenance)
+        job = {"id": jid, "status": "running", "pid": None, "args": list(args),
                "started_at": _time.strftime("%Y-%m-%dT%H:%M:%S"),
-               "timeout_s": timeout_s, "log": log}
+               "timeout_s": timeout_s, "log": os.path.join(_jobs_dir(), f"{jid}.log")}
         _job_save(job)
-        click.echo(_json.dumps({"job_id": jid, "status": "running", "pid": p.pid}, ensure_ascii=False, indent=1))
+        jf = os.path.join(_jobs_dir(), f"{jid}.json")
+        # stdin=DEVNULL 关键(2026-09-23 实测): 继承 exec 管道 stdin 的子进程在父退出时被清
+        _sp.Popen([_sys.executable, "-c", _JOB_MONITOR, jf],
+                  start_new_session=True, stdin=_sp.DEVNULL,
+                  stdout=_sp.DEVNULL, stderr=_sp.DEVNULL, close_fds=True)
+        click.echo(_json.dumps({"job_id": jid, "status": "running"}, ensure_ascii=False, indent=1))
 
     @cli.command(name="job-status")
     @click.argument("job_id")

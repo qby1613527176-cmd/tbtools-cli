@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: tbtools-cli
-Version: 1.1.0
-Summary: TBtools-II command-line wrapper: 218 engines, 188 RPC methods, journal presets, pitfall hints
+Version: 1.2.0
+Summary: TBtools-II command-line wrapper: 200+ engines, 188+ RPC methods, journal presets, pitfall hints (exact counts via `tbtools version`)
 Author: tbtools-cli contributors
 License: MIT License
         
@@ -27,7 +27,9 @@ License: MIT License
         
 Project-URL: Homepage, https://github.com/qby1613527176-cmd/tbtools-cli
 Project-URL: upstream, https://github.com/CJ-Chen/TBtools
-Project-URL: Documentation, docs/COMMAND_REFERENCE.md
+Project-URL: Documentation, https://github.com/qby1613527176-cmd/tbtools-cli/blob/main/docs/COMMAND_REFERENCE.md
+Project-URL: Source, https://github.com/qby1613527176-cmd/tbtools-cli
+Project-URL: Issues, https://github.com/qby1613527176-cmd/tbtools-cli/issues
 Keywords: bioinformatics,tbtools,cli,plotting,genomics
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Console
@@ -48,31 +50,28 @@ Dynamic: license-file
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![engines](https://img.shields.io/badge/engines-200+-orange.svg)]()
+[![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **218 个绘图/分析命令 + 188 个 RPC 数据工具 + 82 个命令行工具 + 118 个 Java 桥 + 任意引擎反射**，全部实测出图。（数字以 `tbtools version` 实时统计为准）
-> 2026-08-31 达成 123 引擎里程碑（含 dualsyn 旧框架保存破解 + eFP 热图/全管线 miRNA/双向 BLAST 等），118 个 Java 桥，218 命令。10 批回归 162/162 PASS。
+> **200+ 绘图/分析命令 + 180+ RPC 数据工具 + 80+ 命令行工具 + 110+ Java 桥 + 任意引擎反射**，全部实测出图。
+> 数字权威源: `tbtools version --json`(运行时统计) / [docs/_generated/counts.md](docs/_generated/counts.md)(静态注册口径, 自动生成防漂移)。README 内数字为范围快照, 以二者为准。
 
 <div align="center">
 
-**English** | 中文说明见文末（以英文版为准）
+**English** | 中文要点见各节说明（命令输出默认中文,`LC_ALL=en` 切换英文）
 
-[![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue.svg)]()
-[![engines](https://img.shields.io/badge/engines-200+-orange.svg)]()
-[![commands](https://img.shields.io/badge/commands-276-blueviolet.svg)]()
 
 </div>
 
 ---
 
-## 📺 Demo（终端录屏）
+## 📺 Demo
 
-[`docs/images/demo.cast`](docs/images/demo.cast) — asciinema 格式,10 秒演示:
-`tbtools version` → `doctor` → `search volcano` → `volcano 实跑出图`。
+![tbtools-cli demo](docs/images/demo.gif)
+
+10 秒演示: `tbtools version` → `doctor` → `search volcano` → `volcano 实跑出图`。
+(`docs/images/demo.cast` 为 asciinema 原始录制,可 `asciinema play` 播放。)
 
 ```bash
 # 本地播放
@@ -80,23 +79,81 @@ asciinema play docs/images/demo.cast
 # 或上传 asciinema.org 网页播放(asciinema upload)
 ```
 
+## 🤖 Agent 接口(结构化调用, AI 可用)
+
+统一命令模型 + 结构化 JSON 输出,Agent 可程序化发现/预检/执行/验证:
+
+| 能力 | 命令 | 说明 |
+|---|---|---|
+| 1 发现 | `tbtools search <任务> --json` | 自然语言多词搜索(名称/描述/类名) |
+| 2 描述 | `tbtools tool-describe <命令> --json` | 命令 schema(分组/参数/输入格式/输出/坑位) |
+| 3 预检 | `tbtools tool-validate <命令> <输入...> --json` | 执行前检查(存在性/格式/列数) |
+| 4 执行 | `tbtools tool-run <命令参数...> --json` | 统一执行 + {exit_code/duration/artifacts} |
+| 5 结果 | `tbtools tool-result <产出>` | 结构化结果摘要(状态/产物) |
+| 6 溯源 | `tbtools tool-provenance <产出>` | 运行记录(命令/版本/输入 sha/时间戳) |
+| 7 环境 | `tbtools env --json` / `env --lock` | 环境快照/可复现性固化 |
+
+```bash
+# Agent 调用链示例
+tbtools search "gene structure" --json        # 发现
+tbtools tool-describe genestructure --json    # 理解 schema
+tbtools tool-validate genestructure in.gff ids.txt --json   # 预检
+tbtools tool-run seq genestructure in.gff ids.txt out.svg --json  # 执行
+tbtools tool-provenance out.svg               # 溯源验证
+```
+
 ## 📑 Table of Contents
 
+- [Demo](#demo)
 - [Quick Start](#quick-start)
 - [Features](#features)
 - [Documentation](#documentation)
 - [Installation](#installation)
-- [️ Example Outputs（示例输出，fulltest 合成数据实测）](#️-example-outputs（示例输出，fulltest-合成数据实测）)
-- [Plotting Engines (218)](#plotting-engines-218)
-- [RPC Data Tools (188 methods)](#rpc-data-tools-188-methods)
-- [️ CLI Tools (82)](#️-cli-tools-82)
-- [Any Engine Reflection (universal fallback)](#any-engine-reflection-universal-fallback)
+- [Example Outputs](#example-outputs)
+- [Plotting Engines (200+)](#plotting-engines-218)
+- [RPC Data Tools](#rpc-data-tools-188-methods)
+- [CLI Tools](#cli-tools-82)
+- [Any Engine Reflection](#any-engine-reflection-universal-fallback)
 - [Project Structure](#project-structure)
-- [️ Naming Convention](#️-naming-convention)
-- [️ Known Limitations](#️-known-limitations)
+- [兼容层退役计划](#兼容层退役计划)
+- [Naming Convention](#naming-convention)
+- [Known Limitations](#known-limitations)
+- [FAQ](#faq)
 - [Credits](#credits)
 - [License](#license)
-- [许可](#许可)
+
+## 🎯 这是什么
+
+生物信息学积累了大量成熟工具,但多为人工 GUI/CLI 设计,参数/格式/依赖复杂。**tbtools-cli 将 TBtools-II 及传统生信工具转换为 Agent 可发现、可调用、可验证的接口层**——人类用 CLI,AI Agent 用同一套接口(搜索/元数据/RPC/结构化输出)。
+
+```
+        Agent / 用户 / Shell
+                 │
+        ┌────────┴────────┐
+        ↓                 ↓
+      CLI              RPC(JSON)
+        │                 │
+        └────────┬────────┘
+                 ↓
+    统一注册层(metadata 单一数据源, 数量见 counts.md)
+                 ↓
+  ┌────────┬─────────┬─────────┐
+  ↓        ↓         ↓         ↓
+ Bridge   Direct    Tool     Engine
+(118)   Engine    (82)     Reflection
+                 ↓
+         TBtools-II / 系统工具
+                 ↓
+           产物 SVG/TSV/图
+```
+
+### 典型工作流(Common Workflows)
+
+- **基因家族分析(GRAS 实测)**: FASTA → `muscle`/`trimal` → `iqtree` → `motif` → `genestructure`(DEG 表 ± `volcano`)
+- **RNA-seq**: counts → `tpmCalc` → `pca` → `heatmap` → `volcano`(DEG)
+- **比较基因组学**: GFF → `mcscanx` → `dualsyn` → `dotplot`
+- **系统发育**: FASTA → `msa` → `trimal` → `one-step`(IQ-TREE)→ `tree draw`
+- **Agent 调用**: `tbtools search <任务>` → `version --json` / `rpc <method>` → 结构化结果
 
 ## 🚀 Quick Start
 
@@ -155,8 +212,8 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 
 | 能力 | 状态 | 说明 |
 |:---|:---:|:---|
-| 绘图引擎 CLI | ✅ | 218 个（无头 SVG/PNG 输出,Linux 需 xvfb） |
-| RPC 数据工具 | ✅ | 188 方法,自愈服务器（pid+健康检查+自动重启） |
+| 绘图引擎 CLI | ✅ | 200+ 个（无头 SVG/PNG 输出,Linux 需 xvfb） |
+| RPC 数据工具 | ✅ | 180+ 方法,自愈服务器（pid+健康检查+自动重启） |
 | 管道（stdin/stdout） | ⚠️ | 仅部分 tool 层命令;绘图命令需真实文件路径 |
 | Windows 绘图 | ⚠️ | 基本可用;无 xvfb 时部分绘图受限 |
 | 联网命令（NCBI/API） | ⚠️ | srr2ena/pubmed/seqfetch 等需外网,被墙环境请配代理 |
@@ -166,9 +223,9 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
-| 🎨 **绘图引擎** | 218 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
-| 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
-| 🛠️ **命令行工具** | 82 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
+| 🎨 **绘图引擎** | 200+ 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
+| 📊 **RPC 数据工具** | 180+ 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
+| 🛠️ **命令行工具** | 80+ 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
 | 🧩 **插件命令** | 12 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名/基因组 dot plot/diamond 蛋白注释/SMART 域注释/FIMO motif 扫描） | `tbtools table gsea` / `tbtools tree notung` 等 |
 
@@ -180,14 +237,14 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 | 文档 | 内容 |
 |:-----|:-----|
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：218 个命令（用法表+详细注释）+ 82 个 CLI 工具（18 类功能分组）+ 118 个桥 Javadoc（输入格式权威来源）+ 46 条实测坑位 + engine 反射 + RPC 指引 |
-| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值，89KB） |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80+ 个 CLI 工具（18 类功能分组）+ 110+ 个桥 Javadoc（输入格式权威来源）+ 46 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 180+ 方法参考（参数/返回值,自动生成） |
 
 ```bash
 # 快速查用法（不用翻手册）：
 tbtools --help              # 绘图命令一屏预览
 tbtools list tools          # CLI 工具列表
-tbtools methods             # RPC 方法列表
+tbtools rpc methods         # RPC 方法列表
 java -cp $TBTOOLS_JAR <引擎类>  # 无参运行 → 打印完整 [Usage] 参数表（含默认值）
 ```
 
@@ -259,7 +316,7 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 
 ---
 
-## 🖼️ Example Outputs（示例输出，fulltest 合成数据实测）
+## 🖼️ Example Outputs
 
 | Heatmap | Venn / UpSet |
 |:--|:--|
@@ -278,9 +335,9 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 ### Gene structure / Motif / Sequence logo
 ```bash
 # Gene structure (exons/UTR from GFF)
-tbtools genestructure <input.gff> <mRNA_ids.txt> <out.svg> [genome.fa] [w] [h]
+tbtools seq genestructure <input.gff> <mRNA_ids.txt> <out.svg> [genome.fa] [w] [h]
 # Motif distribution (MEME XML)
-tbtools motif <meme.xml> <idList.txt> <out.svg> [w] [h]
+tbtools seq motif <meme.xml> <idList.txt> <out.svg> [w] [h]
 ```
 > 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Expression / Statistics
@@ -294,15 +351,15 @@ tbtools tool rpkmCal    --countsTable counts.tsv --lenInfo gene_len.tsv --outTab
 ### Phylogeny / Tree
 ```bash
 # Tree + annotation tracks (TextAnno/HeatMap/BarPlot/Tile/StackBar/Domain...)
-tbtools tree <treeMeta.cfg> <out.svg> [pad]
+tbtools tree draw <treeMeta.cfg> <out.svg> [pad]
 # Hclust → Newick
-tbtools hclust <distance_matrix.tsv> <out.nwk>
+tbtools expr hclust <distance_matrix.tsv> <out.nwk>
 ```
 > 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ### Genomic location / Circos / Synteny
 ```bash
 # Gene chromosome location (GFF + IDs)
-tbtools genelocgff <gff3> <ids.txt> <out.svg> [--chrLen l.tsv --pairs p.tsv ...]
+tbtools gxf genelocgff <gff3> <ids.txt> <out.svg> [--chrLen l.tsv --pairs p.tsv ...]
 # Gene location (native CLI)
 tbtools genelocation --ChrLen <chrlen.tsv> --FeaturePos <pos.tsv> --OutGraph <out.svg>
 ```
@@ -318,21 +375,22 @@ tbtools sets venn4 --List1 a.txt --List2 b.txt --List3 c.txt --List4 d.txt --lab
 ### ChIP-seq / Others
 ```bash
 # Peak-TSS heatmap
-tbtools peaktss <gxf> <macs2_peak.xls> <out.svg> [--dist N]
+tbtools chipseq peaktss <gxf> <macs2_peak.xls> <out.svg> [--dist N]
 # Peak chromosome distribution
-tbtools peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --height H]
+tbtools chipseq peakdist <chrLen.tsv> <macs2_peak.xls> <out.svg> [--width W --height H]
 ```
 > 更多命令见 [docs/_generated/commands.md](docs/_generated/commands.md) 或 `tbtools list plots`
 ## 📊 RPC Data Tools (188 methods)
 
 ```bash
 tbtools rpc start                       # 启动 RPC 服务器 (port 8765)
-tbtools methods                            # list all 188 methods
+tbtools rpc methods                     # list all RPC methods
 tbtools rpc FastaStat.process '{"inputPath":"in.fa","outputPath":"out.xls"}'
 tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outdir","options":{"ultraFastBS":true}}'
-tbtools heatmap matrix.tsv out.png [group.tsv]   # quick heatmap
+```
 
 > 全部 188 方法见 [docs/rpc_methods_reference.md](docs/rpc_methods_reference.md) 或 `tbtools list rpc`
+
 ## 🛠️ CLI Tools (82)
 
 ```bash
@@ -341,8 +399,10 @@ tbtools tool <name> [args...]      # run any CLI tool; full help: tbtools list t
 # --- Fasta / Fastq ---
 tbtools tool statFasta             # sequence statistics
 tbtools tool extractFasta          # extract/filter FASTA by ID list
+```
 
-> 全部 82 个工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`
+> 全部工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`(数量见 counts.md)
+
 ## 🔬 Any Engine Reflection (universal fallback)
 
 ```bash
@@ -364,16 +424,16 @@ tbtools-cli/
 │   └── tbcli.py           # 旧工具入口（已由 cli_tools_registry 替代，保留兼容）
 ├── tbtools_cli/           # ✅ Python 包（真正的入口）
 │   ├── cli.py             # click 主 CLI（全命令注册 + rpc 自愈 + 纠错）
-│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂（201 命令:172 表驱动 + 29 手写）
-│   ├── cli_tools_registry.py  # 82 个 CLI 工具共享注册表
-│   ├── command_metadata.json  # 276 命令元数据（gen_metadata 生成,唯一数据源）
+│   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂(命令数以 `tbtools version` 为准)
+│   ├── cli_tools_registry.py  # CLI 工具共享注册表
+│   ├── command_metadata.json  # 命令元数据（gen_metadata 从 CommandSpec 生成,唯一数据源）
 │   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
 │   ├── presets.py / scenarios.py / config.py
 ├── pyproject.toml         # ✅ pip 安装（tbtools console_script）
 ├── bridges/               # 118 Java bridge sources
 ├── build/                 # compiled bridges (auto-generated)
 ├── config/config.sh       # unified config (TBTOOLS_JAR etc.)
-├── completions/           # bash completion + man page
+├── scripts/               # tbtools-completion.bash + tbtools.1 + 工具脚本
 ├── examples/              # example data + scripts
 ├── scripts/               # rpc_regression_linux.sh 等工具脚本
 ├── tests/                 # pytest（83 passed：框架/命令/防漂移/输入保护）
@@ -434,13 +494,11 @@ tbtools-cli/
 
 ## 📄 License
 
-This CLI wrapper: **MIT License** (see [LICENSE](LICENSE)). TBtools itself is MIT-licensed by its authors.
+This CLI wrapper is released under the **MIT License** (see [LICENSE](LICENSE)):
+you may use, copy, modify, and distribute it freely, provided the copyright notice and
+this permission notice are preserved in all copies or substantial portions.
 
----
+The underlying [TBtools](https://github.com/CJ-Chen/TBtools) toolkit is also MIT-licensed
+by its author Chengjie Chen. This project is an independent wrapper and is not affiliated with TBtools.
 
-
-## 📄 许可
-
-> 文档以英文版为准（中文节仅为补充;命令帮助信息以 `tbtools <cmd> --help` 输出为准）。
-
-本 CLI 封装为 MIT License。TBtools 本身由其作者 Chengjie Chen 以 MIT 许可发布。
+> 文档以英文版为准;命令帮助信息以 `tbtools <cmd> --help` 输出为准。

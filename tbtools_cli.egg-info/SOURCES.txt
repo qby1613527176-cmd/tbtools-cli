@@ -127,9 +127,11 @@ tbtools_cli/cli_rpc.py
 tbtools_cli/cli_tools_registry.py
 tbtools_cli/cli_top.py
 tbtools_cli/command_metadata.json
+tbtools_cli/command_spec.py
 tbtools_cli/config.example.toml
 tbtools_cli/config.py
 tbtools_cli/core.py
+tbtools_cli/errors.py
 tbtools_cli/presets.py
 tbtools_cli/scenarios.py
 tbtools_cli.egg-info/PKG-INFO
@@ -139,5 +141,7 @@ tbtools_cli.egg-info/entry_points.txt
 tbtools_cli.egg-info/requires.txt
 tbtools_cli.egg-info/top_level.txt
 tests/test_cli.py
+tests/test_command_spec.py
+tests/test_i18n.py
 tests/test_metadata.py
 tests/test_p0_protection.py
