@@ -503,12 +503,8 @@ def register_top(cli, _LG):
         }
         if v.get("alias_of"):
             desc["alias_of"] = v["alias_of"]
-        try:
-            from tbtools_cli.command_spec import KNOWN_RELATIONS
-            if command in KNOWN_RELATIONS:
-                desc["relations"] = KNOWN_RELATIONS[command]
-        except Exception:
-            pass
+        if v.get("relations"):
+            desc["relations"] = v["relations"]
         if v.get("capabilities"):
             desc["capabilities"] = v["capabilities"]
         if v.get("dependencies"):

@@ -401,6 +401,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["capabilities"] = spec.capabilities
     if spec.dependencies:
         e["dependencies"] = spec.dependencies
+    if spec.relations:
+        e["relations"] = spec.relations
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note} for i in spec.inputs]

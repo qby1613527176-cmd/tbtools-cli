@@ -30,7 +30,20 @@
   "help": "amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "annocompare": {
   "name": "annocompare",
@@ -43,7 +56,15 @@
   "help": "annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "bamMerge": {
   "name": "bamMerge",
@@ -56,7 +77,16 @@
   "help": "bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "bamindex": {
   "name": "bamindex",
@@ -69,7 +99,16 @@
   "help": "bamindex: bamindex <in.sorted.bam> [out.bai]",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "bamsort": {
   "name": "bamsort",
@@ -82,7 +121,16 @@
   "help": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "bamstate": {
   "name": "bamstate",
@@ -95,7 +143,16 @@
   "help": "bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "barplot": {
   "name": "barplot",
@@ -109,6 +166,18 @@
   "capabilities": [
    "expression"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "enrichment",
@@ -134,6 +203,18 @@
   "capabilities": [
    "expression"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -165,7 +246,15 @@
   "help": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "calcRepeat": {
   "name": "calcRepeat",
@@ -204,7 +293,20 @@
   "help": "cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "circlegene": {
   "name": "circlegene",
@@ -217,7 +319,23 @@
   "help": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "circos": {
   "name": "circos",
@@ -232,6 +350,22 @@
    "visualization",
    "genome_circos"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "chrLen",
@@ -271,7 +405,23 @@
   "capabilities": [
    "synteny",
    "visualization"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "colorscheme": {
   "name": "colorscheme",
@@ -284,7 +434,19 @@
   "help": "colorscheme: colorscheme <inTab> <outTab> <refColIndex>",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "conflictpaf": {
   "name": "conflictpaf",
@@ -297,7 +459,23 @@
   "help": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "ctgGroup": {
   "name": "ctgGroup",
@@ -310,7 +488,16 @@
   "help": "ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "cubeheatmap": {
   "name": "cubeheatmap",
@@ -324,6 +511,18 @@
   "capabilities": [
    "expression"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "status": "beta"
  },
  "degramdom": {
@@ -337,7 +536,19 @@
   "help": "degramdom: degramdom <in.tsv> [out.nwk]",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "distance": {
   "name": "distance",
@@ -350,7 +561,19 @@
   "help": "distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "dotplot": {
   "name": "dotplot",
@@ -365,6 +588,15 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "DOTPLOT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -398,6 +630,15 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -431,6 +672,18 @@
    "expression",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "tga",
@@ -472,7 +725,19 @@
   "help": "exprCorr: exprCorr <inFPKM> <outCorrMat>",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "fastaExtract": {
   "name": "fastaExtract",
@@ -486,7 +751,19 @@
   "capabilities": [
    "sequence",
    "extraction"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  }
  },
  "fastaSubseq": {
   "name": "fastaSubseq",
@@ -500,7 +777,19 @@
   "capabilities": [
    "sequence",
    "extraction"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  }
  },
  "filesplit": {
   "name": "filesplit",
@@ -524,7 +813,18 @@
   "capabilities": [
    "homology",
    "filtering"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "findblockdual": {
   "name": "findblockdual",
@@ -537,7 +837,23 @@
   "help": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "findblockmultiple": {
   "name": "findblockmultiple",
@@ -550,7 +866,23 @@
   "help": "findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "findpath": {
   "name": "findpath",
@@ -563,7 +895,19 @@
   "help": "findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "fqTrim": {
   "name": "fqTrim",
@@ -577,7 +921,19 @@
   "capabilities": [
    "ngs",
    "preprocessing"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  }
  },
  "fqfaConv": {
   "name": "fqfaConv",
@@ -591,7 +947,19 @@
   "capabilities": [
    "sequence",
    "conversion"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  }
  },
  "gbar": {
   "name": "gbar",
@@ -605,7 +973,19 @@
   "alias_of": "groupedbar",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "gdensity": {
   "name": "gdensity",
@@ -619,7 +999,15 @@
   "alias_of": "genedensity",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gel": {
   "name": "gel",
@@ -633,6 +1021,19 @@
   "capabilities": [
    "sequence"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "lanes",
@@ -658,6 +1059,14 @@
   "capabilities": [
    "annotation"
   ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
   "aliases": [
    "gdensity"
   ]
@@ -674,7 +1083,15 @@
   "capabilities": [
    "annotation",
    "visualization"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "genelocgff": {
   "name": "genelocgff",
@@ -688,6 +1105,14 @@
   "capabilities": [
    "annotation"
   ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -729,7 +1154,20 @@
   "help": "gfa: gfa <in.gfa> <out> [width] [height]",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "gfa2fa": {
   "name": "gfa2fa",
@@ -742,7 +1180,20 @@
   "help": "gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "goEnrich": {
   "name": "goEnrich",
@@ -757,6 +1208,14 @@
    "enrichment",
    "gene_ontology"
   ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "background",
@@ -788,7 +1247,15 @@
   "help": "goParse: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "golevel": {
   "name": "golevel",
@@ -801,7 +1268,15 @@
   "help": "golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "groupCol": {
   "name": "groupCol",
@@ -814,7 +1289,19 @@
   "help": "groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "groupedbar": {
   "name": "groupedbar",
@@ -828,6 +1315,18 @@
   "capabilities": [
    "expression"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "status": "beta",
   "aliases": [
    "gbar"
@@ -855,7 +1354,15 @@
   "capabilities": [
    "annotation",
    "gff_ops"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfFix": {
   "name": "gxfFix",
@@ -868,7 +1375,15 @@
   "help": "gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfGenepos": {
   "name": "gxfGenepos",
@@ -881,7 +1396,15 @@
   "help": "gxfGenepos: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # G",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfMatch": {
   "name": "gxfMatch",
@@ -894,7 +1417,15 @@
   "help": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfOverlap": {
   "name": "gxfOverlap",
@@ -907,7 +1438,15 @@
   "help": "gxfOverlap: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfRecall": {
   "name": "gxfRecall",
@@ -920,7 +1459,15 @@
   "help": "gxfRecall: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfRegion": {
   "name": "gxfRegion",
@@ -933,7 +1480,15 @@
   "help": "gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfRename": {
   "name": "gxfRename",
@@ -946,7 +1501,15 @@
   "help": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfRepGXF": {
   "name": "gxfRepGXF",
@@ -959,7 +1522,15 @@
   "help": "gxfRepGXF: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfRepIDs": {
   "name": "gxfRepIDs",
@@ -972,7 +1543,15 @@
   "help": "gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfStat": {
   "name": "gxfStat",
@@ -985,7 +1564,15 @@
   "help": "gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxffilter": {
   "name": "gxffilter",
@@ -1018,7 +1605,16 @@
   "help": "hicEnzyme: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "hmmExtract": {
   "name": "hmmExtract",
@@ -1041,7 +1637,16 @@
   "help": "homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "keggEnrich": {
   "name": "keggEnrich",
@@ -1056,6 +1661,14 @@
    "enrichment",
    "pathway"
   ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "background",
@@ -1089,6 +1702,18 @@
    "expression",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "expr",
@@ -1120,7 +1745,15 @@
   "help": "levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "makemotif": {
   "name": "makemotif",
@@ -1133,7 +1766,20 @@
   "help": "makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "marker": {
   "name": "marker",
@@ -1166,7 +1812,20 @@
   "help": "mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "mast2tab": {
   "name": "mast2tab",
@@ -1179,7 +1838,20 @@
   "help": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "mastExtract": {
   "name": "mastExtract",
@@ -1192,7 +1864,20 @@
   "help": "mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "mastrun": {
   "name": "mastrun",
@@ -1207,6 +1892,19 @@
    "motif",
    "scanning"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "meme",
@@ -1233,6 +1931,19 @@
    "synteny",
    "collinearity_detection"
   ],
+  "relations": {
+   "accepts": [
+    "GFF",
+    "BLAST_TAB6"
+   ],
+   "produces": [
+    "COLLINEARITY"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -1264,7 +1975,20 @@
   "help": "meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "meme2tab": {
   "name": "meme2tab",
@@ -1277,7 +2001,20 @@
   "help": "meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "memerun": {
   "name": "memerun",
@@ -1292,6 +2029,19 @@
    "motif",
    "discovery"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "fasta",
@@ -1326,7 +2076,23 @@
   "help": "microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "microsyn": {
   "name": "microsyn",
@@ -1341,6 +2107,22 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -1392,7 +2174,19 @@
   "help": "mountain: mountain <fold.txt> <out.tsv>",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "mpattern": {
   "name": "mpattern",
@@ -1405,7 +2199,20 @@
   "help": "mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "multiEfp": {
   "name": "multiEfp",
@@ -1420,6 +2227,18 @@
    "expression",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "tga",
@@ -1453,6 +2272,22 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -1485,6 +2320,18 @@
   "capabilities": [
    "phylogeny"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "status": "beta"
  },
  "pafcomp": {
@@ -1498,7 +2345,23 @@
   "help": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "pafref": {
   "name": "pafref",
@@ -1513,6 +2376,22 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "paf",
@@ -1539,6 +2418,22 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "paf",
@@ -1563,7 +2458,23 @@
   "help": "partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "peakanno": {
   "name": "peakanno",
@@ -1578,6 +2489,15 @@
    "chip_seq",
    "peak_annotation"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  },
   "inputs": [
    {
     "name": "peaks",
@@ -1602,7 +2522,16 @@
   "help": "peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]",
   "capabilities": [
    "chip_seq"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  }
  },
  "peaktss": {
   "name": "peaktss",
@@ -1617,6 +2546,15 @@
    "chip_seq",
    "peak_calling"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  },
   "inputs": [
    {
     "name": "gxf",
@@ -1649,6 +2587,19 @@
   "capabilities": [
    "sequence"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "cds",
@@ -1680,7 +2631,20 @@
   "help": "pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "phylotree": {
   "name": "phylotree",
@@ -1693,7 +2657,19 @@
   "help": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "pileup": {
   "name": "pileup",
@@ -1706,7 +2682,16 @@
   "help": "pileup: pileup <blast.xml> <out.svg> [--query NAME]",
   "capabilities": [
    "chip_seq"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  }
  },
  "plotrna": {
   "name": "plotrna",
@@ -1723,6 +2708,19 @@
   "dependencies": [
    "rnafold"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "seq",
@@ -1748,6 +2746,15 @@
   "capabilities": [
    "assembly"
   ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "genome",
@@ -1781,6 +2788,22 @@
    "synteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -1805,7 +2828,19 @@
   "help": "qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "qpcrExp": {
   "name": "qpcrExp",
@@ -1818,7 +2853,19 @@
   "help": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "qpcrproc": {
   "name": "qpcrproc",
@@ -1841,7 +2888,18 @@
   "help": "quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "recipBlast": {
   "name": "recipBlast",
@@ -1856,6 +2914,17 @@
    "homology",
    "reciprocal_best_hit"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
   "inputs": [
    {
     "name": "db",
@@ -1887,7 +2956,15 @@
   "help": "regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "regiondepth": {
   "name": "regiondepth",
@@ -1914,6 +2991,19 @@
   "dependencies": [
    "rnafold"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "seq",
@@ -1949,7 +3039,16 @@
   "help": "sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "seqconvert": {
   "name": "seqconvert",
@@ -1972,7 +3071,20 @@
   "help": "seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "simplehmmscan": {
   "name": "simplehmmscan",
@@ -1989,6 +3101,19 @@
   "dependencies": [
    "hmmer"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "status": "platform-limited"
  },
  "sricher": {
@@ -2002,7 +3127,15 @@
   "help": "sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx> <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "supercircos": {
   "name": "supercircos",
@@ -2016,6 +3149,22 @@
   "capabilities": [
    "synteny"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "config",
@@ -2040,7 +3189,15 @@
   "help": "tableAppend: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   #",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableCast": {
   "name": "tableCast",
@@ -2054,6 +3211,14 @@
   "capabilities": [
    "table_operations"
   ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "aliases": [
    "TableCast"
   ]
@@ -2069,7 +3234,15 @@
   "help": "tableColSel: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableColSelect": {
   "name": "tableColSelect",
@@ -2082,7 +3255,15 @@
   "help": "tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableCollapse": {
   "name": "tableCollapse",
@@ -2095,7 +3276,15 @@
   "help": "tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader ",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableMelt": {
   "name": "tableMelt",
@@ -2108,7 +3297,15 @@
   "help": "tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableMerge": {
   "name": "tableMerge",
@@ -2122,6 +3319,14 @@
   "capabilities": [
    "table_operations"
   ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "tables",
@@ -2146,7 +3351,15 @@
   "help": "tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableTranspose": {
   "name": "tableTranspose",
@@ -2159,7 +3372,15 @@
   "help": "tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tableUniq": {
   "name": "tableUniq",
@@ -2172,7 +3393,15 @@
   "help": "tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "tauIndex": {
   "name": "tauIndex",
@@ -2185,7 +3414,19 @@
   "help": "tauIndex: tauIndex <inExpTab> <outTAU>",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "trimmsa": {
   "name": "trimmsa",
@@ -2208,7 +3449,18 @@
   "help": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "upset": {
   "name": "upset",
@@ -2222,6 +3474,19 @@
   "capabilities": [
    "set_operations"
   ],
+  "relations": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
   "inputs": [
    {
     "name": "sets",
@@ -2247,6 +3512,19 @@
   "capabilities": [
    "set_operations"
   ],
+  "relations": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
   "inputs": [
    {
     "name": "list1",
@@ -2279,6 +3557,19 @@
   "capabilities": [
    "set_operations"
   ],
+  "relations": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
   "inputs": [
    {
     "name": "list1",
@@ -2318,6 +3609,19 @@
   "capabilities": [
    "set_operations"
   ],
+  "relations": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
   "inputs": [
    {
     "name": "list1",
@@ -2363,7 +3667,20 @@
   "help": "venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]",
   "capabilities": [
    "set_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  }
  },
  "venn6": {
   "name": "venn6",
@@ -2376,7 +3693,20 @@
   "help": "venn6: venn6 <out> <setA..F.txt> [labels]",
   "capabilities": [
    "set_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  }
  },
  "violin": {
   "name": "violin",
@@ -2389,7 +3719,19 @@
   "help": "violin: violin <in.tsv> <out> [width] [height]",
   "capabilities": [
    "expression"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  }
  },
  "virusRecomb": {
   "name": "virusRecomb",
@@ -2402,7 +3744,16 @@
   "help": "virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引",
   "capabilities": [
    "assembly"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "visualizeblock": {
   "name": "visualizeblock",
@@ -2415,7 +3766,23 @@
   "help": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
   "capabilities": [
    "synteny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  }
  },
  "kaks": {
   "name": "kaks",
@@ -2428,7 +3795,19 @@
   "help": "kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "sixframe": {
   "name": "sixframe",
@@ -2443,6 +3822,19 @@
    "translation",
    "sequence"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "pep",
@@ -2469,6 +3861,19 @@
    "orf_prediction",
    "sequence"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "seq",
@@ -2496,7 +3901,20 @@
   "help": "protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️ 联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "seqpattern": {
   "name": "seqpattern",
@@ -2509,7 +3927,20 @@
   "help": "seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap] [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "bed2gff3": {
   "name": "bed2gff3",
@@ -2522,7 +3953,15 @@
   "help": "bed2gff3 <in.bed> <out.gff3> [genome.fa]   # exon BED→GFF3（GUI 逆向 #21 RegionBedToGFF3；⚠️ BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）",
   "capabilities": [
    "annotation"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "careclassify": {
   "name": "careclassify",
@@ -2535,7 +3974,20 @@
   "help": "careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "subtree": {
   "name": "subtree",
@@ -2548,7 +4000,19 @@
   "help": "subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向 #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "protsim": {
   "name": "protsim",
@@ -2561,7 +4025,20 @@
   "help": "protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "iqtree": {
   "name": "iqtree",
@@ -2578,6 +4055,17 @@
   "dependencies": [
    "iqtree2"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "inputs": [
    {
     "name": "aln",
@@ -2608,6 +4096,17 @@
   "dependencies": [
    "trimal"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "TRIMMED_ALIGNMENT"
+   ],
+   "next_step": [
+    "iqtree"
+   ]
+  },
   "inputs": [
    {
     "name": "aln",
@@ -2632,7 +4131,20 @@
   "help": "gblocks <in.aln.fa> <out.aln.fa> [--is 0.5] [--fs 0.85] [--cp 8] [--bl1 15] [--bl2 10] [--nongap 0.5] [--gaptreat none|half|all]   # Gblocks 保守区修剪（GUI 逆向 #30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "goAnno": {
   "name": "goAnno",
@@ -2645,7 +4157,15 @@
   "help": "goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--inPutFileType BlastxXml|Query2GiTable] [--maxEvalue 1e-5] [--minQueryCov 0.33] [--outDir dir] [--isDoDbFormat]   # GO 注释管道（GUI 逆向 #32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️ idmappingDb 须 gzip 格式「ID; ID\\tGO:num; GO:num」；产物 outDir/<输入名>.xls）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "fasplit": {
   "name": "fasplit",
@@ -2658,7 +4178,20 @@
   "help": "fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "famerge": {
   "name": "famerge",
@@ -2671,7 +4204,20 @@
   "help": "famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "clearchar": {
   "name": "clearchar",
@@ -2684,7 +4230,15 @@
   "help": "clearchar <in.txt> <out.txt>   # 文件非法字符清理（GUI 逆向 #34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "gb2fa": {
   "name": "gb2fa",
@@ -2697,7 +4251,20 @@
   "help": "gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "findhomolog": {
   "name": "findhomolog",
@@ -2710,7 +4277,18 @@
   "help": "findhomolog --inQueryProteinSet <query.pep> --inSubjectProteinSet <subject.pep> --targetIDs <ID[,ID2]> --outDir <dir> [--threads N] [--extendClade] [--sensitive N] [--similarity 0.x] [--weightCov 0.x] [--plot] [--directGraph]   # 最优同源查找（GUI 逆向 #37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "taxparse": {
   "name": "taxparse",
@@ -2723,7 +4301,15 @@
   "help": "taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "srr2ena": {
   "name": "srr2ena",
@@ -2737,6 +4323,14 @@
   "capabilities": [
    "table_operations"
   ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "status": "network-required"
  },
  "sraxml2tab": {
@@ -2750,7 +4344,15 @@
   "help": "sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "sranum2info": {
   "name": "sranum2info",
@@ -2763,7 +4365,15 @@
   "help": "sranum2info --sraIdList <srrList.txt> --outTabInfo <out.xls>   # SRR 批量信息表（GUI 逆向 #41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser；SRA 组 3/3 全清）",
   "capabilities": [
    "table_operations"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "blat": {
   "name": "blat",
@@ -2776,7 +4386,18 @@
   "help": "blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8] [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra \"opts\"]   # BLAT 序列比对（GUI 逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "seqrecommend": {
   "name": "seqrecommend",
@@ -2800,6 +4421,19 @@
   "capabilities": [
    "sequence"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "status": "network-required"
  },
  "pubmed": {
@@ -2814,6 +4448,14 @@
   "capabilities": [
    "table_operations"
   ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "status": "network-required"
  },
  "vcfAddID": {
@@ -2889,6 +4531,20 @@
    "rna_seq",
    "normalization"
   ],
+  "relations": {
+   "accepts": [
+    "COUNTS_TABLE",
+    "GENE_LENGTH"
+   ],
+   "produces": [
+    "TPM_TABLE"
+   ],
+   "next_step": [
+    "pca",
+    "heatmap",
+    "volcano"
+   ]
+  },
   "inputs": [
    {
     "name": "counts",
@@ -3684,7 +5340,20 @@
   "help": "序列 LOGO 图",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "msa": {
   "name": "msa",
@@ -3698,7 +5367,20 @@
   "capabilities": [
    "alignment",
    "visualization"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "structure": {
   "name": "structure",
@@ -3712,6 +5394,19 @@
   "capabilities": [
    "sequence"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "aliases": [
    "genestructure"
   ]
@@ -3729,6 +5424,19 @@
    "motif",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "meme_xml",
@@ -3762,6 +5470,22 @@
    "differential_expression",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "DEG_TABLE"
+   ],
+   "produces": [
+    "VOLCANO_PLOT"
+   ],
+   "next_step": [
+    "goEnrich",
+    "keggEnrich"
+   ],
+   "related_to": [
+    "dehist",
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "deg",
@@ -3789,6 +5513,20 @@
    "clustering",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_MATRIX"
+   ],
+   "produces": [
+    "HEATMAP"
+   ],
+   "next_step": [
+    "hclust"
+   ],
+   "related_to": [
+    "pca"
+   ]
+  },
   "inputs": [
    {
     "name": "matrix",
@@ -3815,6 +5553,14 @@
    "dimension_reduction",
    "expression_matrix"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_MATRIX"
+   ],
+   "produces": [
+    "PCA_PLOT"
+   ]
+  },
   "inputs": [
    {
     "name": "matrix",
@@ -3841,6 +5587,17 @@
    "clustering",
    "distance"
   ],
+  "relations": {
+   "accepts": [
+    "DISTANCE_TABLE"
+   ],
+   "produces": [
+    "DENDROGRAM"
+   ],
+   "related_to": [
+    "heatmap"
+   ]
+  },
   "inputs": [
    {
     "name": "distance",
@@ -3867,6 +5624,17 @@
    "differential_expression",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "DEG_TABLE"
+   ],
+   "produces": [
+    "DEG_HISTOGRAM"
+   ],
+   "related_to": [
+    "volcano"
+   ]
+  },
   "inputs": [
    {
     "name": "deg",
@@ -3891,7 +5659,19 @@
   "help": "树+注释图（TreeTreeTree 多轨道）",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "unrooted": {
   "name": "unrooted",
@@ -3904,7 +5684,19 @@
   "help": "无根树可视化",
   "capabilities": [
    "phylogeny"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  },
  "rooting": {
   "name": "rooting",
@@ -3918,6 +5710,18 @@
   "capabilities": [
    "phylogeny"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "aliases": [
    "treeRooting"
   ]
@@ -3972,6 +5776,14 @@
   "capabilities": [
    "annotation"
   ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -4001,6 +5813,17 @@
   "dependencies": [
    "kallisto"
   ],
+  "relations": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "QUANT_TABLE"
+   ],
+   "next_step": [
+    "tpmCalc"
+   ]
+  },
   "inputs": [
    {
     "name": "fastq",
@@ -4026,7 +5849,20 @@
   "capabilities": [
    "motif",
    "scanning"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "xml2blasttab": {
   "name": "xml2blasttab",
@@ -4039,7 +5875,18 @@
   "help": "xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向 #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "xml2pairwise": {
   "name": "xml2pairwise",
@@ -4052,7 +5899,18 @@
   "help": "xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI 逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "fa2tab": {
   "name": "fa2tab",
@@ -4065,7 +5923,20 @@
   "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "tab2fa": {
   "name": "tab2fa",
@@ -4078,7 +5949,20 @@
   "help": "tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "muscle": {
   "name": "muscle",
@@ -4095,6 +5979,18 @@
   "dependencies": [
    "muscle"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "ALIGNMENT"
+   ],
+   "next_step": [
+    "trimal",
+    "iqtree"
+   ]
+  },
   "inputs": [
    {
     "name": "fasta",
@@ -4119,7 +6015,18 @@
   "help": "bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix> [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "getseqdb": {
   "name": "getseqdb",
@@ -4132,7 +6039,18 @@
   "help": "getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST 库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "genomefilter": {
   "name": "genomefilter",
@@ -4145,7 +6063,20 @@
   "help": "genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
   "capabilities": [
    "sequence"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "notung": {
   "name": "notung",
@@ -4160,6 +6091,18 @@
    "phylogeny",
    "reconciliation"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "inputs": [
    {
     "name": "tree",
@@ -4193,6 +6136,18 @@
    "phylogeny",
    "tree_editing"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "inputs": [
    {
     "name": "nwk",
@@ -4248,6 +6203,19 @@
    "motif",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "meme",
@@ -4273,6 +6241,15 @@
   "capabilities": [
    "enrichment"
   ],
+  "relations": {
+   "accepts": [
+    "EXPRESSION_TABLE",
+    "PHENOTYPE_CLS"
+   ],
+   "produces": [
+    "GSEA_REPORT"
+   ]
+  },
   "inputs": [
    {
     "name": "expr",
@@ -4306,6 +6283,19 @@
    "motif",
    "genome_scan"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "motif",
@@ -4334,6 +6324,22 @@
   "dependencies": [
    "mcscanx"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -4365,7 +6371,18 @@
   "help": "quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   # diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）",
   "capabilities": [
    "homology"
-  ]
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  }
  },
  "smart": {
   "name": "smart",
@@ -4380,6 +6397,19 @@
    "domain",
    "annotation"
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "inputs": [
    {
     "name": "seq",
@@ -4416,6 +6446,22 @@
    "microsynteny",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
   "inputs": [
    {
     "name": "pos",
@@ -4455,6 +6501,14 @@
   "capabilities": [
    "annotation"
   ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -4480,6 +6534,14 @@
   "capabilities": [
    "annotation"
   ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -4508,6 +6570,15 @@
    "annotation",
    "visualization"
   ],
+  "relations": {
+   "accepts": [
+    "GFF3",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "GENE_STRUCTURE_PLOT"
+   ]
+  },
   "inputs": [
    {
     "name": "gff",
@@ -4542,6 +6613,18 @@
    "phylogeny",
    "rooting"
   ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "inputs": [
    {
     "name": "nwk",
