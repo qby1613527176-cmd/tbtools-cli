@@ -108,11 +108,47 @@ def _rpc_launch(port, mem):
     _rpc_write_pid(port, proc.pid)
     return proc
 
+def _rpc_start_lock(port, timeout_s=20):
+    """启动互斥锁(评审 #17: Agent 并发 ensure 竞争)。文件锁 + double-check。
+
+    返回锁 fd(成功)或 None(已有人持有, 等待后 double-check)。
+    """
+    import fcntl as _f
+    import time as _t
+    lock = os.path.expanduser(f"~/.config/tbtools-cli/rpc-{port}.lock")
+    fd = os.open(lock, os.O_CREAT | os.O_RDWR, 0o644)
+    t0 = _t.time()
+    while True:
+        try:
+            _f.flock(fd, _f.LOCK_EX | _f.LOCK_NB)
+            return fd
+        except BlockingIOError:
+            if _t.time() - t0 > timeout_s:
+                os.close(fd)
+                return None
+            _t.sleep(0.3)
+
+
 def _ensure_rpc(port, mem="4g", wait_s=30, quiet=False):
     """ensure 逻辑（同交付包 run_p*.py 的 ensure_srv）：
     健康 → True；不健康/死亡 → 清 stale pid → 拉起 → 轮询健康。"""
     if _rpc_ping(port):
         return True
+    # 启动互斥(评审 #17: 两个进程同时 ensure → 竞争; 锁内 double-check)
+    _lock_fd = _rpc_start_lock(port)
+    if _lock_fd is None:
+        # 未获锁(他人启动中)→ 等待其完成, 再 ping
+        import time as _t
+        for _ in range(40):
+            _t.sleep(0.5)
+            if _rpc_ping(port):
+                return True
+        return _rpc_ping(port)
+    try:
+        if _rpc_ping(port):  # double-check(锁内)
+            return True
+    finally:
+        pass
     old_pid = _rpc_read_pid(port)
     if old_pid:
         if not quiet:
