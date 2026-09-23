@@ -121,6 +121,24 @@ MCP 客户端配置示例(Claude Desktop / Cursor):
 
 暴露 8 个原生工具: search / tool_describe / tool_validate / tool_run / job_submit / job_status / job_result / tool_provenance——AI 模型自动发现、自动调用,零提示词。
 
+## 🧭 按任务找命令(What do you want to do?)
+
+| 你手上的数据 | 想做什么 | 命令链 |
+|---|---|---|
+| FASTA(蛋白/核酸) | 比对→修剪→建树 | `muscle` → `trimal` → `iqtree` → `tree` |
+| FASTA | Motif 发现/可视化 | `memerun` → `memeViz` / `motif` |
+| counts + 基因长度 | RNA-seq 差异分析 | `tpmCalc` → `pca` → `heatmap` → `volcano` |
+| DEG 表(GeneID/Log2FC/pvalue) | 火山图/分布图 | `volcano` / `dehist` |
+| 表达矩阵 | 聚类/热图/PCA | `hclust`(三列距离)/ `heatmap` / `pca` |
+| GFF3 + 基因 ID | 基因结构图 | `genestructure` |
+| GFF + BLAST | 共线性分析 | `mcscanx` → `dualsyn` / `dotplot` / `msy` |
+| 基因列表 | 韦恩/UpSet | `venn2` / `venn3` / `upset` |
+| GFF/PEP | GO/KEGG 富集 | `goEnrich` / `keggEnrich` → `barplot` |
+| FASTA | BLAST 同源搜索 | `blastp` / `blastn` / `recipBlast` |
+| peak 坐标 | ChIP-seq 峰值/TSS | `peaktss` / `peakanno` |
+| Newick | 树定根/重命名 | `treeRooting` / `newickRename` |
+| **Agent/AI** | 按任务自动发现 | `tbtools search <任务> --json` → `tool-describe` → `tool-run` |
+
 ## 🚀 Quick Start
 
 > **最小示例数据**（新人入门防格式坑）: 本仓库 `examples/data/` 为官方数据,`git clone` 或直接下载:
