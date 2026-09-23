@@ -300,7 +300,6 @@ def register_top(cli, _LG):
         jar_target = os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar")
         os.makedirs(os.path.dirname(jar_target), exist_ok=True)
         found = False
-        jar_sha = _hl.sha256()
         try:
             with zipfile.ZipFile(tmp) as z:
                 for n in z.namelist():
@@ -319,7 +318,6 @@ def register_top(cli, _LG):
         if not found:
             click.echo("❌ zip 中未找到 TBtools_JRE1.6.jar", err=True)
             sys.exit(1)
-        # jar sha256(流式)
         h = _hl.sha256()
         with open(jar_target, "rb") as _f:
             for _chunk in iter(lambda: _f.read(1 << 20), b""):
