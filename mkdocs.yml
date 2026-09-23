@@ -11,4 +11,6 @@ nav:
   - 命令清单: commands.md
   - 命令参考: reference.md
   - RPC 方法: rpc.md
+  - Agent 接口: agent.md
+  - 工作流: workflows.md
   - FAQ: faq.md
