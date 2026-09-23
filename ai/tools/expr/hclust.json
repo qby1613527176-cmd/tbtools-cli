@@ -17,7 +17,12 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "三列: GeneA\tGeneB\tdist"
+   "note": "三列距离",
+   "columns": [
+    "GeneA",
+    "GeneB",
+    "distance"
+   ]
   }
  ],
  "outputs": [

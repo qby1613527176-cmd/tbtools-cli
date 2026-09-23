@@ -21,6 +21,7 @@ class InputSpec:
     format: str = ""             # gff3 | fasta | tsv | newick | ...
     required: bool = True
     note: str = ""
+    columns: list[str] | None = None  # 列名契约(评审 #31: Agent 语义校验)
 
 
 @dataclass
@@ -45,9 +46,9 @@ class CommandSpec:
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
 KNOWN_SCHEMAS = {
-    "volcano": ([InputSpec("deg", format="tsv", note="GeneID\tLog2FC\tpvalue")], ["svg"]),
+    "volcano": ([InputSpec("deg", format="tsv", note="GeneID\tLog2FC\tpvalue", columns=["GeneID", "Log2FC", "pvalue"])], ["svg"]),
     "heatmap": ([InputSpec("matrix", format="tsv", note="表达矩阵 gene×sample")], ["svg"]),
-    "hclust": ([InputSpec("distance", format="tsv", note="三列: GeneA\tGeneB\tdist")], ["svg"]),
+    "hclust": ([InputSpec("distance", format="tsv", note="三列距离", columns=["GeneA", "GeneB", "distance"])], ["svg"]),
     "venn2": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt")], ["svg"]),
     "msy": ([InputSpec("pos", format="tsv", note="Chr\tGene\tStart\tEnd"),
              InputSpec("links", format="tsv"), InputSpec("layout", format="txt")], ["svg"]),
@@ -430,7 +431,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["relations"] = spec.relations
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
-                        "required": i.required, "note": i.note} for i in spec.inputs]
+                        "required": i.required, "note": i.note,
+                        **({"columns": i.columns} if i.columns else {})} for i in spec.inputs]
     if spec.outputs:
         e["outputs"] = spec.outputs
     if spec.status != "stable":

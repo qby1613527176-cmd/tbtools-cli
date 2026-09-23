@@ -17,7 +17,12 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "GeneID\tLog2FC\tpvalue"
+   "note": "GeneID\tLog2FC\tpvalue",
+   "columns": [
+    "GeneID",
+    "Log2FC",
+    "pvalue"
+   ]
   }
  ],
  "outputs": [

@@ -584,9 +584,22 @@ def register_top(cli, _LG):
                 continue
             fmt, ncols, _ = detect_format(path)
             warn = check_input_format(command, path)
-            checks.append({"input": path, "ok": True, "format": fmt, "columns": ncols,
-                           "warning": warn or None})
-            if warn:
+            # 列名契约校验(评审 #31: CommandSpec columns 标注的命令, 首行列名比对)
+            _col_mismatch = None
+            try:
+                from tbtools_cli.command_spec import KNOWN_SCHEMAS
+                _specs = KNOWN_SCHEMAS.get(command)
+                if _specs and _specs[0] and _specs[0][0].columns:
+                    _expected = _specs[0][0].columns
+                    _header = open(path, encoding="utf-8", errors="replace").readline().rstrip().split("	")
+                    if _header[:len(_expected)] != _expected:
+                        _col_mismatch = f"列名不匹配: 期望 {_expected}, 实际 {_header[:len(_expected)]}"
+            except Exception:
+                pass
+            _ok_this = not warn and not _col_mismatch
+            checks.append({"input": path, "ok": _ok_this, "format": fmt, "columns": ncols,
+                           "warning": warn or _col_mismatch or None})
+            if not _ok_this:
                 ok = False
         result = {"command": command, "valid": ok, "checks": checks}
         if as_json:
