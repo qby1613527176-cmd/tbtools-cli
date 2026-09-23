@@ -4,16 +4,14 @@
 在 discover/describe/validate 三层都可用,防"注册了但 Agent 找不到/描述不了"。
 """
 import json
-import os
 import sys
 from pathlib import Path
 
-import pytest
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from tbtools_cli.command_spec import build_command_specs, to_metadata_entry
+from tbtools_cli.command_spec import build_command_specs
 
 META = json.load(open(ROOT / "tbtools_cli" / "command_metadata.json", encoding="utf-8"))
 SPECS = build_command_specs()
