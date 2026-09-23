@@ -1,16 +1,12 @@
 """tbtools-cli 核心引擎：通用选项 + _run_java wrapper + 统一输出格式 + 输入校验"""
-import hashlib
 import os
-import re
 import shutil
 import subprocess
 import sys
 import tempfile
 
-import click
 
 from tbtools_cli.config import get_default  # heap 可配置(第六轮评审)
-from tbtools_cli.errors import ERROR_CODES, classify_error  # 错误契约独立模块(拆分第一步)
 
 # ── 轻量 i18n(--lang en / LC_ALL / config [defaults] lang)──
 _LANG_EN = None
@@ -499,14 +495,5 @@ def probe_dead_engines():
 
 # ── core.py 拆分(GPT 评审 #8): Java 执行/输入保护/provenance 迁至 runtime/java.py, 此处重导出保持兼容 ──
 from tbtools_cli.runtime.java import (  # noqa: E402  # 延迟到模块加载完(避免循环 import)
-    _n19_move_result,
-    _sha1_file,
-    _write_provenance,
-    check_missing_outputs,
-    cleanup_side_effects,
-    find_empty_inputs,
-    resolve_output,
     run_java,
-    snapshot_inputs,
-    verify_and_restore,
 )

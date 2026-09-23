@@ -13,10 +13,11 @@ import subprocess
 import sys
 import tempfile
 
+import click
+
 from tbtools_cli.core import (
     BUILD_DIR,
     _,
-    cp,
     get_default,   # heap 可配置
     get_java,
     get_pitfall_hint,
