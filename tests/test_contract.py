@@ -11,7 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from tbtools_cli.command_spec import build_command_specs
+from tbtools_cli.command_spec import build_command_specs  # noqa: E402
 
 META = json.load(open(ROOT / "tbtools_cli" / "command_metadata.json", encoding="utf-8"))
 SPECS = build_command_specs()
