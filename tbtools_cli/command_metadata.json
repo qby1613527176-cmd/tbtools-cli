@@ -654,6 +654,22 @@
     "SYNTENY_PLOT"
    ]
   },
+  "parameters": [
+   {
+    "name": "chr1",
+    "type": "string",
+    "default": null,
+    "required": false,
+    "note": "逗号分隔染色体"
+   },
+   {
+    "name": "chr2",
+    "type": "string",
+    "default": null,
+    "required": false,
+    "note": ""
+   }
+  ],
   "inputs": [
    {
     "name": "gff",
@@ -1959,6 +1975,29 @@
     "dotplot"
    ]
   },
+  "parameters": [
+   {
+    "name": "t",
+    "type": "int",
+    "default": 4,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   }
+  ],
   "inputs": [
    {
     "name": "gff",
@@ -4123,6 +4162,22 @@
     "tree"
    ]
   },
+  "parameters": [
+   {
+    "name": "bb",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": "UFBoot ≥1000"
+   },
+   {
+    "name": "t",
+    "type": "int",
+    "default": 4,
+    "required": false,
+    "note": ""
+   }
+  ],
   "inputs": [
    {
     "name": "aln",
@@ -5582,6 +5637,36 @@
     "heatmap"
    ]
   },
+  "parameters": [
+   {
+    "name": "pval_cutoff",
+    "type": "float",
+    "default": 0.05,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "fc_cutoff",
+    "type": "float",
+    "default": 1.0,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   }
+  ],
   "inputs": [
    {
     "name": "deg",
@@ -5628,6 +5713,36 @@
     "pca"
    ]
   },
+  "parameters": [
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "log2",
+    "type": "bool",
+    "default": false,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "row_scale",
+    "type": "bool",
+    "default": false,
+    "required": false,
+    "note": ""
+   }
+  ],
   "inputs": [
    {
     "name": "matrix",
@@ -5705,6 +5820,29 @@
     "heatmap"
    ]
   },
+  "parameters": [
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "t",
+    "type": "int",
+    "default": 4,
+    "required": false,
+    "note": "线程"
+   }
+  ],
   "inputs": [
    {
     "name": "distance",
@@ -5747,6 +5885,22 @@
     "volcano"
    ]
   },
+  "parameters": [
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   }
+  ],
   "inputs": [
    {
     "name": "deg",
@@ -6740,6 +6894,29 @@
     "GENE_STRUCTURE_PLOT"
    ]
   },
+  "parameters": [
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "genome",
+    "type": "string",
+    "default": null,
+    "required": false,
+    "note": "可选基因组 FASTA"
+   }
+  ],
   "inputs": [
    {
     "name": "gff",

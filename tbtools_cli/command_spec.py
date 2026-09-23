@@ -14,6 +14,16 @@ from tbtools_cli.cli_load import CATEGORY_MAP
 
 
 @dataclass
+class ParamSpec:
+    """命令参数定义(评审 #31 Tool Contract: 类型/默认值/是否必填)"""
+    name: str
+    type: str = "string"        # string|int|float|bool
+    default: object = None
+    required: bool = False
+    note: str = ""
+
+
+@dataclass
 class InputSpec:
     """命令输入定义(二期 schema: 类型/格式/必填)"""
     name: str
@@ -42,6 +52,7 @@ class CommandSpec:
     capabilities: list[str] = field(default_factory=list)  # 能力标签(能力图搜索)
     dependencies: list[str] = field(default_factory=list)  # 外部依赖(环境解析, GLM #22)
     relations: dict = field(default_factory=dict)          # 语义关系(能力图衔接, GLM #24)
+    parameters: list = field(default_factory=list)         # ParamSpec 参数契约(Tool Contract)
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -120,6 +131,23 @@ KNOWN_SCHEMAS = {
     "calcRepeat": ([InputSpec("fasta", format="fasta")], ["tsv"]),
     "rnaplot": ([InputSpec("seq", format="fasta")], ["svg"]),
     "preparespecies": ([InputSpec("genome", format="fasta"), InputSpec("gff", format="gff3")], ["fasta"]),
+}
+
+
+# 命令参数契约(评审 #31: Agent 知道参数类型/默认值)
+KNOWN_PARAMS = {
+    "volcano": [ParamSpec("pval_cutoff", "float", 0.05), ParamSpec("fc_cutoff", "float", 1.0),
+                ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800)],
+    "heatmap": [ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800),
+                ParamSpec("log2", "bool", False), ParamSpec("row_scale", "bool", False)],
+    "hclust": [ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800),
+               ParamSpec("t", "int", 4, note="线程")],
+    "genestructure": [ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800),
+                      ParamSpec("genome", "string", None, note="可选基因组 FASTA")],
+    "dehist": [ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800)],
+    "mcscanx": [ParamSpec("t", "int", 4), ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800)],
+    "dualsyn": [ParamSpec("chr1", "string", None, note="逗号分隔染色体"), ParamSpec("chr2", "string", None)],
+    "iqtree": [ParamSpec("bb", "int", 1000, note="UFBoot ≥1000"), ParamSpec("t", "int", 4)],
 }
 
 
@@ -381,6 +409,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
         spec.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(spec.group, [])
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
+        spec.parameters = KNOWN_PARAMS.get(name, [])
     return specs
 
 
@@ -411,6 +440,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         s.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(s.group, [])
         s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         s.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(s.group, {})
+        s.parameters = KNOWN_PARAMS.get(name, [])
     return {n: to_metadata_entry(s) for n, s in specs.items()}
 
 
@@ -429,6 +459,9 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["dependency_manifest"] = KNOWN_DEPENDENCIES_STRUCT[spec.name]
     if spec.relations:
         e["relations"] = spec.relations
+    if spec.parameters:
+        e["parameters"] = [{"name": p.name, "type": p.type, "default": p.default,
+                            "required": p.required, "note": p.note} for p in spec.parameters]
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note,

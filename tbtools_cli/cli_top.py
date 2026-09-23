@@ -543,6 +543,8 @@ def register_top(cli, _LG):
             desc["relations"] = v["relations"]
         if v.get("capabilities"):
             desc["capabilities"] = v["capabilities"]
+        if v.get("parameters"):
+            desc["parameters"] = v["parameters"]
         if v.get("dependencies"):
             import shutil as _sh
             desc["dependencies"] = v["dependencies"]
