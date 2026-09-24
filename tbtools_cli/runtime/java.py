@@ -231,6 +231,29 @@ def find_empty_inputs(java_args):
 
 # ---- _run_java wrapper（友好错误处理 + 智能异常分类 + 退出码规范 + 坑位提示）----
 
+# ── FailureSpec 自动修复(评审 #52 P2-36): 已知失败 → 修复 → 重试一次 ──
+# 键: (command, 错误特征子串) → {"add_args": [...], "message": str}
+KNOWN_REPAIRS = {
+    ("iqtree", "UFBoot"): {"add_args": ["--bb", "1000"],
+                          "message": "UFBoot 须 ≥1000(引擎静默拒绝低值)→ 自动补 --bb 1000 重试"},
+    ("onesteptree", "UFBoot"): {"add_args": ["--bb", "1000"],
+                               "message": "UFBoot 须 ≥1000 → 自动补 --bb 1000 重试"},
+}
+
+
+def _try_repair(java_args, command_name, err_text, retried):
+    """失败模式匹配修复策略, 返回修复后的 java_args(或 None=不可修)。
+
+    只重试一次(retried 防循环);不可修的(数据类错误)不碰。
+    """
+    if retried or not command_name:
+        return None
+    for (cmd, sig), fix in KNOWN_REPAIRS.items():
+        if command_name == cmd and sig in err_text:
+            return java_args + fix["add_args"], fix["message"]
+    return None
+
+
 # ── Error Code Registry(GLM 评审: 结构化错误契约, AI 可编程处理)──
 def _n19_move_result(n19_tmp, n19_out, n19_orig_sha):
     """N19: findBestHomologyBatch 引擎改写了临时副本时才搬结果到 outTable。
@@ -454,6 +477,18 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     # 成功时 ec_out = 0
     if ec == 0:
         ec_out = 0
+    # FailureSpec 自动修复(评审 #52 P2-36): 已知失败模式 → 修复 → 重试一次
+    if ec_out != 0 and err_text:
+        _repair = _try_repair(java_args, command_name, err_text, retried=getattr(run_java, "_retried", False))
+        if _repair:
+            _new_args, _fix_msg = _repair
+            click.echo(f"🔧 自动修复: {_fix_msg}", err=True)
+            run_java._retried = True
+            try:
+                return run_java(_new_args, verbose=verbose, quiet=quiet, command_name=command_name)
+            finally:
+                run_java._retried = False
+
     # 运行 provenance: 识别输出文件, 旁写 <out>.tbtools.json(成功/失败都写, 含结构化 error)
     _inputs_before = {s[0] for s in snaps} if "snaps" in dir() else None
     _write_provenance(java_args, command_name, ec_out, err_text if ec_out != 0 else "",
