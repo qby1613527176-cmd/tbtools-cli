@@ -1,3 +1,50 @@
+Metadata-Version: 2.4
+Name: tbtools-cli
+Version: 1.3.0
+Summary: TBtools-II command-line wrapper: 200+ engines, 188+ RPC methods, journal presets, pitfall hints (exact counts via `tbtools version`)
+Author: tbtools-cli contributors
+License: MIT License
+        
+        Copyright (c) 2026 tbtools-cli contributors
+        
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        
+        The above copyright notice and this permission notice shall be included in all
+        copies or substantial portions of the Software.
+        
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+        SOFTWARE.
+        
+Project-URL: Homepage, https://github.com/qby1613527176-cmd/tbtools-cli
+Project-URL: upstream, https://github.com/CJ-Chen/TBtools
+Project-URL: Documentation, https://github.com/qby1613527176-cmd/tbtools-cli/blob/main/docs/COMMAND_REFERENCE.md
+Project-URL: Source, https://github.com/qby1613527176-cmd/tbtools-cli
+Project-URL: Issues, https://github.com/qby1613527176-cmd/tbtools-cli/issues
+Keywords: bioinformatics,tbtools,cli,plotting,genomics
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Java
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: click>=8.1
+Provides-Extra: test
+Requires-Dist: pytest>=7.0; extra == "test"
+Dynamic: license-file
+
 # TBtools CLI — TBtools-II 全功能命令行封装
 
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
@@ -7,9 +54,8 @@
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **Agent-ready 工具契约 294 个**(FULL 8 / PARTIAL 180 / LEGACY 106,`doctor --json` 实时统计)——底层能力: 200+ 绘图/分析 + 180+ RPC + 80+ CLI 工具 + 110+ Java 桥 + 引擎反射(逃生舱)。
-> **Agent-ready 定义**: FULL=契约完整(inputs+outputs+parameters+capabilities+stable);PARTIAL=部分契约;LEGACY=仅注册。
-> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)。
+> **200+ 绘图/分析命令 + 180+ RPC 数据工具 + 80+ 命令行工具 + 110+ Java 桥 + 任意引擎反射**，全部实测出图。
+> 数字权威源: `tbtools version --json`(运行时统计) / [docs/_generated/counts.md](docs/_generated/counts.md)(静态注册口径, 自动生成防漂移)。README 内数字为范围快照, 以二者为准。
 
 <div align="center">
 
@@ -120,7 +166,7 @@ MCP 客户端配置示例(Claude Desktop / Cursor):
 {"mcpServers": {"tbtools": {"command": "tbtools", "args": ["mcp"]}}}
 ```
 
-**MCP 暴露 8 个稳定编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / job_submit / job_status / job_result / tool_provenance——Agent 怕 2000 个工具;8 原语 ↓ 294 领域能力,自动发现、自动调用,零提示词。协议规范见 [docs/agent-protocol.md](docs/agent-protocol.md)。
+暴露 8 个原生工具: search / tool_describe / tool_validate / tool_run / job_submit / job_status / job_result / tool_provenance——AI 模型自动发现、自动调用,零提示词。
 
 ## 🧭 按任务找命令(What do you want to do?)
 
@@ -441,16 +487,6 @@ tbtools-cli/
 - **规范命令名是小写 camelCase**：`tableCast` / `tableMelt` / `recipBlast`（分组命令）
 - 个别工具层保留旧大写注册名作别名：`TableCast` 与 `tableCast` 指向同一引擎（`tool TableCast` 兼容旧写法）
 - 新旧入口并存是过渡设计，规范入口见 `tbtools list`
-
-## 🖥️ 平台支持矩阵
-
-| 能力 | Linux | WSL2 | macOS | Windows |
-|---|---|---|---|---|
-| CLI/Tool/RPC | ✅ | ✅ | ✅ | ✅ |
-| 绘图(SVG) | ✅(xvfb) | ✅ | ✅ | ⚠️ 部分受限 |
-| MCP | ✅ | ✅ | ✅ | ✅ |
-| Workflow/Job | ✅ | ✅ | ✅ | ⚠️ 进程组操作受限 |
-| 外部二进制依赖 | ✅ | ✅ | 部分 | 部分 |
 
 ## ⚠️ Known Limitations
 

@@ -7,8 +7,8 @@
    "tool": "table tableCollapse",
    "exit_code": 0,
    "status": "succeeded",
-   "output": "/tmp/tmp98l239ox/s1.tsv",
-   "provenance": "/tmp/tmp98l239ox/s1.tsv.tbtools.json",
+   "output": "/tmp/tmpdfq3zxtc/s1.tsv",
+   "provenance": "/tmp/tmpdfq3zxtc/s1.tsv.tbtools.json",
    "log": "wf.wf/s1.log"
   },
   {
@@ -16,8 +16,8 @@
    "tool": "table tableCollapse",
    "exit_code": 0,
    "status": "succeeded",
-   "output": "/tmp/tmp98l239ox/s2.tsv",
-   "provenance": "/tmp/tmp98l239ox/s2.tsv.tbtools.json",
+   "output": "/tmp/tmpdfq3zxtc/s2.tsv",
+   "provenance": "/tmp/tmpdfq3zxtc/s2.tsv.tbtools.json",
    "log": "wf.wf/s2.log"
   }
  ]

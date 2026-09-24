@@ -542,3 +542,28 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     if spec.aliases:
         e["aliases"] = spec.aliases
     return e
+
+# ── Agent-ready 分级(评审 #60-8): FULL/PARTIAL/LEGACY 正式定义 ──
+def agent_readiness(spec) -> str:
+    """工具 Agent-ready 分级:
+    FULL = 契约完整(inputs+outputs+parameters+capabilities 均有标注, 且 status=stable)
+    PARTIAL = 部分契约(capabilities 有但 schema 不全, 或 status 非 stable)
+    LEGACY = 基础(仅注册;或无 capability 标注)
+    """
+    has_caps = bool(spec.capabilities)
+    has_schema = bool(spec.inputs)
+    has_params = bool(spec.parameters)
+    if has_caps and has_schema and has_params and spec.status == "stable":
+        return "FULL"
+    if has_caps or spec.status != "stable":
+        return "PARTIAL"
+    return "LEGACY"
+
+
+def readiness_census() -> dict:
+    """全量工具 Agent-ready 统计(readiness matrix 的数值口径)。"""
+    out = {"FULL": 0, "PARTIAL": 0, "LEGACY": 0}
+    for s in build_command_specs().values():
+        out[agent_readiness(s)] += 1
+    return out
+

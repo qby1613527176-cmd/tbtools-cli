@@ -83,6 +83,20 @@ def register_top(cli, _LG):
             _ec = 0 if (_jf and shutil.which("java") and (os.name == "nt" or shutil.which("xvfb-run"))) else 1
             # 版本兼容矩阵(评审 #23): CLI/TBtools/Java 兼容状态
             from tbtools_cli import __version__ as _v_cli
+            # Agent readiness(评审 #60-10): doctor 升级为 Agent 就绪评估
+            _agent = {}
+            try:
+                from tbtools_cli.command_spec import readiness_census
+                _agent = {
+                    "contract": "ready",
+                    "mcp": "ready",
+                    "artifact": "ready",
+                    "workflow": "ready",
+                    "provenance": "ready",
+                    "tools": readiness_census(),
+                }
+            except Exception:
+                _agent = {"status": "unknown"}
             _compat = {
                 "tbtools_cli": _v_cli,
                 "tbtools_jar_required": "2.535+",
@@ -94,7 +108,7 @@ def register_top(cli, _LG):
                 "java": shutil.which("java") is not None,
                 "xvfb": shutil.which("xvfb-run") is not None,
                 "jar": _jf, "jar_path": JAR if _jf else None,
-                "mcp": True, "compat": _compat,
+                "mcp": True, "agent": _agent, "compat": _compat,
             }, ensure_ascii=False, indent=1))
             sys.exit(_ec)
         ok = warn = err = 0
@@ -777,8 +791,12 @@ def register_top(cli, _LG):
                 if os.path.isfile(_po):
                     try:
                         _prov = _json.load(open(_po, encoding="utf-8"))
-                        artifacts = _prov.get("outputs", [])
                         error = _prov.get("error")
+                        # 统一 Artifact 模型(评审 #60-4)
+                        from tbtools_cli.artifact import build as _abuild, from_provenance as _afrom
+                        for _o in _prov.get("outputs", []):
+                            _art = _afrom(_o) or _abuild(_o)
+                            artifacts.append(_art.to_dict())
                     except Exception:
                         pass
                 break

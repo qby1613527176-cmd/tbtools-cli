@@ -1,0 +1,2 @@
+[console_scripts]
+tbtools = tbtools_cli.cli:cli
