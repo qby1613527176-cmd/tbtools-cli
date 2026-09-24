@@ -1,28 +1,6 @@
-name: tbtools-cli CI
-
-on: [push, pull_request]
-
 jobs:
   test:
     runs-on: ubuntu-latest
-
-  test-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
-      - name: Install
-        run: pip install click pytest ruff pyyaml
-      - name: Lint (ruff 硬失败)
-        run: ruff check .
-      - name: Windows 无 jar CLI 冒烟(跨平台验证)
-        shell: bash
-        run: |
-          python -m tbtools_cli.cli version | grep -q "tbtools-cli" && echo "✅ version"
-          python -m tbtools_cli.cli list plots | grep -cE '^    ' | awk '$1>100 {print "✅ list plots:", $1}'
-          python -m tbtools_cli.cli sets ven 2>&1 | grep -q "venn" && echo "✅ 拼写纠错"
-          python -m tbtools_cli.cli --help | grep -q "TBtools-II" && echo "✅ help"
     steps:
       - uses: actions/checkout@v4
 
@@ -94,3 +72,21 @@ jobs:
           assert len(m) >= 200, f'Expected >=200 commands, got {len(m)}'
           print(f'Commands: {len(m)}')
           "
+
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Install
+        run: pip install click pytest ruff pyyaml
+      - name: Lint (ruff 硬失败)
+        run: ruff check .
+      - name: Windows 无 jar CLI 冒烟(跨平台验证)
+        shell: bash
+        run: |
+          python -m tbtools_cli.cli version | grep -q "tbtools-cli" && echo "✅ version"
+          python -m tbtools_cli.cli list plots | grep -cE '^    ' | awk '$1>100 {print "✅ list plots:", $1}'
+          python -m tbtools_cli.cli sets ven 2>&1 | grep -q "venn" && echo "✅ 拼写纠错"
+          python -m tbtools_cli.cli --help | grep -q "TBtools-II" && echo "✅ help"

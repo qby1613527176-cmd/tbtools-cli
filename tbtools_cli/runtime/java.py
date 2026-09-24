@@ -105,6 +105,21 @@ def snapshot_inputs(java_args: list) -> list:
         if size == 0:
             continue
         backup = None
+        if size > _MAX_SNAPSHOT_COPY:
+            # P0-9: 大文件 reflink(copy-on-write)备份——零拷贝隔离, 引擎写穿不影响备份
+            try:
+                import subprocess as _sp
+                tmpdir = tmpdir or tempfile.mkdtemp(prefix="tbq_snap_")
+                backup = os.path.join(tmpdir, f"inp_{len(snaps)}_{os.path.basename(_a)}")
+                _r = _sp.run(["cp", "--reflink=always", _a, backup], capture_output=True, timeout=300)
+                if _r.returncode == 0:
+                    snaps.append([_a, backup, size, mtime])
+                    continue
+            except Exception:
+                pass
+            # reflink 不可用(NTFS/旧内核)→ hash+警告(无法恢复, 但破坏可检测)
+            snaps.append([_a, None, size, mtime])
+            continue
         if size <= _MAX_SNAPSHOT_COPY:
             if tmpdir is None:
                 tmpdir = tempfile.mkdtemp(prefix="tbtools_inp.")

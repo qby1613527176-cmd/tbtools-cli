@@ -109,20 +109,37 @@ def _rpc_launch(port, mem):
     return proc
 
 def _rpc_start_lock(port, timeout_s=20):
-    """启动互斥锁(评审 #17: Agent 并发 ensure 竞争)。文件锁 + double-check。
+    """启动互斥锁(评审 #17/#52-P0-8: Agent 并发 ensure 竞争, 跨平台)。
 
-    返回锁 fd(成功)或 None(已有人持有, 等待后 double-check)。
+    POSIX: fcntl.flock;Windows: msvcrt.locking;不可用: 降级无锁(仅警告)。
+    返回锁 fd(成功)或 None(已有人持有/平台不支持, 等待后 double-check)。
     """
-    import fcntl as _f
     import time as _t
     lock = os.path.expanduser(f"~/.config/tbtools-cli/rpc-{port}.lock")
     fd = os.open(lock, os.O_CREAT | os.O_RDWR, 0o644)
+    _locker = None
+    try:
+        import fcntl as _f
+        def _try():
+            _f.flock(fd, _f.LOCK_EX | _f.LOCK_NB)
+        _locker = _try
+    except ImportError:
+        try:
+            import msvcrt as _m  # type: ignore[attr-defined]  # Windows-only 模块
+            def _try():
+                _m.locking(fd, _m.LK_NBLCK, 1)  # type: ignore[attr-defined]
+            _locker = _try
+        except ImportError:
+            _locker = None
+    if _locker is None:
+        click.echo("⚠️ 平台无文件锁(fcntl/msvcrt 均不可用), RPC 启动无互斥保护", err=True)
+        return fd  # 降级: 仍返回 fd(调用方 double-check ping 兜底)
     t0 = _t.time()
     while True:
         try:
-            _f.flock(fd, _f.LOCK_EX | _f.LOCK_NB)
+            _locker()
             return fd
-        except BlockingIOError:
+        except (BlockingIOError, OSError):
             if _t.time() - t0 > timeout_s:
                 os.close(fd)
                 return None

@@ -660,6 +660,31 @@ class TestReadmeStructure:
         assert '## 📄 许可' not in r, "中文许可节已合并, 不应残留"
 
 
+class TestVersionConsistency:
+    """P0-2: pyproject/__version__/CHANGELOG 单一权威源一致性"""
+
+    ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    def test_pyproject_matches_package(self):
+        import re
+        import tbtools_cli
+        ROOT = self.ROOT
+        pp = open(os.path.join(ROOT, "pyproject.toml"), encoding="utf-8").read()
+        m = re.search(r'^version = "([^"]+)"', pp, re.M)
+        assert m and m.group(1) == tbtools_cli.__version__, \
+            f"pyproject {m.group(1) if m else '?'} != __version__ {tbtools_cli.__version__}"
+
+    def test_changelog_latest_matches(self):
+        import re
+        ROOT = self.ROOT
+        cl = open(os.path.join(ROOT, "CHANGELOG.md"), encoding="utf-8").read()
+        m = re.search(r'^## \[([0-9.]+)\]', cl, re.M)
+        pp = open(os.path.join(ROOT, "pyproject.toml"), encoding="utf-8").read()
+        pv = re.search(r'^version = "([^"]+)"', pp, re.M)
+        assert m and pv and m.group(1) == pv.group(1), \
+            f"CHANGELOG 最新 {m.group(1) if m else '?'} != pyproject {pv.group(1) if pv else '?'}"
+
+
 class TestWorkflowYaml:
     """所有 GitHub workflow YAML 必须有效(第十五轮审计: docs.yml 曾被 heredoc 破坏,需固化)"""
 
