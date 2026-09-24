@@ -1,0 +1,11 @@
+id: deg.pipeline
+title: DEG 可视化管线(DEG 表 → 火山图 → 分布图)
+inputs:
+  deg: examples/data/deg.txt
+steps:
+  - id: volcano
+    tool: expr volcano
+    args: ["examples/data/deg.txt", "{workdir}/volcano.svg"]
+  - id: dehist
+    tool: expr dehist
+    args: ["examples/data/deg.txt", "{workdir}/dehist.svg"]

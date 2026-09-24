@@ -1156,6 +1156,34 @@ except Exception:
             click.echo(f"    大小: {art.size} B | sha256: {art.sha256}")
             click.echo(f"    生产者: {art.producer or '?'} | {prov}")
 
+    @cli.command(name="workflow")
+    @click.argument("sub", type=click.Choice(["validate", "plan", "run", "graph"]))
+    @click.argument("path")
+    @click.option("--workdir", default=None, help="执行目录(默认 <wf 名>.wf/)")
+    @click.option("--timeout", "timeout_s", type=int, default=600)
+    def workflow_cmd(sub, path, workdir, timeout_s):
+        """Workflow 一等公民(ADR-0007): YAML 工作流 validate/plan/run/graph"""
+        import json as _json
+        from tbtools_cli.workflow import WorkflowError, graph, load_workflow, plan, run
+        try:
+            wf = load_workflow(path)
+        except WorkflowError as e:
+            click.echo(f"❌ workflow 无效: {e}", err=True)
+            sys.exit(3)
+        wd = workdir or os.path.splitext(os.path.basename(path))[0] + ".wf"
+        if sub == "validate":
+            click.echo(_json.dumps({"schema_version": "1.0", "workflow": wf["id"],
+                                    "valid": True, "steps": len(wf["steps"])}, ensure_ascii=False))
+        elif sub == "plan":
+            click.echo(_json.dumps({"schema_version": "1.0", "workflow": wf["id"],
+                                    "plan": plan(wf, wd)}, ensure_ascii=False, indent=1))
+        elif sub == "graph":
+            click.echo(graph(wf))
+        else:
+            result = run(wf, wd, timeout_s=timeout_s)
+            click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
+            sys.exit(0 if result["status"] == "succeeded" else 1)
+
     @cli.command(name="search")
     @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
