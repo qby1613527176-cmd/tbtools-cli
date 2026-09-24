@@ -1,4 +1,0 @@
-click>=8.1
-
-[test]
-pytest>=7.0
