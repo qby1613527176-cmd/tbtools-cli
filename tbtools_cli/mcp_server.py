@@ -98,14 +98,18 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
         except Exception:
             pass
         # 参数类型验证(评审 #64 P1-1: ParamSpec.type 强类型;错误→INVALID_PARAMETER_TYPE)
-        _type_map = {}
+        # P1(评审 #68): 从 spec 读参数契约,不再 KNOWN_PARAMS 旁路;bool→flag 形式(--flag 无值)
+        _spec_map = {}
         try:
-            from tbtools_cli.command_spec import KNOWN_PARAMS
-            _type_map = {p.name: p.type for p in KNOWN_PARAMS.get(_cmd_name, [])}
+            from tbtools_cli.command_spec import build_command_specs
+            _sp = build_command_specs().get(_cmd_name)
+            if _sp:
+                _spec_map = {p.name: p for p in _sp.parameters}
         except Exception:
             pass
         for k, v in arguments.get("parameters", {}).items():
-            _t = _type_map.get(k)
+            _ps = _spec_map.get(k)
+            _t = _ps.type if _ps else None
             if _t:
                 _ok = True
                 try:
@@ -123,7 +127,12 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
                         "error": {"code": "INVALID_PARAMETER_TYPE",
                                   "parameter": k, "expected": _t, "received": str(v),
                                   "retryable": False}}, ensure_ascii=False, indent=1)
-            flag = _cli_map.get(k) or ("--" + k.replace("_", "-"))
+            flag = (_ps.cli_name if _ps and _ps.cli_name else None) or _cli_map.get(k) or ("--" + k.replace("_", "-"))
+            # bool 参数: true→flag 无值, false→省略(评审 #68 P1-6)
+            if _t == "bool":
+                if str(v).lower() in ("true", "1", "yes"):
+                    parts.append(flag)
+                continue
             parts += [flag, str(v)]
         parts += list(arguments.get("outputs", []))
     else:

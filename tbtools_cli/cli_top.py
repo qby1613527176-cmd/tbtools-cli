@@ -1222,6 +1222,16 @@ except Exception:
         """Artifact 一等公民(ADR-0007): inspect——从 provenance 输出结构化 Artifact"""
         import json as _json
         from tbtools_cli.artifact import build, from_provenance
+        # P1(评审 #68): 不存在文件必须 ARTIFACT_NOT_FOUND(build 对缺失文件返回 truthy 是 bug)
+        if not os.path.isfile(path):
+            _e = {"schema_version": "1.0", "status": "not_found",
+                  "error": {"code": "ARTIFACT_NOT_FOUND", "message": f"artifact 不存在: {path}",
+                            "retryable": False}}
+            if as_json:
+                click.echo(_json.dumps(_e, ensure_ascii=False, indent=1))
+            else:
+                click.echo(f"❌ artifact 不存在: {path}")
+            sys.exit(3)
         art = from_provenance(path) or build(path)
         if not art:
             click.echo(f"❌ 文件不存在: {path}", err=True)
@@ -1249,7 +1259,8 @@ except Exception:
     def workflow_cmd(sub, path, workdir, timeout_s, resume):
         """Workflow 一等公民(ADR-0007): YAML 工作流 validate/plan/run/graph"""
         import json as _json
-        from tbtools_cli.workflow import WorkflowError, graph, load_workflow, plan, run
+        from tbtools_cli.workflow import (WorkflowError, graph, load_workflow, plan, run,
+                                          validate_workflow)
         try:
             wf = load_workflow(path)
         except WorkflowError as e:
@@ -1257,8 +1268,10 @@ except Exception:
             sys.exit(3)
         wd = workdir or os.path.splitext(os.path.basename(path))[0] + ".wf"
         if sub == "validate":
-            click.echo(_json.dumps({"schema_version": "1.0", "workflow": wf["id"],
-                                    "valid": True, "steps": len(wf["steps"])}, ensure_ascii=False))
+            wf = load_workflow(path)
+            vr = validate_workflow(wf)
+            click.echo(_json.dumps(vr, ensure_ascii=False, indent=1))
+            sys.exit(0 if vr["valid"] else 3)
         elif sub == "plan":
             click.echo(_json.dumps({"schema_version": "1.0", "workflow": wf["id"],
                                     "plan": plan(wf, wd)}, ensure_ascii=False, indent=1))

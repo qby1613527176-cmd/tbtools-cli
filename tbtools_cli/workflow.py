@@ -159,6 +159,18 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                             _valid = False
                     except Exception:
                         _valid = False  # 无 provenance 不可信
+                # P0-5(评审 #68): sha256 完整验证(产物被换→重跑)
+                if _valid and prev.get("output_sha256"):
+                    try:
+                        import hashlib as _hl
+                        _h = _hl.sha256()
+                        with open(_out_p, "rb") as _fh:
+                            for _c in iter(lambda: _fh.read(1 << 20), b""):
+                                _h.update(_c)
+                        if _h.hexdigest() != prev["output_sha256"]:
+                            _valid = False  # 内容变了(覆盖写/腐化)→ 重跑
+                    except Exception:
+                        _valid = False
                 if _valid:
                     results.append(prev)
                     continue
@@ -172,15 +184,31 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                 cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
             )
         step_ok = r.returncode == 0
-        out = st["args"][-1] if st["args"] else ""
+        # 输出识别契约化(评审 #68 P0-2): 用 CommandSpec outputs 匹配扩展名,不猜 args[-1]
+        out = ""
+        try:
+            from tbtools_cli.command_spec import build_command_specs as _bcs2
+            _osp = _bcs2().get(str(st["tool"]).split()[-1])
+            _outs_fmt = [str(o).lower() for o in (_osp.outputs if _osp else [])]
+            if _outs_fmt:
+                _exts = tuple("." + f for f in _outs_fmt if 1 <= len(f) <= 5)
+                _cands = [a for a in st["args"] if isinstance(a, str) and a.lower().endswith(_exts)]
+                if _cands:
+                    out = _cands[-1]
+        except Exception:
+            pass
+        if not out:
+            out = st["args"][-1] if st["args"] else ""  # 回退: 末参约定
         # Artifact ID 登记(评审 #64 P0-3): 每步产物 → Artifact ID(state 携带, 下游可 {artifact: id})
         _art_id = None
+        _out_sha = None
         if step_ok and out and os.path.isfile(out):
             try:
                 from tbtools_cli.artifact import build as _ab, register as _areg
                 _a = _ab(out, producer=st["tool"])
                 _areg(_a)
                 _art_id = _a.id
+                _out_sha = _a.sha256
             except Exception:
                 pass
         # 产物语义验证(评审 #52 P1-11): ec=0 但产物损坏检出
@@ -195,6 +223,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                         **({"validation_warning": _vwarn} if _vwarn else {}),
                         "output": out if step_ok and os.path.isfile(out) else None,
                         "artifact_id": _art_id,
+                        "output_sha256": _out_sha,
                         "provenance": out + ".tbtools.json" if step_ok and os.path.isfile(out + ".tbtools.json") else None,
                         "log": log_path})
         if not step_ok:
@@ -207,6 +236,62 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
             "steps": results, "duration_s": round(time.time() - t0, 1),
             "artifacts": [r2["output"] for r2 in results if r2["output"]]}
 
+
+
+def validate_workflow(wf: dict) -> dict:
+    """Workflow 契约验证(评审 #68 P0-1): Syntax→Graph→Tool Contract→Binding 四层。
+
+    返回 {valid, errors:[{code, step?, tool?, message}]}——结构化 errors,不只 plan/不 plan。
+    code: WORKFLOW_INVALID_TOOL / WORKFLOW_INVALID_DEPENDENCY / WORKFLOW_CYCLE /
+          WORKFLOW_INVALID_BINDING / WORKFLOW_MISSING_STEP_ID
+    """
+    from tbtools_cli.command_spec import build_command_specs
+    specs = build_command_specs()
+    errors = []
+    steps = wf.get("steps") or []
+    ids = [s.get("id") for s in steps]
+    # Layer 1 Syntax: id 唯一/非空
+    for i, sid in enumerate(ids):
+        if not sid:
+            errors.append({"code": "WORKFLOW_MISSING_STEP_ID", "step": f"#{i + 1}",
+                           "message": "step 缺 id"})
+    if len(ids) != len(set(ids)):
+        errors.append({"code": "WORKFLOW_DUP_STEP_ID",
+                       "message": f"step id 重复: {[x for x in set(ids) if ids.count(x) > 1]}"})
+    idset = set(i for i in ids if i)
+    # Layer 2 Tool Contract: tool 存在(带组名或裸名)
+    for s in steps:
+        tool = str(s.get("tool", ""))
+        bare = tool.split()[-1] if tool else ""
+        if bare and bare not in specs:
+            errors.append({"code": "WORKFLOW_INVALID_TOOL", "step": s.get("id"),
+                           "tool": tool, "message": f"工具不存在: {tool}"})
+    # Layer 3 Graph: depends_on 引用存在 + 环检测
+    for s in steps:
+        for d in (s.get("depends_on") or s.get("dependsOn") or []):
+            if d not in idset:
+                errors.append({"code": "WORKFLOW_INVALID_DEPENDENCY", "step": s.get("id"),
+                               "message": f"depends_on 引用不存在的 step: {d}"})
+    if not any(e["code"].startswith("WORKFLOW_") and e["code"] != "WORKFLOW_MISSING_STEP_ID"
+               and "DUP" not in e["code"] and "TOOL" in e["code"] for e in errors):
+        try:
+            _topo_sort([s for s in steps if s.get("id")])
+        except WorkflowError as e:
+            errors.append({"code": "WORKFLOW_CYCLE", "message": str(e)})
+    # Layer 4 Binding: $step.output 引用存在 + 在依赖之前声明
+    import re as _re
+    for s in steps:
+        for a in s.get("args", []):
+            if isinstance(a, str):
+                for ref in _re.findall(r"\$([A-Za-z0-9_]+)\.output", a):
+                    if ref not in idset:
+                        errors.append({"code": "WORKFLOW_INVALID_BINDING", "step": s.get("id"),
+                                       "message": f"绑定了不存在的 step 输出: ${ref}.output"})
+                    deps = set(s.get("depends_on") or s.get("dependsOn") or [])
+                    if deps and ref not in deps:
+                        errors.append({"code": "WORKFLOW_INVALID_BINDING", "step": s.get("id"),
+                                       "message": f"${ref}.output 引用但 depends_on 未声明 {ref}"})
+    return {"schema_version": "1.0", "valid": not errors, "errors": errors}
 
 def graph(wf: dict) -> str:
     """mermaid 工作流图(评审 #66 P0-3: 读取 depends_on 画真 DAG, 不再线性链)。"""

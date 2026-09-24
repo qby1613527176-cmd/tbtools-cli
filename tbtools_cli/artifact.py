@@ -87,7 +87,7 @@ def build(path: str, producer: str = "", metadata: dict | None = None) -> Artifa
     size = os.path.getsize(path) if os.path.isfile(path) else 0
     _sha = _sha256_file(path) if os.path.isfile(path) else ""
     return Artifact(
-        id=f"art_{_sha[:16]}" if _sha else f"art_{os.path.basename(path)[:20]}",
+        id=f"art_{_sha[:32]}" if _sha else f"art_{os.path.basename(path)[:20]}",
         type=t, format=fmt, path=os.path.abspath(path),
         uri=f"file://{os.path.abspath(path)}",
         size=size,
