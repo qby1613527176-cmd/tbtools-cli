@@ -291,7 +291,7 @@ def validate_workflow(wf: dict) -> dict:
                     if deps and ref not in deps:
                         errors.append({"code": "WORKFLOW_INVALID_BINDING", "step": s.get("id"),
                                        "message": f"${ref}.output 引用但 depends_on 未声明 {ref}"})
-    return {"schema_version": "1.0", "valid": not errors, "errors": errors}
+    return {"schema_version": "1.0", "valid": not errors, "steps": len(steps), "errors": errors}
 
 def graph(wf: dict) -> str:
     """mermaid 工作流图(评审 #66 P0-3: 读取 depends_on 画真 DAG, 不再线性链)。"""
