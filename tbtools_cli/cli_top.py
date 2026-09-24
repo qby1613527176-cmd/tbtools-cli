@@ -721,7 +721,7 @@ def register_top(cli, _LG):
             import shutil as _sh2
             _dep_map = {"tbtools_jar": {"ready": bool(JAR) and os.path.isfile(JAR)}}
             for d in _deps:
-                _dep_map[d] = {"ready": _sh2.which(d) is not None}
+                _dep_map[str(d)] = {"ready": _sh2.which(str(d)) is not None}
             _deps_ready = all(v["ready"] for v in _dep_map.values())
             click.echo(_json2.dumps({"schema_version": "1.0", "status": "ready" if ok else "not_ready",
                                      "tool": args[-1] if args else "", "inputs_valid": ok,
