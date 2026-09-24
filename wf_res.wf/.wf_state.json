@@ -1,0 +1,33 @@
+{
+ "workflow": "res.test",
+ "status": "succeeded",
+ "steps": [
+  {
+   "id": "s1",
+   "tool": "table tableCollapse",
+   "exit_code": 0,
+   "status": "succeeded",
+   "output": "/tmp/wf_res/s1.tsv",
+   "provenance": "/tmp/wf_res/s1.tsv.tbtools.json",
+   "log": "wf_res.wf/s1.log"
+  },
+  {
+   "id": "s2",
+   "tool": "expr volcano",
+   "exit_code": 0,
+   "status": "succeeded",
+   "output": "/tmp/wf_res/s2.svg",
+   "provenance": "/tmp/wf_res/s2.svg.tbtools.json",
+   "log": "wf_res.wf/s2.log"
+  },
+  {
+   "id": "s3",
+   "tool": "table tableCollapse",
+   "exit_code": 0,
+   "status": "succeeded",
+   "output": "/tmp/wf_res/s3.tsv",
+   "provenance": "/tmp/wf_res/s3.tsv.tbtools.json",
+   "log": "wf_res.wf/s3.log"
+  }
+ ]
+}

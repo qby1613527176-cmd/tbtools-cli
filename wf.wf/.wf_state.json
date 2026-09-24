@@ -1,0 +1,24 @@
+{
+ "workflow": "chain.test",
+ "status": "succeeded",
+ "steps": [
+  {
+   "id": "s1",
+   "tool": "table tableCollapse",
+   "exit_code": 0,
+   "status": "succeeded",
+   "output": "/tmp/tmps_3m5y1g/s1.tsv",
+   "provenance": "/tmp/tmps_3m5y1g/s1.tsv.tbtools.json",
+   "log": "wf.wf/s1.log"
+  },
+  {
+   "id": "s2",
+   "tool": "table tableCollapse",
+   "exit_code": 0,
+   "status": "succeeded",
+   "output": "/tmp/tmps_3m5y1g/s2.tsv",
+   "provenance": "/tmp/tmps_3m5y1g/s2.tsv.tbtools.json",
+   "log": "wf.wf/s2.log"
+  }
+ ]
+}

@@ -1146,6 +1146,9 @@ except Exception:
             click.echo(f"❌ 文件不存在: {path}", err=True)
             sys.exit(1)
         d = art.to_dict()
+        from tbtools_cli.workflow import validate_artifact
+        _vok, _vmsg = validate_artifact(path)
+        d["validation"] = {"valid": _vok, "detail": _vmsg}
         if as_json:
             click.echo(_json.dumps(d, ensure_ascii=False, indent=1))
         else:
@@ -1161,7 +1164,8 @@ except Exception:
     @click.argument("path")
     @click.option("--workdir", default=None, help="执行目录(默认 <wf 名>.wf/)")
     @click.option("--timeout", "timeout_s", type=int, default=600)
-    def workflow_cmd(sub, path, workdir, timeout_s):
+    @click.option("--resume", is_flag=True, help="断点续跑(跳过已成功步骤)")
+    def workflow_cmd(sub, path, workdir, timeout_s, resume):
         """Workflow 一等公民(ADR-0007): YAML 工作流 validate/plan/run/graph"""
         import json as _json
         from tbtools_cli.workflow import WorkflowError, graph, load_workflow, plan, run
@@ -1180,7 +1184,7 @@ except Exception:
         elif sub == "graph":
             click.echo(graph(wf))
         else:
-            result = run(wf, wd, timeout_s=timeout_s)
+            result = run(wf, wd, timeout_s=timeout_s, resume=resume)
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
             sys.exit(0 if result["status"] == "succeeded" else 1)
 
