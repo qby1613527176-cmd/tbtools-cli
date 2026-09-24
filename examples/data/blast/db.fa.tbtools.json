@@ -1,0 +1,28 @@
+{
+ "command": "recipBlast",
+ "invocation": "xvfb-run -a java -Xmx3g -cp /home/elysia/tbtools-cli/build:/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast --querySeqFile ...",
+ "tbtools_cli": "1.4.0",
+ "exit_code": 2,
+ "parameters": {
+  "querySeqFile": "examples/data/blast/query.fa",
+  "subjectSeqFile": "examples/data/blast/db.fa",
+  "outDirAndPrefix": "/tmp/rb_fixed"
+ },
+ "error": {
+  "code": "TB002_FILE_NOT_FOUND",
+  "retryable": false,
+  "suggested_action": "check the input file path exists"
+ },
+ "outputs": [
+  "examples/data/blast/db.fa"
+ ],
+ "input_count": 1,
+ "inputs": [
+  {
+   "path": "examples/data/blast/query.fa",
+   "sha256": "d55d58fc0544b694d9d47da98221e9b6a7388a73bf327d8e3700f681afbcc368"
+  }
+ ],
+ "timestamp": "2026-09-24T22:12:13",
+ "java_args_count": 13
+}

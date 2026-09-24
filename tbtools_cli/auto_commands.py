@@ -133,7 +133,7 @@ ENGINE_REGISTRY = [
     ('qpcrExp', 'bridge', 'QpcrDdctCli', '3g', 'plot', 'qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>'),
     ('qpcrproc', 'bridge', 'QpcrProcCli', '3g', 'plot', 'qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>'),
     ('quickFamily', 'direct', 'biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification', '3g', 'plot', 'quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr'),
-    ('recipBlast', 'direct', 'biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast', '3g', 'plot', 'recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i'),
+    ('recipBlast', 'direct', 'biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast', '3g', 'plot', 'recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统 blastp/makeblastdb）'),
     ('regionAnno', 'direct', 'biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation', '3g', 'plot', 'regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-'),
     ('regiondepth', 'bridge', 'RegionDepthCli', '3g', 'plot', 'regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]'),
     ('rnaplot', 'bridge', 'RNAplotCli', '3g', 'plot', 'rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R'),

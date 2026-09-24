@@ -161,7 +161,8 @@ def ensure_bridge(bridge_name: str) -> None:
         os.path.isfile(dst) and os.path.getmtime(dst) > os.path.getmtime(cls_file)
     ):
         _r = subprocess.run(
-            ["javac", "-cp", JAR, dst],
+            # Bug1(WorkBuddy ARR-B 实跑): 中文 Windows javac 默认 GBK 读 UTF-8 桥源码→全灭;显式 UTF-8
+            ["javac", "-encoding", "UTF-8", "-cp", JAR, dst],
             capture_output=True, cwd=BUILD_DIR
         )
         # 桥编译失败即中断(评审 #15): 不继续启动 Java(否则 ClassNotFound 掩盖真实错误归因)
@@ -178,7 +179,7 @@ def ensure_bridge(bridge_name: str) -> None:
         if (not os.path.isfile(fake_cls)
                 or os.path.getmtime(fake_src) > os.path.getmtime(fake_cls)):
             os.makedirs(os.path.dirname(fake_cls), exist_ok=True)
-            subprocess.run(["javac", "-d", BUILD_DIR, fake_src], capture_output=True)
+            subprocess.run(["javac", "-encoding", "UTF-8", "-d", BUILD_DIR, fake_src], capture_output=True)
 
 # ---- xvfb-run 包装 ----
 def run_plot(java_args: list, verbose: bool = False, quiet: bool = False, use_xvfb: bool = True, command_name: str | None = None) -> int:

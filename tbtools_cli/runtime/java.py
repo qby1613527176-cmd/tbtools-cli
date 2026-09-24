@@ -405,7 +405,8 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     
     try:
         result = subprocess.run(
-            java_args, stderr=open(err_file, "w"),
+            # Bug2: Windows GBK stderr;errors=replace 防 UnicodeDecodeError 自崩(WorkBuddy 实跑)
+            java_args, stderr=open(err_file, "w", encoding="utf-8", errors="replace"),
             stdout=None,  # stdout 直通
         )
         ec = result.returncode
@@ -431,11 +432,24 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     
     # ── N19：仅当引擎改写了临时副本时才把结果搬到 outTable（独立 hook 函数）──
     _n19_move_result(n19_tmp, n19_out, n19_orig_sha)
-    
+
+    # Bug3/4(WorkBuddy ARR-B 实跑): ArgsParser 引擎收到位置参数/错参数时打印 Usage 却 exit 0
+    # → 静默失败(零输出零报错)。检测: ec==0 但 stderr 含 Usage/缺参错误 → 强制失败并提示风格。
+    if ec == 0:
+        _err0 = open(err_file, encoding="utf-8", errors="replace").read() if os.path.isfile(err_file) else ""
+        if ("[Usage]:" in _err0 and ("Should be Setted" in _err0 or "[Error]" in _err0)):
+            ec = 1
+            print(_("❌ 参数错误（引擎拒绝了参数并打印用法——多半是参数风格问题）",
+                     "❌ Invalid arguments (engine rejected and printed usage)"), file=sys.stderr)
+            print(_("💡 该引擎使用 ArgsParser 风格（--key value 空格分隔）；位置参数会被忽略。",
+                     "💡 This engine uses ArgsParser style (--key value); positional args are ignored."), file=sys.stderr)
+            print(_("   用 tbtools tool-describe {cmd} --json 查看参数契约；或 --help 查看用法",
+                     "   See tbtools tool-describe {cmd} --json for parameter contract"), file=sys.stderr)
+
     if ec != 0:
         ec_out = ec
         # 错误处理
-        err_text = open(err_file).read() if os.path.isfile(err_file) else ""
+        err_text = open(err_file, encoding="utf-8", errors="replace").read() if os.path.isfile(err_file) else ""
         print(file=sys.stderr)
         print(_("❌ 执行失败（退出码 {ec}）", "❌ Execution failed (exit code {ec})").format(ec=ec), file=sys.stderr)
         
@@ -477,7 +491,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     else:
         # 成功时输出进度信息（quiet 模式跳过）
         if not quiet and os.path.isfile(err_file):
-            sys.stderr.write(open(err_file).read())
+            sys.stderr.write(open(err_file, encoding="utf-8", errors="replace").read())
         # N30: 输出存在性校验（声明了强输出但未生成 → 报错，避免长路径/静默失败）
         _missing_out = check_missing_outputs(java_args)
         if _missing_out:
