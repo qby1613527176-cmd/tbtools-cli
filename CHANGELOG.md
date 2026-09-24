@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.3] - 2026-09-25
+
+### Contract Compiler(第 15 份评审)
+- **InvocationSpec**: `CommandSpec.invocation.build_argv(inputs/parameters/output)` → 精确 argv(类型验证/未知参数/必填输入检查;消灭 {input}/$step.output/args[-1] 三层猜测)
+- **Planner 契约图**: A.outputs↔B.inputs 真实配对(模糊格式匹配)+ DFS 全分支 + 目标可达排序 + 多必填输入降级 + 透传跳惩罚 + 精确名单步优先;confidence reasons-based(数值+reasons)
+- **resume 执行 fingerprint**: workflow 定义变更 → 全部重跑
+- **Artifact 索引 flock**(并发防丢,补)+ `_save_state` 原子写
+- **MCP 错误 envelope 统一**(CLI_ERROR/TIMEOUT 结构化)
+- **artifact inspect 列名契约**(producer columns 验证表头)
+- workflow_id 完整身份(goal+contracts+chain+schema 版本)
+- 金链契约测试 tests/test_contract_compiler.py(13 用例)
+
 ## [1.4.2] - 2026-09-25
 
 ### Workflow 契约化(第 14 份评审)
