@@ -1,0 +1,6 @@
+id: gxf.split
+title: GXF 拆分(GFF3 → 按染色体拆分)
+steps:
+  - id: split
+    tool: gxf gxfSplit
+    args: ["examples/data/gxf/input.gff3", "{workdir}/gx"]

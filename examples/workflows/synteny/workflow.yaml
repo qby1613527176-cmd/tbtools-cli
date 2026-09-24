@@ -1,0 +1,11 @@
+id: synteny.dual
+title: 共线性管线(GFF+collinearity → dualsyn → dotplot)
+steps:
+  - id: dualsyn
+    tool: syn dualsyn
+    args: ["examples/data/synteny/dual.gff", "examples/data/synteny/dual.collinearity",
+           "{workdir}/dual.svg", "--chr1", "1", "--chr2", "1"]
+  - id: msy
+    tool: syn msy
+    args: ["examples/data/synteny/msy/genes2.pos", "examples/data/synteny/msy/genes3.pos",
+           "examples/data/synteny/msy/links2.txt", "{workdir}/msy.svg"]
