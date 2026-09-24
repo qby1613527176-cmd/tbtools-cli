@@ -254,6 +254,9 @@ def _try_repair(java_args, command_name, err_text, retried):
     return None
 
 
+_REPAIR_RETRIED = False  # FailureSpec 防循环(模块级, mypy strict)
+
+
 # ── Error Code Registry(GLM 评审: 结构化错误契约, AI 可编程处理)──
 def _n19_move_result(n19_tmp, n19_out, n19_orig_sha):
     """N19: findBestHomologyBatch 引擎改写了临时副本时才搬结果到 outTable。
@@ -478,16 +481,17 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     if ec == 0:
         ec_out = 0
     # FailureSpec 自动修复(评审 #52 P2-36): 已知失败模式 → 修复 → 重试一次
-    if ec_out != 0 and err_text:
-        _repair = _try_repair(java_args, command_name, err_text, retried=getattr(run_java, "_retried", False))
+    global _REPAIR_RETRIED
+    if ec_out != 0 and err_text and not _REPAIR_RETRIED:
+        _repair = _try_repair(java_args, command_name, err_text, retried=False)
         if _repair:
             _new_args, _fix_msg = _repair
             click.echo(f"🔧 自动修复: {_fix_msg}", err=True)
-            run_java._retried = True
+            _REPAIR_RETRIED = True
             try:
                 return run_java(_new_args, verbose=verbose, quiet=quiet, command_name=command_name)
             finally:
-                run_java._retried = False
+                _REPAIR_RETRIED = False
 
     # 运行 provenance: 识别输出文件, 旁写 <out>.tbtools.json(成功/失败都写, 含结构化 error)
     _inputs_before = {s[0] for s in snaps} if "snaps" in dir() else None
