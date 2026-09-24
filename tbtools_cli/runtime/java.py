@@ -61,6 +61,19 @@ _OUT_FLAG_RE = re.compile(
     re.IGNORECASE)
 _MAX_SNAPSHOT_COPY = 50 * 1024 * 1024  # >50MB 只记 (size, mtime)，不复制（无法恢复，只报警）
 
+def _sha256_file(f, _max: int = 512 * 1024 * 1024) -> str:
+    """真 SHA-256(分块读; provenance/artifact 身份唯一算法——评审 #56 P0-1 修冒名 bug)。"""
+    h = hashlib.sha256()
+    with open(f, "rb") as fh:
+        read = 0
+        while chunk := fh.read(1 << 20):
+            h.update(chunk)
+            read += len(chunk)
+            if read > _max:
+                break
+    return h.hexdigest()
+
+
 def _sha1_file(f):
     h = hashlib.sha1()
     with open(f, "rb") as fh:
@@ -106,19 +119,29 @@ def snapshot_inputs(java_args: list) -> list:
             continue
         backup = None
         if size > _MAX_SNAPSHOT_COPY:
-            # P0-9: 大文件 reflink(copy-on-write)备份——零拷贝隔离, 引擎写穿不影响备份
+            # P0-9/P1-3: 大文件跨平台备份——Linux reflink / macOS clonefile(APFS COW) / Windows copy2
+            tmpdir = tmpdir or tempfile.mkdtemp(prefix="tbq_snap_")
+            backup = os.path.join(tmpdir, f"inp_{len(snaps)}_{os.path.basename(_a)}")
+            _backed = False
             try:
                 import subprocess as _sp
-                tmpdir = tmpdir or tempfile.mkdtemp(prefix="tbq_snap_")
-                backup = os.path.join(tmpdir, f"inp_{len(snaps)}_{os.path.basename(_a)}")
-                _r = _sp.run(["cp", "--reflink=always", _a, backup], capture_output=True, timeout=300)
-                if _r.returncode == 0:
-                    snaps.append([_a, backup, size, mtime])
-                    continue
+                import sys as _sys
+                if _sys.platform == "darwin":
+                    _r = _sp.run(["cp", "-c", _a, backup], capture_output=True, timeout=300)  # APFS clonefile
+                    _backed = _r.returncode == 0
+                elif _sys.platform.startswith("linux"):
+                    _r = _sp.run(["cp", "--reflink=always", _a, backup], capture_output=True, timeout=300)
+                    _backed = _r.returncode == 0
+                if not _backed and not _sys.platform.startswith(("linux", "darwin")):
+                    shutil.copy2(_a, backup)  # Windows/其他: 全量复制
+                    _backed = True
             except Exception:
                 pass
-            # reflink 不可用(NTFS/旧内核)→ hash+警告(无法恢复, 但破坏可检测)
-            snaps.append([_a, None, size, mtime])
+            if _backed:
+                snaps.append([_a, backup, size, mtime])
+            else:
+                # COW 不可用(NTFS/旧内核)→ hash+警告(无法恢复, 但破坏可检测)
+                snaps.append([_a, None, size, mtime])
             continue
         if size <= _MAX_SNAPSHOT_COPY:
             if tmpdir is None:
@@ -562,7 +585,7 @@ def _write_provenance(java_args, command_name, ec, err_text="", inputs_set=None)
             },
             "outputs": [out],
             "input_count": len(inputs),
-            "inputs": [{"path": i, "sha256": _sha1_file(i)[:16]} for i in inputs],
+            "inputs": [{"path": i, "sha256": _sha256_file(i)} for i in inputs],
             "timestamp": _tm.strftime("%Y-%m-%dT%H:%M:%S"),
             "java_args_count": len(java_args),
         }

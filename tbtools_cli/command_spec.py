@@ -21,6 +21,7 @@ class ParamSpec:
     default: object = None
     required: bool = False
     note: str = ""
+    cli_name: str = ""          # CLI 实际 flag(如 --pval-cutoff;评审 #56 P0-2 name↔CLI 分离)
 
 
 @dataclass
@@ -136,7 +137,7 @@ KNOWN_SCHEMAS = {
 
 # 命令参数契约(评审 #31: Agent 知道参数类型/默认值)
 KNOWN_PARAMS = {
-    "volcano": [ParamSpec("pval_cutoff", "float", 0.05), ParamSpec("fc_cutoff", "float", 1.0),
+    "volcano": [ParamSpec("pval_cutoff", "float", 0.05, cli_name="--pval-cutoff"), ParamSpec("fc_cutoff", "float", 1.0, cli_name="--fc-cutoff"),
                 ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800)],
     "heatmap": [ParamSpec("w", "int", 1000), ParamSpec("h", "int", 800),
                 ParamSpec("log2", "bool", False), ParamSpec("row_scale", "bool", False)],
@@ -523,7 +524,8 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["relations"] = spec.relations
     if spec.parameters:
         e["parameters"] = [{"name": p.name, "type": p.type, "default": p.default,
-                            "required": p.required, "note": p.note} for p in spec.parameters]
+                            "required": p.required, "note": p.note,
+                            **({"cli_name": p.cli_name} if p.cli_name else {})} for p in spec.parameters]
     if spec.inputs:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note,

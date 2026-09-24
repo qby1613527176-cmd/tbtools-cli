@@ -82,8 +82,9 @@ def register_top(cli, _LG):
             _jf = bool(JAR) and os.path.isfile(JAR)
             _ec = 0 if (_jf and shutil.which("java") and (os.name == "nt" or shutil.which("xvfb-run"))) else 1
             # 版本兼容矩阵(评审 #23): CLI/TBtools/Java 兼容状态
+            from tbtools_cli import __version__ as _v_cli
             _compat = {
-                "tbtools_cli": "1.2.0",
+                "tbtools_cli": _v_cli,
                 "tbtools_jar_required": "2.535+",
                 "java_runtime": "11-21 (推荐 17)",
                 "compatibility": "verified" if _ec == 0 else "check_jar_version",
@@ -479,15 +480,35 @@ def register_top(cli, _LG):
         import json as _json
         import shutil as _sh
         from tbtools_cli import __version__ as _pkg_ver
+        # P0-8: env --lock 完整化(版本 + sha256 + contract version + jar sha)
+        import hashlib as _hl
+        import tomllib as _tl
+        _jar_sha = None
+        _jar_ver = None
+        _cfg_p = os.path.join(os.path.expanduser("~/.config/tbtools-cli"), "config.toml")
+        if os.path.isfile(_cfg_p):
+            try:
+                _cfg = _tl.load(open(_cfg_p, "rb"))
+                _jar_sha, _jar_ver = _cfg.get("jar_sha256"), _cfg.get("jar_version")
+            except Exception:
+                pass
+        if _jar_sha is None and JAR and os.path.isfile(JAR):
+            h = _hl.sha256()
+            with open(JAR, "rb") as _f:
+                for _c in iter(lambda: _f.read(1 << 20), b""):
+                    h.update(_c)
+            _jar_sha = h.hexdigest()
         snap = {
             "tbtools_cli": _pkg_ver,
-            "jar": JAR or "",
+            "contract_version": "1.0",
+            "jar": {"path": JAR or "", "version": _jar_ver, "sha256": _jar_sha},
             "java": _detect_java_ver(),
             "xvfb": bool(_sh.which("xvfb-run")),
             "deps": {},
         }
         for tool in ("blastp", "muscle", "iqtree2", "trimal", "jellyfish", "hmmsearch", "mafft", "diamond"):
-            snap["deps"][tool] = _sh.which(tool) or None
+            _p = _sh.which(tool)
+            snap["deps"][tool] = {"path": _p} if _p else None
         if lock:
             path = "tbtools.lock"
             _json.dump(snap, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
@@ -496,7 +517,7 @@ def register_top(cli, _LG):
             click.echo(_json.dumps(snap, ensure_ascii=False, indent=1))
         else:
             click.echo(f"  tbtools-cli: {snap['tbtools_cli']}")
-            click.echo(f"  TBtools JAR: {snap['jar'] or '⚠️ 未配置'}")
+            click.echo(f"  TBtools JAR: {snap['jar'].get('path') or '⚠️ 未配置'}")
             click.echo(f"  Java: {snap['java']}")
             click.echo(f"  xvfb: {'✅' if snap['xvfb'] else '❌ 未安装(Linux 绘图必需)'}")
             for k, v in snap["deps"].items():
@@ -657,7 +678,7 @@ def register_top(cli, _LG):
         }
         click.echo(_json.dumps(summary, ensure_ascii=False, indent=1))
 
-    @cli.command(name="tool-run")
+    @cli.command(name="tool-run", context_settings={"ignore_unknown_options": True})
     @click.argument("args", nargs=-1, required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化结果回显(Agent 能力4)")
     @click.option("--timeout", "timeout_s", type=int, default=0, help="超时秒数(0=不超时; 超时杀进程树并返回 TB007)")
@@ -680,9 +701,13 @@ def register_top(cli, _LG):
                 if not os.path.isfile(a):
                     ok = False
                     probs.append(f"missing input: {a}")
-            est = [a for a in args[_skip:] if a.endswith((".svg", ".png", ".pdf"))]
-            # P1-17: dry-run 资源/依赖预估(从 CommandSpec 模型读)
-            _deps, _net, _mem = [], None, None
+            # P1-1: dry-run 产物预估任意 artifact(不止图形;评审 #56)
+            _OUT_EXTS = (".svg", ".png", ".pdf", ".tsv", ".txt", ".csv", ".json",
+                         ".gff", ".gff3", ".gtf", ".nwk", ".fa", ".fasta", ".fastq",
+                         ".xls", ".out", ".meme", ".tree", ".aln", ".collinearity")
+            est = [a for a in args[_skip:] if a.endswith(_OUT_EXTS)]
+            # P0-6: 真实依赖检查(shutil.which 逐依赖探测, 非仅 JAR;评审 #56)
+            _deps, _net, _mem, _dep_map = [], None, None, {}
             try:
                 from tbtools_cli.command_spec import KNOWN_DEPENDENCIES_STRUCT, KNOWN_STATUS
                 _cmd_name = args[1] if len(args) >= 2 else (args[0] if args else "")
@@ -693,9 +718,15 @@ def register_top(cli, _LG):
                 _mem = _meta.get(_cmd_name, {}).get("xmx")
             except Exception:
                 pass
+            import shutil as _sh2
+            _dep_map = {"tbtools_jar": {"ready": bool(JAR) and os.path.isfile(JAR)}}
+            for d in _deps:
+                _dep_map[d] = {"ready": _sh2.which(d) is not None}
+            _deps_ready = all(v["ready"] for v in _dep_map.values())
             click.echo(_json2.dumps({"schema_version": "1.0", "status": "ready" if ok else "not_ready",
                                      "tool": args[-1] if args else "", "inputs_valid": ok,
-                                     "dependencies_ready": True if (JAR and os.path.isfile(JAR)) else False,
+                                     "dependencies": _dep_map,
+                                     "dependencies_ready": _deps_ready,
                                      "estimated_artifacts": est,
                                      "estimated_memory": _mem,
                                      "required_dependencies": _deps,
@@ -736,10 +767,12 @@ def register_top(cli, _LG):
                 _os.dup2(_saved_fd, 1)
                 _os.close(_saved_fd)
         dt = round(_time.time() - t0, 2)
-        # 产物+错误: 明确输出识别(args 中最后图形参数 → 其 provenance), 非扫描猜测
+        # 产物+错误: 明确输出识别(args 中最后产物参数 → 其 provenance), 非扫描猜测(评审 #56 P1-1 任意 artifact)
         artifacts, error = [], None
         for a in reversed(args):
-            if a.endswith((".svg", ".png", ".pdf")):
+            if a.endswith((".svg", ".png", ".pdf", ".tsv", ".txt", ".csv", ".json",
+                           ".gff", ".gff3", ".gtf", ".nwk", ".fa", ".fasta", ".fastq",
+                           ".xls", ".out", ".meme", ".tree", ".aln", ".collinearity")):
                 _po = a + ".tbtools.json"
                 if os.path.isfile(_po):
                     try:
@@ -752,6 +785,21 @@ def register_top(cli, _LG):
         if _timed_out:
             error = {"code": "TB007_TOOL_TIMEOUT", "retryable": True,
                      "suggested_action": "retry with --timeout higher or smaller input"}
+        # 无 provenance 时按退出码合成错误(校验早期返回不写 provenance;评审 #56 闭环)
+        if error is None and ec != 0:
+            from tbtools_cli.errors import ERROR_CODES
+            _ec_map = {v["exit"]: k for k, v in ERROR_CODES.items()}
+            _code = _ec_map.get(ec, "TB001_INVALID_ARGUMENT")
+            _meta = ERROR_CODES.get(_code, {})
+            error = {"code": _code, "retryable": _meta.get("retryable", False),
+                     "suggested_action": _meta.get("action", "")}
+        # P1-5: 错误分层进协议(code=分层码 + legacy_code + category)
+        if error and error.get("code"):
+            from tbtools_cli.errors import error_tier
+            _tier, _cat = error_tier(error["code"])
+            error = {"code": _tier, "legacy_code": error["code"], "category": _cat,
+                     "retryable": error.get("retryable", False),
+                     "suggested_action": error.get("suggested_action", "")}
         result = {"$schema": "https://json-schema.org/draft/2020-12/schema",
                   "schema_version": "1.0", "exit_code": ec, "duration_s": dt,
                   "artifacts": artifacts, "error": error, "timed_out": _timed_out}
@@ -792,6 +840,7 @@ except Exception:
 
     # P1-14: JSON Protocol 统一封装(评审 #52)——Agent 接口统一 {schema_version/request_id/status/data/error/meta}
     def _envelope(data, status="success", error=None, meta=None):
+        from tbtools_cli import __version__ as _vv
         import json as _json
         import time as _time
         import uuid as _uuid
@@ -801,7 +850,7 @@ except Exception:
             "status": status,
             "data": data,
             "error": error,
-            "meta": meta or {"tbtools_cli": "1.3.0"},
+            "meta": meta or {"tbtools_cli": _vv},
         }, ensure_ascii=False, indent=1)
 
     def _jobs_dir():
@@ -955,7 +1004,11 @@ except Exception:
             click.echo(f"⏹ {job_id} 非运行中(当前 {job.get('status')})", err=True)
             sys.exit(1)
         try:
-            os.killpg(os.getpgid(job["pid"]), _sig.SIGKILL)
+            if os.name == "nt":
+                import subprocess as _spk
+                _spk.run(["taskkill", "/F", "/T", "/PID", str(job["pid"])], capture_output=True)
+            else:
+                os.killpg(os.getpgid(job["pid"]), _sig.SIGKILL)
             _job_finish(job, "cancelled", -1)
             click.echo(f"✅ 已取消 {job_id}(PID {job['pid']} 进程组)")
         except Exception:

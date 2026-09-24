@@ -88,10 +88,24 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
     """
     if arguments:
         parts = list(arguments.get("inputs", []))
+        # 参数 Schema-bound 翻译(评审 #56 P0-2): ParamSpec.name → cli_name(如 pval_cutoff→--pval-cutoff)
+        # Agent 只传 contract 名;无 cli_name 标注的参数按 kebab-case 兜底
+        _cmd_name = command.split()[-1] if command else ""
+        _cli_map = {}
+        try:
+            from tbtools_cli.command_spec import KNOWN_PARAMS
+            _cli_map = {p.name: p.cli_name for p in KNOWN_PARAMS.get(_cmd_name, []) if p.cli_name}
+        except Exception:
+            pass
         for k, v in arguments.get("parameters", {}).items():
-            parts += [f"--{k}", str(v)]
+            flag = _cli_map.get(k) or ("--" + k.replace("_", "-"))
+            parts += [flag, str(v)]
         parts += list(arguments.get("outputs", []))
     else:
+        if isinstance(args, str) and args.strip():
+            import warnings as _w
+            _w.warn("MCP args string 形式已弃用(空格路径拆错风险)——请用 args: list[str] 或 arguments: dict",
+                    DeprecationWarning, stacklevel=2)
         parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
     # command 含空格(如 "expr volcano")拆分为分组+命令(评审: CLI 需要独立 token)
     cmd_parts = command.split() if " " in command else [command]
