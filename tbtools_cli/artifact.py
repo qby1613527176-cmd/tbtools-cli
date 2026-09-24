@@ -50,15 +50,12 @@ def classify(path: str) -> tuple[str, str]:
     return TYPE_BY_EXT.get(ext, ("file", ext.lstrip(".") or "unknown"))
 
 
-def _sha256_file(path: str, _max: int = 256 * 1024 * 1024) -> str:
+def _sha256_file(path: str) -> str:
+    """完整 SHA-256(分块读, 不截断;评审 #66 P0-1 协议违约修复: 完整 64 位)。"""
     h = hashlib.sha256()
     with open(path, "rb") as f:
-        read = 0
-        while chunk := f.read(1 << 20):
+        for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
-            read += len(chunk)
-            if read > _max:
-                break
     return h.hexdigest()
 
 
@@ -81,15 +78,20 @@ def from_provenance(artifact_path: str) -> Artifact | None:
 
 
 def build(path: str, producer: str = "", metadata: dict | None = None) -> Artifact:
-    """从路径构建 Artifact(计算 type/format/size/sha256)。"""
+    """从路径构建 Artifact(计算 type/format/size/sha256)。
+
+    ID 稳定身份(评审 #66 P0-2): art_<sha256[:16]>——同内容同 ID(支持缓存/去重/resume);
+    不再时间戳+文件名(同内容不同 ID/同毫秒碰撞)。
+    """
     t, fmt = classify(path)
     size = os.path.getsize(path) if os.path.isfile(path) else 0
+    _sha = _sha256_file(path) if os.path.isfile(path) else ""
     return Artifact(
-        id=f"art_{int(time.time()*1000)%10**10}_{os.path.basename(path)[:20]}",
+        id=f"art_{_sha[:16]}" if _sha else f"art_{os.path.basename(path)[:20]}",
         type=t, format=fmt, path=os.path.abspath(path),
         uri=f"file://{os.path.abspath(path)}",
         size=size,
-        sha256=_sha256_file(path)[:16] if os.path.isfile(path) else "",
+        sha256=_sha,
         producer=producer,
         created_at=time.strftime("%Y-%m-%dT%H:%M:%S"),
         metadata=metadata or {},
@@ -103,21 +105,33 @@ def _index_path() -> str:
 
 
 def register(art: "Artifact"):
-    """登记 Artifact 到索引(art_id → path)。"""
+    """登记 Artifact 到索引(art_id → path)。
+
+    原子写(评审 #66 P1-3 并发竞争): tmp+fsync+os.replace——并发 job 不丢记录/不留半截 JSON。
+    """
     try:
-        idx = {}
         p = _index_path()
+        idx = {}
         if os.path.isfile(p):
             idx = json.load(open(p, encoding="utf-8"))
         idx[art.id] = {"path": art.path, "type": art.type, "format": art.format,
+                       "sha256": art.sha256, "size": art.size,
                        "producer": art.producer, "created_at": art.created_at}
-        json.dump(idx, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        tmp = p + f".tmp.{os.getpid()}"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(idx, f, ensure_ascii=False, indent=1)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp, p)  # 原子替换(POSIX)
     except Exception:
         pass
 
 
 def resolve(ref: str) -> str | None:
-    """art_id 或 path → path(索引解析;去路径化: workflow 可引用 art_id)。"""
+    """art_id 或 path → path(索引解析;去路径化)。
+
+    身份验证(评审 #66 P1-4): art_id 须文件存在 + sha256 匹配登记值(stale ID 拒绝)。
+    """
     if os.path.isfile(ref):
         return ref
     p = _index_path()
@@ -125,7 +139,14 @@ def resolve(ref: str) -> str | None:
         try:
             idx = json.load(open(p, encoding="utf-8"))
             if ref in idx:
-                return idx[ref]["path"]
+                entry = idx[ref]
+                path = entry["path"]
+                if not os.path.isfile(path):
+                    return None  # 文件已删
+                recorded_sha = entry.get("sha256")
+                if recorded_sha and _sha256_file(path) != recorded_sha:
+                    return None  # 内容被换(stale)
+                return path
         except Exception:
             pass
     return None

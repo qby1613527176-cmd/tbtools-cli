@@ -61,16 +61,12 @@ _OUT_FLAG_RE = re.compile(
     re.IGNORECASE)
 _MAX_SNAPSHOT_COPY = 50 * 1024 * 1024  # >50MB 只记 (size, mtime)，不复制（无法恢复，只报警）
 
-def _sha256_file(f, _max: int = 512 * 1024 * 1024) -> str:
-    """真 SHA-256(分块读; provenance/artifact 身份唯一算法——评审 #56 P0-1 修冒名 bug)。"""
+def _sha256_file(f) -> str:
+    """完整 SHA-256(分块读, 不截断;评审 #66: provenance/artifact 统一完整 64 位)。"""
     h = hashlib.sha256()
     with open(f, "rb") as fh:
-        read = 0
-        while chunk := fh.read(1 << 20):
+        for chunk in iter(lambda: fh.read(1 << 20), b""):
             h.update(chunk)
-            read += len(chunk)
-            if read > _max:
-                break
     return h.hexdigest()
 
 

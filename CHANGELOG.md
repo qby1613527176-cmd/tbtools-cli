@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.0] - 2026-09-24
+
+### Agent Runtime 协议一致性收口(第 9-12 份外部评审全落地)
+
+- **Agent Protocol v1.0 正式文档**(docs/agent-protocol.md: 七铁律/调用链含 plan/错误分层/Artifact 模型/变更策略)
+- **Artifact 一等公民完整化**: 完整 SHA-256 64 位(不再 16 位截断/256-512MiB 截断) + 稳定身份 ID(art_<sha256[:16]>, 同内容同 ID, 支持缓存/去重/resume) + 索引原子写(tmp+fsync+os.replace 并发安全) + resolve 身份验证(stale ID 拒绝)
+- **Workflow 一等公民完整化**: depends_on 拓扑排序 + 真 DAG graph + resume Artifact 验证(state 成功≠可信, 产物+provenance 失效重跑) + workflow_plan(目标→CommandSpec 契约推导, CLI+MCP 9 原语) + WorkflowSpec 对象化(depends_on/input/output_contract/selection_reason) + Artifact ID 登记
+- **MCP 完整化**: 9 编排原语(含 workflow_plan) + Schema-bound 参数(cli_name 翻译) + 强类型验证(INVALID_PARAMETER_TYPE) + arguments dict + embedded 模式 + agent 默认关 reflection
+- **Agent-ready 分级**: FULL 判定修正(outputs 检查+无参数区分, FULL 8→59 真实契约完整工具) + readiness_census + doctor Readiness Report + counts.md 自动统计 + tool-readiness.md
+- **CommandSpec 唯一事实源**: 全量 294 投影等价测试证明 + cli_load._group_of 模型优先 + legacy registry deprecation + tests/test_registry_discipline(禁新 import)
+- **工程**: tool-readiness/contracts YAML/README hero 精简/平台矩阵/仓库卫生(dist/egg-info/.coverage 去跟踪)
+- **测试**: pytest 269(新增 agent_contract 全链路/registry_discipline) / ruff 0 / mypy strict 0
+
 ## [1.3.0] - 2026-09-24
 
 ### Tool Contract 收敛(第 4-6 份外部评审全落地, 40+ commits)

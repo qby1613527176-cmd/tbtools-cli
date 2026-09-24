@@ -19,7 +19,12 @@ import pytest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-FULL_TOOLS = ["dualsyn", "mcscanx", "iqtree", "volcano", "heatmap", "hclust", "dehist", "genestructure"]
+# FULL 工具动态取(FULL 判定修正后 8→59;评审 #66)
+import sys as _sys
+_sys.path.insert(0, ROOT)
+from tbtools_cli.command_spec import agent_readiness as _ar, build_command_specs as _bcs
+
+FULL_TOOLS = sorted(n for n, s in _bcs().items() if _ar(s) == "FULL")
 
 # 每工具的集成运行参数(真实数据)
 RUN_CASES = {
@@ -66,8 +71,7 @@ class TestAgentContractDescribe:
         assert d.get("inputs"), f"{tool} 缺 inputs"
         assert d.get("outputs"), f"{tool} 缺 outputs"
         assert d.get("capabilities"), f"{tool} 缺 capabilities"
-        # FULL 应有 parameters(FULL 定义要求)
-        assert d.get("parameters") is not None
+        # FULL 定义(评审 #66 修正): parameters 非必填(声明无参数的工具合法)
 
 
 class TestAgentContractValidate:
@@ -125,7 +129,7 @@ class TestAgentContractCensus:
     """机器验证的能力等级: FULL 工具必须全链路通过(非 metadata 自评)"""
 
     def test_full_count_matches_readiness(self):
-        """readiness_census 的 FULL 数与测试集一致(8)。"""
+        """readiness_census 的 FULL 数与动态测试集一致。"""
         import sys
         sys.path.insert(0, ROOT)
         from tbtools_cli.command_spec import readiness_census

@@ -97,7 +97,7 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 
 ## 7. MCP 接口
 
-- **8 个编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / job_submit / job_status / job_result / tool_provenance
+- **9 个编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / **workflow_plan** / job_submit / job_status / job_result / tool_provenance
 - 参数: `arguments: dict`(结构化,**正式**)> `args: list[str]`(legacy)> `args: string`(deprecated)
 - `tool-run --json`: stdout 纯 JSON(执行期日志进 stderr)
 - Agent 默认安全: engine reflection 关闭(`TBTOOLS_AGENT_MODE`/`[agent.policy]`)

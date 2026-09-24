@@ -545,15 +545,18 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
 
 # ── Agent-ready 分级(评审 #60-8): FULL/PARTIAL/LEGACY 正式定义 ──
 def agent_readiness(spec) -> str:
-    """工具 Agent-ready 分级:
-    FULL = 契约完整(inputs+outputs+parameters+capabilities 均有标注, 且 status=stable)
+    """工具 Agent-ready 分级(评审 #66 P1-5 修正):
+    FULL = inputs+outputs+capabilities 有标注 + status=stable(parameters 声明存在即可,
+           无参数工具不扣分——区分"声明无参数"和"未定义参数")
     PARTIAL = 部分契约(capabilities 有但 schema 不全, 或 status 非 stable)
     LEGACY = 基础(仅注册;或无 capability 标注)
     """
     has_caps = bool(spec.capabilities)
     has_schema = bool(spec.inputs)
-    has_params = bool(spec.parameters)
-    if has_caps and has_schema and has_params and spec.status == "stable":
+    has_outputs = bool(spec.outputs)
+    # parameters 用"声明存在"判定(dataclass 字段总是存在;无参数工具声明空列表=合法)
+    params_declared = True  # CommandSpec.parameters 总是声明(空=无可选参数, 仍算契约完整)
+    if has_caps and has_schema and has_outputs and params_declared and spec.status == "stable":
         return "FULL"
     if has_caps or spec.status != "stable":
         return "PARTIAL"

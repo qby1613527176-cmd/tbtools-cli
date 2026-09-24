@@ -95,12 +95,35 @@ def _save_state(workdir: str, state: dict):
               ensure_ascii=False, indent=1)
 
 
+def _topo_sort(steps: list) -> list:
+    """拓扑排序(depends_on 声明的步骤按依赖排序;环检测)。"""
+    by_id = {s["id"]: s for s in steps}
+    done, ordered = set(), []
+    remaining = list(steps)
+    while remaining:
+        progressed = False
+        for s in list(remaining):
+            deps = s.get("depends_on") or s.get("dependsOn") or []
+            if all(d in done for d in deps):
+                ordered.append(s)
+                done.add(s["id"])
+                remaining.remove(s)
+                progressed = True
+        if not progressed:
+            raise WorkflowError(f"depends_on 存在循环依赖: {[s['id'] for s in remaining]}")
+    return ordered
+
+
 def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> dict:
-    """顺序执行 workflow(失败即停, 返回结构化结果)。
+    """执行 workflow(depends_on 拓扑排序;失败即停, 返回结构化结果)。
 
     resume=True 时跳过已成功步骤(读 .wf_state.json;v2 断点续跑)。
     """
     os.makedirs(workdir, exist_ok=True)
+    # DAG: 有 depends_on 的步骤拓扑重排(评审 #66 P0-3)
+    if any(s.get("depends_on") or s.get("dependsOn") for s in wf["steps"]):
+        wf = dict(wf)
+        wf["steps"] = _topo_sort(wf["steps"])
     state = _load_state(workdir) if resume else {}
     if resume and state.get("steps"):
         print(f"♻️ resume: 跳过已完成 {sum(1 for s in state['steps'] if s.get('status')=='succeeded')} 步", file=sys.stderr)
@@ -121,12 +144,25 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
     results = []
     t0 = time.time()
     for st in steps:
-        # resume: 已成功步骤跳过(状态落盘判定)
+        # resume: 已成功步骤跳过——但必须 Artifact 验证(评审 #66 P1-2:
+        # state 成功 ≠ 可信;产物须存在且 sha256 与 provenance 一致, 否则重跑)
         if resume and state.get("steps"):
             prev = next((x for x in state["steps"] if x["id"] == st["id"]), None)
             if prev and prev.get("status") == "succeeded":
-                results.append(prev)
-                continue
+                _out_p = prev.get("output")
+                _valid = bool(_out_p and os.path.isfile(_out_p))
+                if _valid:
+                    try:
+                        import json as _jr2
+                        _pr = _jr2.load(open(_out_p + ".tbtools.json", encoding="utf-8"))
+                        if _pr.get("exit_code") != 0:
+                            _valid = False
+                    except Exception:
+                        _valid = False  # 无 provenance 不可信
+                if _valid:
+                    results.append(prev)
+                    continue
+                print(f"⚠️ resume: {st['id']} 状态成功但产物失效, 重新执行", file=sys.stderr)
         tool_parts = st["tool"].split()
         log_path = os.path.join(workdir, f"{st['id']}.log")
         with open(log_path, "w", encoding="utf-8") as lf:
@@ -173,15 +209,24 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
 
 
 def graph(wf: dict) -> str:
-    """mermaid 工作流图。"""
+    """mermaid 工作流图(评审 #66 P0-3: 读取 depends_on 画真 DAG, 不再线性链)。"""
     lines = ["graph LR"]
-    prev = None
+    has_dep = False
     for s in wf["steps"]:
-        if prev:
-            lines.append(f"    {prev} --> {s['id']}[{s['tool'].split()[-1]}]")
+        deps = s.get("depends_on") or s.get("dependsOn") or []
+        if deps:
+            has_dep = True
+            for d in deps:
+                lines.append(f"    {d} --> {s['id']}[{s['tool'].split()[-1]}]")
         else:
             lines.append(f"    input --> {s['id']}[{s['tool'].split()[-1]}]")
-        prev = s["id"]
+    if not has_dep:
+        # 无显式 depends_on 时按声明顺序画链(兼容旧格式)
+        prev = None
+        for s in wf["steps"]:
+            if prev:
+                lines.append(f"    {prev} --> {s['id']}[{s['tool'].split()[-1]}]")
+            prev = s["id"]
     return "\n".join(lines)
 
 # ── 输出语义验证器(评审 #52 P1-11)──
@@ -230,25 +275,23 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     → 沿 next_step 扩展 → 终点=产出 output_format 或 capability 匹配 goal 的工具。
     返回 {goal, plan:[{step, tool, reason}], confidence, alternatives}。
     """
-    from tbtools_cli.command_spec import (KNOWN_RELATIONS, KNOWN_SCHEMAS,
-                                          build_command_specs)
+    from tbtools_cli.command_spec import build_command_specs
     specs = build_command_specs()
     goal_l = goal.lower()
-    # 1. 起点: 接受输入类型的工具(有 next_step 链的优先——可达多步终点)
+    # 1. 起点: 接受输入类型的工具(评审 #66 P1-6: 从 spec 读 inputs/relations, 不再 KNOWN_*)
     starts = []
     for name, spec in specs.items():
-        ins = KNOWN_SCHEMAS.get(name)
-        if ins and any(i.format == input_format for i in ins[0]):
+        if spec.inputs and any(i.format == input_format for i in spec.inputs):
             starts.append((name, f"接受 {input_format} 输入"))
-        rel = KNOWN_RELATIONS.get(name, {})
+        rel = spec.relations or {}
         if input_format.upper() in [a.upper() for a in rel.get("accepts", [])]:
             starts.append((name, f"relations: accepts {input_format}"))
-    starts.sort(key=lambda s: 0 if KNOWN_RELATIONS.get(s[0], {}).get("next_step") else 1)
+    starts.sort(key=lambda s: 0 if (specs[s[0]].relations or {}).get("next_step") else 1)
     # 2. 终点: capability/输出匹配 goal
     def _goal_match(name):
         spec = specs[name]
         caps = " ".join(spec.capabilities + (spec.__dict__.get("capabilities_ontology") or [])).lower()
-        rel = KNOWN_RELATIONS.get(name, {})
+        rel = specs[name].relations or {}
         prods = " ".join(rel.get("produces", [])).lower()
         hay = caps + " " + prods + " " + name.lower()
         # 词根前缀匹配(phylogenetic↔phylogeny, tree↔tree, alignment↔align)
@@ -267,7 +310,8 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         for _ in range(max_steps - 1):
             if _goal_match(cur):
                 break
-            nxt = KNOWN_RELATIONS.get(cur, {}).get("next_step", [])
+            _csp = specs.get(cur)
+            nxt = ((_csp.relations or {}).get("next_step", [])) if _csp else []
             nxt = [n for n in nxt if n in specs and n not in [c[0] for c in chain]]
             if not nxt:
                 break
@@ -297,19 +341,22 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
 def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str) -> dict:
     """plan 链 → 可执行 WorkflowSpec(评审 #64 P0-1/P0-2):
     每步带 depends_on + input_contract/output_contract + selection_reason。"""
-    from tbtools_cli.command_spec import KNOWN_RELATIONS, KNOWN_SCHEMAS
+    from tbtools_cli.command_spec import build_command_specs as _bcs
+    _specs = _bcs()
     steps = []
     for i, (tool, reason) in enumerate(chain):
         sid = f"step{i + 1}"
-        ins = KNOWN_SCHEMAS.get(tool)
-        rel = KNOWN_RELATIONS.get(tool, {})
+        _sp = _specs.get(tool)
+        _ins = _sp.inputs if _sp else []
+        _outs = _sp.outputs if _sp else []
+        rel = (_sp.relations or {}) if _sp else {}
         steps.append({
             "id": sid,
             "tool": tool,
             "depends_on": [f"step{i}"] if i > 0 else [],
             "args": _default_args(tool, i, chain, input_format, output_format),
-            "input_contract": ins[0][0].format if ins and ins[0] else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
-            "output_contract": (ins[1][0] if ins and len(ins[1]) else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),
+            "input_contract": _ins[0].format if _ins else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
+            "output_contract": (_outs[0] if _outs else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),
             "selection_reason": reason,
         })
     return {
@@ -321,14 +368,28 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
 
 
 def _default_args(tool: str, i: int, chain: list, input_format: str, output_format: str) -> list:
-    """生成步骤默认参数(首步=输入占位, 中间=$prev.output, 末步=输出占位)。"""
+    """从 CommandSpec 生成步骤参数(评审 #66 P0-4: InputSpec/outputs 驱动, 不再猜位置参数)。
+
+    输入: 首步={input}, 中间步=$prev.output(对齐 InputSpec.format)
+    输出: CommandSpec outputs 首格式 → 对应扩展名(.svg/.tsv/.nwk...)
+    """
+    from tbtools_cli.command_spec import build_command_specs as _bcs
     args = []
+    _sp = _bcs().get(tool)
+    ins = (_sp.inputs, _sp.outputs) if _sp else None
     if i == 0:
         args.append("{input}")
     else:
         args.append("$step%d.output" % i)
-    # 末参: 输出(末步用目标格式, 中间步用上游格式)
-    ext = output_format or (".out" if i < len(chain) - 1 else output_format)
-    ext = ext if ext and ext.startswith(".") else ("." + ext if ext else ".out")
-    args.append("{workdir}/%s%s" % (chain[i][0], ext if i == len(chain) - 1 else ".out"))
+    # 输出格式: CommandSpec outputs 首格式 → 扩展名
+    _EXT_MAP = {"svg": ".svg", "png": ".png", "pdf": ".pdf", "tsv": ".tsv", "txt": ".txt",
+                "json": ".json", "nwk": ".nwk", "treefile": ".nwk", "fa": ".fa", "aln": ".fa",
+                "aln.fa": ".fa", "gff3": ".gff3", "xls": ".xls", "collinearity": ".collinearity",
+                "meme": ".meme", "db": ".db", "out": ".out"}
+    if ins and ins[1]:
+        _ofmt = ins[1][0] if isinstance(ins[1], list) else str(ins[1])
+        ext = _EXT_MAP.get(str(_ofmt).lower(), "." + str(_ofmt).lower())
+    else:
+        ext = "." + (output_format or "out") if output_format else ".out"
+    args.append("{workdir}/%s%s" % (chain[i][0], ext))
     return args

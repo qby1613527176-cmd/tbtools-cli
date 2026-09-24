@@ -127,7 +127,7 @@ MCP 客户端配置示例(Claude Desktop / Cursor):
 {"mcpServers": {"tbtools": {"command": "tbtools", "args": ["mcp"]}}}
 ```
 
-**MCP 暴露 8 个稳定编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / job_submit / job_status / job_result / tool_provenance——Agent 怕 2000 个工具;8 原语 ↓ 294 领域能力,自动发现、自动调用,零提示词。协议规范见 [docs/agent-protocol.md](docs/agent-protocol.md)。
+**MCP 暴露 9 个稳定编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / **workflow_plan** / job_submit / job_status / job_result / tool_provenance——Agent 怕 2000 个工具;8 原语 ↓ 294 领域能力,自动发现、自动调用,零提示词。协议规范见 [docs/agent-protocol.md](docs/agent-protocol.md)。
 
 ## 🧭 按任务找命令(What do you want to do?)
 
