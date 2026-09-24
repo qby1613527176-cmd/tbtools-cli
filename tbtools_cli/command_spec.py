@@ -174,19 +174,8 @@ KNOWN_DEPENDENCIES_STRUCT = {
 }
 
 
-# 兼容层: 简单 list 形式(既有 KNOWN_DEPENDENCIES 消费方)
-KNOWN_DEPENDENCIES = {
-    "hmmsearch": ["hmmer"], "simplehmmscan": ["hmmer"],
-    "calcRepeat": ["jellyfish"],
-    "rnaplot": ["rnafold"], "plotrna": ["rnafold"],
-    "kallisto": ["kallisto"],
-    "diamond": ["diamond"],
-    "mcscanxd": ["mcscanx"],
-    "blastp": ["blast+"], "blastn": ["blast+"],
-    "muscle": ["muscle"], "mafft": ["mafft"],
-    "iqtree": ["iqtree2"], "onesteptree": ["iqtree2"],
-    "trimal": ["trimal"],
-}
+# 兼容层(评审 #52 P1-3 合并): 简单 list 由 STRUCT 派生, 单一事实源
+KNOWN_DEPENDENCIES: dict = {cmd: [str(d["name"]) for d in deps] for cmd, deps in KNOWN_DEPENDENCIES_STRUCT.items()}
 
 
 # 组级能力兜底(无精确标注的命令按组归能力域; 优先精确标注, 后兜底)

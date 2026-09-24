@@ -14,7 +14,7 @@ discovery → describe → validate → execute → result → provenance, with 
 ## Install
 
 ```bash
-pip install tbtools-cli          # PyPI (coming soon)
+pip install tbtools-cli          # PyPI (v1.3.0 live)
 # or from source
 git clone https://github.com/qby1613527176-cmd/tbtools-cli
 cd tbtools-cli && pip install -e .

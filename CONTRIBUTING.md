@@ -19,7 +19,7 @@ pip install pytest ruff     # 质量门禁
 ```bash
 ruff check .                # 全仓库 0 errors（硬性）
 shellcheck -S warning bin/*.sh install.sh run_examples.sh config/config.sh scripts/*.sh
-python3 -m pytest tests/    # 88+ passed
+python3 -m pytest tests/    # 数量随版本演进, 以 CI 为准
 python3 scripts/gen_metadata.py --check   # metadata 与运行时一致（防漂移）
 ```
 
@@ -29,7 +29,7 @@ python3 scripts/gen_metadata.py --check   # metadata 与运行时一致（防漂
 |---|---|
 | `tbtools_cli/auto_commands.py` | `ENGINE_REGISTRY` 表驱动命令定义（name/kind/class/xmx/runner/doc）+ 特殊手写 impl |
 | `tbtools_cli/cli_tools_registry.py` | 82 个 CLI 工具共享注册表（`tool <name>` 兜底转发） |
-| `tbtools_cli/command_metadata.json` | **唯一数据源**（276 命令;由 `scripts/gen_metadata.py` 生成/校验） |
+| `tbtools_cli/command_metadata.json` | **唯一数据源**(由 `scripts/gen_metadata.py` 生成/校验; 当前数量见 `docs/_generated/counts.md`) |
 | `tbtools_cli/cli.py` | 入口 + 分组手动命令（~530 行;拆分后瘦身） |
 | `tbtools_cli/cli_load.py` | 动态注册（分组映射/加载/纠错） |
 | `tbtools_cli/cli_rpc.py` | RPC 分组 + 自愈基础设施 |

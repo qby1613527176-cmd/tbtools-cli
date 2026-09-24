@@ -153,8 +153,13 @@ def verify_and_restore(snaps: list) -> list[tuple[str, str]]:
                 problems.append((path, "verify-error"))
     return problems
 
-def cleanup_side_effects(t0: float) -> int:
-    """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。"""
+def cleanup_side_effects(t0: float, preexisting: frozenset | None = None) -> int:
+    """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。
+
+    P0-10 安全化: 只删**不在 t0 目录清单里**的新文件(preexisting 快照判定)——
+    t0 前已存在的文件(即使本次被引擎修改 mtime)一律不删, 防误删用户文件。
+    preexisting 缺省时退回 mtime 判定(旧行为兼容)。
+    """
     try:
         cwd = os.getcwd()
         names = os.listdir(cwd)
@@ -166,7 +171,14 @@ def cleanup_side_effects(t0: float) -> int:
             continue
         fp = os.path.join(cwd, fn)
         try:
-            if os.path.isfile(fp) and os.path.getmtime(fp) >= t0 - 2:
+            if not os.path.isfile(fp):
+                continue
+            if preexisting is not None:
+                if fn in preexisting:
+                    continue  # t0 前已存在(P0-10: 即使被引擎修改也不删)
+                os.unlink(fp)
+                n += 1
+            elif os.path.getmtime(fp) >= t0 - 2:
                 os.unlink(fp)
                 n += 1
         except Exception:
@@ -253,8 +265,16 @@ def _security_check_generic(java_args: list, command_name: str | None = None) ->
         return None
     try:
         from tbtools_cli.config import load_config
-        sec = load_config().get("security", {})
+        cfg = load_config()
+        sec = cfg.get("security", {})
         allow = sec.get("allow_engine_reflection", True)
+        # P1-22: agent.policy(无人值守/MCP 场景默认关闭;human CLI 默认兼容开启)
+        policy = cfg.get("agent", {}).get("policy", {})
+        if policy.get("allow_engine_reflection") is False:
+            allow = False
+        # MCP/Agent 模式默认关闭(P1-22)
+        if os.environ.get("TBTOOLS_AGENT_MODE") == "1" and "allow_engine_reflection" not in sec:
+            allow = False
     except Exception:
         allow = True
     if allow is False or str(allow).lower() in ("false", "0", "no"):
@@ -324,6 +344,11 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     # ── P0：输入快照（在原 java_args 上做，含 query 原文件，兜底验证）──
     snaps = snapshot_inputs(java_args)
     _wall_t0 = _time.time()
+    # P0-10: t0 目录清单快照(cleanup 只删清单外新文件)
+    try:
+        _pre_listing = frozenset(os.listdir(os.getcwd()))
+    except Exception:
+        _pre_listing = None
     # N10/N11: 空输入文件友好报错（引擎对 0 字节文件裸崩：statFasta/heatmap 等）
     _empties = find_empty_inputs(java_args)
     if _empties:
@@ -348,7 +373,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     
     # ── P0：输入保护（无论成败都执行）──
     _problems = verify_and_restore(snaps)
-    _clean_n = cleanup_side_effects(_wall_t0)
+    _clean_n = cleanup_side_effects(_wall_t0, preexisting=_pre_listing)
     if _problems:
         print(file=sys.stderr)
         print(_("⚠️ 输入保护：检测到引擎修改/删除了输入文件，已自动恢复：",

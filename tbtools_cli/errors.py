@@ -35,4 +35,26 @@ def classify_error(err_text: str) -> tuple[str, int, str]:
         return "TB001_INVALID_ARGUMENT", 1, "可能缺少必需参数或格式不匹配"
     if "NoClassDefFoundError" in err_text or "DatatypeConverter" in err_text:
         return "TB005_DEPENDENCY_MISSING", 1, "缺 javax.xml 类(ensure_bridge 应已编译 fake DatatypeConverter)"
-    return "TB001_INVALID_ARGUMENT", 1, "参数缺失/格式不对/路径错误/数据不匹配"
+    code, ec, hint = "TB001_INVALID_ARGUMENT", 1, "参数缺失/格式不对/路径错误/数据不匹配"
+    return code, ec, hint
+
+# ── P1-13 错误码分层版本化(2026-09-24)──
+# TB001-099 core/runtime | TB100-199 input | TB200-299 dependency | TB300-399 engine | TB400-499 agent
+ERROR_TIERS = {
+    "TB001_INVALID_ARGUMENT": ("TB101", "input"),
+    "TB002_FILE_NOT_FOUND": ("TB102", "input"),
+    "TB003_INPUT_FORMAT_ERROR": ("TB103", "input"),
+    "TB004_INPUT_SCHEMA_ERROR": ("TB104", "input"),
+    "TB005_DEPENDENCY_MISSING": ("TB201", "dependency"),
+    "TB007_TOOL_TIMEOUT": ("TB002", "core"),
+    "TB008_OUT_OF_MEMORY": ("TB301", "engine"),
+    "TB009_ENGINE_CRASH": ("TB302", "engine"),
+    "TB010_OUTPUT_MISSING": ("TB303", "engine"),
+    "TB012_INTERNAL_ERROR": ("TB001", "core"),
+}
+
+
+def error_tier(code: str) -> tuple[str, str]:
+    """错误码 → (分层码, 类别)。旧码兼容保留, 新分层码为 Agent 正式契约。"""
+    return ERROR_TIERS.get(code, ("TB000", "core"))
+

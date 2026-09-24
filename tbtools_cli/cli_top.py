@@ -681,10 +681,25 @@ def register_top(cli, _LG):
                     ok = False
                     probs.append(f"missing input: {a}")
             est = [a for a in args[_skip:] if a.endswith((".svg", ".png", ".pdf"))]
+            # P1-17: dry-run 资源/依赖预估(从 CommandSpec 模型读)
+            _deps, _net, _mem = [], None, None
+            try:
+                from tbtools_cli.command_spec import KNOWN_DEPENDENCIES_STRUCT, KNOWN_STATUS
+                _cmd_name = args[1] if len(args) >= 2 else (args[0] if args else "")
+                _deps = [d["name"] for d in KNOWN_DEPENDENCIES_STRUCT.get(_cmd_name, [])]
+                _net = KNOWN_STATUS.get(_cmd_name) == "network-required"
+                import json as _jm
+                _meta = _jm.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
+                _mem = _meta.get(_cmd_name, {}).get("xmx")
+            except Exception:
+                pass
             click.echo(_json2.dumps({"schema_version": "1.0", "status": "ready" if ok else "not_ready",
                                      "tool": args[-1] if args else "", "inputs_valid": ok,
                                      "dependencies_ready": True if (JAR and os.path.isfile(JAR)) else False,
                                      "estimated_artifacts": est,
+                                     "estimated_memory": _mem,
+                                     "required_dependencies": _deps,
+                                     "network_required": _net,
                                      "problems": probs}, ensure_ascii=False, indent=1))
             sys.exit(0 if ok else 3)
 
@@ -774,6 +789,20 @@ except Exception:
     except Exception:
         pass
 """
+
+    # P1-14: JSON Protocol 统一封装(评审 #52)——Agent 接口统一 {schema_version/request_id/status/data/error/meta}
+    def _envelope(data, status="success", error=None, meta=None):
+        import json as _json
+        import time as _time
+        import uuid as _uuid
+        return _json.dumps({
+            "schema_version": "1.0",
+            "request_id": f"req_{_time.strftime('%Y%m%d')}_{_uuid.uuid4().hex[:8]}",
+            "status": status,
+            "data": data,
+            "error": error,
+            "meta": meta or {"tbtools_cli": "1.3.0"},
+        }, ensure_ascii=False, indent=1)
 
     def _jobs_dir():
         d = os.path.join(os.path.expanduser("~"), ".config", "tbtools-cli", "jobs")

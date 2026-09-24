@@ -108,6 +108,9 @@ def tool_provenance(output: str) -> str:
 
 
 def main() -> None:
+    # P1-22: MCP 默认 agent 安全模式(engine reflection 关闭, 除非 config [agent.policy] 显式开启)
+    import os as _os
+    _os.environ.setdefault("TBTOOLS_AGENT_MODE", "1")
     mcp.run()
 
 

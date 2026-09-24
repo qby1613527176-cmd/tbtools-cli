@@ -146,6 +146,23 @@ def _rpc_start_lock(port, timeout_s=20):
             _t.sleep(0.3)
 
 
+_RPC_CRASHES: dict = {}  # port -> [崩溃时间戳...](P1-20 crash-loop breaker)
+
+
+def _rpc_breaker_open(port) -> bool:
+    """60s 内 ≥3 次启动崩溃 → breaker OPEN(停止自动重启)"""
+    import time as _t
+    now = _t.time()
+    hist = [t for t in _RPC_CRASHES.get(port, []) if now - t < 60]
+    _RPC_CRASHES[port] = hist
+    return len(hist) >= 3
+
+
+def _rpc_record_crash(port):
+    import time as _t
+    _RPC_CRASHES.setdefault(port, []).append(_t.time())
+
+
 def _ensure_rpc(port, mem="4g", wait_s=30, quiet=False):
     """ensure 逻辑（同交付包 run_p*.py 的 ensure_srv）：
     健康 → True；不健康/死亡 → 清 stale pid → 拉起 → 轮询健康。"""
@@ -179,6 +196,12 @@ def _ensure_rpc(port, mem="4g", wait_s=30, quiet=False):
     elif not quiet:
         click.echo(_tr("⚠️ RPC 服务器不可达（端口 {p}），自动拉起...", "⚠️ RPC server unreachable (port {p}) — auto-restarting...").format(p=port), err=True)
     try:
+        # P1-20: crash-loop breaker(反复崩溃不再自动重启)
+        if _rpc_breaker_open(port):
+            click.echo(f"🛑 RPC crash-loop breaker: 60s 内 ≥3 次启动失败, 停止自动重启。"
+                       f"诊断: tbtools rpc logs -p {port};手动恢复: tbtools rpc start -p {port} --force", err=True)
+            _rpc_record_crash(port)
+            return False
         _rpc_launch(port, mem)
     except FileNotFoundError as e:
         click.echo(f"❌ {e}", err=True)
