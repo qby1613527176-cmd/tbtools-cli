@@ -1,4 +1,5 @@
 """
+# ⚠️ DEPRECATED(Phase 2, 评审 #62): 新代码禁止 import——统一从 CommandSpec 读取
 cli_tools_registry — 82 个命令行工具的共享注册表（name → java 类名）
 ====================================================================
 FIX(P0-3): 原注册表仅存在于旧入口 bin/tbcli.py，新入口 tbtools tool 不可达

@@ -68,7 +68,7 @@ def from_provenance(artifact_path: str) -> Artifact | None:
     if not os.path.isfile(artifact_path) or not os.path.isfile(prov_path):
         return None
     prov = json.load(open(prov_path, encoding="utf-8"))
-    return build(
+    _art = build(
         artifact_path,
         producer=prov.get("command", ""),
         metadata={"invocation": prov.get("invocation", ""),
@@ -76,6 +76,8 @@ def from_provenance(artifact_path: str) -> Artifact | None:
                   "exit_code": prov.get("exit_code"),
                   "timestamp": prov.get("timestamp", "")},
     )
+    register(_art)
+    return _art
 
 
 def build(path: str, producer: str = "", metadata: dict | None = None) -> Artifact:
@@ -92,3 +94,38 @@ def build(path: str, producer: str = "", metadata: dict | None = None) -> Artifa
         created_at=time.strftime("%Y-%m-%dT%H:%M:%S"),
         metadata=metadata or {},
     )
+
+# ── Artifact 索引(评审 #62 P0-6): art_id → path 登记与解析(去路径化基础)──
+def _index_path() -> str:
+    d = os.path.join(os.path.expanduser("~"), ".config", "tbtools-cli")
+    os.makedirs(d, exist_ok=True)
+    return os.path.join(d, "artifacts.json")
+
+
+def register(art: "Artifact"):
+    """登记 Artifact 到索引(art_id → path)。"""
+    try:
+        idx = {}
+        p = _index_path()
+        if os.path.isfile(p):
+            idx = json.load(open(p, encoding="utf-8"))
+        idx[art.id] = {"path": art.path, "type": art.type, "format": art.format,
+                       "producer": art.producer, "created_at": art.created_at}
+        json.dump(idx, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    except Exception:
+        pass
+
+
+def resolve(ref: str) -> str | None:
+    """art_id 或 path → path(索引解析;去路径化: workflow 可引用 art_id)。"""
+    if os.path.isfile(ref):
+        return ref
+    p = _index_path()
+    if os.path.isfile(p):
+        try:
+            idx = json.load(open(p, encoding="utf-8"))
+            if ref in idx:
+                return idx[ref]["path"]
+        except Exception:
+            pass
+    return None

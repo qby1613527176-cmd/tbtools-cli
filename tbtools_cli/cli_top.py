@@ -578,6 +578,16 @@ def register_top(cli, _LG):
             desc["relations"] = v["relations"]
         if v.get("capabilities"):
             desc["capabilities"] = v["capabilities"]
+        # P1-7: platforms 能力矩阵(评审 #62-11;Agent 不再瞎撞)
+        _st = v.get("status", "stable")
+        _kind = v.get("kind", "manual")
+        if _st == "platform-limited" or _kind == "bridge":
+            desc["platforms"] = {"linux": "full", "macos": "full", "windows": "partial"}
+        elif _st == "network-required":
+            desc["platforms"] = {"linux": "full", "macos": "full", "windows": "full",
+                                 "network": "conditional"}
+        else:
+            desc["platforms"] = {"linux": "full", "macos": "full", "windows": "full"}
         if v.get("parameters"):
             desc["parameters"] = v["parameters"]
         if v.get("dependencies"):
@@ -1258,6 +1268,26 @@ except Exception:
             result = run(wf, wd, timeout_s=timeout_s, resume=resume)
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
             sys.exit(0 if result["status"] == "succeeded" else 1)
+
+    @cli.command(name="workflow-plan")
+    @click.argument("goal", required=True)
+    @click.option("--input", "in_fmt", default=None, help="输入格式(fasta/tsv/gff3/...)")
+    @click.option("--output", "out_fmt", default=None, help="目标输出格式(nwk/svg/...)")
+    @click.option("--json", "as_json", is_flag=True)
+    def workflow_plan_cmd(goal, in_fmt, out_fmt, as_json):
+        """Workflow Planner(评审 #62 P0-5): 目标 → 自动推导工具链计划"""
+        import json as _json
+        from tbtools_cli.workflow import plan_from_goal
+        p = plan_from_goal(goal, input_format=in_fmt or "", output_format=out_fmt or "")
+        if as_json:
+            click.echo(_json.dumps(p, ensure_ascii=False, indent=1))
+        else:
+            if not p["plan"]:
+                click.echo(f"❌ 无法规划: 目标 '{goal}' 无匹配工具链")
+                sys.exit(3)
+            click.echo(f"  规划: {goal}(置信度 {p['confidence']}, 备选 {p['alternatives']}):")
+            for s in p["plan"]:
+                click.echo(f"    {s['step']}. {s['tool']}  — {s['reason']}")
 
     @cli.command(name="search")
     @click.argument("keyword", required=False)

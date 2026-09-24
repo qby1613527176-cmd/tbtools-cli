@@ -39,11 +39,12 @@ def load_workflow(path: str) -> dict:
 
 def _resolve(value, outputs: dict):
     """引用解析: $step.output / {artifact: path}(Artifact 引用) / {input.X}。"""
-    # P1-8: dict 形式 Artifact 引用({artifact: <path>} → 路径透传, provenance 溯源)
+    # P1-8/#62 P0-6: Artifact 引用({artifact: <path 或 art_id>};id 经索引解析——去路径化)
     if isinstance(value, dict) and "artifact" in value:
-        ap = value["artifact"]
-        if not os.path.isfile(ap):
-            raise WorkflowError(f"Artifact 不存在: {ap}")
+        from tbtools_cli.artifact import resolve as _aresolve
+        ap = _aresolve(value["artifact"])
+        if not ap:
+            raise WorkflowError(f"Artifact 不存在(路径或 id 均无法解析): {value['artifact']}")
         return ap
     if isinstance(value, str) and value.startswith("$"):
         ref = value[1:]
@@ -208,3 +209,73 @@ def validate_artifact(path: str) -> tuple[bool, str]:
         return True, f"exists({ext or 'no-ext'}, no parser)"
     except Exception as e:
         return False, f"parse error: {e}"
+
+# ── Workflow Planner(评审 #62 P0-5): 目标 → 自动规划 ──
+def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
+                   max_steps: int = 4) -> dict:
+    """目标驱动规划: 输入类型 + 目标/输出类型 → relations/capability 推导工具链。
+
+    算法: 起点=接受 input_format 的工具(relations.accepts 或 inputs.format 匹配)
+    → 沿 next_step 扩展 → 终点=产出 output_format 或 capability 匹配 goal 的工具。
+    返回 {goal, plan:[{step, tool, reason}], confidence, alternatives}。
+    """
+    from tbtools_cli.command_spec import (KNOWN_RELATIONS, KNOWN_SCHEMAS,
+                                          build_command_specs)
+    specs = build_command_specs()
+    goal_l = goal.lower()
+    # 1. 起点: 接受输入类型的工具(有 next_step 链的优先——可达多步终点)
+    starts = []
+    for name, spec in specs.items():
+        ins = KNOWN_SCHEMAS.get(name)
+        if ins and any(i.format == input_format for i in ins[0]):
+            starts.append((name, f"接受 {input_format} 输入"))
+        rel = KNOWN_RELATIONS.get(name, {})
+        if input_format.upper() in [a.upper() for a in rel.get("accepts", [])]:
+            starts.append((name, f"relations: accepts {input_format}"))
+    starts.sort(key=lambda s: 0 if KNOWN_RELATIONS.get(s[0], {}).get("next_step") else 1)
+    # 2. 终点: capability/输出匹配 goal
+    def _goal_match(name):
+        spec = specs[name]
+        caps = " ".join(spec.capabilities + (spec.__dict__.get("capabilities_ontology") or [])).lower()
+        rel = KNOWN_RELATIONS.get(name, {})
+        prods = " ".join(rel.get("produces", [])).lower()
+        hay = caps + " " + prods + " " + name.lower()
+        # 词根前缀匹配(phylogenetic↔phylogeny, tree↔tree, alignment↔align)
+        for k in goal_l.split():
+            if len(k) < 3:
+                continue
+            root = k[:7] if len(k) > 7 else k
+            if root in hay or any(w.startswith(root) for w in hay.replace(".", " ").replace("-", " ").split()):
+                return True
+        return False
+    # 3. 链推导(起点 → next_step → 终点)
+    plans = []
+    for start, reason in starts[:10]:
+        chain = [(start, reason)]
+        cur = start
+        for _ in range(max_steps - 1):
+            if _goal_match(cur):
+                break
+            nxt = KNOWN_RELATIONS.get(cur, {}).get("next_step", [])
+            nxt = [n for n in nxt if n in specs and n not in [c[0] for c in chain]]
+            if not nxt:
+                break
+            cur = nxt[0]
+            chain.append((cur, f"relations: {chain[-1][0]} → next_step"))
+        if chain and _goal_match(chain[-1][0]):
+            plans.append(chain)
+    if not plans:
+        # 回退: capability 直接匹配 goal 的工具
+        direct = [(n, "capability 直接匹配") for n, s in specs.items() if _goal_match(n)]
+        if direct:
+            plans = [direct[:1]]
+    best = plans[0] if plans else []
+    return {
+        "schema_version": "1.0",
+        "goal": goal,
+        "input_format": input_format or None,
+        "output_format": output_format or None,
+        "plan": [{"step": i + 1, "tool": t, "reason": r} for i, (t, r) in enumerate(best)],
+        "confidence": "high" if len(best) > 1 else ("medium" if best else "none"),
+        "alternatives": len(plans) - 1,
+    }

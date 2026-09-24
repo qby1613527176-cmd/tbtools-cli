@@ -40,6 +40,7 @@ def _group_of(name: str) -> str | None:
     return _SPEC_GROUPS.get(name) or CATEGORY_MAP.get(name)
 
 
+# ⚠️ DEPRECATED(Phase 2, 评审 #62): 新代码禁止直接读 CATEGORY_MAP——用 _group_of()(CommandSpec 优先)
 CATEGORY_MAP = {
     "sixframe": "seq",  # GUI 逆向：六框翻译
     "longestorf": "seq",  # GUI 逆向：最长 ORF 预测

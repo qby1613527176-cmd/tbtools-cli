@@ -113,6 +113,15 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
 
 
 @mcp.tool()
+def workflow_plan(goal: str, input_format: str = "", output_format: str = "") -> str:
+    """目标 → 自动推导工具链计划(Workflow Planner; relations/capability 链推导)。"""
+    import json as _json
+    from tbtools_cli.workflow import plan_from_goal
+    return _json.dumps(plan_from_goal(goal, input_format=input_format,
+                                      output_format=output_format), ensure_ascii=False, indent=1)
+
+
+@mcp.tool()
 def job_submit(command: str, args: list[str] | str = "", timeout_s: int = 0) -> str:
     """异步提交长任务: 返回 job_id(状态机 running→succeeded/failed/cancelled/timed_out)。"""
     parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
