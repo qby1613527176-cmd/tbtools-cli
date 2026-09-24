@@ -178,6 +178,78 @@ KNOWN_DEPENDENCIES_STRUCT = {
 KNOWN_DEPENDENCIES: dict = {cmd: [str(d["name"]) for d in deps] for cmd, deps in KNOWN_DEPENDENCIES_STRUCT.items()}
 
 
+# 能力 ontology(评审 #52 P1-7): 分层标签 domain.subdomain
+# 平标签 → 分层父链(Agent 可用 "phylogeny.tree-building" 或 "phylogeny" 查询)
+ONTOLOGY = {
+    "alignment": "sequence.alignment",
+    "translation": "sequence.translation",
+    "extraction": "sequence.extraction",
+    "conversion": "sequence.conversion",
+    "sequence": "sequence",
+    "homology": "sequence.homology",
+    "hmm_scan": "sequence.homology.hmm_scan",
+    "filtering": "sequence.homology.filtering",
+    "reciprocal_best_hit": "sequence.homology.reciprocal_best_hit",
+    "phylogeny": "phylogeny",
+    "rooting": "phylogeny.rooting",
+    "reconciliation": "phylogeny.reconciliation",
+    "tree_building": "phylogeny.tree-building",
+    "tree_editing": "phylogeny.editing",
+    "synteny": "genomics.synteny",
+    "collinearity": "genomics.synteny",
+    "collinearity_detection": "genomics.synteny.detection",
+    "microsynteny": "genomics.synteny.microsynteny",
+    "annotation": "genomics.annotation",
+    "gff_fixing": "genomics.annotation.fixing",
+    "gff_ops": "genomics.annotation.ops",
+    "genome_analysis": "genomics",
+    "genome_circos": "genomics.circos",
+    "expression": "expression",
+    "differential_expression": "expression.differential",
+    "normalization": "expression.normalization",
+    "rna_seq": "expression.rna-seq",
+    "quantification": "expression.rna-seq.quantification",
+    "enrichment": "expression.enrichment",
+    "gene_ontology": "expression.enrichment.go",
+    "pathway": "expression.enrichment.pathway",
+    "clustering": "expression.clustering",
+    "distance": "expression.clustering.distance",
+    "dimension_reduction": "expression.dimension-reduction",
+    "statistics": "expression.statistics",
+    "visualization": "visualization",
+    "motif": "sequence.motif",
+    "scanning": "sequence.motif.scanning",
+    "discovery": "sequence.motif.discovery",
+    "genome_scan": "sequence.motif.genome-scan",
+    "domain": "sequence.domain",
+    "orf_prediction": "sequence.orf-prediction",
+    "chip_seq": "chip-seq",
+    "peak_calling": "chip-seq.peak-calling",
+    "peak_annotation": "chip-seq.peak-annotation",
+    "assembly": "genomics.assembly",
+    "ngs": "sequence.ngs",
+    "preprocessing": "sequence.ngs.preprocessing",
+    "set_operations": "sets",
+    "table_operations": "table",
+    "viral_analysis": "virus",
+}
+
+
+def expand_ontology(tags: list[str]) -> list[str]:
+    """平标签 → 含分层父链的全集(如 alignment → [sequence.alignment, sequence])。
+
+    Agent 用 'phylogeny' 查询时, 'phylogeny.tree-building' 也命中(父链展开)。
+    """
+    out = set()
+    for t in tags:
+        out.add(t)
+        full = ONTOLOGY.get(t, t)
+        parts = full.split(".")
+        for i in range(1, len(parts) + 1):
+            out.add(".".join(parts[:i]))
+    return sorted(out)
+
+
 # 组级能力兜底(无精确标注的命令按组归能力域; 优先精确标注, 后兜底)
 GROUP_CAPABILITIES = {
     "expr": ["expression"], "syn": ["synteny"], "gxf": ["annotation"],
@@ -442,6 +514,7 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["alias_of"] = spec.alias_of
     if spec.capabilities:
         e["capabilities"] = spec.capabilities
+        e["capabilities_ontology"] = expand_ontology(spec.capabilities)
     if spec.dependencies:
         e["dependencies"] = spec.dependencies
     if spec.name in KNOWN_DEPENDENCIES_STRUCT:

@@ -1133,6 +1133,29 @@ except Exception:
                 click.echo(f"    {r['command']:<14} {r['description']:<20} ({r['plugin']})")
             click.echo("  (plugin install/search 规划: plugins/src/ 原始存档 + PluginStore 122 插件/飞纪盘 64)")
 
+    @cli.command(name="artifact")
+    @click.argument("sub", default="inspect", type=click.Choice(["inspect"]))
+    @click.argument("path")
+    @click.option("--json", "as_json", is_flag=True)
+    def artifact_cmd(sub, path, as_json):
+        """Artifact 一等公民(ADR-0007): inspect——从 provenance 输出结构化 Artifact"""
+        import json as _json
+        from tbtools_cli.artifact import build, from_provenance
+        art = from_provenance(path) or build(path)
+        if not art:
+            click.echo(f"❌ 文件不存在: {path}", err=True)
+            sys.exit(1)
+        d = art.to_dict()
+        if as_json:
+            click.echo(_json.dumps(d, ensure_ascii=False, indent=1))
+        else:
+            prov = "✅ 溯源完整" if art.metadata.get("invocation") else "⚠️ 无 provenance"
+            click.echo(f"  Artifact: {art.id}")
+            click.echo(f"    类型/格式: {art.type}/{art.format}")
+            click.echo(f"    路径: {art.path}")
+            click.echo(f"    大小: {art.size} B | sha256: {art.sha256}")
+            click.echo(f"    生产者: {art.producer or '?'} | {prov}")
+
     @cli.command(name="search")
     @click.argument("keyword", required=False)
     @click.option("--json", "as_json", is_flag=True, help="结构化输出(JSON, 供 Agent 发现)")
@@ -1188,8 +1211,10 @@ except Exception:
                     continue  # 反向/能力搜索: alias 不污染工具空间(仅 canonical)
                 if out_fmt and out_fmt not in outs:
                     continue
-                if cap and cap not in caps:
-                    continue
+                if cap:
+                    _onto = v.get("capabilities_ontology", []) or []
+                    if cap not in caps and cap not in _onto:
+                        continue
                 cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
                 desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
                 filtered.append((name, cat, v.get("kind", "?"), desc))

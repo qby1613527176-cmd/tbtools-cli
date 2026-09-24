@@ -31,6 +31,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -57,6 +60,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -77,6 +85,11 @@
   "help": "bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）",
   "capabilities": [
    "assembly"
+  ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
   ],
   "relations": {
    "accepts": [
@@ -100,6 +113,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -121,6 +139,11 @@
   "help": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
   "capabilities": [
    "assembly"
+  ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
   ],
   "relations": {
    "accepts": [
@@ -144,6 +167,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -164,6 +192,9 @@
   "group": "expr",
   "help": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -205,6 +236,9 @@
   "group": "expr",
   "help": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -249,6 +283,10 @@
   "group": "table",
   "help": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
   "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
    "table_operations"
   ],
   "relations": {
@@ -309,6 +347,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -333,6 +374,11 @@
   "group": "syn",
   "help": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "relations": {
@@ -364,6 +410,12 @@
   "capabilities": [
    "visualization",
    "genome_circos"
+  ],
+  "capabilities_ontology": [
+   "genome_circos",
+   "genomics",
+   "genomics.circos",
+   "visualization"
   ],
   "relations": {
    "accepts": [
@@ -421,6 +473,12 @@
    "synteny",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
+   "synteny",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "SIMPLIFIED_GFF",
@@ -450,6 +508,9 @@
   "capabilities": [
    "expression"
   ],
+  "capabilities_ontology": [
+   "expression"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -473,6 +534,11 @@
   "group": "syn",
   "help": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "relations": {
@@ -504,6 +570,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -524,6 +595,9 @@
   "group": "expr",
   "help": "cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor <c> --midColor <c> --maxColor <c>]   # 3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -552,6 +626,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -577,6 +654,9 @@
   "capabilities": [
    "expression"
   ],
+  "capabilities_ontology": [
+   "expression"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -600,6 +680,12 @@
   "group": "syn",
   "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout",
   "capabilities": [
+   "synteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny",
    "visualization"
   ],
@@ -642,6 +728,12 @@
   "group": "syn",
   "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] ",
   "capabilities": [
+   "synteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny",
    "visualization"
   ],
@@ -703,6 +795,10 @@
    "expression",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "expression",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -757,6 +853,9 @@
   "capabilities": [
    "expression"
   ],
+  "capabilities_ontology": [
+   "expression"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -783,6 +882,11 @@
    "sequence",
    "extraction"
   ],
+  "capabilities_ontology": [
+   "extraction",
+   "sequence",
+   "sequence.extraction"
+  ],
   "relations": {
    "accepts": [
     "FASTQ"
@@ -808,6 +912,11 @@
   "capabilities": [
    "sequence",
    "extraction"
+  ],
+  "capabilities_ontology": [
+   "extraction",
+   "sequence",
+   "sequence.extraction"
   ],
   "relations": {
    "accepts": [
@@ -845,6 +954,13 @@
    "homology",
    "filtering"
   ],
+  "capabilities_ontology": [
+   "filtering",
+   "homology",
+   "sequence",
+   "sequence.homology",
+   "sequence.homology.filtering"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -867,6 +983,11 @@
   "group": "syn",
   "help": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "relations": {
@@ -898,6 +1019,11 @@
   "capabilities": [
    "synteny"
   ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
+   "synteny"
+  ],
   "relations": {
    "accepts": [
     "SIMPLIFIED_GFF",
@@ -927,6 +1053,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -952,6 +1081,13 @@
   "capabilities": [
    "ngs",
    "preprocessing"
+  ],
+  "capabilities_ontology": [
+   "ngs",
+   "preprocessing",
+   "sequence",
+   "sequence.ngs",
+   "sequence.ngs.preprocessing"
   ],
   "relations": {
    "accepts": [
@@ -979,6 +1115,11 @@
    "sequence",
    "conversion"
   ],
+  "capabilities_ontology": [
+   "conversion",
+   "sequence",
+   "sequence.conversion"
+  ],
   "relations": {
    "accepts": [
     "FASTQ"
@@ -1003,6 +1144,9 @@
   "help": "gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）",
   "alias_of": "groupedbar",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -1031,6 +1175,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1050,6 +1199,9 @@
   "group": "seq",
   "help": "gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -1090,6 +1242,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1115,6 +1272,12 @@
    "annotation",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1135,6 +1298,11 @@
   "help": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -1186,6 +1354,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -1210,6 +1381,9 @@
   "group": "seq",
   "help": "gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -1237,6 +1411,13 @@
   "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
   "capabilities": [
    "enrichment",
+   "gene_ontology"
+  ],
+  "capabilities_ontology": [
+   "enrichment",
+   "expression",
+   "expression.enrichment",
+   "expression.enrichment.go",
    "gene_ontology"
   ],
   "relations": {
@@ -1279,6 +1460,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -1300,6 +1485,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -1319,6 +1508,9 @@
   "group": "expr",
   "help": "groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -1344,6 +1536,9 @@
   "group": "expr",
   "help": "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load 崩溃——引擎缺陷）",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -1386,6 +1581,13 @@
    "annotation",
    "gff_ops"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation",
+   "genomics.annotation.ops",
+   "gff_ops"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1406,6 +1608,11 @@
   "help": "gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -1428,6 +1635,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1448,6 +1660,11 @@
   "help": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -1470,6 +1687,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1490,6 +1712,11 @@
   "help": "gxfRecall: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -1512,6 +1739,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1532,6 +1764,11 @@
   "help": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -1554,6 +1791,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1575,6 +1817,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -1595,6 +1842,11 @@
   "help": "gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -1637,6 +1889,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -1669,6 +1926,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -1690,6 +1952,13 @@
   "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
   "capabilities": [
    "enrichment",
+   "pathway"
+  ],
+  "capabilities_ontology": [
+   "enrichment",
+   "expression",
+   "expression.enrichment",
+   "expression.enrichment.pathway",
    "pathway"
   ],
   "relations": {
@@ -1730,6 +1999,10 @@
   "group": "expr",
   "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
   "capabilities": [
+   "expression",
+   "visualization"
+  ],
+  "capabilities_ontology": [
    "expression",
    "visualization"
   ],
@@ -1777,6 +2050,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -1796,6 +2073,9 @@
   "group": "seq",
   "help": "makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -1844,6 +2124,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -1868,6 +2151,9 @@
   "group": "seq",
   "help": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -1896,6 +2182,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -1922,6 +2211,13 @@
   "capabilities": [
    "motif",
    "scanning"
+  ],
+  "capabilities_ontology": [
+   "motif",
+   "scanning",
+   "sequence",
+   "sequence.motif",
+   "sequence.motif.scanning"
   ],
   "relations": {
    "accepts": [
@@ -1961,6 +2257,13 @@
   "capabilities": [
    "synteny",
    "collinearity_detection"
+  ],
+  "capabilities_ontology": [
+   "collinearity_detection",
+   "genomics",
+   "genomics.synteny",
+   "genomics.synteny.detection",
+   "synteny"
   ],
   "relations": {
    "accepts": [
@@ -2030,6 +2333,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -2054,6 +2360,9 @@
   "group": "seq",
   "help": "meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -2082,6 +2391,13 @@
   "capabilities": [
    "motif",
    "discovery"
+  ],
+  "capabilities_ontology": [
+   "discovery",
+   "motif",
+   "sequence",
+   "sequence.motif",
+   "sequence.motif.discovery"
   ],
   "relations": {
    "accepts": [
@@ -2131,6 +2447,11 @@
   "capabilities": [
    "synteny"
   ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
+   "synteny"
+  ],
   "relations": {
    "accepts": [
     "SIMPLIFIED_GFF",
@@ -2158,6 +2479,12 @@
   "group": "syn",
   "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
   "capabilities": [
+   "synteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny",
    "visualization"
   ],
@@ -2229,6 +2556,9 @@
   "capabilities": [
    "expression"
   ],
+  "capabilities_ontology": [
+   "expression"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -2252,6 +2582,9 @@
   "group": "seq",
   "help": "mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -2278,6 +2611,10 @@
   "group": "expr",
   "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
   "capabilities": [
+   "expression",
+   "visualization"
+  ],
+  "capabilities_ontology": [
    "expression",
    "visualization"
   ],
@@ -2323,6 +2660,12 @@
   "group": "syn",
   "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
   "capabilities": [
+   "synteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny",
    "visualization"
   ],
@@ -2374,6 +2717,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -2398,6 +2744,11 @@
   "group": "syn",
   "help": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "relations": {
@@ -2427,6 +2778,12 @@
   "group": "syn",
   "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
   "capabilities": [
+   "synteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny",
    "visualization"
   ],
@@ -2472,6 +2829,12 @@
    "synteny",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
+   "synteny",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "SIMPLIFIED_GFF",
@@ -2513,6 +2876,11 @@
   "capabilities": [
    "synteny"
   ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
+   "synteny"
+  ],
   "relations": {
    "accepts": [
     "SIMPLIFIED_GFF",
@@ -2540,6 +2908,12 @@
   "group": "chipseq",
   "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
   "capabilities": [
+   "chip_seq",
+   "peak_annotation"
+  ],
+  "capabilities_ontology": [
+   "chip-seq",
+   "chip-seq.peak-annotation",
    "chip_seq",
    "peak_annotation"
   ],
@@ -2577,6 +2951,10 @@
   "capabilities": [
    "chip_seq"
   ],
+  "capabilities_ontology": [
+   "chip-seq",
+   "chip_seq"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -2597,6 +2975,12 @@
   "group": "chipseq",
   "help": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
   "capabilities": [
+   "chip_seq",
+   "peak_calling"
+  ],
+  "capabilities_ontology": [
+   "chip-seq",
+   "chip-seq.peak-calling",
    "chip_seq",
    "peak_calling"
   ],
@@ -2639,6 +3023,9 @@
   "group": "seq",
   "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -2686,6 +3073,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -2710,6 +3100,9 @@
   "group": "tree",
   "help": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
   "capabilities": [
+   "phylogeny"
+  ],
+  "capabilities_ontology": [
    "phylogeny"
   ],
   "relations": {
@@ -2737,6 +3130,10 @@
   "capabilities": [
    "chip_seq"
   ],
+  "capabilities_ontology": [
+   "chip-seq",
+   "chip_seq"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -2757,6 +3154,9 @@
   "group": "seq",
   "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "dependencies": [
@@ -2810,6 +3210,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -2849,6 +3254,12 @@
   "group": "syn",
   "help": "qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
   "capabilities": [
+   "synteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny",
    "visualization"
   ],
@@ -2893,6 +3304,9 @@
   "capabilities": [
    "expression"
   ],
+  "capabilities_ontology": [
+   "expression"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -2916,6 +3330,9 @@
   "group": "expr",
   "help": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -2953,6 +3370,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -2977,6 +3399,13 @@
   "capabilities": [
    "homology",
    "reciprocal_best_hit"
+  ],
+  "capabilities_ontology": [
+   "homology",
+   "reciprocal_best_hit",
+   "sequence",
+   "sequence.homology",
+   "sequence.homology.reciprocal_best_hit"
   ],
   "relations": {
    "accepts": [
@@ -3021,6 +3450,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -3050,6 +3484,9 @@
   "group": "seq",
   "help": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "dependencies": [
@@ -3114,6 +3551,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -3146,6 +3588,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -3170,6 +3615,9 @@
   "group": "seq",
   "help": "simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "dependencies": [
@@ -3213,6 +3661,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3232,6 +3684,11 @@
   "group": "syn",
   "help": "supercircos: supercircos <config.cfg> <out> [width] [height]",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "relations": {
@@ -3275,6 +3732,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3294,6 +3755,10 @@
   "group": "table",
   "help": "tableCast: tableCast <inLong.txt> <outMatrix>",
   "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
    "table_operations"
   ],
   "relations": {
@@ -3320,6 +3785,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3339,6 +3808,10 @@
   "group": "table",
   "help": "tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]",
   "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
    "table_operations"
   ],
   "relations": {
@@ -3362,6 +3835,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3383,6 +3860,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3402,6 +3883,10 @@
   "group": "table",
   "help": "tableMerge: tableMerge --inFileArr \"f1,f2,...\" --inColIndexArr \"0,1,...\" --outTable <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   # 按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)",
   "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
    "table_operations"
   ],
   "relations": {
@@ -3437,6 +3922,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3456,6 +3945,10 @@
   "group": "table",
   "help": "tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran",
   "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
    "table_operations"
   ],
   "relations": {
@@ -3479,6 +3972,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -3498,6 +3995,9 @@
   "group": "expr",
   "help": "tauIndex: tauIndex <inExpTab> <outTAU>",
   "capabilities": [
+   "expression"
+  ],
+  "capabilities_ontology": [
    "expression"
   ],
   "relations": {
@@ -3535,6 +4035,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -3558,6 +4063,10 @@
   "help": "upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
   "capabilities": [
    "set_operations"
+  ],
+  "capabilities_ontology": [
+   "set_operations",
+   "sets"
   ],
   "relations": {
    "accepts": [
@@ -3596,6 +4105,10 @@
   "help": "venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]",
   "capabilities": [
    "set_operations"
+  ],
+  "capabilities_ontology": [
+   "set_operations",
+   "sets"
   ],
   "relations": {
    "accepts": [
@@ -3641,6 +4154,10 @@
   "help": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>",
   "capabilities": [
    "set_operations"
+  ],
+  "capabilities_ontology": [
+   "set_operations",
+   "sets"
   ],
   "relations": {
    "accepts": [
@@ -3693,6 +4210,10 @@
   "help": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
   "capabilities": [
    "set_operations"
+  ],
+  "capabilities_ontology": [
+   "set_operations",
+   "sets"
   ],
   "relations": {
    "accepts": [
@@ -3753,6 +4274,10 @@
   "capabilities": [
    "set_operations"
   ],
+  "capabilities_ontology": [
+   "set_operations",
+   "sets"
+  ],
   "relations": {
    "accepts": [
     "GENE_LISTS"
@@ -3778,6 +4303,10 @@
   "help": "venn6: venn6 <out> <setA..F.txt> [labels]",
   "capabilities": [
    "set_operations"
+  ],
+  "capabilities_ontology": [
+   "set_operations",
+   "sets"
   ],
   "relations": {
    "accepts": [
@@ -3805,6 +4334,9 @@
   "capabilities": [
    "expression"
   ],
+  "capabilities_ontology": [
+   "expression"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -3830,6 +4362,11 @@
   "capabilities": [
    "assembly"
   ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "relations": {
    "accepts": [
     "GENOME",
@@ -3850,6 +4387,11 @@
   "group": "syn",
   "help": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "relations": {
@@ -3881,6 +4423,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -3906,6 +4451,11 @@
   "capabilities": [
    "translation",
    "sequence"
+  ],
+  "capabilities_ontology": [
+   "sequence",
+   "sequence.translation",
+   "translation"
   ],
   "relations": {
    "accepts": [
@@ -3945,6 +4495,11 @@
   "capabilities": [
    "orf_prediction",
    "sequence"
+  ],
+  "capabilities_ontology": [
+   "orf_prediction",
+   "sequence",
+   "sequence.orf-prediction"
   ],
   "relations": {
    "accepts": [
@@ -3987,6 +4542,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -4011,6 +4569,9 @@
   "group": "seq",
   "help": "seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap] [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -4039,6 +4600,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -4058,6 +4624,9 @@
   "group": "seq",
   "help": "careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -4086,6 +4655,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -4109,6 +4681,9 @@
   "group": "seq",
   "help": "protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -4135,6 +4710,9 @@
   "group": "tree",
   "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
   "capabilities": [
+   "phylogeny"
+  ],
+  "capabilities_ontology": [
    "phylogeny"
   ],
   "dependencies": [
@@ -4205,6 +4783,14 @@
    "alignment",
    "filtering"
   ],
+  "capabilities_ontology": [
+   "alignment",
+   "filtering",
+   "sequence",
+   "sequence.alignment",
+   "sequence.homology",
+   "sequence.homology.filtering"
+  ],
   "dependencies": [
    "trimal"
   ],
@@ -4255,6 +4841,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -4281,6 +4870,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -4300,6 +4893,9 @@
   "group": "seq",
   "help": "fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -4328,6 +4924,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -4354,6 +4953,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -4373,6 +4976,9 @@
   "group": "seq",
   "help": "gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -4401,6 +5007,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -4424,6 +5035,13 @@
   "help": "taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）",
   "capabilities": [
    "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
+  "dependencies": [
+   "internet"
   ],
   "dependency_manifest": [
    {
@@ -4458,6 +5076,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -4479,6 +5101,13 @@
   "help": "sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
   "capabilities": [
    "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
+  "dependencies": [
+   "internet"
   ],
   "dependency_manifest": [
    {
@@ -4513,6 +5142,10 @@
   "capabilities": [
    "table_operations"
   ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
   "relations": {
    "accepts": [
     "TABLE"
@@ -4533,6 +5166,11 @@
   "help": "blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8] [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra \"opts\"]   # BLAT 序列比对（GUI 逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）",
   "capabilities": [
    "homology"
+  ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
   ],
   "relations": {
    "accepts": [
@@ -4568,6 +5206,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -4593,6 +5234,10 @@
   "group": "table",
   "help": "pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）",
   "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
    "table_operations"
   ],
   "relations": {
@@ -4677,6 +5322,13 @@
   "capabilities": [
    "rna_seq",
    "normalization"
+  ],
+  "capabilities_ontology": [
+   "expression",
+   "expression.normalization",
+   "expression.rna-seq",
+   "normalization",
+   "rna_seq"
   ],
   "relations": {
    "accepts": [
@@ -5492,6 +6144,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -5519,6 +6174,12 @@
    "alignment",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "alignment",
+   "sequence",
+   "sequence.alignment",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -5543,6 +6204,9 @@
   "group": "seq",
   "help": "基因结构图（外显子/UTR 从 GFF）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -5573,6 +6237,12 @@
   "help": "Motif 分布图（MEME XML）",
   "capabilities": [
    "motif",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "motif",
+   "sequence",
+   "sequence.motif",
    "visualization"
   ],
   "relations": {
@@ -5619,6 +6289,12 @@
   "help": "火山图（DEG: GeneID Log2FC pvalue）",
   "capabilities": [
    "differential_expression",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "differential_expression",
+   "expression",
+   "expression.differential",
    "visualization"
   ],
   "relations": {
@@ -5699,6 +6375,13 @@
    "clustering",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "clustering",
+   "expression",
+   "expression.clustering",
+   "expression_matrix",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_MATRIX"
@@ -5772,6 +6455,12 @@
    "dimension_reduction",
    "expression_matrix"
   ],
+  "capabilities_ontology": [
+   "dimension_reduction",
+   "expression",
+   "expression.dimension-reduction",
+   "expression_matrix"
+  ],
   "relations": {
    "accepts": [
     "EXPRESSION_MATRIX"
@@ -5808,6 +6497,13 @@
   "capabilities": [
    "clustering",
    "distance"
+  ],
+  "capabilities_ontology": [
+   "clustering",
+   "distance",
+   "expression",
+   "expression.clustering",
+   "expression.clustering.distance"
   ],
   "relations": {
    "accepts": [
@@ -5874,6 +6570,12 @@
    "differential_expression",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "differential_expression",
+   "expression",
+   "expression.differential",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "DEG_TABLE"
@@ -5931,6 +6633,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -5956,6 +6661,9 @@
   "capabilities": [
    "phylogeny"
   ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -5979,6 +6687,9 @@
   "group": "tree",
   "help": "MAD 系统发育定根",
   "capabilities": [
+   "phylogeny"
+  ],
+  "capabilities_ontology": [
    "phylogeny"
   ],
   "relations": {
@@ -6030,6 +6741,13 @@
    "homology",
    "hmm_scan"
   ],
+  "capabilities_ontology": [
+   "hmm_scan",
+   "homology",
+   "sequence",
+   "sequence.homology",
+   "sequence.homology.hmm_scan"
+  ],
   "dependencies": [
    "hmmer"
   ],
@@ -6057,6 +6775,11 @@
   "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -6091,6 +6814,13 @@
   "capabilities": [
    "rna_seq",
    "quantification"
+  ],
+  "capabilities_ontology": [
+   "expression",
+   "expression.rna-seq",
+   "expression.rna-seq.quantification",
+   "quantification",
+   "rna_seq"
   ],
   "dependencies": [
    "kallisto"
@@ -6143,6 +6873,13 @@
    "motif",
    "scanning"
   ],
+  "capabilities_ontology": [
+   "motif",
+   "scanning",
+   "sequence",
+   "sequence.motif",
+   "sequence.motif.scanning"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -6169,6 +6906,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -6193,6 +6935,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -6215,6 +6962,9 @@
   "group": "seq",
   "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -6243,6 +6993,9 @@
   "capabilities": [
    "sequence"
   ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -6268,6 +7021,11 @@
   "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
   "capabilities": [
    "alignment"
+  ],
+  "capabilities_ontology": [
+   "alignment",
+   "sequence",
+   "sequence.alignment"
   ],
   "dependencies": [
    "muscle"
@@ -6320,6 +7078,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -6344,6 +7107,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -6366,6 +7134,9 @@
   "group": "seq",
   "help": "genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
   "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
    "sequence"
   ],
   "relations": {
@@ -6393,6 +7164,11 @@
   "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
   "capabilities": [
    "phylogeny",
+   "reconciliation"
+  ],
+  "capabilities_ontology": [
+   "phylogeny",
+   "phylogeny.reconciliation",
    "reconciliation"
   ],
   "relations": {
@@ -6438,6 +7214,11 @@
   "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
   "capabilities": [
    "phylogeny",
+   "tree_editing"
+  ],
+  "capabilities_ontology": [
+   "phylogeny",
+   "phylogeny.editing",
    "tree_editing"
   ],
   "relations": {
@@ -6507,6 +7288,12 @@
    "motif",
    "visualization"
   ],
+  "capabilities_ontology": [
+   "motif",
+   "sequence",
+   "sequence.motif",
+   "visualization"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -6544,6 +7331,11 @@
   "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
   "capabilities": [
    "enrichment"
+  ],
+  "capabilities_ontology": [
+   "enrichment",
+   "expression",
+   "expression.enrichment"
   ],
   "relations": {
    "accepts": [
@@ -6587,6 +7379,13 @@
    "motif",
    "genome_scan"
   ],
+  "capabilities_ontology": [
+   "genome_scan",
+   "motif",
+   "sequence",
+   "sequence.motif",
+   "sequence.motif.genome-scan"
+  ],
   "relations": {
    "accepts": [
     "FASTA",
@@ -6623,6 +7422,11 @@
   "group": "syn",
   "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
   "capabilities": [
+   "synteny"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
    "synteny"
   ],
   "dependencies": [
@@ -6687,6 +7491,11 @@
   "capabilities": [
    "homology"
   ],
+  "capabilities_ontology": [
+   "homology",
+   "sequence",
+   "sequence.homology"
+  ],
   "relations": {
    "accepts": [
     "FASTA"
@@ -6711,6 +7520,14 @@
   "capabilities": [
    "domain",
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "domain",
+   "genomics",
+   "genomics.annotation",
+   "sequence",
+   "sequence.domain"
   ],
   "relations": {
    "accepts": [
@@ -6758,6 +7575,13 @@
   "group": "syn",
   "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n       #   engineClass 导致 ClassNo",
   "capabilities": [
+   "microsynteny",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "genomics",
+   "genomics.synteny",
+   "genomics.synteny.microsynteny",
    "microsynteny",
    "visualization"
   ],
@@ -6816,6 +7640,11 @@
   "capabilities": [
    "annotation"
   ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
   "relations": {
    "accepts": [
     "GFF3"
@@ -6848,6 +7677,11 @@
   "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
   "capabilities": [
    "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -6883,6 +7717,13 @@
   "capabilities": [
    "gene_structure",
    "annotation",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "gene_structure",
+   "genomics",
+   "genomics.annotation",
    "visualization"
   ],
   "relations": {
@@ -6951,6 +7792,11 @@
    "phylogeny",
    "rooting"
   ],
+  "capabilities_ontology": [
+   "phylogeny",
+   "phylogeny.rooting",
+   "rooting"
+  ],
   "relations": {
    "accepts": [
     "ALIGNMENT",
@@ -6987,6 +7833,12 @@
   "help": "(alias of logo) 序列 LOGO 图",
   "capabilities": [
    "motif",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "motif",
+   "sequence",
+   "sequence.motif",
    "visualization"
   ],
   "inputs": [

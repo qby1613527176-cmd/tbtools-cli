@@ -24,9 +24,27 @@ def _root() -> str:
 def _cli(*args: str, timeout: int = 300) -> str:
     """调 CLI, 返回 stdout(纯 JSON 协议)。
 
-    timeout 与 CLI --timeout 对齐(评审 #6: 唯一 timeout authority):
-    tool-run --timeout N 时 MCP 外层 subprocess timeout = N + 30s 缓冲(不抢先杀)。
+    双模式(ADR-0003, 评审 #52 P0-7):
+    - subprocess(默认, 隔离): 进程级隔离, 稳定
+    - embedded(TBTOOLS_MCP_EMBEDDED=1): 进程内直接调用, 无启动开销
     """
+    import os as _os
+    if _os.environ.get("TBTOOLS_MCP_EMBEDDED") == "1":
+        import contextlib
+        import io
+        cwd = _os.getcwd()
+        try:
+            _os.chdir(_root())
+            import tbtools_cli.cli as _c
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                try:
+                    _c.cli.main(list(args), standalone_mode=False)
+                except SystemExit:
+                    pass
+            return buf.getvalue().strip()
+        finally:
+            _os.chdir(cwd)
     r = subprocess.run(
         [sys.executable, "-m", "tbtools_cli.cli", *args],
         capture_output=True, text=True, timeout=timeout, cwd=_root(),
