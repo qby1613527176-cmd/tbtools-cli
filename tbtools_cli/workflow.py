@@ -281,14 +281,14 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if direct:
             plans = [direct[:1]]
     best = plans[0] if plans else []
-    spec = _plan_to_spec(goal, best, input_format, output_format) if best else None
+    wf_spec = _plan_to_spec(goal, best, input_format, output_format) if best else None
     return {
         "schema_version": "1.0",
         "goal": goal,
         "input_format": input_format or None,
         "output_format": output_format or None,
         "plan": [{"step": i + 1, "tool": t, "reason": r} for i, (t, r) in enumerate(best)],
-        "workflow": spec,  # 可执行 WorkflowSpec(评审 #64 P0-2: plan → 对象)
+        "workflow": wf_spec,  # 可执行 WorkflowSpec(评审 #64 P0-2: plan → 对象)
         "confidence": "high" if len(best) > 1 else ("medium" if best else "none"),
         "alternatives": len(plans) - 1,
     }
