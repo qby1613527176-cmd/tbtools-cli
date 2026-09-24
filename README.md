@@ -7,8 +7,8 @@
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **Agent-ready 工具契约 294 个**(FULL 8 / PARTIAL 180 / LEGACY 106,`doctor --json` 实时统计)——底层能力: 200+ 绘图/分析 + 180+ RPC + 80+ CLI 工具 + 110+ Java 桥 + 引擎反射(逃生舱)。
-> **Agent-ready 定义**: FULL=契约完整(inputs+outputs+parameters+capabilities+stable);PARTIAL=部分契约;LEGACY=仅注册。
+> **294 Agent-facing tools**(注册): **Fully Agent-ready 8** | **Schema-capable 188** | Registered 294(`doctor --json` 实时统计)——底层能力: 200+ 绘图/分析 + 180+ RPC + 80+ CLI 工具 + 110+ Java 桥 + 引擎反射(逃生舱)。
+> 分级定义: FULL=契约完整(inputs+outputs+parameters+capabilities+stable);PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
 > 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)。
 
 <div align="center">

@@ -42,3 +42,13 @@ test_reports/data_*/
 
 # mkdocs 构建产物
 site/
+
+# 构建/测试产物(评审 #62-12 仓库卫生)
+dist/
+*.egg-info/
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+*.wf/
+__pycache__/
