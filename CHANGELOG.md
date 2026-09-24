@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.1] - 2026-09-25
+
+### 修复(第 13 份评审)
+- **P0-5【真 bug】workflow_id 稳定化**: `abs(hash(goal))` → sha256 派生(Python hash() 受 PYTHONHASHSEED 影响每次进程随机化,跨 run/resume 引用全断;实测跨进程同 ID)
+- README hero FULL 数 8→59 同步(FULL 判定修正后)
+- workflow 类 docstring/sanity 命名收敛
+- tests/test_doc_consistency.py: README/protocol MCP 数/FULL 数与代码一致性防文档漂移
+
 ## [1.4.0] - 2026-09-24
 
 ### Agent Runtime 协议一致性收口(第 9-12 份外部评审全落地)
