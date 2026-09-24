@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.2] - 2026-09-25
+
+### Workflow 契约化(第 14 份评审)
+- **validate 契约化**: Syntax→Graph→Tool Contract→Binding 四层,结构化 errors(WORKFLOW_INVALID_TOOL/DEPENDENCY/CYCLE/BINDING),exit 3
+- **输出识别契约化**: CommandSpec outputs 扩展名匹配(不再 args[-1] 纯猜)
+- **resume 完整 sha256 验证**: state 记录 output_sha256,产物篡改→强制重跑(实测)
+- **artifact inspect 不存在 bug 修**: ARTIFACT_NOT_FOUND exit 3(此前返回 truthy)
+- workflow_id 含 constraints / Artifact ID sha256[:32] / 索引 flock 并发安全
+- MCP 参数契约只读 spec(KNOWN_PARAMS 旁路清除)+ bool 参数 flag 形式
+
 ## [1.4.1] - 2026-09-25
 
 ### 修复(第 13 份评审)
