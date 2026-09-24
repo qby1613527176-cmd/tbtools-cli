@@ -1,4 +1,10 @@
-# TBtools CLI — TBtools-II 全功能命令行封装
+# TBtools CLI
+
+**Turn legacy bioinformatics tools into Agent-callable, verifiable workflows.**
+
+294 Agent-facing tools · 8 FULL contracts · 188 schema-capable · Agent Protocol v1.0
+
+将 TBtools-II 及传统生信工具转换为 Agent 可发现、可调用、可验证的接口层。
 
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
