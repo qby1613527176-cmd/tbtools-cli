@@ -1,0 +1,23 @@
+name: nwAlign
+kind: bridge
+mode: bridge
+class: NeedlemanWunschCli
+xmx: 3g
+runner: plot
+group: tree
+help: 'nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA]
+  [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   #
+  Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）'
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree
+status: beta

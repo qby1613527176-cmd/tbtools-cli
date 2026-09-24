@@ -1,0 +1,21 @@
+name: cddmotif
+kind: bridge
+mode: bridge
+class: CddMotifCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

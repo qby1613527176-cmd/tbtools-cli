@@ -1,0 +1,20 @@
+name: unrooted
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tree
+help: 无根树可视化
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree

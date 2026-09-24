@@ -1,0 +1,35 @@
+name: pafref
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.Paf.PafRefBaseCoverCalc
+xmx: 3g
+runner: plot
+group: syn
+help: 'pafref: pafref --inPaf <paf> --outTab <out.tsv>'
+capabilities:
+- synteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: paf
+  role: file
+  format: tsv
+  required: true
+  note: 含 cg:Z CIGAR
+outputs:
+- svg

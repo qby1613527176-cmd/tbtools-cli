@@ -1,0 +1,30 @@
+name: gel
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.GelImage.Marker
+xmx: 3g
+runner: plot
+group: seq
+help: 'gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️
+  无参调用会挂起 N32）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: lanes
+  role: file
+  format: tsv
+  required: true
+  note: LaneLabels 逗号分隔
+outputs:
+- svg

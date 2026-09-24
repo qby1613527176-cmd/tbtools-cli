@@ -1,0 +1,23 @@
+name: getseqdb
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: blast
+help: 'getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST
+  库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids
+  -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

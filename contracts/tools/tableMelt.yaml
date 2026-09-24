@@ -1,0 +1,18 @@
+name: tableMelt
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Table.TableMelt
+xmx: 3g
+runner: plot
+group: table
+help: 'tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

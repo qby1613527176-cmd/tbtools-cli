@@ -1,0 +1,26 @@
+name: findblockmultiple
+kind: bridge
+mode: bridge
+class: FindBlockMultipleCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId>
+  <ou'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

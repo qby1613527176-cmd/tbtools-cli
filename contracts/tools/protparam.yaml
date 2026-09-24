@@ -1,0 +1,22 @@
+name: protparam
+kind: direct
+mode: direct
+class: biocjava.bioWeb.ProtParamWrapper
+xmx: 2g
+runner: java
+group: seq
+help: 'protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️
+  联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

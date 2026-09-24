@@ -1,0 +1,43 @@
+name: kallisto
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: expr
+help: 'kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance>
+  [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd
+  N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 '
+capabilities:
+- rna_seq
+- quantification
+capabilities_ontology:
+- expression
+- expression.rna-seq
+- expression.rna-seq.quantification
+- quantification
+- rna_seq
+dependencies:
+- kallisto
+dependency_manifest:
+- name: kallisto
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+relations:
+  accepts:
+  - FASTQ
+  produces:
+  - QUANT_TABLE
+  next_step:
+  - tpmCalc
+inputs:
+- name: fastq
+  role: file
+  format: fastq
+  required: true
+  note: RNA-seq
+outputs:
+- tsv

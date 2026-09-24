@@ -1,0 +1,18 @@
+name: tableTranspose
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Table.TableTransposer
+xmx: 3g
+runner: plot
+group: table
+help: 'tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

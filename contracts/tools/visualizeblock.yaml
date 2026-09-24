@@ -1,0 +1,25 @@
+name: visualizeblock
+kind: bridge
+mode: bridge
+class: VisualizeCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Gen'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

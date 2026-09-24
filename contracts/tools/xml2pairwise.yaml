@@ -1,0 +1,22 @@
+name: xml2pairwise
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: blast
+help: 'xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI
+  逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

@@ -1,0 +1,34 @@
+name: mastrun
+kind: bridge
+mode: bridge
+class: MastRunCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--'
+capabilities:
+- motif
+- scanning
+capabilities_ontology:
+- motif
+- scanning
+- sequence
+- sequence.motif
+- sequence.motif.scanning
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: meme
+  role: file
+  format: meme
+  required: true
+  note: ''
+outputs:
+- xml

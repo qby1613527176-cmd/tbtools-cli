@@ -1,0 +1,23 @@
+name: fastaSubseq
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Fasta.ExtractFastaSubseq
+xmx: 3g
+runner: plot
+group: fastq
+help: 'fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext'
+capabilities:
+- sequence
+- extraction
+capabilities_ontology:
+- extraction
+- sequence
+- sequence.extraction
+relations:
+  accepts:
+  - FASTQ
+  produces:
+  - SEQUENCE_ARTIFACT
+  next_step:
+  - kallisto
+  - tpmCalc

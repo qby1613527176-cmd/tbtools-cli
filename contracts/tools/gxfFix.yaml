@@ -1,0 +1,19 @@
+name: gxfFix
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GXFfixer.GXFFix
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

@@ -1,0 +1,25 @@
+name: microgenome
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.MicroGenomeViz.MicroGenomeAnnotationCircosPlot
+xmx: 3g
+runner: plot
+group: syn
+help: 'microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

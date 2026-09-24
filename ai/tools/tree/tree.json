@@ -1,13 +1,15 @@
 {
  "schema_version": "1.0",
- "id": "tbtools.engine.tree",
+ "id": "tbtools.tree.tree",
  "name": "tree",
- "group": "engine",
+ "group": "tree",
  "kind": "manual",
  "class": "",
  "description": "树+注释图（TreeTreeTree 多轨道）",
- "invoke": "tbtools engine  key=value",
- "capabilities": [],
+ "invoke": "tbtools tree tree <args...>",
+ "capabilities": [
+  "phylogeny"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

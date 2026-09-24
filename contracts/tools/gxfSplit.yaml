@@ -1,0 +1,28 @@
+name: gxfSplit
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: gxf
+help: "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF\
+  \ 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）"
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT
+inputs:
+- name: gff
+  role: file
+  format: gff3
+  required: true
+  note: ''
+outputs:
+- tsv

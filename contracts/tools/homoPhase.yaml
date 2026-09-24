@@ -1,0 +1,20 @@
+name: homoPhase
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GenomeAssembly.HomoConflictBasedPartition
+xmx: 3g
+runner: plot
+group: asm
+help: 'homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>'
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT

@@ -1,0 +1,21 @@
+name: gdensity
+kind: bridge
+mode: bridge
+class: GeneDensityCli
+xmx: 3g
+runner: java
+group: gxf
+help: 'gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>]
+  [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）'
+alias_of: genedensity
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

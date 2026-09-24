@@ -1,0 +1,33 @@
+name: supercircos
+kind: bridge
+mode: bridge
+class: SuperCircosCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'supercircos: supercircos <config.cfg> <out> [width] [height]'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: config
+  role: file
+  format: txt
+  required: true
+  note: '[chrLen] 等节'
+outputs:
+- svg

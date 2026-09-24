@@ -1,0 +1,21 @@
+name: twoSeqBlast
+kind: direct
+mode: direct
+class: biocjava.bioDoer.BLAST.CompareTwoSeqSet
+xmx: 3g
+runner: plot
+group: blast
+help: 'twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

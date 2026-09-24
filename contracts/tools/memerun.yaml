@@ -1,0 +1,34 @@
+name: memerun
+kind: bridge
+mode: bridge
+class: MemeRunCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma'
+capabilities:
+- motif
+- discovery
+capabilities_ontology:
+- discovery
+- motif
+- sequence
+- sequence.motif
+- sequence.motif.discovery
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: fasta
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- meme

@@ -1,0 +1,19 @@
+name: clearchar
+kind: bridge
+mode: bridge
+class: FileCleanerCli
+xmx: 2g
+runner: java
+group: table
+help: 'clearchar <in.txt> <out.txt>   # 文件非法字符清理（GUI 逆向 #34 FileCleaner.simplifyFile；非可打印
+  ASCII/非 tab→_，空白行跳过，逐行报告）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

@@ -1,0 +1,37 @@
+name: pafviz
+kind: bridge
+mode: bridge
+class: PafVizCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None]
+  [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕
+  quickShow）'
+capabilities:
+- synteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: paf
+  role: file
+  format: tsv
+  required: true
+  note: 13 列 PAF
+outputs:
+- svg

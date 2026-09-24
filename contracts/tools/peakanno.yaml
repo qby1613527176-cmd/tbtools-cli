@@ -1,0 +1,30 @@
+name: peakanno
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakAnno
+xmx: 3g
+runner: plot
+group: chipseq
+help: 'peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]'
+capabilities:
+- chip_seq
+- peak_annotation
+capabilities_ontology:
+- chip-seq
+- chip-seq.peak-annotation
+- chip_seq
+- peak_annotation
+relations:
+  accepts:
+  - ALIGNMENT
+  - PEAKS
+  produces:
+  - PEAK_ANNOTATION
+inputs:
+- name: peaks
+  role: file
+  format: tsv
+  required: true
+  note: MACS2, 百万级坐标
+outputs:
+- tsv

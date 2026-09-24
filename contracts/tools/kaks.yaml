@@ -1,0 +1,22 @@
+name: kaks
+kind: direct
+mode: direct
+class: biocjava.bioIO.BioSoftPipeServer.PairWiseKaKsCalculator
+xmx: 2g
+runner: java
+group: tree
+help: 'kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU
+  N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key
+  value；inGenePair 为 ID1\tID2 每行，缺文件时自动全两两配对并翻译 CDS）'
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree

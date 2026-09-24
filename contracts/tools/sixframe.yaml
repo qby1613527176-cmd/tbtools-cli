@@ -1,0 +1,33 @@
+name: sixframe
+kind: bridge
+mode: bridge
+class: SixFrameTranlaterCli
+xmx: 2g
+runner: java
+group: seq
+help: 'sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列
+  6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）'
+capabilities:
+- translation
+- sequence
+capabilities_ontology:
+- sequence
+- sequence.translation
+- translation
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: pep
+  role: file
+  format: fasta
+  required: true
+  note: 蛋白(输出核酸)
+outputs:
+- fa

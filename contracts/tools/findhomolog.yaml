@@ -1,0 +1,24 @@
+name: findhomolog
+kind: direct
+mode: direct
+class: biocjava.bioIO.BioSoftPipeServer.FindBestHomology
+xmx: 3g
+runner: java
+group: blast
+help: 'findhomolog --inQueryProteinSet <query.pep> --inSubjectProteinSet <subject.pep>
+  --targetIDs <ID[,ID2]> --outDir <dir> [--threads N] [--extendClade] [--sensitive
+  N] [--similarity 0.x] [--weightCov 0.x] [--plot] [--directGraph]   # 最优同源查找（GUI
+  逆向 #37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

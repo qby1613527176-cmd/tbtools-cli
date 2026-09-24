@@ -1,0 +1,20 @@
+name: qpcr
+kind: bridge
+mode: bridge
+class: QpcrCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

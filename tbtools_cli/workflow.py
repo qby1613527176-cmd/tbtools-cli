@@ -38,7 +38,13 @@ def load_workflow(path: str) -> dict:
 
 
 def _resolve(value, outputs: dict):
-    """$step.output 引用解析为实际路径。"""
+    """引用解析: $step.output / {artifact: path}(Artifact 引用) / {input.X}。"""
+    # P1-8: dict 形式 Artifact 引用({artifact: <path>} → 路径透传, provenance 溯源)
+    if isinstance(value, dict) and "artifact" in value:
+        ap = value["artifact"]
+        if not os.path.isfile(ap):
+            raise WorkflowError(f"Artifact 不存在: {ap}")
+        return ap
     if isinstance(value, str) and value.startswith("$"):
         ref = value[1:]
         if "." in ref:

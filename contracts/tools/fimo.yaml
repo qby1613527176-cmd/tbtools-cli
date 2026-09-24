@@ -1,0 +1,27 @@
+name: fimo
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 'fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件
+  P00552 等价，直调系统 fimo；meme-suite）'
+capabilities:
+- motif
+- scanning
+capabilities_ontology:
+- motif
+- scanning
+- sequence
+- sequence.motif
+- sequence.motif.scanning
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

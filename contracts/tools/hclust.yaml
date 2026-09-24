@@ -1,0 +1,52 @@
+name: hclust
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: expr
+help: 层次聚类树（三列距离文件 GeneA\tGeneB\tdist）
+capabilities:
+- clustering
+- distance
+capabilities_ontology:
+- clustering
+- distance
+- expression
+- expression.clustering
+- expression.clustering.distance
+relations:
+  accepts:
+  - DISTANCE_TABLE
+  produces:
+  - DENDROGRAM
+  related_to:
+  - heatmap
+parameters:
+- name: w
+  type: int
+  default: 1000
+  required: false
+  note: ''
+- name: h
+  type: int
+  default: 800
+  required: false
+  note: ''
+- name: t
+  type: int
+  default: 4
+  required: false
+  note: 线程
+inputs:
+- name: distance
+  role: file
+  format: tsv
+  required: true
+  note: 三列距离
+  columns:
+  - GeneA
+  - GeneB
+  - distance
+outputs:
+- svg

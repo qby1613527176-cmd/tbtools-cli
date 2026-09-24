@@ -1,0 +1,25 @@
+name: pafcomp
+kind: bridge
+mode: bridge
+class: PafGC
+xmx: 3g
+runner: plot
+group: syn
+help: 'pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

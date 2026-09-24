@@ -1,0 +1,18 @@
+name: tableCollapse
+kind: bridge
+mode: bridge
+class: TableCollapseCli
+xmx: 3g
+runner: plot
+group: table
+help: 'tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader '
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

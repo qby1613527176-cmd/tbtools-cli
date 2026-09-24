@@ -1,0 +1,46 @@
+name: venn4
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn4Ellipse
+xmx: 2g
+runner: plot
+group: sets
+help: 'venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels>
+  --graph <out> --prefix <out>'
+capabilities:
+- set_operations
+capabilities_ontology:
+- set_operations
+- sets
+relations:
+  accepts:
+  - GENE_LISTS
+  produces:
+  - SET_DIAGRAM
+  related_to:
+  - venn2
+  - venn3
+  - upset
+inputs:
+- name: list1
+  role: file
+  format: txt
+  required: true
+  note: ''
+- name: list2
+  role: file
+  format: txt
+  required: true
+  note: ''
+- name: list3
+  role: file
+  format: txt
+  required: true
+  note: ''
+- name: list4
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- svg

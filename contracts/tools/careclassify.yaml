@@ -1,0 +1,22 @@
+name: careclassify
+kind: bridge
+mode: bridge
+class: PlantCAREResultClassifyCli
+xmx: 2g
+runner: java
+group: seq
+help: 'careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列
+  motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

@@ -1,0 +1,22 @@
+name: fa2tab
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 'fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与
+  tab2fa 往返一致）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

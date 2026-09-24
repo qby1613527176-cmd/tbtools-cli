@@ -1,0 +1,33 @@
+name: preparespecies
+kind: direct
+mode: direct
+class: biocjava.bioDoer.ComparativeGenomics.PrepareSpecies
+xmx: 3g
+runner: plot
+group: asm
+help: 'preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>'
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT
+inputs:
+- name: genome
+  role: file
+  format: fasta
+  required: true
+  note: ''
+- name: gff
+  role: file
+  format: gff3
+  required: true
+  note: ''
+outputs:
+- fasta

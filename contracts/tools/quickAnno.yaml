@@ -1,0 +1,22 @@
+name: quickAnno
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: blast
+help: 'quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   #
+  diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

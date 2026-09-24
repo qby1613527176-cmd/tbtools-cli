@@ -1,0 +1,21 @@
+name: pfammotif
+kind: bridge
+mode: bridge
+class: PfamMotifCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

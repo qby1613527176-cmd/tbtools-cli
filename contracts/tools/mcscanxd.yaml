@@ -1,0 +1,48 @@
+name: mcscanxd
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: syn
+help: 'mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads]
+  [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+dependencies:
+- mcscanx
+dependency_manifest:
+- name: mcscanx
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: gff
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: blast
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- collinearity

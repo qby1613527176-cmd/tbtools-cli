@@ -1,0 +1,20 @@
+name: tauIndex
+kind: bridge
+mode: bridge
+class: TauCalcCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'tauIndex: tauIndex <inExpTab> <outTAU>'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

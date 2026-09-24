@@ -1,0 +1,21 @@
+name: subtree
+kind: bridge
+mode: bridge
+class: GetSubNewickTreeCli
+xmx: 2g
+runner: java
+group: tree
+help: 'subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向
+  #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）'
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree

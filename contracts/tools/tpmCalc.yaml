@@ -1,0 +1,43 @@
+name: tpmCalc
+kind: tool
+mode: tool
+class: biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator
+xmx: 3g
+runner: java
+group: tool
+help: ''
+capabilities:
+- rna_seq
+- normalization
+capabilities_ontology:
+- expression
+- expression.normalization
+- expression.rna-seq
+- normalization
+- rna_seq
+relations:
+  accepts:
+  - COUNTS_TABLE
+  - GENE_LENGTH
+  produces:
+  - TPM_TABLE
+  next_step:
+  - pca
+  - heatmap
+  - volcano
+inputs:
+- name: counts
+  role: file
+  format: tsv
+  required: true
+  note: counts 表
+- name: lenInfo
+  role: file
+  format: tsv
+  required: true
+  note: ''
+  columns:
+  - GeneID
+  - Length
+outputs:
+- tsv

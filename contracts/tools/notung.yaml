@@ -1,0 +1,37 @@
+name: notung
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tree
+help: 'notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树
+  reconcile（duplication/loss 推断，插件 P00651 CLI 化）'
+capabilities:
+- phylogeny
+- reconciliation
+capabilities_ontology:
+- phylogeny
+- phylogeny.reconciliation
+- reconciliation
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree
+inputs:
+- name: tree
+  role: file
+  format: newick
+  required: true
+  note: ''
+- name: gene_tree
+  role: file
+  format: newick
+  required: true
+  note: ''
+outputs:
+- nwk

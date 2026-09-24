@@ -1,0 +1,25 @@
+name: conflictpaf
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GenomeAssembly.CalculateConflictByRefAlignPAF
+xmx: 3g
+runner: plot
+group: syn
+help: 'conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

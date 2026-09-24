@@ -1,0 +1,41 @@
+name: venn3
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JJplot2Toolkit.WonderfulVenn.Venn3
+xmx: 2g
+runner: plot
+group: sets
+help: 'venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph
+  <out> --prefix <out>'
+capabilities:
+- set_operations
+capabilities_ontology:
+- set_operations
+- sets
+relations:
+  accepts:
+  - GENE_LISTS
+  produces:
+  - SET_DIAGRAM
+  related_to:
+  - venn2
+  - venn3
+  - upset
+inputs:
+- name: list1
+  role: file
+  format: txt
+  required: true
+  note: ''
+- name: list2
+  role: file
+  format: txt
+  required: true
+  note: ''
+- name: list3
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- svg

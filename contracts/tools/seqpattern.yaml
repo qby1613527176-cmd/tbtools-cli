@@ -1,0 +1,23 @@
+name: seqpattern
+kind: direct
+mode: direct
+class: biocjava.bioIO.FastX.QuickLocateSeqPattern
+xmx: 2g
+runner: java
+group: seq
+help: 'seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap]
+  [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key
+  value 空格分隔）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

@@ -1,0 +1,19 @@
+name: golevel
+kind: bridge
+mode: bridge
+class: GoLevelCli
+xmx: 3g
+runner: plot
+group: table
+help: 'golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width
+  W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

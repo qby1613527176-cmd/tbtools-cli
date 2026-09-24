@@ -1,0 +1,25 @@
+name: seqfetch
+kind: direct
+mode: direct
+class: biocjava.bioWeb.EntrezUtils.NcbiSmartSeqFetchEntrezUtils
+xmx: 2g
+runner: java
+group: seq
+help: 'seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.txt>
+  [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey
+  KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️
+  联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+status: network-required

@@ -1,0 +1,21 @@
+name: tab2fa
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 'tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

@@ -1,0 +1,21 @@
+name: goAnno
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GeneOntology.Annotation.GoAnnoPipe
+xmx: 3g
+runner: java
+group: table
+help: 'goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--inPutFileType
+  BlastxXml|Query2GiTable] [--maxEvalue 1e-5] [--minQueryCov 0.33] [--outDir dir]
+  [--isDoDbFormat]   # GO 注释管道（GUI 逆向 #32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️
+  idmappingDb 须 gzip 格式「ID; ID\tGO:num; GO:num」；产物 outDir/<输入名>.xls）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

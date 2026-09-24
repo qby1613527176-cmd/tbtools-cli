@@ -1,0 +1,35 @@
+name: multiEfp
+kind: bridge
+mode: bridge
+class: MultiSuperHeatCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId'
+capabilities:
+- expression
+- visualization
+capabilities_ontology:
+- expression
+- visualization
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap
+inputs:
+- name: tga
+  role: file
+  format: tga
+  required: true
+  note: ''
+- name: expMat
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- svg

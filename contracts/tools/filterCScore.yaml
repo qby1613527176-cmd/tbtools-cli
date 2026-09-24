@@ -1,0 +1,24 @@
+name: filterCScore
+kind: direct
+mode: direct
+class: biocjava.bioDoer.BLAST.FilterBlastResultByCScore
+xmx: 3g
+runner: plot
+group: blast
+help: 'filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]'
+capabilities:
+- homology
+- filtering
+capabilities_ontology:
+- filtering
+- homology
+- sequence
+- sequence.homology
+- sequence.homology.filtering
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

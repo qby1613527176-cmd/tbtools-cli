@@ -1,0 +1,20 @@
+name: colorscheme
+kind: bridge
+mode: bridge
+class: ColorSchemeCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'colorscheme: colorscheme <inTab> <outTab> <refColIndex>'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

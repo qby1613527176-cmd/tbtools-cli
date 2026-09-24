@@ -1,0 +1,21 @@
+name: amazingmeta
+kind: bridge
+mode: bridge
+class: AmazingMetaCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> ['
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

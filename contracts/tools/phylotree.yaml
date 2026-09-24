@@ -1,0 +1,20 @@
+name: phylotree
+kind: bridge
+mode: bridge
+class: PhyloTreeCli
+xmx: 3g
+runner: plot
+group: tree
+help: 'phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]'
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree

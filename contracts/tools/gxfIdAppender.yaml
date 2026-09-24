@@ -1,0 +1,28 @@
+name: gxfIdAppender
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: gxf
+help: "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF\
+  \ ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）"
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT
+inputs:
+- name: gff
+  role: file
+  format: gff3
+  required: true
+  note: ''
+outputs:
+- gff3

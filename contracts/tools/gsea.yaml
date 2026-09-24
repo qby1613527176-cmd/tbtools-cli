@@ -1,0 +1,34 @@
+name: gsea
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: table
+help: 'gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342
+  CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）'
+capabilities:
+- enrichment
+capabilities_ontology:
+- enrichment
+- expression
+- expression.enrichment
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  - PHENOTYPE_CLS
+  produces:
+  - GSEA_REPORT
+inputs:
+- name: expr
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: cls
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- xls

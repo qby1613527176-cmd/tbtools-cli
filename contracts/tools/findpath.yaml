@@ -1,0 +1,20 @@
+name: findpath
+kind: bridge
+mode: bridge
+class: FindPathCli
+xmx: 3g
+runner: plot
+group: tree
+help: 'findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --'
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree

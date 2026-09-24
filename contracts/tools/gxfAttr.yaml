@@ -1,0 +1,28 @@
+name: gxfAttr
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: gxf
+help: 'gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   #
+  GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT
+inputs:
+- name: gff
+  role: file
+  format: gff3
+  required: true
+  note: ''
+outputs:
+- tsv

@@ -1,0 +1,23 @@
+name: fqfaConv
+kind: direct
+mode: direct
+class: biocjava.bioDoer.LinuxPipe.FastqAndFasta
+xmx: 3g
+runner: plot
+group: fastq
+help: 'fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第'
+capabilities:
+- sequence
+- conversion
+capabilities_ontology:
+- conversion
+- sequence
+- sequence.conversion
+relations:
+  accepts:
+  - FASTQ
+  produces:
+  - SEQUENCE_ARTIFACT
+  next_step:
+  - kallisto
+  - tpmCalc

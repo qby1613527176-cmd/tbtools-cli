@@ -1,0 +1,36 @@
+name: goEnrich
+kind: bridge
+mode: bridge
+class: GoEnrichCli
+xmx: 4g
+runner: java
+group: table
+help: 'goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO
+  富集分析（MF/CC/BP，P+BH 校正，G4 补齐）'
+capabilities:
+- enrichment
+- gene_ontology
+capabilities_ontology:
+- enrichment
+- expression
+- expression.enrichment
+- expression.enrichment.go
+- gene_ontology
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT
+inputs:
+- name: background
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: target
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- tsv

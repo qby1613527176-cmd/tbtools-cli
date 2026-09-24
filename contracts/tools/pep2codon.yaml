@@ -1,0 +1,34 @@
+name: pep2codon
+kind: bridge
+mode: bridge
+class: Pep2CodonCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: cds
+  role: file
+  format: fasta
+  required: true
+  note: ''
+- name: pep_aln
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- fa

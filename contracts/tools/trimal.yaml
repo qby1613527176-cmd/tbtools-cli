@@ -1,0 +1,44 @@
+name: trimal
+kind: bridge
+mode: bridge
+class: QuickTrimALCli
+xmx: 2g
+runner: java
+group: seq
+help: 'trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format
+  fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29
+  QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）'
+capabilities:
+- alignment
+- filtering
+capabilities_ontology:
+- alignment
+- filtering
+- sequence
+- sequence.alignment
+- sequence.homology
+- sequence.homology.filtering
+dependencies:
+- trimal
+dependency_manifest:
+- name: trimal
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+relations:
+  accepts:
+  - ALIGNMENT
+  produces:
+  - TRIMMED_ALIGNMENT
+  next_step:
+  - iqtree
+inputs:
+- name: aln
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- aln

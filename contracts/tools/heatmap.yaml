@@ -1,0 +1,58 @@
+name: heatmap
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: expr
+help: 热图（表达矩阵）
+capabilities:
+- expression_matrix
+- clustering
+- visualization
+capabilities_ontology:
+- clustering
+- expression
+- expression.clustering
+- expression_matrix
+- visualization
+relations:
+  accepts:
+  - EXPRESSION_MATRIX
+  produces:
+  - HEATMAP
+  next_step:
+  - hclust
+  related_to:
+  - pca
+parameters:
+- name: w
+  type: int
+  default: 1000
+  required: false
+  note: ''
+- name: h
+  type: int
+  default: 800
+  required: false
+  note: ''
+- name: log2
+  type: bool
+  default: false
+  required: false
+  note: ''
+- name: row_scale
+  type: bool
+  default: false
+  required: false
+  note: ''
+inputs:
+- name: matrix
+  role: file
+  format: tsv
+  required: true
+  note: 首列 gene ID
+  columns:
+  - gene_id
+outputs:
+- svg

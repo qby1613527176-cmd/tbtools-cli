@@ -1,0 +1,19 @@
+name: gxfStat
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GXFfixer.GXFstat
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

@@ -1,0 +1,21 @@
+name: quickFamily
+kind: direct
+mode: direct
+class: biocjava.bioDoer.BLAST.ReciprocalBlast.QuickGeneFamilyIdentification
+xmx: 3g
+runner: plot
+group: blast
+help: 'quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

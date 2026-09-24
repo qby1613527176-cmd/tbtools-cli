@@ -1,0 +1,19 @@
+name: sricher
+kind: bridge
+mode: bridge
+class: SimpleEnricherCli
+xmx: 3g
+runner: java
+group: table
+help: 'sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx>
+  <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

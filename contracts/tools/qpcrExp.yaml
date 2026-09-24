@@ -1,0 +1,20 @@
+name: qpcrExp
+kind: bridge
+mode: bridge
+class: QpcrDdctCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

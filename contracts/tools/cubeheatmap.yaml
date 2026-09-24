@@ -1,0 +1,23 @@
+name: cubeheatmap
+kind: bridge
+mode: bridge
+class: CubeHeatmapCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor <c>
+  --midColor <c> --maxColor <c>]   # 3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv
+  仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap
+status: beta

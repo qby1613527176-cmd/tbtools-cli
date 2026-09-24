@@ -1,0 +1,21 @@
+name: mast2tab
+kind: bridge
+mode: bridge
+class: Mast2TabCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'mast2tab: mast2tab <mast|meme.xml> <out.tab>'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

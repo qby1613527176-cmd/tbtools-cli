@@ -1,0 +1,25 @@
+name: msa
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 多序列比对可视化
+capabilities:
+- alignment
+- visualization
+capabilities_ontology:
+- alignment
+- sequence
+- sequence.alignment
+- visualization
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

@@ -1,0 +1,31 @@
+name: pca
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: expr
+help: PCA 图
+capabilities:
+- dimension_reduction
+- expression_matrix
+capabilities_ontology:
+- dimension_reduction
+- expression
+- expression.dimension-reduction
+- expression_matrix
+relations:
+  accepts:
+  - EXPRESSION_MATRIX
+  produces:
+  - PCA_PLOT
+inputs:
+- name: matrix
+  role: file
+  format: tsv
+  required: true
+  note: 首列 gene ID
+  columns:
+  - gene_id
+outputs:
+- svg

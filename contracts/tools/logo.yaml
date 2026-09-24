@@ -1,0 +1,21 @@
+name: logo
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 序列 LOGO 图
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

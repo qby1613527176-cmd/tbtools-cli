@@ -1,0 +1,31 @@
+name: simplehmmscan
+kind: bridge
+mode: bridge
+class: SimpleHmmscanCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+dependencies:
+- hmmer
+dependency_manifest:
+- name: hmmer
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+status: platform-limited

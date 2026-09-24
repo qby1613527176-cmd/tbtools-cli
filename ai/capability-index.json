@@ -179,7 +179,8 @@
   "rooting",
   "notung",
   "newickRename",
-  "treeRooting"
+  "treeRooting",
+  "tree"
  ],
  "extraction": [
   "fastaExtract",

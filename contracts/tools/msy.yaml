@@ -1,0 +1,48 @@
+name: msy
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: syn
+help: "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n  \
+  \     # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli\
+  \ 透传，用户参数被当\n       #   engineClass 导致 ClassNo"
+capabilities:
+- microsynteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- genomics.synteny.microsynteny
+- microsynteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: pos
+  role: file
+  format: tsv
+  required: true
+  note: "Chr\tGene\tStart\tEnd"
+- name: links
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: layout
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- svg

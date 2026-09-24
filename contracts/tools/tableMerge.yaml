@@ -1,0 +1,28 @@
+name: tableMerge
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Table.TableMerger
+xmx: 3g
+runner: plot
+group: table
+help: 'tableMerge: tableMerge --inFileArr "f1,f2,..." --inColIndexArr "0,1,..." --outTable
+  <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   #
+  按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT
+inputs:
+- name: tables
+  role: file
+  format: tsv
+  required: true
+  note: 多个输入表
+outputs:
+- tsv

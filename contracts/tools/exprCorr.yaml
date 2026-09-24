@@ -1,0 +1,20 @@
+name: exprCorr
+kind: bridge
+mode: bridge
+class: ExprCorrCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'exprCorr: exprCorr <inFPKM> <outCorrMat>'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

@@ -1,0 +1,22 @@
+name: venn5
+kind: bridge
+mode: bridge
+class: Venn5Cli
+xmx: 3g
+runner: plot
+group: sets
+help: 'venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]'
+capabilities:
+- set_operations
+capabilities_ontology:
+- set_operations
+- sets
+relations:
+  accepts:
+  - GENE_LISTS
+  produces:
+  - SET_DIAGRAM
+  related_to:
+  - venn2
+  - venn3
+  - upset

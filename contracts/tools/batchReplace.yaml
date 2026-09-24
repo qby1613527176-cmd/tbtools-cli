@@ -1,0 +1,18 @@
+name: batchReplace
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Table.BatchStringReplace
+xmx: 3g
+runner: plot
+group: table
+help: 'batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

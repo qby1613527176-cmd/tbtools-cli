@@ -1,0 +1,19 @@
+name: gxfRepIDs
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GXFToRepresentativeIDs
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

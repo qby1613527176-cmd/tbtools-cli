@@ -1,0 +1,19 @@
+name: gxfRename
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GXFRenamer
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

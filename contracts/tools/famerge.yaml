@@ -1,0 +1,21 @@
+name: famerge
+kind: bridge
+mode: bridge
+class: FastaMergerCli
+xmx: 2g
+runner: java
+group: seq
+help: 'famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

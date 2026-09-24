@@ -1,0 +1,19 @@
+name: pileup
+kind: bridge
+mode: bridge
+class: PileUpCli
+xmx: 3g
+runner: plot
+group: chipseq
+help: 'pileup: pileup <blast.xml> <out.svg> [--query NAME]'
+capabilities:
+- chip_seq
+capabilities_ontology:
+- chip-seq
+- chip_seq
+relations:
+  accepts:
+  - ALIGNMENT
+  - PEAKS
+  produces:
+  - PEAK_ANNOTATION

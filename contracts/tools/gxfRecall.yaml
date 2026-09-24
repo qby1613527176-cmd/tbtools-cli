@@ -1,0 +1,19 @@
+name: gxfRecall
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.RecallmRNAFeature
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfRecall: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

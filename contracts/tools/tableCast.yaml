@@ -1,0 +1,20 @@
+name: tableCast
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Table.TableCast
+xmx: 3g
+runner: plot
+group: table
+help: 'tableCast: tableCast <inLong.txt> <outMatrix>'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT
+aliases:
+- TableCast

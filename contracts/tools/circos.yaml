@@ -1,0 +1,45 @@
+name: circos
+kind: bridge
+mode: bridge
+class: CircosCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] ['
+capabilities:
+- visualization
+- genome_circos
+capabilities_ontology:
+- genome_circos
+- genomics
+- genomics.circos
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: chrLen
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: link
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: genePos
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- svg

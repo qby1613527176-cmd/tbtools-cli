@@ -1,0 +1,26 @@
+name: calcRepeat
+kind: bridge
+mode: bridge
+class: CalcRepeatCli
+xmx: 3g
+runner: plot
+group: engine
+help: 'calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min'
+dependencies:
+- jellyfish
+dependency_manifest:
+- name: jellyfish
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+inputs:
+- name: fasta
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- tsv
+status: platform-limited

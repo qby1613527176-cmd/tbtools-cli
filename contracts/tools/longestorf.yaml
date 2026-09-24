@@ -1,0 +1,35 @@
+name: longestorf
+kind: direct
+mode: direct
+class: biocjava.bioIO.ORF.GetLongestORF
+xmx: 2g
+runner: java
+group: seq
+help: 'longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17
+  GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）'
+capabilities:
+- orf_prediction
+- sequence
+capabilities_ontology:
+- orf_prediction
+- sequence
+- sequence.orf-prediction
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: seq
+  role: file
+  format: fasta
+  required: true
+  note: 核酸输入
+outputs:
+- fa
+aliases:
+- getLongestCompleteORF

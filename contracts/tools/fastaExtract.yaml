@@ -1,0 +1,23 @@
+name: fastaExtract
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Fasta.ExtractFasta
+xmx: 3g
+runner: plot
+group: fastq
+help: 'fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con'
+capabilities:
+- sequence
+- extraction
+capabilities_ontology:
+- extraction
+- sequence
+- sequence.extraction
+relations:
+  accepts:
+  - FASTQ
+  produces:
+  - SEQUENCE_ARTIFACT
+  next_step:
+  - kallisto
+  - tpmCalc

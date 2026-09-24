@@ -1,0 +1,27 @@
+name: collinearRegion
+kind: direct
+mode: direct
+class: biocjava.bioDoer.ComparativeGenomics.MCScanX.CollinearityToRegion
+xmx: 3g
+runner: plot
+group: syn
+help: 'collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>'
+capabilities:
+- synteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

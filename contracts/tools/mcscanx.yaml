@@ -1,0 +1,55 @@
+name: mcscanx
+kind: bridge
+mode: bridge
+class: MCScanXCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测'
+capabilities:
+- synteny
+- collinearity_detection
+capabilities_ontology:
+- collinearity_detection
+- genomics
+- genomics.synteny
+- genomics.synteny.detection
+- synteny
+relations:
+  accepts:
+  - GFF
+  - BLAST_TAB6
+  produces:
+  - COLLINEARITY
+  next_step:
+  - dualsyn
+  - dotplot
+parameters:
+- name: t
+  type: int
+  default: 4
+  required: false
+  note: ''
+- name: w
+  type: int
+  default: 1000
+  required: false
+  note: ''
+- name: h
+  type: int
+  default: 800
+  required: false
+  note: ''
+inputs:
+- name: gff
+  role: file
+  format: tsv
+  required: true
+  note: "chr\tgene\tstart\tend"
+- name: blast
+  role: file
+  format: tsv
+  required: true
+  note: tab6
+outputs:
+- tsv

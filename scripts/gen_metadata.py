@@ -345,6 +345,50 @@ def render_ai_manifest(meta):
     _json.dump({"schema_version": "1.0", "workflows": workflows},
                open(_os.path.join(ai_dir, "workflows.json"), "w", encoding="utf-8"),
                ensure_ascii=False, indent=1)
+    # P2: Tool readiness matrix(评审 #56): 每工具契约完备度
+    try:
+        _rows = []
+        for _n, _v in sorted(meta.items()):
+            dims = {
+                "schema": bool(_v.get("inputs")),
+                "params": bool(_v.get("parameters")),
+                "caps": bool(_v.get("capabilities")),
+                "deps": bool(_v.get("dependency_manifest") or _v.get("dependencies")),
+                "rels": bool(_v.get("relations")),
+                "status": _v.get("status", "stable"),
+            }
+            score = sum(1 for k in ("schema", "params", "caps", "deps", "rels") if dims[k])
+            _rows.append((_n, dims, score))
+        full = sum(1 for _, d, s in _rows if s == 5)
+        partial = sum(1 for _, d, s in _rows if 3 <= s < 5)
+        lines = ["# Tool Readiness Matrix(自动生成, 勿手改)", "",
+                 f"总览: {len(_rows)} 工具 | 契约完整(5/5): {full} | 部分(3-4): {partial} | 基础(<3): {len(_rows)-full-partial}", "",
+                 "| 工具 | Schema | Params | Caps | Deps | Rels | 完备度 |",
+                 "|---|---|---|---|---|---|---|"]
+        for _n, _d, _s in _rows:
+            mark = lambda b: "✅" if b else "—"
+            lines.append(f"| `{_n}` | {mark(_d['schema'])} | {mark(_d['params'])} | {mark(_d['caps'])} | {mark(_d['deps'])} | {mark(_d['rels'])} | {_s}/5 |")
+        open(_os.path.join(ROOT, "docs", "_generated", "tool-readiness.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
+    except Exception:
+        pass
+
+    # P1-9: contracts YAML 导出(评审 #56;CommandSpec → contracts/tools/*.yaml, 协议可读形式)
+    try:
+        import yaml as _y
+        cdir = _os.path.join(ROOT, "contracts", "tools")
+        _os.makedirs(cdir, exist_ok=True)
+        for _sub in _os.listdir(cdir):
+            _p = _os.path.join(cdir, _sub)
+            if _p.endswith(".yaml"):
+                _os.unlink(_p)
+        from tbtools_cli.command_spec import build_command_specs as _bcs, to_metadata_entry as _tme
+        for _n, _sp in _bcs().items():
+            _e = _tme(_sp)
+            if _e.get("inputs") or _e.get("parameters") or _e.get("capabilities"):
+                _y.safe_dump(_e, open(_os.path.join(cdir, f"{_n}.yaml"), "w", encoding="utf-8"),
+                             allow_unicode=True, sort_keys=False)
+    except Exception:
+        pass
     manifest = {"schema_version": "1.0",
                 "description": "tbtools-cli AI 机器接口层(Agent 程序化发现/理解/调用工具)",
                 "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "workflows.json", "relations.json", "tools/<group>/<cmd>.json"],

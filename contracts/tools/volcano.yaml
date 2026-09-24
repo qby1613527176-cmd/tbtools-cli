@@ -1,0 +1,62 @@
+name: volcano
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: expr
+help: '火山图（DEG: GeneID Log2FC pvalue）'
+capabilities:
+- differential_expression
+- visualization
+capabilities_ontology:
+- differential_expression
+- expression
+- expression.differential
+- visualization
+relations:
+  accepts:
+  - DEG_TABLE
+  produces:
+  - VOLCANO_PLOT
+  next_step:
+  - goEnrich
+  - keggEnrich
+  related_to:
+  - dehist
+  - heatmap
+parameters:
+- name: pval_cutoff
+  type: float
+  default: 0.05
+  required: false
+  note: ''
+  cli_name: --pval-cutoff
+- name: fc_cutoff
+  type: float
+  default: 1.0
+  required: false
+  note: ''
+  cli_name: --fc-cutoff
+- name: w
+  type: int
+  default: 1000
+  required: false
+  note: ''
+- name: h
+  type: int
+  default: 800
+  required: false
+  note: ''
+inputs:
+- name: deg
+  role: file
+  format: tsv
+  required: true
+  note: "GeneID\tLog2FC\tpvalue"
+  columns:
+  - GeneID
+  - Log2FC
+  - pvalue
+outputs:
+- svg

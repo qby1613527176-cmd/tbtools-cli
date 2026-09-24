@@ -1,0 +1,21 @@
+name: gfa2fa
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Fasta.Tools.GFAtoFasta
+xmx: 3g
+runner: plot
+group: seq
+help: 'gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

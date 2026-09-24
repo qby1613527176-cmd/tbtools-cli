@@ -1,0 +1,35 @@
+name: dotplot
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.DotPlot.dotdotdot
+xmx: 3g
+runner: plot
+group: syn
+help: 'dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout'
+capabilities:
+- synteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - DOTPLOT
+inputs:
+- name: gff
+  role: file
+  format: tsv
+  required: true
+  note: 4 列简化
+- name: pairs
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- svg

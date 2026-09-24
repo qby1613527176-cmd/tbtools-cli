@@ -1,0 +1,35 @@
+name: tfbsShift
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 'tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件
+  P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）'
+capabilities:
+- motif
+- genome_scan
+capabilities_ontology:
+- genome_scan
+- motif
+- sequence
+- sequence.motif
+- sequence.motif.genome-scan
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: motif
+  role: file
+  format: meme
+  required: true
+  note: ''
+outputs:
+- tsv

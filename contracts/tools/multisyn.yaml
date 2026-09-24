@@ -1,0 +1,40 @@
+name: multisyn
+kind: bridge
+mode: bridge
+class: SeveralSpeciesCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt'
+capabilities:
+- synteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: gff
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: gxf_lst
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- svg

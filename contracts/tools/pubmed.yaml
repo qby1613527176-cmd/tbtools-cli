@@ -1,0 +1,20 @@
+name: pubmed
+kind: bridge
+mode: bridge
+class: PubmedSearchCli
+xmx: 2g
+runner: java
+group: table
+help: 'pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️
+  联网 eutils；输出期刊/标题/年份/IF/DOI 表）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT
+status: network-required

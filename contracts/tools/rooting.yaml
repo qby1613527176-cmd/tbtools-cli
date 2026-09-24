@@ -1,0 +1,22 @@
+name: rooting
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tree
+help: MAD 系统发育定根
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree
+aliases:
+- treeRooting

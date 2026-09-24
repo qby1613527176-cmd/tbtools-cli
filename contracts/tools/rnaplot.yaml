@@ -1,0 +1,38 @@
+name: rnaplot
+kind: bridge
+mode: bridge
+class: RNAplotCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+dependencies:
+- rnafold
+dependency_manifest:
+- name: rnafold
+  type: binary
+  required: true
+  platforms:
+  - linux
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: seq
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- svg
+status: platform-limited

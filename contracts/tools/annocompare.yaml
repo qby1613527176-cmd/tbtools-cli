@@ -1,0 +1,19 @@
+name: annocompare
+kind: bridge
+mode: bridge
+class: StructAnnoCompareCli
+xmx: 3g
+runner: plot
+group: gxf
+help: 'annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

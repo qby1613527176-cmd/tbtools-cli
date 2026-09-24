@@ -1,0 +1,36 @@
+name: keggEnrich
+kind: bridge
+mode: bridge
+class: KeggEnrichCli
+xmx: 4g
+runner: java
+group: table
+help: 'keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   #
+  KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）'
+capabilities:
+- enrichment
+- pathway
+capabilities_ontology:
+- enrichment
+- expression
+- expression.enrichment
+- expression.enrichment.pathway
+- pathway
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT
+inputs:
+- name: background
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: target
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- tsv

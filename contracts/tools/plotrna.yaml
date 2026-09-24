@@ -1,0 +1,37 @@
+name: plotrna
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.miRCoverage.PlotRNAfold
+xmx: 3g
+runner: plot
+group: seq
+help: 'plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+dependencies:
+- rnafold
+dependency_manifest:
+- name: rnafold
+  type: binary
+  required: true
+  platforms:
+  - linux
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: seq
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- pdf

@@ -1,0 +1,38 @@
+name: motif
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: Motif 分布图（MEME XML）
+capabilities:
+- motif
+- visualization
+capabilities_ontology:
+- motif
+- sequence
+- sequence.motif
+- visualization
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal
+inputs:
+- name: meme_xml
+  role: file
+  format: xml
+  required: true
+  note: ''
+- name: ids
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- svg

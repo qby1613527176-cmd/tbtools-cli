@@ -1,0 +1,20 @@
+name: bed2gff3
+kind: bridge
+mode: bridge
+class: RegionBedToGFF3Cli
+xmx: 2g
+runner: java
+group: gxf
+help: 'bed2gff3 <in.bed> <out.gff3> [genome.fa]   # exon BED→GFF3（GUI 逆向 #21 RegionBedToGFF3；⚠️
+  BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

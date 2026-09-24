@@ -1,0 +1,21 @@
+name: mastExtract
+kind: direct
+mode: direct
+class: biocjava.bioDoer.MEME.ExtractSeq.ExtractSeqFromMastXML
+xmx: 3g
+runner: plot
+group: seq
+help: 'mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

@@ -1,0 +1,23 @@
+name: mast
+kind: bridge
+mode: bridge
+class: MastCli
+xmx: 3g
+runner: java
+group: seq
+help: 'mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use
+  N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口
+  QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

@@ -1,0 +1,25 @@
+name: groupedbar
+kind: bridge
+mode: bridge
+class: GroupedBarCli
+xmx: 3g
+runner: plot
+group: expr
+help: "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader]\
+  \ [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load\
+  \ 崩溃——引擎缺陷）"
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap
+status: beta
+aliases:
+- gbar

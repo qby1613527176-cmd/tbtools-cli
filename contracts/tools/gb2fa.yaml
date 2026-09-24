@@ -1,0 +1,21 @@
+name: gb2fa
+kind: bridge
+mode: bridge
+class: GenBank2FastaCli
+xmx: 2g
+runner: java
+group: seq
+help: 'gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

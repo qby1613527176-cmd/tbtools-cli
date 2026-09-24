@@ -1,0 +1,20 @@
+name: groupCol
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Table.TableColCollaspe
+xmx: 3g
+runner: plot
+group: expr
+help: 'groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

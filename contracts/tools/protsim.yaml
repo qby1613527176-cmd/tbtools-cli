@@ -1,0 +1,22 @@
+name: protsim
+kind: bridge
+mode: bridge
+class: CalculateSimilarityCli
+xmx: 2g
+runner: java
+group: seq
+help: 'protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵
+  TSV）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

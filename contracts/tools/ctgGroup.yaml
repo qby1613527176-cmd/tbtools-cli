@@ -1,0 +1,20 @@
+name: ctgGroup
+kind: bridge
+mode: bridge
+class: CtgGroupCli
+xmx: 3g
+runner: plot
+group: asm
+help: 'ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>'
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT

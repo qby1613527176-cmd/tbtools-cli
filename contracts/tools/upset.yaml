@@ -1,0 +1,32 @@
+name: upset
+kind: bridge
+mode: bridge
+class: UpSetCli
+xmx: 3g
+runner: plot
+group: sets
+help: 'upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap
+  N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode
+  Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）'
+capabilities:
+- set_operations
+capabilities_ontology:
+- set_operations
+- sets
+relations:
+  accepts:
+  - GENE_LISTS
+  produces:
+  - SET_DIAGRAM
+  related_to:
+  - venn2
+  - venn3
+  - upset
+inputs:
+- name: sets
+  role: file
+  format: txt
+  required: true
+  note: 多个集合文件, 末参为输出
+outputs:
+- svg

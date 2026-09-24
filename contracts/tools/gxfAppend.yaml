@@ -1,0 +1,22 @@
+name: gxfAppend
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GxfIDAppender
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀'
+capabilities:
+- annotation
+- gff_ops
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+- genomics.annotation.ops
+- gff_ops
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

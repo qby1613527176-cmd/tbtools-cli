@@ -1,0 +1,22 @@
+name: fasplit
+kind: direct
+mode: direct
+class: biocjava.bioIO.FastX.FastaIndex.QuickSpiltFasta
+xmx: 2g
+runner: java
+group: seq
+help: 'fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   #
+  FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

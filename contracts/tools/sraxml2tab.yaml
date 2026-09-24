@@ -1,0 +1,29 @@
+name: sraxml2tab
+kind: direct
+mode: direct
+class: biocjava.bioIO.SRAtools.ParseSRAXml2Table
+xmx: 2g
+runner: java
+group: table
+help: 'sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向
+  #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）'
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+dependencies:
+- internet
+dependency_manifest:
+- name: internet
+  type: capability
+  required: false
+  platforms:
+  - linux
+  - macos
+  - windows
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

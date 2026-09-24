@@ -1250,6 +1250,30 @@ except Exception:
     def search_cmd(keyword, as_json, in_fmt, out_fmt, cap):
         """模糊搜索命令（匹配名称+doc）: tbtools search <关键词> [--json]"""
         import json as _json
+        # P1-6: ranking(评审 #56): 名称>能力>描述;canonical 优先(alias 降权)
+        def _ranked(hits):
+            try:
+                import json as _jm
+                meta_c = _jm.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
+            except Exception:
+                meta_c = {}
+            kw_l = (keyword or "").lower()
+
+            def _score(h):
+                name, _cat, kind, _desc = h
+                s = 0
+                if kw_l and kw_l in name.lower():
+                    s += 100
+                if kw_l and any(kw_l in str(c) for c in (meta_c.get(name, {}).get("capabilities") or [])):
+                    s += 50
+                if meta_c.get(name, {}).get("alias_of"):
+                    s -= 30
+                if kind == "manual":
+                    s += 10
+                return -s, name
+
+            return sorted(hits, key=_score)
+
         if not keyword and not (in_fmt or out_fmt or cap):
             click.echo(_json.dumps({"query": "", "hits": [], "error": "need keyword or --input/--output/--capability"},
                                    ensure_ascii=False) if as_json
@@ -1315,12 +1339,12 @@ except Exception:
             sys.exit(1)
         if as_json:
             click.echo(_json.dumps({"query": keyword, "hits": [
-                {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in sorted(hits)
+                {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in _ranked(hits)
             ]}, ensure_ascii=False, indent=1))
             return
         kw_disp = keyword or ""
         click.echo(f"🔍 匹配 '{kw_disp}' 的命令（{len(hits)} 个）:")
-        for name, cat, kind, desc in sorted(hits):
+        for name, cat, kind, desc in _ranked(hits):
             click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")
         click.echo("\n查看详情: tbtools help <命令> | 全量: tbtools list")
 

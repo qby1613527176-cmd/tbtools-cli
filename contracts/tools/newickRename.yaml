@@ -1,0 +1,32 @@
+name: newickRename
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tree
+help: 'newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk
+  <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName）'
+capabilities:
+- phylogeny
+- tree_editing
+capabilities_ontology:
+- phylogeny
+- phylogeny.editing
+- tree_editing
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree
+inputs:
+- name: nwk
+  role: file
+  format: newick
+  required: true
+  note: ''
+outputs:
+- nwk

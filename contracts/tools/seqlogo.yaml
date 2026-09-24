@@ -1,0 +1,24 @@
+name: seqlogo
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: engine
+help: (alias of logo) 序列 LOGO 图
+capabilities:
+- motif
+- visualization
+capabilities_ontology:
+- motif
+- sequence
+- sequence.motif
+- visualization
+inputs:
+- name: seqs
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- svg

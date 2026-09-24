@@ -1,0 +1,23 @@
+name: genomefilter
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: seq
+help: 'genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   #
+  按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID
+  → ExtractFasta 提取；可选 GXF 同过滤）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

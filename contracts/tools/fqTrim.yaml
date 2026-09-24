@@ -1,0 +1,25 @@
+name: fqTrim
+kind: direct
+mode: direct
+class: biocjava.bioDoer.Fastq.FastqParallelTrimmer
+xmx: 3g
+runner: plot
+group: fastq
+help: 'fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]'
+capabilities:
+- ngs
+- preprocessing
+capabilities_ontology:
+- ngs
+- preprocessing
+- sequence
+- sequence.ngs
+- sequence.ngs.preprocessing
+relations:
+  accepts:
+  - FASTQ
+  produces:
+  - SEQUENCE_ARTIFACT
+  next_step:
+  - kallisto
+  - tpmCalc

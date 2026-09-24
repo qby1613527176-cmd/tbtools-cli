@@ -1,0 +1,50 @@
+name: iqtree
+kind: bridge
+mode: bridge
+class: QuickRunIQtreeCli
+xmx: 2g
+runner: java
+group: tree
+help: 'iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate]
+  [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot
+  须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）'
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+dependencies:
+- iqtree2
+dependency_manifest:
+- name: iqtree2
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+relations:
+  accepts:
+  - ALIGNMENT
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree
+parameters:
+- name: bb
+  type: int
+  default: 1000
+  required: false
+  note: UFBoot ≥1000
+- name: t
+  type: int
+  default: 4
+  required: false
+  note: ''
+inputs:
+- name: aln
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- nwk
+- treefile

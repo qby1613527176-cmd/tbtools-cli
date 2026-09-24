@@ -1,0 +1,21 @@
+name: genelocation
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.GeneLocation.GeneLocation
+xmx: 3g
+runner: plot
+group: gxf
+help: 'genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph'
+capabilities:
+- annotation
+- visualization
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+- visualization
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

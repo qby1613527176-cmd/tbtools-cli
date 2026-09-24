@@ -1,0 +1,19 @@
+name: regionAnno
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.RegionGXFOverlapAnnotation
+xmx: 3g
+runner: plot
+group: gxf
+help: 'regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

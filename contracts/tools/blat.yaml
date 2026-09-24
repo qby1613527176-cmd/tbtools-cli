@@ -1,0 +1,24 @@
+name: blat
+kind: bridge
+mode: bridge
+class: BlatExecutorCli
+xmx: 2g
+runner: java
+group: blast
+help: 'blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8]
+  [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize
+  N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra "opts"]   # BLAT 序列比对（GUI
+  逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore

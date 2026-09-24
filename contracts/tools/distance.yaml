@@ -1,0 +1,20 @@
+name: distance
+kind: bridge
+mode: bridge
+class: DistanceCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

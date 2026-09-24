@@ -1,0 +1,35 @@
+name: peaktss
+kind: direct
+mode: direct
+class: biocjava.bioDoer.JIGplotToolkit.MACS2viz.peakTssHeatMap
+xmx: 3g
+runner: plot
+group: chipseq
+help: 'peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b'
+capabilities:
+- chip_seq
+- peak_calling
+capabilities_ontology:
+- chip-seq
+- chip-seq.peak-calling
+- chip_seq
+- peak_calling
+relations:
+  accepts:
+  - ALIGNMENT
+  - PEAKS
+  produces:
+  - PEAK_ANNOTATION
+inputs:
+- name: gxf
+  role: file
+  format: gff3
+  required: true
+  note: ''
+- name: peaks
+  role: file
+  format: tsv
+  required: true
+  note: MACS2
+outputs:
+- svg

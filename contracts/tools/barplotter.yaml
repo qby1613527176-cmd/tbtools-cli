@@ -1,0 +1,33 @@
+name: barplotter
+kind: bridge
+mode: bridge
+class: BarPlotterCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap
+inputs:
+- name: gff
+  role: file
+  format: gff3
+  required: true
+  note: ''
+- name: synteny
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- svg

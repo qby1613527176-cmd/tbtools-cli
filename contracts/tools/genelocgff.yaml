@@ -1,0 +1,32 @@
+name: genelocgff
+kind: bridge
+mode: bridge
+class: GeneLocGffCli
+xmx: 3g
+runner: plot
+group: gxf
+help: 'genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT
+inputs:
+- name: gff
+  role: file
+  format: gff3
+  required: true
+  note: ''
+- name: ids
+  role: file
+  format: txt
+  required: true
+  note: ''
+outputs:
+- svg

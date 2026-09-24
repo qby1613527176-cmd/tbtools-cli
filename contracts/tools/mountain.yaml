@@ -1,0 +1,20 @@
+name: mountain
+kind: bridge
+mode: bridge
+class: MountainPlotCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'mountain: mountain <fold.txt> <out.tsv>'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

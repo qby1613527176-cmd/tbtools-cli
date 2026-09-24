@@ -1,0 +1,25 @@
+name: findblockdual
+kind: bridge
+mode: bridge
+class: FindBlockDualCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

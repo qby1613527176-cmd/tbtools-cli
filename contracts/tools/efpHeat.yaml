@@ -1,0 +1,35 @@
+name: efpHeat
+kind: direct
+mode: direct
+class: biocjava.bioDoer.SimpleEfpBrowser.generateSuperHeatMap
+xmx: 3g
+runner: plot
+group: expr
+help: 'efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s'
+capabilities:
+- expression
+- visualization
+capabilities_ontology:
+- expression
+- visualization
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap
+inputs:
+- name: tga
+  role: file
+  format: tga
+  required: true
+  note: TrueColor type2
+- name: expMat
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- svg

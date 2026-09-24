@@ -1,0 +1,20 @@
+name: violin
+kind: bridge
+mode: bridge
+class: ViolinCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'violin: violin <in.tsv> <out> [width] [height]'
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

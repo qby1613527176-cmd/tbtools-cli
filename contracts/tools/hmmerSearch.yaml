@@ -1,0 +1,22 @@
+name: hmmerSearch
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: hmm
+help: 'hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout
+  解析（插件 P00680 CLI 化，无需 idList）'
+inputs:
+- name: hmm
+  role: file
+  format: hmm
+  required: true
+  note: ''
+- name: seq
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- tsv

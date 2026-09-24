@@ -1,0 +1,22 @@
+name: meme2tab
+kind: bridge
+mode: bridge
+class: Meme2TabCli
+xmx: 3g
+runner: java
+group: seq
+help: 'meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI
+  逆向接口 MEMESuiteXMLtoTab）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

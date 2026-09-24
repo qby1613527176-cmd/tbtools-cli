@@ -1,0 +1,25 @@
+name: circlegene
+kind: bridge
+mode: bridge
+class: CircleGeneViewerCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r'
+capabilities:
+- synteny
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx

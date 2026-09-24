@@ -1,0 +1,46 @@
+name: dehist
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: expr
+help: 差异表达双直方图
+capabilities:
+- differential_expression
+- visualization
+capabilities_ontology:
+- differential_expression
+- expression
+- expression.differential
+- visualization
+relations:
+  accepts:
+  - DEG_TABLE
+  produces:
+  - DEG_HISTOGRAM
+  related_to:
+  - volcano
+parameters:
+- name: w
+  type: int
+  default: 1000
+  required: false
+  note: ''
+- name: h
+  type: int
+  default: 800
+  required: false
+  note: ''
+inputs:
+- name: deg
+  role: file
+  format: tsv
+  required: true
+  note: DEG 表
+  columns:
+  - GeneID
+  - Log2FC
+  - pvalue
+outputs:
+- svg

@@ -1,0 +1,23 @@
+name: gblocks
+kind: bridge
+mode: bridge
+class: JgblocksCli
+xmx: 2g
+runner: java
+group: seq
+help: 'gblocks <in.aln.fa> <out.aln.fa> [--is 0.5] [--fs 0.85] [--cp 8] [--bl1 15]
+  [--bl2 10] [--nongap 0.5] [--gaptreat none|half|all]   # Gblocks 保守区修剪（GUI 逆向 #30
+  Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

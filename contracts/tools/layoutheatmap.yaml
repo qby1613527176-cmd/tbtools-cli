@@ -1,0 +1,35 @@
+name: layoutheatmap
+kind: bridge
+mode: bridge
+class: LayoutHeatmapCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]'
+capabilities:
+- expression
+- visualization
+capabilities_ontology:
+- expression
+- visualization
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap
+inputs:
+- name: expr
+  role: file
+  format: tsv
+  required: true
+  note: ''
+- name: layout
+  role: file
+  format: tsv
+  required: true
+  note: ''
+outputs:
+- svg

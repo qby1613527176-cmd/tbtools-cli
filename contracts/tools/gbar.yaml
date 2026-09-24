@@ -1,0 +1,23 @@
+name: gbar
+kind: bridge
+mode: bridge
+class: GroupedBarCli
+xmx: 3g
+runner: plot
+group: expr
+help: 'gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95]
+  [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI
+  逆向接口 buildPanel；数据=每行 group value）'
+alias_of: groupedbar
+capabilities:
+- expression
+capabilities_ontology:
+- expression
+relations:
+  accepts:
+  - EXPRESSION_TABLE
+  produces:
+  - PLOT
+  related_to:
+  - volcano
+  - heatmap

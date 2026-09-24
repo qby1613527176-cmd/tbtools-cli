@@ -1,0 +1,28 @@
+name: hmmsearch
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: hmm
+help: 'hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM
+  Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）'
+capabilities:
+- homology
+- hmm_scan
+capabilities_ontology:
+- hmm_scan
+- homology
+- sequence
+- sequence.homology
+- sequence.homology.hmm_scan
+dependencies:
+- hmmer
+dependency_manifest:
+- name: hmmer
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+status: platform-limited

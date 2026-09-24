@@ -1,0 +1,19 @@
+name: gxfGenepos
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GXFToGenePosFile
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfGenepos: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # G'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

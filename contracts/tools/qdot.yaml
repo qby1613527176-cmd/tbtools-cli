@@ -1,0 +1,37 @@
+name: qdot
+kind: bridge
+mode: bridge
+class: QuickGenomeDotCli
+xmx: 3g
+runner: plot
+group: syn
+help: 'qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N]
+  [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由
+  mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）'
+capabilities:
+- synteny
+- visualization
+capabilities_ontology:
+- genomics
+- genomics.synteny
+- synteny
+- visualization
+relations:
+  accepts:
+  - SIMPLIFIED_GFF
+  - COLLINEARITY
+  produces:
+  - SYNTENY_PLOT
+  next_step:
+  - dualsyn
+  - dotplot
+  related_to:
+  - mcscanx
+inputs:
+- name: gff
+  role: file
+  format: tsv
+  required: true
+  note: "4 列简化: Chr\tGene\tStart\tEnd"
+outputs:
+- svg

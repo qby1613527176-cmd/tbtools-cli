@@ -1,0 +1,23 @@
+name: meme
+kind: bridge
+mode: bridge
+class: MemeCli
+xmx: 3g
+runner: java
+group: seq
+help: 'meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw
+  N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统
+  meme；产物可与 memeViz/fimo 串联）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

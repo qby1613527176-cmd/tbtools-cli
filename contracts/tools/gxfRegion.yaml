@@ -1,0 +1,19 @@
+name: gxfRegion
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GXFUtils.GXFRegionSummary
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]'
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

@@ -1,0 +1,20 @@
+name: virusRecomb
+kind: direct
+mode: direct
+class: biocjava.bioDoer.VirusDetect.RecombinationAnalysis
+xmx: 3g
+runner: plot
+group: asm
+help: 'virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引'
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT

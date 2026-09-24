@@ -1,0 +1,20 @@
+name: bamMerge
+kind: direct
+mode: direct
+class: biocjava.bioDoer.GenomeAnnotation.BAMMergeByRegionCoverage
+xmx: 3g
+runner: plot
+group: asm
+help: 'bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）'
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT

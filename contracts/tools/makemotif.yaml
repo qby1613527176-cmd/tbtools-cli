@@ -1,0 +1,22 @@
+name: makemotif
+kind: bridge
+mode: bridge
+class: MakeMotifCli
+xmx: 3g
+runner: java
+group: seq
+help: 'makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME
+  motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）'
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

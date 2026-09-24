@@ -1,0 +1,23 @@
+name: bestid
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: blast
+help: 'bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix>
+  [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH
+  互撞 Excellent/Poor；⚠️ 引擎强制 --threa'
+capabilities:
+- homology
+capabilities_ontology:
+- homology
+- sequence
+- sequence.homology
+relations:
+  accepts:
+  - FASTA
+  produces:
+  - BLAST_HITS
+  next_step:
+  - filterCScore
