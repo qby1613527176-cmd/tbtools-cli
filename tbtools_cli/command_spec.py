@@ -35,6 +35,63 @@ class InputSpec:
     columns: list[str] | None = None  # 列名契约(评审 #31: Agent 语义校验)
 
 
+
+
+@dataclass
+class InvocationSpec:
+    """调用契约(评审 #70 P0-1 Contract Compiler):
+    把 CommandSpec 的 inputs/outputs/parameters 编译成精确 argv 布局——
+    消灭 {input}/$step.output/args[-1] 的三层猜测。
+
+    布局约定(与现有引擎一致): [flag 参数对...] [输入(按声明序)] [输出路径]
+    """
+    inputs: list = field(default_factory=list)
+    parameters: list = field(default_factory=list)
+    outputs: list = field(default_factory=list)
+
+    def build_argv(self, inputs: list, parameters: dict, output: str) -> list:
+        """编译精确 argv:
+        inputs: 按 InputSpec 声明序的路径列表
+        parameters: {contract 名: 值}(自动翻译 cli_name + 类型验证 + bool flag 形式)
+        output: 输出路径(末位)
+        """
+        argv: list = []
+        # 1. flag 参数(先放,引擎 ArgsParser 任意位置可识别)
+        for k, v in parameters.items():
+            ps = next((p for p in self.parameters if p.name == k), None)
+            if ps is None:
+                raise ValueError(f"UNKNOWN_PARAMETER: {k}")
+            if ps.type == "int":
+                try:
+                    int(v)
+                except (ValueError, TypeError) as e:
+                    raise ValueError(f"INVALID_PARAMETER_TYPE: {k} expected int, got {v!r}") from e
+            elif ps.type == "float":
+                try:
+                    float(v)
+                except (ValueError, TypeError) as e:
+                    raise ValueError(f"INVALID_PARAMETER_TYPE: {k} expected float, got {v!r}") from e
+            flag = ps.cli_name or ("--" + k.replace("_", "-"))
+            if ps.type == "bool":
+                if str(v).lower() in ("true", "1", "yes"):
+                    argv.append(flag)
+                continue
+            argv += [flag, str(v)]
+        # 2. 必填检查
+        for ps in self.parameters:
+            if ps.required and ps.name not in parameters:
+                raise ValueError(f"MISSING_REQUIRED_PARAMETER: {ps.name}")
+        # 3. 输入(按声明序)+ 必填输入检查
+        req_inputs = [i for i in self.inputs if i.required]
+        if len(inputs) < len(req_inputs):
+            raise ValueError(f"MISSING_REQUIRED_INPUT: 需要 {len(req_inputs)} 个必填输入, 收到 {len(inputs)}")
+        argv += [str(i) for i in inputs]
+        # 4. 输出(末位)
+        if output:
+            argv.append(str(output))
+        return argv
+
+
 @dataclass
 class CommandSpec:
     """单一命令定义(第八轮评审 CommandSpec 模型)"""
@@ -54,6 +111,15 @@ class CommandSpec:
     dependencies: list[str] = field(default_factory=list)  # 外部依赖(环境解析, GLM #22)
     relations: dict = field(default_factory=dict)          # 语义关系(能力图衔接, GLM #24)
     parameters: list = field(default_factory=list)         # ParamSpec 参数契约(Tool Contract)
+
+    @property
+    def invocation(self) -> "InvocationSpec":
+        """调用契约投影(评审 #70): inputs+parameters → 可编译 argv 的 InvocationSpec。"""
+        inv = InvocationSpec()
+        inv.inputs = self.inputs
+        inv.parameters = self.parameters
+        inv.outputs = self.outputs
+        return inv
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -542,6 +608,7 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     if spec.aliases:
         e["aliases"] = spec.aliases
     return e
+
 
 # ── Agent-ready 分级(评审 #60-8): FULL/PARTIAL/LEGACY 正式定义 ──
 def agent_readiness(spec) -> str:

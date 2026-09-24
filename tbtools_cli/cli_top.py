@@ -1240,6 +1240,27 @@ except Exception:
         from tbtools_cli.workflow import validate_artifact
         _vok, _vmsg = validate_artifact(path)
         d["validation"] = {"valid": _vok, "detail": _vmsg}
+        # 契约列名验证(评审 #70 P1): producer 有 columns 契约时验证表头
+        if _vok and art.producer:
+            try:
+                from tbtools_cli.command_spec import KNOWN_SCHEMAS
+                _cols = None
+                _sc = KNOWN_SCHEMAS.get(art.producer)
+                if _sc and _sc[0]:
+                    _cols = next((i.columns for i in _sc[0] if i.columns), None)
+                if _cols and art.format in ("tsv", "csv", "txt"):
+                    with open(path, encoding="utf-8", errors="replace") as _f:
+                        _hdr = _f.readline().strip().split("\t")
+                    _missing = [c for c in _cols if c not in _hdr]
+                    if _missing:
+                        d["validation"]["contract_columns"] = {
+                            "valid": False, "missing": _missing, "expected": _cols}
+                        d["validation"]["valid"] = False
+                        d["validation"]["detail"] += f"; 契约列名缺失: {_missing}"
+                    else:
+                        d["validation"]["contract_columns"] = {"valid": True, "columns": _cols}
+            except Exception:
+                pass
         if as_json:
             click.echo(_json.dumps(d, ensure_ascii=False, indent=1))
         else:

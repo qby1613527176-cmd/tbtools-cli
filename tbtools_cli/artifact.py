@@ -111,18 +111,35 @@ def register(art: "Artifact"):
     """
     try:
         p = _index_path()
-        idx = {}
-        if os.path.isfile(p):
-            idx = json.load(open(p, encoding="utf-8"))
-        idx[art.id] = {"path": art.path, "type": art.type, "format": art.format,
-                       "sha256": art.sha256, "size": art.size,
-                       "producer": art.producer, "created_at": art.created_at}
-        tmp = p + f".tmp.{os.getpid()}"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(idx, f, ensure_ascii=False, indent=1)
-            f.flush()
-            os.fsync(f.fileno())
-        os.replace(tmp, p)  # 原子替换(POSIX)
+        # flock 保护读-改-写(评审 #70 P1-4: 并发 job_submit 双写必丢;原子写只防半截 JSON 不防丢更新)
+        try:
+            import fcntl as _fcntl_mod
+        except ImportError:
+            _fcntl_mod = None  # type: ignore[assignment]  # Windows 降级(仅 atomic write)
+        lock_path = p + ".lock"
+        with open(lock_path, "w") as _lf:
+            if _fcntl_mod:
+                try:
+                    _fcntl_mod.flock(_lf.fileno(), _fcntl_mod.LOCK_EX)
+                except Exception:
+                    pass
+            idx = {}
+            if os.path.isfile(p):
+                idx = json.load(open(p, encoding="utf-8"))
+            idx[art.id] = {"path": art.path, "type": art.type, "format": art.format,
+                           "sha256": art.sha256, "size": art.size,
+                           "producer": art.producer, "created_at": art.created_at}
+            tmp = p + f".tmp.{os.getpid()}"
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(idx, f, ensure_ascii=False, indent=1)
+                f.flush()
+                os.fsync(f.fileno())
+            os.replace(tmp, p)  # 原子替换(POSIX)
+            if _fcntl_mod:
+                try:
+                    _fcntl_mod.flock(_lf.fileno(), _fcntl_mod.LOCK_UN)
+                except Exception:
+                    pass
     except Exception:
         pass
 

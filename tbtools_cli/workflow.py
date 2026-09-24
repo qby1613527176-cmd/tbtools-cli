@@ -91,8 +91,14 @@ def _load_state(workdir: str) -> dict:
 
 
 def _save_state(workdir: str, state: dict):
-    json.dump(state, open(os.path.join(workdir, ".wf_state.json"), "w", encoding="utf-8"),
-              ensure_ascii=False, indent=1)
+    """原子写(评审 #70 P1-3): tmp+fsync+os.replace——中断不留半截 JSON。"""
+    p = os.path.join(workdir, ".wf_state.json")
+    tmp = p + f".tmp.{os.getpid()}"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=1)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp, p)
 
 
 def _topo_sort(steps: list) -> list:
@@ -363,62 +369,159 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     from tbtools_cli.command_spec import build_command_specs
     specs = build_command_specs()
     goal_l = goal.lower()
-    # 1. 起点: 接受输入类型的工具(评审 #66 P1-6: 从 spec 读 inputs/relations, 不再 KNOWN_*)
-    starts = []
-    for name, spec in specs.items():
-        if spec.inputs and any(i.format == input_format for i in spec.inputs):
-            starts.append((name, f"接受 {input_format} 输入"))
-        rel = spec.relations or {}
-        if input_format.upper() in [a.upper() for a in rel.get("accepts", [])]:
-            starts.append((name, f"relations: accepts {input_format}"))
-    starts.sort(key=lambda s: 0 if (specs[s[0]].relations or {}).get("next_step") else 1)
-    # 2. 终点: capability/输出匹配 goal
+    # ── 契约图搜索(评审 #70 P0-3): A.outputs ↔ B.inputs 真实配对,DFS 探索所有分支 ──
+    def _accepts(tool_spec, fmt: str) -> bool:
+        if not fmt:
+            return False
+        ins_fmts = [i.format.lower() for i in (tool_spec.inputs or [])]
+        rel_acc = [a.lower() for a in ((tool_spec.relations or {}).get("accepts") or [])]
+        return fmt.lower() in ins_fmts or fmt.lower() in rel_acc
+
+    def _produces(tool_spec) -> list:
+        outs = [str(o).lower() for o in (tool_spec.outputs or [])]
+        rel_prods = [p.lower() for p in ((tool_spec.relations or {}).get("produces") or [])]
+        return outs + rel_prods
+
     def _goal_match(name):
         spec = specs[name]
         caps = " ".join(spec.capabilities + (spec.__dict__.get("capabilities_ontology") or [])).lower()
-        rel = specs[name].relations or {}
-        prods = " ".join(rel.get("produces", [])).lower()
+        prods = " ".join(_produces(spec))
         hay = caps + " " + prods + " " + name.lower()
-        # 词根前缀匹配(phylogenetic↔phylogeny, tree↔tree, alignment↔align)
         for k in goal_l.split():
             if len(k) < 3:
                 continue
             root = k[:7] if len(k) > 7 else k
-            if root in hay or any(w.startswith(root) for w in hay.replace(".", " ").replace("-", " ").split()):
+            if root in hay or any(wd.startswith(root) for wd in hay.replace(".", " ").replace("-", " ").split()):
                 return True
         return False
-    # 3. 链推导(起点 → next_step → 终点)
-    plans = []
-    for start, reason in starts[:10]:
-        chain = [(start, reason)]
-        cur = start
-        for _ in range(max_steps - 1):
-            if _goal_match(cur):
-                break
-            _csp = specs.get(cur)
-            nxt = ((_csp.relations or {}).get("next_step", [])) if _csp else []
-            nxt = [n for n in nxt if n in specs and n not in [c[0] for c in chain]]
-            if not nxt:
-                break
-            cur = str(nxt[0])
-            chain.append((cur, f"relations: {chain[-1][0]} → next_step"))
-        if chain and _goal_match(chain[-1][0]):
-            plans.append(chain)
+
+    def _fmt_match(a: str, b: str) -> bool:
+        """格式模糊匹配(评审 #70): 相等或互为子串(aln↔alignment, trimmed_alignment↔alignment)。"""
+        a, b = a.lower(), b.lower()
+        return a == b or (len(a) >= 3 and a in b) or (len(b) >= 3 and b in a)
+
+    def _edge(a_name: str, b_name: str) -> str | None:
+        """A→B 兼容边: A 产出格式 ∩ B 接受格式(契约图核心, 模糊匹配)。"""
+        for ofmt in _produces(specs[a_name]):
+            ins_fmts = [i.format.lower() for i in (specs[b_name].inputs or [])]
+            rel_acc = [x.lower() for x in ((specs[b_name].relations or {}).get("accepts") or [])]
+            for ifmt in ins_fmts + rel_acc:
+                if _fmt_match(ofmt, ifmt):
+                    return ofmt
+        return None
+
+    # 起点(去重: 评审 #70 P0-5——同一工具 schema+relations 双命中不再重复探索)
+    starts, _seen_starts = [], set()
+    for name, spec in specs.items():
+        if _accepts(spec, input_format) and name not in _seen_starts:
+            _seen_starts.add(name)
+            starts.append(name)
+
+    # DFS 契约图搜索(深度≤max_steps; 有向无环: 不回访链内节点)
+    plans = []  # [(chain, edge_fmts)]
+    def _dfs(chain: list, fmts: list):
+        cur = chain[-1]
+        if _goal_match(cur) and chain:
+            plans.append((list(chain), list(fmts)))
+            return
+        if len(chain) >= max_steps:
+            return
+        # 后继: 契约兼容(outputs→inputs)或 relations.next_step
+        nexts = []
+        rel_next = (specs[cur].relations or {}).get("next_step", [])
+        for cand in specs:
+            if cand == cur or cand in chain:
+                continue
+            ef = _edge(cur, cand)
+            if ef:
+                nexts.append((cand, ef, 0))  # 契约边优先
+            elif cand in rel_next:
+                nexts.append((cand, (rel_next and "relation") or "", 1))
+        # 分支排序: 契约边优先, 然后目标可达性(goal_match/2跳)优先——防 [:8] 截断关键路径
+        nexts.sort(key=lambda x: (x[2],
+                                  0 if _goal_match(x[0]) else 1,
+                                  0 if any(_edge(x[0], c2) and _goal_match(c2) for c2 in specs if c2 != x[0]) else 1))
+        for cand, ef, _prio in nexts[:8]:  # 分支上限防爆炸
+            _dfs(chain + [cand], fmts + [ef])
+
+    # 起点排序(评审 #70): ① 直接 goal 匹配 ② 2 跳可达 goal(如 muscle→trimal→iqtree)
+    def _reach_goal_2hop(name: str) -> bool:
+        for cand in specs:
+            if cand != name and _edge(name, cand) and (_goal_match(cand) or
+                    any(_edge(cand, c2) and _goal_match(c2) for c2 in specs)):
+                return True
+        return False
+    starts.sort(key=lambda n: (0 if _goal_match(n) else 1, 0 if _reach_goal_2hop(n) else 1))
+    for st in starts[:16]:
+        _dfs([st], [])
     if not plans:
-        # 回退: capability 直接匹配 goal 的工具
-        direct = [(n, "capability 直接匹配") for n, s in specs.items() if _goal_match(n)]
+        direct = [n for n in specs if _goal_match(n)]
         if direct:
-            plans = [direct[:1]]
-    best = plans[0] if plans else []
-    wf_spec = _plan_to_spec(goal, best, input_format, output_format) if best else None
+            plans = [([direct[0]], [])]
+    # 置信度: reasons-based(评审 #70 P0-4——不再按链长)
+    def _score(chain, fmts):
+        if not chain:
+            return 0.0, []
+        reasons, score = [], 0.0
+        if input_format and _accepts(specs[chain[0]], input_format):
+            reasons.append("input_format_exact"); score += 0.3
+        if output_format and output_format.lower() in _produces(specs[chain[-1]]):
+            reasons.append("output_format_exact"); score += 0.3
+        if _goal_match(chain[-1]):
+            reasons.append("capability_match"); score += 0.2
+        # 目标词命中终点工具名(评审 #70: 语义优先——volcano>barplot, iqtree>degramdom)
+        _final = chain[-1].lower()
+        if any((k[:7] if len(k) > 7 else k) in _final for k in goal_l.split() if len(k) > 2):
+            reasons.append("name_match"); score += 0.15
+        # 工具全名直接出现在目标文本(最强语义信号: goal 含 "volcano" → volcano 工具)
+        if chain[-1].lower() in goal_l:
+            reasons.append("exact_name_in_goal"); score += 0.2
+        contract_edges = sum(1 for f in fmts if f and f != "relation")
+        if contract_edges == len(chain) - 1 and len(chain) > 1:
+            reasons.append("all_contract_edges"); score += 0.2
+        # 深管线加分(每契约边 +0.05;评审 #70: muscle→trimal→iqtree 应胜过 preparespecies→iqtree)
+        score += 0.05 * contract_edges
+        # 模糊边小罚(子串匹配不如精确匹配可信)
+        fuzzy = sum(1 for f in fmts if f and f != "relation" and f not in
+                    [i.format.lower() for i in (specs[chain[fmts.index(f) + 1]].inputs or [])])
+        score -= 0.05 * fuzzy
+        # 多必填输入降级(评审 #70 P0-2): planner 单输入绑定, >1 必填输入的工具当前不可执行
+        for t in chain:
+            _req = [i for i in (specs[t].inputs or []) if i.required]
+            if len(_req) > 1:
+                score -= 0.4
+                reasons.append("multi_input_unsupported")
+                break
+        # 透传跳惩罚(评审 #70): 中间步 输入格式≈输出格式 且不相关 goal = 无增值(preparespecies→iqtree)
+        for mid in chain[1:-1] if len(chain) > 1 else []:
+            _ins = [i.format.lower() for i in (specs[mid].inputs or [])] +                    [a.lower() for a in ((specs[mid].relations or {}).get("accepts") or [])]
+            _outs = _produces(specs[mid])
+            if any(_fmt_match(i, o) for i in _ins for o in _outs) and not _goal_match(mid):
+                score -= 0.15
+                break
+        return round(score, 2), reasons  # 内部不截断, 输出时 cap
+    best = max(plans, key=lambda p: _score(*p)[0]) if plans else ([], [])
+    # 精确名单步优先(评审 #70): 目标点名工具且单步高分 → 不塞无关前缀(peakanno→volcano)
+    _exact_singles = [p for p in plans if len(p[0]) == 1 and p[0][0].lower() in goal_l
+                      and _score(*p)[0] >= 0.8]
+    if _exact_singles:
+        best = max(_exact_singles, key=lambda p: _score(*p)[0])
+    best_score, best_reasons = _score(*best) if best[0] else (0.0, [])
+    chain_tools = best[0]
+    _fmts_padded = [None] + list(best[1])  # fmts 是边(比 chain 少 1),首步补 None 防 zip 截断
+    wf_spec = _plan_to_spec(goal, [(t, f"contract graph({fm})" if fm else "start") for t, fm in zip(chain_tools, _fmts_padded)],
+                            input_format, output_format) if chain_tools else None
     return {
         "schema_version": "1.0",
         "goal": goal,
         "input_format": input_format or None,
         "output_format": output_format or None,
-        "plan": [{"step": i + 1, "tool": t, "reason": r} for i, (t, r) in enumerate(best)],
+        "plan": [{"step": i + 1, "tool": t, "reason": r} for i, (t, r) in
+                 enumerate([(t, f"contract graph({fm})" if fm else "start")
+                            for t, fm in zip(chain_tools, _fmts_padded)])],
         "workflow": wf_spec,  # 可执行 WorkflowSpec(评审 #64 P0-2: plan → 对象)
-        "confidence": "high" if len(best) > 1 else ("medium" if best else "none"),
+        "confidence": min(best_score, 0.99),  # reasons-based 数值(评审 #70 P0-4; 内部比较用未截断分)
+        "confidence_reasons": best_reasons,
         "alternatives": len(plans) - 1,
     }
 

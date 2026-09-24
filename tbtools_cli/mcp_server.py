@@ -45,10 +45,21 @@ def _cli(*args: str, timeout: int = 300) -> str:
             return buf.getvalue().strip()
         finally:
             _os.chdir(cwd)
-    r = subprocess.run(
-        [sys.executable, "-m", "tbtools_cli.cli", *args],
-        capture_output=True, text=True, timeout=timeout, cwd=_root(),
-    )
+    # 错误 envelope 统一(评审 #70 P1-6): timeout/非 0 返回结构化 JSON,不抛异常/裸文本
+    try:
+        r = subprocess.run(
+            [sys.executable, "-m", "tbtools_cli.cli", *args],
+            capture_output=True, text=True, timeout=timeout, cwd=_root(),
+        )
+    except subprocess.TimeoutExpired:
+        return json.dumps({"schema_version": "1.0", "status": "failed",
+                           "error": {"code": "TIMEOUT", "message": f"CLI timeout after {timeout}s",
+                                     "retryable": True}}, ensure_ascii=False, indent=1)
+    if r.returncode != 0 and not r.stdout.strip().startswith("{"):
+        return json.dumps({"schema_version": "1.0", "status": "failed",
+                           "error": {"code": "CLI_ERROR", "exit_code": r.returncode,
+                                     "message": (r.stderr or r.stdout).strip()[-500:],
+                                     "retryable": False}}, ensure_ascii=False, indent=1)
     return r.stdout.strip()
 
 
