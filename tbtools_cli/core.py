@@ -216,7 +216,7 @@ def pre_flight(cmd_name: str, first_file: str) -> None:
     """手动注册命令的早期格式检查（打印警告，不阻断）"""
     if not first_file or str(first_file).startswith('-'):
         return
-    ok, _ = validate_file(str(first_file))
+    ok, _unused = validate_file(str(first_file))
     if not ok:
         return
     warn = check_input_format(cmd_name, str(first_file))
