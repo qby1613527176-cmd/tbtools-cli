@@ -8,7 +8,6 @@
 """
 from __future__ import annotations
 
-import json
 import os
 import subprocess
 import sys
@@ -54,8 +53,8 @@ def plan(wf: dict, workdir: str) -> list[dict]:
 
     占位符: {workdir} → 执行目录;{input.X} → workflow inputs 声明;$step.output → 上游产物。
     """
-    steps = []
-    outputs = {}
+    steps: list = []
+    outputs: dict = {}
     inputs = wf.get("inputs", {}) or {}
     for s in wf["steps"]:
         args = []
