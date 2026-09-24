@@ -7,230 +7,30 @@ import tempfile
 
 
 from tbtools_cli.config import get_default  # heap 可配置(第六轮评审)
+from tbtools_cli.errors import ERROR_CODES, classify_error  # noqa: F401  # 错误契约(拆分第一步)
+# core.py 拆分(2026-09-24): i18n/env/validation 迁至 runtime/{i18n,env,validation}.py(重导出保兼容)
+from tbtools_cli.runtime.i18n import _, _lang_cache_clear, _use_en  # noqa: F401
+from tbtools_cli.runtime.env import (  # noqa: F401
+    BRIDGES_DIR,
+    BUILD_DIR,
+    CP_SEP,
+    JAR,
+    ROOT,
+    cp,
+    find_jar_deep,
+    get_jar,
+    get_java,
+    safe_temp,
+    stdout_path,
+)
+from tbtools_cli.runtime.validation import (  # noqa: F401
+    EXPECTED_INPUT_FORMATS,
+    check_input_format,
+    detect_format,
+    validate_file,
+    validate_format_cols,
+)
 
-# ── 轻量 i18n(--lang en / LC_ALL / config [defaults] lang)──
-_LANG_EN = None
-
-def _use_en() -> bool:
-    """是否英文输出: config [defaults] lang=en 或 LC_ALL/LANG 含 en|c。中文默认。"""
-    global _LANG_EN
-    if _LANG_EN is None:
-        cfg = get_default("lang", "")
-        env = (os.environ.get("LC_ALL", "") + " " + os.environ.get("LANG", "")).lower()
-        lang_code = env.split()[0].split(".")[0] if env.split() else ""
-        # en 开头 → 英文; C/POSIX locale(如 C.UTF-8)也是英文环境
-        _LANG_EN = bool(cfg and str(cfg).lower().startswith("en")) or "en" in env or lang_code in ("c", "posix")
-    return _LANG_EN
-
-
-def _lang_cache_clear():
-    global _LANG_EN
-    _LANG_EN = None
-
-
-def _(zh: str, en: str) -> str:
-    """双语消息选择(中文默认;英文开关)"""
-    return en if _use_en() else zh
-
-# ---- 平台常量（Windows 主战场：classpath 分隔符；Linux/WSL 用 :）----
-CP_SEP = ";" if os.name == "nt" else ":"
-
-
-def safe_temp(prefix="tmp.", suffix="", dir=None, text=True):
-    """mkstemp 封装(替代有竞态的 tempfile.mktemp, 第六轮评审): 返回已关 fd 的路径"""
-    fd, path = tempfile.mkstemp(prefix=prefix, suffix=suffix, dir=dir, text=text)
-    os.close(fd)
-    return path
-def cp(*parts):
-    """平台安全的 classpath 拼接（Windows ; / POSIX :）"""
-    return CP_SEP.join(p for p in parts if p)
-
-def stdout_path():
-    """标准输出占位路径：POSIX /dev/stdout；Windows 用 CON（模式受限时回退临时文件）"""
-    return "/dev/stdout" if os.name != "nt" else "CON"
-
-# ---- 配置 ----
-def get_jar():
-    jar = os.environ.get("TBTOOLS_JAR", "")
-    if jar and os.path.isfile(jar):
-        return jar
-    # 配置文件
-    try:
-        from tbtools_cli.config import get_jar as cfg_jar
-        cj = cfg_jar()
-        if cj and os.path.isfile(cj):
-            return cj
-    except Exception:
-        pass
-    # 常见路径 + Windows/WSL/macOS 路径
-    for cand in [
-        os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar"),
-        os.path.expanduser("~/TBtools/TBtools_JRE1.6.jar"),
-        os.path.expanduser("~/Downloads/TBtools_JRE1.6.jar"),
-        os.path.expanduser("~/下载/TBtools_JRE1.6.jar"),
-        os.path.expanduser("~/Desktop/TBtools_JRE1.6.jar"),
-        os.path.expanduser("~/桌面/TBtools_JRE1.6.jar"),
-        "/opt/TBtools/TBtools_JRE1.6.jar",
-        "/usr/local/lib/TBtools_JRE1.6.jar",
-        # Windows 原生路径（git-bash / cmd 环境）
-        "C:/TBtools/TBtools_JRE1.6.jar",
-        "C:/Program Files/TBtools/TBtools_JRE1.6.jar",
-        "C:/Users/%s/Downloads/TBtools_JRE1.6.jar" % os.environ.get("USERNAME", ""),
-        # WSL 挂载 Win 盘
-        "/mnt/c/TBtools/TBtools_JRE1.6.jar",
-        "/mnt/c/Program Files/TBtools/TBtools_JRE1.6.jar",
-        "/mnt/d/TBtools/TBtools_JRE1.6.jar",
-        "/mnt/c/Users/*/Downloads/TBtools_JRE1.6.jar",
-        "/mnt/c/Users/*/Desktop/TBtools_JRE1.6.jar",
-        # macOS
-        "/Applications/TBtools/TBtools_JRE1.6.jar",
-        os.path.expanduser("~/Applications/TBtools/TBtools_JRE1.6.jar"),
-    ]:
-        if os.path.isfile(cand):
-            return cand
-    return jar  # 返回空或原始值（让下游报错）
-
-
-def find_jar_deep():
-    """全盘深搜 TBtools jar（限定常见挂载点 + 递归 glob）。
-
-    外部审查反馈（2026-09-20）：原 get_jar 在模块导入期执行递归全盘
-    glob（/mnt/*/TBtools*/**/...），无 jar 机器每次起 CLI 都白扫一遍。
-    现改为独立函数，仅 doctor / setup --auto 显式调用。
-    """
-    import glob
-    for pat in [
-        "/mnt/*/TBtools*/**/TBtools_JRE1.6.jar",
-        "/mnt/*/Users/*/Downloads/TBtools*.jar",
-        "/mnt/*/Users/*/Desktop/TBtools*.jar",
-        "/mnt/c/Users/*/Downloads/TBtools*.jar",
-        "/mnt/c/Users/*/Desktop/TBtools*.jar",
-    ]:
-        try:
-            hits = sorted(glob.glob(pat, recursive=True))
-        except Exception:
-            continue
-        if hits and os.path.isfile(hits[0]):
-            return hits[0]
-    return ""
-
-JAR = get_jar()
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-_SRC_BRIDGES = os.path.join(ROOT, "bridges")
-if os.path.isdir(_SRC_BRIDGES):
-    BRIDGES_DIR: str = _SRC_BRIDGES
-elif os.path.isdir(os.path.join(os.path.dirname(__file__), "bridges")):
-    BRIDGES_DIR = os.path.join(os.path.dirname(__file__), "bridges")
-elif os.path.isdir(os.path.join(sys.prefix, "tbtools_cli", "bridges")):
-    BRIDGES_DIR = os.path.join(sys.prefix, "tbtools_cli", "bridges")
-else:
-    BRIDGES_DIR = ""  # 空串约定(同 JAR): 桥命令会报未配置
-# bridges 位置: 源码环境 ROOT/bridges;pip data-files 装到 sys.prefix/tbtools_cli/bridges(实测);包内路径兜底
-_SRC_BUILD = os.path.join(ROOT, "build")
-BUILD_DIR = _SRC_BUILD if (os.path.isdir(_SRC_BUILD) or os.access(ROOT, os.W_OK)) else     os.path.join(os.path.expanduser("~/.cache/tbtools-cli/build"))
-
-# ---- 输入校验 ----
-def validate_file(path: str, desc: str = "输入文件", check_readable: bool = True) -> tuple[bool, str]:
-    """校验文件存在性 + 可读性。返回 (ok, msg)"""
-    if not path:
-        return False, f"❌ {desc}: 路径为空"
-    if path in ("-", "/dev/stdin", "/dev/stdout"):
-        return True, ""  # 管道跳过校验
-    if not os.path.exists(path):
-        return False, f"❌ {desc}: 文件不存在 → {path}"
-    if os.path.isdir(path):
-        return False, f"❌ {desc}: 是目录不是文件 → {path}"
-    if check_readable and not os.access(path, os.R_OK):
-        return False, f"❌ {desc}: 无读取权限 → {path}"
-    size = os.path.getsize(path)
-    if size == 0:
-        return False, f"❌ {desc}: 文件为空（0 字节）→ {path}"
-    return True, ""
-
-def detect_format(path: str, max_lines: int = 3) -> tuple[str, int, list[str]]:
-    """探测文件格式（peek 前 N 行）。返回 (format_hint, ncols, sample_lines)"""
-    if path in ("-", "/dev/stdin"):
-        return ("stdin", 0, [])
-    try:
-        with open(path, 'r', errors='replace') as f:
-            lines = []
-            for i, line in enumerate(f):
-                if i >= max_lines:
-                    break
-                lines.append(line.rstrip('\n'))
-    except Exception as e:
-        import logging; logging.getLogger(__name__).debug("detect_format %s: %s", path, e)
-        return ("unknown", 0, [])
-    if not lines:
-        return ("empty", 0, [])
-    # FASTA
-    if lines[0].startswith('>'):
-        return ("fasta", 0, lines)
-    # GFF3（N16: 含 ##gff-version 头或特征列 gene/mRNA 的均判 GFF3，此前误判 text）
-    if lines[0].startswith('##gff-version') or '\tgene\t' in lines[0] or '\tmRNA\t' in lines[0]:
-        return ("gff3", len(lines[0].split('\t')), lines)
-    # GFF3（旧判定保留）
-    if '\tgff3' in lines[0].lower() or '\tgff' in lines[0].lower():
-        return ("gff3", len(lines[0].split('\t')), lines)
-    # Newick
-    if lines[0].startswith('(') or lines[0].endswith(';'):
-        return ("newick", 0, lines)
-    # MEME XML
-    if lines[0].lstrip().startswith('<?xml'):  # 收紧: 仅真 XML 声明(评审: 含<和?的任何文本误判)
-        return ("xml", 0, lines)
-    # TSV/CSV
-    delim = '\t' if '\t' in lines[0] else (',' if ',' in lines[0] else None)
-    if delim:
-        ncols = len(lines[0].split(delim))
-        return ("tsv" if delim == '\t' else "csv", ncols, lines)
-    return ("text", 0, lines)
-
-def validate_format_cols(path, expected_cols, desc="输入文件"):
-    """校验文件列数是否符合预期"""
-    fmt, ncols, _ = detect_format(path)
-    if ncols > 0 and expected_cols and ncols < expected_cols:
-        return False, f"❌ {desc}: 需要 ≥{expected_cols} 列，实际 {ncols} 列（{fmt} 格式）→ {path}"
-    return True, ""
-
-# ---- C2: 早期格式不匹配警告 ----
-# 命令 → (期望格式, 最少列数, 人类描述)。仅高置信场景，警告不阻断。
-EXPECTED_INPUT_FORMATS = {
-    "hclust":    ("tsv", 3, "三列距离文件 GeneA\tGeneB\tdist"),
-    "volcano":   ("tsv", 3, "DEG 表（ID\tlog2FC\tP值...）"),
-    "heatmap":   ("tsv", 2, "表达矩阵（基因×样本）"),
-    "pca":       ("tsv", 2, "表达矩阵（基因×样本，行=观测）"),
-    "msa":       ("fasta", 0, "多序列比对 FASTA"),
-    "logo":      ("fasta", 0, "比对 FASTA"),
-    "motif":     ("xml", 0, "MEME XML"),
-    "structure": ("gff3", 9, "GFF3 注释"),
-    "tree":      ("newick", 0, "Newick 树文件"),
-    "barplot":   ("tsv", 2, "富集表（term\tP值...）"),
-}
-
-def check_input_format(cmd_name: str, path: str) -> str | None:
-    """早期格式检测：期望格式与实际不符时返回警告文本（不阻断）"""
-    exp = EXPECTED_INPUT_FORMATS.get(cmd_name)
-    if not exp:
-        return None
-    exp_fmt, min_cols, desc = exp
-    fmt, ncols, _ = detect_format(path)
-    if fmt in ("unknown", "empty", "stdin"):
-        return None
-    if exp_fmt == "fasta" and fmt != "fasta":
-        return f"输入文件看起来是 {fmt}，但 {cmd_name} 通常需要 FASTA（{desc}）"
-    if exp_fmt == "newick" and fmt != "newick":
-        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要 Newick 树文件（{desc}）"
-    if exp_fmt == "xml" and fmt != "xml":
-        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要 XML（{desc}）"
-    if exp_fmt == "gff3" and fmt != "gff3":
-        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要 GFF3（{desc}）"
-    if exp_fmt == "tsv" and fmt not in ("tsv", "csv"):
-        return f"输入文件看起来是 {fmt}，但 {cmd_name} 需要表格（{desc}）"
-    if exp_fmt == "tsv" and min_cols and ncols and ncols < min_cols:
-        return f"输入文件只有 {ncols} 列，{cmd_name} 通常需要 ≥{min_cols} 列（{desc}）"
-    return None
-
-# ---- 已知坑位提示 ----
 PITFALL_HINTS = {
     "onesteptree": "--bb-time 必须 ≥1000（IQ-TREE UFBoot 下限），小于 1000 会静默不产树；序列须 ≥4 条唯一（太相似会被合并报错）；outFilePrefix 若是目录，产物命名为 目录/TBtools.*",
     "draw": "输入必须是 TreeTab 配置（[TYPE]:Tree + [NEWICK]: 行），直接喂 .nwk 曾导致引擎从 stdin 读入而挂起（G2 已修复为快速报错）；只画树用 tbtools tree phylotree",
@@ -341,37 +141,7 @@ def get_pitfall_hint(command_name: str) -> str | None:
     return PITFALL_HINTS.get(command_name, "")
 
 # ---- 统一输出格式处理 ----
-def get_java() -> str | None:
-    """定位 java 可执行文件（N1：tool 层 PATH 依赖误导报错）。
 
-    优先级: TBTOOLS_JAVA 环境变量 > PATH 搜索 > 常见位置。
-    Windows 下 Python 运行时注入 PATH 对 CreateProcess 无效（交付包实测），
-    所以调用前必须解析出绝对路径而非依赖 PATH。
-    """
-    j = os.environ.get("TBTOOLS_JAVA", "")
-    if j and os.path.isfile(j):
-        return j
-    w = shutil.which("java")
-    if w:
-        return w
-    for cand in (
-        "/usr/bin/java", "/usr/local/bin/java", "/opt/java/bin/java",
-        os.path.expanduser("~/jdk*/bin/java"),
-        "C:/Program Files/TBtools/jre/bin/java.exe",
-        "C:/Program Files/Java/*/bin/java.exe",
-        "/mnt/c/Program Files/TBtools/jre/bin/java.exe",
-        "/mnt/c/Program Files/Java/*/bin/java.exe",
-        "/Applications/TBtools/jre/bin/java",
-    ):
-        import glob as _glob
-        hits = _glob.glob(cand)
-        for h in hits:
-            if os.path.isfile(h):
-                return h
-    return ""
-
-
-# ---- 桥编译 ----
 def ensure_bridge(bridge_name: str) -> None:
     """确保桥 Java 文件已编译到 build/ 目录"""
     src = os.path.join(BRIDGES_DIR, f"{bridge_name}.java")
