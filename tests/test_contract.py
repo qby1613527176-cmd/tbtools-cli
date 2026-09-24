@@ -40,10 +40,29 @@ def test_contract_kind_enum():
     assert not bad, f"非法 kind: {bad[:10]}"
 
 
+# 模型拥有字段(协议层;help/mode 等扫描派生字段不在等价范围)
+_SPEC_FIELDS = ("name", "kind", "group", "runner", "xmx", "class",
+                "capabilities", "capabilities_ontology", "relations", "dependencies",
+                "dependency_manifest", "parameters", "inputs", "outputs",
+                "status", "alias_of", "aliases")
+
+
+def _normalize(entry: dict) -> dict:
+    return {k: entry.get(k) for k in _SPEC_FIELDS if k in entry and entry.get(k) not in (None, [], {}, "")}
+
+
 def test_contract_metadata_projection():
-    """契约④: metadata 可由模型投影再生(单一事实源成立)"""
-    for name in list(META)[:50]:  # 抽样 50(全量投影含动态 help 差异容忍)
-        assert name in SPECS, f"{name} 不在模型"
+    """契约④(评审 #56 P0-5): 全量 294 投影等价——模型投影与 metadata 模型字段逐一相同。"""
+    from tbtools_cli.command_spec import to_metadata_entry
+    diffs = []
+    for name, spec in SPECS.items():
+        proj = _normalize(to_metadata_entry(spec))
+        meta = _normalize(META.get(name, {}))
+        if proj != meta:
+            delta = {k: (proj.get(k), meta.get(k)) for k in set(proj) | set(meta)
+                     if proj.get(k) != meta.get(k)}
+            diffs.append((name, delta))
+    assert not diffs, f"投影不等价 {len(diffs)} 条: {diffs[:3]}"
 
 
 def test_contract_status_semantics():

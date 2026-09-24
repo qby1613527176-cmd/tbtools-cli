@@ -402,6 +402,10 @@ KNOWN_ALIASES = {
     "getLongestCompleteORF": "longestorf",
     "one-step": "onesteptree",
     "genestructure": "structure",  # 旧名 → seq structure? 保留注释: genestructure 是独立命令
+    # 显示别名(与 gen_metadata 特判一致, 评审 #56 两路径统一): draw→tree, one-step→onesteptree, rooting→treeRooting
+    "tree": "draw",
+    "onesteptree": "one-step",
+    "treeRooting": "rooting",
 }
 
 # 已知状态(engine 级/环境限制; 未列默认为 stable)
@@ -455,6 +459,7 @@ def build_command_specs() -> dict[str, CommandSpec]:
                 if v.get("kind") == "manual" and name not in specs:
                     specs[name] = CommandSpec(
                         name=name, group=v.get("group", "engine"), kind="manual",
+                        runner="plot",  # 与 specs_from_scans 一致(评审 #56 两路径统一)
                         doc=v.get("help", ""),
                     )
     except Exception:

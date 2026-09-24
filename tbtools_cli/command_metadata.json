@@ -6319,14 +6319,16 @@
     "type": "float",
     "default": 0.05,
     "required": false,
-    "note": ""
+    "note": "",
+    "cli_name": "--pval-cutoff"
    },
    {
     "name": "fc_cutoff",
     "type": "float",
     "default": 1.0,
     "required": false,
-    "note": ""
+    "note": "",
+    "cli_name": "--fc-cutoff"
    },
    {
     "name": "w",
@@ -6647,7 +6649,10 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "aliases": [
+   "tree"
+  ]
  },
  "unrooted": {
   "name": "unrooted",
@@ -7869,11 +7874,29 @@
   "kind": "manual",
   "mode": "manual",
   "class": "",
-  "xmx": "",
+  "xmx": "2g",
   "runner": "plot",
   "help": "树+注释图（TreeTreeTree 多轨道）",
   "alias_of": "draw",
   "src": "cli_manual",
-  "group": "engine"
+  "group": "tree",
+  "capabilities": [
+   "phylogeny"
+  ],
+  "capabilities_ontology": [
+   "phylogeny"
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  }
  }
 }

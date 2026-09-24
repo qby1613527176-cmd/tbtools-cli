@@ -151,9 +151,11 @@ def build():
     # tree 分组别名（显示名 ≠ 函数名）: draw→tree, one-step→onesteptree, rooting→treeRooting
     for alias, disp in (("tree", "draw"), ("onesteptree", "one-step"), ("treeRooting", "rooting")):
         if alias not in meta and disp in meta:
+            _d = meta[disp]
             meta[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
-                           "xmx": "", "runner": "plot", "help": meta[disp].get("help", ""),
-                           "alias_of": disp, "src": "cli_manual"}
+                           "xmx": "2g", "runner": "plot", "help": _d.get("help", ""),
+                           "alias_of": disp, "src": "cli_manual", "group": _d.get("group", "engine"),
+                           **({k: _d[k] for k in ("capabilities", "capabilities_ontology", "relations") if k in _d})}
 
     # 兜底: 旧 metadata 遗留条目统一补 kind（兼容历史数据）
     for _v in meta.values():
