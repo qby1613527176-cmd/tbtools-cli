@@ -271,7 +271,7 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             nxt = [n for n in nxt if n in specs and n not in [c[0] for c in chain]]
             if not nxt:
                 break
-            cur = nxt[0]
+            cur = str(nxt[0])
             chain.append((cur, f"relations: {chain[-1][0]} → next_step"))
         if chain and _goal_match(chain[-1][0]):
             plans.append(chain)
