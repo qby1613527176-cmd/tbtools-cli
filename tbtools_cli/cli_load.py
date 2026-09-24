@@ -20,6 +20,26 @@ from tbtools_cli.presets import PRESETS, apply_preset
 
 # ---- 动态加载剩余命令 ----
 # ---- 命令分类映射 ----
+# CommandSpec 分组覆盖层(评审 #56 P0-4): 模型有 group 的命令以 CommandSpec 为准(单一事实源)
+def _spec_groups() -> dict:
+    """CommandSpec → {name: group}(模型分组投影;运行时不再只依赖静态 CATEGORY_MAP)。"""
+    try:
+        from tbtools_cli.command_spec import build_command_specs
+        return {n: s.group for n, s in build_command_specs().items() if s.group}
+    except Exception:
+        return {}
+
+
+_SPEC_GROUPS: dict = {}
+
+
+def _group_of(name: str) -> str | None:
+    """分组解析: CommandSpec 模型优先 → CATEGORY_MAP 兜底(输入适配层)。"""
+    if not _SPEC_GROUPS:
+        _SPEC_GROUPS.update(_spec_groups())
+    return _SPEC_GROUPS.get(name) or CATEGORY_MAP.get(name)
+
+
 CATEGORY_MAP = {
     "sixframe": "seq",  # GUI 逆向：六框翻译
     "longestorf": "seq",  # GUI 逆向：最长 ORF 预测
@@ -162,7 +182,7 @@ def _load_auto_commands():
             cmd = name[1:-5]
             if cmd in skip:
                 continue
-            cat = CATEGORY_MAP.get(cmd, "engine")
+            cat = _group_of(cmd) or "engine"
             target = _groups.get(cat)
             if target and cmd not in target.commands:
                 _make_passthrough(cmd, target)
@@ -184,7 +204,7 @@ def _load_dynamic_commands():
                   "chipseq", "sets", "syn", "asm", "gxf", "mirna", "table",
                   "blast", "fastq", "hmm", "gwas", "engine"}
     for cmd_name in sorted(cmds - registered):
-        cat = CATEGORY_MAP.get(cmd_name, "engine")
+        cat = _group_of(cmd_name) or "engine"
         _make_passthrough(cmd_name, _groups[cat])
 
     # 给所有分组加未知子命令纠错（ToolGroup/rpc 已有自己的 resolve_command）
