@@ -338,6 +338,14 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     }
 
 
+
+
+def _stable_wf_id(goal: str) -> str:
+    """稳定 workflow_id(评审 #66b P0-5): sha256 派生——Python hash() 每次进程随机化(PYTHONHASHSEED),
+    跨 run/resume/日志引用全断;sha256 同 goal 同 ID。"""
+    import hashlib
+    return hashlib.sha256(goal.encode("utf-8")).hexdigest()[:10]
+
 def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str) -> dict:
     """plan 链 → 可执行 WorkflowSpec(评审 #64 P0-1/P0-2):
     每步带 depends_on + input_contract/output_contract + selection_reason。"""
@@ -361,7 +369,7 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
         })
     return {
         "schema_version": "1.0",
-        "workflow_id": f"wf_{abs(hash(goal)) % 10**6:06d}",
+        "workflow_id": f"wf_{_stable_wf_id(goal)}",
         "goal": goal,
         "steps": steps,
     }
