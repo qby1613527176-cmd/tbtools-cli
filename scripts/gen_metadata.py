@@ -164,9 +164,18 @@ def build():
     # 二期: 统一补 group 字段(直接可查, 无需运行时推断)
     for _n, _v in meta.items():
         _v.setdefault("group", _infer_group(_n, _v.get("kind", "manual"), _v.get("src", "")))
+    # Agent-ready 统计(评审 #64: FULL/PARTIAL/LEGACY 自动统计进 counts)
+    try:
+        from tbtools_cli.command_spec import readiness_census as _rc
+        _census = _rc()
+    except Exception:
+        _census = {}
     counts = {"registry": len(reg), "tools": len(tools), "bridges": len(bridges),
               "meta_total": len(meta),
-              "plot_ish": sum(1 for v in meta.values() if v.get("kind") in ("bridge", "direct", "manual"))}
+              "plot_ish": sum(1 for v in meta.values() if v.get("kind") in ("bridge", "direct", "manual")),
+        "agent_ready_full": _census.get("FULL", 0),
+        "agent_ready_partial": _census.get("PARTIAL", 0),
+        "agent_ready_legacy": _census.get("LEGACY", 0)}
     return meta, counts
 
 

@@ -45,13 +45,14 @@ asciinema play docs/images/demo.cast
 
 | 能力 | 命令 | 说明 |
 |---|---|---|
-| 1 发现 | `tbtools search <任务> --json` | 自然语言多词搜索(名称/描述/类名) |
-| 2 描述 | `tbtools tool-describe <命令> --json` | 命令 schema(分组/参数/输入格式/输出/坑位) |
-| 3 预检 | `tbtools tool-validate <命令> <输入...> --json` | 执行前检查(存在性/格式/列数) |
-| 4 执行 | `tbtools tool-run <命令参数...> --json` | 统一执行 + {exit_code/duration/artifacts} |
-| 5 结果 | `tbtools tool-result <产出>` | 结构化结果摘要(状态/产物) |
-| 6 溯源 | `tbtools tool-provenance <产出>` | 运行记录(命令/版本/输入 sha/时间戳) |
-| 7 环境 | `tbtools env --json` / `env --lock` | 环境快照/可复现性固化 |
+| 1 Discover | `tbtools search <任务> --json` | 工具发现(多词/反向/能力;**不做规划**) |
+| 2 Describe | `tbtools tool-describe <命令> --json` | 命令 schema(列名/参数/依赖/关系/platforms) |
+| 3 **Plan** | `tbtools workflow-plan <目标> --json` | **规划(决策层)**: 目标→工具链(relations/capability 推导) |
+| 4 Validate | `tbtools tool-validate <命令> <输入...> --json` | 执行前检查(存在性/格式/列名契约) |
+| 5 Execute | `tbtools tool-run <参数...> --json` / `tool-submit` | 同步执行 / 异步 job(状态机) |
+| 6 Observe | `tbtools job-status/result <job_id>` | 长任务观测(running→succeeded/failed/cancelled/timed_out) |
+| 7 Artifact | `tbtools artifact inspect <产出> --json` | Artifact 语义验证(type/format/sha256/validation) |
+| 8 Provenance | `tbtools tool-provenance <产出>` / `provenance-graph` | 溯源/DAG |
 
 ```bash
 # Agent 调用链示例

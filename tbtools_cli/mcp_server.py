@@ -97,7 +97,32 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
             _cli_map = {p.name: p.cli_name for p in KNOWN_PARAMS.get(_cmd_name, []) if p.cli_name}
         except Exception:
             pass
+        # 参数类型验证(评审 #64 P1-1: ParamSpec.type 强类型;错误→INVALID_PARAMETER_TYPE)
+        _type_map = {}
+        try:
+            from tbtools_cli.command_spec import KNOWN_PARAMS
+            _type_map = {p.name: p.type for p in KNOWN_PARAMS.get(_cmd_name, [])}
+        except Exception:
+            pass
         for k, v in arguments.get("parameters", {}).items():
+            _t = _type_map.get(k)
+            if _t:
+                _ok = True
+                try:
+                    if _t == "int":
+                        int(v)
+                    elif _t == "float":
+                        float(v)
+                    elif _t == "bool":
+                        if str(v).lower() not in ("true", "false", "1", "0", "yes", "no"):
+                            _ok = False
+                except (ValueError, TypeError):
+                    _ok = False
+                if not _ok:
+                    return json.dumps({
+                        "error": {"code": "INVALID_PARAMETER_TYPE",
+                                  "parameter": k, "expected": _t, "received": str(v),
+                                  "retryable": False}}, ensure_ascii=False, indent=1)
             flag = _cli_map.get(k) or ("--" + k.replace("_", "-"))
             parts += [flag, str(v)]
         parts += list(arguments.get("outputs", []))

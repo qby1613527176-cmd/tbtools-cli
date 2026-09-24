@@ -137,6 +137,16 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
             )
         step_ok = r.returncode == 0
         out = st["args"][-1] if st["args"] else ""
+        # Artifact ID 登记(评审 #64 P0-3): 每步产物 → Artifact ID(state 携带, 下游可 {artifact: id})
+        _art_id = None
+        if step_ok and out and os.path.isfile(out):
+            try:
+                from tbtools_cli.artifact import build as _ab, register as _areg
+                _a = _ab(out, producer=st["tool"])
+                _areg(_a)
+                _art_id = _a.id
+            except Exception:
+                pass
         # 产物语义验证(评审 #52 P1-11): ec=0 但产物损坏检出
         _vwarn = None
         if step_ok and out and os.path.isfile(out):
@@ -148,6 +158,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                         "status": "succeeded" if step_ok else "failed",
                         **({"validation_warning": _vwarn} if _vwarn else {}),
                         "output": out if step_ok and os.path.isfile(out) else None,
+                        "artifact_id": _art_id,
                         "provenance": out + ".tbtools.json" if step_ok and os.path.isfile(out + ".tbtools.json") else None,
                         "log": log_path})
         if not step_ok:
@@ -270,12 +281,54 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if direct:
             plans = [direct[:1]]
     best = plans[0] if plans else []
+    spec = _plan_to_spec(goal, best, input_format, output_format) if best else None
     return {
         "schema_version": "1.0",
         "goal": goal,
         "input_format": input_format or None,
         "output_format": output_format or None,
         "plan": [{"step": i + 1, "tool": t, "reason": r} for i, (t, r) in enumerate(best)],
+        "workflow": spec,  # 可执行 WorkflowSpec(评审 #64 P0-2: plan → 对象)
         "confidence": "high" if len(best) > 1 else ("medium" if best else "none"),
         "alternatives": len(plans) - 1,
     }
+
+
+def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str) -> dict:
+    """plan 链 → 可执行 WorkflowSpec(评审 #64 P0-1/P0-2):
+    每步带 depends_on + input_contract/output_contract + selection_reason。"""
+    from tbtools_cli.command_spec import KNOWN_RELATIONS, KNOWN_SCHEMAS
+    steps = []
+    for i, (tool, reason) in enumerate(chain):
+        sid = f"step{i + 1}"
+        ins = KNOWN_SCHEMAS.get(tool)
+        rel = KNOWN_RELATIONS.get(tool, {})
+        steps.append({
+            "id": sid,
+            "tool": tool,
+            "depends_on": [f"step{i}"] if i > 0 else [],
+            "args": _default_args(tool, i, chain, input_format, output_format),
+            "input_contract": ins[0][0].format if ins and ins[0] else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
+            "output_contract": (ins[1][0] if ins and len(ins[1]) else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),
+            "selection_reason": reason,
+        })
+    return {
+        "schema_version": "1.0",
+        "workflow_id": f"wf_{abs(hash(goal)) % 10**6:06d}",
+        "goal": goal,
+        "steps": steps,
+    }
+
+
+def _default_args(tool: str, i: int, chain: list, input_format: str, output_format: str) -> list:
+    """生成步骤默认参数(首步=输入占位, 中间=$prev.output, 末步=输出占位)。"""
+    args = []
+    if i == 0:
+        args.append("{input}")
+    else:
+        args.append("$step%d.output" % i)
+    # 末参: 输出(末步用目标格式, 中间步用上游格式)
+    ext = output_format or (".out" if i < len(chain) - 1 else output_format)
+    ext = ext if ext and ext.startswith(".") else ("." + ext if ext else ".out")
+    args.append("{workdir}/%s%s" % (chain[i][0], ext if i == len(chain) - 1 else ".out"))
+    return args
