@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.4] - 2026-09-25
+
+### 契约最后一公里(第 16 份评审)
+- **InvocationSpec grammar 升级**: named-flag 布局(venn2: `--List1 a --List2 b --graph out.svg`)+ KNOWN_NAMED_FLAGS;positional 布局兼容
+- **validate/run 同一 compiler**: `compile_step` 共享(binding 形态契约编译;validate 抓 WORKFLOW_COMPILE_ERROR;run 实测)
+- **format ontology**: 8 格式族 + exact/compatible/incompatible 三级匹配
+- **edge 标注**: `{type: contract|legacy_relation, match level}`;**planning_score** `{score, level, evidence}`
+- **Artifact lock Windows msvcrt 兜底**;MCP embedded envelope 统一
+- **Contract Coverage**: counts.md 契约完备度统计(invocation_compilable 63/294)
+- **conformance 测试**: 59 FULL 工具编译契约 + 金链 executable
+
 ## [1.4.3] - 2026-09-25
 
 ### Contract Compiler(第 15 份评审)
