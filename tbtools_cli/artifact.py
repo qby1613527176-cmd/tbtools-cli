@@ -114,13 +114,23 @@ def register(art: "Artifact"):
         # flock 保护读-改-写(评审 #70 P1-4: 并发 job_submit 双写必丢;原子写只防半截 JSON 不防丢更新)
         try:
             import fcntl as _fcntl_mod
+            _lock_mode = "fcntl"
         except ImportError:
-            _fcntl_mod = None  # type: ignore[assignment]  # Windows 降级(仅 atomic write)
+            try:
+                import msvcrt as _fcntl_mod  # type: ignore[assignment,no-redef]
+                _lock_mode = "msvcrt"  # Windows(评审 #72 P1-4: msvcrt.locking 兜底)
+            except ImportError:
+                _fcntl_mod = None  # type: ignore[assignment]
+                _lock_mode = "none"
         lock_path = p + ".lock"
         with open(lock_path, "w") as _lf:
             if _fcntl_mod:
                 try:
-                    _fcntl_mod.flock(_lf.fileno(), _fcntl_mod.LOCK_EX)
+                    if _lock_mode == "fcntl":
+                        _fcntl_mod.flock(_lf.fileno(), _fcntl_mod.LOCK_EX)
+                    else:  # msvcrt(Windows 专属属性, getattr 规避 mypy)
+                        getattr(_fcntl_mod, "locking")(
+                            _lf.fileno(), getattr(_fcntl_mod, "LK_LOCK"), 1)
                 except Exception:
                     pass
             idx = {}
@@ -137,7 +147,12 @@ def register(art: "Artifact"):
             os.replace(tmp, p)  # 原子替换(POSIX)
             if _fcntl_mod:
                 try:
-                    _fcntl_mod.flock(_lf.fileno(), _fcntl_mod.LOCK_UN)
+                    if _lock_mode == "fcntl":
+                        _fcntl_mod.flock(_lf.fileno(), _fcntl_mod.LOCK_UN)
+                    else:
+                        _lf.seek(0)
+                        getattr(_fcntl_mod, "locking")(
+                            _lf.fileno(), getattr(_fcntl_mod, "LK_UNLCK"), 1)
                 except Exception:
                     pass
     except Exception:

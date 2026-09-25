@@ -65,6 +65,19 @@ def plan(wf: dict, workdir: str) -> list[dict]:
     outputs: dict = {}
     inputs = wf.get("inputs", {}) or {}
     for s in wf["steps"]:
+        # binding 形态(契约): compile_step 统一编译(评审 #72 P0-3: run/validate 同一 compiler)
+        if s.get("binding"):
+            for k, v in inputs.items():
+                # binding 里的 {input.X} 预替换
+                s = dict(s)
+                s["binding"] = json.loads(json.dumps(s["binding"]).replace("{input." + k + "}", str(v)))
+            s = dict(s)
+            s["binding"] = json.loads(json.dumps(s["binding"]).replace("{workdir}", workdir))
+            args = compile_step(s, workdir, outputs)
+            steps.append({"id": s["id"], "tool": s["tool"], "args": args})
+            out_args = [a for a in args if isinstance(a, str) and os.path.splitext(a)[1]]
+            outputs[s["id"]] = {"output": out_args[-1] if out_args else os.path.join(workdir, f"{s['id']}.out")}
+            continue
         args = []
         for a in s.get("args", []):
             if isinstance(a, str):
@@ -100,6 +113,33 @@ def _save_state(workdir: str, state: dict):
         os.fsync(f.fileno())
     os.replace(tmp, p)
 
+
+
+def compile_step(step: dict, workdir: str, outputs: dict) -> list:
+    """步骤 → 精确 argv(评审 #72 P0-2/P0-3: validate 与 run 同一 compiler)。
+
+    两形态:
+    ① binding 形态(契约): step.binding = {inputs: [...], parameters: {...}, output: "..."}
+       → spec.invocation.build_argv(契约编译, 类型/未知/必填全检查)
+    ② args 形态(legacy): step.args = [...] → 占位符解析({workdir}/{input.X}/$s.output/{artifact})
+    """
+    from tbtools_cli.command_spec import build_command_specs
+    binding = step.get("binding")
+    if binding:
+        bare = str(step.get("tool", "")).split()[-1]
+        sp = build_command_specs().get(bare)
+        if not sp:
+            raise WorkflowError(f"WORKFLOW_INVALID_TOOL: {step.get('tool')}")
+        inputs = [_resolve(v, outputs) for v in binding.get("inputs", [])]
+        params = {k: _resolve(v, outputs) if isinstance(v, str) else v
+                  for k, v in binding.get("parameters", {}).items()}
+        output = _resolve(binding.get("output", ""), outputs) if binding.get("output") else ""
+        try:
+            return sp.invocation.build_argv(inputs=inputs, parameters=params, output=output)
+        except ValueError as e:
+            raise WorkflowError(f"WORKFLOW_COMPILE_ERROR: step {step.get('id')} 编译失败: {e}") from e
+    # legacy args 形态
+    return [_resolve(a, outputs) if isinstance(a, str) else a for a in step.get("args", [])]
 
 def _topo_sort(steps: list) -> list:
     """拓扑排序(depends_on 声明的步骤按依赖排序;环检测)。"""
@@ -284,6 +324,19 @@ def validate_workflow(wf: dict) -> dict:
             _topo_sort([s for s in steps if s.get("id")])
         except WorkflowError as e:
             errors.append({"code": "WORKFLOW_CYCLE", "message": str(e)})
+    # Layer 2b Binding 编译(评审 #72 P0-2): binding 形态步骤走 compile_step 干跑——validate==compile success
+    import os as _os2, tempfile as _tf
+    _dry_wd = _tf.mkdtemp(prefix="tb_wfval_")
+    _dry_outputs: dict = {}
+    for s in steps:
+        if s.get("binding"):
+            try:
+                _cargs = compile_step(s, _dry_wd, _dry_outputs)
+                _outs = [a for a in _cargs if isinstance(a, str) and _os2.path.splitext(a)[1]]
+                _dry_outputs[s.get("id")] = {"output": _outs[-1] if _outs else f"{s.get('id')}.out"}
+            except WorkflowError as e:
+                errors.append({"code": "WORKFLOW_COMPILE_ERROR", "step": s.get("id"),
+                               "message": str(e)})
     # Layer 4 Binding: $step.output 引用存在 + 在依赖之前声明
     import re as _re
     for s in steps:
@@ -395,13 +448,37 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 return True
         return False
 
-    def _fmt_match(a: str, b: str) -> bool:
-        """格式模糊匹配(评审 #70): 相等或互为子串(aln↔alignment, trimmed_alignment↔alignment)。"""
+    # format ontology(评审 #72 P1-1): 格式族 + 三级匹配(exact/compatible/incompatible)
+    _FORMAT_FAMILIES = {
+        "sequence": {"fasta", "fa", "fastq", "faa", "fna", "pep"},
+        "alignment": {"aln", "alignment", "trimmed_alignment", "clustal", "maf", "sto", "afa"},
+        "table": {"tsv", "csv", "txt", "xls", "xlsx", "count_table", "table", "tab"},
+        "tree": {"nwk", "tree", "treefile", "newick", "tre", "contree"},
+        "annotation": {"gff", "gff3", "gtf", "bed", "gxf"},
+        "graphics": {"svg", "png", "pdf"},
+        "synteny": {"collinearity", "anchors", "blast", "m8"},
+        "mapping": {"sam", "bam", "paf"},
+    }
+
+    def _fmt_level(a: str, b: str) -> str:
+        """格式匹配级别: exact(1.0) / compatible(同族 0.7) / incompatible(0)。
+        子串匹配降级为 compatible(不再是 exact)。"""
         a, b = a.lower(), b.lower()
-        return a == b or (len(a) >= 3 and a in b) or (len(b) >= 3 and b in a)
+        if a == b:
+            return "exact"
+        for fam in _FORMAT_FAMILIES.values():
+            if a in fam and b in fam:
+                return "compatible"
+        # 子串(如 trimmed_alignment vs alignment)——同一语义家族但弱化
+        if (len(a) >= 3 and a in b) or (len(b) >= 3 and b in a):
+            return "compatible"
+        return "incompatible"
+
+    def _fmt_match(a: str, b: str) -> bool:
+        return _fmt_level(a, b) != "incompatible"
 
     def _edge(a_name: str, b_name: str) -> str | None:
-        """A→B 兼容边: A 产出格式 ∩ B 接受格式(契约图核心, 模糊匹配)。"""
+        """A→B 兼容边: A 产出格式 ∩ B 接受格式(契约图核心)。"""
         for ofmt in _produces(specs[a_name]):
             ins_fmts = [i.format.lower() for i in (specs[b_name].inputs or [])]
             rel_acc = [x.lower() for x in ((specs[b_name].relations or {}).get("accepts") or [])]
@@ -409,6 +486,19 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 if _fmt_match(ofmt, ifmt):
                     return ofmt
         return None
+
+    def _edge_info(a_name: str, b_name: str) -> dict:
+        """边信息(评审 #72 P1-2): {type: contract|legacy_relation, match: exact|compatible}。"""
+        ofmt = _edge(a_name, b_name)
+        if ofmt:
+            ins_fmts = [i.format.lower() for i in (specs[b_name].inputs or [])]
+            lvl = max((_fmt_level(ofmt, f) for f in ins_fmts), default="compatible",
+                      key=lambda x: {"exact": 1, "compatible": 0.5, "incompatible": 0}[x])
+            return {"type": "contract", "format": ofmt, "match": lvl}
+        rel_next = (specs[a_name].relations or {}).get("next_step", [])
+        if b_name in rel_next:
+            return {"type": "legacy_relation", "format": "", "match": "unknown"}
+        return {"type": "none", "format": "", "match": "incompatible"}
 
     # 起点(去重: 评审 #70 P0-5——同一工具 schema+relations 双命中不再重复探索)
     starts, _seen_starts = [], set()
@@ -520,8 +610,15 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                  enumerate([(t, f"contract graph({fm})" if fm else "start")
                             for t, fm in zip(chain_tools, _fmts_padded)])],
         "workflow": wf_spec,  # 可执行 WorkflowSpec(评审 #64 P0-2: plan → 对象)
-        "confidence": min(best_score, 0.99),  # reasons-based 数值(评审 #70 P0-4; 内部比较用未截断分)
+        "confidence": min(best_score, 0.99),  # reasons-based 数值(向后兼容)
         "confidence_reasons": best_reasons,
+        # planning_score(评审 #72 P1-3): level/score/evidence 结构
+        "planning_score": {
+            "score": min(best_score, 0.99),
+            "level": ("high" if best_score >= 0.8 else
+                      "medium" if best_score >= 0.5 else "low"),
+            "evidence": best_reasons,
+        },
         "alternatives": len(plans) - 1,
     }
 

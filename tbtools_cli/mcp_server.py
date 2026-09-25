@@ -38,11 +38,19 @@ def _cli(*args: str, timeout: int = 300) -> str:
             import tbtools_cli.cli as _c
             buf = io.StringIO()
             with contextlib.redirect_stdout(buf):
+                _exit_code = 0
                 try:
                     _c.cli.main(list(args), standalone_mode=False)
-                except SystemExit:
-                    pass
-            return buf.getvalue().strip()
+                except SystemExit as _se:
+                    _exit_code = _se.code if isinstance(_se.code, int) else 1
+            _out = buf.getvalue().strip()
+            # envelope 统一(评审 #72 P1-5): embedded 非 0 也返回结构化,与 subprocess 对齐
+            if _exit_code != 0 and not _out.startswith("{"):
+                return json.dumps({"schema_version": "1.0", "status": "failed",
+                                   "error": {"code": "CLI_ERROR", "exit_code": _exit_code,
+                                             "message": _out[-500:], "retryable": False}},
+                                  ensure_ascii=False, indent=1)
+            return _out
         finally:
             _os.chdir(cwd)
     # 错误 envelope 统一(评审 #70 P1-6): timeout/非 0 返回结构化 JSON,不抛异常/裸文本

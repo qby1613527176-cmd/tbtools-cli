@@ -48,6 +48,9 @@ class InvocationSpec:
     inputs: list = field(default_factory=list)
     parameters: list = field(default_factory=list)
     outputs: list = field(default_factory=list)
+    # grammar 扩展(评审 #72 P0-1): named-flag 布局(venn2: --List1 a --List2 b --graph out.svg)
+    # None=positional 布局(默认); {"inputs": {name: flag}, "output": flag} = named-flag 布局
+    named_flags: dict | None = None
 
     def build_argv(self, inputs: list, parameters: dict, output: str) -> list:
         """编译精确 argv:
@@ -81,14 +84,23 @@ class InvocationSpec:
         for ps in self.parameters:
             if ps.required and ps.name not in parameters:
                 raise ValueError(f"MISSING_REQUIRED_PARAMETER: {ps.name}")
-        # 3. 输入(按声明序)+ 必填输入检查
+        # 3. 输入+输出(按 grammar 布局)
         req_inputs = [i for i in self.inputs if i.required]
         if len(inputs) < len(req_inputs):
             raise ValueError(f"MISSING_REQUIRED_INPUT: 需要 {len(req_inputs)} 个必填输入, 收到 {len(inputs)}")
-        argv += [str(i) for i in inputs]
-        # 4. 输出(末位)
-        if output:
-            argv.append(str(output))
+        if self.named_flags:
+            # named-flag 布局(评审 #72 P0-1): 输入/输出都走 flag(venn2: --List1/--List2/--graph)
+            in_flags = self.named_flags.get("inputs", {})
+            for idx, path in enumerate(inputs):
+                slot = self.inputs[idx].name if idx < len(self.inputs) else f"in{idx}"
+                argv += [in_flags.get(slot, f"--{slot}"), str(path)]
+            if output:
+                argv += [self.named_flags.get("output", "--output"), str(output)]
+        else:
+            # positional 布局(默认): [输入(按声明序)] [输出路径]
+            argv += [str(i) for i in inputs]
+            if output:
+                argv.append(str(output))
         return argv
 
 
@@ -119,7 +131,19 @@ class CommandSpec:
         inv.inputs = self.inputs
         inv.parameters = self.parameters
         inv.outputs = self.outputs
+        if self.name in KNOWN_NAMED_FLAGS:
+            inv.named_flags = KNOWN_NAMED_FLAGS[self.name]
         return inv
+
+
+# ── named-flag 布局注册表(评审 #72 P0-1): 输入/输出全走 flag 的工具 ──
+KNOWN_NAMED_FLAGS = {
+    "venn2": {"inputs": {"list1": "--List1", "list2": "--List2"}, "output": "--graph"},
+    "venn3": {"inputs": {"list1": "--List1", "list2": "--List2", "list3": "--List3"}, "output": "--graph"},
+    "recipBlast": {"inputs": {"query": "--querySeqFile", "subject": "--subjectSeqFile"},
+                   "output": "--outDirAndPrefix"},
+    "autoMakeBlastDb": {"inputs": {"fasta": "--inFasta"}, "output": "--outBase"},
+}
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)

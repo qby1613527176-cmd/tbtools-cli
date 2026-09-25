@@ -170,12 +170,27 @@ def build():
         _census = _rc()
     except Exception:
         _census = {}
+    # Contract Coverage(评审 #72 P2-1): 契约完备度统计
+    try:
+        from tbtools_cli.command_spec import KNOWN_NAMED_FLAGS, build_command_specs as _bcs_cov
+        _spc = _bcs_cov()
+        _cov = {"total": len(_spc),
+                "with_inputs": sum(1 for s in _spc.values() if s.inputs),
+                "with_outputs": sum(1 for s in _spc.values() if s.outputs),
+                "with_parameters": sum(1 for s in _spc.values() if s.parameters),
+                "with_capabilities": sum(1 for s in _spc.values() if s.capabilities),
+                "with_relations": sum(1 for s in _spc.values() if s.relations),
+                "invocation_compilable": sum(1 for s in _spc.values()
+                                           if s.inputs or s.name in KNOWN_NAMED_FLAGS)}
+    except Exception:
+        _cov = {}
     counts = {"registry": len(reg), "tools": len(tools), "bridges": len(bridges),
               "meta_total": len(meta),
               "plot_ish": sum(1 for v in meta.values() if v.get("kind") in ("bridge", "direct", "manual")),
         "agent_ready_full": _census.get("FULL", 0),
         "agent_ready_partial": _census.get("PARTIAL", 0),
-        "agent_ready_legacy": _census.get("LEGACY", 0)}
+        "agent_ready_legacy": _census.get("LEGACY", 0),
+        "contract_coverage": _cov}
     return meta, counts
 
 

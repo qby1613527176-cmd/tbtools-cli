@@ -5,7 +5,7 @@
  "group": "blast",
  "kind": "direct",
  "class": "biocjava.bioDoer.BLAST.ReciprocalBlast.ReciprocalBlast",
- "description": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
+ "description": "RBH 双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统 blastp/makeblastdb）",
  "invoke": "tbtools blast recipBlast <args...>",
  "capabilities": [
   "homology",

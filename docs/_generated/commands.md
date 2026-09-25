@@ -29,7 +29,7 @@
 | `getseqdb` | 手动 | 35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batc |
 | `quickAnno` | 手动 | diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错） |
 | `quickFamily` | 直连 | quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr |
-| `recipBlast` | 直连 | recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i |
+| `recipBlast` | 直连 | RBH 双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统  |
 | `twoSeqBlast` | 直连 | twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp |
 | `xml2blasttab` | 手动 | 25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectI |
 | `xml2pairwise` | 手动 | 25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-fra |

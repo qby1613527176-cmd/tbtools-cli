@@ -3395,7 +3395,7 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "blast",
-  "help": "recipBlast: recipBlast <query.fa> <subject.fa> <outPrefix> [--queryIds i",
+  "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统 blastp/makeblastdb）",
   "capabilities": [
    "homology",
    "reciprocal_best_hit"
