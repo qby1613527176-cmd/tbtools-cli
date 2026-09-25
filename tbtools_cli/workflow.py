@@ -67,12 +67,19 @@ def plan(wf: dict, workdir: str) -> list[dict]:
     for s in wf["steps"]:
         # binding 形态(契约): compile_step 统一编译(评审 #72 P0-3: run/validate 同一 compiler)
         if s.get("binding"):
-            for k, v in inputs.items():
-                # binding 里的 {input.X} 预替换
-                s = dict(s)
-                s["binding"] = json.loads(json.dumps(s["binding"]).replace("{input." + k + "}", str(v)))
             s = dict(s)
-            s["binding"] = json.loads(json.dumps(s["binding"]).replace("{workdir}", workdir))
+            _bj = json.dumps(s["binding"])
+            for k, v in inputs.items():
+                _bj = _bj.replace("{input." + k + "}", str(v))
+            # {input} 裸占位(planner 生成)→ 首个/唯一 input(评审 #74)
+            if "{input}" in _bj:
+                if inputs:
+                    _first = str(next(iter(inputs.values())))
+                    _bj = _bj.replace("{input}", _first)
+                else:
+                    raise WorkflowError(f"step {s.get('id')} 引用 {{input}} 但 workflow 无 inputs 声明")
+            _bj = _bj.replace("{workdir}", workdir)
+            s["binding"] = json.loads(_bj)
             args = compile_step(s, workdir, outputs)
             steps.append({"id": s["id"], "tool": s["tool"], "args": args})
             out_args = [a for a in args if isinstance(a, str) and os.path.splitext(a)[1]]
@@ -325,7 +332,8 @@ def validate_workflow(wf: dict) -> dict:
         except WorkflowError as e:
             errors.append({"code": "WORKFLOW_CYCLE", "message": str(e)})
     # Layer 2b Binding 编译(评审 #72 P0-2): binding 形态步骤走 compile_step 干跑——validate==compile success
-    import os as _os2, tempfile as _tf
+    import os as _os2
+    import tempfile as _tf
     _dry_wd = _tf.mkdtemp(prefix="tb_wfval_")
     _dry_outputs: dict = {}
     for s in steps:
@@ -500,12 +508,24 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             return {"type": "legacy_relation", "format": "", "match": "unknown"}
         return {"type": "none", "format": "", "match": "incompatible"}
 
+    # 可执行性三态(评审 #74 P0-4): EXECUTABLE(单必填输入可绑定)/
+    # PARTIALLY_BINDABLE(有可选输入)/UNEXECUTABLE(多必填输入,planner 无法绑定→排除,不入选)
+    def _bindability(name: str) -> str:
+        spec = specs[name]
+        req = [i for i in (spec.inputs or []) if i.required]
+        if len(req) > 1:
+            return "UNEXECUTABLE"
+        if len((spec.inputs or [])) > 1:
+            return "PARTIALLY_BINDABLE"
+        return "EXECUTABLE"
+
     # 起点(去重: 评审 #70 P0-5——同一工具 schema+relations 双命中不再重复探索)
     starts, _seen_starts = [], set()
     for name, spec in specs.items():
         if _accepts(spec, input_format) and name not in _seen_starts:
             _seen_starts.add(name)
             starts.append(name)
+    starts = [n for n in starts if _bindability(n) != "UNEXECUTABLE"]
 
     # DFS 契约图搜索(深度≤max_steps; 有向无环: 不回访链内节点)
     plans = []  # [(chain, edge_fmts)]
@@ -522,6 +542,8 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         for cand in specs:
             if cand == cur or cand in chain:
                 continue
+            if _bindability(cand) == "UNEXECUTABLE":
+                continue  # 评审 #74 P0-4: 多必填输入工具不进计划
             ef = _edge(cur, cand)
             if ef:
                 nexts.append((cand, ef, 0))  # 契约边优先
@@ -620,6 +642,12 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             "evidence": best_reasons,
         },
         "alternatives": len(plans) - 1,
+        "rejected": [
+            {"tool": n, "status": "UNEXECUTABLE",
+             "reason": f"需要 {len([i for i in (specs[n].inputs or []) if i.required])} 个必填输入, planner 单输入绑定无法供给"}
+            for n in specs
+            if _accepts(specs[n], input_format) and _bindability(n) == "UNEXECUTABLE"
+        ][:5],
     }
 
 
@@ -632,8 +660,11 @@ def _stable_wf_id(goal: str) -> str:
     return hashlib.sha256(goal.encode("utf-8")).hexdigest()[:10]
 
 def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str) -> dict:
-    """plan 链 → 可执行 WorkflowSpec(评审 #64 P0-1/P0-2):
-    每步带 depends_on + input_contract/output_contract + selection_reason。"""
+    """plan 链 → 可执行 WorkflowSpec(评审 #74 P0-1: 直接生成 binding, 不再 args 拼接)。
+
+    binding 形态: {inputs, parameters, output}——workflow run 走 compile_step → InvocationSpec,
+    同一 compiler 闭环(validate==compile success)。
+    """
     from tbtools_cli.command_spec import build_command_specs as _bcs
     _specs = _bcs()
     steps = []
@@ -643,18 +674,26 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
         _ins = _sp.inputs if _sp else []
         _outs = _sp.outputs if _sp else []
         rel = (_sp.relations or {}) if _sp else {}
+        # binding: 首步输入={input}, 后续=$prev.output;输出=workdir/工具名.契约格式扩展名
+        _in_ref = "{input}" if i == 0 else f"$step{i}.output"
+        _EXT_MAP = {"svg": ".svg", "png": ".png", "pdf": ".pdf", "tsv": ".tsv", "txt": ".txt",
+                    "json": ".json", "nwk": ".nwk", "treefile": ".nwk", "newick": ".nwk",
+                    "fa": ".fa", "aln": ".fa", "gff3": ".gff3", "collinearity": ".collinearity"}
+        _ofmt = (_outs[0] if _outs else output_format or "out")
+        _ext = _EXT_MAP.get(str(_ofmt).lower(), "." + str(_ofmt).lower())
         steps.append({
             "id": sid,
             "tool": tool,
             "depends_on": [f"step{i}"] if i > 0 else [],
-            "args": _default_args(tool, i, chain, input_format, output_format),
+            "binding": {"inputs": [_in_ref], "parameters": {},
+                        "output": "{workdir}/%s%s" % (tool, _ext)},
             "input_contract": _ins[0].format if _ins else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
             "output_contract": (_outs[0] if _outs else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),
             "selection_reason": reason,
         })
     return {
         "schema_version": "1.0",
-        "workflow_id": f"wf_{_stable_wf_id(goal)}",
+        "workflow_id": f"wf_{_stable_wf_id(goal + '|' + input_format + '|' + output_format + '|' + '>'.join([t for t, _ in chain]) + '|wf1.1')}",  # P1(评审 #70): 完整身份(goal+contracts+chain+schema 版本)
         "goal": goal,
         "steps": steps,
     }

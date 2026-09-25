@@ -1,0 +1,13 @@
+{
+ "binding": {
+  "inputs": [
+   "dist.tsv"
+  ],
+  "parameters": {},
+  "output": "h.svg"
+ },
+ "expected_argv": [
+  "dist.tsv",
+  "h.svg"
+ ]
+}

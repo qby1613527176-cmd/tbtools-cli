@@ -1,0 +1,20 @@
+{
+ "binding": {
+  "inputs": [
+   "deg.txt"
+  ],
+  "parameters": {
+   "pval_cutoff": "0.01",
+   "fc_cutoff": "2"
+  },
+  "output": "out.svg"
+ },
+ "expected_argv": [
+  "--pval-cutoff",
+  "0.01",
+  "--fc-cutoff",
+  "2",
+  "deg.txt",
+  "out.svg"
+ ]
+}

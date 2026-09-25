@@ -1,0 +1,18 @@
+{
+ "binding": {
+  "inputs": [
+   "a.txt",
+   "b.txt"
+  ],
+  "parameters": {},
+  "output": "venn.svg"
+ },
+ "expected_argv": [
+  "--List1",
+  "a.txt",
+  "--List2",
+  "b.txt",
+  "--graph",
+  "venn.svg"
+ ]
+}

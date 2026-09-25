@@ -98,3 +98,34 @@ class TestPlanningScore:
         assert 0 < ps["score"] <= 0.99
         assert ps["level"] in ("high", "medium", "low")
         assert ps["evidence"], "evidence 非空"
+
+
+class TestConformanceCorpus:
+    """corpus 驱动(评审 #74 P1-2): tests/conformance/*.json 声明 expected argv"""
+
+    def test_corpus_cases(self):
+        import glob
+
+        from tbtools_cli.command_spec import build_command_specs
+        specs = build_command_specs()
+        corpus = sorted(glob.glob(os.path.join(ROOT, "tests/conformance/*.json")))
+        assert len(corpus) >= 3, "corpus 至少 3 案例"
+        for path in corpus:
+            case = json.load(open(path, encoding="utf-8"))
+            name = os.path.basename(path).replace(".json", "")
+            argv = specs[name].invocation.build_argv(**case["binding"])
+            assert argv == case["expected_argv"], \
+                f"{name} 编译漂移: {argv} != corpus {case['expected_argv']}"
+
+
+class TestCoverageBreakdown:
+    """契约覆盖分级(评审 #74 P1-1)"""
+
+    def test_contract_coverage_dimensions(self):
+        from tbtools_cli.command_spec import contract_coverage
+        c = contract_coverage()
+        for dim in ("total", "input_contract", "output_contract", "invocation_contract",
+                    "capability_contract"):
+            assert dim in c, f"缺维度 {dim}"
+        assert c["total"] >= 294
+        assert c["input_contract"] > 0 and c["invocation_contract"] > 0

@@ -51,6 +51,13 @@ class InvocationSpec:
     # grammar 扩展(评审 #72 P0-1): named-flag 布局(venn2: --List1 a --List2 b --graph out.svg)
     # None=positional 布局(默认); {"inputs": {name: flag}, "output": flag} = named-flag 布局
     named_flags: dict | None = None
+    # token layout(评审 #74 P0-3): 精确 argv token 序列,元素:
+    #   {"input": <idx>}          第 idx 个输入
+    #   {"output": true}          输出路径
+    #   {"flag": "--x", "param": "name"}  参数 flag(值来自 parameters)
+    #   {"literal": "..."}        字面量
+    # 声明则优先于 named_flags/positional 默认布局
+    layout: list | None = None
 
     def build_argv(self, inputs: list, parameters: dict, output: str) -> list:
         """编译精确 argv:
@@ -59,7 +66,8 @@ class InvocationSpec:
         output: 输出路径(末位)
         """
         argv: list = []
-        # 1. flag 参数(先放,引擎 ArgsParser 任意位置可识别)
+        # 1. flag 参数(先放,引擎 ArgsParser 任意位置可识别;layout 模式只验证不发射)
+        _layout_mode = bool(self.layout)
         for k, v in parameters.items():
             ps = next((p for p in self.parameters if p.name == k), None)
             if ps is None:
@@ -74,6 +82,8 @@ class InvocationSpec:
                     float(v)
                 except (ValueError, TypeError) as e:
                     raise ValueError(f"INVALID_PARAMETER_TYPE: {k} expected float, got {v!r}") from e
+            if _layout_mode:
+                continue  # layout 模式: flag 由 layout token 发射
             flag = ps.cli_name or ("--" + k.replace("_", "-"))
             if ps.type == "bool":
                 if str(v).lower() in ("true", "1", "yes"):
@@ -88,6 +98,23 @@ class InvocationSpec:
         req_inputs = [i for i in self.inputs if i.required]
         if len(inputs) < len(req_inputs):
             raise ValueError(f"MISSING_REQUIRED_INPUT: 需要 {len(req_inputs)} 个必填输入, 收到 {len(inputs)}")
+        if self.layout:
+            # token layout(评审 #74 P0-3): 精确 token 序列编译
+            for tok in self.layout:
+                if "input" in tok:
+                    idx = int(tok["input"])
+                    if idx < len(inputs):
+                        argv.append(str(inputs[idx]))
+                elif "output" in tok:
+                    if output:
+                        argv.append(str(output))
+                elif "flag" in tok:
+                    pname = tok.get("param", "")
+                    if pname in parameters:
+                        argv += [tok["flag"], str(parameters[pname])]
+                elif "literal" in tok:
+                    argv.append(str(tok["literal"]))
+            return argv
         if self.named_flags:
             # named-flag 布局(评审 #72 P0-1): 输入/输出都走 flag(venn2: --List1/--List2/--graph)
             in_flags = self.named_flags.get("inputs", {})
@@ -661,3 +688,17 @@ def readiness_census() -> dict:
         out[agent_readiness(s)] += 1
     return out
 
+def contract_coverage() -> dict:
+    """契约覆盖分级(评审 #74 P1-1): 不再只有 FULL/PARTIAL/LEGACY 三档,
+    拆为契约维度覆盖统计(input/output/parameter/invocation/capability/dependency)。"""
+    specs = build_command_specs()
+    return {
+        "total": len(specs),
+        "input_contract": sum(1 for s in specs.values() if s.inputs),
+        "output_contract": sum(1 for s in specs.values() if s.outputs),
+        "parameter_contract": sum(1 for s in specs.values() if s.parameters),
+        "invocation_contract": sum(1 for s in specs.values()
+                                   if s.inputs or s.name in KNOWN_NAMED_FLAGS),
+        "capability_contract": sum(1 for s in specs.values() if s.capabilities),
+        "dependency_contract": sum(1 for s in specs.values() if s.dependencies),
+    }
