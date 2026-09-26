@@ -10,7 +10,6 @@ import sys
 import click
 
 from tbtools_cli import auto_commands as _ac
-from tbtools_cli.cli_tools_registry import CLI_TOOLS
 from tbtools_cli.core import (
     JAR,
     ROOT,
@@ -21,6 +20,7 @@ from tbtools_cli.core import (
     safe_temp,
     validate_file,
 )
+from tbtools_cli.command_spec import build_command_specs
 from tbtools_cli.presets import PRESETS, list_presets
 
 
@@ -53,7 +53,7 @@ def register_top(cli, _LG):
                 "cli_commands": plot_count,
                 "auto_commands": auto_count,
                 "rpc_methods": 188,
-                "tools": len(CLI_TOOLS),
+                "tools": sum(1 for s in build_command_specs().values() if s.kind == "tool"),
                 "bridges": bridge_count,
                 "pitfall_hints": len(PITFALL_HINTS),
                 "metadata_commands": len(_json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))) if os.path.isfile(os.path.join(ROOT, "tbtools_cli", "command_metadata.json")) else 0,
@@ -451,14 +451,7 @@ def register_top(cli, _LG):
                 pit = get_pitfall_hint(name)
                 if pit:
                     click.echo(f"\n  ⚠️ 坑位: {pit}")
-                # 示例（若存在）
-                try:
-                    from tbtools_cli.auto_commands import EXAMPLES  # type: ignore[attr-defined]  # 可选属性,hasattr 兜底
-                    ex = EXAMPLES.get(name)
-                    if ex:
-                        click.echo(f"\n  示例: {ex}")
-                except Exception:
-                    pass
+
                 click.echo(f"\n  完整帮助: tbtools {gname} {name} --help")
                 return
         # 顶层命令
@@ -468,12 +461,13 @@ def register_top(cli, _LG):
                 click.echo(f"\n{cmd.help}")
             return
         # 共享注册表工具（P0-3：tbtools tool <name> 动态解析，不在静态 commands 里）
-        if name in CLI_TOOLS:
+        _sp_d2 = build_command_specs().get(name)
+        if _sp_d2 and _sp_d2.kind == "tool" and _sp_d2.class_name:
             click.echo(f"\n  命令: tool {name}  （分组 tool · 注册表工具）")
             click.echo(f"\n  {name} [引擎命名参数...]")
-            click.echo(f"  引擎类: {CLI_TOOLS[name]}")
+            click.echo(f"  引擎类: {_sp_d2.class_name}")
             click.echo("\n  ⚠️ ArgsParser 系引擎一律 --key value 空格分隔，--key=value 会被拒绝")
-            click.echo(f"  💡 查看引擎真实参数: java -cp $TBTOOLS_JAR {CLI_TOOLS[name]} --bogus x（逼出 Usage）")
+            click.echo(f"  💡 查看引擎真实参数: java -cp $TBTOOLS_JAR {_sp_d2.class_name} --bogus x（逼出 Usage）")
             click.echo(f"\n  完整帮助: tbtools tool {name} --help")
             return
         click.echo(f"❌ 未找到命令: {name}")
@@ -1523,10 +1517,10 @@ except Exception:
                     count += 1
             # 加上共享注册表（P0-3：82 个 CLI 工具，排除已被 _impl 覆盖的）
             reg_count = 0
-            for tname in sorted(CLI_TOOLS):
-                if getattr(_ac, f'_{tname}_impl', None):
+            for _tn2, _ts2 in sorted(build_command_specs().items()):
+                if _ts2.kind != "tool" or getattr(_ac, f'_{_tn2}_impl', None):
                     continue  # 已在上面列出
-                lines.append(f"  {tname:20s} {CLI_TOOLS[tname].split('.')[-1]}")
+                lines.append(f"  {_tn2:20s} {_ts2.class_name.split('.')[-1]}")
                 reg_count += 1
             # 加上手动注册的 3 个
             lines.append(f"\n共 {count + reg_count + 3} 个工具（含 {reg_count} 个注册表工具 + 3 个手动迁移）")

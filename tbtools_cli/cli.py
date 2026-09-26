@@ -9,7 +9,6 @@ import click
 if os.path.isfile(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pyproject.toml")):
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import tbtools_cli.auto_commands as _ac
-from tbtools_cli.cli_tools_registry import CLI_TOOLS
 from tbtools_cli.core import (
     _,
     JAR,
@@ -406,7 +405,10 @@ class ToolGroup(click.Group):
                     return name, cmd, args[1:]
                 # FIX(P0-3): 回退到共享注册表（82 个 CLI 工具，原仅旧入口 tbcli.py 可达，
                 # 外部测试 §3.3：rpkmCal/statFasta/tpmCalc 等在新入口全部未找到）
-                cls = CLI_TOOLS.get(name)
+                # Phase 3(评审: CommandSpec 唯一入口): 引擎类经 CommandSpec.class_name,不再 CLI_TOOLS
+                from tbtools_cli.command_spec import build_command_specs as _bcs_cli
+                _sp_reg = _bcs_cli().get(name)
+                cls = _sp_reg.class_name if _sp_reg and _sp_reg.kind == "tool" else None
                 if cls:
                     @click.pass_context
                     def _fwd_reg(sctx, _cls=cls, _name=name):
@@ -431,10 +433,10 @@ class ToolGroup(click.Group):
                         short = doc.split(':',1)[1].strip()[:50] if ':' in doc else ''
                         click.echo(f"  {cmd:20s} {short}", file=sys.stderr)
                         count += 1
-                for tname in sorted(CLI_TOOLS):
-                    if getattr(_ac, f'_{tname}_impl', None):
+                for _tn, _ts in sorted(_bcs_cli().items()):
+                    if _ts.kind != "tool" or getattr(_ac, f'_{_tn}_impl', None):
                         continue
-                    click.echo(f"  {tname:20s} {CLI_TOOLS[tname].split('.')[-1]}", file=sys.stderr)
+                    click.echo(f"  {_tn:20s} {_ts.class_name.split('.')[-1]}", file=sys.stderr)
                     count += 1
                 click.echo(f"\n共 {count} 个工具，查看: tbtools list tools", file=sys.stderr)
                 ctx.exit(2)

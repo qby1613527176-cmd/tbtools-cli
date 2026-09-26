@@ -18,10 +18,8 @@ WHITELIST = {
     "tests/test_cli.py",
     "tests/test_contract.py",
     "tests/test_command_spec.py",
-    # Phase 2 过渡期存量(评审 #64; 目标: Phase 3 全部迁移到 CommandSpec 后从此清单删除)
-    "tbtools_cli/cli.py",               # 存量: CLI_TOOLS 引用
-    "tbtools_cli/cli_top.py",           # 存量: ENGINE_REGISTRY/CLI_TOOLS 引用
-    "tests/test_metadata.py",           # 存量: CLI_TOOLS 断言
+    # Phase 3 完成(2026-09-26): cli.py/cli_top.py/test_metadata.py 已全部迁移到 CommandSpec
+    # ——grandfather 清单清零,仅剩定义本体+构建源+扫描器
 }
 
 LEGACY_PATTERNS = [
