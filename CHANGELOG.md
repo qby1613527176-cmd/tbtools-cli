@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.5] - 2026-09-26
+
+### 契约闭环 + WOX 实跑修复(第 17 份评审 + WOX 问题单)
+- **P06-A【严重】wheel 缺 runtime 子包修复**: pyproject `packages=["tbtools_cli"]` 只打顶层包 → `packages.find` auto-discovery(pip install 后 `ModuleNotFoundError: tbtools_cli.runtime` 根因;wheel 实测含 java.py)
+- **Planner 直接生成 binding**: 生成 spec→validate→run 全闭环(同一 compile_step)
+- **UNEXECUTABLE 三态**: 多必填输入工具明确排除(非低分,rejected 列表含原因)
+- **InvocationSpec token layout**: 精确 argv token 序列编译
+- **contract_coverage 六维分级** + conformance corpus(tests/conformance/*.json)
+- P06-B __version__ 防御回退;P07 doctor jar 版本显示 + 三平台 Java 提示
+
 ## [1.4.4] - 2026-09-25
 
 ### 契约最后一公里(第 16 份评审)
