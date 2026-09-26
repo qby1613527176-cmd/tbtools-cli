@@ -6381,6 +6381,7 @@
    "clustering",
    "expression",
    "expression.clustering",
+   "expression.matrix",
    "expression_matrix",
    "visualization"
   ],
@@ -6461,6 +6462,7 @@
    "dimension_reduction",
    "expression",
    "expression.dimension-reduction",
+   "expression.matrix",
    "expression_matrix"
   ],
   "relations": {
@@ -7726,6 +7728,7 @@
   ],
   "capabilities_ontology": [
    "annotation",
+   "annotation.gene_structure",
    "gene_structure",
    "genomics",
    "genomics.annotation",

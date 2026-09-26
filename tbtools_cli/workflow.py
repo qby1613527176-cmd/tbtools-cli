@@ -177,6 +177,131 @@ def _topo_sort(steps: list) -> list:
     return ordered
 
 
+def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: bool) -> dict:
+    """执行单步(DAG 并行可重入;评审: DAG scheduler)——resume 验证/子进程/产物登记/语义验证。"""
+    # resume: 已成功步骤跳过——但必须 Artifact 验证(产物存在+sha256)
+    if resume and state.get("steps"):
+        prev = next((x for x in state["steps"] if x["id"] == st["id"]), None)
+        if prev and prev.get("status") == "succeeded":
+            _out_p = prev.get("output")
+            _valid = bool(_out_p and os.path.isfile(_out_p))
+            if _valid:
+                try:
+                    _pr = json.load(open(_out_p + ".tbtools.json", encoding="utf-8"))
+                    if _pr.get("exit_code") != 0:
+                        _valid = False
+                except Exception:
+                    _valid = False
+            if _valid and prev.get("output_sha256"):
+                try:
+                    import hashlib as _hl
+                    _h = _hl.sha256()
+                    with open(_out_p, "rb") as _fh:
+                        for _c in iter(lambda: _fh.read(1 << 20), b""):
+                            _h.update(_c)
+                    if _h.hexdigest() != prev["output_sha256"]:
+                        _valid = False
+                except Exception:
+                    _valid = False
+            if _valid:
+                return prev
+            print(f"⚠️ resume: {st['id']} 状态成功但产物失效, 重新执行", file=sys.stderr)
+    tool_parts = st["tool"].split()
+    log_path = os.path.join(workdir, f"{st['id']}.log")
+    with open(log_path, "w", encoding="utf-8") as lf:
+        r = subprocess.run(
+            [sys.executable, "-m", "tbtools_cli.cli"] + tool_parts + st["args"],
+            stdout=lf, stderr=subprocess.STDOUT, timeout=timeout_s,
+            cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        )
+    step_ok = r.returncode == 0
+    # 输出识别契约化(CommandSpec outputs 匹配扩展名)
+    out = ""
+    try:
+        from tbtools_cli.command_spec import build_command_specs as _bcs2
+        _osp = _bcs2().get(str(st["tool"]).split()[-1])
+        _outs_fmt = [str(o).lower() for o in (_osp.outputs if _osp else [])]
+        if _outs_fmt:
+            _exts = tuple("." + f for f in _outs_fmt if 1 <= len(f) <= 5)
+            _cands = [a for a in st["args"] if isinstance(a, str) and a.lower().endswith(_exts)]
+            if _cands:
+                out = _cands[-1]
+    except Exception:
+        pass
+    if not out:
+        out = st["args"][-1] if st["args"] else ""
+    # Artifact ID 登记
+    _art_id = None
+    _out_sha = None
+    if step_ok and out and os.path.isfile(out):
+        try:
+            from tbtools_cli.artifact import build as _ab, register as _areg
+            _a = _ab(out, producer=st["tool"])
+            _areg(_a)
+            _art_id = _a.id
+            _out_sha = _a.sha256
+        except Exception:
+            pass
+    # 产物语义验证
+    _vwarn = None
+    if step_ok and out and os.path.isfile(out):
+        _vok, _vmsg = validate_artifact(out)
+        if not _vok:
+            _vwarn = f"output validation failed: {_vmsg}"
+            step_ok = False
+    return {"id": st["id"], "tool": st["tool"], "exit_code": r.returncode,
+            "status": "succeeded" if step_ok else "failed",
+            **({"validation_warning": _vwarn} if _vwarn else {}),
+            "output": out if step_ok and os.path.isfile(out) else None,
+            "artifact_id": _art_id,
+            "output_sha256": _out_sha,
+            "provenance": out + ".tbtools.json" if step_ok and os.path.isfile(out + ".tbtools.json") else None,
+            "log": log_path}
+
+
+def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume: bool,
+                  max_workers: int = 2) -> tuple[list, str | None]:
+    """DAG 并行调度(评审: ready-queue;depends_on 工作流;fail-fast 早取消)。
+
+    返回 (results 按完成序, failed_step_id 或 None)。线程安全: outputs 在 plan 期已解析,
+    results 收集加锁;resume 状态只读。
+    """
+    import threading
+    from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+    by_id = {s["id"]: s for s in steps}
+    pending = set(by_id)
+    done: dict = {}
+    results, failed = [], None
+    lock = threading.Lock()
+
+    def _ready():
+        return [sid for sid in pending
+                if all(d in done for d in (by_id[sid].get("depends_on") or by_id[sid].get("dependsOn") or []))]
+
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        running: dict = {}
+        # 条件含 running(竞态修复): pending 空但仍有在飞步骤时不能退出——否则结果丢失
+        while (pending or running) and failed is None:
+            for sid in _ready():
+                running[pool.submit(_execute_step, by_id[sid], workdir, timeout_s, state, resume)] = sid
+                pending.discard(sid)
+            if not running:
+                break
+            finished, _ = wait(running, return_when=FIRST_COMPLETED)
+            for fut in finished:
+                sid = running.pop(fut)
+                res = fut.result()
+                with lock:
+                    done[sid] = res
+                    results.append(res)
+                if res["status"] != "succeeded":
+                    failed = sid
+                    for f2 in running:
+                        f2.cancel()
+                    break
+    return results, failed
+
+
 def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> dict:
     """执行 workflow(depends_on 拓扑排序;失败即停, 返回结构化结果)。
 
@@ -204,96 +329,30 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                     os.makedirs(os.path.dirname(os.path.abspath(a)), exist_ok=True)
                 except (PermissionError, OSError):
                     pass  # 不可建则跳过——真实错误由引擎/report 层报出
-    results = []
     t0 = time.time()
-    for st in steps:
-        # resume: 已成功步骤跳过——但必须 Artifact 验证(评审 #66 P1-2:
-        # state 成功 ≠ 可信;产物须存在且 sha256 与 provenance 一致, 否则重跑)
-        if resume and state.get("steps"):
-            prev = next((x for x in state["steps"] if x["id"] == st["id"]), None)
-            if prev and prev.get("status") == "succeeded":
-                _out_p = prev.get("output")
-                _valid = bool(_out_p and os.path.isfile(_out_p))
-                if _valid:
-                    try:
-                        import json as _jr2
-                        _pr = _jr2.load(open(_out_p + ".tbtools.json", encoding="utf-8"))
-                        if _pr.get("exit_code") != 0:
-                            _valid = False
-                    except Exception:
-                        _valid = False  # 无 provenance 不可信
-                # P0-5(评审 #68): sha256 完整验证(产物被换→重跑)
-                if _valid and prev.get("output_sha256"):
-                    try:
-                        import hashlib as _hl
-                        _h = _hl.sha256()
-                        with open(_out_p, "rb") as _fh:
-                            for _c in iter(lambda: _fh.read(1 << 20), b""):
-                                _h.update(_c)
-                        if _h.hexdigest() != prev["output_sha256"]:
-                            _valid = False  # 内容变了(覆盖写/腐化)→ 重跑
-                    except Exception:
-                        _valid = False
-                if _valid:
-                    results.append(prev)
-                    continue
-                print(f"⚠️ resume: {st['id']} 状态成功但产物失效, 重新执行", file=sys.stderr)
-        tool_parts = st["tool"].split()
-        log_path = os.path.join(workdir, f"{st['id']}.log")
-        with open(log_path, "w", encoding="utf-8") as lf:
-            r = subprocess.run(
-                [sys.executable, "-m", "tbtools_cli.cli"] + tool_parts + st["args"],
-                stdout=lf, stderr=subprocess.STDOUT, timeout=timeout_s,
-                cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            )
-        step_ok = r.returncode == 0
-        # 输出识别契约化(评审 #68 P0-2): 用 CommandSpec outputs 匹配扩展名,不猜 args[-1]
-        out = ""
-        try:
-            from tbtools_cli.command_spec import build_command_specs as _bcs2
-            _osp = _bcs2().get(str(st["tool"]).split()[-1])
-            _outs_fmt = [str(o).lower() for o in (_osp.outputs if _osp else [])]
-            if _outs_fmt:
-                _exts = tuple("." + f for f in _outs_fmt if 1 <= len(f) <= 5)
-                _cands = [a for a in st["args"] if isinstance(a, str) and a.lower().endswith(_exts)]
-                if _cands:
-                    out = _cands[-1]
-        except Exception:
-            pass
-        if not out:
-            out = st["args"][-1] if st["args"] else ""  # 回退: 末参约定
-        # Artifact ID 登记(评审 #64 P0-3): 每步产物 → Artifact ID(state 携带, 下游可 {artifact: id})
-        _art_id = None
-        _out_sha = None
-        if step_ok and out and os.path.isfile(out):
-            try:
-                from tbtools_cli.artifact import build as _ab, register as _areg
-                _a = _ab(out, producer=st["tool"])
-                _areg(_a)
-                _art_id = _a.id
-                _out_sha = _a.sha256
-            except Exception:
-                pass
-        # 产物语义验证(评审 #52 P1-11): ec=0 但产物损坏检出
-        _vwarn = None
-        if step_ok and out and os.path.isfile(out):
-            _vok, _vmsg = validate_artifact(out)
-            if not _vok:
-                _vwarn = f"output validation failed: {_vmsg}"
-                step_ok = False
-        results.append({"id": st["id"], "tool": st["tool"], "exit_code": r.returncode,
-                        "status": "succeeded" if step_ok else "failed",
-                        **({"validation_warning": _vwarn} if _vwarn else {}),
-                        "output": out if step_ok and os.path.isfile(out) else None,
-                        "artifact_id": _art_id,
-                        "output_sha256": _out_sha,
-                        "provenance": out + ".tbtools.json" if step_ok and os.path.isfile(out + ".tbtools.json") else None,
-                        "log": log_path})
-        if not step_ok:
-            _save_state(workdir, {"workflow": wf["id"], "status": "failed", "steps": results})
-            return {"schema_version": "1.0", "workflow": wf["id"], "status": "failed",
-                    "failed_at": st["id"], "steps": results,
-                    "duration_s": round(time.time() - t0, 1)}
+    # DAG 并行调度(depends_on 工作流且 TBTOOLS_WF_PARALLEL!=0;默认 2 workers——Java 内存约束)
+    _has_dag = any(s.get("depends_on") or s.get("dependsOn") for s in wf["steps"])
+    _parallel = _has_dag and len(steps) > 1 and os.environ.get("TBTOOLS_WF_PARALLEL", "1") != "0"
+    if _parallel:
+        results, failed_at = _run_parallel(steps, workdir, timeout_s, state, resume,
+                                           max_workers=int(os.environ.get("TBTOOLS_WF_WORKERS", "2")))
+        # 结果按声明序重排(输出稳定)
+        _order = {s["id"]: i for i, s in enumerate(steps)}
+        results.sort(key=lambda r: _order.get(r["id"], 999))
+    else:
+        results = []
+        failed_at = None
+        for st in steps:
+            res = _execute_step(st, workdir, timeout_s, state, resume)
+            results.append(res)
+            if res["status"] != "succeeded":
+                failed_at = st["id"]
+                break
+    if failed_at:
+        _save_state(workdir, {"workflow": wf["id"], "status": "failed", "steps": results})
+        return {"schema_version": "1.0", "workflow": wf["id"], "status": "failed",
+                "failed_at": failed_at, "steps": results,
+                "duration_s": round(time.time() - t0, 1)}
     _save_state(workdir, {"workflow": wf["id"], "status": "succeeded", "steps": results})
     return {"schema_version": "1.0", "workflow": wf["id"], "status": "succeeded",
             "steps": results, "duration_s": round(time.time() - t0, 1),

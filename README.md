@@ -259,7 +259,7 @@ pip install .            # 或 pipx install . / pip install git+https://github.c
 ### Requirements
 - **Linux / WSL2 / macOS**（绘图需要 `xvfb-run`，可用 `sudo apt install xvfb`）
 - **Windows**：支持工具类/RPC/表格类命令（Git Bash + TBtools-II/bin 加入 PATH）；绘图类命令受 xvfb 限制（部分可用）
-- **JDK 11+**（`java`、`javac`）
+- **JDK 11+**(推荐 17;`java` 运行 + `javac` 编译 110+ 个 Java bridge——**JRE 不够,必须 JDK**)
 - **TBtools_JRE1.6.jar**（TBtools-II 主 jar，~55MB）
 
 ### 1. Install（自动接入本机 TBtools）
@@ -477,7 +477,7 @@ tbtools-cli/
 
 ## ❓ FAQ
 
-**Java 版本要求?** 需要 JRE 8+（推荐 11/17;引擎为 Java 8 编译,JDK 9+ 移除部分 javax.xml 类,`--verbose` 报 ClassNotFoundException 时见 `docs/_worklog` 修复记录）。`tbtools doctor` 会自动检测。
+**Java 版本要求?** 需要 **JDK 11+**(推荐 17;`java` 运行引擎 + `javac` 编译 bridge——JRE 无 javac 不可用。引擎为 Java 8 编译,JDK 9+ 移除部分 javax.xml 类,fake jaxb 桥已内置兼容)。`tbtools doctor` 会自动检测 java/javac 两者。
 
 **Windows 支持?** 双击/终端可用（v2.475 实测）;绘图命令在 Windows 无 xvfb 时部分受限（见「Known Limitations」）。WSL2 经 /mnt/d 挂载 JAR 亦可。
 

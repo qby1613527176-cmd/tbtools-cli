@@ -13,6 +13,7 @@ capabilities:
 - visualization
 capabilities_ontology:
 - annotation
+- annotation.gene_structure
 - gene_structure
 - genomics
 - genomics.annotation

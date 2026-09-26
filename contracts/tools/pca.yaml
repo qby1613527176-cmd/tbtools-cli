@@ -13,6 +13,7 @@ capabilities_ontology:
 - dimension_reduction
 - expression
 - expression.dimension-reduction
+- expression.matrix
 - expression_matrix
 relations:
   accepts:

@@ -33,6 +33,8 @@ class InputSpec:
     required: bool = True
     note: str = ""
     columns: list[str] | None = None  # 列名契约(评审 #31: Agent 语义校验)
+    # 生物学语义类型(biological semantic type;防 protein 进 dna 工具)
+    content_type: str = "generic"  # dna | protein | alignment | table | annotation | tree | generic
 
 
 
@@ -187,6 +189,18 @@ KNOWN_NAMED_FLAGS = {
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
+# content_type 标注表(biological semantic type;按工具名挂语义)
+KNOWN_CONTENT_TYPES = {
+    "muscle": "protein", "trimal": "alignment", "iqtree": "alignment", "phylotree": "alignment",
+    "blastp": "protein", "blastn": "dna", "diamond": "protein", "recipBlast": "protein",
+    "hmmsearch": "protein", "simpleHmmscan": "protein", "pep2codon": "protein",
+    "sixframe": "dna", "longestorf": "dna", "cpg": "dna", "seqlogo": "alignment",
+    "msa": "alignment", "genestructure": "annotation", "gxfSplit": "annotation",
+    "volcano": "table", "dehist": "table", "hclust": "table", "barplot": "table",
+    "heatmap": "table", "goEnrich": "table", "keggEnrich": "table", "gsea": "table",
+    "mcscanx": "table", "dualsyn": "table", "fasta2phy": "dna",
+}
+
 KNOWN_SCHEMAS = {
     "volcano": ([InputSpec("deg", format="tsv", note="GeneID\tLog2FC\tpvalue", columns=["GeneID", "Log2FC", "pvalue"])], ["svg"]),
     "heatmap": ([InputSpec("matrix", format="tsv", note="首列 gene ID", columns=["gene_id"])], ["svg"]),
@@ -313,6 +327,8 @@ KNOWN_DEPENDENCIES: dict = {cmd: [str(d["name"]) for d in deps] for cmd, deps in
 # 平标签 → 分层父链(Agent 可用 "phylogeny.tree-building" 或 "phylogeny" 查询)
 ONTOLOGY = {
     "alignment": "sequence.alignment",
+    "expression_matrix": "expression.matrix",
+    "gene_structure": "annotation.gene_structure",
     "translation": "sequence.translation",
     "extraction": "sequence.extraction",
     "conversion": "sequence.conversion",
@@ -603,6 +619,10 @@ def build_command_specs() -> dict[str, CommandSpec]:
         if name in KNOWN_SCHEMAS:
             ins, outs = KNOWN_SCHEMAS[name]
             spec.inputs, spec.outputs = ins, outs
+            if name in KNOWN_CONTENT_TYPES:
+                for _inp in spec.inputs:
+                    if _inp.content_type == "generic":
+                        _inp.content_type = KNOWN_CONTENT_TYPES[name]
         spec.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(spec.group, [])
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
@@ -634,6 +654,10 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
+            if name in KNOWN_CONTENT_TYPES:
+                for _inp in s.inputs:
+                    if _inp.content_type == "generic":
+                        _inp.content_type = KNOWN_CONTENT_TYPES[name]
         s.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(s.group, [])
         s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         s.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(s.group, {})
