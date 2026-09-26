@@ -23,8 +23,9 @@ EXEC_VERIFIED = {
     "dehist": ("expr", ["examples/data/deg.txt", "{out}.svg"]),
     "dualsyn": ("syn", ["examples/data/synteny/dual.gff", "examples/data/synteny/dual.collinearity",
                         "{out}.svg", "--chr1", "1", "--chr2", "1"]),
-    # mcscanx 移出: prefix 型输出(产 <out>.collinearity 等多文件),
-    # 单输出 Artifact 模型不覆盖——多输出 Artifact 是 roadmap(评审 #76 P2)
+    # mcscanx 回归 Tier-2: 多输出 Artifact 已落地(discover_outputs prefix 发现)
+    "mcscanx": ("syn", ["examples/data/synteny/Co_wgd.gff", "examples/data/synteny/Co_wgd.collinearity",
+                        "{out}.txt"]),
 }
 
 
@@ -72,7 +73,10 @@ class TestTier2ExecutionVerified:
         # 产物+溯源验证
         arts = d.get("artifacts") or []
         assert arts, f"{tool} 无产物"
-        assert len(arts[0]["sha256"]) == 64, "sha256 完整"
+        # 多输出: 任一真实产物(非空)sha256 完整即可(prefix 主路径可能 0B)
+        real = [a for a in arts if a.get("size", 0) > 0]
+        assert real, f"{tool} 无真实产物"
+        assert all(len(a["sha256"]) == 64 for a in real), "sha256 完整"
         prov_ext = ".svg" if args_tpl[-1].endswith(".svg") or ".svg" in args_tpl[2] else ".txt"
         prov_path = out_base + prov_ext + ".tbtools.json"
         assert os.path.isfile(prov_path), f"{tool} provenance 缺失"

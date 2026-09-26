@@ -182,3 +182,44 @@ def resolve(ref: str) -> str | None:
         except Exception:
             pass
     return None
+
+def discover_outputs(base_path: str, max_extra: int = 10) -> list[str]:
+    """prefix 型输出发现(多输出 Artifact): mcscanx <out> → <out>.collinearity/.html 等。
+
+    规则: base_path 不存在时,找同目录下以 base_path 名称为前缀的兄弟文件(t0 后新建);
+    base_path 存在时返回自身。返回绝对路径列表(自身优先,按 mtime 排序)。
+    """
+    if os.path.isfile(base_path):
+        return [os.path.abspath(base_path)]
+    d = os.path.dirname(os.path.abspath(base_path)) or "."
+    prefix = os.path.basename(base_path)
+    if not os.path.isdir(d):
+        return []
+    found = []
+    try:
+        for name in os.listdir(d):
+            if name.endswith(".tbtools.json"):
+                continue  # provenance 元数据不算产物
+            if name.startswith(prefix + ".") or name.startswith(prefix + "_"):
+                fp = os.path.join(d, name)
+                if os.path.isfile(fp) and os.path.getsize(fp) > 0:
+                    found.append(fp)
+    except OSError:
+        return []
+    found.sort(key=lambda p: os.path.getmtime(p))
+    return [os.path.abspath(f) for f in found[:max_extra]]
+
+
+def build_many(paths: list[str], producer: str = "") -> list["Artifact"]:
+    """多路径批量构建 Artifact(prefix 多输出工具用)。"""
+    return [build(p, producer=producer) for p in paths if os.path.isfile(p)]
+
+def resolve_artifact(ref: str) -> "Artifact | None":
+    """art_id 或 path → 完整 Artifact 对象(评审 P1-5: resolve 不只返路径)。
+
+    身份验证同 resolve(): art_id 须文件存在 + sha256 匹配(stale 拒绝)。
+    """
+    path = resolve(ref)
+    if not path:
+        return None
+    return from_provenance(path) or build(path)

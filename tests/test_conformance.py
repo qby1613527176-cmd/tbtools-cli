@@ -129,3 +129,36 @@ class TestCoverageBreakdown:
             assert dim in c, f"缺维度 {dim}"
         assert c["total"] >= 294
         assert c["input_contract"] > 0 and c["invocation_contract"] > 0
+
+
+class TestMultiOutputArtifact:
+    """多输出 Artifact(prefix 型输出发现)"""
+
+    def test_discover_outputs(self, tmp_path):
+        sys.path.insert(0, ROOT)
+        from tbtools_cli.artifact import discover_outputs
+        # prefix 兄弟文件
+        (tmp_path / "o.txt.collinearity").write_text("x" * 100)
+        (tmp_path / "o.txt.tbtools.json").write_text("{}")  # provenance 应排除
+        found = discover_outputs(str(tmp_path / "o.txt"))
+        assert len(found) == 1 and found[0].endswith(".collinearity"), \
+            f"provenance 应排除, prefix 兄弟应发现: {found}"
+
+    def test_resolve_artifact_object(self, tmp_path):
+        from tbtools_cli.artifact import build, register, resolve_artifact
+        p = tmp_path / "a.svg"
+        p.write_text("<svg>z</svg>")
+        a = build(str(p), producer="t")
+        register(a)
+        r = resolve_artifact(a.id)
+        assert r is not None and r.type == "plot" and len(r.sha256) == 64
+
+
+class TestEnvelopeConsistency:
+    """envelope 统一: search/describe JSON 都带 schema_version"""
+
+    def test_search_has_schema_version(self):
+        r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "search", "volcano", "--json"],
+                           capture_output=True, text=True, cwd=ROOT)
+        d = json.loads(r.stdout)
+        assert d.get("schema_version") == "1.0" and "count" in d

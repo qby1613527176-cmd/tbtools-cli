@@ -854,10 +854,15 @@ def register_top(cli, _LG):
                         _prov = _json.load(open(_po, encoding="utf-8"))
                         error = _prov.get("error")
                         # 统一 Artifact 模型(评审 #60-4)
-                        from tbtools_cli.artifact import build as _abuild, from_provenance as _afrom
+                        from tbtools_cli.artifact import (build as _abuild, discover_outputs,
+                                                          from_provenance as _afrom)
                         for _o in _prov.get("outputs", []):
                             _art = _afrom(_o) or _abuild(_o)
                             artifacts.append(_art.to_dict())
+                            # prefix 多输出发现(mcscanx 类: 主路径不存在时找 <out>.xxx 兄弟)
+                            if not os.path.isfile(_o):
+                                for _x in discover_outputs(_o):
+                                    artifacts.append(_abuild(_x).to_dict())
                     except Exception:
                         pass
                 break
@@ -1471,7 +1476,8 @@ except Exception:
                        else f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")
             sys.exit(1)
         if as_json:
-            click.echo(_json.dumps({"query": keyword, "hits": [
+            click.echo(_json.dumps({"schema_version": "1.0", "query": keyword,
+                                    "count": len(hits), "hits": [
                 {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in _ranked(hits)
             ]}, ensure_ascii=False, indent=1))
             return
