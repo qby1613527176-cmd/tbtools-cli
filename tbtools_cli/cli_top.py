@@ -67,9 +67,28 @@ def register_top(cli, _LG):
             r = subprocess.run(["java", "-version"], capture_output=True, text=True, timeout=5)
             java_ver = r.stderr.splitlines()[0] if r.stderr else "unknown"
         except FileNotFoundError:
-            java_ver = "❌ 未安装(apt install openjdk-17-jre-headless)"
+            java_ver = ("❌ 未安装(Windows: winget install EclipseAdoptium.Temurin.17.JDK; "
+                        "macOS: brew install temurin@17; Linux: apt install openjdk-17-jre-headless)")
         click.echo(f"  Java: {java_ver}")
         click.echo(f"  JAR: {JAR}" if JAR else "  JAR: ⚠️ 未配置")
+        # P07(WOX 实跑): doctor 显示 jar 版本 + 最低版本建议(README 称 2.535+, 实测 2.475 也过)
+        if JAR and os.path.isfile(JAR):
+            try:
+                import zipfile as _zf
+                _jv = "unknown"
+                with _zf.ZipFile(JAR) as _z:
+                    for _n in _z.namelist():
+                        if _n.endswith("META-INF/MANIFEST.MF"):
+                            for _ln in _z.read(_n).decode("utf-8", "replace").splitlines():
+                                if _ln.startswith(("Implementation-Version:", "Bundle-Version:")):
+                                    _jv = _ln.split(":", 1)[1].strip()
+                                    break
+                            break
+                _rec = "2.535+"
+                _warn = " ⚠️ 低于推荐基线" if _jv != "unknown" and _jv < "2.535" else ""
+                click.echo(f"  JAR 版本: {_jv}(推荐 ≥ {_rec}){_warn}")
+            except Exception:
+                pass
 
     @cli.command()
     @click.option("--json", "as_json", is_flag=True, help="机器格式输出(环境快照, 供 Agent)")
@@ -118,8 +137,12 @@ def register_top(cli, _LG):
             ("xvfb-run", "xvfb-run（Linux 绘图必需）", os.name != "nt"),  # N14: Windows 无 xvfb 且不需要
         ]
         fix_cmds = {
-            "java": "sudo apt install -y openjdk-17-jre-headless",
-            "javac": "sudo apt install -y openjdk-17-jdk-headless",
+            "java": ("Windows: winget install EclipseAdoptium.Temurin.17.JDK | "
+                     "macOS: brew install temurin@17 | "
+                     "Ubuntu: sudo apt install -y openjdk-17-jre-headless"),
+            "javac": ("Windows: winget install EclipseAdoptium.Temurin.17.JDK | "
+                      "macOS: brew install temurin@17 | "
+                      "Ubuntu: sudo apt install -y openjdk-17-jdk-headless"),
             "xvfb-run": "sudo apt install -y xvfb",
         }
         for cmd_name, desc, required in checks:
@@ -137,6 +160,34 @@ def register_top(cli, _LG):
         if JAR and os.path.isfile(JAR):
             size_mb = os.path.getsize(JAR) / 1024 / 1024
             click.echo(f"  ✅ JAR: {JAR} ({size_mb:.0f}MB)")
+            # P07(WOX 实跑): jar 版本显示 + 最低版本建议(README 称 2.535+, 实测 2.475 兼容)
+            try:
+                import zipfile as _zf
+                _jv = None
+                with _zf.ZipFile(JAR) as _z:
+                    for _n in _z.namelist():
+                        if _n.endswith("META-INF/MANIFEST.MF"):
+                            for _ln in _z.read(_n).decode("utf-8", "replace").splitlines():
+                                if _ln.startswith(("Implementation-Version:", "Bundle-Version:")):
+                                    _jv = _ln.split(":", 1)[1].strip()
+                                    break
+                            break
+                if not _jv:
+                    # manifest 无版本(TBtools 常态)→ 读 fetch-jar 的 config.toml 记录
+                    import tomllib as _tl2
+                    _cfgp = os.path.join(os.path.expanduser("~/.config/tbtools-cli"), "config.toml")
+                    if os.path.isfile(_cfgp):
+                        try:
+                            _jv = _tl2.load(open(_cfgp, "rb")).get("jar_version")
+                        except Exception:
+                            pass
+                if _jv:
+                    _low = tuple(int(x) for x in str(_jv).split(".")[:3] if str(x).isdigit()) < (2, 535)
+                    click.echo(f"  📦 JAR 版本: {_jv}(推荐 ≥ 2.535){' ⚠️ 低于推荐基线' if _low else ' ✅'}")
+                else:
+                    click.echo("  📦 JAR 版本: unknown(env var 配置无版本记录;fetch-jar 安装会记录)")
+            except Exception:
+                pass
             # 供应链校验(fetch-jar 记录 sha256; hashlib 流式, 300MB 约 1s)
             import hashlib as _hl
             import tomllib as _tl

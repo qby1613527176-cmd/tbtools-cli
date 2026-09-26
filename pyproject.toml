@@ -38,8 +38,11 @@ Issues = "https://github.com/qby1613527176-cmd/tbtools-cli/issues"
 [project.scripts]
 tbtools = "tbtools_cli.cli:cli"
 
-[tool.setuptools]
-packages = ["tbtools_cli"]
+[tool.setuptools.packages.find]
+# P06-A(WOX 实跑): 显式 ["tbtools_cli"] 只打顶层包——runtime/ 子包不进 wheel
+# (pip install 后 ModuleNotFoundError: No module named 'tbtools_cli.runtime');
+# find 自动发现所有子包(含 runtime/)
+include = ["tbtools_cli*"]
 
 [tool.setuptools.data-files]
 # pip 安装后桥源码必须存在于包内(ensure_bridge 运行时编译;118 桥)

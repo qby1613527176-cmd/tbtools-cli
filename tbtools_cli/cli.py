@@ -28,7 +28,16 @@ from tbtools_cli.presets import apply_preset
 from tbtools_cli.cli_rpc import build_rpc_group
 import tbtools_cli.cli_load as cli_load
 from tbtools_cli.cli_top import register_top  # 批次 B: 顶层命令拆分
-from tbtools_cli import __version__ as _CLI_VERSION  # 单一源: pyproject
+try:
+    from tbtools_cli import __version__ as _CLI_VERSION  # 单一源: pyproject
+except ImportError:
+    # P06-B(WOX 实跑): editable/namespace 包场景 __init__.py 未执行——
+    # 直接从 importlib.metadata 兜底(P06-A 打包修复后此类场景应消失, 留防御)
+    try:
+        from importlib.metadata import version as _imv
+        _CLI_VERSION = _imv("tbtools-cli")
+    except Exception:
+        _CLI_VERSION = "0.0.0.dev"
 
 from tbtools_cli.cli_load import (  # 批次 B: 动态注册拆分
     CATEGORY_MAP,
