@@ -177,8 +177,13 @@ def _topo_sort(steps: list) -> list:
     return ordered
 
 
-def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: bool) -> dict:
-    """执行单步(DAG 并行可重入;评审: DAG scheduler)——resume 验证/子进程/产物登记/语义验证。"""
+def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: bool,
+                  cancel_event=None, proc_registry: dict | None = None) -> dict:
+    """执行单步(DAG 并行可重入;评审: DAG scheduler)。
+
+    GLM-4.7 P0: cancel_event 取消传播(入口检查) + Popen 进程组注册(可 killpg) +
+    超时杀进程树 + 异常结构化(不吞 worker 异常)。
+    """
     # resume: 已成功步骤跳过——但必须 Artifact 验证(产物存在+sha256)
     if resume and state.get("steps"):
         prev = next((x for x in state["steps"] if x["id"] == st["id"]), None)
@@ -206,15 +211,46 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             if _valid:
                 return prev
             print(f"⚠️ resume: {st['id']} 状态成功但产物失效, 重新执行", file=sys.stderr)
+    # 取消传播(GLM-4.7 P0-1): 入口检查——fail-fast 后新步骤不再启动
+    if cancel_event is not None and cancel_event.is_set():
+        return {"id": st["id"], "tool": st["tool"], "exit_code": None,
+                "status": "cancelled", "output": None, "artifact_id": None,
+                "output_sha256": None, "provenance": None, "log": None}
     tool_parts = st["tool"].split()
     log_path = os.path.join(workdir, f"{st['id']}.log")
-    with open(log_path, "w", encoding="utf-8") as lf:
-        r = subprocess.run(
-            [sys.executable, "-m", "tbtools_cli.cli"] + tool_parts + st["args"],
-            stdout=lf, stderr=subprocess.STDOUT, timeout=timeout_s,
-            cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        )
-    step_ok = r.returncode == 0
+    # Popen + 进程组注册(GLM-4.7 P0-1/P0-2): 可被 killpg;超时杀进程树(不再 worker 悬挂)
+    _rc = None
+    _timeout_hit = False
+    try:
+        with open(log_path, "w", encoding="utf-8") as lf:
+            _p = subprocess.Popen(
+                [sys.executable, "-m", "tbtools_cli.cli"] + tool_parts + st["args"],
+                stdout=lf, stderr=subprocess.STDOUT,
+                cwd=os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                start_new_session=True,  # 进程组独立, killpg 可达
+            )
+            if proc_registry is not None:
+                proc_registry[st["id"]] = _p
+            try:
+                _rc = _p.wait(timeout=timeout_s)
+            except subprocess.TimeoutExpired:
+                _timeout_hit = True
+                try:
+                    import signal as _sig
+                    os.killpg(os.getpgid(_p.pid), _sig.SIGKILL)
+                except Exception:
+                    _p.kill()
+                _p.wait()
+            finally:
+                if proc_registry is not None:
+                    proc_registry.pop(st["id"], None)
+    except Exception as e:
+        # worker 异常结构化(GLM-4.7 P0-3): 不抛出——转为 failed 步骤(带诊断)
+        return {"id": st["id"], "tool": st["tool"], "exit_code": None,
+                "status": "failed", "validation_warning": f"worker exception: {e}",
+                "output": None, "artifact_id": None, "output_sha256": None,
+                "provenance": None, "log": log_path}
+    step_ok = (_rc == 0) and not _timeout_hit
     # 输出识别契约化(CommandSpec outputs 匹配扩展名)
     out = ""
     try:
@@ -249,8 +285,9 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
         if not _vok:
             _vwarn = f"output validation failed: {_vmsg}"
             step_ok = False
-    return {"id": st["id"], "tool": st["tool"], "exit_code": r.returncode,
+    return {"id": st["id"], "tool": st["tool"], "exit_code": _rc,
             "status": "succeeded" if step_ok else "failed",
+            **({"validation_warning": f"step timeout after {timeout_s}s (process tree killed)"} if _timeout_hit else {}),
             **({"validation_warning": _vwarn} if _vwarn else {}),
             "output": out if step_ok and os.path.isfile(out) else None,
             "artifact_id": _art_id,
@@ -564,6 +601,22 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                     return ofmt
         return None
 
+    def _content_compat(a_name: str, b_name: str) -> bool | None:
+        """content_type 兼容(biological semantic type): A 输出语义 vs B 输入语义。
+        None=无标注(中性);True=兼容;False=冲突(protein→dna 工具)。"""
+        from tbtools_cli.command_spec import KNOWN_CONTENT_TYPES
+        ca, cb = KNOWN_CONTENT_TYPES.get(a_name), KNOWN_CONTENT_TYPES.get(b_name)
+        if not ca or not cb:
+            return None
+        if ca == cb:
+            return True
+        # alignment 可进 alignment/sequence 类;table 通用
+        if cb == "table" or ca == "table":
+            return True
+        if ca == "alignment" and cb in ("protein", "dna"):
+            return True
+        return False
+
     def _edge_info(a_name: str, b_name: str) -> dict:
         """边信息(评审 #72 P1-2): {type: contract|legacy_relation, match: exact|compatible}。"""
         ofmt = _edge(a_name, b_name)
@@ -666,6 +719,12 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         fuzzy = sum(1 for f in fmts if f and f != "relation" and f not in
                     [i.format.lower() for i in (specs[chain[fmts.index(f) + 1]].inputs or [])])
         score -= 0.05 * fuzzy
+        # content_type 冲突边罚(评审 semantic type: protein 链误入 dna 工具→降级)
+        for i in range(len(chain) - 1):
+            if _content_compat(chain[i], chain[i + 1]) is False:
+                score -= 0.3
+                reasons.append("content_type_conflict")
+                break
         # 多必填输入降级(评审 #70 P0-2): planner 单输入绑定, >1 必填输入的工具当前不可执行
         for t in chain:
             _req = [i for i in (specs[t].inputs or []) if i.required]

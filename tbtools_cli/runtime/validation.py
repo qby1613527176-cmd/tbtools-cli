@@ -103,3 +103,41 @@ def check_input_format(cmd_name: str, path: str) -> str | None:
     return None
 
 # ---- 已知坑位提示 ----
+
+def sniff_fasta_content(path: str, max_seqs: int = 20) -> str:
+    """fasta 内容嗅探: 序列字符集推断 dna/protein(前 max_seqs 条)。
+    dna: 只含 ACGTUNacgtun + 少量简并碱基;protein: 含其他氨基酸字母。"""
+    dna_chars = set("ACGTUNacgtunRYSWKMBDHVNryswkmbdhvn-.")
+    seq_chars: set = set()
+    n = 0
+    try:
+        with open(path, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                if line.startswith(">"):
+                    n += 1
+                    if n > max_seqs:
+                        break
+                    continue
+                seq_chars.update(line.strip())
+    except OSError:
+        return "unknown"
+    if not seq_chars:
+        return "unknown"
+    non_dna = seq_chars - dna_chars
+    return "protein" if non_dna else "dna"
+
+
+def check_content_type(tool: str, path: str) -> str | None:
+    """content_type 语义检查(评审: biological semantic type 功能化):
+    工具有 content_type 标注且输入是 fasta 时,嗅探内容类型不匹配→警告文案。"""
+    from tbtools_cli.command_spec import KNOWN_CONTENT_TYPES
+    expect = KNOWN_CONTENT_TYPES.get(tool)
+    if expect not in ("dna", "protein"):
+        return None
+    if not path.lower().endswith((".fa", ".fasta", ".faa", ".fna", ".pep")):
+        return None
+    actual = sniff_fasta_content(path)
+    if actual == "unknown" or actual == expect:
+        return None
+    return (f"content_type 不匹配: 输入嗅探为 {actual},但 {tool} 期望 {expect}"
+            f"(如确认无误可忽略)")

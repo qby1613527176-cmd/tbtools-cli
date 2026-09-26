@@ -162,3 +162,41 @@ class TestEnvelopeConsistency:
                            capture_output=True, text=True, cwd=ROOT)
         d = json.loads(r.stdout)
         assert d.get("schema_version") == "1.0" and "count" in d
+
+
+class TestContentTypeSemantics:
+    """biological semantic type 功能化(标注→拦截/规划)"""
+
+    def test_sniff_dna_vs_protein(self, tmp_path):
+        from tbtools_cli.runtime.validation import sniff_fasta_content
+        dna = tmp_path / "d.fa"
+        dna.write_text(">s1\nACGTACGTACGT\n>s2\nACGTACGT\n")
+        pep = tmp_path / "p.fa"
+        pep.write_text(">s1\nMKTAYIAKQRQISFVKSHFSRQ\n")
+        assert sniff_fasta_content(str(dna)) == "dna"
+        assert sniff_fasta_content(str(pep)) == "protein"
+
+    def test_content_type_mismatch_warns(self, tmp_path):
+        from tbtools_cli.runtime.validation import check_content_type
+        dna = tmp_path / "d.fa"
+        dna.write_text(">s1\nACGTACGTACGT\n")
+        # dna fasta 进 protein 工具 → 警告
+        w = check_content_type("blastp", str(dna))
+        assert w and "不匹配" in w
+        # dna fasta 进 dna 工具 → 无警告
+        assert check_content_type("blastn", str(dna)) is None
+        # 无标注工具 → 中性
+        assert check_content_type("volcano", str(dna)) is None
+
+    def test_real_protein_fasta_passes(self):
+        from tbtools_cli.runtime.validation import check_content_type
+        assert check_content_type("blastp", "examples/data/blast/query.fa") is None
+        w = check_content_type("blastn", "examples/data/blast/query.fa")
+        assert w and "protein" in w
+
+    def test_annotations_attached(self):
+        from tbtools_cli.command_spec import build_command_specs
+        specs = build_command_specs()
+        assert specs["muscle"].inputs[0].content_type == "protein"
+        assert specs["iqtree"].inputs[0].content_type == "alignment"
+        assert specs["sixframe"].inputs[0].content_type == "dna"
