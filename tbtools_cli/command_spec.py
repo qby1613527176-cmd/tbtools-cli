@@ -99,21 +99,34 @@ class InvocationSpec:
         if len(inputs) < len(req_inputs):
             raise ValueError(f"MISSING_REQUIRED_INPUT: 需要 {len(req_inputs)} 个必填输入, 收到 {len(inputs)}")
         if self.layout:
-            # token layout(评审 #74 P0-3): 精确 token 序列编译
+            # token layout(评审 #74 P0-3 + #76 P0-1 严格检查):
+            # 契约声明什么,编译就必须满足什么——禁止 silent skip(silently degrade 破坏可验证性)
             for tok in self.layout:
+                if not isinstance(tok, dict) or len(tok) == 0:
+                    raise ValueError(f"INVALID_LAYOUT_TOKEN: {tok!r}")
                 if "input" in tok:
                     idx = int(tok["input"])
-                    if idx < len(inputs):
-                        argv.append(str(inputs[idx]))
+                    if idx >= len(inputs):
+                        raise ValueError(
+                            f"INVALID_LAYOUT_INPUT: layout 引用 input[{idx}], 但只提供 {len(inputs)} 个输入")
+                    argv.append(str(inputs[idx]))
                 elif "output" in tok:
-                    if output:
-                        argv.append(str(output))
+                    if not output:
+                        raise ValueError("MISSING_LAYOUT_OUTPUT: layout 要求 output token, 但 binding 未提供 output")
+                    argv.append(str(output))
                 elif "flag" in tok:
                     pname = tok.get("param", "")
-                    if pname in parameters:
-                        argv += [tok["flag"], str(parameters[pname])]
+                    if not pname:
+                        raise ValueError(f"INVALID_LAYOUT_TOKEN: flag token 缺 param 字段: {tok!r}")
+                    if pname not in [p.name for p in self.parameters]:
+                        raise ValueError(f"UNKNOWN_LAYOUT_PARAMETER: layout 引用未声明参数: {pname}")
+                    if pname not in parameters:
+                        raise ValueError(f"MISSING_LAYOUT_PARAMETER: layout 要求参数 {pname}, 但 binding 未提供")
+                    argv += [tok["flag"], str(parameters[pname])]
                 elif "literal" in tok:
                     argv.append(str(tok["literal"]))
+                else:
+                    raise ValueError(f"INVALID_LAYOUT_TOKEN: 未知 token 类型: {tok!r}")
             return argv
         if self.named_flags:
             # named-flag 布局(评审 #72 P0-1): 输入/输出都走 flag(venn2: --List1/--List2/--graph)

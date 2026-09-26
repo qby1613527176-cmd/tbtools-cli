@@ -19,6 +19,15 @@ class WorkflowError(Exception):
     pass
 
 
+def _warn_legacy_args(wf: dict):
+    """legacy args 退役警告(评审 #76 P1-3): v1.x 兼容,v2.0 移除——迁移 binding。"""
+    legacy = [s.get("id", "?") for s in (wf.get("steps") or []) if not s.get("binding")]
+    if legacy:
+        print(f"⚠️ DeprecationWarning: workflow {wf.get('id', '?')} 的 {len(legacy)} 个步骤({', '.join(legacy[:3])})"
+              f"使用 legacy args 形态——v2.0 将移除,请迁移 binding 形态({{inputs/parameters/output}})",
+              file=sys.stderr)
+
+
 def load_workflow(path: str) -> dict:
     """加载 YAML workflow 并基础校验。"""
     import yaml
@@ -34,6 +43,7 @@ def load_workflow(path: str) -> dict:
         if s["id"] in seen:
             raise WorkflowError(f"step id 重复: {s['id']}")
         seen.add(s["id"])
+    _warn_legacy_args(wf)  # 评审 #76 P1-3: legacy 退役警告
     return wf
 
 
@@ -681,11 +691,14 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
                     "fa": ".fa", "aln": ".fa", "gff3": ".gff3", "collinearity": ".collinearity"}
         _ofmt = (_outs[0] if _outs else output_format or "out")
         _ext = _EXT_MAP.get(str(_ofmt).lower(), "." + str(_ofmt).lower())
+        # 参数默认值填充(评审 #76 P0-2): binding 带 ParamSpec 默认,不再是空 parameters
+        _defaults = {p.name: p.default for p in (_sp.parameters if _sp else [])
+                     if p.default is not None}
         steps.append({
             "id": sid,
             "tool": tool,
             "depends_on": [f"step{i}"] if i > 0 else [],
-            "binding": {"inputs": [_in_ref], "parameters": {},
+            "binding": {"inputs": [_in_ref], "parameters": _defaults,
                         "output": "{workdir}/%s%s" % (tool, _ext)},
             "input_contract": _ins[0].format if _ins else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
             "output_contract": (_outs[0] if _outs else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),
