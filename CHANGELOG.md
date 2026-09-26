@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.6] - 2026-09-26
+
+### Conformance Verified(第 18 份评审)
+- **layout 严格错误检查(禁 silent skip)**: INVALID_LAYOUT_INPUT/MISSING_LAYOUT_OUTPUT/MISSING_LAYOUT_PARAMETER/UNKNOWN_LAYOUT_PARAMETER/INVALID_LAYOUT_TOKEN
+- **planner binding 填 ParamSpec 默认值**(volcano: pval_cutoff 0.05/fc_cutoff 1.0/w 1000/h 800)
+- **Conformance Verified 体系**: Tier1 compile-verified(59 FULL 全部)+ Tier2 execution-verified(volcano/dehist/dualsyn 真实执行+产物+sha+溯源)
+- **legacy args 退役警告**(DeprecationWarning 提示迁移 binding,v2.0 移除)
+
 ## [1.4.5] - 2026-09-26
 
 ### 契约闭环 + WOX 实跑修复(第 17 份评审 + WOX 问题单)
