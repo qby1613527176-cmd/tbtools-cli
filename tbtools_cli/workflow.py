@@ -199,17 +199,21 @@ def _topo_sort(steps: list) -> list:
 
 
 
-def _merge_state_step(workdir: str, workflow_id: str, result: dict):
+def _merge_state_step(workdir: str, workflow_id: str, result: dict) -> str | None:
     """单步完成即合并落盘(P0-2 评审 #80): 崩溃后 resume 能看到已完成步骤。
-    读-改-写(串行路径天然安全;并行路径由调用方加锁)。"""
+
+    P1-4(评审 #86): 落盘失败返回警告文案(不再静默吞——resume 可信度问题必须可见)。"""
     try:
         state = _load_state(workdir)
         steps = state.get("steps", [])
         steps = [s for s in steps if s.get("id") != result["id"]]
         steps.append(result)
         _save_state(workdir, {"workflow": workflow_id, "status": "running", "steps": steps})
-    except Exception:
-        pass  # 落盘失败不阻断执行
+        return None
+    except Exception as e:
+        _warn = f"PERSISTENCE_WARNING: step {result.get('id')} state 落盘失败: {e}"
+        print(f"⚠️ {_warn}", file=sys.stderr)
+        return _warn
 
 def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: bool,
                   cancel_event=None, proc_registry: dict | None = None) -> dict:
@@ -265,6 +269,19 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             )
             if proc_registry is not None:
                 proc_registry[st["id"]] = _p
+            # P0-3(评审 #86): cancel↔register 竞态——注册完成后立查 cancel_event
+            # (若 cancel 在 wait 前已 set 且 killpg 先于注册执行,此步骤会漏杀→悬挂)
+            if cancel_event is not None and cancel_event.is_set():
+                try:
+                    import signal as _sig2
+                    os.killpg(os.getpgid(_p.pid), _sig2.SIGKILL)
+                except Exception:
+                    pass
+                _p.wait(timeout=10)
+                if proc_registry is not None:
+                    proc_registry.pop(st["id"], None)
+                return {"id": st["id"], "tool": st["tool"], "exit_code": -1,
+                        "status": "cancelled", "output": None, "log": log_path}
             try:
                 _rc = _p.wait(timeout=timeout_s)
             except subprocess.TimeoutExpired:
@@ -441,6 +458,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                 except (PermissionError, OSError):
                     pass  # 不可建则跳过——真实错误由引擎/report 层报出
     t0 = time.time()
+    _persistence_warnings: list = []
     # DAG 并行调度(depends_on 工作流且 TBTOOLS_WF_PARALLEL!=0;默认 2 workers——Java 内存约束)
     _has_dag = any(s.get("depends_on") or s.get("dependsOn") for s in wf["steps"])
     _parallel = _has_dag and len(steps) > 1 and os.environ.get("TBTOOLS_WF_PARALLEL", "1") != "0"
@@ -457,7 +475,9 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
         for st in steps:
             res = _execute_step(st, workdir, timeout_s, state, resume)
             results.append(res)
-            _merge_state_step(workdir, wf["id"], res)  # P0-2: 每步落盘
+            _pw = _merge_state_step(workdir, wf["id"], res)  # P0-2: 每步落盘
+            if _pw:
+                _persistence_warnings.append(_pw)
             if res["status"] != "succeeded":
                 failed_at = st["id"]
                 break
@@ -469,6 +489,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
     _save_state(workdir, {"workflow": wf["id"], "status": "succeeded", "steps": results})
     return {"schema_version": "1.0", "workflow": wf["id"], "status": "succeeded",
             "steps": results, "duration_s": round(time.time() - t0, 1),
+            **({"persistence_warnings": _persistence_warnings} if _persistence_warnings else {}),
             "artifacts": [r2["output"] for r2 in results if r2["output"]]}
 
 
@@ -698,9 +719,16 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 cb = None
         if not cb:
             cb = KNOWN_CONTENT_TYPES.get(b_name)
-        # A 输出语义(评审 #84 P1-3: 输出 slot 级优先,工具级兜底)
+        # A 输出语义(评审 #86 P1-5: output_slots 槽位级最优先 → KNOWN_OUTPUT → 工具级)
         from tbtools_cli.command_spec import KNOWN_OUTPUT_CONTENT_TYPES
-        ca = KNOWN_OUTPUT_CONTENT_TYPES.get(a_name) or KNOWN_CONTENT_TYPES.get(a_name)
+        ca = None
+        _a_spec = specs.get(a_name)
+        if _a_spec and _a_spec.output_slots:
+            ca = _a_spec.output_slots[0].content_type
+            if ca == "generic":
+                ca = None
+        if not ca:
+            ca = KNOWN_OUTPUT_CONTENT_TYPES.get(a_name) or KNOWN_CONTENT_TYPES.get(a_name)
         if not ca or not cb:
             return None
         if ca == cb:
@@ -739,38 +767,8 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             return "PARTIALLY_BINDABLE"
         return "EXECUTABLE"
 
-    def _bind_slots(name: str, first_ref: str, wf_inputs: dict) -> dict | None:
-        """slot 级绑定(评审 #80 P0-3 + #82 P0-2): 首必填槽 ← 链引用;其余必填槽 ← workflow inputs。
-        匹配级别(不再只看扩展名): EXACT(format+content_type 同) / COMPATIBLE(format 同族) /
-        INCOMPATIBLE(不匹配→None) / UNRESOLVED(无可用输入→None)。"""
-        spec = specs[name]
-        ins = [i for i in (spec.inputs or []) if i.required]
-        if not ins:
-            return None
-        binding = {ins[0].name: first_ref}
-        # 首槽兼容性(评审 #84 P1-6): 链引用与首槽 format 不兼容时不硬绑
-        if first_ref.startswith("$"):
-            # 上游输出 → 首槽: 由调用方(_content_compat)已保证边兼容;此处标记
-            binding["__first_slot_match"] = "UPSTREAM_EDGE"
-        elif first_ref == "{input}" or first_ref.startswith("{input."):
-            binding["__first_slot_match"] = "WORKFLOW_INPUT"
-        for slot in ins[1:]:
-            hit, hit_level = None, "UNRESOLVED"
-            for in_name, in_val in wf_inputs.items():
-                _fmt = str(in_val).rsplit(".", 1)[-1].lower() if isinstance(in_val, str) else ""
-                if not slot.format or not _fmt:
-                    continue
-                if slot.format.lower() == _fmt:
-                    hit, hit_level = "{input." + in_name + "}", "EXACT"
-                    break
-                if _fmt_match(slot.format, _fmt):
-                    hit, hit_level = "{input." + in_name + "}", "COMPATIBLE"
-                    # 不 break——继续找 EXACT
-            if not hit:
-                return None  # INCOMPATIBLE/UNRESOLVED
-            binding[slot.name] = hit
-            binding[f"__{slot.name}_match"] = hit_level
-        return binding
+    def _bind_slots_local(name: str, first_ref: str, wf_inputs: dict) -> dict | None:
+        return _bind_slots(name, first_ref, wf_inputs, specs)
 
     # 起点(去重: 评审 #70 P0-5——同一工具 schema+relations 双命中不再重复探索)
     starts, _seen_starts = [], set()
@@ -885,7 +883,7 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     wf_spec = _plan_to_spec(goal, [(t, f"contract graph({fm})" if fm else "start") for t, fm in zip(chain_tools, _fmts_padded)],
                             input_format, output_format) if chain_tools else None
     return {
-        "schema_version": "1.0",
+        "schema_version": WORKFLOW_SCHEMA_CURRENT,  # P0-2(评审 #86): 统一不再硬编码
         "goal": goal,
         "input_format": input_format or None,
         "output_format": output_format or None,
@@ -920,6 +918,40 @@ def _stable_wf_id(goal: str) -> str:
     import hashlib
     return hashlib.sha256(goal.encode("utf-8")).hexdigest()[:10]
 
+
+def _bind_slots(name: str, first_ref: str, wf_inputs: dict, specs: dict) -> dict | None:
+    """slot 级绑定(评审 #80 P0-3 + #82 P0-2 + #86 P0-1 模块级): 首必填槽 ← 链引用;
+    其余必填槽 ← workflow inputs。匹配级别: EXACT / COMPATIBLE / INCOMPATIBLE / UNRESOLVED。"""
+    spec = specs.get(name)
+    if not spec:
+        return None
+    ins = [i for i in (spec.inputs or []) if i.required]
+    if not ins:
+        return None
+    binding = {ins[0].name: first_ref}
+    if first_ref.startswith("$"):
+        binding["__first_slot_match"] = "UPSTREAM_EDGE"
+    elif first_ref == "{input}" or first_ref.startswith("{input."):
+        binding["__first_slot_match"] = "WORKFLOW_INPUT"
+    for slot in ins[1:]:
+        hit, hit_level = None, "UNRESOLVED"
+        for in_name, in_val in wf_inputs.items():
+            _fmt = str(in_val).rsplit(".", 1)[-1].lower() if isinstance(in_val, str) else ""
+            if not slot.format or not _fmt:
+                continue
+            if slot.format.lower() == _fmt:
+                hit, hit_level = "{input." + in_name + "}", "EXACT"
+                break
+            # 同族兼容(format ontology)
+            a, b = slot.format.lower(), _fmt
+            if a == b or (len(a) >= 3 and a in b) or (len(b) >= 3 and b in a):
+                hit, hit_level = "{input." + in_name + "}", "COMPATIBLE"
+        if not hit:
+            return None
+        binding[slot.name] = hit
+        binding[f"__{slot.name}_match"] = hit_level
+    return binding
+
 def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str) -> dict:
     """plan 链 → 可执行 WorkflowSpec(评审 #74 P0-1: 直接生成 binding, 不再 args 拼接)。
 
@@ -945,15 +977,20 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
         # 参数默认值填充(评审 #76 P0-2): binding 带 ParamSpec 默认,不再是空 parameters
         _defaults = {p.name: p.default for p in (_sp.parameters if _sp else [])
                      if p.default is not None}
-        # MULTI_INPUT 接入(评审 #82 P0-1): 多必填槽位经 _bind_slots 生成 dict 绑定
+        # MULTI_INPUT 接入(评审 #82 P0-1 + #86 P0-1): 多必填槽位经 _bind_slots 统一解析
         _req = [x for x in (_sp.inputs if _sp else []) if x.required]
         if len(_req) > 1:
-            _slot_binding = {**{_req[0].name: _in_ref}}
+            _slot_binding = _bind_slots(tool, _in_ref, {}, _specs) or {}
+            # _bind_slots 无 wf_inputs 时额外槽位解析失败→生成 requires_inputs 占位
+            _required_extra = []
             for _slot in _req[1:]:
-                # 额外必填槽位 → workflow inputs 占位(用户按 format/content_type 提供)
-                _slot_binding[_slot.name] = "{input." + _slot.name + "}"
+                if _slot.name not in _slot_binding:
+                    _slot_binding[_slot.name] = "{input." + _slot.name + "}"
+                    _required_extra.append({"slot": _slot.name, "format": _slot.format,
+                                            "content_type": _slot.content_type})
             _inputs_field: object = _slot_binding
         else:
+            _required_extra = []
             _inputs_field = [_in_ref]
         steps.append({
             "id": sid,
@@ -964,10 +1001,11 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
             "input_contract": _ins[0].format if _ins else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
             "output_contract": (_outs[0] if _outs else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),
             "selection_reason": reason,
+            **({"required_workflow_inputs": _required_extra} if _required_extra else {}),
         })
     return {
-        "schema_version": "1.0",
-        "workflow_id": f"wf_{_stable_wf_id(goal + '|' + input_format + '|' + output_format + '|' + '>'.join([t for t, _ in chain]) + '|wf1.1')}",  # P1(评审 #70): 完整身份(goal+contracts+chain+schema 版本)
+        "schema_version": WORKFLOW_SCHEMA_CURRENT,  # P0-2(评审 #86): planner 生成 spec 与常量一致
+        "workflow_id": f"wf_{_stable_wf_id(goal + '|' + input_format + '|' + output_format + '|' + '>'.join([t for t, _ in chain]) + '|wf' + WORKFLOW_SCHEMA_CURRENT)}",
         "goal": goal,
         "steps": steps,
     }

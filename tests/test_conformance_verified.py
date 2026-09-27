@@ -50,6 +50,12 @@ class TestTier1CompileVerified:
                 spec.invocation.build_argv(inputs=fake, parameters={"__nope__": "1"}, output="o.out")
             verified.append(tool)
         assert len(verified) == len(FULL_TOOLS),             f"compile-verified {len(verified)}/{len(FULL_TOOLS)}: 缺 {set(FULL_TOOLS) - set(verified)}"
+        # verification_report.json(评审 #86 P1-6): 测试产物驱动 verification_level
+        import json as _jr
+        _report = {"compile_verified": sorted(verified),
+                   "execution_verified": sorted(EXEC_VERIFIED.keys())}
+        _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
+                 indent=1)
 
 
 @pytest.mark.integration

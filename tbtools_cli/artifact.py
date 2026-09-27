@@ -104,11 +104,11 @@ def _index_path() -> str:
     return os.path.join(d, "artifacts.json")
 
 
-def register(art: "Artifact"):
+def register(art: "Artifact") -> str | None:
     """登记 Artifact 到索引(art_id → path)。
 
     原子写(评审 #66 P1-3 并发竞争): tmp+fsync+os.replace——并发 job 不丢记录/不留半截 JSON。
-    """
+    返回 None=成功;错误文案=失败(评审 #86 P1-4: 不再静默吞)。"""
     try:
         p = _index_path()
         # flock 保护读-改-写(评审 #70 P1-4: 并发 job_submit 双写必丢;原子写只防半截 JSON 不防丢更新)
@@ -155,8 +155,9 @@ def register(art: "Artifact"):
                             _lf.fileno(), getattr(_fcntl_mod, "LK_UNLCK"), 1)
                 except Exception:
                     pass
-    except Exception:
-        pass
+        return None
+    except Exception as e:
+        return f"artifact register failed: {e}"
 
 
 def resolve(ref: str) -> str | None:

@@ -180,6 +180,7 @@ class CommandSpec:
     dependencies: list[str] = field(default_factory=list)  # 外部依赖(环境解析, GLM #22)
     relations: dict = field(default_factory=dict)          # 语义关系(能力图衔接, GLM #24)
     parameters: list = field(default_factory=list)         # ParamSpec 参数契约(Tool Contract)
+    output_slots: list = field(default_factory=list)       # OutputSpec 输出槽位(评审 #86 P1-5)
 
     @property
     def invocation(self) -> "InvocationSpec":
@@ -269,6 +270,27 @@ def _apply_contract_overlay(spec) -> None:
             spec.__dict__["_contract_named_flags"] = lay
         elif isinstance(lay, list):
             spec.__dict__["_contract_layout"] = lay
+
+
+@dataclass
+class OutputSpec:
+    """输出槽位定义(评审 #86 P1-5): semantic matching 需要 output-slot → input-slot。"""
+    name: str
+    format: str = ""
+    content_type: str = "generic"  # dna | protein | alignment | table | annotation | tree | generic
+
+
+# 关键工具输出槽位(output slot 级语义;KNOWN_OUTPUT_CONTENT_TYPES 的槽位化)
+KNOWN_OUTPUT_SLOTS = {
+    "muscle": [OutputSpec("aln", format="fasta", content_type="alignment")],
+    "trimal": [OutputSpec("aln", format="fasta", content_type="alignment")],
+    "sixframe": [OutputSpec("pep", format="fasta", content_type="protein")],
+    "pep2codon": [OutputSpec("cds", format="fasta", content_type="dna")],
+    "iqtree": [OutputSpec("tree", format="nwk", content_type="tree")],
+    "mcscanx": [OutputSpec("collinearity", format="tsv", content_type="table")],
+    "recipBlast": [OutputSpec("result", format="tsv", content_type="table")],
+    "volcano": [OutputSpec("plot", format="svg", content_type="table")],
+}
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -720,6 +742,9 @@ def build_command_specs() -> dict[str, CommandSpec]:
         if name in KNOWN_SCHEMAS:
             ins, outs = KNOWN_SCHEMAS[name]
             spec.inputs, spec.outputs = ins, outs
+            # output_slots 挂接(评审 #86 P1-5)
+            if name in KNOWN_OUTPUT_SLOTS:
+                spec.output_slots = KNOWN_OUTPUT_SLOTS[name]
             # content_type 挂接: slot 级优先,工具级兜底(评审 #80 P0-4)
             _slot_ct = KNOWN_INPUT_CONTENT_TYPES.get(name, {})
             for _inp in spec.inputs:
