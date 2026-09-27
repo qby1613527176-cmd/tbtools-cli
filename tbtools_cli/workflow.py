@@ -160,6 +160,14 @@ class CompiledInvocation:
         self.outputs = outputs
         self.parameters = parameters
         self.tool = tool
+        self.schema_version = WORKFLOW_SCHEMA_CURRENT  # 评审 #94 P1-3
+        # contract fingerprint(评审 #94 P1-3): 编译产物哈希——resume/provenance 可验证同一性
+        import hashlib as _hc
+        import json as _jc
+        self.contract_fingerprint = _hc.sha256(
+            _jc.dumps({"argv": argv, "inputs": inputs, "outputs": outputs,
+                       "parameters": parameters, "tool": tool},
+                      sort_keys=True, default=str).encode()).hexdigest()[:16]
 
 
 def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvocation:
@@ -430,8 +438,12 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
     proc_registry: dict = {}
 
     def _ready():
-        return [sid for sid in pending
-                if all(d in done for d in (by_id[sid].get("depends_on") or by_id[sid].get("dependsOn") or []))]
+        # P2(评审 #94): deterministic ready queue——按声明序排序(输出稳定可复现)
+        _decl = {s["id"]: i for i, s in enumerate(steps)}
+        return sorted(
+            (sid for sid in pending
+             if all(d in done for d in (by_id[sid].get("depends_on") or by_id[sid].get("dependsOn") or []))),
+            key=lambda x: _decl.get(x, 999))
 
     def _kill_running():
         """失败触发: cancel_event + killpg 所有在飞进程组(P0-1 状态收敛)。"""
@@ -532,6 +544,11 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
         results, failed_at = _run_parallel(steps, workdir, timeout_s, state, resume,
                                            max_workers=int(os.environ.get("TBTOOLS_WF_WORKERS", "2")),
                                            workflow_id=wf["id"])
+        # 评审 #94 P1-2: 并行步骤级 persistence_warnings 汇总到顶层(与串行一致)
+        for _r in results:
+            for _pw3 in _r.get("persistence_warnings", []):
+                if _pw3 not in _persistence_warnings:
+                    _persistence_warnings.append(_pw3)
         # 结果按声明序重排(输出稳定)
         _order = {s["id"]: i for i, s in enumerate(steps)}
         results.sort(key=lambda r: _order.get(r["id"], 999))
@@ -788,10 +805,25 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             cb = KNOWN_CONTENT_TYPES.get(b_name)
         # A 输出语义(评审 #86 P1-5: output_slots 槽位级最优先 → KNOWN_OUTPUT → 工具级)
         from tbtools_cli.command_spec import KNOWN_OUTPUT_CONTENT_TYPES
+        # output-slot → input-slot 配对(评审 #94 P1-1):
+        # A 每个 output slot 与 B 每个 input slot 找兼容对(不再"A 第一槽 vs B 第一槽")
+        _a_spec2, _b_spec2 = specs.get(a_name), specs.get(b_name)
+        if _a_spec2 and _a_spec2.output_slots and _b_spec2 and _b_spec2.inputs:
+            for _os in _a_spec2.output_slots:
+                for _is in _b_spec2.inputs:
+                    if _os.content_type != "generic" and _is.content_type != "generic":
+                        if _os.content_type == _is.content_type:
+                            return True
+                        if "table" in (_os.content_type, _is.content_type):
+                            return True
+                        if {_os.content_type, _is.content_type} <= {"alignment", "protein", "dna"}:
+                            return True
+            if any(o.content_type != "generic" for o in _a_spec2.output_slots) and \
+                    any(i.content_type != "generic" for i in _b_spec2.inputs):
+                return False  # 有标注但无兼容对 → 冲突
         ca = None
-        _a_spec = specs.get(a_name)
+        _a_spec = _a_spec2
         if _a_spec and _a_spec.output_slots:
-            # 遍历全部 output_slots(评审 #90 P1-3): 任一非 generic 即采纳(不再只用第一个)
             for _os in _a_spec.output_slots:
                 if _os.content_type and _os.content_type != "generic":
                     ca = _os.content_type
@@ -988,6 +1020,32 @@ def _stable_wf_id(goal: str) -> str:
     return hashlib.sha256(goal.encode("utf-8")).hexdigest()[:10]
 
 
+
+def resolve_input_binding(source: str, slot) -> tuple[str, str]:
+    """Binding Resolver(评审 #94 P0-3): 候选输入 vs InputSpec 的匹配级别。
+
+    返回 (ref, level): level = EXACT / COMPATIBLE / INCOMPATIBLE / UNRESOLVED。
+    content_type 真正进入(fasta 可嗅探时内容冲突→INCOMPATIBLE)。"""
+    ref = source
+    fmt = str(source).rsplit(".", 1)[-1].lower() if isinstance(source, str) else ""
+    if not slot.format or not fmt:
+        return ref, "UNRESOLVED"
+
+    def _content_ok() -> bool:
+        if slot.content_type in ("dna", "protein") and os.path.isfile(str(source)):
+            from tbtools_cli.runtime.validation import sniff_fasta_content
+            sniffed = sniff_fasta_content(str(source))
+            return sniffed == "unknown" or sniffed == slot.content_type
+        return True
+
+    if slot.format.lower() == fmt:
+        return (ref, "EXACT") if _content_ok() else (ref, "INCOMPATIBLE")
+    a, b = slot.format.lower(), fmt
+    if a == b or (len(a) >= 3 and a in b) or (len(b) >= 3 and b in a):
+        return (ref, "COMPATIBLE") if _content_ok() else (ref, "INCOMPATIBLE")
+    return ref, "INCOMPATIBLE"
+
+
 def _bind_slots(name: str, first_ref: str, wf_inputs: dict, specs: dict) -> dict | None:
     """slot 级绑定(评审 #80 P0-3 + #82 P0-2 + #86 P0-1 模块级): 首必填槽 ← 链引用;
     其余必填槽 ← workflow inputs。匹配级别: EXACT / COMPATIBLE / INCOMPATIBLE / UNRESOLVED。"""
@@ -1005,15 +1063,12 @@ def _bind_slots(name: str, first_ref: str, wf_inputs: dict, specs: dict) -> dict
     for slot in ins[1:]:
         hit, hit_level = None, "UNRESOLVED"
         for in_name, in_val in wf_inputs.items():
-            _fmt = str(in_val).rsplit(".", 1)[-1].lower() if isinstance(in_val, str) else ""
-            if not slot.format or not _fmt:
-                continue
-            if slot.format.lower() == _fmt:
+            # P0-3(评审 #94): Binding Resolver 统一(content_type 正式进入)
+            _ref, _lvl = resolve_input_binding(str(in_val), slot)
+            if _lvl == "EXACT":
                 hit, hit_level = "{input." + in_name + "}", "EXACT"
                 break
-            # 同族兼容(format ontology)
-            a, b = slot.format.lower(), _fmt
-            if a == b or (len(a) >= 3 and a in b) or (len(b) >= 3 and b in a):
+            if _lvl == "COMPATIBLE":
                 hit, hit_level = "{input." + in_name + "}", "COMPATIBLE"
         if not hit:
             return None

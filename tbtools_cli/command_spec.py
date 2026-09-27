@@ -183,6 +183,13 @@ class CommandSpec:
     output_slots: list = field(default_factory=list)       # OutputSpec 输出槽位(评审 #86 P1-5)
 
     @property
+    def output_formats(self) -> list:
+        """唯一 output truth 访问口(评审 #94 P0-1): output_slots 优先,outputs 兜底。"""
+        if self.output_slots:
+            return [o.format for o in self.output_slots]
+        return list(self.outputs)
+
+    @property
     def invocation(self) -> "InvocationSpec":
         """调用契约投影(评审 #70): inputs+parameters → 可编译 argv 的 InvocationSpec。"""
         inv = InvocationSpec()
@@ -262,7 +269,7 @@ def _apply_contract_overlay(spec) -> None:
     c = load_contracts().get(spec.name)
     if not c:
         return
-    if c.get("inputs"):
+    if "inputs" in c:  # 评审 #94: presence semantics(显式 []=清空)
         # merge by slot name(评审: YAML 未声明 content_type 时保留内存标注,不冲掉 slot 语义)
         _old_ct = {i.name: i.content_type for i in spec.inputs if i.content_type != "generic"}
         spec.inputs = [InputSpec(name=i.get("name", ""), role=i.get("role", "file"),
@@ -273,6 +280,8 @@ def _apply_contract_overlay(spec) -> None:
                        for i in c["inputs"]]
     if "outputs" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.outputs = list(c["outputs"])
+        # P0-1(评审 #94): outputs 覆盖时同步重建 output_slots——消灭 outputs/output_slots 漂移
+        spec.output_slots = [OutputSpec(name=o, format=o) for o in c["outputs"]]
     if "parameters" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.parameters = [ParamSpec(name=p.get("name", ""), type=p.get("type", "string"),
                                      default=p.get("default"), required=p.get("required", False),
@@ -280,7 +289,7 @@ def _apply_contract_overlay(spec) -> None:
                            for p in c["parameters"]]
     if "capabilities" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.capabilities = list(c["capabilities"])
-    if c.get("layout"):
+    if "layout" in c:  # 评审 #94: presence semantics
         # layout 经 invocation 投影(named_flags 或 token layout)
         lay = c["layout"]
         if isinstance(lay, dict) and ("inputs" in lay or "output" in lay):
@@ -847,10 +856,12 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     if spec.outputs:
         e["outputs"] = spec.outputs
     # 评审 #88 P1-2: layout/named_flags/output_slots 导出(metadata 丢布局=第二轮 metadata bug)
-    if spec.output_slots:
+    # output_slots 为空时从 outputs 派生(评审 #94 P0-1: 唯一 output truth 的一致性)
+    _slots = spec.output_slots or [OutputSpec(name=o, format=o) for o in spec.outputs]
+    if _slots:
         e["output_slots"] = [{"name": o.name, "format": o.format,
                               **({"content_type": o.content_type} if o.content_type != "generic" else {})}
-                             for o in spec.output_slots]
+                             for o in _slots]
     if spec.name in KNOWN_NAMED_FLAGS:
         e["named_flags"] = KNOWN_NAMED_FLAGS[spec.name]
     # YAML contract 布局投影(评审 #90 P1-2): contract loader 声明的布局也进 metadata
