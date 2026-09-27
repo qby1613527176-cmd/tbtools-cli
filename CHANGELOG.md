@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.16] - 2026-09-28
+
+### slots 为真相(第 27 份评审)
+- **P0【bug 修复】overlay 优先读 YAML output_slots**(slots 为唯一真相,outputs 为投影;v1.4.15 自引入的 content_type 丢失修复)
+- **三层 identity**: contract_fingerprint → binding_fingerprint → execution_fingerprint
+- **COMPILE_VERIFIED 指标**(测试产物名单,与声明级区分)
+- contracts 重生成(63 个带 output_slots)
+
 ## [1.4.15] - 2026-09-28
 
 ### 语义统一(第 26 份评审)
