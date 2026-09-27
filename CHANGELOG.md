@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.17] - 2026-09-28
+
+### identity→resume 纵贯(第 28 份评审)
+- **fingerprint 数学语义重定义**: contract_fp=契约本身/binding_fp=符号绑定/execution_fp=contract+binding+输入 sha+runtime
+- **fingerprint→resume 闸门**: state.fp ≠ 当前 fp → 重跑(篡改输入实测触发)
+- **binding 路径禁 output guessing**(启发式回退只限 legacy args)
+- **contract 修正**: volcano 输出 table→plot;muscle content_type→sequence(DNA+蛋白双兼容)
+- **verification_census 加 COMPILE_VERIFIED**
+
 ## [1.4.16] - 2026-09-28
 
 ### slots 为真相(第 27 份评审)
