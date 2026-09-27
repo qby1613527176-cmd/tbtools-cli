@@ -25,12 +25,12 @@ relations:
   next_step:
   - filterCScore
 inputs:
-- name: db
+- name: query
   role: file
   format: fasta
   required: true
   note: ''
-- name: query
+- name: subject
   role: file
   format: fasta
   required: true
