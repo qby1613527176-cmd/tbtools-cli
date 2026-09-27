@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.7] - 2026-09-27
+
+### 架构收口 + 语义层(roadmap 三项 + Phase 3)
+- **CommandSpec 兼容层 Phase 3**: cli.py/cli_top.py/test_metadata.py 三处 legacy import 全部迁移到 CommandSpec;grandfather 白名单清零——CommandSpec 唯一入口达成
+- **DAG 并行 scheduler**: ready-queue + ThreadPoolExecutor(默认 2 workers)+ fail-fast;**竞态修复**(在飞步骤结果丢失)
+- **biological semantic type 功能化**: InputSpec.content_type(30 工具标注)+ fasta 语义嗅探(dna 进 blastp→警告)+ planner 语义边罚分
+- **多输出 Artifact**: discover_outputs(prefix 型输出兄弟文件发现);mcscanx 回归 Tier-2
+- **resolve_artifact()**: 返回完整 Artifact 对象;search envelope schema_version 统一
+- **capability ontology 全覆盖**(51 能力)+ JDK/JRE 文档统一(JDK 11+,JRE 不够)
+
 ## [1.4.6] - 2026-09-26
 
 ### Conformance Verified(第 18 份评审)
