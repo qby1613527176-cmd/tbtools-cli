@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.14] - 2026-09-28
+
+### 旧语义旁路清理(第 25 份评审)
+- **validate 消费 CompiledInvocation.outputs**(与 run 同语义,不再 argv 猜)
+- **contracts 缓存文件指纹**(mtime+size 每文件 tuple)
+- **overlay presence 检查**(显式 []=有意清空)
+- **并行 persistence warning 收集**;**绑定 content_type 嗅探**
+- **重名契约记录**(CONTRACT_DUPLICATE_NAME);schema 命名区分
+
 ## [1.4.13] - 2026-09-28
 
 ### 真相链补全(第 24 份评审)
