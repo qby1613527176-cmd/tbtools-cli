@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.8] - 2026-09-27
+
+### Runtime 工程阶段(第 19 份评审)
+- **cancel fail-fast 打通**: cancel_event + killpg 在飞进程组 + 状态收敛(未启动 skipped)
+- **每步原子落盘**: _merge_state_step(崩溃后 resume 可见已完成步骤)
+- **多输入 binding**: dict slot 绑定({query, subject} 按 InputSpec 声明序展开;RBH 全链路实测)
+- **content_type slot 级**: KNOWN_INPUT_CONTENT_TYPES(pep2codon cds=dna/pep_aln=protein)
+- **layout 三漏洞**: 负 index 拒/required 覆盖检查/bool flag 语义
+- **Contract YAML loader**: 190 个 YAML 正式覆盖层(merge 保 content_type 标注)
+- **Execution Verification 分级**: EXECUTION_VERIFIED/COMPILEABLE/DECLARED
+- 并行/cancel/resume conformance 测试 8 用例
+
 ## [1.4.7] - 2026-09-27
 
 ### 架构收口 + 语义层(roadmap 三项 + Phase 3)
