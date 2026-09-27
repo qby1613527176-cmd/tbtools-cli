@@ -32,5 +32,8 @@ inputs:
   content_type: dna
 outputs:
 - fa
+output_slots:
+- name: fa
+  format: fa
 aliases:
 - getLongestCompleteORF

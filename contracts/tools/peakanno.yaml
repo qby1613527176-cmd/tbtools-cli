@@ -28,3 +28,6 @@ inputs:
   note: MACS2, 百万级坐标
 outputs:
 - tsv
+output_slots:
+- name: tsv
+  format: tsv

@@ -15,6 +15,9 @@ inputs:
   content_type: protein
 outputs:
 - db
+output_slots:
+- name: db
+  format: db
 named_flags:
   inputs:
     fasta: --inFasta

@@ -33,7 +33,7 @@ inputs:
   note: ''
   content_type: protein
 outputs:
-- fa
+- fasta
 output_slots:
 - name: cds
   format: fasta

@@ -30,3 +30,6 @@ inputs:
   note: 多个集合文件, 末参为输出
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

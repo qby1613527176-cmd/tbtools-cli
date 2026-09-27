@@ -32,3 +32,6 @@ inputs:
   note: ''
 outputs:
 - meme
+output_slots:
+- name: meme
+  format: meme

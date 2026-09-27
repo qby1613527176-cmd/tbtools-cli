@@ -278,7 +278,15 @@ def _apply_contract_overlay(spec) -> None:
                                  content_type=i.get("content_type")
                                  or _old_ct.get(i.get("name", ""), "generic"))
                        for i in c["inputs"]]
-    if "outputs" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
+    # 🔴 P0(评审 #96): output_slots 优先读 YAML 声明(slots 是唯一真相,outputs 为投影);
+    # 仅无 output_slots 时才从 outputs 重建(generic)——不再"用 outputs 覆盖掉 YAML 的 content_type"
+    if "output_slots" in c:
+        spec.output_slots = [OutputSpec(name=o.get("name", ""), format=o.get("format", ""),
+                                        content_type=o.get("content_type", "generic"))
+                             for o in c["output_slots"]]
+        # outputs 从 slots 投影(一致性)
+        spec.outputs = [o.format for o in spec.output_slots if o.format]
+    elif "outputs" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.outputs = list(c["outputs"])
         # P0-1(评审 #94): outputs 覆盖时同步重建 output_slots——消灭 outputs/output_slots 漂移
         spec.output_slots = [OutputSpec(name=o, format=o) for o in c["outputs"]]
@@ -853,8 +861,10 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
                         **({"columns": i.columns} if i.columns else {}),
                         **({"content_type": i.content_type} if i.content_type != "generic" else {})}
                        for i in spec.inputs]
-    if spec.outputs:
-        e["outputs"] = spec.outputs
+    # outputs 从 output_slots 投影(评审 #96 P0: slots 为真相——specs_from_scans 无 overlay 也一致)
+    _outs = [o.format for o in spec.output_slots if o.format] if spec.output_slots else spec.outputs
+    if _outs:
+        e["outputs"] = _outs
     # 评审 #88 P1-2: layout/named_flags/output_slots 导出(metadata 丢布局=第二轮 metadata bug)
     # output_slots 为空时从 outputs 派生(评审 #94 P0-1: 唯一 output truth 的一致性)
     _slots = spec.output_slots or [OutputSpec(name=o, format=o) for o in spec.outputs]
@@ -910,6 +920,9 @@ def contract_coverage() -> dict:
     tiers = {"DECLARED": 0, "COMPILEABLE": 0, "EXECUTION_VERIFIED": 0}
     for s in specs.values():
         tiers[verification_level(s)] += 1
+    # 评审 #96 P1-3: COMPILE_VERIFIED(测试产物名单)单独统计——与 COMPILEABLE(声明可编译)区分
+    _cv = sum(1 for s in specs.values() if s.name in _COMPILE_VERIFIED)
+    tiers["COMPILE_VERIFIED"] = _cv
     return {
         "total": len(specs),
         "tiers": tiers,  # 三层(评审 #82)

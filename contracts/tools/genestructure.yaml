@@ -55,3 +55,6 @@ inputs:
   content_type: annotation
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

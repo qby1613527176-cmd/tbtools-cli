@@ -26,3 +26,6 @@ inputs:
   note: 多个输入表
 outputs:
 - tsv
+output_slots:
+- name: tsv
+  format: tsv

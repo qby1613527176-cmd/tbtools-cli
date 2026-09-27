@@ -28,3 +28,6 @@ inputs:
   note: LaneLabels 逗号分隔
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

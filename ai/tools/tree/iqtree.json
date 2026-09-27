@@ -21,8 +21,7 @@
   }
  ],
  "outputs": [
-  "nwk",
-  "treefile"
+  "nwk"
  ],
  "status": "stable"
 }

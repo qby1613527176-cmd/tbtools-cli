@@ -30,3 +30,6 @@ inputs:
   - gene_id
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

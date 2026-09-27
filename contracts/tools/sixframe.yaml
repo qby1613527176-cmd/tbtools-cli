@@ -31,7 +31,7 @@ inputs:
   note: 蛋白(输出核酸)
   content_type: dna
 outputs:
-- fa
+- fasta
 output_slots:
 - name: pep
   format: fasta

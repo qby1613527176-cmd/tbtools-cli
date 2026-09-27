@@ -35,3 +35,6 @@ inputs:
   note: 13 列 PAF
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

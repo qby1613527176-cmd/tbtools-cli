@@ -23,4 +23,7 @@ inputs:
   note: ''
 outputs:
 - tsv
+output_slots:
+- name: tsv
+  format: tsv
 status: platform-limited

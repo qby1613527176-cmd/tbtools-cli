@@ -41,3 +41,6 @@ inputs:
   - Length
 outputs:
 - tsv
+output_slots:
+- name: tsv
+  format: tsv

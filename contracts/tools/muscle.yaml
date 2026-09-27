@@ -39,7 +39,7 @@ inputs:
   note: ''
   content_type: protein
 outputs:
-- aln
+- fasta
 output_slots:
 - name: aln
   format: fasta

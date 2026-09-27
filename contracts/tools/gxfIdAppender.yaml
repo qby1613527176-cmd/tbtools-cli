@@ -26,3 +26,6 @@ inputs:
   note: ''
 outputs:
 - gff3
+output_slots:
+- name: gff3
+  format: gff3

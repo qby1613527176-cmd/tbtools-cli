@@ -51,3 +51,6 @@ inputs:
   content_type: table
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

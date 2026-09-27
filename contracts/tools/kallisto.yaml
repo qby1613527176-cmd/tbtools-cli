@@ -41,3 +41,6 @@ inputs:
   note: RNA-seq
 outputs:
 - tsv
+output_slots:
+- name: tsv
+  format: tsv

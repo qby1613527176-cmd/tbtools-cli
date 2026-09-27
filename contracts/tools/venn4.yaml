@@ -44,3 +44,6 @@ inputs:
   note: ''
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

@@ -35,3 +35,6 @@ inputs:
   note: ''
 outputs:
 - pdf
+output_slots:
+- name: pdf
+  format: pdf

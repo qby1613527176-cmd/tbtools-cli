@@ -22,7 +22,7 @@
   }
  ],
  "outputs": [
-  "aln"
+  "fasta"
  ],
  "status": "stable"
 }

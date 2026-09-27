@@ -30,3 +30,6 @@ inputs:
   note: ''
 outputs:
 - nwk
+output_slots:
+- name: nwk
+  format: nwk

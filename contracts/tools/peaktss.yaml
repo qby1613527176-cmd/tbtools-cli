@@ -33,3 +33,6 @@ inputs:
   note: MACS2
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

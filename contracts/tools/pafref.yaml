@@ -33,3 +33,6 @@ inputs:
   note: 含 cg:Z CIGAR
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

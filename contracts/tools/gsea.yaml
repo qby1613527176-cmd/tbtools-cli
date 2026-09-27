@@ -34,3 +34,6 @@ inputs:
   content_type: table
 outputs:
 - xls
+output_slots:
+- name: xls
+  format: xls

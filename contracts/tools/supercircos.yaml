@@ -31,3 +31,6 @@ inputs:
   note: '[chrLen] 等节'
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

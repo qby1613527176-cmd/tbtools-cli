@@ -34,6 +34,9 @@ inputs:
   note: ''
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg
 named_flags:
   inputs:
     list1: --List1

@@ -30,3 +30,6 @@ inputs:
   note: 需枝长
 outputs:
 - nwk
+output_slots:
+- name: nwk
+  format: nwk

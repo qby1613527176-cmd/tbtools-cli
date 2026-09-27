@@ -35,3 +35,6 @@ inputs:
   note: "4 列简化: Chr\tGene\tStart\tEnd"
 outputs:
 - svg
+output_slots:
+- name: svg
+  format: svg

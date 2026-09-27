@@ -42,7 +42,7 @@ inputs:
   note: ''
   content_type: alignment
 outputs:
-- aln
+- fasta
 output_slots:
 - name: aln
   format: fasta

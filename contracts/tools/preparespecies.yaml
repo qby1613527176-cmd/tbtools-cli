@@ -31,3 +31,6 @@ inputs:
   note: ''
 outputs:
 - fasta
+output_slots:
+- name: fasta
+  format: fasta

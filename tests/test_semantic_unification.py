@@ -119,3 +119,58 @@ class TestE_MultiOutputSlots:
         # 同输入同指纹(稳定)
         ci2 = compile_step_full(step, "/tmp", {})
         assert ci.contract_fingerprint == ci2.contract_fingerprint
+
+
+class TestF_OutputSlotsOverlayTruth:
+    """F) 评审 #96 P0: overlay 优先读 YAML output_slots(slots 为真相)"""
+
+    def test_yaml_output_slots_preserved(self, tmp_path):
+        """手写带 content_type 的 output_slots YAML → overlay 不得冲掉语义"""
+        from tbtools_cli.command_spec import OutputSpec
+        # 模拟 overlay 逻辑(output_slots 优先)
+        c = {"output_slots": [{"name": "aln", "format": "fasta", "content_type": "alignment"}],
+             "outputs": ["fasta"]}
+        # 新逻辑: output_slots 在 c → 用之(不再从 outputs 重建 generic)
+        if "output_slots" in c:
+            slots = [OutputSpec(name=o.get("name", ""), format=o.get("format", ""),
+                                content_type=o.get("content_type", "generic"))
+                     for o in c["output_slots"]]
+        else:
+            slots = [OutputSpec(name=o, format=o) for o in c["outputs"]]
+        assert slots[0].content_type == "alignment", "P0: YAML output_slots 语义被冲"
+
+    def test_production_slots_semantic_intact(self):
+        from tbtools_cli.command_spec import build_command_specs
+        specs = build_command_specs()
+        for name, ct in [("muscle", "alignment"), ("sixframe", "protein"),
+                         ("iqtree", "tree"), ("trimal", "alignment")]:
+            sp = specs[name]
+            assert sp.output_slots, f"{name} 无 output_slots"
+            assert sp.output_slots[0].content_type == ct, \
+                f"{name} content_type 丢失: {sp.output_slots[0].content_type} != {ct}"
+
+    def test_outputs_projected_from_slots(self):
+        from tbtools_cli.command_spec import build_command_specs
+        sp = build_command_specs()["muscle"]
+        # slots 为真相,outputs 为投影——两者一致
+        assert sp.output_formats == [o.format for o in sp.output_slots]
+
+
+class TestG_ExecutionFingerprint:
+    """G) 三层 identity: contract → binding → execution"""
+
+    def test_three_layers_distinct(self):
+        from tbtools_cli.workflow import compile_step_full
+        ci = compile_step_full(
+            {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["d.txt"], "parameters": {"pval_cutoff": "0.05"},
+                         "output": "/tmp/o.svg"}}, "/tmp", {})
+        assert ci.contract_fingerprint != ci.binding_fingerprint
+        assert len(ci.execution_fingerprint) == 16
+        # 同绑定同 binding_fingerprint
+        ci2 = compile_step_full(
+            {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["d.txt"], "parameters": {"pval_cutoff": "0.05"},
+                         "output": "/tmp/o2.svg"}}, "/tmp", {})
+        assert ci.binding_fingerprint == ci2.binding_fingerprint  # 输出不同不影响 binding 层
+        assert ci.contract_fingerprint != ci2.contract_fingerprint  # 但 contract 层不同

@@ -36,3 +36,6 @@ inputs:
   content_type: table
 outputs:
 - tsv
+output_slots:
+- name: tsv
+  format: tsv

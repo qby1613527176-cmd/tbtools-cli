@@ -161,13 +161,20 @@ class CompiledInvocation:
         self.parameters = parameters
         self.tool = tool
         self.schema_version = WORKFLOW_SCHEMA_CURRENT  # 评审 #94 P1-3
-        # contract fingerprint(评审 #94 P1-3): 编译产物哈希——resume/provenance 可验证同一性
+        # 三层 identity(评审 #96 P1-2): contract → binding → execution
         import hashlib as _hc
         import json as _jc
         self.contract_fingerprint = _hc.sha256(
             _jc.dumps({"argv": argv, "inputs": inputs, "outputs": outputs,
                        "parameters": parameters, "tool": tool},
                       sort_keys=True, default=str).encode()).hexdigest()[:16]
+        # binding_fingerprint(评审 #96): 绑定层哈希(inputs+parameters 绑定关系)
+        self.binding_fingerprint = _hc.sha256(
+            _jc.dumps({"inputs": inputs, "parameters": parameters, "tool": tool},
+                      sort_keys=True, default=str).encode()).hexdigest()[:16]
+        # execution_fingerprint(评审 #96): 执行层(contract+binding 联合)
+        self.execution_fingerprint = _hc.sha256(
+            (self.contract_fingerprint + self.binding_fingerprint).encode()).hexdigest()[:16]
 
 
 def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvocation:

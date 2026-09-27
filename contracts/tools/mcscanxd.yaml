@@ -46,3 +46,6 @@ inputs:
   note: ''
 outputs:
 - collinearity
+output_slots:
+- name: collinearity
+  format: collinearity
