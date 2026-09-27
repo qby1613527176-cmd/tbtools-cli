@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.9] - 2026-09-27
+
+### 半成品完工(第 20 份评审)
+- **_bind_slots 正式接入 Planner**: MULTI_INPUT 多必填工具入选(dict slot 绑定;recipBlast 实测)
+- **slot 匹配三级**: EXACT/COMPATIBLE/INCOMPATIBLE/UNRESOLVED(format+content_type)
+- **_content_compat slot 级**: 读首必填 InputSpec.content_type(不再工具级查表)
+- **并发 Runtime conformance**: 失败传播/崩溃恢复/并发 merge 3 用例
+- **YAML 迁移规则**(test_yaml_migration)+ **verification 报告驱动**(verification_report.json)
+- **contract_coverage 三层**: DECLARED 231/COMPILEABLE 58/EXECUTION_VERIFIED 5
+- **schema_version 正式化**: 1.0=args/1.1=binding/2.0=binding-only
+
 ## [1.4.8] - 2026-09-27
 
 ### Runtime 工程阶段(第 19 份评审)
