@@ -331,7 +331,7 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
 
 
 def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume: bool,
-                  max_workers: int = 2) -> tuple[list, str | None]:
+                  max_workers: int = 2, workflow_id: str = "") -> tuple[list, str | None]:
     """DAG 并行调度(评审: ready-queue;depends_on 工作流;fail-fast 早取消)。
 
     返回 (results 按完成序, failed_step_id 或 None)。线程安全: outputs 在 plan 期已解析,
@@ -381,7 +381,7 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
                 with lock:
                     done[sid] = res
                     results.append(res)
-                    _merge_state_step(workdir, by_id[sid].get("_wf_id", "wf"), res)  # P0-2
+                    _merge_state_step(workdir, workflow_id or "wf", res)  # P0-2/P0-3(评审 #84)
                 if res["status"] != "succeeded":
                     failed = sid
                     _kill_running()
@@ -417,8 +417,15 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
         wf = dict(wf)
         wf["steps"] = _topo_sort(wf["steps"])
     state = _load_state(workdir) if resume else {}
+    # Resume identity 校验(评审 #84 P0-2): state 的 workflow 标识必须匹配当前 wf——
+    # 不同 workflow 同 workdir 时错误跳过(崩溃恢复边界)
     if resume and state.get("steps"):
-        print(f"♻️ resume: 跳过已完成 {sum(1 for s in state['steps'] if s.get('status')=='succeeded')} 步", file=sys.stderr)
+        _state_wf = state.get("workflow") or state.get("id") or ""
+        if _state_wf and _state_wf != wf["id"]:
+            print(f"⚠️ resume: state 属于 {_state_wf},当前 {wf['id']}——忽略旧状态全量执行", file=sys.stderr)
+            state = {}
+        else:
+            print(f"♻️ resume: 跳过已完成 {sum(1 for s in state['steps'] if s.get('status')=='succeeded')} 步", file=sys.stderr)
     steps = plan(wf, workdir)
     # 每步输出父目录预创建(否则 Java 输出目录预检报错)。
     # 只为 workdir 内或图形产物参数建目录;坏输入路径(如 /no/such.txt)不建, 让引擎报真实错(v2)
@@ -439,7 +446,8 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
     _parallel = _has_dag and len(steps) > 1 and os.environ.get("TBTOOLS_WF_PARALLEL", "1") != "0"
     if _parallel:
         results, failed_at = _run_parallel(steps, workdir, timeout_s, state, resume,
-                                           max_workers=int(os.environ.get("TBTOOLS_WF_WORKERS", "2")))
+                                           max_workers=int(os.environ.get("TBTOOLS_WF_WORKERS", "2")),
+                                           workflow_id=wf["id"])
         # 结果按声明序重排(输出稳定)
         _order = {s["id"]: i for i, s in enumerate(steps)}
         results.sort(key=lambda r: _order.get(r["id"], 999))
@@ -506,11 +514,18 @@ def validate_workflow(wf: dict) -> dict:
         except WorkflowError as e:
             errors.append({"code": "WORKFLOW_CYCLE", "message": str(e)})
     # Layer 2b Binding 编译(评审 #72 P0-2): binding 形态步骤走 compile_step 干跑——validate==compile success
+    # P0-4(评审 #84): 干跑前拓扑排序(与 run 一致;$step.output 须在依赖之后声明)
+    _dry_steps = steps
+    if any(s.get("depends_on") or s.get("dependsOn") for s in steps):
+        try:
+            _dry_steps = _topo_sort(steps)
+        except WorkflowError:
+            pass  # 环错误已在 Layer 3 捕获
     import os as _os2
     import tempfile as _tf
     _dry_wd = _tf.mkdtemp(prefix="tb_wfval_")
     _dry_outputs: dict = {}
-    for s in steps:
+    for s in _dry_steps:
         if s.get("binding"):
             try:
                 _cargs = compile_step(s, _dry_wd, _dry_outputs)
@@ -683,8 +698,9 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 cb = None
         if not cb:
             cb = KNOWN_CONTENT_TYPES.get(b_name)
-        # A 输出语义(输出无 slot 级标注→工具级)
-        ca = KNOWN_CONTENT_TYPES.get(a_name)
+        # A 输出语义(评审 #84 P1-3: 输出 slot 级优先,工具级兜底)
+        from tbtools_cli.command_spec import KNOWN_OUTPUT_CONTENT_TYPES
+        ca = KNOWN_OUTPUT_CONTENT_TYPES.get(a_name) or KNOWN_CONTENT_TYPES.get(a_name)
         if not ca or not cb:
             return None
         if ca == cb:
@@ -732,6 +748,12 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if not ins:
             return None
         binding = {ins[0].name: first_ref}
+        # 首槽兼容性(评审 #84 P1-6): 链引用与首槽 format 不兼容时不硬绑
+        if first_ref.startswith("$"):
+            # 上游输出 → 首槽: 由调用方(_content_compat)已保证边兼容;此处标记
+            binding["__first_slot_match"] = "UPSTREAM_EDGE"
+        elif first_ref == "{input}" or first_ref.startswith("{input."):
+            binding["__first_slot_match"] = "WORKFLOW_INPUT"
         for slot in ins[1:]:
             hit, hit_level = None, "UNRESOLVED"
             for in_name, in_val in wf_inputs.items():

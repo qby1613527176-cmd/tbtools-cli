@@ -282,6 +282,14 @@ KNOWN_INPUT_CONTENT_TYPES = {
     "mcscanx": {"gff": "annotation", "blast": "table"},
 }
 
+# 输出 slot 级 content_type(评审 #84 P1-7): A.output-slot 语义(content_compat A 侧)
+KNOWN_OUTPUT_CONTENT_TYPES = {
+    "muscle": "alignment", "trimal": "alignment", "sixframe": "protein",
+    "pep2codon": "dna", "blastp": "table", "blastn": "table", "diamond": "table",
+    "recipBlast": "table", "mcscanx": "table", "hmmsearch": "table",
+    "iqtree": "tree", "phylotree": "tree", "fasttree": "tree",
+}
+
 # content_type 标注表(biological semantic type;按工具名挂语义——slot 级无标注时兜底)
 KNOWN_CONTENT_TYPES = {
     "muscle": "protein", "trimal": "alignment", "iqtree": "alignment", "phylotree": "alignment",
