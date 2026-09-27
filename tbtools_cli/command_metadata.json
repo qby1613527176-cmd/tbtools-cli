@@ -6664,7 +6664,7 @@
    {
     "name": "plot",
     "format": "svg",
-    "content_type": "table"
+    "content_type": "plot"
    }
   ]
  },
@@ -7411,7 +7411,7 @@
     "format": "fasta",
     "required": true,
     "note": "",
-    "content_type": "protein"
+    "content_type": "sequence"
    }
   ],
   "outputs": [

@@ -3,8 +3,12 @@
 A) Overlay round-trip    B) output_slots↔outputs 一致
 C) protein/dna binding   D) envelope parity    E) 多输出 slot
 """
+import json
 import os
+import subprocess
 import sys
+
+import pytest
 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,11 +23,11 @@ class TestA_OverlayRoundTrip:
         from tbtools_cli.command_spec import build_command_specs
         specs = build_command_specs()
         # spec 有 content_type
-        assert specs["muscle"].inputs[0].content_type == "protein"
+        assert specs["muscle"].inputs[0].content_type == "sequence"  # 评审 #98: muscle DNA+蛋白双兼容
         # metadata 也有(round-trip 不丢)
         m = _j.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"),
                          encoding="utf-8"))
-        assert m["muscle"]["inputs"][0].get("content_type") == "protein"
+        assert m["muscle"]["inputs"][0].get("content_type") == "sequence"
 
     def test_named_flags_roundtrip(self):
         import json as _j
@@ -172,5 +176,97 @@ class TestG_ExecutionFingerprint:
             {"id": "t", "tool": "volcano",
              "binding": {"inputs": ["d.txt"], "parameters": {"pval_cutoff": "0.05"},
                          "output": "/tmp/o2.svg"}}, "/tmp", {})
-        assert ci.binding_fingerprint == ci2.binding_fingerprint  # 输出不同不影响 binding 层
-        assert ci.contract_fingerprint != ci2.contract_fingerprint  # 但 contract 层不同
+        # 评审 #98 P1-1 新语义: output 属符号绑定——binding 不同,contract 同
+        assert ci.binding_fingerprint != ci2.binding_fingerprint
+        assert ci.contract_fingerprint == ci2.contract_fingerprint  # contract 不含解析路径
+
+
+class TestH_FingerprintSemantics:
+    """评审 #98 Test A/B/C/D: fingerprint 数学语义"""
+
+    def test_A_same_contract_same_binding(self):
+        """A: 同 contract + 同 binding → 三指纹全同"""
+        from tbtools_cli.workflow import compile_step_full
+        s = {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                         "output": "/tmp/a.svg"}}
+        c1 = compile_step_full(s, "/tmp", {})
+        c2 = compile_step_full(s, "/tmp", {})
+        assert c1.contract_fingerprint == c2.contract_fingerprint
+        assert c1.binding_fingerprint == c2.binding_fingerprint
+
+    def test_B_same_contract_diff_binding(self):
+        """B: 同 contract + 不同 binding → contract 同,binding 不同"""
+        from tbtools_cli.workflow import compile_step_full
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/b.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.contract_fingerprint == c2.contract_fingerprint, "contract 不含解析路径"
+        assert c1.binding_fingerprint != c2.binding_fingerprint, "binding 含符号绑定"
+
+    def test_D_input_change_execution_diff(self, tmp_path):
+        """D: 输入文件变 → execution 不同,contract 不变"""
+        import shutil
+
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "deg_mod.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        p.write_text(p.read_text() + "#tamper\n")
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint != c2.execution_fingerprint
+        assert c1.contract_fingerprint == c2.contract_fingerprint
+
+
+class TestI_ResumeFingerprintGate:
+    """评审 #98 Test C: fingerprint resume 闸门"""
+
+    @pytest.mark.integration
+    def test_tampered_input_triggers_rerun(self, tmp_path):
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR")
+        import shutil
+        wf = tmp_path / "w.yaml"
+        wf.write_text("""id: gate.test
+steps:
+  - id: v
+    tool: expr volcano
+    binding: {inputs: ["{workdir}/deg.txt"], parameters: {}, output: "{workdir}/v.svg"}
+""")
+        wd = tmp_path / "w.wf"
+        wd.mkdir()
+        shutil.copy("examples/data/deg.txt", wd / "deg.txt")
+        env = dict(os.environ, TBTOOLS_JAR=jar)
+        r1 = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                             str(wf), "--workdir", str(wd)], capture_output=True, text=True,
+                            cwd=ROOT, env=env, timeout=120)
+        assert json.loads(r1.stdout)["status"] == "succeeded"
+        # 篡改输入 → resume 必须重跑(fingerprint 闸门)
+        with open(wd / "deg.txt", "a") as f:
+            f.write("#tamper\n")
+        r2 = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                             str(wf), "--workdir", str(wd), "--resume"],
+                            capture_output=True, text=True, cwd=ROOT, env=env, timeout=120)
+        assert "重新执行" in r2.stderr, "fingerprint 闸门未触发(输入变了却跳过)"
+
+
+class TestJ_BindingNoGuess:
+    """评审 #98 P0-2: binding 路径禁 output guessing"""
+
+    def test_binding_path_no_fallback(self):
+        import inspect
+
+        import tbtools_cli.workflow as wfm
+        src = inspect.getsource(wfm._execute_step)
+        assert "_is_binding_path" in src, "binding 路径必须显式标记"
+        assert "if not out and not _is_binding_path" in src, \
+            "启发式回退只限 legacy args"

@@ -64,4 +64,4 @@ outputs:
 output_slots:
 - name: plot
   format: svg
-  content_type: table
+  content_type: plot

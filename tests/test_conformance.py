@@ -197,6 +197,6 @@ class TestContentTypeSemantics:
     def test_annotations_attached(self):
         from tbtools_cli.command_spec import build_command_specs
         specs = build_command_specs()
-        assert specs["muscle"].inputs[0].content_type == "protein"
+        assert specs["muscle"].inputs[0].content_type == "sequence"  # 评审 #98: muscle 双兼容
         assert specs["iqtree"].inputs[0].content_type == "alignment"
         assert specs["sixframe"].inputs[0].content_type == "dna"

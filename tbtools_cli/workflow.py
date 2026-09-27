@@ -106,7 +106,8 @@ def plan(wf: dict, workdir: str) -> list[dict]:
             args = _ci.argv
             # 输出登记编译结构(评审 #88 P0-1): binding.outputs 精确,不再 out_args[-1] 猜
             steps.append({"id": s["id"], "tool": s["tool"], "args": args,
-                          "_compiled_outputs": _ci.outputs})
+                          "_compiled_outputs": _ci.outputs,
+                          "_execution_fingerprint": _ci.execution_fingerprint})  # P0-1(评审 #98)
             outputs[s["id"]] = {"output": _ci.outputs[0] if _ci.outputs
                                         else os.path.join(workdir, f"{s['id']}.out")}
             continue
@@ -154,27 +155,67 @@ class CompiledInvocation:
     argv + 明确的 inputs/outputs/parameters/tool——Runtime/Artifact/Provenance/Resume
     全部消费 outputs 字段,不再用扩展名/args[-1] 从 argv 反推。"""
 
-    def __init__(self, argv: list, inputs: list, outputs: list, parameters: dict, tool: str):
+    def __init__(self, argv: list, inputs: list, outputs: list, parameters: dict, tool: str,
+                 symbolic_binding: dict | None = None):
         self.argv = argv
         self.inputs = inputs
         self.outputs = outputs
         self.parameters = parameters
         self.tool = tool
         self.schema_version = WORKFLOW_SCHEMA_CURRENT  # 评审 #94 P1-3
-        # 三层 identity(评审 #96 P1-2): contract → binding → execution
+        # 三层 identity 数学语义(评审 #98 P1-1 重定义):
+        #   contract_fp = 契约本身(tool + schema_version + spec 契约内容)——输入换了它不变
+        #   binding_fp  = 符号绑定(slot refs/parameters,未解析路径)——解析结果换了它不变
+        #   execution_fp = contract_fp + binding_fp + 已解析输入 artifact sha + runtime 版本
         import hashlib as _hc
         import json as _jc
+        _spec_contract = {}
+        try:
+            from tbtools_cli.command_spec import build_command_specs as _bcs3
+            _sp3 = _bcs3().get(tool)
+            if _sp3:
+                _spec_contract = {
+                    "inputs": [{"name": i.name, "format": i.format,
+                                "content_type": i.content_type, "required": i.required}
+                               for i in (_sp3.inputs or [])],
+                    "outputs": list(_sp3.outputs or []),
+                    "parameters": [{"name": p.name, "type": p.type, "cli_name": p.cli_name}
+                                   for p in (_sp3.parameters or [])],
+                    "layout": _sp3.invocation.layout,
+                    "named_flags": _sp3.invocation.named_flags,
+                }
+        except Exception:
+            pass
         self.contract_fingerprint = _hc.sha256(
-            _jc.dumps({"argv": argv, "inputs": inputs, "outputs": outputs,
-                       "parameters": parameters, "tool": tool},
+            _jc.dumps({"tool": tool, "schema_version": self.schema_version,
+                       "contract": _spec_contract},
                       sort_keys=True, default=str).encode()).hexdigest()[:16]
-        # binding_fingerprint(评审 #96): 绑定层哈希(inputs+parameters 绑定关系)
+        # symbolic binding(评审 #98): 用未解析的 binding 原文(slot refs/$step.output/{input.X})
+        _symbolic = {"parameters": parameters,
+                     "binding_refs": symbolic_binding or {}}
         self.binding_fingerprint = _hc.sha256(
-            _jc.dumps({"inputs": inputs, "parameters": parameters, "tool": tool},
-                      sort_keys=True, default=str).encode()).hexdigest()[:16]
-        # execution_fingerprint(评审 #96): 执行层(contract+binding 联合)
+            _jc.dumps(_symbolic, sort_keys=True, default=str).encode()).hexdigest()[:16]
+        # execution_fp(评审 #98): + 已解析输入 artifact sha + runtime 版本
+        _input_shas = []
+        for _ip in inputs:
+            try:
+                import hashlib as _h2
+                _h = _h2.sha256()
+                with open(str(_ip), "rb") as _f:
+                    for _c in iter(lambda: _f.read(1 << 20), b""):
+                        _h.update(_c)
+                _input_shas.append(_h.hexdigest()[:16])
+            except OSError:
+                _input_shas.append("missing")
+        try:
+            from tbtools_cli import __version__ as _rt_ver
+        except Exception:
+            _rt_ver = "unknown"
         self.execution_fingerprint = _hc.sha256(
-            (self.contract_fingerprint + self.binding_fingerprint).encode()).hexdigest()[:16]
+            _jc.dumps({"contract": self.contract_fingerprint,
+                       "binding": self.binding_fingerprint,
+                       "input_shas": _input_shas, "runtime": _rt_ver},
+                      sort_keys=True).encode()).hexdigest()[:16]
 
 
 def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvocation:
@@ -207,7 +248,8 @@ def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvoca
         except ValueError as e:
             raise WorkflowError(f"WORKFLOW_COMPILE_ERROR: step {step.get('id')} 编译失败: {e}") from e
         return CompiledInvocation(argv=argv, inputs=inputs, outputs=outs,
-                                  parameters=params, tool=bare)
+                                  parameters=params, tool=bare,
+                                  symbolic_binding=dict(binding))
     argv = [_resolve(a, outputs) if isinstance(a, str) else a for a in step.get("args", [])]
     return CompiledInvocation(argv=argv, inputs=[], outputs=[], parameters={}, tool=bare)
 
@@ -305,6 +347,11 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
                         _valid = False
                 except Exception:
                     _valid = False
+            # P0-1(评审 #98): execution_fingerprint resume 闸门——
+            # state 的 fingerprint 与当前编译不一致(输入/binding/contract/runtime 任一变了)→重跑
+            if _valid and st.get("_execution_fingerprint") and prev.get("execution_fingerprint"):
+                if st["_execution_fingerprint"] != prev["execution_fingerprint"]:
+                    _valid = False
             if _valid and prev.get("output_sha256"):
                 try:
                     import hashlib as _hl
@@ -372,11 +419,14 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
                 "output": None, "artifact_id": None, "output_sha256": None,
                 "provenance": None, "log": log_path}
     step_ok = (_rc == 0) and not _timeout_hit
-    # 输出消费编译结构(评审 #88 P0-1): _compiled_outputs 优先——Runtime 不再从 argv 猜
+    # 输出消费编译结构(评审 #88 P0-1 + #98 P0-2):
+    # binding 路径(_compiled_outputs 存在)——只消费 CompiledInvocation.outputs,禁止任何猜测;
+    # 无 _compiled_outputs(legacy args)——才允许回退启发式(显式标记)
     out = ""
-    if st.get("_compiled_outputs"):
-        out = st["_compiled_outputs"][0]
-    if not out:
+    _is_binding_path = "_compiled_outputs" in st
+    if _is_binding_path:
+        out = st["_compiled_outputs"][0] if st["_compiled_outputs"] else ""
+    else:
         try:
             from tbtools_cli.command_spec import build_command_specs as _bcs2
             _osp = _bcs2().get(str(st["tool"]).split()[-1])
@@ -388,8 +438,8 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
                     out = _cands[-1]
         except Exception:
             pass
-    if not out:
-        out = st["args"][-1] if st["args"] else ""
+    if not out and not _is_binding_path:
+        out = st["args"][-1] if st["args"] else ""  # legacy args 末参回退(binding 路径禁猜)
     # Artifact ID 登记
     _art_id = None
     _out_sha = None
@@ -422,6 +472,7 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             "output": out if step_ok and os.path.isfile(out) else None,
             "artifact_id": _art_id,
             "output_sha256": _out_sha,
+            "execution_fingerprint": st.get("_execution_fingerprint"),
             "provenance": out + ".tbtools.json" if step_ok and os.path.isfile(out + ".tbtools.json") else None,
             "log": log_path}
 
@@ -1039,6 +1090,10 @@ def resolve_input_binding(source: str, slot) -> tuple[str, str]:
         return ref, "UNRESOLVED"
 
     def _content_ok() -> bool:
+        # "sequence" 双兼容(评审 #98 P1-2): muscle 类 DNA+蛋白通用 aligner
+        if slot.content_type == "sequence" and os.path.isfile(str(source)):
+            from tbtools_cli.runtime.validation import sniff_fasta_content
+            return sniff_fasta_content(str(source)) in ("dna", "protein", "unknown")
         if slot.content_type in ("dna", "protein") and os.path.isfile(str(source)):
             from tbtools_cli.runtime.validation import sniff_fasta_content
             sniffed = sniff_fasta_content(str(source))

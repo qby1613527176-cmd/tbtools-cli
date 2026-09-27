@@ -323,7 +323,7 @@ KNOWN_OUTPUT_SLOTS = {
     "iqtree": [OutputSpec("tree", format="nwk", content_type="tree")],
     "mcscanx": [OutputSpec("collinearity", format="tsv", content_type="table")],
     "recipBlast": [OutputSpec("result", format="tsv", content_type="table")],
-    "volcano": [OutputSpec("plot", format="svg", content_type="table")],
+    "volcano": [OutputSpec("plot", format="svg", content_type="plot")],  # 评审 #98: 输出是 plot 不是 table
 }
 
 
@@ -331,7 +331,7 @@ KNOWN_OUTPUT_SLOTS = {
 # slot 级 content_type(评审 #80 P0-4): 按"输入槽位"标注,优先于工具级
 KNOWN_INPUT_CONTENT_TYPES = {
     "pep2codon": {"cds": "dna", "pep_aln": "protein"},
-    "sixframe": {"inFa": "dna"},  # 评审勘误: sixframe 输入是 dna(不是 protein)
+    "sixframe": {"inFa": "dna", "dna": "dna", "pep": "dna"},  # 评审 #98: 输入是 DNA(pep 槽命名误导,兼容保留)
     "recipBlast": {"query": "protein", "subject": "protein"},
     "autoMakeBlastDb": {"fasta": "protein"},
     "dualsyn": {"gff": "annotation", "collinearity": "table"},
@@ -348,7 +348,7 @@ KNOWN_OUTPUT_CONTENT_TYPES = {
 
 # content_type 标注表(biological semantic type;按工具名挂语义——slot 级无标注时兜底)
 KNOWN_CONTENT_TYPES = {
-    "muscle": "protein", "trimal": "alignment", "iqtree": "alignment", "phylotree": "alignment",
+    "muscle": "sequence", "trimal": "alignment", "iqtree": "alignment", "phylotree": "alignment",  # 评审 #98: muscle DNA+蛋白双兼容
     "blastp": "protein", "blastn": "dna", "diamond": "protein", "recipBlast": "protein",
     "hmmsearch": "protein", "simpleHmmscan": "protein", "pep2codon": "protein",
     "sixframe": "dna", "longestorf": "dna", "cpg": "dna", "seqlogo": "alignment",
@@ -972,7 +972,12 @@ def verification_level(spec) -> str:
 
 
 def verification_census() -> dict:
-    out = {"EXECUTION_VERIFIED": 0, "COMPILEABLE": 0, "DECLARED": 0}
+    """评审 #98 P1-3: COMPILE_VERIFIED(测试产物名单)入 census——
+    与 COMPILEABLE(声明可编译)区分,API 统一(不再只在 coverage 里有)。"""
+    out = {"EXECUTION_VERIFIED": 0, "COMPILEABLE": 0, "DECLARED": 0, "COMPILE_VERIFIED": 0}
     for s in build_command_specs().values():
         out[verification_level(s)] += 1
+    for s in build_command_specs().values():
+        if s.name in _COMPILE_VERIFIED:
+            out["COMPILE_VERIFIED"] += 1
     return out

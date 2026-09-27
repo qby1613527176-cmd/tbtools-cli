@@ -37,7 +37,7 @@ inputs:
   format: fasta
   required: true
   note: ''
-  content_type: protein
+  content_type: sequence
 outputs:
 - fasta
 output_slots:
