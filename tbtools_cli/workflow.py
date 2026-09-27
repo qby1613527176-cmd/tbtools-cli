@@ -28,7 +28,9 @@ def _warn_legacy_args(wf: dict):
               file=sys.stderr)
 
 
-WORKFLOW_SCHEMA_CURRENT = "1.1"   # 1.0=args 形态; 1.1=binding 形态; 2.0=binding-only(未来)
+WORKFLOW_SCHEMA_CURRENT = "1.1"   # workflow schema: 1.0=args / 1.1=binding / 2.0=binding-only
+# ⚠️ 命名区分(评审 #92 P1-4): 这是 **workflow schema version**,与 docs/agent-protocol.md 的
+# Agent Protocol version(调用协议)是两个独立版本线——改名/升版时勿混淆。
 
 
 def load_workflow(path: str) -> dict:
@@ -460,7 +462,9 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
                 with lock:
                     done[sid] = res
                     results.append(res)
-                    _merge_state_step(workdir, workflow_id or "wf", res)  # P0-2/P0-3(评审 #84)
+                    _pw2 = _merge_state_step(workdir, workflow_id or "wf", res)
+                    if _pw2:
+                        res.setdefault("persistence_warnings", []).append(_pw2)  # P0-4(评审 #92)
                 if res["status"] != "succeeded":
                     failed = sid
                     _kill_running()
@@ -604,16 +608,16 @@ def validate_workflow(wf: dict) -> dict:
             _dry_steps = _topo_sort(steps)
         except WorkflowError:
             pass  # 环错误已在 Layer 3 捕获
-    import os as _os2
     import tempfile as _tf
     _dry_wd = _tf.mkdtemp(prefix="tb_wfval_")
     _dry_outputs: dict = {}
     for s in _dry_steps:
         if s.get("binding"):
             try:
-                _cargs = compile_step(s, _dry_wd, _dry_outputs)
-                _outs = [a for a in _cargs if isinstance(a, str) and _os2.path.splitext(a)[1]]
-                _dry_outputs[s.get("id")] = {"output": _outs[-1] if _outs else f"{s.get('id')}.out"}
+                # P0(评审 #92): validate 消费 CompiledInvocation.outputs(不再 argv 扩展名猜)
+                _ci = compile_step_full(s, _dry_wd, _dry_outputs)
+                _dry_outputs[s.get("id")] = {"output": _ci.outputs[0] if _ci.outputs
+                                                     else f"{s.get('id')}.out"}
             except WorkflowError as e:
                 errors.append({"code": "WORKFLOW_COMPILE_ERROR", "step": s.get("id"),
                                "message": str(e)})

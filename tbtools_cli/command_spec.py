@@ -211,7 +211,7 @@ KNOWN_NAMED_FLAGS = {
 
 # ── Contract Loader(评审 #80 P1-5): contracts/tools/*.yaml 正式声明层 ──
 _CONTRACTS_CACHE: dict = {}
-_CONTRACTS_MTIME: float = 0.0
+_CONTRACTS_MTIME: tuple = ()  # 文件指纹(mtime+size tuple;评审 #92)
 
 
 def load_contracts() -> dict:
@@ -225,8 +225,9 @@ def load_contracts() -> dict:
     files = sorted(_g.glob(os.path.join(root, "contracts", "tools", "*.yaml")))
     if not files:
         return {}
-    mt = max(os.path.getmtime(f) for f in files)
-    if _CONTRACTS_CACHE and mt <= _CONTRACTS_MTIME:
+    # P0-2(评审 #92): 文件指纹(mtime+size 每文件 tuple)——max(mtime) 会漏"同秒改写/新增文件"
+    _fp = tuple(sorted((f, os.path.getmtime(f), os.path.getsize(f)) for f in files))
+    if _CONTRACTS_CACHE and _fp == _CONTRACTS_MTIME:
         return _CONTRACTS_CACHE
     out = {}
     global _CONTRACTS_ERRORS
@@ -235,11 +236,15 @@ def load_contracts() -> dict:
         try:
             d = _y.safe_load(open(f, encoding="utf-8"))
             if isinstance(d, dict) and d.get("name"):
+                # P1-3(评审 #92): 重名契约记录(不再静默覆盖)
+                if d["name"] in out:
+                    _CONTRACTS_ERRORS.append({"code": "CONTRACT_DUPLICATE_NAME",
+                                              "file": f, "name": d["name"]})
                 out[d["name"]] = d
         except Exception as e:
             # P1-1(评审 #90): YAML 加载失败不再静默——收集供 doctor/validate 报告
             _CONTRACTS_ERRORS.append({"code": "CONTRACT_LOAD_ERROR", "file": f, "error": str(e)})
-    _CONTRACTS_CACHE, _CONTRACTS_MTIME = out, mt
+    _CONTRACTS_CACHE, _CONTRACTS_MTIME = out, _fp
     return out
 
 
@@ -266,14 +271,14 @@ def _apply_contract_overlay(spec) -> None:
                                  content_type=i.get("content_type")
                                  or _old_ct.get(i.get("name", ""), "generic"))
                        for i in c["inputs"]]
-    if c.get("outputs"):
+    if "outputs" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.outputs = list(c["outputs"])
-    if c.get("parameters"):
+    if "parameters" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.parameters = [ParamSpec(name=p.get("name", ""), type=p.get("type", "string"),
                                      default=p.get("default"), required=p.get("required", False),
                                      note=p.get("note", ""), cli_name=p.get("cli_name", ""))
                            for p in c["parameters"]]
-    if c.get("capabilities"):
+    if "capabilities" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
         spec.capabilities = list(c["capabilities"])
     if c.get("layout"):
         # layout 经 invocation 投影(named_flags 或 token layout)
