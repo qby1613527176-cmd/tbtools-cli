@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.13] - 2026-09-28
+
+### 真相链补全(第 24 份评审)
+- **verification 无 fallback**: 报告不存在→0 EXECUTION_VERIFIED(不再假验证;22 轮脚本回归修复)
+- **Planner 首槽登记**: step1 首必填输入也进 required_inputs(三槽全列)
+- **YAML 加载错误可见**: contract_load_errors()(CONTRACT_LOAD_ERROR)
+- **named_flags/layout 投影 metadata**;_content_compat 遍历全部 output_slots
+- **artifact 锁失败警告**(不再无保护继续)
+
 ## [1.4.12] - 2026-09-28
 
 ### Runtime 语义升级(第 23 份评审)
