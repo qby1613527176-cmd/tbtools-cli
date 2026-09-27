@@ -147,7 +147,18 @@ def compile_step(step: dict, workdir: str, outputs: dict) -> list:
         sp = build_command_specs().get(bare)
         if not sp:
             raise WorkflowError(f"WORKFLOW_INVALID_TOOL: {step.get('tool')}")
-        inputs = [_resolve(v, outputs) for v in binding.get("inputs", [])]
+        _bi = binding.get("inputs", [])
+        if isinstance(_bi, dict):
+            # slot 级绑定(评审 #80 P0-3): {slot_name: ref} → 按 InputSpec 声明序展开
+            inputs = []
+            for slot in sp.inputs:
+                if slot.name in _bi:
+                    inputs.append(_resolve(_bi[slot.name], outputs))
+                elif slot.required:
+                    raise WorkflowError(
+                        f"WORKFLOW_MISSING_INPUT: step {step.get('id')} 缺必填输入槽位 {slot.name}")
+        else:
+            inputs = [_resolve(v, outputs) for v in _bi]
         params = {k: _resolve(v, outputs) if isinstance(v, str) else v
                   for k, v in binding.get("parameters", {}).items()}
         output = _resolve(binding.get("output", ""), outputs) if binding.get("output") else ""
@@ -176,6 +187,19 @@ def _topo_sort(steps: list) -> list:
             raise WorkflowError(f"depends_on 存在循环依赖: {[s['id'] for s in remaining]}")
     return ordered
 
+
+
+def _merge_state_step(workdir: str, workflow_id: str, result: dict):
+    """单步完成即合并落盘(P0-2 评审 #80): 崩溃后 resume 能看到已完成步骤。
+    读-改-写(串行路径天然安全;并行路径由调用方加锁)。"""
+    try:
+        state = _load_state(workdir)
+        steps = state.get("steps", [])
+        steps = [s for s in steps if s.get("id") != result["id"]]
+        steps.append(result)
+        _save_state(workdir, {"workflow": workflow_id, "status": "running", "steps": steps})
+    except Exception:
+        pass  # 落盘失败不阻断执行
 
 def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: bool,
                   cancel_event=None, proc_registry: dict | None = None) -> dict:
@@ -310,31 +334,64 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
     done: dict = {}
     results, failed = [], None
     lock = threading.Lock()
+    # P0-1(评审 #80): cancel_event + 进程组注册真正打通——失败后 kill 在飞步骤,状态收敛
+    cancel_event = threading.Event()
+    proc_registry: dict = {}
 
     def _ready():
         return [sid for sid in pending
                 if all(d in done for d in (by_id[sid].get("depends_on") or by_id[sid].get("dependsOn") or []))]
+
+    def _kill_running():
+        """失败触发: cancel_event + killpg 所有在飞进程组(P0-1 状态收敛)。"""
+        cancel_event.set()
+        import signal as _sig
+        for sid2, proc in list(proc_registry.items()):
+            try:
+                if proc.poll() is None:
+                    os.killpg(os.getpgid(proc.pid), _sig.SIGTERM)
+            except Exception:
+                pass
 
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
         running: dict = {}
         # 条件含 running(竞态修复): pending 空但仍有在飞步骤时不能退出——否则结果丢失
         while (pending or running) and failed is None:
             for sid in _ready():
-                running[pool.submit(_execute_step, by_id[sid], workdir, timeout_s, state, resume)] = sid
+                running[pool.submit(_execute_step, by_id[sid], workdir, timeout_s, state, resume,
+                                    cancel_event, proc_registry)] = sid
                 pending.discard(sid)
             if not running:
                 break
             finished, _ = wait(running, return_when=FIRST_COMPLETED)
             for fut in finished:
                 sid = running.pop(fut)
+                proc_registry.pop(sid, None)
                 res = fut.result()
                 with lock:
                     done[sid] = res
                     results.append(res)
+                    _merge_state_step(workdir, by_id[sid].get("_wf_id", "wf"), res)  # P0-2
                 if res["status"] != "succeeded":
                     failed = sid
-                    for f2 in running:
-                        f2.cancel()
+                    _kill_running()
+                    # 收敛: 等在飞步骤全部结束(不返回半死状态)
+                    for fut2 in list(running):
+                        sid2 = running.pop(fut2)
+                        try:
+                            res2 = fut2.result(timeout=30)
+                        except Exception:
+                            res2 = {"id": sid2, "tool": by_id[sid2]["tool"], "exit_code": -1,
+                                    "status": "cancelled", "output": None, "log": ""}
+                        with lock:
+                            results.append(res2)
+                    # 未启动步骤标记 skipped(状态收敛)
+                    for sid3 in sorted(pending):
+                        with lock:
+                            results.append({"id": sid3, "tool": by_id[sid3]["tool"],
+                                            "exit_code": -1, "status": "skipped",
+                                            "output": None, "log": ""})
+                    pending.clear()
                     break
     return results, failed
 
@@ -382,6 +439,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
         for st in steps:
             res = _execute_step(st, workdir, timeout_s, state, resume)
             results.append(res)
+            _merge_state_step(workdir, wf["id"], res)  # P0-2: 每步落盘
             if res["status"] != "succeeded":
                 failed_at = st["id"]
                 break
@@ -640,6 +698,27 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if len((spec.inputs or [])) > 1:
             return "PARTIALLY_BINDABLE"
         return "EXECUTABLE"
+
+    def _bind_slots(name: str, first_ref: str, wf_inputs: dict) -> dict | None:
+        """slot 级绑定(评审 #80 P0-3): 首必填槽 ← 链引用;其余必填槽 ← workflow inputs
+        按 format/content_type 匹配。全部必填槽有来源→ {slot: ref};否则 None。"""
+        spec = specs[name]
+        ins = [i for i in (spec.inputs or []) if i.required]
+        if not ins:
+            return None
+        binding = {ins[0].name: first_ref}
+        for slot in ins[1:]:
+            # 从 workflow inputs 找格式匹配
+            hit = None
+            for in_name, in_val in wf_inputs.items():
+                _fmt = str(in_val).rsplit(".", 1)[-1].lower() if isinstance(in_val, str) else ""
+                if slot.format and _fmt_match(slot.format, _fmt):
+                    hit = "{input." + in_name + "}"
+                    break
+            if not hit:
+                return None
+            binding[slot.name] = hit
+        return binding
 
     # 起点(去重: 评审 #70 P0-5——同一工具 schema+relations 双命中不再重复探索)
     starts, _seen_starts = [], set()

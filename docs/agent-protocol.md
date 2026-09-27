@@ -128,6 +128,8 @@ steps:
 ```
 
 - 引用: `{workdir}` / `{input.X}` / `$step.output` / `{artifact: <path>}`
+- **binding 形态**(推荐): `binding: {inputs: [...或 {slot: ref}], parameters: {...}, output: "..."}`——契约编译(compile_step → InvocationSpec);多输入工具用 dict slot 绑定
+- legacy `args` 形态兼容至 v2.0(DeprecationWarning)
 - 状态: `.wf_state.json` 落盘 → `--resume` 断点续跑
 - 产物: 每步 provenance + 语义验证(validation_warning)
 

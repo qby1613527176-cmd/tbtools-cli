@@ -6,6 +6,7 @@
 当前为兼容层骨架: 从现有注册源构建统一 specs(不改运行时行为),
 gen_metadata 与后续工具以 specs 为唯一输入。
 """
+import os
 from dataclasses import dataclass, field
 
 from tbtools_cli import auto_commands as _ac
@@ -108,6 +109,8 @@ class InvocationSpec:
                     raise ValueError(f"INVALID_LAYOUT_TOKEN: {tok!r}")
                 if "input" in tok:
                     idx = int(tok["input"])
+                    if idx < 0:
+                        raise ValueError(f"INVALID_LAYOUT_INPUT: layout input index 为负: {idx}")
                     if idx >= len(inputs):
                         raise ValueError(
                             f"INVALID_LAYOUT_INPUT: layout 引用 input[{idx}], 但只提供 {len(inputs)} 个输入")
@@ -124,11 +127,23 @@ class InvocationSpec:
                         raise ValueError(f"UNKNOWN_LAYOUT_PARAMETER: layout 引用未声明参数: {pname}")
                     if pname not in parameters:
                         raise ValueError(f"MISSING_LAYOUT_PARAMETER: layout 要求参数 {pname}, 但 binding 未提供")
+                    # bool 语义(评审 #80): true→flag 无值,false→跳过(不发 flag)
+                    _ps = next((p for p in self.parameters if p.name == pname), None)
+                    if _ps and _ps.type == "bool":
+                        if str(parameters[pname]).lower() in ("true", "1", "yes"):
+                            argv.append(tok["flag"])
+                        continue
                     argv += [tok["flag"], str(parameters[pname])]
                 elif "literal" in tok:
                     argv.append(str(tok["literal"]))
                 else:
                     raise ValueError(f"INVALID_LAYOUT_TOKEN: 未知 token 类型: {tok!r}")
+            # required input 覆盖检查(评审 #80): layout 必须消费所有必填输入
+            used = {int(t["input"]) for t in self.layout if "input" in t}
+            for idx, inp in enumerate(self.inputs):
+                if inp.required and idx not in used:
+                    raise ValueError(
+                        f"INVALID_LAYOUT: layout 遗漏必填输入槽位 {inp.name}(input[{idx}])")
             return argv
         if self.named_flags:
             # named-flag 布局(评审 #72 P0-1): 输入/输出都走 flag(venn2: --List1/--List2/--graph)
@@ -175,6 +190,11 @@ class CommandSpec:
         inv.outputs = self.outputs
         if self.name in KNOWN_NAMED_FLAGS:
             inv.named_flags = KNOWN_NAMED_FLAGS[self.name]
+        # Contract YAML 布局优先(评审 #80 P1-6)
+        if self.__dict__.get("_contract_named_flags"):
+            inv.named_flags = self.__dict__["_contract_named_flags"]
+        if self.__dict__.get("_contract_layout"):
+            inv.layout = self.__dict__["_contract_layout"]
         return inv
 
 
@@ -188,8 +208,81 @@ KNOWN_NAMED_FLAGS = {
 }
 
 
+# ── Contract Loader(评审 #80 P1-5): contracts/tools/*.yaml 正式声明层 ──
+_CONTRACTS_CACHE: dict = {}
+_CONTRACTS_MTIME: float = 0.0
+
+
+def load_contracts() -> dict:
+    """加载 contracts/tools/*.yaml(评审: CommandSpec 从聚合器变成 contract loader;
+    YAML 声明优先于 KNOWN_* 内存表)。返回 {name: {inputs/outputs/parameters/capabilities/layout/...}}。"""
+    import glob as _g
+
+    import yaml as _y
+    global _CONTRACTS_CACHE, _CONTRACTS_MTIME
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    files = sorted(_g.glob(os.path.join(root, "contracts", "tools", "*.yaml")))
+    if not files:
+        return {}
+    mt = max(os.path.getmtime(f) for f in files)
+    if _CONTRACTS_CACHE and mt <= _CONTRACTS_MTIME:
+        return _CONTRACTS_CACHE
+    out = {}
+    for f in files:
+        try:
+            d = _y.safe_load(open(f, encoding="utf-8"))
+            if isinstance(d, dict) and d.get("name"):
+                out[d["name"]] = d
+        except Exception:
+            pass
+    _CONTRACTS_CACHE, _CONTRACTS_MTIME = out, mt
+    return out
+
+
+def _apply_contract_overlay(spec) -> None:
+    """YAML 契约覆盖到 spec(YAML 胜出:inputs/outputs/parameters/capabilities/layout)。"""
+    c = load_contracts().get(spec.name)
+    if not c:
+        return
+    if c.get("inputs"):
+        # merge by slot name(评审: YAML 未声明 content_type 时保留内存标注,不冲掉 slot 语义)
+        _old_ct = {i.name: i.content_type for i in spec.inputs if i.content_type != "generic"}
+        spec.inputs = [InputSpec(name=i.get("name", ""), role=i.get("role", "file"),
+                                 format=i.get("format", ""), required=i.get("required", True),
+                                 note=i.get("note", ""), columns=i.get("columns"),
+                                 content_type=i.get("content_type")
+                                 or _old_ct.get(i.get("name", ""), "generic"))
+                       for i in c["inputs"]]
+    if c.get("outputs"):
+        spec.outputs = list(c["outputs"])
+    if c.get("parameters"):
+        spec.parameters = [ParamSpec(name=p.get("name", ""), type=p.get("type", "string"),
+                                     default=p.get("default"), required=p.get("required", False),
+                                     note=p.get("note", ""), cli_name=p.get("cli_name", ""))
+                           for p in c["parameters"]]
+    if c.get("capabilities"):
+        spec.capabilities = list(c["capabilities"])
+    if c.get("layout"):
+        # layout 经 invocation 投影(named_flags 或 token layout)
+        lay = c["layout"]
+        if isinstance(lay, dict) and ("inputs" in lay or "output" in lay):
+            spec.__dict__["_contract_named_flags"] = lay
+        elif isinstance(lay, list):
+            spec.__dict__["_contract_layout"] = lay
+
+
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
-# content_type 标注表(biological semantic type;按工具名挂语义)
+# slot 级 content_type(评审 #80 P0-4): 按"输入槽位"标注,优先于工具级
+KNOWN_INPUT_CONTENT_TYPES = {
+    "pep2codon": {"cds": "dna", "pep_aln": "protein"},
+    "sixframe": {"inFa": "dna"},  # 评审勘误: sixframe 输入是 dna(不是 protein)
+    "recipBlast": {"query": "protein", "subject": "protein"},
+    "autoMakeBlastDb": {"fasta": "protein"},
+    "dualsyn": {"gff": "annotation", "collinearity": "table"},
+    "mcscanx": {"gff": "annotation", "blast": "table"},
+}
+
+# content_type 标注表(biological semantic type;按工具名挂语义——slot 级无标注时兜底)
 KNOWN_CONTENT_TYPES = {
     "muscle": "protein", "trimal": "alignment", "iqtree": "alignment", "phylotree": "alignment",
     "blastp": "protein", "blastn": "dna", "diamond": "protein", "recipBlast": "protein",
@@ -241,7 +334,7 @@ KNOWN_SCHEMAS = {
     "gxfSplit": ([InputSpec("gff", format="gff3")], ["tsv"]),
     "gxfAttr": ([InputSpec("gff", format="gff3")], ["tsv"]),
     "gxfIdAppender": ([InputSpec("gff", format="gff3")], ["gff3"]),
-    "recipBlast": ([InputSpec("db", format="fasta"), InputSpec("query", format="fasta")], ["tsv"]),
+    "recipBlast": ([InputSpec("query", format="fasta"), InputSpec("subject", format="fasta")], ["tsv"]),
     "autoMakeBlastDb": ([InputSpec("fasta", format="fasta")], ["db"]),
     "genelocgff": ([InputSpec("gff", format="gff3"), InputSpec("ids", format="txt")], ["svg"]),
     "treeRooting": ([InputSpec("nwk", format="newick", note="需枝长")], ["nwk"]),
@@ -619,14 +712,18 @@ def build_command_specs() -> dict[str, CommandSpec]:
         if name in KNOWN_SCHEMAS:
             ins, outs = KNOWN_SCHEMAS[name]
             spec.inputs, spec.outputs = ins, outs
-            if name in KNOWN_CONTENT_TYPES:
-                for _inp in spec.inputs:
-                    if _inp.content_type == "generic":
-                        _inp.content_type = KNOWN_CONTENT_TYPES[name]
+            # content_type 挂接: slot 级优先,工具级兜底(评审 #80 P0-4)
+            _slot_ct = KNOWN_INPUT_CONTENT_TYPES.get(name, {})
+            for _inp in spec.inputs:
+                if _inp.content_type == "generic":
+                    _inp.content_type = _slot_ct.get(_inp.name) or KNOWN_CONTENT_TYPES.get(name, "generic")
         spec.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(spec.group, [])
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
         spec.parameters = KNOWN_PARAMS.get(name, [])
+    # Contract Loader: YAML 覆盖层(评审 #80;YAML 胜出)
+    for _sp in specs.values():
+        _apply_contract_overlay(_sp)
     return specs
 
 
@@ -654,10 +751,11 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
-            if name in KNOWN_CONTENT_TYPES:
-                for _inp in s.inputs:
-                    if _inp.content_type == "generic":
-                        _inp.content_type = KNOWN_CONTENT_TYPES[name]
+            # content_type 挂接: slot 级优先,工具级兜底(评审 #80 P0-4)
+            _slot_ct = KNOWN_INPUT_CONTENT_TYPES.get(name, {})
+            for _inp in s.inputs:
+                if _inp.content_type == "generic":
+                    _inp.content_type = _slot_ct.get(_inp.name) or KNOWN_CONTENT_TYPES.get(name, "generic")
         s.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(s.group, [])
         s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         s.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(s.group, {})
@@ -739,3 +837,26 @@ def contract_coverage() -> dict:
         "capability_contract": sum(1 for s in specs.values() if s.capabilities),
         "dependency_contract": sum(1 for s in specs.values() if s.dependencies),
     }
+
+# ── Execution Verification 分级(评审 #80 P1-8): 与 Agent-ready 正交 ──
+EXECUTION_VERIFIED_TOOLS = {"volcano", "dehist", "dualsyn", "mcscanx", "hclust"}  # conformance Tier2 实测
+
+
+def verification_level(spec) -> str:
+    """执行验证分级(评审 #80):
+    EXECUTION_VERIFIED = conformance 真实执行通过(Tier2)
+    COMPILEABLE = InvocationSpec 可编译(有 inputs 契约)
+    DECLARED = 仅注册声明
+    """
+    if spec.name in EXECUTION_VERIFIED_TOOLS:
+        return "EXECUTION_VERIFIED"
+    if spec.inputs or spec.name in KNOWN_NAMED_FLAGS:
+        return "COMPILEABLE"
+    return "DECLARED"
+
+
+def verification_census() -> dict:
+    out = {"EXECUTION_VERIFIED": 0, "COMPILEABLE": 0, "DECLARED": 0}
+    for s in build_command_specs().values():
+        out[verification_level(s)] += 1
+    return out
