@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.15] - 2026-09-28
+
+### 语义统一(第 26 份评审)
+- **OutputSpec 统一**: overlay 同步重建 output_slots;output_formats 唯一访问口
+- **Binding Resolver**: resolve_input_binding(content_type 正式进入绑定决策)
+- **output-slot→input-slot 配对匹配**;**串/并 warnings envelope 统一**
+- **CompiledInvocation contract_fingerprint**;**deterministic ready queue**
+- Tests A–E(overlay round-trip/output 一致/binding resolver/envelope parity/多 slot)
+
 ## [1.4.14] - 2026-09-28
 
 ### 旧语义旁路清理(第 25 份评审)
