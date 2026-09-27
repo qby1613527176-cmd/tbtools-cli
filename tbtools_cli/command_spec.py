@@ -229,15 +229,27 @@ def load_contracts() -> dict:
     if _CONTRACTS_CACHE and mt <= _CONTRACTS_MTIME:
         return _CONTRACTS_CACHE
     out = {}
+    global _CONTRACTS_ERRORS
+    _CONTRACTS_ERRORS = []
     for f in files:
         try:
             d = _y.safe_load(open(f, encoding="utf-8"))
             if isinstance(d, dict) and d.get("name"):
                 out[d["name"]] = d
-        except Exception:
-            pass
+        except Exception as e:
+            # P1-1(评审 #90): YAML 加载失败不再静默——收集供 doctor/validate 报告
+            _CONTRACTS_ERRORS.append({"code": "CONTRACT_LOAD_ERROR", "file": f, "error": str(e)})
     _CONTRACTS_CACHE, _CONTRACTS_MTIME = out, mt
     return out
+
+
+_CONTRACTS_ERRORS: list = []
+
+
+def contract_load_errors() -> list:
+    """YAML 契约加载错误(评审 #90 P1-1): doctor/validate 可报告。"""
+    load_contracts()  # 确保已加载
+    return list(_CONTRACTS_ERRORS)
 
 
 def _apply_contract_overlay(spec) -> None:
@@ -836,6 +848,11 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
                              for o in spec.output_slots]
     if spec.name in KNOWN_NAMED_FLAGS:
         e["named_flags"] = KNOWN_NAMED_FLAGS[spec.name]
+    # YAML contract 布局投影(评审 #90 P1-2): contract loader 声明的布局也进 metadata
+    if spec.__dict__.get("_contract_named_flags"):
+        e["named_flags"] = spec.__dict__["_contract_named_flags"]
+    if spec.__dict__.get("_contract_layout"):
+        e["layout"] = spec.__dict__["_contract_layout"]
     if spec.status != "stable":
         e["status"] = spec.status
     if spec.aliases:
@@ -890,20 +907,24 @@ def contract_coverage() -> dict:
     }
 
 # ── Execution Verification 分级(评审 #80 P1-8 + #82 P1-6): 与 Agent-ready 正交 ──
-def _load_verification_report() -> set:
-    """从测试产物读 verification 名单(评审 #82 P1-6: 名单由测试生成,不再手工维护)。"""
+def _load_verification_report() -> tuple[set, set]:
+    """从测试产物读 verification 名单(评审 #82 P1-6 + #86 P1-6 + #90 P0-2:
+    名单由测试生成;报告不存在时**不回退过时内置名单**——假的 EXECUTION_VERIFIED 比 DECLARED 更危险)。
+    返回 (execution_verified, compile_verified)。"""
     import json as _j
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     p = os.path.join(root, "tests", "verification_report.json")
     if os.path.isfile(p):
         try:
-            return set(_j.load(open(p, encoding="utf-8")).get("execution_verified", []))
+            d = _j.load(open(p, encoding="utf-8"))
+            return set(d.get("execution_verified", [])), set(d.get("compile_verified", []))
         except Exception:
             pass
-    return {"volcano", "dehist", "dualsyn", "mcscanx", "hclust"}  # 回退: 内置名单
+    return set(), set()
 
 
-EXECUTION_VERIFIED_TOOLS = _load_verification_report()
+_EXEC_VERIFIED, _COMPILE_VERIFIED = _load_verification_report()
+EXECUTION_VERIFIED_TOOLS = _EXEC_VERIFIED
 
 
 def verification_level(spec) -> str:
@@ -914,8 +935,10 @@ def verification_level(spec) -> str:
     """
     if spec.name in EXECUTION_VERIFIED_TOOLS:
         return "EXECUTION_VERIFIED"
+    if spec.name in _COMPILE_VERIFIED:
+        return "COMPILEABLE"  # 评审 #86: 测试产物名单优先
     if spec.inputs or spec.name in KNOWN_NAMED_FLAGS:
-        return "COMPILEABLE"
+        return "COMPILEABLE"  # 无报告时回退: 有 inputs 契约(COMPILEABLE 属声明级,非假验证)
     return "DECLARED"
 
 

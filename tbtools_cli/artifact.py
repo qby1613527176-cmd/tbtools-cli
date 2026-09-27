@@ -131,8 +131,10 @@ def register(art: "Artifact") -> str | None:
                     else:  # msvcrt(Windows 专属属性, getattr 规避 mypy)
                         getattr(_fcntl_mod, "locking")(
                             _lf.fileno(), getattr(_fcntl_mod, "LK_LOCK"), 1)
-                except Exception:
-                    pass
+                except Exception as _le:
+                    # P2(评审 #90): 锁失败警告(不再无保护继续——并发风险可见)
+                    import sys as _sys
+                    print(f"⚠️ artifact index lock failed(无锁保护继续): {_le}", file=_sys.stderr)
             idx = {}
             if os.path.isfile(p):
                 idx = json.load(open(p, encoding="utf-8"))

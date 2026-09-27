@@ -787,9 +787,11 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         ca = None
         _a_spec = specs.get(a_name)
         if _a_spec and _a_spec.output_slots:
-            ca = _a_spec.output_slots[0].content_type
-            if ca == "generic":
-                ca = None
+            # 遍历全部 output_slots(评审 #90 P1-3): 任一非 generic 即采纳(不再只用第一个)
+            for _os in _a_spec.output_slots:
+                if _os.content_type and _os.content_type != "generic":
+                    ca = _os.content_type
+                    break
         if not ca:
             ca = KNOWN_OUTPUT_CONTENT_TYPES.get(a_name) or KNOWN_CONTENT_TYPES.get(a_name)
         if not ca or not cb:
@@ -1072,6 +1074,16 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
     for s in steps:
         for ri in s.get("required_workflow_inputs", []):
             _all_required.append({"step": s["id"], **ri})
+    # P0-1(评审 #90): step1 首槽也是外部必填({input})——登记进 required_inputs
+    if steps and chain:
+        _sp0 = _specs.get(chain[0][0]) if chain else None
+        if _sp0 and _sp0.inputs:
+            _first_req = [i for i in _sp0.inputs if i.required]
+            if _first_req:
+                _all_required.insert(0, {"step": "step1", "slot": _first_req[0].name,
+                                         "format": _first_req[0].format,
+                                         "content_type": _first_req[0].content_type,
+                                         "source": "workflow_main_input"})
     return {
         "schema_version": WORKFLOW_SCHEMA_CURRENT,
         "type": "workflow_template" if _all_required else "workflow",  # 评审 #88
