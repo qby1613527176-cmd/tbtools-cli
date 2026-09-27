@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.11] - 2026-09-28
+
+### 语义收口 + Runtime conformance(第 22 份评审)
+- **schema_version 统一**: planner 输出用 WORKFLOW_SCHEMA_CURRENT(消灭 1.0 硬编码)
+- **cancel↔Popen 注册竞态修复**: 注册后立查 cancel_event(漏杀悬挂修复)
+- **_bind_slots 模块级**: Planner 统一调用;required_workflow_inputs 元数据(机器可读"必须提供")
+- **persistence 不静默吞**: _merge_state_step/artifact.register 返回警告文案
+- **OutputSpec 输出槽位**: KNOWN_OUTPUT_SLOTS 8 工具;_content_compat 槽位级
+- **verification 报告驱动**: verification_report.json(compile 59/exec 4);无报告不回退过时名单
+
 ## [1.4.10] - 2026-09-28
 
 ### 同一真相链(第 21 份评审)
