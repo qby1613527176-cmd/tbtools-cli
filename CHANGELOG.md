@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.12] - 2026-09-28
+
+### Runtime 语义升级(第 23 份评审)
+- **CompiledInvocation**: compile_step_full 返回结构(argv+inputs+outputs+parameters);Runtime 消费编译结构,不再从 argv 反推语义
+- **Planner Template 正式化**: type=workflow_template + required_inputs 汇总(不再"看似可执行")
+- **schema_version 全统一**: run/validate/planner 全部 WORKFLOW_SCHEMA_CURRENT
+- **metadata 语义导出**: content_type/output_slots/named_flags(volcano=table/muscle=alignment)
+- **register 警告记录**(register_warning 进结果)
+- 🐛 specs_from_scans content_type 缩进 bug 修复(投影测试抓到 13 条不等价)
+
 ## [1.4.11] - 2026-09-28
 
 ### 语义收口 + Runtime conformance(第 22 份评审)
