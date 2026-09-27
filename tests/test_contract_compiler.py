@@ -157,3 +157,50 @@ class TestArtifactIndexLock:
         from tbtools_cli import artifact
         src = inspect.getsource(artifact.register)
         assert "flock" in src, "register 应有 flock(并发防丢)"
+
+
+class TestMetadataSemanticExport:
+    """metadata 语义导出(评审 #88 P1-1/P1-2): content_type/layout/output_slots 不丢"""
+
+    def test_content_type_exported(self):
+        import json
+        m = json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"),
+                           encoding="utf-8"))
+        volcano = m["volcano"]
+        assert volcano["inputs"][0].get("content_type") == "table", \
+            "metadata 必须导出 content_type(评审 #88)"
+
+    def test_output_slots_exported(self):
+        import json
+        m = json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"),
+                           encoding="utf-8"))
+        muscle = m["muscle"]
+        assert muscle.get("output_slots"), "metadata 必须导出 output_slots"
+        assert muscle["output_slots"][0]["content_type"] == "alignment"
+
+    def test_named_flags_exported(self):
+        import json
+        m = json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"),
+                           encoding="utf-8"))
+        assert m["recipBlast"].get("named_flags"), "metadata 必须导出 named_flags"
+
+
+class TestCompiledInvocation:
+    """CompiledInvocation(评审 #88 P0-1): Runtime 消费结构不猜 argv"""
+
+    def test_binding_outputs_exact(self):
+        from tbtools_cli.workflow import compile_step_full
+        step = {"id": "t", "tool": "volcano",
+                "binding": {"inputs": ["deg.txt"], "parameters": {}, "output": "/tmp/o.svg"}}
+        ci = compile_step_full(step, "/tmp", {})
+        assert ci.outputs == ["/tmp/o.svg"], f"outputs 应精确(不猜): {ci.outputs}"
+        assert ci.argv, "argv 非空"
+
+    def test_planner_template_type(self):
+        from tbtools_cli.workflow import plan_from_goal
+        p = plan_from_goal("recipBlast reciprocal", input_format="fasta", output_format="tsv")
+        wf = p["workflow"]
+        # 有 required_inputs → workflow_template(评审 #88 P0-2)
+        if wf["required_inputs"]:
+            assert wf["type"] == "workflow_template"
+        assert wf["schema_version"] == "1.1"

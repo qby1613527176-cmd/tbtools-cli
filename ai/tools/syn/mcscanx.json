@@ -17,14 +17,16 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "chr\tgene\tstart\tend"
+   "note": "chr\tgene\tstart\tend",
+   "content_type": "annotation"
   },
   {
    "name": "blast",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "tab6"
+   "note": "tab6",
+   "content_type": "table"
   }
  ],
  "outputs": [

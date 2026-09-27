@@ -16,7 +16,8 @@
    "role": "file",
    "format": "gff3",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "annotation"
   }
  ],
  "outputs": [

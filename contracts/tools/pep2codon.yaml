@@ -25,10 +25,16 @@ inputs:
   format: fasta
   required: true
   note: ''
+  content_type: dna
 - name: pep_aln
   role: file
   format: fasta
   required: true
   note: ''
+  content_type: protein
 outputs:
 - fa
+output_slots:
+- name: cds
+  format: fasta
+  content_type: dna

@@ -20,5 +20,6 @@ inputs:
   format: fasta
   required: true
   note: ''
+  content_type: alignment
 outputs:
 - svg

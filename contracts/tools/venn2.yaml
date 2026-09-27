@@ -34,3 +34,8 @@ inputs:
   note: ''
 outputs:
 - svg
+named_flags:
+  inputs:
+    list1: --List1
+    list2: --List2
+  output: --graph

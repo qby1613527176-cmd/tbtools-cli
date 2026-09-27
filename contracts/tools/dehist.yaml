@@ -42,5 +42,6 @@ inputs:
   - GeneID
   - Log2FC
   - pvalue
+  content_type: table
 outputs:
 - svg

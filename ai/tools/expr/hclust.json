@@ -22,7 +22,8 @@
     "GeneA",
     "GeneB",
     "distance"
-   ]
+   ],
+   "content_type": "table"
   }
  ],
  "outputs": [

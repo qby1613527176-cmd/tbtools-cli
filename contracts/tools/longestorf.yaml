@@ -29,6 +29,7 @@ inputs:
   format: fasta
   required: true
   note: 核酸输入
+  content_type: dna
 outputs:
 - fa
 aliases:

@@ -27,10 +27,12 @@ inputs:
   format: tsv
   required: true
   note: ''
+  content_type: table
 - name: target
   role: file
   format: tsv
   required: true
   note: ''
+  content_type: table
 outputs:
 - tsv

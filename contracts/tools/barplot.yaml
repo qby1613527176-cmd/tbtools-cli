@@ -27,5 +27,6 @@ inputs:
   columns:
   - Term
   - Pvalue
+  content_type: table
 outputs:
 - svg

@@ -45,6 +45,11 @@ inputs:
   format: fasta
   required: true
   note: ''
+  content_type: alignment
 outputs:
 - nwk
 - treefile
+output_slots:
+- name: tree
+  format: nwk
+  content_type: tree

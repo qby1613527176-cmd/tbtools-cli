@@ -16,14 +16,16 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "table"
   },
   {
    "name": "cls",
    "role": "file",
    "format": "txt",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "table"
   }
  ],
  "outputs": [

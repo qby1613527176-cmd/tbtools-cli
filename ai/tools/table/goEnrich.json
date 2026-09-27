@@ -17,14 +17,16 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "table"
   },
   {
    "name": "target",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "table"
   }
  ],
  "outputs": [

@@ -100,10 +100,13 @@ def plan(wf: dict, workdir: str) -> list[dict]:
                     raise WorkflowError(f"step {s.get('id')} 引用 {{input}} 但 workflow 无 inputs 声明")
             _bj = _bj.replace("{workdir}", workdir)
             s["binding"] = json.loads(_bj)
-            args = compile_step(s, workdir, outputs)
-            steps.append({"id": s["id"], "tool": s["tool"], "args": args})
-            out_args = [a for a in args if isinstance(a, str) and os.path.splitext(a)[1]]
-            outputs[s["id"]] = {"output": out_args[-1] if out_args else os.path.join(workdir, f"{s['id']}.out")}
+            _ci = compile_step_full(s, workdir, outputs)
+            args = _ci.argv
+            # 输出登记编译结构(评审 #88 P0-1): binding.outputs 精确,不再 out_args[-1] 猜
+            steps.append({"id": s["id"], "tool": s["tool"], "args": args,
+                          "_compiled_outputs": _ci.outputs})
+            outputs[s["id"]] = {"output": _ci.outputs[0] if _ci.outputs
+                                        else os.path.join(workdir, f"{s['id']}.out")}
             continue
         args = []
         for a in s.get("args", []):
@@ -140,6 +143,56 @@ def _save_state(workdir: str, state: dict):
         os.fsync(f.fileno())
     os.replace(tmp, p)
 
+
+
+
+class CompiledInvocation:
+    """编译产物(评审 #88 P0-1): 上游已知的语义下游不再重猜。
+
+    argv + 明确的 inputs/outputs/parameters/tool——Runtime/Artifact/Provenance/Resume
+    全部消费 outputs 字段,不再用扩展名/args[-1] 从 argv 反推。"""
+
+    def __init__(self, argv: list, inputs: list, outputs: list, parameters: dict, tool: str):
+        self.argv = argv
+        self.inputs = inputs
+        self.outputs = outputs
+        self.parameters = parameters
+        self.tool = tool
+
+
+def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvocation:
+    """compile_step 的结构版(评审 #88): 返回 CompiledInvocation(argv+inputs+outputs)。"""
+    from tbtools_cli.command_spec import build_command_specs
+    binding = step.get("binding")
+    bare = str(step.get("tool", "")).split()[-1]
+    if binding:
+        sp = build_command_specs().get(bare)
+        if not sp:
+            raise WorkflowError(f"WORKFLOW_INVALID_TOOL: {step.get('tool')}")
+        _bi = binding.get("inputs", [])
+        if isinstance(_bi, dict):
+            inputs = []
+            for slot in sp.inputs:
+                if slot.name in _bi:
+                    inputs.append(_resolve(_bi[slot.name], outputs))
+                elif slot.required:
+                    raise WorkflowError(
+                        f"WORKFLOW_MISSING_INPUT: step {step.get('id')} 缺必填输入槽位 {slot.name}")
+        else:
+            inputs = [_resolve(v, outputs) for v in _bi]
+        params = {k: _resolve(v, outputs) if isinstance(v, str) else v
+                  for k, v in binding.get("parameters", {}).items()}
+        out_raw = binding.get("output", "")
+        outs = [_resolve(out_raw, outputs)] if out_raw else []
+        try:
+            argv = sp.invocation.build_argv(inputs=inputs, parameters=params,
+                                            output=outs[0] if outs else "")
+        except ValueError as e:
+            raise WorkflowError(f"WORKFLOW_COMPILE_ERROR: step {step.get('id')} 编译失败: {e}") from e
+        return CompiledInvocation(argv=argv, inputs=inputs, outputs=outs,
+                                  parameters=params, tool=bare)
+    argv = [_resolve(a, outputs) if isinstance(a, str) else a for a in step.get("args", [])]
+    return CompiledInvocation(argv=argv, inputs=[], outputs=[], parameters={}, tool=bare)
 
 
 def compile_step(step: dict, workdir: str, outputs: dict) -> list:
@@ -302,33 +355,41 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
                 "output": None, "artifact_id": None, "output_sha256": None,
                 "provenance": None, "log": log_path}
     step_ok = (_rc == 0) and not _timeout_hit
-    # 输出识别契约化(CommandSpec outputs 匹配扩展名)
+    # 输出消费编译结构(评审 #88 P0-1): _compiled_outputs 优先——Runtime 不再从 argv 猜
     out = ""
-    try:
-        from tbtools_cli.command_spec import build_command_specs as _bcs2
-        _osp = _bcs2().get(str(st["tool"]).split()[-1])
-        _outs_fmt = [str(o).lower() for o in (_osp.outputs if _osp else [])]
-        if _outs_fmt:
-            _exts = tuple("." + f for f in _outs_fmt if 1 <= len(f) <= 5)
-            _cands = [a for a in st["args"] if isinstance(a, str) and a.lower().endswith(_exts)]
-            if _cands:
-                out = _cands[-1]
-    except Exception:
-        pass
+    if st.get("_compiled_outputs"):
+        out = st["_compiled_outputs"][0]
+    if not out:
+        try:
+            from tbtools_cli.command_spec import build_command_specs as _bcs2
+            _osp = _bcs2().get(str(st["tool"]).split()[-1])
+            _outs_fmt = [str(o).lower() for o in (_osp.outputs if _osp else [])]
+            if _outs_fmt:
+                _exts = tuple("." + f for f in _outs_fmt if 1 <= len(f) <= 5)
+                _cands = [a for a in st["args"] if isinstance(a, str) and a.lower().endswith(_exts)]
+                if _cands:
+                    out = _cands[-1]
+        except Exception:
+            pass
     if not out:
         out = st["args"][-1] if st["args"] else ""
     # Artifact ID 登记
     _art_id = None
     _out_sha = None
+    _reg_warn = None
     if step_ok and out and os.path.isfile(out):
         try:
             from tbtools_cli.artifact import build as _ab, register as _areg
             _a = _ab(out, producer=st["tool"])
-            _areg(_a)
+            _reg_err = _areg(_a)
+            if _reg_err:
+                _reg_warn = f"artifact register warning: {_reg_err}"
+                print(f"⚠️ {_reg_warn}", file=sys.stderr)  # 评审 #88 P1-4
             _art_id = _a.id
             _out_sha = _a.sha256
-        except Exception:
-            pass
+        except Exception as _re:
+            _reg_warn = f"artifact register exception: {_re}"
+            print(f"⚠️ {_reg_warn}", file=sys.stderr)
     # 产物语义验证
     _vwarn = None
     if step_ok and out and os.path.isfile(out):
@@ -340,6 +401,7 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             "status": "succeeded" if step_ok else "failed",
             **({"validation_warning": f"step timeout after {timeout_s}s (process tree killed)"} if _timeout_hit else {}),
             **({"validation_warning": _vwarn} if _vwarn else {}),
+            **({"register_warning": _reg_warn} if _reg_warn else {}),
             "output": out if step_ok and os.path.isfile(out) else None,
             "artifact_id": _art_id,
             "output_sha256": _out_sha,
@@ -483,11 +545,11 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                 break
     if failed_at:
         _save_state(workdir, {"workflow": wf["id"], "status": "failed", "steps": results})
-        return {"schema_version": "1.0", "workflow": wf["id"], "status": "failed",
+        return {"schema_version": WORKFLOW_SCHEMA_CURRENT, "workflow": wf["id"], "status": "failed",
                 "failed_at": failed_at, "steps": results,
                 "duration_s": round(time.time() - t0, 1)}
     _save_state(workdir, {"workflow": wf["id"], "status": "succeeded", "steps": results})
-    return {"schema_version": "1.0", "workflow": wf["id"], "status": "succeeded",
+    return {"schema_version": WORKFLOW_SCHEMA_CURRENT, "workflow": wf["id"], "status": "succeeded",
             "steps": results, "duration_s": round(time.time() - t0, 1),
             **({"persistence_warnings": _persistence_warnings} if _persistence_warnings else {}),
             "artifacts": [r2["output"] for r2 in results if r2["output"]]}
@@ -568,7 +630,8 @@ def validate_workflow(wf: dict) -> dict:
                     if deps and ref not in deps:
                         errors.append({"code": "WORKFLOW_INVALID_BINDING", "step": s.get("id"),
                                        "message": f"${ref}.output 引用但 depends_on 未声明 {ref}"})
-    return {"schema_version": "1.0", "valid": not errors, "steps": len(steps), "errors": errors}
+    return {"schema_version": WORKFLOW_SCHEMA_CURRENT, "valid": not errors,
+            "steps": len(steps), "errors": errors}
 
 def graph(wf: dict) -> str:
     """mermaid 工作流图(评审 #66 P0-3: 读取 depends_on 画真 DAG, 不再线性链)。"""
@@ -1003,8 +1066,16 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
             "selection_reason": reason,
             **({"required_workflow_inputs": _required_extra} if _required_extra else {}),
         })
+    # Planner Template 正式化(评审 #88 P0-2): 不是 executable workflow——
+    # 需用户提供 required_inputs 后才能执行(type + 汇总元数据,不再"看似可执行")
+    _all_required = []
+    for s in steps:
+        for ri in s.get("required_workflow_inputs", []):
+            _all_required.append({"step": s["id"], **ri})
     return {
-        "schema_version": WORKFLOW_SCHEMA_CURRENT,  # P0-2(评审 #86): planner 生成 spec 与常量一致
+        "schema_version": WORKFLOW_SCHEMA_CURRENT,
+        "type": "workflow_template" if _all_required else "workflow",  # 评审 #88
+        "required_inputs": _all_required,  # Agent 必须提供才能执行的输入清单
         "workflow_id": f"wf_{_stable_wf_id(goal + '|' + input_format + '|' + output_format + '|' + '>'.join([t for t, _ in chain]) + '|wf' + WORKFLOW_SCHEMA_CURRENT)}",
         "goal": goal,
         "steps": steps,

@@ -17,7 +17,8 @@
    "role": "file",
    "format": "fasta",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "alignment"
   }
  ],
  "outputs": [

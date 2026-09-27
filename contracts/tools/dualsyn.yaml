@@ -37,10 +37,12 @@ inputs:
   format: tsv
   required: true
   note: 简化 GFF
+  content_type: annotation
 - name: pairs
   role: file
   format: tsv
   required: true
   note: ''
+  content_type: table
 outputs:
 - svg

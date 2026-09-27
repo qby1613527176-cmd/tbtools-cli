@@ -46,10 +46,12 @@ inputs:
   format: gff3
   required: true
   note: ''
+  content_type: annotation
 - name: ids
   role: file
   format: txt
   required: true
   note: ''
+  content_type: annotation
 outputs:
 - svg

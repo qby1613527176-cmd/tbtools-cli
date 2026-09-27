@@ -12,5 +12,10 @@ inputs:
   format: fasta
   required: true
   note: ''
+  content_type: protein
 outputs:
 - db
+named_flags:
+  inputs:
+    fasta: --inFasta
+  output: --outBase

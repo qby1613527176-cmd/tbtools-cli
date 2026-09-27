@@ -30,10 +30,21 @@ inputs:
   format: fasta
   required: true
   note: ''
+  content_type: protein
 - name: subject
   role: file
   format: fasta
   required: true
   note: ''
+  content_type: protein
 outputs:
 - tsv
+output_slots:
+- name: result
+  format: tsv
+  content_type: table
+named_flags:
+  inputs:
+    query: --querySeqFile
+    subject: --subjectSeqFile
+  output: --outDirAndPrefix

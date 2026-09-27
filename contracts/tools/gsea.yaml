@@ -25,10 +25,12 @@ inputs:
   format: tsv
   required: true
   note: ''
+  content_type: table
 - name: cls
   role: file
   format: txt
   required: true
   note: ''
+  content_type: table
 outputs:
 - xls

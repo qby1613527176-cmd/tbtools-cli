@@ -17,14 +17,16 @@
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "简化 GFF"
+   "note": "简化 GFF",
+   "content_type": "annotation"
   },
   {
    "name": "pairs",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "table"
   }
  ],
  "outputs": [

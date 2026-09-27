@@ -21,7 +21,8 @@
    "note": "首列 gene ID",
    "columns": [
     "gene_id"
-   ]
+   ],
+   "content_type": "table"
   }
  ],
  "outputs": [

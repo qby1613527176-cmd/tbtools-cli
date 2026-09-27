@@ -18,14 +18,16 @@
    "role": "file",
    "format": "gff3",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "annotation"
   },
   {
    "name": "ids",
    "role": "file",
    "format": "txt",
    "required": true,
-   "note": ""
+   "note": "",
+   "content_type": "annotation"
   }
  ],
  "outputs": [

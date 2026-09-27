@@ -58,5 +58,10 @@ inputs:
   - GeneID
   - Log2FC
   - pvalue
+  content_type: table
 outputs:
 - svg
+output_slots:
+- name: plot
+  format: svg
+  content_type: table

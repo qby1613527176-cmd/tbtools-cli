@@ -48,5 +48,6 @@ inputs:
   - GeneA
   - GeneB
   - distance
+  content_type: table
 outputs:
 - svg

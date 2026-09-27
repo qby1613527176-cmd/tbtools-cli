@@ -784,11 +784,15 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
             s.inputs, s.outputs = KNOWN_SCHEMAS[name]
-            # content_type 挂接: slot 级优先,工具级兜底(评审 #80 P0-4)
-            _slot_ct = KNOWN_INPUT_CONTENT_TYPES.get(name, {})
-            for _inp in s.inputs:
-                if _inp.content_type == "generic":
-                    _inp.content_type = _slot_ct.get(_inp.name) or KNOWN_CONTENT_TYPES.get(name, "generic")
+        # output_slots 挂接(specs_from_scans 路径;评审 #88 P1-2)
+        if name in KNOWN_OUTPUT_SLOTS:
+            s.output_slots = KNOWN_OUTPUT_SLOTS[name]
+        # content_type 挂接: slot 级优先,工具级兜底(评审 #80 P0-4)
+        # ⚠️ 必须在 KNOWN_OUTPUT_SLOTS 之外(缩进 bug: 否则只 8 个工具有 content_type)
+        _slot_ct = KNOWN_INPUT_CONTENT_TYPES.get(name, {})
+        for _inp in s.inputs:
+            if _inp.content_type == "generic":
+                _inp.content_type = _slot_ct.get(_inp.name) or KNOWN_CONTENT_TYPES.get(name, "generic")
         s.capabilities = KNOWN_CAPABILITIES.get(name, []) or GROUP_CAPABILITIES.get(s.group, [])
         s.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         s.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(s.group, {})
@@ -817,11 +821,21 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
                             "required": p.required, "note": p.note,
                             **({"cli_name": p.cli_name} if p.cli_name else {})} for p in spec.parameters]
     if spec.inputs:
+        # 评审 #88 P1-1: content_type 必须导出(否则 metadata 丢语义,spec 升级降级不一致)
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note,
-                        **({"columns": i.columns} if i.columns else {})} for i in spec.inputs]
+                        **({"columns": i.columns} if i.columns else {}),
+                        **({"content_type": i.content_type} if i.content_type != "generic" else {})}
+                       for i in spec.inputs]
     if spec.outputs:
         e["outputs"] = spec.outputs
+    # 评审 #88 P1-2: layout/named_flags/output_slots 导出(metadata 丢布局=第二轮 metadata bug)
+    if spec.output_slots:
+        e["output_slots"] = [{"name": o.name, "format": o.format,
+                              **({"content_type": o.content_type} if o.content_type != "generic" else {})}
+                             for o in spec.output_slots]
+    if spec.name in KNOWN_NAMED_FLAGS:
+        e["named_flags"] = KNOWN_NAMED_FLAGS[spec.name]
     if spec.status != "stable":
         e["status"] = spec.status
     if spec.aliases:

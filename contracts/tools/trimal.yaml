@@ -40,5 +40,10 @@ inputs:
   format: fasta
   required: true
   note: ''
+  content_type: alignment
 outputs:
 - aln
+output_slots:
+- name: aln
+  format: fasta
+  content_type: alignment

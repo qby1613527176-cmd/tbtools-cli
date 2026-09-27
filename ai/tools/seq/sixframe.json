@@ -17,7 +17,8 @@
    "role": "file",
    "format": "fasta",
    "required": true,
-   "note": "蛋白(输出核酸)"
+   "note": "蛋白(输出核酸)",
+   "content_type": "dna"
   }
  ],
  "outputs": [

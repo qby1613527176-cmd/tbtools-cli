@@ -46,10 +46,16 @@ inputs:
   format: tsv
   required: true
   note: "chr\tgene\tstart\tend"
+  content_type: annotation
 - name: blast
   role: file
   format: tsv
   required: true
   note: tab6
+  content_type: table
 outputs:
 - tsv
+output_slots:
+- name: collinearity
+  format: tsv
+  content_type: table

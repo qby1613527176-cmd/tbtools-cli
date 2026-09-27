@@ -219,7 +219,8 @@
     "columns": [
      "Term",
      "Pvalue"
-    ]
+    ],
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -768,14 +769,16 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "简化 GFF"
+    "note": "简化 GFF",
+    "content_type": "annotation"
    },
    {
     "name": "pairs",
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -1434,14 +1437,16 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    },
    {
     "name": "target",
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -1975,14 +1980,16 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    },
    {
     "name": "target",
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -2307,18 +2314,27 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "chr\tgene\tstart\tend"
+    "note": "chr\tgene\tstart\tend",
+    "content_type": "annotation"
    },
    {
     "name": "blast",
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "tab6"
+    "note": "tab6",
+    "content_type": "table"
    }
   ],
   "outputs": [
    "tsv"
+  ],
+  "output_slots": [
+   {
+    "name": "collinearity",
+    "format": "tsv",
+    "content_type": "table"
+   }
   ]
  },
  "meme": {
@@ -3047,18 +3063,27 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "dna"
    },
    {
     "name": "pep_aln",
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "protein"
    }
   ],
   "outputs": [
    "fa"
+  ],
+  "output_slots": [
+   {
+    "name": "cds",
+    "format": "fasta",
+    "content_type": "dna"
+   }
   ]
  },
  "pfammotif": {
@@ -3424,19 +3449,35 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "protein"
    },
    {
     "name": "subject",
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "protein"
    }
   ],
   "outputs": [
    "tsv"
-  ]
+  ],
+  "output_slots": [
+   {
+    "name": "result",
+    "format": "tsv",
+    "content_type": "table"
+   }
+  ],
+  "named_flags": {
+   "inputs": {
+    "query": "--querySeqFile",
+    "subject": "--subjectSeqFile"
+   },
+   "output": "--outDirAndPrefix"
+  }
  },
  "regionAnno": {
   "name": "regionAnno",
@@ -4141,7 +4182,14 @@
   ],
   "outputs": [
    "svg"
-  ]
+  ],
+  "named_flags": {
+   "inputs": {
+    "list1": "--List1",
+    "list2": "--List2"
+   },
+   "output": "--graph"
+  }
  },
  "venn3": {
   "name": "venn3",
@@ -4197,7 +4245,15 @@
   ],
   "outputs": [
    "svg"
-  ]
+  ],
+  "named_flags": {
+   "inputs": {
+    "list1": "--List1",
+    "list2": "--List2",
+    "list3": "--List3"
+   },
+   "output": "--graph"
+  }
  },
  "venn4": {
   "name": "venn4",
@@ -4476,11 +4532,19 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": "蛋白(输出核酸)"
+    "note": "蛋白(输出核酸)",
+    "content_type": "dna"
    }
   ],
   "outputs": [
    "fa"
+  ],
+  "output_slots": [
+   {
+    "name": "pep",
+    "format": "fasta",
+    "content_type": "protein"
+   }
   ]
  },
  "longestorf": {
@@ -4520,7 +4584,8 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": "核酸输入"
+    "note": "核酸输入",
+    "content_type": "dna"
    }
   ],
   "outputs": [
@@ -4762,12 +4827,20 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "alignment"
    }
   ],
   "outputs": [
    "nwk",
    "treefile"
+  ],
+  "output_slots": [
+   {
+    "name": "tree",
+    "format": "nwk",
+    "content_type": "tree"
+   }
   ]
  },
  "trimal": {
@@ -4822,11 +4895,19 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "alignment"
    }
   ],
   "outputs": [
    "aln"
+  ],
+  "output_slots": [
+   {
+    "name": "aln",
+    "format": "fasta",
+    "content_type": "alignment"
+   }
   ]
  },
  "gblocks": {
@@ -5383,12 +5464,19 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "protein"
    }
   ],
   "outputs": [
    "db"
-  ]
+  ],
+  "named_flags": {
+   "inputs": {
+    "fasta": "--inFasta"
+   },
+   "output": "--outBase"
+  }
  },
  "autoRemoteBlast": {
   "name": "autoRemoteBlast",
@@ -6356,11 +6444,19 @@
      "GeneID",
      "Log2FC",
      "pvalue"
-    ]
+    ],
+    "content_type": "table"
    }
   ],
   "outputs": [
    "svg"
+  ],
+  "output_slots": [
+   {
+    "name": "plot",
+    "format": "svg",
+    "content_type": "table"
+   }
   ]
  },
  "heatmap": {
@@ -6438,7 +6534,8 @@
     "note": "首列 gene ID",
     "columns": [
      "gene_id"
-    ]
+    ],
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -6554,7 +6651,8 @@
      "GeneA",
      "GeneB",
      "distance"
-    ]
+    ],
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -6618,7 +6716,8 @@
      "GeneID",
      "Log2FC",
      "pvalue"
-    ]
+    ],
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -7066,11 +7165,19 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "protein"
    }
   ],
   "outputs": [
    "aln"
+  ],
+  "output_slots": [
+   {
+    "name": "aln",
+    "format": "fasta",
+    "content_type": "alignment"
+   }
   ]
  },
  "bestid": {
@@ -7359,14 +7466,16 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    },
    {
     "name": "cls",
     "role": "file",
     "format": "txt",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "table"
    }
   ],
   "outputs": [
@@ -7666,7 +7775,8 @@
     "role": "file",
     "format": "gff3",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "annotation"
    }
   ],
   "outputs": [
@@ -7772,14 +7882,16 @@
     "role": "file",
     "format": "gff3",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "annotation"
    },
    {
     "name": "ids",
     "role": "file",
     "format": "txt",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "annotation"
    }
   ],
   "outputs": [
@@ -7855,7 +7967,8 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "content_type": "alignment"
    }
   ],
   "outputs": [
