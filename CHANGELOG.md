@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.10] - 2026-09-28
+
+### 同一真相链(第 21 份评审)
+- **P0-3【真 bug】并行 state "wf" 落盘**: _run_parallel 显式 workflow_id(不再 by_id.get('_wf_id','wf'))
+- **Resume identity 校验**: state.workflow_id 不匹配→忽略旧状态全量执行
+- **validate 干跑前拓扑排序**: 乱序 workflow 误报 COMPILE_ERROR 修复
+- **Planner 解析统一**: multi_input_unsupported 矛盾消除(requires_workflow_inputs)
+- **KNOWN_OUTPUT_CONTENT_TYPES**(A 侧输出语义)+ 首槽兼容标记
+
 ## [1.4.9] - 2026-09-27
 
 ### 半成品完工(第 20 份评审)
