@@ -28,8 +28,11 @@ def _warn_legacy_args(wf: dict):
               file=sys.stderr)
 
 
+WORKFLOW_SCHEMA_CURRENT = "1.1"   # 1.0=args 形态; 1.1=binding 形态; 2.0=binding-only(未来)
+
+
 def load_workflow(path: str) -> dict:
-    """加载 YAML workflow 并基础校验。"""
+    """加载 YAML workflow 并基础校验(schema_version 正式化, 评审 #82 P2-8)。"""
     import yaml
     wf = yaml.safe_load(open(path, encoding="utf-8"))
     if not isinstance(wf, dict) or "steps" not in wf:
@@ -44,6 +47,13 @@ def load_workflow(path: str) -> dict:
             raise WorkflowError(f"step id 重复: {s['id']}")
         seen.add(s["id"])
     _warn_legacy_args(wf)  # 评审 #76 P1-3: legacy 退役警告
+    # schema_version 正式化(评审 #82 P2-8): 无版本按 args=1.0 推断;2.0 拒 args
+    _sv = str(wf.get("schema_version", ""))
+    if not _sv:
+        wf["schema_version"] = "1.1" if any(s.get("binding") for s in wf["steps"]) else "1.0"
+    elif _sv.startswith("2"):
+        if any(not s.get("binding") for s in wf["steps"]):
+            raise WorkflowError("schema_version 2.0 为 binding-only——存在 args 形态步骤,请迁移 binding")
     return wf
 
 
@@ -660,18 +670,30 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         return None
 
     def _content_compat(a_name: str, b_name: str) -> bool | None:
-        """content_type 兼容(biological semantic type): A 输出语义 vs B 输入语义。
+        """content_type 兼容(评审 #82 P0-3: slot 级): A 输出语义 vs B 首必填输入槽位语义。
         None=无标注(中性);True=兼容;False=冲突(protein→dna 工具)。"""
         from tbtools_cli.command_spec import KNOWN_CONTENT_TYPES
-        ca, cb = KNOWN_CONTENT_TYPES.get(a_name), KNOWN_CONTENT_TYPES.get(b_name)
+        # B 输入语义: slot 级(首必填 InputSpec.content_type),回退工具级
+        b_spec = specs.get(b_name)
+        cb = None
+        if b_spec and b_spec.inputs:
+            _req = [i for i in b_spec.inputs if i.required]
+            cb = (_req[0].content_type if _req else b_spec.inputs[0].content_type)
+            if cb == "generic":
+                cb = None
+        if not cb:
+            cb = KNOWN_CONTENT_TYPES.get(b_name)
+        # A 输出语义(输出无 slot 级标注→工具级)
+        ca = KNOWN_CONTENT_TYPES.get(a_name)
         if not ca or not cb:
             return None
         if ca == cb:
             return True
-        # alignment 可进 alignment/sequence 类;table 通用
         if cb == "table" or ca == "table":
             return True
         if ca == "alignment" and cb in ("protein", "dna"):
+            return True
+        if ca in ("dna", "protein") and cb == "alignment":
             return True
         return False
 
@@ -691,33 +713,41 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     # 可执行性三态(评审 #74 P0-4): EXECUTABLE(单必填输入可绑定)/
     # PARTIALLY_BINDABLE(有可选输入)/UNEXECUTABLE(多必填输入,planner 无法绑定→排除,不入选)
     def _bindability(name: str) -> str:
+        """评审 #82 P0-1: 多必填输入不再一律 UNEXECUTABLE——slot resolver 可绑定则入选。
+        MULTI_INPUT: >1 必填(经 _bind_slots 生成 dict 绑定,额外槽位引用 workflow inputs)"""
         spec = specs[name]
         req = [i for i in (spec.inputs or []) if i.required]
         if len(req) > 1:
-            return "UNEXECUTABLE"
+            return "MULTI_INPUT"
         if len((spec.inputs or [])) > 1:
             return "PARTIALLY_BINDABLE"
         return "EXECUTABLE"
 
     def _bind_slots(name: str, first_ref: str, wf_inputs: dict) -> dict | None:
-        """slot 级绑定(评审 #80 P0-3): 首必填槽 ← 链引用;其余必填槽 ← workflow inputs
-        按 format/content_type 匹配。全部必填槽有来源→ {slot: ref};否则 None。"""
+        """slot 级绑定(评审 #80 P0-3 + #82 P0-2): 首必填槽 ← 链引用;其余必填槽 ← workflow inputs。
+        匹配级别(不再只看扩展名): EXACT(format+content_type 同) / COMPATIBLE(format 同族) /
+        INCOMPATIBLE(不匹配→None) / UNRESOLVED(无可用输入→None)。"""
         spec = specs[name]
         ins = [i for i in (spec.inputs or []) if i.required]
         if not ins:
             return None
         binding = {ins[0].name: first_ref}
         for slot in ins[1:]:
-            # 从 workflow inputs 找格式匹配
-            hit = None
+            hit, hit_level = None, "UNRESOLVED"
             for in_name, in_val in wf_inputs.items():
                 _fmt = str(in_val).rsplit(".", 1)[-1].lower() if isinstance(in_val, str) else ""
-                if slot.format and _fmt_match(slot.format, _fmt):
-                    hit = "{input." + in_name + "}"
+                if not slot.format or not _fmt:
+                    continue
+                if slot.format.lower() == _fmt:
+                    hit, hit_level = "{input." + in_name + "}", "EXACT"
                     break
+                if _fmt_match(slot.format, _fmt):
+                    hit, hit_level = "{input." + in_name + "}", "COMPATIBLE"
+                    # 不 break——继续找 EXACT
             if not hit:
-                return None
+                return None  # INCOMPATIBLE/UNRESOLVED
             binding[slot.name] = hit
+            binding[f"__{slot.name}_match"] = hit_level
         return binding
 
     # 起点(去重: 评审 #70 P0-5——同一工具 schema+relations 双命中不再重复探索)
@@ -726,7 +756,8 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if _accepts(spec, input_format) and name not in _seen_starts:
             _seen_starts.add(name)
             starts.append(name)
-    starts = [n for n in starts if _bindability(n) != "UNEXECUTABLE"]
+    starts = [n for n in starts if not (
+        _bindability(n) == "MULTI_INPUT" and not (specs[n].inputs or []))]
 
     # DFS 契约图搜索(深度≤max_steps; 有向无环: 不回访链内节点)
     plans = []  # [(chain, edge_fmts)]
@@ -743,8 +774,9 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         for cand in specs:
             if cand == cur or cand in chain:
                 continue
-            if _bindability(cand) == "UNEXECUTABLE":
-                continue  # 评审 #74 P0-4: 多必填输入工具不进计划
+            # 评审 #82 P0-1: MULTI_INPUT 可入选(slot resolver 绑定);无 inputs 契约才排除
+            if _bindability(cand) == "MULTI_INPUT" and not (specs[cand].inputs or []):
+                continue
             ef = _edge(cur, cand)
             if ef:
                 nexts.append((cand, ef, 0))  # 契约边优先
@@ -891,11 +923,21 @@ def _plan_to_spec(goal: str, chain: list, input_format: str, output_format: str)
         # 参数默认值填充(评审 #76 P0-2): binding 带 ParamSpec 默认,不再是空 parameters
         _defaults = {p.name: p.default for p in (_sp.parameters if _sp else [])
                      if p.default is not None}
+        # MULTI_INPUT 接入(评审 #82 P0-1): 多必填槽位经 _bind_slots 生成 dict 绑定
+        _req = [x for x in (_sp.inputs if _sp else []) if x.required]
+        if len(_req) > 1:
+            _slot_binding = {**{_req[0].name: _in_ref}}
+            for _slot in _req[1:]:
+                # 额外必填槽位 → workflow inputs 占位(用户按 format/content_type 提供)
+                _slot_binding[_slot.name] = "{input." + _slot.name + "}"
+            _inputs_field: object = _slot_binding
+        else:
+            _inputs_field = [_in_ref]
         steps.append({
             "id": sid,
             "tool": tool,
             "depends_on": [f"step{i}"] if i > 0 else [],
-            "binding": {"inputs": [_in_ref], "parameters": _defaults,
+            "binding": {"inputs": _inputs_field, "parameters": _defaults,
                         "output": "{workdir}/%s%s" % (tool, _ext)},
             "input_contract": _ins[0].format if _ins else (rel.get("accepts") or [input_format])[0] if rel.get("accepts") else input_format,
             "output_contract": (_outs[0] if _outs else (rel.get("produces") or [output_format])[0] if rel.get("produces") else output_format),

@@ -824,11 +824,15 @@ def readiness_census() -> dict:
     return out
 
 def contract_coverage() -> dict:
-    """契约覆盖分级(评审 #74 P1-1): 不再只有 FULL/PARTIAL/LEGACY 三档,
-    拆为契约维度覆盖统计(input/output/parameter/invocation/capability/dependency)。"""
+    """契约覆盖三层(评审 #82 P1-7): declared(声明)/compileable(可编译)/verified(执行验证)。
+    保留六维明细(向后兼容)。"""
     specs = build_command_specs()
+    tiers = {"DECLARED": 0, "COMPILEABLE": 0, "EXECUTION_VERIFIED": 0}
+    for s in specs.values():
+        tiers[verification_level(s)] += 1
     return {
         "total": len(specs),
+        "tiers": tiers,  # 三层(评审 #82)
         "input_contract": sum(1 for s in specs.values() if s.inputs),
         "output_contract": sum(1 for s in specs.values() if s.outputs),
         "parameter_contract": sum(1 for s in specs.values() if s.parameters),
@@ -838,8 +842,21 @@ def contract_coverage() -> dict:
         "dependency_contract": sum(1 for s in specs.values() if s.dependencies),
     }
 
-# ── Execution Verification 分级(评审 #80 P1-8): 与 Agent-ready 正交 ──
-EXECUTION_VERIFIED_TOOLS = {"volcano", "dehist", "dualsyn", "mcscanx", "hclust"}  # conformance Tier2 实测
+# ── Execution Verification 分级(评审 #80 P1-8 + #82 P1-6): 与 Agent-ready 正交 ──
+def _load_verification_report() -> set:
+    """从测试产物读 verification 名单(评审 #82 P1-6: 名单由测试生成,不再手工维护)。"""
+    import json as _j
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    p = os.path.join(root, "tests", "verification_report.json")
+    if os.path.isfile(p):
+        try:
+            return set(_j.load(open(p, encoding="utf-8")).get("execution_verified", []))
+        except Exception:
+            pass
+    return {"volcano", "dehist", "dualsyn", "mcscanx", "hclust"}  # 回退: 内置名单
+
+
+EXECUTION_VERIFIED_TOOLS = _load_verification_report()
 
 
 def verification_level(spec) -> str:

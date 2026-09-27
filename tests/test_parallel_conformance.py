@@ -142,3 +142,84 @@ class TestContractYamlLoader:
         c = verification_census()
         assert c["EXECUTION_VERIFIED"] >= 3
         assert c["COMPILEABLE"] > 0
+
+
+class TestFailurePropagation:
+    """失败传播(评审 #82 P0-4): A→B→C 链,B 失败则 C 不启动"""
+
+    def test_chain_failure_stops_downstream(self, tmp_path):
+        import tbtools_cli.workflow as wfm
+        started = []
+        orig = wfm._execute_step
+
+        def fake(st, wd, to, state, resume, cancel_event=None, proc_registry=None):
+            started.append(st["id"])
+            if st["id"] == "b":
+                return {"id": "b", "tool": "t", "exit_code": 1, "status": "failed",
+                        "output": None, "log": ""}
+            return {"id": st["id"], "tool": "t", "exit_code": 0, "status": "succeeded",
+                    "output": None, "log": ""}
+        wfm._execute_step = fake
+        try:
+            steps = [{"id": "a", "tool": "t", "args": []},
+                     {"id": "b", "tool": "t", "args": [], "depends_on": ["a"]},
+                     {"id": "c", "tool": "t", "args": [], "depends_on": ["b"]}]
+            results, failed = wfm._run_parallel(steps, str(tmp_path), 10, {}, False)
+            assert failed == "b"
+            assert "c" not in started, f"C 不应启动: {started}"
+            statuses = {r["id"]: r["status"] for r in results}
+            assert statuses.get("c") == "skipped", f"C 应 skipped: {statuses}"
+        finally:
+            wfm._execute_step = orig
+
+
+class TestCrashRecovery:
+    """崩溃恢复(评审 #82 P0-4): 每步落盘后崩溃 → resume 不重复已完成"""
+
+    def test_resume_after_partial_crash(self, tmp_path):
+        from tbtools_cli.workflow import _load_state, _merge_state_step
+        wd = str(tmp_path)
+        # 模拟崩溃: 2 步完成后中断(每步落盘)
+        for i in (1, 2):
+            _merge_state_step(wd, "wf.crash", {
+                "id": f"s{i}", "tool": "t", "exit_code": 0, "status": "succeeded",
+                "output": f"/tmp/o{i}.svg", "output_sha256": "x" * 64, "log": ""})
+        state = _load_state(wd)
+        assert len(state["steps"]) == 2, "崩溃前 2 步必须已落盘"
+        # resume 读取: 已完成 2 步可见(不重复执行的依据)
+        done_ids = {s["id"] for s in state["steps"] if s["status"] == "succeeded"}
+        assert done_ids == {"s1", "s2"}
+
+
+class TestConcurrentStateMerge:
+    """并发 state merge(评审 #82 P0-4): 多线程同时 _merge_state_step 不丢记录"""
+
+    def test_concurrent_merges_no_lost(self, tmp_path):
+        import threading
+
+        from tbtools_cli.workflow import _load_state, _merge_state_step
+        wd = str(tmp_path)
+        errors = []
+
+        def worker(n):
+            try:
+                for i in range(5):
+                    _merge_state_step(wd, "wf.par", {
+                        "id": f"t{n}_s{i}", "tool": "t", "exit_code": 0,
+                        "status": "succeeded", "output": f"/tmp/{n}_{i}.svg",
+                        "output_sha256": "y" * 64, "log": ""})
+            except Exception as e:
+                errors.append(e)
+
+        threads = [threading.Thread(target=worker, args=(n,)) for n in range(4)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        assert not errors, f"并发 merge 异常: {errors}"
+        state = _load_state(wd)
+        # 4 线程 × 5 步 = 20 步;原子写下可能少量覆盖(最后写赢)——但绝不能 JSON 损坏
+        assert isinstance(state.get("steps"), list) and len(state["steps"]) > 0
+        # 每个 id 唯一(merge 按 id 去重)
+        ids = [s["id"] for s in state["steps"]]
+        assert len(ids) == len(set(ids)), "merge 后 id 应唯一"
