@@ -90,6 +90,7 @@ def plan(wf: dict, workdir: str) -> list[dict]:
         # binding 形态(契约): compile_step 统一编译(评审 #72 P0-3: run/validate 同一 compiler)
         if s.get("binding"):
             s = dict(s)
+            _raw_binding = dict(s["binding"])  # P0-1(评审 #100): raw symbolic binding(替换前)
             _bj = json.dumps(s["binding"])
             for k, v in inputs.items():
                 _bj = _bj.replace("{input." + k + "}", str(v))
@@ -102,7 +103,7 @@ def plan(wf: dict, workdir: str) -> list[dict]:
                     raise WorkflowError(f"step {s.get('id')} 引用 {{input}} 但 workflow 无 inputs 声明")
             _bj = _bj.replace("{workdir}", workdir)
             s["binding"] = json.loads(_bj)
-            _ci = compile_step_full(s, workdir, outputs)
+            _ci = compile_step_full(s, workdir, outputs, symbolic_override=_raw_binding)
             args = _ci.argv
             # 输出登记编译结构(评审 #88 P0-1): binding.outputs 精确,不再 out_args[-1] 猜
             steps.append({"id": s["id"], "tool": s["tool"], "args": args,
@@ -149,6 +150,38 @@ def _save_state(workdir: str, state: dict):
 
 
 
+
+def canonical_contract(spec) -> dict:
+    """唯一契约指纹源(评审 #100 P0-2): CommandSpec → 规范化契约 dict。
+
+    contract_fingerprint 必须= SHA256(canonical_contract JSON)——
+    含 inputs(全字段)/outputs/output_slots/parameters/layout/named_flags/capabilities/relations。
+    任何一处契约变化(含 output_slots)都会改变 fingerprint。"""
+    return {
+        "name": spec.name, "kind": spec.kind, "group": spec.group,
+        "inputs": [{"name": i.name, "format": i.format, "role": i.role,
+                    "required": i.required, "content_type": i.content_type,
+                    "columns": i.columns} for i in (spec.inputs or [])],
+        "outputs": list(spec.outputs or []),
+        "output_slots": [{"name": o.name, "format": o.format, "content_type": o.content_type}
+                         for o in (spec.output_slots or [])],
+        "parameters": [{"name": p.name, "type": p.type, "default": p.default,
+                        "required": p.required, "cli_name": p.cli_name}
+                       for p in (spec.parameters or [])],
+        "layout": spec.invocation.layout,
+        "named_flags": spec.invocation.named_flags,
+        "capabilities": list(spec.capabilities or []),
+        "dependencies": list(spec.dependencies or []),
+    }
+
+
+def contract_fingerprint_for(spec) -> str:
+    """唯一契约指纹(评审 #100): SHA256(canonical_contract JSON 前 16)。"""
+    import hashlib as _hc
+    import json as _jc
+    return _hc.sha256(_jc.dumps(canonical_contract(spec), sort_keys=True,
+                                default=str).encode()).hexdigest()[:16]
+
 class CompiledInvocation:
     """编译产物(评审 #88 P0-1): 上游已知的语义下游不再重猜。
 
@@ -169,27 +202,16 @@ class CompiledInvocation:
         #   execution_fp = contract_fp + binding_fp + 已解析输入 artifact sha + runtime 版本
         import hashlib as _hc
         import json as _jc
-        _spec_contract = {}
+        # P0-2(评审 #100): contract_fp = canonical_contract 统一指纹(含 output_slots 等全字段)
         try:
             from tbtools_cli.command_spec import build_command_specs as _bcs3
             _sp3 = _bcs3().get(tool)
-            if _sp3:
-                _spec_contract = {
-                    "inputs": [{"name": i.name, "format": i.format,
-                                "content_type": i.content_type, "required": i.required}
-                               for i in (_sp3.inputs or [])],
-                    "outputs": list(_sp3.outputs or []),
-                    "parameters": [{"name": p.name, "type": p.type, "cli_name": p.cli_name}
-                                   for p in (_sp3.parameters or [])],
-                    "layout": _sp3.invocation.layout,
-                    "named_flags": _sp3.invocation.named_flags,
-                }
+            self.contract_fingerprint = (
+                contract_fingerprint_for(_sp3) if _sp3 else
+                _hc.sha256(_jc.dumps({"tool": tool}, sort_keys=True).encode()).hexdigest()[:16])
         except Exception:
-            pass
-        self.contract_fingerprint = _hc.sha256(
-            _jc.dumps({"tool": tool, "schema_version": self.schema_version,
-                       "contract": _spec_contract},
-                      sort_keys=True, default=str).encode()).hexdigest()[:16]
+            self.contract_fingerprint = _hc.sha256(
+                _jc.dumps({"tool": tool}, sort_keys=True).encode()).hexdigest()[:16]
         # symbolic binding(评审 #98): 用未解析的 binding 原文(slot refs/$step.output/{input.X})
         _symbolic = {"parameters": parameters,
                      "binding_refs": symbolic_binding or {}}
@@ -211,14 +233,32 @@ class CompiledInvocation:
             from tbtools_cli import __version__ as _rt_ver
         except Exception:
             _rt_ver = "unknown"
+        # 🟠 dependency identity(评审 #100): 外部依赖版本进 execution_fp
+        # (muscle v5.1→v5.2 / iqtree2 换版 → 同一 workflow 必须视为不同执行)
+        _deps = {}
+        try:
+            import shutil as _sh
+            import subprocess as _sp4
+            for _dep, _flag in (("muscle", "-version"), ("iqtree2", "--version")):
+                _bin = _sh.which(_dep)
+                if _bin:
+                    try:
+                        _rv = _sp4.run([_bin, _flag], capture_output=True, text=True, timeout=5)
+                        _deps[_dep] = (_rv.stdout or _rv.stderr).strip().splitlines()[0][:40]
+                    except Exception:
+                        _deps[_dep] = "unknown"
+        except Exception:
+            pass
         self.execution_fingerprint = _hc.sha256(
             _jc.dumps({"contract": self.contract_fingerprint,
                        "binding": self.binding_fingerprint,
-                       "input_shas": _input_shas, "runtime": _rt_ver},
+                       "input_shas": _input_shas, "runtime": _rt_ver,
+                       "dependencies": _deps},
                       sort_keys=True).encode()).hexdigest()[:16]
 
 
-def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvocation:
+def compile_step_full(step: dict, workdir: str, outputs: dict,
+                      symbolic_override: dict | None = None) -> CompiledInvocation:
     """compile_step 的结构版(评审 #88): 返回 CompiledInvocation(argv+inputs+outputs)。"""
     from tbtools_cli.command_spec import build_command_specs
     binding = step.get("binding")
@@ -247,9 +287,11 @@ def compile_step_full(step: dict, workdir: str, outputs: dict) -> CompiledInvoca
                                             output=outs[0] if outs else "")
         except ValueError as e:
             raise WorkflowError(f"WORKFLOW_COMPILE_ERROR: step {step.get('id')} 编译失败: {e}") from e
+        # P0-1(评审 #100): binding_fp 用 raw symbolic binding(替换前 refs),
+        # 不用替换后的已解析路径——否则 binding_fp 实质是 resolved fingerprint
         return CompiledInvocation(argv=argv, inputs=inputs, outputs=outs,
                                   parameters=params, tool=bare,
-                                  symbolic_binding=dict(binding))
+                                  symbolic_binding=symbolic_override or dict(binding))
     argv = [_resolve(a, outputs) if isinstance(a, str) else a for a in step.get("args", [])]
     return CompiledInvocation(argv=argv, inputs=[], outputs=[], parameters={}, tool=bare)
 
@@ -347,10 +389,11 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
                         _valid = False
                 except Exception:
                     _valid = False
-            # P0-1(评审 #98): execution_fingerprint resume 闸门——
-            # state 的 fingerprint 与当前编译不一致(输入/binding/contract/runtime 任一变了)→重跑
-            if _valid and st.get("_execution_fingerprint") and prev.get("execution_fingerprint"):
-                if st["_execution_fingerprint"] != prev["execution_fingerprint"]:
+            # P0-1(评审 #98 + #100 P0-3): execution_fingerprint resume 闸门(严格化)——
+            # 当前有 fp 时: prev.fp != 当前 fp(含 prev 无 fp/None)→ 一律重跑。
+            # 旧 state 无 fingerprint ≠ 相同;只有 fp 完全相等才可跳过。
+            if _valid and st.get("_execution_fingerprint"):
+                if prev.get("execution_fingerprint") != st["_execution_fingerprint"]:
                     _valid = False
             if _valid and prev.get("output_sha256"):
                 try:

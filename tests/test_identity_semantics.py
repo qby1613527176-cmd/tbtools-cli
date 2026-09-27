@@ -1,0 +1,112 @@
+"""评审 #100 回归矩阵(identity semantics): A-E 全测。"""
+import json
+import os
+import shutil
+import subprocess
+import sys
+
+import pytest
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, ROOT)
+
+
+class TestIdentityMatrix:
+    """identity 数学定义回归矩阵(评审 #100 Test A-E)"""
+
+    def test_A_same_everything(self):
+        """A: 同 contract + 同 binding + 同输入 → 三指纹全同"""
+        from tbtools_cli.workflow import compile_step_full
+        s = {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                         "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s, "/tmp", {}), compile_step_full(s, "/tmp", {})
+        assert c1.contract_fingerprint == c2.contract_fingerprint
+        assert c1.binding_fingerprint == c2.binding_fingerprint
+        assert c1.execution_fingerprint == c2.execution_fingerprint
+
+    def test_B_diff_output_binding_diff_contract_same(self):
+        """B: 不同输出 → binding 不同,contract 同"""
+        from tbtools_cli.workflow import compile_step_full
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/b.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.binding_fingerprint != c2.binding_fingerprint
+        assert c1.contract_fingerprint == c2.contract_fingerprint
+
+    def test_C_diff_input_execution_diff(self, tmp_path):
+        """C: 不同输入文件 → execution 不同,contract/binding 可比"""
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "deg2.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        p.write_text(p.read_text() + "#x\n")
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint != c2.execution_fingerprint
+        assert c1.contract_fingerprint == c2.contract_fingerprint
+
+    def test_D_raw_symbolic_binding(self):
+        """D: binding_fp 用 raw symbolic binding({input.X}/$step.output 替换前)"""
+        from tbtools_cli.workflow import compile_step_full
+        s = {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["{input.deg}"], "parameters": {},
+                         "output": "{workdir}/v.svg"}}
+        c1 = compile_step_full(s, "/tmp/wd1", {}, symbolic_override=dict(s["binding"]))
+        c2 = compile_step_full(s, "/tmp/wd2", {}, symbolic_override=dict(s["binding"]))
+        # 不同 workdir 替换后路径不同,但 raw binding 同 → binding_fp 必须同
+        assert c1.binding_fingerprint == c2.binding_fingerprint, \
+            "binding_fp 必须用 raw symbolic binding(替换前 refs)"
+
+    def test_E_canonical_contract_complete(self):
+        """E: canonical_contract 含全字段(inputs/outputs/output_slots/parameters/layout)"""
+        from tbtools_cli.command_spec import build_command_specs
+        from tbtools_cli.workflow import canonical_contract
+        c = canonical_contract(build_command_specs()["volcano"])
+        for field in ("inputs", "outputs", "output_slots", "parameters",
+                      "layout", "named_flags", "capabilities"):
+            assert field in c, f"canonical_contract 缺 {field}"
+        assert c["inputs"][0]["content_type"] == "table"
+
+
+class TestResumeStrictness:
+    """评审 #100 P0-3: resume 严格化(旧 state 无 fp → 重跑)"""
+
+    @pytest.mark.integration
+    def test_old_state_without_fp_reruns(self, tmp_path):
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR")
+        wf = tmp_path / "w.yaml"
+        wf.write_text("""id: strict.test
+steps:
+  - id: v
+    tool: expr volcano
+    binding: {inputs: ["{workdir}/deg.txt"], parameters: {}, output: "{workdir}/v.svg"}
+""")
+        wd = tmp_path / "w.wf"
+        wd.mkdir()
+        shutil.copy("examples/data/deg.txt", wd / "deg.txt")
+        env = dict(os.environ, TBTOOLS_JAR=jar)
+        r1 = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                             str(wf), "--workdir", str(wd)], capture_output=True, text=True,
+                            cwd=ROOT, env=env, timeout=120)
+        assert json.loads(r1.stdout)["status"] == "succeeded"
+        # 模拟旧 state: 删掉 fingerprint(旧版本 state)
+        st_path = wd / ".wf_state.json"
+        state = json.loads(st_path.read_text())
+        for s in state["steps"]:
+            s.pop("execution_fingerprint", None)
+        st_path.write_text(json.dumps(state))
+        # resume → 无 fp 必须重跑(评审 #100 P0-3)
+        r2 = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                             str(wf), "--workdir", str(wd), "--resume"],
+                            capture_output=True, text=True, cwd=ROOT, env=env, timeout=120)
+        assert "重新执行" in r2.stderr, "旧 state 无 fp 却跳过=假成功风险"

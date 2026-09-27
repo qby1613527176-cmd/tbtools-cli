@@ -24,11 +24,11 @@ relations:
   - muscle
   - trimal
 inputs:
-- name: pep
+- name: dna
   role: file
   format: fasta
   required: true
-  note: 蛋白(输出核酸)
+  note: DNA 序列输入(6-frame 翻译为蛋白)
   content_type: dna
 outputs:
 - fasta

@@ -384,7 +384,7 @@ KNOWN_SCHEMAS = {
     "muscle": ([InputSpec("fasta", format="fasta")], ["aln"]),
     "trimal": ([InputSpec("aln", format="fasta")], ["aln"]),
     "blastp": ([InputSpec("query", format="fasta"), InputSpec("db", format="fasta")], ["out"]),
-    "sixframe": ([InputSpec("pep", format="fasta", note="蛋白(输出核酸)")], ["fa"]),
+    "sixframe": ([InputSpec("dna", format="fasta", note="DNA 序列输入(6-frame 翻译为蛋白)")], ["fasta"]),  # 评审 #100: 命名+note 语义修正(输入 DNA 输出蛋白,原"蛋白(输出核酸)"完全写反)
     "longestorf": ([InputSpec("seq", format="fasta", note="核酸输入")], ["fa"]),
     "seqlogo": ([InputSpec("seqs", format="fasta")], ["svg"]),
     "stat-fasta": ([InputSpec("fasta", format="fasta")], ["xls"]),
