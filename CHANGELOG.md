@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.18] - 2026-09-28
+
+### identity 数学定义干净化(第 29 份评审)
+- **binding_fp 用 raw symbolic binding**(替换前 refs,非 resolved 路径)
+- **canonical_contract() 统一契约指纹源**(含 output_slots/layout 等全字段)
+- **resume 严格化**: 旧 state 无 fp → 一律重跑(假成功风险修复)
+- **dependency identity**: execution_fp 含外部依赖版本(muscle/iqtree2)
+- **sixframe 语义修正**(slot pep→dna,note 原文写反)
+- identity→resume 回归矩阵 6 用例
+
 ## [1.4.17] - 2026-09-28
 
 ### identity→resume 纵贯(第 28 份评审)
