@@ -108,7 +108,9 @@ def plan(wf: dict, workdir: str) -> list[dict]:
             # 输出登记编译结构(评审 #88 P0-1): binding.outputs 精确,不再 out_args[-1] 猜
             steps.append({"id": s["id"], "tool": s["tool"], "args": args,
                           "_compiled_outputs": _ci.outputs,
-                          "_execution_fingerprint": _ci.execution_fingerprint})  # P0-1(评审 #98)
+                          "_execution_fingerprint": _ci.execution_fingerprint,
+                          "_contract_fingerprint": _ci.contract_fingerprint,
+                          "_binding_fingerprint": _ci.binding_fingerprint})  # 评审 #104
             outputs[s["id"]] = {"output": _ci.outputs[0] if _ci.outputs
                                         else os.path.join(workdir, f"{s['id']}.out")}
             continue
@@ -175,12 +177,38 @@ def canonical_contract(spec) -> dict:
     }
 
 
-def contract_fingerprint_for(spec) -> str:
-    """唯一契约指纹(评审 #100): SHA256(canonical_contract JSON 前 16)。"""
+# 四层 identity 字段形式化(评审 #102 P1-4):
+#   Execution Contract(执行身份): inputs/outputs/output_slots/parameters/layout/named_flags
+#   Semantic Metadata(语义元数据): capabilities/relations/ontology——搜索/规划用,非执行身份
+#   Runtime Identity(运行环境): tool/schema_version/runtime/deps
+CANONICAL_EXECUTION_FIELDS = ("inputs", "outputs", "output_slots", "parameters",
+                              "layout", "named_flags")
+CANONICAL_SEMANTIC_FIELDS = ("capabilities", "relations", "dependencies")
+
+
+def execution_contract_fingerprint(spec) -> str:
+    """执行契约指纹(评审 #102 P1-1): 仅 Execution Contract 字段——
+    契约变了 = 执行必须重来;语义变化不影响它。"""
     import hashlib as _hc
     import json as _jc
-    return _hc.sha256(_jc.dumps(canonical_contract(spec), sort_keys=True,
-                                default=str).encode()).hexdigest()[:16]
+    c = canonical_contract(spec)
+    return _hc.sha256(_jc.dumps({k: c.get(k) for k in CANONICAL_EXECUTION_FIELDS},
+                                sort_keys=True, default=str).encode()).hexdigest()
+
+
+def semantic_fingerprint(spec) -> str:
+    """语义指纹(评审 #102 P1-1): capabilities/relations/dependencies——
+    搜索/规划语义层身份,与执行身份独立。"""
+    import hashlib as _hc
+    import json as _jc
+    c = canonical_contract(spec)
+    return _hc.sha256(_jc.dumps({k: c.get(k) for k in CANONICAL_SEMANTIC_FIELDS},
+                                sort_keys=True, default=str).encode()).hexdigest()
+
+
+def contract_fingerprint_for(spec) -> str:
+    """执行契约指纹(短形;评审 #100 + #102): 与 execution_contract_fingerprint 同义,截 16 显示。"""
+    return execution_contract_fingerprint(spec)[:16]
 
 class CompiledInvocation:
     """编译产物(评审 #88 P0-1): 上游已知的语义下游不再重猜。
@@ -202,21 +230,25 @@ class CompiledInvocation:
         #   execution_fp = contract_fp + binding_fp + 已解析输入 artifact sha + runtime 版本
         import hashlib as _hc
         import json as _jc
-        # P0-2(评审 #100): contract_fp = canonical_contract 统一指纹(含 output_slots 等全字段)
+        # P0-2(评审 #100 + #102 P1-1): contract_fp = execution_contract_fingerprint(执行契约层)
         try:
             from tbtools_cli.command_spec import build_command_specs as _bcs3
             _sp3 = _bcs3().get(tool)
-            self.contract_fingerprint = (
-                contract_fingerprint_for(_sp3) if _sp3 else
-                _hc.sha256(_jc.dumps({"tool": tool}, sort_keys=True).encode()).hexdigest()[:16])
+            self.contract_fingerprint_full = (
+                execution_contract_fingerprint(_sp3) if _sp3 else
+                _hc.sha256(_jc.dumps({"tool": tool}, sort_keys=True).encode()).hexdigest())
         except Exception:
-            self.contract_fingerprint = _hc.sha256(
-                _jc.dumps({"tool": tool}, sort_keys=True).encode()).hexdigest()[:16]
-        # symbolic binding(评审 #98): 用未解析的 binding 原文(slot refs/$step.output/{input.X})
-        _symbolic = {"parameters": parameters,
-                     "binding_refs": symbolic_binding or {}}
-        self.binding_fingerprint = _hc.sha256(
-            _jc.dumps(_symbolic, sort_keys=True, default=str).encode()).hexdigest()[:16]
+            self.contract_fingerprint_full = _hc.sha256(
+                _jc.dumps({"tool": tool}, sort_keys=True).encode()).hexdigest()
+        self.contract_fingerprint = self.contract_fingerprint_full[:16]  # 显示截断(评审 #102 P1-3)
+        # symbolic binding(评审 #98 + #102 P0): binding_fp = SHA256(raw symbolic binding)
+        # ——raw binding 本身已含 inputs/parameters/output 的符号 refs;
+        # 不混入已解析的 parameters(resolved 路径污染修复:
+        # genome={input.genome} 换路径不应改变 binding identity)
+        self.binding_fingerprint_full = _hc.sha256(
+            _jc.dumps(symbolic_binding or {}, sort_keys=True,
+                      default=str).encode()).hexdigest()
+        self.binding_fingerprint = self.binding_fingerprint_full[:16]
         # execution_fp(评审 #98): + 已解析输入 artifact sha + runtime 版本
         _input_shas = []
         for _ip in inputs:
@@ -233,28 +265,42 @@ class CompiledInvocation:
             from tbtools_cli import __version__ as _rt_ver
         except Exception:
             _rt_ver = "unknown"
-        # 🟠 dependency identity(评审 #100): 外部依赖版本进 execution_fp
-        # (muscle v5.1→v5.2 / iqtree2 换版 → 同一 workflow 必须视为不同执行)
+        # 🟠 dependency identity(评审 #100 + #102 P1-2): contract-driven——
+        # 按 spec.dependencies 声明解析(不硬编码 muscle/iqtree2;换版=不同执行)
         _deps = {}
         try:
             import shutil as _sh
             import subprocess as _sp4
-            for _dep, _flag in (("muscle", "-version"), ("iqtree2", "--version")):
-                _bin = _sh.which(_dep)
+            from tbtools_cli.command_spec import KNOWN_DEPENDENCIES_STRUCT as _KDS
+            _dep_names = []
+            if '_sp3' in dir() and _sp3:
+                _dep_names = list(_sp3.dependencies or [])
+            for _dn in _dep_names:
+                _dnorm = _dn.lower().replace("+", "").replace("-", "")
+                _bin = _sh.which(_dn) or _sh.which(_dnorm)
                 if _bin:
-                    try:
-                        _rv = _sp4.run([_bin, _flag], capture_output=True, text=True, timeout=5)
-                        _deps[_dep] = (_rv.stdout or _rv.stderr).strip().splitlines()[0][:40]
-                    except Exception:
-                        _deps[_dep] = "unknown"
+                    for _flag in ("--version", "-version", "-v"):
+                        try:
+                            _rv = _sp4.run([_bin, _flag], capture_output=True, text=True, timeout=5)
+                            _ver = (_rv.stdout or _rv.stderr).strip().splitlines()
+                            if _ver:
+                                _deps[_dn] = _ver[0][:40]
+                                break
+                        except Exception:
+                            continue
+                    else:
+                        _deps[_dn] = "unknown"
+                else:
+                    _deps[_dn] = "missing"
         except Exception:
             pass
+        # P1-3(评审 #102): full SHA256(64 hex 内部;显示层才截断)
         self.execution_fingerprint = _hc.sha256(
-            _jc.dumps({"contract": self.contract_fingerprint,
-                       "binding": self.binding_fingerprint,
+            _jc.dumps({"contract": self.contract_fingerprint_full,
+                       "binding": self.binding_fingerprint_full,
                        "input_shas": _input_shas, "runtime": _rt_ver,
                        "dependencies": _deps},
-                      sort_keys=True).encode()).hexdigest()[:16]
+                      sort_keys=True).encode()).hexdigest()
 
 
 def compile_step_full(step: dict, workdir: str, outputs: dict,
@@ -369,6 +415,50 @@ def _merge_state_step(workdir: str, workflow_id: str, result: dict) -> str | Non
         print(f"⚠️ {_warn}", file=sys.stderr)
         return _warn
 
+
+def _resume_gate(st: dict, prev: dict) -> tuple[bool, str]:
+    """统一 resume 闸门(评审 #104 🔴1/2/5): binding/legacy 同一条路径。
+
+    返回 (can_skip, reason)。
+    规则:
+    ① prev 无 provenance 或 exit_code != 0 → 重跑(假成功拦截)
+    ② 产物缺失 → 重跑
+    ③ 产物 sha256 与 state 不符 → 重跑(内容被换)
+    ④ 当前步骤有指纹(binding): 三层全比——contract/binding/execution 任一不一致(含 prev 缺指纹)→ 重跑
+    ⑤ legacy args(当前无指纹): ①②③ 通过即可跳过(显式降级, 文档化)
+    """
+    _out_p = prev.get("output")
+    if not (_out_p and os.path.isfile(_out_p)):
+        return False, "artifact_missing"
+    try:
+        _pr = json.load(open(_out_p + ".tbtools.json", encoding="utf-8"))
+        if _pr.get("exit_code") != 0:
+            return False, "provenance_exit_nonzero"
+    except Exception:
+        return False, "provenance_missing"
+    if prev.get("output_sha256"):
+        try:
+            import hashlib as _hl
+            _h = _hl.sha256()
+            with open(_out_p, "rb") as _fh:
+                for _c in iter(lambda: _fh.read(1 << 20), b""):
+                    _h.update(_c)
+            if _h.hexdigest() != prev["output_sha256"]:
+                return False, "output_sha_mismatch"
+        except Exception:
+            return False, "output_unreadable"
+    # ④ 三层指纹全比(评审 #104 🔴2): contract/binding/execution 任一不一致→重跑
+    if st.get("_execution_fingerprint"):
+        if prev.get("execution_fingerprint") != st["_execution_fingerprint"]:
+            return False, "execution_fp_mismatch"
+        if st.get("_contract_fingerprint") and prev.get("contract_fingerprint") and \
+                prev["contract_fingerprint"] != st["_contract_fingerprint"]:
+            return False, "contract_fp_mismatch"
+        if st.get("_binding_fingerprint") and prev.get("binding_fingerprint") and \
+                prev["binding_fingerprint"] != st["_binding_fingerprint"]:
+            return False, "binding_fp_mismatch"
+    return True, "ok"
+
 def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: bool,
                   cancel_event=None, proc_registry: dict | None = None) -> dict:
     """执行单步(DAG 并行可重入;评审: DAG scheduler)。
@@ -376,39 +466,14 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
     GLM-4.7 P0: cancel_event 取消传播(入口检查) + Popen 进程组注册(可 killpg) +
     超时杀进程树 + 异常结构化(不吞 worker 异常)。
     """
-    # resume: 已成功步骤跳过——但必须 Artifact 验证(产物存在+sha256)
+    # resume: 已成功步骤跳过——统一 _resume_gate(评审 #104 🔴5: binding/legacy 同一路径)
     if resume and state.get("steps"):
         prev = next((x for x in state["steps"] if x["id"] == st["id"]), None)
         if prev and prev.get("status") == "succeeded":
-            _out_p = prev.get("output")
-            _valid = bool(_out_p and os.path.isfile(_out_p))
-            if _valid:
-                try:
-                    _pr = json.load(open(_out_p + ".tbtools.json", encoding="utf-8"))
-                    if _pr.get("exit_code") != 0:
-                        _valid = False
-                except Exception:
-                    _valid = False
-            # P0-1(评审 #98 + #100 P0-3): execution_fingerprint resume 闸门(严格化)——
-            # 当前有 fp 时: prev.fp != 当前 fp(含 prev 无 fp/None)→ 一律重跑。
-            # 旧 state 无 fingerprint ≠ 相同;只有 fp 完全相等才可跳过。
-            if _valid and st.get("_execution_fingerprint"):
-                if prev.get("execution_fingerprint") != st["_execution_fingerprint"]:
-                    _valid = False
-            if _valid and prev.get("output_sha256"):
-                try:
-                    import hashlib as _hl
-                    _h = _hl.sha256()
-                    with open(_out_p, "rb") as _fh:
-                        for _c in iter(lambda: _fh.read(1 << 20), b""):
-                            _h.update(_c)
-                    if _h.hexdigest() != prev["output_sha256"]:
-                        _valid = False
-                except Exception:
-                    _valid = False
-            if _valid:
+            _can_skip, _gate_reason = _resume_gate(st, prev)
+            if _can_skip:
                 return prev
-            print(f"⚠️ resume: {st['id']} 状态成功但产物失效, 重新执行", file=sys.stderr)
+            print(f"⚠️ resume: {st['id']} 状态成功但验证失效({_gate_reason}), 重新执行", file=sys.stderr)
     # 取消传播(GLM-4.7 P0-1): 入口检查——fail-fast 后新步骤不再启动
     if cancel_event is not None and cancel_event.is_set():
         return {"id": st["id"], "tool": st["tool"], "exit_code": None,
@@ -516,6 +581,8 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             "artifact_id": _art_id,
             "output_sha256": _out_sha,
             "execution_fingerprint": st.get("_execution_fingerprint"),
+            "contract_fingerprint": st.get("_contract_fingerprint"),
+            "binding_fingerprint": st.get("_binding_fingerprint"),
             "provenance": out + ".tbtools.json" if step_ok and os.path.isfile(out + ".tbtools.json") else None,
             "log": log_path}
 

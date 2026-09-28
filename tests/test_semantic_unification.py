@@ -170,7 +170,7 @@ class TestG_ExecutionFingerprint:
              "binding": {"inputs": ["d.txt"], "parameters": {"pval_cutoff": "0.05"},
                          "output": "/tmp/o.svg"}}, "/tmp", {})
         assert ci.contract_fingerprint != ci.binding_fingerprint
-        assert len(ci.execution_fingerprint) == 16
+        assert len(ci.execution_fingerprint) == 64  # 评审 #102 P1-3: full SHA256(64 hex 内部)
         # 同绑定同 binding_fingerprint
         ci2 = compile_step_full(
             {"id": "t", "tool": "volcano",

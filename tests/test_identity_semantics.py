@@ -110,3 +110,65 @@ steps:
                              str(wf), "--workdir", str(wd), "--resume"],
                             capture_output=True, text=True, cwd=ROOT, env=env, timeout=120)
         assert "重新执行" in r2.stderr, "旧 state 无 fp 却跳过=假成功风险"
+
+
+class TestIdentityFinal:
+    """评审 #102 Test 1-5: identity 数学化收官"""
+
+    def test_T1_same_contract_binding_input_same_fp(self):
+        """Test 1: 同 contract + 同 binding + 同 input → 相同 fingerprint"""
+        from tbtools_cli.workflow import compile_step_full
+        s = {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                         "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s, "/tmp", {}), compile_step_full(s, "/tmp", {})
+        assert c1.execution_fingerprint == c2.execution_fingerprint
+
+    def test_T2_diff_input_diff_execution(self, tmp_path):
+        """Test 2: 不同 input → execution_fp 不同,contract 不变"""
+        import shutil
+
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "d2.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        p.write_text(p.read_text() + "#x\n")
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint != c2.execution_fingerprint
+        assert c1.contract_fingerprint == c2.contract_fingerprint
+
+    def test_T3_contract_change_diff_fp(self):
+        """Test 3: 契约字段变化 → execution_contract_fp 变化"""
+        from tbtools_cli.command_spec import CommandSpec, InputSpec
+        from tbtools_cli.workflow import execution_contract_fingerprint
+        sp1 = CommandSpec(name="t", group="g", kind="manual",
+                          inputs=[InputSpec("a", format="tsv")])
+        sp2 = CommandSpec(name="t", group="g", kind="manual",
+                          inputs=[InputSpec("a", format="fasta")])  # format 变
+        assert execution_contract_fingerprint(sp1) != execution_contract_fingerprint(sp2)
+
+    def test_T4_semantic_change_exec_contract_same(self):
+        """Test 4: 语义字段变化 → execution_contract 不变,semantic_fp 变"""
+        from tbtools_cli.command_spec import CommandSpec, InputSpec
+        from tbtools_cli.workflow import execution_contract_fingerprint, semantic_fingerprint
+        sp1 = CommandSpec(name="t", group="g", kind="manual",
+                          inputs=[InputSpec("a", format="tsv")], capabilities=["x"])
+        sp2 = CommandSpec(name="t", group="g", kind="manual",
+                          inputs=[InputSpec("a", format="tsv")], capabilities=["y"])
+        assert execution_contract_fingerprint(sp1) == execution_contract_fingerprint(sp2), \
+            "语义变化不应影响执行契约"
+        assert semantic_fingerprint(sp1) != semantic_fingerprint(sp2)
+
+    def test_T5_full_sha256(self):
+        """Test 5: fingerprint 内部 full 64 hex(不截断)"""
+        from tbtools_cli.workflow import compile_step_full
+        ci = compile_step_full(
+            {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                         "output": "/tmp/a.svg"}}, "/tmp", {})
+        assert len(ci.execution_fingerprint) == 64
+        assert len(ci.binding_fingerprint_full) == 64
