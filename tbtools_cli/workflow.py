@@ -29,6 +29,8 @@ def _warn_legacy_args(wf: dict):
 
 
 WORKFLOW_SCHEMA_CURRENT = "1.1"   # workflow schema: 1.0=args / 1.1=binding / 2.0=binding-only
+# ⑥ 评审 #106: fingerprint 计算规则版本(改规则即换版本→旧指纹自动失效,resume 安全)
+FP_SCHEME_VERSION = "fp1"
 # ⚠️ 命名区分(评审 #92 P1-4): 这是 **workflow schema version**,与 docs/agent-protocol.md 的
 # Agent Protocol version(调用协议)是两个独立版本线——改名/升版时勿混淆。
 
@@ -153,6 +155,26 @@ def _save_state(workdir: str, state: dict):
 
 
 
+# ⑤ 评审 #106: Execution Contract 字段——纯执行身份(不含 tool 名/语义)
+EXECUTION_CONTRACT_FIELDS = ("inputs", "outputs", "output_slots", "parameters",
+                             "layout", "named_flags")
+
+
+def canonical_execution_contract(spec) -> dict:
+    """执行契约(评审 #106 P0): 纯执行身份——inputs/outputs/output_slots/parameters/layout/named_flags。
+    不含 name(capabilities/relations/name 属 semantic identity,搜索/规划层)。"""
+    return {k: v for k, v in canonical_contract(spec).items()
+            if k in EXECUTION_CONTRACT_FIELDS}
+
+
+def canonical_semantic_identity(spec) -> dict:
+    """语义身份(评审 #106): name + capabilities + relations + dependencies——
+    搜索/规划/Agent metadata 层使用,不进执行身份。"""
+    c = canonical_contract(spec)
+    return {"name": c.get("name"), "capabilities": c.get("capabilities"),
+            "relations": c.get("relations"), "dependencies": c.get("dependencies")}
+
+
 def canonical_contract(spec) -> dict:
     """唯一契约指纹源(评审 #100 P0-2): CommandSpec → 规范化契约 dict。
 
@@ -174,6 +196,8 @@ def canonical_contract(spec) -> dict:
         "named_flags": spec.invocation.named_flags,
         "capabilities": list(spec.capabilities or []),
         "dependencies": list(spec.dependencies or []),
+        # P0-2(评审 #104): relations 进入 semantic canonical——semantic_fp 必须含它
+        "relations": dict(spec.relations or {}),
     }
 
 
@@ -187,22 +211,24 @@ CANONICAL_SEMANTIC_FIELDS = ("capabilities", "relations", "dependencies")
 
 
 def execution_contract_fingerprint(spec) -> str:
-    """执行契约指纹(评审 #102 P1-1): 仅 Execution Contract 字段——
-    契约变了 = 执行必须重来;语义变化不影响它。"""
+    """执行契约指纹(评审 #106 P0): 纯执行身份——
+    Execution Contract 字段(inputs/outputs/output_slots/parameters/layout/named_flags)
+    + tool + fp_scheme 版本。capabilities/relations/name 不进(语义层,semantic_fingerprint 承担)。"""
     import hashlib as _hc
     import json as _jc
     c = canonical_contract(spec)
-    return _hc.sha256(_jc.dumps({k: c.get(k) for k in CANONICAL_EXECUTION_FIELDS},
+    return _hc.sha256(_jc.dumps({**{k: c.get(k) for k in EXECUTION_CONTRACT_FIELDS},
+                                 "tool": c.get("name"),
+                                 "fp_scheme": FP_SCHEME_VERSION},
                                 sort_keys=True, default=str).encode()).hexdigest()
 
 
 def semantic_fingerprint(spec) -> str:
-    """语义指纹(评审 #102 P1-1): capabilities/relations/dependencies——
-    搜索/规划语义层身份,与执行身份独立。"""
+    """语义指纹(评审 #106 P0): name + capabilities + relations + dependencies——
+    搜索/规划语义层身份,与执行身份独立(评审明令: 不接 resume/execution)。"""
     import hashlib as _hc
     import json as _jc
-    c = canonical_contract(spec)
-    return _hc.sha256(_jc.dumps({k: c.get(k) for k in CANONICAL_SEMANTIC_FIELDS},
+    return _hc.sha256(_jc.dumps(canonical_semantic_identity(spec),
                                 sort_keys=True, default=str).encode()).hexdigest()
 
 
@@ -245,9 +271,22 @@ class CompiledInvocation:
         # ——raw binding 本身已含 inputs/parameters/output 的符号 refs;
         # 不混入已解析的 parameters(resolved 路径污染修复:
         # genome={input.genome} 换路径不应改变 binding identity)
+        # binding identity 归一化(评审 #104 性质⑤): 输入路径值 → 槽位占位。
+        # binding 表达"接线结构"(哪些槽位接了什么),内容身份由 input_shas 承载——
+        # 同内容换路径 → 同 fp;不同符号参数/refs → 不同 fp。
+        _norm = {}
+        for _k, _v in (symbolic_binding or {}).items():
+            if _k == "inputs":
+                if isinstance(_v, list):
+                    _norm[_k] = [f"<input:{i}>" for i in range(len(_v))]
+                elif isinstance(_v, dict):
+                    _norm[_k] = {sk: "<slot>" for sk in _v}
+                else:
+                    _norm[_k] = _v
+            else:
+                _norm[_k] = _v
         self.binding_fingerprint_full = _hc.sha256(
-            _jc.dumps(symbolic_binding or {}, sort_keys=True,
-                      default=str).encode()).hexdigest()
+            _jc.dumps(_norm, sort_keys=True, default=str).encode()).hexdigest()
         self.binding_fingerprint = self.binding_fingerprint_full[:16]
         # execution_fp(评审 #98): + 已解析输入 artifact sha + runtime 版本
         _input_shas = []
@@ -258,7 +297,7 @@ class CompiledInvocation:
                 with open(str(_ip), "rb") as _f:
                     for _c in iter(lambda: _f.read(1 << 20), b""):
                         _h.update(_c)
-                _input_shas.append(_h.hexdigest()[:16])
+                _input_shas.append(_h.hexdigest())  # P1-3(评审 #104): full 64 hex
             except OSError:
                 _input_shas.append("missing")
         try:
@@ -271,27 +310,35 @@ class CompiledInvocation:
         try:
             import shutil as _sh
             import subprocess as _sp4
-            from tbtools_cli.command_spec import KNOWN_DEPENDENCIES_STRUCT as _KDS
+            # 模块级缓存(防 flaky): 同一进程内 dep 版本只查一次——
+            # 每次 compile 都 fork 查版本会因超时/失败随机导致 execution_fp 漂移
+            global _DEP_VERSION_CACHE
+            try:
+                _DEP_VERSION_CACHE
+            except NameError:
+                _DEP_VERSION_CACHE = {}
             _dep_names = []
             if '_sp3' in dir() and _sp3:
                 _dep_names = list(_sp3.dependencies or [])
             for _dn in _dep_names:
+                if _dn in _DEP_VERSION_CACHE:
+                    _deps[_dn] = _DEP_VERSION_CACHE[_dn]
+                    continue
                 _dnorm = _dn.lower().replace("+", "").replace("-", "")
                 _bin = _sh.which(_dn) or _sh.which(_dnorm)
+                _resolved = "missing"
                 if _bin:
                     for _flag in ("--version", "-version", "-v"):
                         try:
                             _rv = _sp4.run([_bin, _flag], capture_output=True, text=True, timeout=5)
                             _ver = (_rv.stdout or _rv.stderr).strip().splitlines()
                             if _ver:
-                                _deps[_dn] = _ver[0][:40]
+                                _resolved = _ver[0][:40]
                                 break
                         except Exception:
                             continue
-                    else:
-                        _deps[_dn] = "unknown"
-                else:
-                    _deps[_dn] = "missing"
+                _deps[_dn] = _resolved
+                _DEP_VERSION_CACHE[_dn] = _resolved
         except Exception:
             pass
         # P1-3(评审 #102): full SHA256(64 hex 内部;显示层才截断)
@@ -333,11 +380,29 @@ def compile_step_full(step: dict, workdir: str, outputs: dict,
                                             output=outs[0] if outs else "")
         except ValueError as e:
             raise WorkflowError(f"WORKFLOW_COMPILE_ERROR: step {step.get('id')} 编译失败: {e}") from e
-        # P0-1(评审 #100): binding_fp 用 raw symbolic binding(替换前 refs),
-        # 不用替换后的已解析路径——否则 binding_fp 实质是 resolved fingerprint
+        # P0-1(评审 #100): binding_fp 用 raw symbolic binding(替换前 refs)
+        # + 内容寻址(评审 #104 Test⑤): binding 里的文件路径替换为内容 sha——
+        # 同内容换路径=同 execution(路径不是身份,内容才是)
+        _sym = symbolic_override or dict(binding)
+        def _content_addr(v):
+            if isinstance(v, str) and os.path.isfile(v):
+                try:
+                    import hashlib as _h4
+                    _hh = _h4.sha256()
+                    with open(v, "rb") as _f4:
+                        for _c4 in iter(lambda: _f4.read(1 << 20), b""):
+                            _hh.update(_c4)
+                    return "sha256:" + _hh.hexdigest()[:16]
+                except OSError:
+                    return v
+            if isinstance(v, list):
+                return [_content_addr(x) for x in v]
+            if isinstance(v, dict):
+                return {k: _content_addr(x) for k, x in v.items()}
+            return v
         return CompiledInvocation(argv=argv, inputs=inputs, outputs=outs,
                                   parameters=params, tool=bare,
-                                  symbolic_binding=symbolic_override or dict(binding))
+                                  symbolic_binding=_content_addr(_sym))
     argv = [_resolve(a, outputs) if isinstance(a, str) else a for a in step.get("args", [])]
     return CompiledInvocation(argv=argv, inputs=[], outputs=[], parameters={}, tool=bare)
 

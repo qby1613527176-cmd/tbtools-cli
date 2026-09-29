@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>'
+semantic_fingerprint: e4cabeffeaee1de1
 capabilities:
 - expression
 capabilities_ontology:

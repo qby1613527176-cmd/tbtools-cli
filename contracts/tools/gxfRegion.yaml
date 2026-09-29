@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]'
+semantic_fingerprint: a49290ade46240c0
 capabilities:
 - annotation
 capabilities_ontology:

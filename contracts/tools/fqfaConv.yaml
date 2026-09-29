@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: fastq
 help: 'fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第'
+semantic_fingerprint: d9173071cdf18995
 capabilities:
 - sequence
 - conversion

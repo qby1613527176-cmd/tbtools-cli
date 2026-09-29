@@ -8,6 +8,7 @@ group: seq
 help: 'seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap]
   [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key
   value 空格分隔）'
+semantic_fingerprint: e58b30bf679cc14c
 capabilities:
 - sequence
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>'
+semantic_fingerprint: 0d1237f3ea81ec5f
 capabilities:
 - assembly
 capabilities_ontology:

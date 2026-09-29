@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: seq
 help: 序列 LOGO 图
+semantic_fingerprint: 6166bd94bede7940
 capabilities:
 - sequence
 capabilities_ontology:

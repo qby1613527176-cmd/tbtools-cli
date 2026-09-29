@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfMatch: gxfMatch <in.gff3> <inGenome.fa>'
+semantic_fingerprint: 5d255728f210f318
 capabilities:
 - annotation
 capabilities_ontology:

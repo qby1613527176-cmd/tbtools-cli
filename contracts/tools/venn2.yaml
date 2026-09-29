@@ -7,6 +7,7 @@ runner: plot
 group: sets
 help: 'venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph
   <out> --prefix <out> [--bgNum N]'
+semantic_fingerprint: 11994e83d510ba02
 capabilities:
 - set_operations
 capabilities_ontology:

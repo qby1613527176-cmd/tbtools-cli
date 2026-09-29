@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q'
+semantic_fingerprint: dcab2e58ccbd3dbe
 capabilities:
 - synteny
 capabilities_ontology:

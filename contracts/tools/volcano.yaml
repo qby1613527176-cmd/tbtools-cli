@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: expr
 help: '火山图（DEG: GeneID Log2FC pvalue）'
+semantic_fingerprint: 14ad46e479a9104d
 capabilities:
 - differential_expression
 - visualization

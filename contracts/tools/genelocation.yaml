@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph'
+semantic_fingerprint: bfd6548eb18a3094
 capabilities:
 - annotation
 - visualization

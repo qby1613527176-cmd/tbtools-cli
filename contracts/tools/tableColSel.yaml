@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableColSel: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|'
+semantic_fingerprint: daae23149b2541ab
 capabilities:
 - table_operations
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中'
+semantic_fingerprint: b64e750a1cbc6b06
 capabilities:
 - sequence
 capabilities_ontology:

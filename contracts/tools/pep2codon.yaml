@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>'
+semantic_fingerprint: 1b359dc504c3cb10
 capabilities:
 - sequence
 capabilities_ontology:

@@ -10,6 +10,14 @@
 - **dependency identity contract-driven**: spec.dependencies 声明解析(不硬编码)
 - **full SHA256**: 内部 64 hex,显示层截断
 
+## [1.4.19] - 2026-09-29
+
+### identity 数学化收官(第 30 份评审)
+- **binding_fp 纯符号化**: 只吃 raw symbolic binding(resolved 路径污染修复)
+- **四层拆分**: Execution Contract / Semantic Metadata / Binding / Execution
+- **dependency identity contract-driven**: spec.dependencies 声明解析
+- **full SHA256**: 内部 64 hex,显示层截断
+
 ## [1.4.18] - 2026-09-28
 
 ### identity 数学定义干净化(第 29 份评审)

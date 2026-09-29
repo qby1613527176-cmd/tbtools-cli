@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: engine
 help: (alias of logo) 序列 LOGO 图
+semantic_fingerprint: ee628f7ad9f3adb6
 capabilities:
 - motif
 - visualization

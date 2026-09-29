@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'mast2tab: mast2tab <mast|meme.xml> <out.tab>'
+semantic_fingerprint: c74c60fbe6175b93
 capabilities:
 - sequence
 capabilities_ontology:

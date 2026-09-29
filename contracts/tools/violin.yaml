@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'violin: violin <in.tsv> <out> [width] [height]'
+semantic_fingerprint: 0eee12c825d4ad8e
 capabilities:
 - expression
 capabilities_ontology:

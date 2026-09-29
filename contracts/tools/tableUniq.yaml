@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|'
+semantic_fingerprint: e470004a0a815134
 capabilities:
 - table_operations
 capabilities_ontology:

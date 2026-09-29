@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: expr
 help: PCA 图
+semantic_fingerprint: cb7d8cb27cd64133
 capabilities:
 - dimension_reduction
 - expression_matrix

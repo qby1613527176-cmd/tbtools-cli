@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C'
+semantic_fingerprint: 668ca25ee68fa320
 capabilities:
 - annotation
 capabilities_ontology:

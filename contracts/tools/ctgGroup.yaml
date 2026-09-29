@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>'
+semantic_fingerprint: 1c58f155d771102d
 capabilities:
 - assembly
 capabilities_ontology:

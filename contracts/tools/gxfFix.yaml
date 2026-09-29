@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang'
+semantic_fingerprint: 84fab0ee5b17fb40
 capabilities:
 - annotation
 capabilities_ontology:

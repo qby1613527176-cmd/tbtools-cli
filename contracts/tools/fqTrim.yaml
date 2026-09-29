@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: fastq
 help: 'fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]'
+semantic_fingerprint: bbfb6e5b9f669568
 capabilities:
 - ngs
 - preprocessing

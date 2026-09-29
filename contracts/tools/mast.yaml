@@ -8,6 +8,7 @@ group: seq
 help: 'mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use
   N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口
   QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）'
+semantic_fingerprint: 5ce712f2105729b1
 capabilities:
 - sequence
 capabilities_ontology:

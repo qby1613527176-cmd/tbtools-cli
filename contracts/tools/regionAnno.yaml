@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-'
+semantic_fingerprint: 6c183dc6f1c8d244
 capabilities:
 - annotation
 capabilities_ontology:

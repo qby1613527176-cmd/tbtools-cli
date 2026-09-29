@@ -8,6 +8,7 @@ group: seq
 help: 'muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI
   逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python
   直调自动适配；依赖系统 muscle）'
+semantic_fingerprint: 93b70add00a10c95
 capabilities:
 - alignment
 capabilities_ontology:

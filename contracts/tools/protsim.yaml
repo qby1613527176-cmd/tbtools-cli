@@ -7,6 +7,7 @@ runner: java
 group: seq
 help: 'protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵
   TSV）'
+semantic_fingerprint: dfea32ad178eed2d
 capabilities:
 - sequence
 capabilities_ontology:

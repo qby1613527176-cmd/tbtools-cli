@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa'
+semantic_fingerprint: 3726af5083c5ff35
 capabilities:
 - synteny
 capabilities_ontology:

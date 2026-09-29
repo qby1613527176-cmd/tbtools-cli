@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>'
+semantic_fingerprint: ecf52b04c2a7f494
 capabilities:
 - expression
 capabilities_ontology:

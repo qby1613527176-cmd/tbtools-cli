@@ -7,6 +7,7 @@ runner: plot
 group: gxf
 help: 'gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   #
   GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）'
+semantic_fingerprint: 4e77431f2e548cd5
 capabilities:
 - annotation
 capabilities_ontology:

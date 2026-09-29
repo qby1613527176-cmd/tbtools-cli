@@ -8,6 +8,7 @@ group: tree
 help: 'iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate]
   [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot
   须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）'
+semantic_fingerprint: 6d8ecd58b43587b3
 capabilities:
 - phylogeny
 capabilities_ontology:

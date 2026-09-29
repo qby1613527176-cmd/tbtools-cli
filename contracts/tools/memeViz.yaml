@@ -7,6 +7,7 @@ runner: plot
 group: seq
 help: 'memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件
   P00700 CLI 化，每 motif 一面板）'
+semantic_fingerprint: e25d38cf0587b2ca
 capabilities:
 - motif
 - visualization

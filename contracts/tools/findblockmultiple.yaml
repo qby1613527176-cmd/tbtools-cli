@@ -7,6 +7,7 @@ runner: plot
 group: syn
 help: 'findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId>
   <ou'
+semantic_fingerprint: b4db67f7963df90b
 capabilities:
 - synteny
 capabilities_ontology:

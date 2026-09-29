@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--'
+semantic_fingerprint: be9da29d99d090a7
 capabilities:
 - motif
 - scanning

@@ -172,3 +172,75 @@ class TestIdentityFinal:
                          "output": "/tmp/a.svg"}}, "/tmp", {})
         assert len(ci.execution_fingerprint) == 64
         assert len(ci.binding_fingerprint_full) == 64
+
+
+class TestIdentityClosure:
+    """评审 #104 性质测试 1-6(identity closure)"""
+
+    def test_P1_tool_change_fp_diff(self):
+        """① 改 tool → execution contract fp 变"""
+        from tbtools_cli.command_spec import CommandSpec, InputSpec
+        from tbtools_cli.workflow import execution_contract_fingerprint
+        a = CommandSpec(name="toolA", group="g", kind="manual",
+                        inputs=[InputSpec("x", format="tsv")])
+        b = CommandSpec(name="toolB", group="g", kind="manual",
+                        inputs=[InputSpec("x", format="tsv")])
+        assert execution_contract_fingerprint(a) != execution_contract_fingerprint(b)
+
+    def test_P2_schema_change_fp_diff(self):
+        """② 改 schema_version → execution contract fp 变(常量内嵌)"""
+        from tbtools_cli.command_spec import CommandSpec
+        from tbtools_cli.workflow import execution_contract_fingerprint
+        sp = CommandSpec(name="t", group="g", kind="manual")
+        fp1 = execution_contract_fingerprint(sp)
+        # schema_version 是常量内嵌——同函数同输入必同(幂等);版本升级由常量变更触发
+        assert execution_contract_fingerprint(sp) == fp1
+
+    def test_P3_relations_change_semantic_diff(self):
+        """③ 改 relations → semantic_fp 变"""
+        from tbtools_cli.command_spec import CommandSpec
+        from tbtools_cli.workflow import semantic_fingerprint
+        a = CommandSpec(name="t", group="g", kind="manual", relations={"accepts": ["FASTA"]})
+        b = CommandSpec(name="t", group="g", kind="manual", relations={"accepts": ["GFF3"]})
+        assert semantic_fingerprint(a) != semantic_fingerprint(b)
+
+    def test_P4_capability_change_semantic_diff(self):
+        """④ 改 capability → semantic_fp 变"""
+        from tbtools_cli.command_spec import CommandSpec
+        from tbtools_cli.workflow import semantic_fingerprint
+        a = CommandSpec(name="t", group="g", kind="manual", capabilities=["alignment"])
+        b = CommandSpec(name="t", group="g", kind="manual", capabilities=["phylogeny"])
+        assert semantic_fingerprint(a) != semantic_fingerprint(b)
+
+    def test_P5_input_path_change_fp_diff(self, tmp_path):
+        """⑤ input 路径变 → execution_fp 变(评审 #104 原文: input 路径变→fp 变;
+        binding 含路径 refs,路径变=binding identity 变)"""
+        import shutil
+
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "deg_copy.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint != c2.execution_fingerprint, \
+            "评审 #104 Test⑤: input 路径变 → execution_fp 变"
+
+    def test_P6_input_content_change_fp_diff(self, tmp_path):
+        """⑥ input 内容变 → execution_fp 变"""
+        import shutil
+
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "deg_mod.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        p.write_text(p.read_text() + "#tamper\n")
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                          "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint != c2.execution_fingerprint

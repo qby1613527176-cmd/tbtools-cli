@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: expr
 help: 差异表达双直方图
+semantic_fingerprint: dc38626d5b3abf9e
 capabilities:
 - differential_expression
 - visualization

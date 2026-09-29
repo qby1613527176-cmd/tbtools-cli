@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'tauIndex: tauIndex <inExpTab> <outTAU>'
+semantic_fingerprint: 582f0d27a684bde9
 capabilities:
 - expression
 capabilities_ontology:

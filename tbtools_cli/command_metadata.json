@@ -7,7 +7,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor"
+  "help": "admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor",
+  "semantic_fingerprint": "72802aaef6864d7d"
  },
  "admixtureViz": {
   "name": "admixtureViz",
@@ -17,7 +18,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "admixtureViz: admixtureViz <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id samples.txt] [--group group.txt] [--sort Qraito|Lexical|None]   # ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id）"
+  "help": "admixtureViz: admixtureViz <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id samples.txt] [--group group.txt] [--sort Qraito|Lexical|None]   # ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id）",
+  "semantic_fingerprint": "5c16ece73ca1f614"
  },
  "amazingmeta": {
   "name": "amazingmeta",
@@ -28,6 +30,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [",
+  "semantic_fingerprint": "6296bc8b2ab5651f",
   "capabilities": [
    "sequence"
   ],
@@ -57,6 +60,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r",
+  "semantic_fingerprint": "f6a15369a7abb0e5",
   "capabilities": [
    "annotation"
   ],
@@ -83,6 +87,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）",
+  "semantic_fingerprint": "e4d50eb122fb3872",
   "capabilities": [
    "assembly"
   ],
@@ -110,6 +115,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "bamindex: bamindex <in.sorted.bam> [out.bai]",
+  "semantic_fingerprint": "ed2e246b70eaed17",
   "capabilities": [
    "assembly"
   ],
@@ -137,6 +143,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
+  "semantic_fingerprint": "3eaf021340c2f4d9",
   "capabilities": [
    "assembly"
   ],
@@ -164,6 +171,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]",
+  "semantic_fingerprint": "2a925645de786db7",
   "capabilities": [
    "assembly"
   ],
@@ -191,6 +199,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol",
+  "semantic_fingerprint": "ffedb6eb2a0bdbd7",
   "capabilities": [
    "expression"
   ],
@@ -242,6 +251,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
+  "semantic_fingerprint": "ecf52b04c2a7f494",
   "capabilities": [
    "expression"
   ],
@@ -295,6 +305,7 @@
   "runner": "plot",
   "group": "table",
   "help": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
+  "semantic_fingerprint": "66dae2417ed486ef",
   "capabilities": [
    "table_operations"
   ],
@@ -320,6 +331,7 @@
   "runner": "plot",
   "group": "engine",
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
+  "semantic_fingerprint": "f408f13eb3ae4581",
   "dependencies": [
    "jellyfish"
   ],
@@ -363,6 +375,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new",
+  "semantic_fingerprint": "55dc246c5b1f74e7",
   "capabilities": [
    "sequence"
   ],
@@ -392,6 +405,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
+  "semantic_fingerprint": "9742dca57b1097a9",
   "capabilities": [
    "synteny"
   ],
@@ -426,6 +440,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
+  "semantic_fingerprint": "b284199ee081c72f",
   "capabilities": [
    "visualization",
    "genome_circos"
@@ -494,6 +509,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
+  "semantic_fingerprint": "96f554e7e3c0e079",
   "capabilities": [
    "synteny",
    "visualization"
@@ -530,6 +546,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "colorscheme: colorscheme <inTab> <outTab> <refColIndex>",
+  "semantic_fingerprint": "9fde4cc288aa0402",
   "capabilities": [
    "expression"
   ],
@@ -558,6 +575,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
+  "semantic_fingerprint": "7472d4677f6789c9",
   "capabilities": [
    "synteny"
   ],
@@ -592,6 +610,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>",
+  "semantic_fingerprint": "1c58f155d771102d",
   "capabilities": [
    "assembly"
   ],
@@ -619,6 +638,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor <c> --midColor <c> --maxColor <c>]   # 3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）",
+  "semantic_fingerprint": "07908b81679d125b",
   "capabilities": [
    "expression"
   ],
@@ -648,6 +668,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "degramdom: degramdom <in.tsv> [out.nwk]",
+  "semantic_fingerprint": "85cb76e6f2ff869e",
   "capabilities": [
    "phylogeny"
   ],
@@ -676,6 +697,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi",
+  "semantic_fingerprint": "fbfd0b3814dd955b",
   "capabilities": [
    "expression"
   ],
@@ -704,6 +726,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout",
+  "semantic_fingerprint": "0717ec6260d82cf7",
   "capabilities": [
    "synteny",
    "visualization"
@@ -758,6 +781,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] ",
+  "semantic_fingerprint": "2059700e92dcb787",
   "capabilities": [
    "synteny",
    "visualization"
@@ -830,6 +854,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
+  "semantic_fingerprint": "53c102f7f83af3fa",
   "capabilities": [
    "expression",
    "visualization"
@@ -884,7 +909,8 @@
   "xmx": "4g",
   "runner": "java",
   "group": "engine",
-  "help": "eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb> [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）"
+  "help": "eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb> [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）",
+  "semantic_fingerprint": "b6fd91f6e9cb34b8"
  },
  "exprCorr": {
   "name": "exprCorr",
@@ -895,6 +921,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "exprCorr: exprCorr <inFPKM> <outCorrMat>",
+  "semantic_fingerprint": "830cf209013fa98a",
   "capabilities": [
    "expression"
   ],
@@ -923,6 +950,7 @@
   "runner": "plot",
   "group": "fastq",
   "help": "fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con",
+  "semantic_fingerprint": "077e329a4b8b134a",
   "capabilities": [
    "sequence",
    "extraction"
@@ -954,6 +982,7 @@
   "runner": "plot",
   "group": "fastq",
   "help": "fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext",
+  "semantic_fingerprint": "bf1fd0e9525a3eab",
   "capabilities": [
    "sequence",
    "extraction"
@@ -984,7 +1013,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "filesplit: filesplit <inFile> <numParts>"
+  "help": "filesplit: filesplit <inFile> <numParts>",
+  "semantic_fingerprint": "0b6a6da33d2d25d1"
  },
  "filterCScore": {
   "name": "filterCScore",
@@ -995,6 +1025,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]",
+  "semantic_fingerprint": "95bcec6568caac44",
   "capabilities": [
    "homology",
    "filtering"
@@ -1027,6 +1058,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
+  "semantic_fingerprint": "3726af5083c5ff35",
   "capabilities": [
    "synteny"
   ],
@@ -1061,6 +1093,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou",
+  "semantic_fingerprint": "b4db67f7963df90b",
   "capabilities": [
    "synteny"
   ],
@@ -1095,6 +1128,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --",
+  "semantic_fingerprint": "b80f5745be4f0ae8",
   "capabilities": [
    "phylogeny"
   ],
@@ -1123,6 +1157,7 @@
   "runner": "plot",
   "group": "fastq",
   "help": "fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]",
+  "semantic_fingerprint": "bbfb6e5b9f669568",
   "capabilities": [
    "ngs",
    "preprocessing"
@@ -1156,6 +1191,7 @@
   "runner": "plot",
   "group": "fastq",
   "help": "fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第",
+  "semantic_fingerprint": "d9173071cdf18995",
   "capabilities": [
    "sequence",
    "conversion"
@@ -1187,6 +1223,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95] [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value）",
+  "semantic_fingerprint": "19f9450581e9a630",
   "alias_of": "groupedbar",
   "capabilities": [
    "expression"
@@ -1216,6 +1253,7 @@
   "runner": "java",
   "group": "gxf",
   "help": "gdensity: gdensity <in.gff3> <out.geneRecords> <binSize> [--feature <tag>] [--chrlen <file>]   # 基因密度 bin 分析（GUI 逆向接口 GeneDensityProfiler）",
+  "semantic_fingerprint": "25f2e2cab13fd265",
   "alias_of": "genedensity",
   "capabilities": [
    "annotation"
@@ -1243,6 +1281,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
+  "semantic_fingerprint": "d18be74d2d31cb52",
   "capabilities": [
    "sequence"
   ],
@@ -1290,6 +1329,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "genedensity: genedensity <in.gff3> <out.tsv> [binSize]",
+  "semantic_fingerprint": "bc2e9e2049fff6d8",
   "capabilities": [
    "annotation"
   ],
@@ -1319,6 +1359,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph",
+  "semantic_fingerprint": "bfd6548eb18a3094",
   "capabilities": [
    "annotation",
    "visualization"
@@ -1347,6 +1388,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
+  "semantic_fingerprint": "541ac77f00942ce7",
   "capabilities": [
    "annotation"
   ],
@@ -1397,7 +1439,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "generic: generic <engineClass> <method[+method2]> <out> [--set field "
+  "help": "generic: generic <engineClass> <method[+method2]> <out> [--set field ",
+  "semantic_fingerprint": "6dbc9f444a64a2d5"
  },
  "gfa": {
   "name": "gfa",
@@ -1408,6 +1451,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "gfa: gfa <in.gfa> <out> [width] [height]",
+  "semantic_fingerprint": "3dc752d91b0fb46f",
   "capabilities": [
    "sequence"
   ],
@@ -1437,6 +1481,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast",
+  "semantic_fingerprint": "d5b8df410e01a8ea",
   "capabilities": [
    "sequence"
   ],
@@ -1466,6 +1511,7 @@
   "runner": "java",
   "group": "table",
   "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
+  "semantic_fingerprint": "390ad02a4e267512",
   "capabilities": [
    "enrichment",
    "gene_ontology"
@@ -1522,6 +1568,7 @@
   "runner": "plot",
   "group": "table",
   "help": "goParse: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103",
+  "semantic_fingerprint": "0c8d5609330fc154",
   "capabilities": [
    "table_operations"
   ],
@@ -1547,6 +1594,7 @@
   "runner": "plot",
   "group": "table",
   "help": "golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）",
+  "semantic_fingerprint": "617a024046b6c8be",
   "capabilities": [
    "table_operations"
   ],
@@ -1572,6 +1620,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|",
+  "semantic_fingerprint": "6a8ef8fe902fcb9d",
   "capabilities": [
    "expression"
   ],
@@ -1600,6 +1649,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load 崩溃——引擎缺陷）",
+  "semantic_fingerprint": "fe94dcaec94252de",
   "capabilities": [
    "expression"
   ],
@@ -1631,7 +1681,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax"
+  "help": "gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax",
+  "semantic_fingerprint": "3902479a90942f61"
  },
  "gxfAppend": {
   "name": "gxfAppend",
@@ -1642,6 +1693,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀",
+  "semantic_fingerprint": "8ce4487c2eac18c1",
   "capabilities": [
    "annotation",
    "gff_ops"
@@ -1671,6 +1723,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang",
+  "semantic_fingerprint": "84fab0ee5b17fb40",
   "capabilities": [
    "annotation"
   ],
@@ -1697,6 +1750,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfGenepos: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # G",
+  "semantic_fingerprint": "228dda83f26070ea",
   "capabilities": [
    "annotation"
   ],
@@ -1723,6 +1777,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
+  "semantic_fingerprint": "5d255728f210f318",
   "capabilities": [
    "annotation"
   ],
@@ -1749,6 +1804,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfOverlap: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand",
+  "semantic_fingerprint": "4fa7fc47caf95fcb",
   "capabilities": [
    "annotation"
   ],
@@ -1775,6 +1831,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfRecall: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，",
+  "semantic_fingerprint": "0212945d4a8c96ae",
   "capabilities": [
    "annotation"
   ],
@@ -1801,6 +1858,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]",
+  "semantic_fingerprint": "a49290ade46240c0",
   "capabilities": [
    "annotation"
   ],
@@ -1827,6 +1885,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
+  "semantic_fingerprint": "a3794e89d0218a3c",
   "capabilities": [
    "annotation"
   ],
@@ -1853,6 +1912,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfRepGXF: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID",
+  "semantic_fingerprint": "579c0d985824250b",
   "capabilities": [
    "annotation"
   ],
@@ -1879,6 +1939,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>",
+  "semantic_fingerprint": "261bb4c574ecb590",
   "capabilities": [
    "annotation"
   ],
@@ -1905,6 +1966,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C",
+  "semantic_fingerprint": "668ca25ee68fa320",
   "capabilities": [
    "annotation"
   ],
@@ -1930,7 +1992,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>"
+  "help": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>",
+  "semantic_fingerprint": "fbbcec66938b1068"
  },
  "gxfsort": {
   "name": "gxfsort",
@@ -1940,7 +2003,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>"
+  "help": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>",
+  "semantic_fingerprint": "fbe8c5b55cf2d0f8"
  },
  "hicEnzyme": {
   "name": "hicEnzyme",
@@ -1951,6 +2015,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "hicEnzyme: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）",
+  "semantic_fingerprint": "163db54e6ac5bc27",
   "capabilities": [
    "assembly"
   ],
@@ -1977,7 +2042,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "hmm",
-  "help": "hmmExtract: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAM"
+  "help": "hmmExtract: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAM",
+  "semantic_fingerprint": "74d3527ec82debc4"
  },
  "homoPhase": {
   "name": "homoPhase",
@@ -1988,6 +2054,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>",
+  "semantic_fingerprint": "0d1237f3ea81ec5f",
   "capabilities": [
    "assembly"
   ],
@@ -2015,6 +2082,7 @@
   "runner": "java",
   "group": "table",
   "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
+  "semantic_fingerprint": "b7cb5c2a82e78753",
   "capabilities": [
    "enrichment",
    "pathway"
@@ -2071,6 +2139,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
+  "semantic_fingerprint": "5c5cd8d82a10245c",
   "capabilities": [
    "expression",
    "visualization"
@@ -2126,6 +2195,7 @@
   "runner": "plot",
   "group": "table",
   "help": "levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]",
+  "semantic_fingerprint": "64efee2410c4e25f",
   "capabilities": [
    "table_operations"
   ],
@@ -2151,6 +2221,7 @@
   "runner": "java",
   "group": "seq",
   "help": "makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）",
+  "semantic_fingerprint": "256fb097f1324b0e",
   "capabilities": [
    "sequence"
   ],
@@ -2179,7 +2250,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "marker: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe"
+  "help": "marker: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe",
+  "semantic_fingerprint": "fb232631d8d264a8"
  },
  "markertools": {
   "name": "markertools",
@@ -2189,7 +2261,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi"
+  "help": "markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi",
+  "semantic_fingerprint": "5861af8281a54ce9"
  },
  "mast": {
   "name": "mast",
@@ -2200,6 +2273,7 @@
   "runner": "java",
   "group": "seq",
   "help": "mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）",
+  "semantic_fingerprint": "5ce712f2105729b1",
   "capabilities": [
    "sequence"
   ],
@@ -2229,6 +2303,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
+  "semantic_fingerprint": "c74c60fbe6175b93",
   "capabilities": [
    "sequence"
   ],
@@ -2258,6 +2333,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中",
+  "semantic_fingerprint": "b64e750a1cbc6b06",
   "capabilities": [
    "sequence"
   ],
@@ -2287,6 +2363,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--",
+  "semantic_fingerprint": "be9da29d99d090a7",
   "capabilities": [
    "motif",
    "scanning"
@@ -2339,6 +2416,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测",
+  "semantic_fingerprint": "873085bb2c14f7d4",
   "capabilities": [
    "synteny",
    "collinearity_detection"
@@ -2424,6 +2502,7 @@
   "runner": "java",
   "group": "seq",
   "help": "meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）",
+  "semantic_fingerprint": "b629fd4f63086139",
   "capabilities": [
    "sequence"
   ],
@@ -2453,6 +2532,7 @@
   "runner": "java",
   "group": "seq",
   "help": "meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）",
+  "semantic_fingerprint": "929cae926deca625",
   "capabilities": [
    "sequence"
   ],
@@ -2482,6 +2562,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
+  "semantic_fingerprint": "67cf14531ce5aa06",
   "capabilities": [
    "motif",
    "discovery"
@@ -2533,7 +2614,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked"
+  "help": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked",
+  "semantic_fingerprint": "fbfac92ded9b039b"
  },
  "microgenome": {
   "name": "microgenome",
@@ -2544,6 +2626,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]",
+  "semantic_fingerprint": "04dacc6756ac215c",
   "capabilities": [
    "synteny"
   ],
@@ -2578,6 +2661,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
+  "semantic_fingerprint": "91a75654ab879e91",
   "capabilities": [
    "synteny",
    "visualization"
@@ -2638,7 +2722,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "mirna",
-  "help": "mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> <outChecklog.txt> [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxBulge N]   # miRNA 前体鉴定（GUI 逆向 #78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）"
+  "help": "mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> <outChecklog.txt> [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxBulge N]   # miRNA 前体鉴定（GUI 逆向 #78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）",
+  "semantic_fingerprint": "316d97b879ea1115"
  },
  "mirnaTarget2": {
   "name": "mirnaTarget2",
@@ -2648,7 +2733,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "mirna",
-  "help": "mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true"
+  "help": "mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true",
+  "semantic_fingerprint": "286da21b8268adf3"
  },
  "mountain": {
   "name": "mountain",
@@ -2659,6 +2745,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "mountain: mountain <fold.txt> <out.tsv>",
+  "semantic_fingerprint": "356e75ec2fa2e380",
   "capabilities": [
    "expression"
   ],
@@ -2687,6 +2774,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）",
+  "semantic_fingerprint": "efa193ae4b42183a",
   "capabilities": [
    "sequence"
   ],
@@ -2716,6 +2804,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
+  "semantic_fingerprint": "93e3e2e21670ed67",
   "capabilities": [
    "expression",
    "visualization"
@@ -2771,6 +2860,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
+  "semantic_fingerprint": "c9b2b6e854da3981",
   "capabilities": [
    "synteny",
    "visualization"
@@ -2832,6 +2922,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA] [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   # Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）",
+  "semantic_fingerprint": "2df1026ce328a7aa",
   "capabilities": [
    "phylogeny"
   ],
@@ -2861,6 +2952,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
+  "semantic_fingerprint": "dcab2e58ccbd3dbe",
   "capabilities": [
    "synteny"
   ],
@@ -2895,6 +2987,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
+  "semantic_fingerprint": "2ff3fdba132c864a",
   "capabilities": [
    "synteny",
    "visualization"
@@ -2949,6 +3042,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
+  "semantic_fingerprint": "c79665ee5953a2c2",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3003,6 +3097,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste",
+  "semantic_fingerprint": "090a0929473f2f72",
   "capabilities": [
    "synteny"
   ],
@@ -3037,6 +3132,7 @@
   "runner": "plot",
   "group": "chipseq",
   "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
+  "semantic_fingerprint": "f8c3bc022c45e1c2",
   "capabilities": [
    "chip_seq",
    "peak_annotation"
@@ -3084,6 +3180,7 @@
   "runner": "plot",
   "group": "chipseq",
   "help": "peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]",
+  "semantic_fingerprint": "600f0e3952a3b59f",
   "capabilities": [
    "chip_seq"
   ],
@@ -3110,6 +3207,7 @@
   "runner": "plot",
   "group": "chipseq",
   "help": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
+  "semantic_fingerprint": "cf14dbd3cb8067ef",
   "capabilities": [
    "chip_seq",
    "peak_calling"
@@ -3164,6 +3262,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
+  "semantic_fingerprint": "1b359dc504c3cb10",
   "capabilities": [
    "sequence"
   ],
@@ -3221,6 +3320,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic",
+  "semantic_fingerprint": "1f6f4681d3001470",
   "capabilities": [
    "sequence"
   ],
@@ -3250,6 +3350,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
+  "semantic_fingerprint": "9ff350923d31f30a",
   "capabilities": [
    "phylogeny"
   ],
@@ -3278,6 +3379,7 @@
   "runner": "plot",
   "group": "chipseq",
   "help": "pileup: pileup <blast.xml> <out.svg> [--query NAME]",
+  "semantic_fingerprint": "05fccb3dfc72783a",
   "capabilities": [
    "chip_seq"
   ],
@@ -3304,6 +3406,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
+  "semantic_fingerprint": "dd3f05afb8548a38",
   "capabilities": [
    "sequence"
   ],
@@ -3364,6 +3467,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
+  "semantic_fingerprint": "c57aa937a5f38f79",
   "capabilities": [
    "assembly"
   ],
@@ -3416,6 +3520,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
+  "semantic_fingerprint": "2ae7e5b9513b154d",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3470,6 +3575,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)",
+  "semantic_fingerprint": "e4a11af334a8f0ac",
   "capabilities": [
    "expression"
   ],
@@ -3498,6 +3604,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
+  "semantic_fingerprint": "e4cabeffeaee1de1",
   "capabilities": [
    "expression"
   ],
@@ -3525,7 +3632,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>"
+  "help": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>",
+  "semantic_fingerprint": "d4e4064e216b252c"
  },
  "quickFamily": {
   "name": "quickFamily",
@@ -3536,6 +3644,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr",
+  "semantic_fingerprint": "38e157c4b347bff7",
   "capabilities": [
    "homology"
   ],
@@ -3565,6 +3674,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统 blastp/makeblastdb）",
+  "semantic_fingerprint": "be028cbdcc32b74b",
   "capabilities": [
    "homology",
    "reciprocal_best_hit"
@@ -3632,6 +3742,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-",
+  "semantic_fingerprint": "6c183dc6f1c8d244",
   "capabilities": [
    "annotation"
   ],
@@ -3657,7 +3768,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]"
+  "help": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]",
+  "semantic_fingerprint": "594bdd4242a99d0b"
  },
  "rnaplot": {
   "name": "rnaplot",
@@ -3668,6 +3780,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
+  "semantic_fingerprint": "87ab9762e3a68603",
   "capabilities": [
    "sequence"
   ],
@@ -3728,7 +3841,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]"
+  "help": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]",
+  "semantic_fingerprint": "9842a84de9c13bb8"
  },
  "sepChr": {
   "name": "sepChr",
@@ -3739,6 +3853,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>",
+  "semantic_fingerprint": "576fa1affc9231af",
   "capabilities": [
    "assembly"
   ],
@@ -3765,7 +3880,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>"
+  "help": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>",
+  "semantic_fingerprint": "efc997897fcfa93e"
  },
  "seqlentrack": {
   "name": "seqlentrack",
@@ -3776,6 +3892,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]",
+  "semantic_fingerprint": "13767a420bd8a4e9",
   "capabilities": [
    "sequence"
   ],
@@ -3805,6 +3922,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt",
+  "semantic_fingerprint": "86788ec713e55769",
   "capabilities": [
    "sequence"
   ],
@@ -3849,6 +3967,7 @@
   "runner": "java",
   "group": "table",
   "help": "sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx> <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）",
+  "semantic_fingerprint": "84a9957d682aea2b",
   "capabilities": [
    "table_operations"
   ],
@@ -3874,6 +3993,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "supercircos: supercircos <config.cfg> <out> [width] [height]",
+  "semantic_fingerprint": "be1bc96b206d458f",
   "capabilities": [
    "synteny"
   ],
@@ -3926,6 +4046,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableAppend: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   #",
+  "semantic_fingerprint": "17d2c0a235d57357",
   "capabilities": [
    "table_operations"
   ],
@@ -3951,6 +4072,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableCast: tableCast <inLong.txt> <outMatrix>",
+  "semantic_fingerprint": "13d9d90c24f81e1a",
   "capabilities": [
    "table_operations"
   ],
@@ -3979,6 +4101,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableColSel: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|",
+  "semantic_fingerprint": "daae23149b2541ab",
   "capabilities": [
    "table_operations"
   ],
@@ -4004,6 +4127,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]",
+  "semantic_fingerprint": "97e2e39dd62cc8b3",
   "capabilities": [
    "table_operations"
   ],
@@ -4029,6 +4153,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader ",
+  "semantic_fingerprint": "2188d400c79ca2ba",
   "capabilities": [
    "table_operations"
   ],
@@ -4054,6 +4179,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）",
+  "semantic_fingerprint": "31d26bf2cc2353c7",
   "capabilities": [
    "table_operations"
   ],
@@ -4079,6 +4205,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableMerge: tableMerge --inFileArr \"f1,f2,...\" --inColIndexArr \"0,1,...\" --outTable <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   # 按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)",
+  "semantic_fingerprint": "d2ac57c58585a968",
   "capabilities": [
    "table_operations"
   ],
@@ -4122,6 +4249,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]",
+  "semantic_fingerprint": "97b4b94c85a62728",
   "capabilities": [
    "table_operations"
   ],
@@ -4147,6 +4275,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran",
+  "semantic_fingerprint": "67dd6b75c7515e89",
   "capabilities": [
    "table_operations"
   ],
@@ -4172,6 +4301,7 @@
   "runner": "plot",
   "group": "table",
   "help": "tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|",
+  "semantic_fingerprint": "e470004a0a815134",
   "capabilities": [
    "table_operations"
   ],
@@ -4197,6 +4327,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "tauIndex: tauIndex <inExpTab> <outTAU>",
+  "semantic_fingerprint": "582f0d27a684bde9",
   "capabilities": [
    "expression"
   ],
@@ -4224,7 +4355,8 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "engine",
-  "help": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]"
+  "help": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]",
+  "semantic_fingerprint": "4704692cc2605073"
  },
  "twoSeqBlast": {
   "name": "twoSeqBlast",
@@ -4235,6 +4367,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
+  "semantic_fingerprint": "153f0359ab8afe34",
   "capabilities": [
    "homology"
   ],
@@ -4264,6 +4397,7 @@
   "runner": "plot",
   "group": "sets",
   "help": "upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
+  "semantic_fingerprint": "d1b264e79738c6df",
   "capabilities": [
    "set_operations"
   ],
@@ -4312,6 +4446,7 @@
   "runner": "plot",
   "group": "sets",
   "help": "venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]",
+  "semantic_fingerprint": "11994e83d510ba02",
   "capabilities": [
    "set_operations"
   ],
@@ -4374,6 +4509,7 @@
   "runner": "plot",
   "group": "sets",
   "help": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>",
+  "semantic_fingerprint": "21dc39b84013e68a",
   "capabilities": [
    "set_operations"
   ],
@@ -4444,6 +4580,7 @@
   "runner": "plot",
   "group": "sets",
   "help": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
+  "semantic_fingerprint": "eedac107e1455a78",
   "capabilities": [
    "set_operations"
   ],
@@ -4513,6 +4650,7 @@
   "runner": "plot",
   "group": "sets",
   "help": "venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]",
+  "semantic_fingerprint": "9d15e8260015d0a3",
   "capabilities": [
    "set_operations"
   ],
@@ -4543,6 +4681,7 @@
   "runner": "plot",
   "group": "sets",
   "help": "venn6: venn6 <out> <setA..F.txt> [labels]",
+  "semantic_fingerprint": "95c7f5447721b332",
   "capabilities": [
    "set_operations"
   ],
@@ -4573,6 +4712,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "violin: violin <in.tsv> <out> [width] [height]",
+  "semantic_fingerprint": "0eee12c825d4ad8e",
   "capabilities": [
    "expression"
   ],
@@ -4601,6 +4741,7 @@
   "runner": "plot",
   "group": "asm",
   "help": "virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引",
+  "semantic_fingerprint": "2c899af07d00b2f4",
   "capabilities": [
    "assembly"
   ],
@@ -4628,6 +4769,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
+  "semantic_fingerprint": "32d213da2a6b28f6",
   "capabilities": [
    "synteny"
   ],
@@ -4662,6 +4804,7 @@
   "runner": "java",
   "group": "tree",
   "help": "kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）",
+  "semantic_fingerprint": "37acda943624cbb5",
   "capabilities": [
    "phylogeny"
   ],
@@ -4690,6 +4833,7 @@
   "runner": "java",
   "group": "seq",
   "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
+  "semantic_fingerprint": "546b6ffdc37754f1",
   "capabilities": [
    "translation",
    "sequence"
@@ -4742,6 +4886,7 @@
   "runner": "java",
   "group": "seq",
   "help": "longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
+  "semantic_fingerprint": "b68f99ffc8b0fe0a",
   "capabilities": [
    "orf_prediction",
    "sequence"
@@ -4796,6 +4941,7 @@
   "runner": "java",
   "group": "seq",
   "help": "protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️ 联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）",
+  "semantic_fingerprint": "10f53c5f6fec17da",
   "capabilities": [
    "sequence"
   ],
@@ -4825,6 +4971,7 @@
   "runner": "java",
   "group": "seq",
   "help": "seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap] [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
+  "semantic_fingerprint": "e58b30bf679cc14c",
   "capabilities": [
    "sequence"
   ],
@@ -4854,6 +5001,7 @@
   "runner": "java",
   "group": "gxf",
   "help": "bed2gff3 <in.bed> <out.gff3> [genome.fa]   # exon BED→GFF3（GUI 逆向 #21 RegionBedToGFF3；⚠️ BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）",
+  "semantic_fingerprint": "83dd1a2d2a5eb6bd",
   "capabilities": [
    "annotation"
   ],
@@ -4880,6 +5028,7 @@
   "runner": "java",
   "group": "seq",
   "help": "careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
+  "semantic_fingerprint": "da3e0e5b780be5ab",
   "capabilities": [
    "sequence"
   ],
@@ -4909,6 +5058,7 @@
   "runner": "java",
   "group": "tree",
   "help": "subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向 #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）",
+  "semantic_fingerprint": "aace10bce6ff95e1",
   "capabilities": [
    "phylogeny"
   ],
@@ -4937,6 +5087,7 @@
   "runner": "java",
   "group": "seq",
   "help": "protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）",
+  "semantic_fingerprint": "dfea32ad178eed2d",
   "capabilities": [
    "sequence"
   ],
@@ -4966,6 +5117,7 @@
   "runner": "java",
   "group": "tree",
   "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
+  "semantic_fingerprint": "6d8ecd58b43587b3",
   "capabilities": [
    "phylogeny"
   ],
@@ -5043,6 +5195,7 @@
   "runner": "java",
   "group": "seq",
   "help": "trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）",
+  "semantic_fingerprint": "2bea2f8aae74b07c",
   "capabilities": [
    "alignment",
    "filtering"
@@ -5110,6 +5263,7 @@
   "runner": "java",
   "group": "seq",
   "help": "gblocks <in.aln.fa> <out.aln.fa> [--is 0.5] [--fs 0.85] [--cp 8] [--bl1 15] [--bl2 10] [--nongap 0.5] [--gaptreat none|half|all]   # Gblocks 保守区修剪（GUI 逆向 #30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）",
+  "semantic_fingerprint": "246acad312ca272c",
   "capabilities": [
    "sequence"
   ],
@@ -5139,6 +5293,7 @@
   "runner": "java",
   "group": "table",
   "help": "goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--inPutFileType BlastxXml|Query2GiTable] [--maxEvalue 1e-5] [--minQueryCov 0.33] [--outDir dir] [--isDoDbFormat]   # GO 注释管道（GUI 逆向 #32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️ idmappingDb 须 gzip 格式「ID; ID\\tGO:num; GO:num」；产物 outDir/<输入名>.xls）",
+  "semantic_fingerprint": "f232667c90725fcf",
   "capabilities": [
    "table_operations"
   ],
@@ -5164,6 +5319,7 @@
   "runner": "java",
   "group": "seq",
   "help": "fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）",
+  "semantic_fingerprint": "3fa550a5b46d3dbc",
   "capabilities": [
    "sequence"
   ],
@@ -5193,6 +5349,7 @@
   "runner": "java",
   "group": "seq",
   "help": "famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）",
+  "semantic_fingerprint": "c1152b3a63e594b5",
   "capabilities": [
    "sequence"
   ],
@@ -5222,6 +5379,7 @@
   "runner": "java",
   "group": "table",
   "help": "clearchar <in.txt> <out.txt>   # 文件非法字符清理（GUI 逆向 #34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）",
+  "semantic_fingerprint": "ce35c32ec9b32a15",
   "capabilities": [
    "table_operations"
   ],
@@ -5247,6 +5405,7 @@
   "runner": "java",
   "group": "seq",
   "help": "gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）",
+  "semantic_fingerprint": "a02559e1cbdcaa03",
   "capabilities": [
    "sequence"
   ],
@@ -5276,6 +5435,7 @@
   "runner": "java",
   "group": "blast",
   "help": "findhomolog --inQueryProteinSet <query.pep> --inSubjectProteinSet <subject.pep> --targetIDs <ID[,ID2]> --outDir <dir> [--threads N] [--extendClade] [--sensitive N] [--similarity 0.x] [--weightCov 0.x] [--plot] [--directGraph]   # 最优同源查找（GUI 逆向 #37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）",
+  "semantic_fingerprint": "13ea5a4960e078ac",
   "capabilities": [
    "homology"
   ],
@@ -5305,6 +5465,7 @@
   "runner": "java",
   "group": "table",
   "help": "taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）",
+  "semantic_fingerprint": "11fa2828a247cac3",
   "capabilities": [
    "table_operations"
   ],
@@ -5345,6 +5506,7 @@
   "runner": "java",
   "group": "table",
   "help": "srr2ena <srrList.txt> <out.xls>   # SRR→ENA 下载链接解析（GUI 逆向 #39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）",
+  "semantic_fingerprint": "70f20959741954e8",
   "capabilities": [
    "table_operations"
   ],
@@ -5371,6 +5533,7 @@
   "runner": "java",
   "group": "table",
   "help": "sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
+  "semantic_fingerprint": "440563d66ceb258d",
   "capabilities": [
    "table_operations"
   ],
@@ -5411,6 +5574,7 @@
   "runner": "java",
   "group": "table",
   "help": "sranum2info --sraIdList <srrList.txt> --outTabInfo <out.xls>   # SRR 批量信息表（GUI 逆向 #41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser；SRA 组 3/3 全清）",
+  "semantic_fingerprint": "a21d8ab2dfb25a60",
   "capabilities": [
    "table_operations"
   ],
@@ -5436,6 +5600,7 @@
   "runner": "java",
   "group": "blast",
   "help": "blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8] [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra \"opts\"]   # BLAT 序列比对（GUI 逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）",
+  "semantic_fingerprint": "f7658639c4c71ce5",
   "capabilities": [
    "homology"
   ],
@@ -5464,7 +5629,8 @@
   "xmx": "2g",
   "runner": "java",
   "group": "engine",
-  "help": "seqrecommend <genomeSize1n_bp> [--polyploid] [--het 0.01] [--level Minimum|Draft|Haplotyped_Resolved|Haplotyped_T2T]   # 基因组组装测序量推荐（GUI 逆向 #43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）"
+  "help": "seqrecommend <genomeSize1n_bp> [--polyploid] [--het 0.01] [--level Minimum|Draft|Haplotyped_Resolved|Haplotyped_T2T]   # 基因组组装测序量推荐（GUI 逆向 #43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）",
+  "semantic_fingerprint": "ad910d3e98e04087"
  },
  "seqfetch": {
   "name": "seqfetch",
@@ -5475,6 +5641,7 @@
   "runner": "java",
   "group": "seq",
   "help": "seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.txt> [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）",
+  "semantic_fingerprint": "d227a1161ea3a054",
   "capabilities": [
    "sequence"
   ],
@@ -5505,6 +5672,7 @@
   "runner": "java",
   "group": "table",
   "help": "pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）",
+  "semantic_fingerprint": "2a9ffbb8b4e46e04",
   "capabilities": [
    "table_operations"
   ],
@@ -5530,7 +5698,8 @@
   "xmx": "2g",
   "runner": "java",
   "group": "gwas",
-  "help": "vcfAddID: vcfAddID --inFile <vcf> --outFile <out.vcf>   # VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz）"
+  "help": "vcfAddID: vcfAddID --inFile <vcf> --outFile <out.vcf>   # VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz）",
+  "semantic_fingerprint": "4ebffe73b2954a81"
  },
  "mimicVqsr": {
   "name": "mimicVqsr",
@@ -5540,7 +5709,8 @@
   "xmx": "2g",
   "runner": "java",
   "group": "gwas",
-  "help": "mimicVqsr: mimicVqsr --inFile <vcf> --outFile <out.txt>   # VCF 质量指标（QD/MQ/FS/SOR；GWAS）"
+  "help": "mimicVqsr: mimicVqsr --inFile <vcf> --outFile <out.txt>   # VCF 质量指标（QD/MQ/FS/SOR；GWAS）",
+  "semantic_fingerprint": "d475e1699cea2288"
  },
  "DecodeIlluminaFqPool": {
   "name": "DecodeIlluminaFqPool",
@@ -5550,7 +5720,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "DecodeIlluminaFqPool: DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode Illumina Fq Pool"
+  "help": "DecodeIlluminaFqPool: DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode Illumina Fq Pool",
+  "semantic_fingerprint": "e1810695e50fbc8a"
  },
  "fastaIDAppender": {
   "name": "fastaIDAppender",
@@ -5560,7 +5731,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "fastaIDAppender: fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender"
+  "help": "fastaIDAppender: fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender",
+  "semantic_fingerprint": "fe928e5b150febce"
  },
  "rpkmCal": {
   "name": "rpkmCal",
@@ -5570,7 +5742,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "rpkmCal: rpkmCal (tool, RPKMcalculator) — R P K Mcalculator"
+  "help": "rpkmCal: rpkmCal (tool, RPKMcalculator) — R P K Mcalculator",
+  "semantic_fingerprint": "f39007fa473e1af5"
  },
  "fpkmToTpm": {
   "name": "fpkmToTpm",
@@ -5580,7 +5753,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "fpkmToTpm: fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M"
+  "help": "fpkmToTpm: fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M",
+  "semantic_fingerprint": "b7ecb9e6ff528e05"
  },
  "tpmCalc": {
   "name": "tpmCalc",
@@ -5591,6 +5765,7 @@
   "runner": "java",
   "group": "tool",
   "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
+  "semantic_fingerprint": "f4829d21e6ee7c70",
   "capabilities": [
    "rna_seq",
    "normalization"
@@ -5655,6 +5830,7 @@
   "runner": "java",
   "group": "tool",
   "help": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb",
+  "semantic_fingerprint": "44adf32e858503d3",
   "inputs": [
    {
     "name": "fasta",
@@ -5689,7 +5865,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "autoRemoteBlast: autoRemoteBlast (tool, remoteblast) — remoteblast"
+  "help": "autoRemoteBlast: autoRemoteBlast (tool, remoteblast) — remoteblast",
+  "semantic_fingerprint": "5ac70c62c830a14c"
  },
  "GoCompareBar": {
   "name": "GoCompareBar",
@@ -5699,7 +5876,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "GoCompareBar: GoCompareBar (tool, GoCompare) — Go Compare"
+  "help": "GoCompareBar: GoCompareBar (tool, GoCompare) — Go Compare",
+  "semantic_fingerprint": "b36eb65dfd09a3f7"
  },
  "plotRNAfoldloci": {
   "name": "plotRNAfoldloci",
@@ -5709,7 +5887,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "plotRNAfoldloci: plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold"
+  "help": "plotRNAfoldloci: plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold",
+  "semantic_fingerprint": "076c9c43bd68827c"
  },
  "getLongestCompleteORF": {
   "name": "getLongestCompleteORF",
@@ -5720,6 +5899,7 @@
   "runner": "java",
   "group": "tool",
   "help": "getLongestCompleteORF: getLongestCompleteORF (tool, ORF) — O R F",
+  "semantic_fingerprint": "d740418a6691a6c0",
   "alias_of": "longestorf"
  },
  "ExtractFeaturefromGFF3andGenome": {
@@ -5730,7 +5910,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "ExtractFeaturefromGFF3andGenome: ExtractFeaturefromGFF3andGenome (tool, ExtractFeaturefromGFF3andGenome) — Extract Featurefrom G F F3and Genome"
+  "help": "ExtractFeaturefromGFF3andGenome: ExtractFeaturefromGFF3andGenome (tool, ExtractFeaturefromGFF3andGenome) — Extract Featurefrom G F F3and Genome",
+  "semantic_fingerprint": "90dd271331d1826f"
  },
  "Fasta36m10toTable": {
   "name": "Fasta36m10toTable",
@@ -5740,7 +5921,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "Fasta36m10toTable: Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to Table"
+  "help": "Fasta36m10toTable: Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to Table",
+  "semantic_fingerprint": "da03aa05578e504f"
  },
  "FastaIDRenamer": {
   "name": "FastaIDRenamer",
@@ -5750,7 +5932,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "FastaIDRenamer: FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer"
+  "help": "FastaIDRenamer: FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer",
+  "semantic_fingerprint": "99982eb42db624fb"
  },
  "FastaIDSimplifier": {
   "name": "FastaIDSimplifier",
@@ -5760,7 +5943,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "FastaIDSimplifier: FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D Simplifier"
+  "help": "FastaIDSimplifier: FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D Simplifier",
+  "semantic_fingerprint": "9366211ed70eec6a"
  },
  "FastaLongestRepresentater": {
   "name": "FastaLongestRepresentater",
@@ -5770,7 +5954,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "FastaLongestRepresentater: FastaLongestRepresentater (tool, FastaLongestRepresentater) — Fasta Longest Representater"
+  "help": "FastaLongestRepresentater: FastaLongestRepresentater (tool, FastaLongestRepresentater) — Fasta Longest Representater",
+  "semantic_fingerprint": "b3979d128daa0c0b"
  },
  "FoldStructureStater": {
   "name": "FoldStructureStater",
@@ -5780,7 +5965,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "FoldStructureStater: FoldStructureStater (tool, FoldStructureStater) — Fold Structure Stater"
+  "help": "FoldStructureStater: FoldStructureStater (tool, FoldStructureStater) — Fold Structure Stater",
+  "semantic_fingerprint": "f0af9ee6369f056a"
  },
  "GXFOverlaper": {
   "name": "GXFOverlaper",
@@ -5790,7 +5976,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "GXFOverlaper: GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper"
+  "help": "GXFOverlaper: GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper",
+  "semantic_fingerprint": "6cfc21e4784b0b99"
  },
  "NCBITaxonomy": {
   "name": "NCBITaxonomy",
@@ -5800,7 +5987,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "NCBITaxonomy: NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy"
+  "help": "NCBITaxonomy: NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy",
+  "semantic_fingerprint": "60b5401d6eea6be7"
  },
  "OneStepMirGraph": {
   "name": "OneStepMirGraph",
@@ -5810,7 +5998,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "OneStepMirGraph: OneStepMirGraph (tool, OneStepMirGraph) — One Step Mir Graph"
+  "help": "OneStepMirGraph: OneStepMirGraph (tool, OneStepMirGraph) — One Step Mir Graph",
+  "semantic_fingerprint": "eb25679a0c1efcf8"
  },
  "OverlapGeneModels": {
   "name": "OverlapGeneModels",
@@ -5820,7 +6009,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "OverlapGeneModels: OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene Models"
+  "help": "OverlapGeneModels: OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene Models",
+  "semantic_fingerprint": "1fc024a1c4b1e482"
  },
  "PredictMirSTAR": {
   "name": "PredictMirSTAR",
@@ -5830,7 +6020,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "PredictMirSTAR: PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R"
+  "help": "PredictMirSTAR: PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R",
+  "semantic_fingerprint": "e03c321474e8bbbb"
  },
  "RNAplotAdvance": {
   "name": "RNAplotAdvance",
@@ -5840,7 +6031,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "RNAplotAdvance: RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance"
+  "help": "RNAplotAdvance: RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance",
+  "semantic_fingerprint": "90bd7319bd6f576c"
  },
  "MIRPrediionResultStat": {
   "name": "MIRPrediionResultStat",
@@ -5850,7 +6042,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "MIRPrediionResultStat: MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R Prediion Result Stat"
+  "help": "MIRPrediionResultStat: MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R Prediion Result Stat",
+  "semantic_fingerprint": "bc3d23ffda9f3f51"
  },
  "ReciprocalBlast": {
   "name": "ReciprocalBlast",
@@ -5860,7 +6053,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "ReciprocalBlast: ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast"
+  "help": "ReciprocalBlast: ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast",
+  "semantic_fingerprint": "c82d253fd32301bb"
  },
  "RegionGXFOverlapAnnotation": {
   "name": "RegionGXFOverlapAnnotation",
@@ -5870,7 +6064,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "RegionGXFOverlapAnnotation: RegionGXFOverlapAnnotation (tool, RegionGXFOverlapAnnotation) — Region G X F Overlap Annotation"
+  "help": "RegionGXFOverlapAnnotation: RegionGXFOverlapAnnotation (tool, RegionGXFOverlapAnnotation) — Region G X F Overlap Annotation",
+  "semantic_fingerprint": "cd9e4b460c127a9d"
  },
  "TableCast": {
   "name": "TableCast",
@@ -5881,6 +6076,7 @@
   "runner": "java",
   "group": "tool",
   "help": "TableCast: TableCast (tool, TableCast) — Table Cast",
+  "semantic_fingerprint": "a24b17a93760c1e4",
   "alias_of": "tableCast"
  },
  "TableColSelector": {
@@ -5891,7 +6087,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "TableColSelector: TableColSelector (tool, TableColSelector) — Table Col Selector"
+  "help": "TableColSelector: TableColSelector (tool, TableColSelector) — Table Col Selector",
+  "semantic_fingerprint": "ff0647862c906e6d"
  },
  "TableMelt": {
   "name": "TableMelt",
@@ -5901,7 +6098,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "TableMelt: TableMelt (tool, TableMelt) — Table Melt"
+  "help": "TableMelt: TableMelt (tool, TableMelt) — Table Melt",
+  "semantic_fingerprint": "c0ce11883d478319"
  },
  "downLoadNCBIFasta": {
   "name": "downLoadNCBIFasta",
@@ -5911,7 +6109,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "downLoadNCBIFasta: downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C B I Fasta"
+  "help": "downLoadNCBIFasta: downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C B I Fasta",
+  "semantic_fingerprint": "09c6dad4873e674d"
  },
  "extractFasta": {
   "name": "extractFasta",
@@ -5921,7 +6120,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta"
+  "help": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
+  "semantic_fingerprint": "9aef2fcea89b3ad9"
  },
  "extractFastaSub": {
   "name": "extractFastaSub",
@@ -5931,7 +6131,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "extractFastaSub: extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta Subseq"
+  "help": "extractFastaSub: extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta Subseq",
+  "semantic_fingerprint": "88c4123f6a296842"
  },
  "keggEnrichment": {
   "name": "keggEnrichment",
@@ -5941,7 +6142,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "keggEnrichment: keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment"
+  "help": "keggEnrichment: keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment",
+  "semantic_fingerprint": "ba94cf5563c2779c"
  },
  "goAnnoPipe": {
   "name": "goAnnoPipe",
@@ -5951,7 +6153,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "goAnnoPipe: goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe"
+  "help": "goAnnoPipe: goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe",
+  "semantic_fingerprint": "e7068dd795389aee"
  },
  "dnDsCalculate": {
   "name": "dnDsCalculate",
@@ -5961,7 +6164,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate"
+  "help": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
+  "semantic_fingerprint": "eb21a633f2a1de62"
  },
  "ssrMiner": {
   "name": "ssrMiner",
@@ -5971,7 +6175,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "ssrMiner: ssrMiner (tool, SSRminer) — S S Rminer"
+  "help": "ssrMiner: ssrMiner (tool, SSRminer) — S S Rminer",
+  "semantic_fingerprint": "85966aa2c38610f4"
  },
  "checkPrimer": {
   "name": "checkPrimer",
@@ -5981,7 +6186,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "checkPrimer: checkPrimer (tool, CheckPrimer) — Check Primer"
+  "help": "checkPrimer: checkPrimer (tool, CheckPrimer) — Check Primer",
+  "semantic_fingerprint": "989da609819d2237"
  },
  "quickLocateSeqPattern": {
   "name": "quickLocateSeqPattern",
@@ -5991,7 +6197,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "quickLocateSeqPattern: quickLocateSeqPattern (tool, QuickLocateSeqPattern) — Quick Locate Seq Pattern"
+  "help": "quickLocateSeqPattern: quickLocateSeqPattern (tool, QuickLocateSeqPattern) — Quick Locate Seq Pattern",
+  "semantic_fingerprint": "86b9a27bf28b112c"
  },
  "blastXmlSummaryTable": {
   "name": "blastXmlSummaryTable",
@@ -6001,7 +6208,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "blastXmlSummaryTable: blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X M L Summary Table"
+  "help": "blastXmlSummaryTable: blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X M L Summary Table",
+  "semantic_fingerprint": "ec6d6f48e5af47c9"
  },
  "emblToFasta": {
   "name": "emblToFasta",
@@ -6011,7 +6219,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "emblToFasta: emblToFasta (tool, emblToFasta) — embl To Fasta"
+  "help": "emblToFasta: emblToFasta (tool, emblToFasta) — embl To Fasta",
+  "semantic_fingerprint": "fd832fbaf66b7c34"
  },
  "gbff2gff": {
   "name": "gbff2gff",
@@ -6021,7 +6230,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "gbff2gff: gbff2gff (tool, gbff2gff) — gbff2gff"
+  "help": "gbff2gff: gbff2gff (tool, gbff2gff) — gbff2gff",
+  "semantic_fingerprint": "5c4ee0c202bf45d8"
  },
  "extractGff3Region": {
   "name": "extractGff3Region",
@@ -6031,7 +6241,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "extractGff3Region: extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 Region"
+  "help": "extractGff3Region: extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 Region",
+  "semantic_fingerprint": "a86b0d1c82be367f"
  },
  "vcfBinCount": {
   "name": "vcfBinCount",
@@ -6041,7 +6252,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "vcfBinCount: vcfBinCount (tool, VCFBINCount) — V C F B I N Count"
+  "help": "vcfBinCount: vcfBinCount (tool, VCFBINCount) — V C F B I N Count",
+  "semantic_fingerprint": "3392af1cf7191b98"
  },
  "getLongestORF": {
   "name": "getLongestORF",
@@ -6051,7 +6263,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "getLongestORF: getLongestORF (tool, GetLongestORF) — Get Longest O R F"
+  "help": "getLongestORF: getLongestORF (tool, GetLongestORF) — Get Longest O R F",
+  "semantic_fingerprint": "e00a1a61993f57f6"
  },
  "translater": {
   "name": "translater",
@@ -6061,7 +6274,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "translater: translater (tool, Translater) — Translater"
+  "help": "translater: translater (tool, Translater) — Translater",
+  "semantic_fingerprint": "17adff1cfd495882"
  },
  "makeFastaIndex": {
   "name": "makeFastaIndex",
@@ -6071,7 +6285,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "makeFastaIndex: makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index"
+  "help": "makeFastaIndex: makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index",
+  "semantic_fingerprint": "767fcefe2ab14a8f"
  },
  "quickSplitFasta": {
   "name": "quickSplitFasta",
@@ -6081,7 +6296,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "quickSplitFasta: quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta"
+  "help": "quickSplitFasta: quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta",
+  "semantic_fingerprint": "47ea447b4b67dc2c"
  },
  "fastaFragmenter": {
   "name": "fastaFragmenter",
@@ -6091,7 +6307,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "fastaFragmenter: fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter"
+  "help": "fastaFragmenter: fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter",
+  "semantic_fingerprint": "18ff363572466d59"
  },
  "eggNogMapperResult": {
   "name": "eggNogMapperResult",
@@ -6101,7 +6318,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "eggNogMapperResult: eggNogMapperResult (tool, eggNogMapperResult) — egg Nog Mapper Result"
+  "help": "eggNogMapperResult: eggNogMapperResult (tool, eggNogMapperResult) — egg Nog Mapper Result",
+  "semantic_fingerprint": "ae69dbcfe0e68ae9"
  },
  "tandemDupFinder": {
   "name": "tandemDupFinder",
@@ -6111,7 +6329,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "tandemDupFinder: tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder"
+  "help": "tandemDupFinder: tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder",
+  "semantic_fingerprint": "a8c76550f6307011"
  },
  "genePairExpCorr": {
   "name": "genePairExpCorr",
@@ -6121,7 +6340,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "genePairExpCorr: genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr"
+  "help": "genePairExpCorr: genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr",
+  "semantic_fingerprint": "740dad3593fdd094"
  },
  "slurmScriptPrepare": {
   "name": "slurmScriptPrepare",
@@ -6131,7 +6351,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "slurmScriptPrepare: slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script Prepare"
+  "help": "slurmScriptPrepare: slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script Prepare",
+  "semantic_fingerprint": "de762ddeef55208c"
  },
  "geneExpFilter": {
   "name": "geneExpFilter",
@@ -6141,7 +6362,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "geneExpFilter: geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter"
+  "help": "geneExpFilter: geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter",
+  "semantic_fingerprint": "97ddf1eaf101393b"
  },
  "prepareFileFromMCScanXtoTBtools": {
   "name": "prepareFileFromMCScanXtoTBtools",
@@ -6151,7 +6373,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "prepareFileFromMCScanXtoTBtools: prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScanXtoTBtools) — Prepare File From M C Scan Xto T Btools"
+  "help": "prepareFileFromMCScanXtoTBtools: prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScanXtoTBtools) — Prepare File From M C Scan Xto T Btools",
+  "semantic_fingerprint": "06945b64aa4bc346"
  },
  "blastXmlToTable": {
   "name": "blastXmlToTable",
@@ -6161,7 +6384,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "blastXmlToTable: blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast Xml To Self Defined Table"
+  "help": "blastXmlToTable: blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast Xml To Self Defined Table",
+  "semantic_fingerprint": "6ad2e77e064fe4b0"
  },
  "targetSoPipe": {
   "name": "targetSoPipe",
@@ -6171,7 +6395,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "targetSoPipe: targetSoPipe (tool, TargetSoPipe) — Target So Pipe"
+  "help": "targetSoPipe: targetSoPipe (tool, TargetSoPipe) — Target So Pipe",
+  "semantic_fingerprint": "16a94ca00c609e2b"
  },
  "target2TablePipe": {
   "name": "target2TablePipe",
@@ -6181,7 +6406,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "target2TablePipe: target2TablePipe (tool, Target2TablePipe) — Target2 Table Pipe"
+  "help": "target2TablePipe: target2TablePipe (tool, Target2TablePipe) — Target2 Table Pipe",
+  "semantic_fingerprint": "6f23f1857ba68514"
  },
  "mirIdentifierBasedOnTargetSo": {
   "name": "mirIdentifierBasedOnTargetSo",
@@ -6191,7 +6417,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "mirIdentifierBasedOnTargetSo: mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTargetSoResult) — M I Ridentifier Based On Target So Result"
+  "help": "mirIdentifierBasedOnTargetSo: mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTargetSoResult) — M I Ridentifier Based On Target So Result",
+  "semantic_fingerprint": "c957853682f11cb7"
  },
  "regionBlast": {
   "name": "regionBlast",
@@ -6201,7 +6428,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "regionBlast: regionBlast (tool, regionBlast) — region Blast"
+  "help": "regionBlast: regionBlast (tool, regionBlast) — region Blast",
+  "semantic_fingerprint": "8354d0c15a2fb5a5"
  },
  "findBestHomologyBatch": {
   "name": "findBestHomologyBatch",
@@ -6211,7 +6439,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "findBestHomologyBatch: findBestHomologyBatch (tool, FindBestHomologyBatch) — Find Best Homology Batch"
+  "help": "findBestHomologyBatch: findBestHomologyBatch (tool, FindBestHomologyBatch) — Find Best Homology Batch",
+  "semantic_fingerprint": "11a004bb0f7bbf9c"
  },
  "collinearityToRegion": {
   "name": "collinearityToRegion",
@@ -6221,7 +6450,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "collinearityToRegion: collinearityToRegion (tool, CollinearityToRegion) — Collinearity To Region"
+  "help": "collinearityToRegion: collinearityToRegion (tool, CollinearityToRegion) — Collinearity To Region",
+  "semantic_fingerprint": "632aa5428a826949"
  },
  "pairWiseKaKsCalculator": {
   "name": "pairWiseKaKsCalculator",
@@ -6231,7 +6461,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "pairWiseKaKsCalculator: pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair Wise Ka Ks Calculator"
+  "help": "pairWiseKaKsCalculator: pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair Wise Ka Ks Calculator",
+  "semantic_fingerprint": "ccd1837376ce622b"
  },
  "simpleBatchProcess": {
   "name": "simpleBatchProcess",
@@ -6241,7 +6472,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "simpleBatchProcess: simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch Process"
+  "help": "simpleBatchProcess: simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch Process",
+  "semantic_fingerprint": "9f15b22d902b7fcf"
  },
  "quickGeneFamilyIdentification": {
   "name": "quickGeneFamilyIdentification",
@@ -6251,7 +6483,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "quickGeneFamilyIdentification: quickGeneFamilyIdentification (tool, QuickGeneFamilyIdentification) — Quick Gene Family Identification"
+  "help": "quickGeneFamilyIdentification: quickGeneFamilyIdentification (tool, QuickGeneFamilyIdentification) — Quick Gene Family Identification",
+  "semantic_fingerprint": "f14a2894f5fa146e"
  },
  "gffCdsPhaseCorrector": {
   "name": "gffCdsPhaseCorrector",
@@ -6261,7 +6494,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector (tool, GffCdsPhaseCorrector) — Gff Cds Phase Corrector"
+  "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector (tool, GffCdsPhaseCorrector) — Gff Cds Phase Corrector",
+  "semantic_fingerprint": "250060bf1b3a922d"
  },
  "parallelMD5Check": {
   "name": "parallelMD5Check",
@@ -6271,7 +6505,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "parallelMD5Check: parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5 Check"
+  "help": "parallelMD5Check: parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5 Check",
+  "semantic_fingerprint": "b34aa1f06e3d4497"
  },
  "pafRefBaseCoverCalc": {
   "name": "pafRefBaseCoverCalc",
@@ -6281,7 +6516,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "pafRefBaseCoverCalc: pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Base Cover Calc"
+  "help": "pafRefBaseCoverCalc: pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Base Cover Calc",
+  "semantic_fingerprint": "0a9ad37ec36594e8"
  },
  "sRNAseqReadLenStat": {
   "name": "sRNAseqReadLenStat",
@@ -6291,7 +6527,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "sRNAseqReadLenStat: sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq Read Len Stat"
+  "help": "sRNAseqReadLenStat: sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq Read Len Stat",
+  "semantic_fingerprint": "9576b1bb5f4351bf"
  },
  "sRNAReadTrimmer": {
   "name": "sRNAReadTrimmer",
@@ -6301,7 +6538,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "sRNAReadTrimmer: sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read Trimmer"
+  "help": "sRNAReadTrimmer: sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read Trimmer",
+  "semantic_fingerprint": "02c4ce79517811f3"
  },
  "sRNAseqAdaperRemover": {
   "name": "sRNAseqAdaperRemover",
@@ -6311,7 +6549,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "sRNAseqAdaperRemover: sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N Aseq Adaper Remover"
+  "help": "sRNAseqAdaperRemover: sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N Aseq Adaper Remover",
+  "semantic_fingerprint": "15d184b680cc335f"
  },
  "fastqParallelTrimmer": {
   "name": "fastqParallelTrimmer",
@@ -6321,7 +6560,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "fastqParallelTrimmer: fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Parallel Trimmer"
+  "help": "fastqParallelTrimmer: fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Parallel Trimmer",
+  "semantic_fingerprint": "50d2243045b26489"
  },
  "fastqParallelSubBest": {
   "name": "fastqParallelSubBest",
@@ -6331,7 +6571,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "fastqParallelSubBest: fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq Parallel Sub Best"
+  "help": "fastqParallelSubBest: fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq Parallel Sub Best",
+  "semantic_fingerprint": "737d38ad97c76db1"
  },
  "fastqAndFasta": {
   "name": "fastqAndFasta",
@@ -6341,7 +6582,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "fastqAndFasta: fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta"
+  "help": "fastqAndFasta: fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta",
+  "semantic_fingerprint": "4978c0cca86b67e9"
  },
  "extractFeatureFromGTF": {
   "name": "extractFeatureFromGTF",
@@ -6351,7 +6593,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "extractFeatureFromGTF: extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome) — Extract Featurefrom G T Fand Genome"
+  "help": "extractFeatureFromGTF: extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome) — Extract Featurefrom G T Fand Genome",
+  "semantic_fingerprint": "91ce14a213d458e5"
  },
  "sRNAseqCollasper": {
   "name": "sRNAseqCollasper",
@@ -6361,7 +6604,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "sRNAseqCollasper: sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq Collasper"
+  "help": "sRNAseqCollasper: sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq Collasper",
+  "semantic_fingerprint": "01ad8d3f8e155414"
  },
  "generateMotifFromSequences": {
   "name": "generateMotifFromSequences",
@@ -6371,7 +6615,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "generateMotifFromSequences: generateMotifFromSequences (tool, GenerateMotifFromSequences) — Generate Motif From Sequences"
+  "help": "generateMotifFromSequences: generateMotifFromSequences (tool, GenerateMotifFromSequences) — Generate Motif From Sequences",
+  "semantic_fingerprint": "f5a26c753d1dccf4"
  },
  "sRNAseqDeCollasper": {
   "name": "sRNAseqDeCollasper",
@@ -6381,7 +6626,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "sRNAseqDeCollasper: sRNAseqDeCollasper (tool, sRNAseqDeCollasper) — s R N Aseq De Collasper"
+  "help": "sRNAseqDeCollasper: sRNAseqDeCollasper (tool, sRNAseqDeCollasper) — s R N Aseq De Collasper",
+  "semantic_fingerprint": "f744a9799aa12f07"
  },
  "findBestForkerRootTree": {
   "name": "findBestForkerRootTree",
@@ -6391,7 +6637,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "findBestForkerRootTree: findBestForkerRootTree (tool, FindBestForkerRootTree) — Find Best Forker Root Tree"
+  "help": "findBestForkerRootTree: findBestForkerRootTree (tool, FindBestForkerRootTree) — Find Best Forker Root Tree",
+  "semantic_fingerprint": "58e99e6ccb1203bd"
  },
  "statFasta": {
   "name": "statFasta",
@@ -6401,7 +6648,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta"
+  "help": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
+  "semantic_fingerprint": "2057fab13e80a29a"
  },
  "goEnrichMerge": {
   "name": "goEnrichMerge",
@@ -6411,7 +6659,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "goEnrichMerge: goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichment Merge Bubble"
+  "help": "goEnrichMerge: goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichment Merge Bubble",
+  "semantic_fingerprint": "f5f21f73000b6e70"
  },
  "bigMarkerRandomDesign": {
   "name": "bigMarkerRandomDesign",
@@ -6421,7 +6670,8 @@
   "xmx": "3g",
   "runner": "java",
   "group": "tool",
-  "help": "bigMarkerRandomDesign: bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big Marker Random Design"
+  "help": "bigMarkerRandomDesign: bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big Marker Random Design",
+  "semantic_fingerprint": "3c5458a929f3db73"
  },
  "logo": {
   "name": "logo",
@@ -6432,6 +6682,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "序列 LOGO 图",
+  "semantic_fingerprint": "6166bd94bede7940",
   "capabilities": [
    "sequence"
   ],
@@ -6461,6 +6712,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "多序列比对可视化",
+  "semantic_fingerprint": "fd3d683a25b643d1",
   "capabilities": [
    "alignment",
    "visualization"
@@ -6494,6 +6746,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "基因结构图（外显子/UTR 从 GFF）",
+  "semantic_fingerprint": "fee8a467a05db715",
   "capabilities": [
    "sequence"
   ],
@@ -6526,6 +6779,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "Motif 分布图（MEME XML）",
+  "semantic_fingerprint": "1c8b742c1898d46e",
   "capabilities": [
    "motif",
    "visualization"
@@ -6584,6 +6838,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "火山图（DEG: GeneID Log2FC pvalue）",
+  "semantic_fingerprint": "14ad46e479a9104d",
   "capabilities": [
    "differential_expression",
    "visualization"
@@ -6677,6 +6932,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "热图（表达矩阵）",
+  "semantic_fingerprint": "6b359528864de66c",
   "capabilities": [
    "expression_matrix",
    "clustering",
@@ -6766,6 +7022,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "PCA 图",
+  "semantic_fingerprint": "cb7d8cb27cd64133",
   "capabilities": [
    "dimension_reduction",
    "expression_matrix"
@@ -6816,6 +7073,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
+  "semantic_fingerprint": "54bd9c88444c5b18",
   "capabilities": [
    "clustering",
    "distance"
@@ -6895,6 +7153,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "差异表达双直方图",
+  "semantic_fingerprint": "dc38626d5b3abf9e",
   "capabilities": [
    "differential_expression",
    "visualization"
@@ -6966,6 +7225,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "树+注释图（TreeTreeTree 多轨道）",
+  "semantic_fingerprint": "d483f0b0a822d008",
   "capabilities": [
    "phylogeny"
   ],
@@ -6997,6 +7257,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "无根树可视化",
+  "semantic_fingerprint": "12443a183fcf7de8",
   "capabilities": [
    "phylogeny"
   ],
@@ -7025,6 +7286,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "MAD 系统发育定根",
+  "semantic_fingerprint": "3f11f3d70b26fa03",
   "capabilities": [
    "phylogeny"
   ],
@@ -7055,7 +7317,8 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "tool",
-  "help": "CDS → 蛋白质翻译"
+  "help": "CDS → 蛋白质翻译",
+  "semantic_fingerprint": "c757b07cd3beca9d"
  },
  "make": {
   "name": "make",
@@ -7065,7 +7328,8 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "engine",
-  "help": "工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）"
+  "help": "工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）",
+  "semantic_fingerprint": "5e22a14a5cb35825"
  },
  "hmmsearch": {
   "name": "hmmsearch",
@@ -7076,6 +7340,7 @@
   "runner": "plot",
   "group": "hmm",
   "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
+  "semantic_fingerprint": "ce199b6d4abf8dfe",
   "capabilities": [
    "homology",
    "hmm_scan"
@@ -7112,6 +7377,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
+  "semantic_fingerprint": "4e77431f2e548cd5",
   "capabilities": [
    "annotation"
   ],
@@ -7156,6 +7422,7 @@
   "runner": "plot",
   "group": "expr",
   "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 ",
+  "semantic_fingerprint": "ea7dcd17acb48263",
   "capabilities": [
    "rna_seq",
    "quantification"
@@ -7220,6 +7487,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）",
+  "semantic_fingerprint": "bf172c8f67d35182",
   "capabilities": [
    "motif",
    "scanning"
@@ -7254,6 +7522,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向 #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）",
+  "semantic_fingerprint": "cf820e87f27d58ef",
   "capabilities": [
    "homology"
   ],
@@ -7283,6 +7552,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI 逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
+  "semantic_fingerprint": "be0ca99e05e77099",
   "capabilities": [
    "homology"
   ],
@@ -7312,6 +7582,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
+  "semantic_fingerprint": "a5a9475da11c1d7d",
   "capabilities": [
    "sequence"
   ],
@@ -7341,6 +7612,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）",
+  "semantic_fingerprint": "4a590ed097a16371",
   "capabilities": [
    "sequence"
   ],
@@ -7370,6 +7642,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
+  "semantic_fingerprint": "93b70add00a10c95",
   "capabilities": [
    "alignment"
   ],
@@ -7434,6 +7707,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix> [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
+  "semantic_fingerprint": "873ac7c24a5df7a1",
   "capabilities": [
    "homology"
   ],
@@ -7463,6 +7737,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST 库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，",
+  "semantic_fingerprint": "507e303fe85824b9",
   "capabilities": [
    "homology"
   ],
@@ -7492,6 +7767,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
+  "semantic_fingerprint": "5e4d6fcdd7675c32",
   "capabilities": [
    "sequence"
   ],
@@ -7521,6 +7797,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
+  "semantic_fingerprint": "70098a6ad211c7f3",
   "capabilities": [
    "phylogeny",
    "reconciliation"
@@ -7577,6 +7854,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
+  "semantic_fingerprint": "c06c470c8dac7a91",
   "capabilities": [
    "phylogeny",
    "tree_editing"
@@ -7626,6 +7904,7 @@
   "runner": "plot",
   "group": "hmm",
   "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
+  "semantic_fingerprint": "66a1cfca52b5d91a",
   "inputs": [
    {
     "name": "hmm",
@@ -7661,6 +7940,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
+  "semantic_fingerprint": "e25d38cf0587b2ca",
   "capabilities": [
    "motif",
    "visualization"
@@ -7712,6 +7992,7 @@
   "runner": "plot",
   "group": "table",
   "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
+  "semantic_fingerprint": "12219a129428e8a9",
   "capabilities": [
    "enrichment"
   ],
@@ -7766,6 +8047,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
+  "semantic_fingerprint": "b12615a4699afc90",
   "capabilities": [
    "motif",
    "genome_scan"
@@ -7818,6 +8100,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
+  "semantic_fingerprint": "4d43a05a47c418f3",
   "capabilities": [
    "synteny"
   ],
@@ -7891,6 +8174,7 @@
   "runner": "plot",
   "group": "blast",
   "help": "quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   # diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）",
+  "semantic_fingerprint": "b44f314a06f989d2",
   "capabilities": [
    "homology"
   ],
@@ -7920,6 +8204,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
+  "semantic_fingerprint": "f78ee4bfe984a72d",
   "capabilities": [
    "domain",
    "annotation"
@@ -7972,7 +8257,8 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "mirna",
-  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]\n       # miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli\n       #   原表驱动误把本"
+  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]\n       # miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli\n       #   原表驱动误把本",
+  "semantic_fingerprint": "0dd732c4784caa33"
  },
  "msy": {
   "name": "msy",
@@ -7983,6 +8269,7 @@
   "runner": "plot",
   "group": "syn",
   "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n       #   engineClass 导致 ClassNo",
+  "semantic_fingerprint": "c583df46cbb1e29d",
   "capabilities": [
    "microsynteny",
    "visualization"
@@ -8052,6 +8339,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）",
+  "semantic_fingerprint": "ca18453f8093af3b",
   "capabilities": [
    "annotation"
   ],
@@ -8097,6 +8385,7 @@
   "runner": "plot",
   "group": "gxf",
   "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
+  "semantic_fingerprint": "9ac5aab96f248dcd",
   "capabilities": [
    "annotation"
   ],
@@ -8141,6 +8430,7 @@
   "runner": "plot",
   "group": "seq",
   "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
+  "semantic_fingerprint": "36cea377e1a4660e",
   "alias_of": "structure",
   "capabilities": [
    "gene_structure",
@@ -8224,6 +8514,7 @@
   "runner": "plot",
   "group": "tree",
   "help": "(alias of rooting) MAD 系统发育定根",
+  "semantic_fingerprint": "d1974459d4378822",
   "alias_of": "rooting",
   "capabilities": [
    "phylogeny",
@@ -8274,6 +8565,7 @@
   "runner": "plot",
   "group": "engine",
   "help": "(alias of logo) 序列 LOGO 图",
+  "semantic_fingerprint": "ee628f7ad9f3adb6",
   "capabilities": [
    "motif",
    "visualization"
@@ -8312,7 +8604,8 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "engine",
-  "help": "(alias of heatmap) 热图（表达矩阵）"
+  "help": "(alias of heatmap) 热图（表达矩阵）",
+  "semantic_fingerprint": "3437424ac5b5b7d2"
  },
  "tree": {
   "name": "tree",

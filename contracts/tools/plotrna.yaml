@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]'
+semantic_fingerprint: dd3f05afb8548a38
 capabilities:
 - sequence
 capabilities_ontology:

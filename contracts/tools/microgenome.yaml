@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]'
+semantic_fingerprint: 04dacc6756ac215c
 capabilities:
 - synteny
 capabilities_ontology:

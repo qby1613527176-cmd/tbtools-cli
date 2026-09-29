@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: fastq
 help: 'fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con'
+semantic_fingerprint: 077e329a4b8b134a
 capabilities:
 - sequence
 - extraction

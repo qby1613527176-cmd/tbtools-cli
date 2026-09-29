@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] '
+semantic_fingerprint: 2059700e92dcb787
 capabilities:
 - synteny
 - visualization

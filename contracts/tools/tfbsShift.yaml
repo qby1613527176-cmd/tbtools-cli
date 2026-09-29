@@ -7,6 +7,7 @@ runner: plot
 group: seq
 help: 'tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件
   P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）'
+semantic_fingerprint: b12615a4699afc90
 capabilities:
 - motif
 - genome_scan

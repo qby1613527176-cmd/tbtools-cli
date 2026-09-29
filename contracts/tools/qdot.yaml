@@ -8,6 +8,7 @@ group: syn
 help: 'qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N]
   [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由
   mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）'
+semantic_fingerprint: 2ae7e5b9513b154d
 capabilities:
 - synteny
 - visualization

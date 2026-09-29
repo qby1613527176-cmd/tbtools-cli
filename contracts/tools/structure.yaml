@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: seq
 help: 基因结构图（外显子/UTR 从 GFF）
+semantic_fingerprint: fee8a467a05db715
 capabilities:
 - sequence
 capabilities_ontology:

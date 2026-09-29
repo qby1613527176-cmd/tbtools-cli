@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'mountain: mountain <fold.txt> <out.tsv>'
+semantic_fingerprint: 356e75ec2fa2e380
 capabilities:
 - expression
 capabilities_ontology:

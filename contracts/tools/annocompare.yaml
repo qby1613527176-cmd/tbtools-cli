@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r'
+semantic_fingerprint: f6a15369a7abb0e5
 capabilities:
 - annotation
 capabilities_ontology:

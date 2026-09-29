@@ -7,6 +7,7 @@ runner: plot
 group: seq
 help: 'gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️
   无参调用会挂起 N32）'
+semantic_fingerprint: d18be74d2d31cb52
 capabilities:
 - sequence
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'gfa: gfa <in.gfa> <out> [width] [height]'
+semantic_fingerprint: 3dc752d91b0fb46f
 capabilities:
 - sequence
 capabilities_ontology:

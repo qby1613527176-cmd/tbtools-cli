@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol'
+semantic_fingerprint: ffedb6eb2a0bdbd7
 capabilities:
 - expression
 capabilities_ontology:

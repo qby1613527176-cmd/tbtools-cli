@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId'
+semantic_fingerprint: 93e3e2e21670ed67
 capabilities:
 - expression
 - visualization

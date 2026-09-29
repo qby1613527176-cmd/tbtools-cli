@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]'
+semantic_fingerprint: 2a925645de786db7
 capabilities:
 - assembly
 capabilities_ontology:

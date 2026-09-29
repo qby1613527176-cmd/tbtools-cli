@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'bamindex: bamindex <in.sorted.bam> [out.bai]'
+semantic_fingerprint: ed2e246b70eaed17
 capabilities:
 - assembly
 capabilities_ontology:

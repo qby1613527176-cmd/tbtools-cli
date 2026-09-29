@@ -6,6 +6,7 @@ xmx: 3g
 runner: java
 group: tool
 help: ''
+semantic_fingerprint: 44adf32e858503d3
 inputs:
 - name: fasta
   role: file

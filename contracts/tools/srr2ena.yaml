@@ -7,6 +7,7 @@ runner: java
 group: table
 help: 'srr2ena <srrList.txt> <out.xls>   # SRR→ENA 下载链接解析（GUI 逆向 #39 GetENALinksOfSRR；⚠️
   联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）'
+semantic_fingerprint: 70f20959741954e8
 capabilities:
 - table_operations
 capabilities_ontology:

@@ -8,6 +8,7 @@ group: seq
 help: 'trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format
   fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29
   QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）'
+semantic_fingerprint: 2bea2f8aae74b07c
 capabilities:
 - alignment
 - filtering

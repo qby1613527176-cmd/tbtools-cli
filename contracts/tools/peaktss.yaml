@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: chipseq
 help: 'peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b'
+semantic_fingerprint: cf14dbd3cb8067ef
 capabilities:
 - chip_seq
 - peak_calling

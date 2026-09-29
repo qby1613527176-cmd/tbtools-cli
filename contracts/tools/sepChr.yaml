@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>'
+semantic_fingerprint: 576fa1affc9231af
 capabilities:
 - assembly
 capabilities_ontology:

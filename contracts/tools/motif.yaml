@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: seq
 help: Motif 分布图（MEME XML）
+semantic_fingerprint: 1c8b742c1898d46e
 capabilities:
 - motif
 - visualization

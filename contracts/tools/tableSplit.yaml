@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]'
+semantic_fingerprint: 97b4b94c85a62728
 capabilities:
 - table_operations
 capabilities_ontology:

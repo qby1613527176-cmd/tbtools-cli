@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: blast
 help: 'twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp'
+semantic_fingerprint: 153f0359ab8afe34
 capabilities:
 - homology
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: tree
 help: 'phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]'
+semantic_fingerprint: 9ff350923d31f30a
 capabilities:
 - phylogeny
 capabilities_ontology:

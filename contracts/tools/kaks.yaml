@@ -8,6 +8,7 @@ group: tree
 help: 'kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU
   N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key
   value；inGenePair 为 ID1\tID2 每行，缺文件时自动全两两配对并翻译 CDS）'
+semantic_fingerprint: 37acda943624cbb5
 capabilities:
 - phylogeny
 capabilities_ontology:

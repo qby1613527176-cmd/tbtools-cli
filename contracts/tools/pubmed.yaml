@@ -7,6 +7,7 @@ runner: java
 group: table
 help: 'pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️
   联网 eutils；输出期刊/标题/年份/IF/DOI 表）'
+semantic_fingerprint: 2a9ffbb8b4e46e04
 capabilities:
 - table_operations
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'colorscheme: colorscheme <inTab> <outTab> <refColIndex>'
+semantic_fingerprint: 9fde4cc288aa0402
 capabilities:
 - expression
 capabilities_ontology:

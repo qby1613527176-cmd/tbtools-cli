@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'exprCorr: exprCorr <inFPKM> <outCorrMat>'
+semantic_fingerprint: 830cf209013fa98a
 capabilities:
 - expression
 capabilities_ontology:

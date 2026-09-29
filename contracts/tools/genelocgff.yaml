@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam'
+semantic_fingerprint: 541ac77f00942ce7
 capabilities:
 - annotation
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] ['
+semantic_fingerprint: b284199ee081c72f
 capabilities:
 - visualization
 - genome_circos

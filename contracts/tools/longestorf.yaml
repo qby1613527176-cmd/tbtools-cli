@@ -7,6 +7,7 @@ runner: java
 group: seq
 help: 'longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17
   GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）'
+semantic_fingerprint: b68f99ffc8b0fe0a
 capabilities:
 - orf_prediction
 - sequence

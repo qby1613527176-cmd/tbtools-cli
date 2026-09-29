@@ -839,6 +839,12 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     e: dict[str, object] = {"name": spec.name, "kind": spec.kind, "mode": spec.kind,
                             "class": spec.class_name, "xmx": spec.xmx, "runner": spec.runner,
                             "group": spec.group, "help": spec.doc}
+    # P1-4(评审 #104): semantic_fp 进入 metadata(Agent 搜索/规划可读;execution 侧不进)
+    try:
+        from tbtools_cli.workflow import semantic_fingerprint as _sfp
+        e["semantic_fingerprint"] = _sfp(spec)[:16]
+    except Exception:
+        pass
     if spec.alias_of:
         e["alias_of"] = spec.alias_of
     if spec.capabilities:

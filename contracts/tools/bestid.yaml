@@ -8,6 +8,7 @@ group: blast
 help: 'bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix>
   [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH
   互撞 Excellent/Poor；⚠️ 引擎强制 --threa'
+semantic_fingerprint: 873ac7c24a5df7a1
 capabilities:
 - homology
 capabilities_ontology:

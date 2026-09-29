@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s'
+semantic_fingerprint: 53c102f7f83af3fa
 capabilities:
 - expression
 - visualization

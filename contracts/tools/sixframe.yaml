@@ -7,6 +7,7 @@ runner: java
 group: seq
 help: 'sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列
   6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）'
+semantic_fingerprint: 546b6ffdc37754f1
 capabilities:
 - translation
 - sequence

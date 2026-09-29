@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt'
+semantic_fingerprint: c9b2b6e854da3981
 capabilities:
 - synteny
 - visualization

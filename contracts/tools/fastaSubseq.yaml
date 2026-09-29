@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: fastq
 help: 'fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext'
+semantic_fingerprint: bf1fd0e9525a3eab
 capabilities:
 - sequence
 - extraction

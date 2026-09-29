@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀'
+semantic_fingerprint: 8ce4487c2eac18c1
 capabilities:
 - annotation
 - gff_ops

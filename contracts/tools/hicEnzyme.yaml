@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'hicEnzyme: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）'
+semantic_fingerprint: 163db54e6ac5bc27
 capabilities:
 - assembly
 capabilities_ontology:

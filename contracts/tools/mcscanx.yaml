@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测'
+semantic_fingerprint: 873085bb2c14f7d4
 capabilities:
 - synteny
 - collinearity_detection

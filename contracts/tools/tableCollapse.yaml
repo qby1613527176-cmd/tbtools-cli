@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader '
+semantic_fingerprint: 2188d400c79ca2ba
 capabilities:
 - table_operations
 capabilities_ontology:

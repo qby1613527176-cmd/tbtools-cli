@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: seq
 help: (alias of structure) 基因结构图（外显子/UTR 从 GFF）
+semantic_fingerprint: 36cea377e1a4660e
 alias_of: structure
 capabilities:
 - gene_structure

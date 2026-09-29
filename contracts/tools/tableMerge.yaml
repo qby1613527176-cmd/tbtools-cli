@@ -8,6 +8,7 @@ group: table
 help: 'tableMerge: tableMerge --inFileArr "f1,f2,..." --inColIndexArr "0,1,..." --outTable
   <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   #
   按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)'
+semantic_fingerprint: d2ac57c58585a968
 capabilities:
 - table_operations
 capabilities_ontology:

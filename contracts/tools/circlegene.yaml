@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r'
+semantic_fingerprint: 9742dca57b1097a9
 capabilities:
 - synteny
 capabilities_ontology:

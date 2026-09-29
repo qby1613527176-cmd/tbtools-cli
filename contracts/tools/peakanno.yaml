@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: chipseq
 help: 'peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]'
+semantic_fingerprint: f8c3bc022c45e1c2
 capabilities:
 - chip_seq
 - peak_annotation

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>'
+semantic_fingerprint: a3794e89d0218a3c
 capabilities:
 - annotation
 capabilities_ontology:

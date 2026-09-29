@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: expr
 help: 层次聚类树（三列距离文件 GeneA\tGeneB\tdist）
+semantic_fingerprint: 54bd9c88444c5b18
 capabilities:
 - clustering
 - distance

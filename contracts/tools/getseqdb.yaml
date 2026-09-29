@@ -8,6 +8,7 @@ group: blast
 help: 'getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST
   库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids
   -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，'
+semantic_fingerprint: 507e303fe85824b9
 capabilities:
 - homology
 capabilities_ontology:

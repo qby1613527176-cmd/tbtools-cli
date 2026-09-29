@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: engine
 help: 'calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min'
+semantic_fingerprint: f408f13eb3ae4581
 dependencies:
 - jellyfish
 dependency_manifest:

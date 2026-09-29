@@ -8,6 +8,7 @@ group: expr
 help: 'gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD|CI95]
   [--plot BAR_ERROR|BOXPLOT|VIOLIN|SWARM] [--homoscedastic-t]   # 分组柱状图+显著性标注（GUI
   逆向接口 buildPanel；数据=每行 group value）'
+semantic_fingerprint: 19f9450581e9a630
 alias_of: groupedbar
 capabilities:
 - expression

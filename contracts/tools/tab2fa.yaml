@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: seq
 help: 'tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）'
+semantic_fingerprint: 4a590ed097a16371
 capabilities:
 - sequence
 capabilities_ontology:

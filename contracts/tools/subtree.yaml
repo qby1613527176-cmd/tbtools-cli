@@ -7,6 +7,7 @@ runner: java
 group: tree
 help: 'subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向
   #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）'
+semantic_fingerprint: aace10bce6ff95e1
 capabilities:
 - phylogeny
 capabilities_ontology:

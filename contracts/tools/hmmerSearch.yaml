@@ -7,6 +7,7 @@ runner: plot
 group: hmm
 help: 'hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout
   解析（插件 P00680 CLI 化，无需 idList）'
+semantic_fingerprint: 66a1cfca52b5d91a
 inputs:
 - name: hmm
   role: file

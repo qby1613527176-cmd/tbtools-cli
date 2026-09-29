@@ -6,6 +6,7 @@ xmx: 3g
 runner: java
 group: tool
 help: ''
+semantic_fingerprint: f4829d21e6ee7c70
 capabilities:
 - rna_seq
 - normalization

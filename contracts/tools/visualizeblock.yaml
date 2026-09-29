@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Gen'
+semantic_fingerprint: 32d213da2a6b28f6
 capabilities:
 - synteny
 capabilities_ontology:

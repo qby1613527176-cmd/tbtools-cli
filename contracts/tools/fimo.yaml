@@ -7,6 +7,7 @@ runner: plot
 group: seq
 help: 'fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件
   P00552 等价，直调系统 fimo；meme-suite）'
+semantic_fingerprint: bf172c8f67d35182
 capabilities:
 - motif
 - scanning

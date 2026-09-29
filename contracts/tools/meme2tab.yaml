@@ -7,6 +7,7 @@ runner: java
 group: seq
 help: 'meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI
   逆向接口 MEMESuiteXMLtoTab）'
+semantic_fingerprint: 929cae926deca625
 capabilities:
 - sequence
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>'
+semantic_fingerprint: 261bb4c574ecb590
 capabilities:
 - annotation
 capabilities_ontology:

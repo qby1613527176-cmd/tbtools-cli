@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma'
+semantic_fingerprint: 67cf14531ce5aa06
 capabilities:
 - motif
 - discovery

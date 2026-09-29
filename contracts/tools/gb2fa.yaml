@@ -6,6 +6,7 @@ xmx: 2g
 runner: java
 group: seq
 help: 'gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）'
+semantic_fingerprint: a02559e1cbdcaa03
 capabilities:
 - sequence
 capabilities_ontology:

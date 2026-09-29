@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfOverlap: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand'
+semantic_fingerprint: 4fa7fc47caf95fcb
 capabilities:
 - annotation
 capabilities_ontology:

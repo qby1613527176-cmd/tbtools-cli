@@ -6,6 +6,7 @@ xmx: 2g
 runner: plot
 group: tree
 help: 树+注释图（TreeTreeTree 多轨道）
+semantic_fingerprint: 596f76186cae9bca
 alias_of: draw
 capabilities:
 - phylogeny

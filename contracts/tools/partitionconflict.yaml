@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste'
+semantic_fingerprint: 090a0929473f2f72
 capabilities:
 - synteny
 capabilities_ontology:

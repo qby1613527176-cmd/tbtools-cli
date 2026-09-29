@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'gxfGenepos: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # G'
+semantic_fingerprint: 228dda83f26070ea
 capabilities:
 - annotation
 capabilities_ontology:

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'pafref: pafref --inPaf <paf> --outTab <out.tsv>'
+semantic_fingerprint: 2ff3fdba132c864a
 capabilities:
 - synteny
 - visualization

@@ -6,6 +6,7 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi'
+semantic_fingerprint: fbfd0b3814dd955b
 capabilities:
 - expression
 capabilities_ontology:

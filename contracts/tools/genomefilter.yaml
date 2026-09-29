@@ -8,6 +8,7 @@ group: seq
 help: 'genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   #
   按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID
   → ExtractFasta 提取；可选 GXF 同过滤）'
+semantic_fingerprint: 5e4d6fcdd7675c32
 capabilities:
 - sequence
 capabilities_ontology:

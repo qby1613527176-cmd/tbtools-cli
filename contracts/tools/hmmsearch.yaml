@@ -7,6 +7,7 @@ runner: plot
 group: hmm
 help: 'hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM
   Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）'
+semantic_fingerprint: ce199b6d4abf8dfe
 capabilities:
 - homology
 - hmm_scan
