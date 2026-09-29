@@ -623,6 +623,9 @@ def register_top(cli, _LG):
             desc["relations"] = v["relations"]
         if v.get("capabilities"):
             desc["capabilities"] = v["capabilities"]
+        # 评审 #104 P1-4: semantic_fingerprint 进 describe(Agent 规划侧可读)
+        if v.get("semantic_fingerprint"):
+            desc["semantic_fingerprint"] = v["semantic_fingerprint"]
         # P1-7: platforms 能力矩阵(评审 #62-11;Agent 不再瞎撞)
         _st = v.get("status", "stable")
         _kind = v.get("kind", "manual")
