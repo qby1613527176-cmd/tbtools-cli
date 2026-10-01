@@ -3790,7 +3790,7 @@
   "xmx": "3g",
   "runner": "plot",
   "group": "blast",
-  "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统 blastp/makeblastdb）",
+  "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（ArgsParser 风格：参数必须 --key value 形态；依赖系统 blastp/makeblastdb）",
   "semantic_fingerprint": "be028cbdcc32b74b2cd2a72050fa90c37dd85a30fbead8bf4f4523ff2a701838",
   "semantic_fingerprint_short": "be028cbdcc32b74b",
   "capabilities": [
