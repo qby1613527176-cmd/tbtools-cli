@@ -392,26 +392,26 @@ class TestReview107PropertyMatrix:
     def test_07_schema_change_contract_diff(self):
         """换 contract schema / fp scheme → contract_fp 变(评审 #107 P0①)
         ——常量内嵌: 改 CONTRACT_SCHEMA_VERSION 后旧 fp 自动失效(resume 安全)"""
-        import tbtools_cli.workflow as _wf
-        from tbtools_cli.workflow import execution_contract_fingerprint
+        import tbtools_cli.identity as _id
+        from tbtools_cli.identity import execution_contract_fingerprint
         from tbtools_cli.command_spec import CommandSpec
         sp = CommandSpec(name="t", group="g", kind="manual")
         fp1 = execution_contract_fingerprint(sp)
-        _old = _wf.CONTRACT_SCHEMA_VERSION
+        _old = _id.CONTRACT_SCHEMA_VERSION
         try:
-            _wf.CONTRACT_SCHEMA_VERSION = "2"  # 模拟契约 schema 升级
+            _id.CONTRACT_SCHEMA_VERSION = "2"  # 模拟契约 schema 升级(改 identity 真源)
             fp2 = execution_contract_fingerprint(sp)
         finally:
-            _wf.CONTRACT_SCHEMA_VERSION = _old
+            _id.CONTRACT_SCHEMA_VERSION = _old
         assert fp1 != fp2, "contract schema 升级必须改变 contract_fp"
         # 且 fp 确实含 schema_version(与实现对齐——直接比对实现输出)
         import hashlib
         import json as _jc
-        c = _wf.canonical_contract(sp)
-        _payload = {k: c.get(k) for k in _wf.EXECUTION_CONTRACT_FIELDS}
+        c = _id.canonical_contract(sp)
+        _payload = {k: c.get(k) for k in _id.EXECUTION_CONTRACT_FIELDS}
         _payload.update({"tool": c.get("name"),
-                         "schema_version": _wf.CONTRACT_SCHEMA_VERSION,
-                         "fp_scheme": _wf.FP_SCHEME_VERSION})
+                         "schema_version": _id.CONTRACT_SCHEMA_VERSION,
+                         "fp_scheme": _id.FP_SCHEME_VERSION})
         _h = hashlib.sha256(_jc.dumps(_payload, sort_keys=True, default=str).encode()).hexdigest()
         assert _h == execution_contract_fingerprint(sp)
 
@@ -453,3 +453,61 @@ class TestReview107PropertyMatrix:
         _wf._DEP_VERSION_CACHE.clear()
         assert c1.execution_fingerprint != c2.execution_fingerprint, \
             "依赖声明不同必须改变 execution_fp(dependency 属 Runtime Identity)"
+
+
+class TestReview108Cleanup:
+    """评审 #108: identity cleanup / dedup——输出唯一真相 + 无重复定义"""
+
+    def test_outputs_projection_change_fp_stable(self):
+        """output_slots 同 + outputs projection 变 → contract_fp/execution_fp 不变
+        (评审 #108 P1-1: output_slots 唯一真相, outputs 是投影, 投影变≠契约变)"""
+        import copy
+        from tbtools_cli.workflow import execution_contract_fingerprint
+        from tbtools_cli.command_spec import build_command_specs
+        a = build_command_specs()["volcano"]
+        b = copy.deepcopy(a)
+        b.outputs = list(b.outputs) + ["extra_projection"]
+        assert execution_contract_fingerprint(a) == execution_contract_fingerprint(b), \
+            "outputs projection 变化不应改变 execution_contract_fp"
+
+    def test_no_duplicate_execution_fields_constant(self):
+        """评审 #108 P0: EXECUTION_CONTRACT_FIELDS 只此一套且不含 outputs——
+        (旧 CANONICAL_EXECUTION_FIELDS 残留已删; 两套常量并存=漂移风险)"""
+        import inspect
+        import tbtools_cli.workflow as wfm
+        src = inspect.getsource(wfm)
+        # 不含 outputs 的旧常量定义不得再次出现
+        assert "CANONICAL_EXECUTION_FIELDS" not in src, "旧常量残留未清"
+        assert "outputs" not in wfm.EXECUTION_CONTRACT_FIELDS, \
+            f"outputs 混入 execution identity: {wfm.EXECUTION_CONTRACT_FIELDS}"
+
+    def test_canonical_execution_contract_is_single_entry(self):
+        """fingerprint 与 canonical_execution_contract 完全一致(唯一入口)——
+        不再可能 canonical 说 A / fingerprint hash B"""
+        from tbtools_cli.workflow import (canonical_execution_contract,
+                                          execution_contract_fingerprint)
+        from tbtools_cli.command_spec import build_command_specs
+        import hashlib
+        import json as _jc
+        for name in ("volcano", "blastp", "heatmap"):
+            sp = build_command_specs().get(name)
+            if not sp:
+                continue
+            import tbtools_cli.workflow as _wf
+            c = canonical_execution_contract(sp)
+            _h = hashlib.sha256(_jc.dumps(
+                {**c, "tool": sp.name,
+                 "schema_version": _wf.CONTRACT_SCHEMA_VERSION,
+                 "fp_scheme": _wf.FP_SCHEME_VERSION},
+                sort_keys=True, default=str).encode()).hexdigest()
+            assert _h == execution_contract_fingerprint(sp), f"{name} fingerprint 与 canonical 不一致"
+
+    def test_compiled_invocation_schema_versions_clear(self):
+        """评审 #108 P1-2: workflow_schema_version / contract_schema_version 分离——
+        不再有模糊的 schema_version 误导(≠CONTRACT_SCHEMA_VERSION 混淆)"""
+        import inspect
+        import tbtools_cli.workflow as wfm
+        src = inspect.getsource(wfm.CompiledInvocation)
+        assert "workflow_schema_version" in src
+        assert "contract_schema_version" in src
+        assert "self.schema_version = " not in src, "模糊 schema_version 残留"

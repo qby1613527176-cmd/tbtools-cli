@@ -119,7 +119,9 @@ class TestE_MultiOutputSlots:
                 "binding": {"inputs": ["d.txt"], "parameters": {}, "output": "/tmp/o.svg"}}
         ci = compile_step_full(step, "/tmp", {})
         assert len(ci.contract_fingerprint) == 16
-        assert ci.schema_version == "1.1"
+        # 评审 #108 P1-2: schema_version 拆分为 workflow/contract 两个概念
+        assert ci.workflow_schema_version == "1.1"
+        assert ci.contract_schema_version == "1"
         # 同输入同指纹(稳定)
         ci2 = compile_step_full(step, "/tmp", {})
         assert ci.contract_fingerprint == ci2.contract_fingerprint

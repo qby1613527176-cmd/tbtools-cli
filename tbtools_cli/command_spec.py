@@ -838,10 +838,11 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
     e: dict[str, object] = {"name": spec.name, "kind": spec.kind, "mode": spec.kind,
                             "class": spec.class_name, "xmx": spec.xmx, "runner": spec.runner,
                             "group": spec.group, "help": spec.doc}
-    # P1-4(评审 #104 + #107 P1④): semantic_fp 进入 metadata full 64 hex(Agent 搜索/规划可读;
+    # P1-4(评审 #104 + #107 P1④ + #108 P1-4): semantic_fp 进入 metadata full 64 hex(Agent 搜索/规划可读;
     # execution 侧不进)——full 用于 identity 比较/cache/metadata 版本检查, short 仅展示
+    # 从 identity.py 取(评审 #108: 解 command_spec↔workflow 双向依赖——workflow 拆出 identity 后单向依赖)
     try:
-        from tbtools_cli.workflow import semantic_fingerprint as _sfp
+        from tbtools_cli.identity import semantic_fingerprint as _sfp
         _sfp_full = _sfp(spec)
         e["semantic_fingerprint"] = _sfp_full
         e["semantic_fingerprint_short"] = _sfp_full[:16]
