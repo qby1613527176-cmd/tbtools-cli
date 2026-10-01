@@ -10,9 +10,9 @@ import sys
 import pytest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, ROOT)
+sys.path.insert(0, ROOT)  # noqa: E402  (ROOT 先行用于 path 注入)
 
-from tbtools_cli.command_spec import agent_readiness, build_command_specs
+from tbtools_cli.command_spec import agent_readiness, build_command_specs  # noqa: E402
 
 FULL_TOOLS = sorted(n for n, s in build_command_specs().items() if agent_readiness(s) == "FULL")
 

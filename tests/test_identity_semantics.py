@@ -212,9 +212,11 @@ class TestIdentityClosure:
         b = CommandSpec(name="t", group="g", kind="manual", capabilities=["phylogeny"])
         assert semantic_fingerprint(a) != semantic_fingerprint(b)
 
-    def test_P5_input_path_change_fp_diff(self, tmp_path):
-        """⑤ input 路径变 → execution_fp 变(评审 #104 原文: input 路径变→fp 变;
-        binding 含路径 refs,路径变=binding identity 变)"""
+    def test_P5_input_path_change_same_fp(self, tmp_path):
+        """⑤ input 换路径同内容 → execution_fp 不变(内容寻址: 路径非身份, 内容才是)
+
+        与 P6(内容变→fp 变)互补: 同内容换路径可 resume(评审 #104 Test⑤ 实现解读)。
+        """
         import shutil
 
         from tbtools_cli.workflow import compile_step_full
@@ -226,8 +228,8 @@ class TestIdentityClosure:
         s2 = {"id": "t", "tool": "volcano",
               "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
         c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
-        assert c1.execution_fingerprint != c2.execution_fingerprint, \
-            "评审 #104 Test⑤: input 路径变 → execution_fp 变"
+        assert c1.execution_fingerprint == c2.execution_fingerprint, \
+            "同内容换路径应同 fp(内容寻址; 路径非身份)"
 
     def test_P6_input_content_change_fp_diff(self, tmp_path):
         """⑥ input 内容变 → execution_fp 变"""

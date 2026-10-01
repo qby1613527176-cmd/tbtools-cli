@@ -708,7 +708,6 @@ KNOWN_ALIASES = {
     # 显示别名(与 gen_metadata 特判一致, 评审 #56 两路径统一): draw→tree, one-step→onesteptree, rooting→treeRooting
     "tree": "draw",
     "onesteptree": "one-step",
-    "treeRooting": "rooting",
 }
 
 # 已知状态(engine 级/环境限制; 未列默认为 stable)

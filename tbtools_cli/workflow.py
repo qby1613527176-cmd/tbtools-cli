@@ -29,6 +29,10 @@ def _warn_legacy_args(wf: dict):
 
 
 WORKFLOW_SCHEMA_CURRENT = "1.1"   # workflow schema: 1.0=args / 1.1=binding / 2.0=binding-only
+
+# dep 版本缓存(评审 #100 + #102 P1-2): 模块级声明, 防 flaky——同一进程内
+# 外部依赖版本只探测一次(每次 compile fork 查版本会因超时/失败随机漂移 execution_fp)
+_DEP_VERSION_CACHE: dict = {}
 # ⑥ 评审 #106: fingerprint 计算规则版本(改规则即换版本→旧指纹自动失效,resume 安全)
 FP_SCHEME_VERSION = "fp1"
 # ⚠️ 命名区分(评审 #92 P1-4): 这是 **workflow schema version**,与 docs/agent-protocol.md 的
@@ -274,7 +278,7 @@ class CompiledInvocation:
         # binding identity 归一化(评审 #104 性质⑤): 输入路径值 → 槽位占位。
         # binding 表达"接线结构"(哪些槽位接了什么),内容身份由 input_shas 承载——
         # 同内容换路径 → 同 fp;不同符号参数/refs → 不同 fp。
-        _norm = {}
+        _norm: dict[str, object] = {}
         for _k, _v in (symbolic_binding or {}).items():
             if _k == "inputs":
                 if isinstance(_v, list):
@@ -312,11 +316,6 @@ class CompiledInvocation:
             import subprocess as _sp4
             # 模块级缓存(防 flaky): 同一进程内 dep 版本只查一次——
             # 每次 compile 都 fork 查版本会因超时/失败随机导致 execution_fp 漂移
-            global _DEP_VERSION_CACHE
-            try:
-                _DEP_VERSION_CACHE
-            except NameError:
-                _DEP_VERSION_CACHE = {}
             _dep_names = []
             if '_sp3' in dir() and _sp3:
                 _dep_names = list(_sp3.dependencies or [])
@@ -446,7 +445,6 @@ def compile_step(step: dict, workdir: str, outputs: dict) -> list:
 
 def _topo_sort(steps: list) -> list:
     """拓扑排序(depends_on 声明的步骤按依赖排序;环检测)。"""
-    by_id = {s["id"]: s for s in steps}
     done, ordered = set(), []
     remaining = list(steps)
     while remaining:
@@ -637,6 +635,25 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
         if not _vok:
             _vwarn = f"output validation failed: {_vmsg}"
             step_ok = False
+    # P1-4(评审 #106): provenance 补三层 fingerprint——子进程 cli 写盘时不知 workflow 层指纹,
+    # 由 workflow 执行者补写(幂等: 已存在则不覆盖; Agent 搜索/规划可读 execution 身份)
+    _fp_prov_path = (out + ".tbtools.json") if step_ok and out and os.path.isfile(out + ".tbtools.json") else None
+    if _fp_prov_path:
+        try:
+            import json as _fpj
+            _fp_data = _fpj.load(open(_fp_prov_path, encoding="utf-8"))
+            _dirty = False
+            for _fpk, _fpv in (("execution_fingerprint", st.get("_execution_fingerprint")),
+                               ("contract_fingerprint", st.get("_contract_fingerprint")),
+                               ("binding_fingerprint", st.get("_binding_fingerprint"))):
+                if _fpv and not _fp_data.get(_fpk):
+                    _fp_data[_fpk] = _fpv
+                    _dirty = True
+            if _dirty:
+                with open(_fp_prov_path, "w", encoding="utf-8") as _fff:
+                    _fpj.dump(_fp_data, _fff, ensure_ascii=False, indent=1)
+        except Exception:
+            pass  # provenance 是附加信息, 补写失败不影响主流程
     return {"id": st["id"], "tool": st["tool"], "exit_code": _rc,
             "status": "succeeded" if step_ok else "failed",
             **({"validation_warning": f"step timeout after {timeout_s}s (process tree killed)"} if _timeout_hit else {}),

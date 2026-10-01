@@ -20,9 +20,9 @@ import pytest
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # FULL 工具动态取(FULL 判定修正后 8→59;评审 #66)
-import sys as _sys
+import sys as _sys  # noqa: E402  (ROOT 先行用于 path 注入)
 _sys.path.insert(0, ROOT)
-from tbtools_cli.command_spec import agent_readiness as _ar, build_command_specs as _bcs
+from tbtools_cli.command_spec import agent_readiness as _ar, build_command_specs as _bcs  # noqa: E402
 
 FULL_TOOLS = sorted(n for n, s in _bcs().items() if _ar(s) == "FULL")
 

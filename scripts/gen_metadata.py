@@ -390,7 +390,8 @@ def render_ai_manifest(meta):
                  "| 工具 | Schema | Params | Caps | Deps | Rels | 完备度 |",
                  "|---|---|---|---|---|---|---|"]
         for _n, _d, _s in _rows:
-            mark = lambda b: "✅" if b else "—"
+            def mark(b: bool) -> str:
+                return "✅" if b else "—"
             lines.append(f"| `{_n}` | {mark(_d['schema'])} | {mark(_d['params'])} | {mark(_d['caps'])} | {mark(_d['deps'])} | {mark(_d['rels'])} | {_s}/5 |")
         open(_os.path.join(ROOT, "docs", "_generated", "tool-readiness.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
     except Exception:
