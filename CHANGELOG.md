@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.22] - 2026-10-01
+
+### identity cleanup / dedup / invariant freeze(评审 #108)
+- **P0 删重复常量**: 旧 CANONICAL_EXECUTION_FIELDS(含 outputs)残留已清——实测 fingerprint 本用无 outputs 版, 但两套常量并存=漂移风险, 现 EXECUTION_CONTRACT_FIELDS 全仓唯一
+- **P0 fingerprint 唯一入口**: execution_contract_fingerprint 直接消费 canonical_execution_contract()(不再手动 filter, 杜绝 canonical 说 A / fp hash B)
+- **P1-1 outputs projection 回归测试**: projection 变 → contract_fp/execution_fp 不变(output_slots 唯一真相)
+- **P1-2 schema_version 拆分**: workflow_schema_version / contract_schema_version 两概念不再模糊
+- **P1-4 拆出 identity.py**: canonical + fingerprint + 常量独立模块——解 command_spec↔workflow 双向依赖(均只向下依赖 identity); workflow 保留向后兼容 re-export
+- **门禁**: pytest 514 passed / ruff 0 / mypy 0
+
 ## [1.4.21] - 2026-10-01
 
 ### identity 边界清理(评审 #107)—— P0×2 + P1×5
