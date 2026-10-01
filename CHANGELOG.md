@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.21] - 2026-10-01
+
+### identity 边界清理(评审 #107)—— P0×2 + P1×5
+- **P0① schema_version 进 execution contract fp**: 新增独立 CONTRACT_SCHEMA_VERSION(与 workflow schema 解耦);契约结构升级→旧 fp 自动失效(resume 安全)
+- **P0② binding 保留 symbolic refs**: 路径抽象但 ref 身份保留({input.genome}≠{input.transcriptome});修复"抹 ref 致不同语义 workflow 同 fp"
+- **P1③ binding 不再混 content sha**: 删截断 16hex 层;binding=接线 / execution=接线+内容(full sha 在 execution input_shas)
+- **P1④ semantic_fp full 64 hex**: metadata 存 full + short(展示截断, identity 不截)
+- **P1⑤ outputs 退出 execution contract**: output_slots 唯一真相(outputs 是投影, 投影实现变≠契约变)
+- **P1⑥ dep cache 带可执行身份**: name+path+mtime+size——长期 Agent 进程不再锁旧版本
+- **P1⑦ DEP_VERSION_ARGS 表**: muscle/-version 等精确版本命令, 停止纯 heuristic 猜
+- **测试**: TestReview107PropertyMatrix 10 性质矩阵;门禁 pytest 510 passed / ruff 0 / mypy 0
+
 ## [1.4.20] - 2026-10-01
 
 ### identity closure(第 31 份评审) + 门禁修复
