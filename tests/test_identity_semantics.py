@@ -305,3 +305,151 @@ steps:
         prov = json.loads((wd / "v.svg.tbtools.json").read_text())
         assert prov.get("execution_fingerprint"), "provenance 缺 execution_fingerprint"
         assert len(prov["execution_fingerprint"]) == 64
+
+
+class TestReview107PropertyMatrix:
+    """评审 #107 性质测试矩阵(10 性质)——identity 边界验收标准。
+
+    同路径 + 同内容       → same (execution)
+    换路径 + 同内容       → same execution (内容寻址)
+    换内容               → different execution
+    换 symbolic ref      → different binding
+    换 slot              → different binding
+    换 tool              → different contract
+    换 schema            → different contract
+    换 capability        → different semantic
+    换 relations         → different semantic
+    换 dependency        → different execution
+    """
+
+    def test_01_same_path_same_content_same(self, tmp_path):
+        """同路径同内容 → execution_fp 相同(幂等)"""
+        from tbtools_cli.workflow import compile_step_full
+        s = {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {},
+                         "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s, "/tmp", {}), compile_step_full(s, "/tmp", {})
+        assert c1.execution_fingerprint == c2.execution_fingerprint
+        assert c1.binding_fingerprint_full == c2.binding_fingerprint_full
+
+    def test_02_path_change_same_content_same_execution(self, tmp_path):
+        """换路径同内容 → execution_fp 不变(内容寻址)"""
+        import shutil
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "deg_copy.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {}, "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint == c2.execution_fingerprint
+        assert c1.binding_fingerprint_full == c2.binding_fingerprint_full  # 路径抽象
+
+    def test_03_content_change_execution_diff(self, tmp_path):
+        """换内容 → execution_fp 变"""
+        import shutil
+        from tbtools_cli.workflow import compile_step_full
+        p = tmp_path / "deg_mod.txt"
+        shutil.copy("examples/data/deg.txt", p)
+        p.write_text(p.read_text() + "#tamper\n")
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {}, "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.execution_fingerprint != c2.execution_fingerprint
+
+    def test_04_symbolic_ref_change_binding_diff(self):
+        """换 symbolic ref({input.genome}→{input.transcriptome}) → binding_fp 变(评审 #107 P0②)"""
+        from tbtools_cli.workflow import compile_step_full
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["{input.genome}"], "parameters": {}, "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["{input.transcriptome}"], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.binding_fingerprint_full != c2.binding_fingerprint_full, \
+            "不同 symbolic ref 必须不同 binding_fp(引用非身份=接线语义丢失)"
+
+    def test_05_slot_change_binding_diff(self):
+        """换 slot(输入个数/位置变化) → binding_fp 变"""
+        from tbtools_cli.workflow import compile_step_full
+        s1 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["{input.a}"], "parameters": {}, "output": "/tmp/a.svg"}}
+        s2 = {"id": "t", "tool": "volcano",
+              "binding": {"inputs": ["{input.a}", "{input.b}"], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
+        assert c1.binding_fingerprint_full != c2.binding_fingerprint_full
+
+    def test_06_tool_change_contract_diff(self):
+        """换 tool → contract_fp 变"""
+        from tbtools_cli.workflow import execution_contract_fingerprint
+        from tbtools_cli.command_spec import CommandSpec, InputSpec
+        a = CommandSpec(name="toolA", group="g", kind="manual", inputs=[InputSpec("x", format="tsv")])
+        b = CommandSpec(name="toolB", group="g", kind="manual", inputs=[InputSpec("x", format="tsv")])
+        assert execution_contract_fingerprint(a) != execution_contract_fingerprint(b)
+
+    def test_07_schema_change_contract_diff(self):
+        """换 contract schema / fp scheme → contract_fp 变(评审 #107 P0①)
+        ——常量内嵌: 改 CONTRACT_SCHEMA_VERSION 后旧 fp 自动失效(resume 安全)"""
+        import tbtools_cli.workflow as _wf
+        from tbtools_cli.workflow import execution_contract_fingerprint
+        from tbtools_cli.command_spec import CommandSpec
+        sp = CommandSpec(name="t", group="g", kind="manual")
+        fp1 = execution_contract_fingerprint(sp)
+        _old = _wf.CONTRACT_SCHEMA_VERSION
+        try:
+            _wf.CONTRACT_SCHEMA_VERSION = "2"  # 模拟契约 schema 升级
+            fp2 = execution_contract_fingerprint(sp)
+        finally:
+            _wf.CONTRACT_SCHEMA_VERSION = _old
+        assert fp1 != fp2, "contract schema 升级必须改变 contract_fp"
+        # 且 fp 确实含 schema_version(与实现对齐——直接比对实现输出)
+        import hashlib
+        import json as _jc
+        c = _wf.canonical_contract(sp)
+        _payload = {k: c.get(k) for k in _wf.EXECUTION_CONTRACT_FIELDS}
+        _payload.update({"tool": c.get("name"),
+                         "schema_version": _wf.CONTRACT_SCHEMA_VERSION,
+                         "fp_scheme": _wf.FP_SCHEME_VERSION})
+        _h = hashlib.sha256(_jc.dumps(_payload, sort_keys=True, default=str).encode()).hexdigest()
+        assert _h == execution_contract_fingerprint(sp)
+
+    def test_08_capability_change_semantic_diff(self):
+        """换 capability → semantic_fp 变"""
+        from tbtools_cli.command_spec import CommandSpec
+        from tbtools_cli.workflow import semantic_fingerprint
+        a = CommandSpec(name="t", group="g", kind="manual", capabilities=["alignment"])
+        b = CommandSpec(name="t", group="g", kind="manual", capabilities=["phylogeny"])
+        assert semantic_fingerprint(a) != semantic_fingerprint(b)
+
+    def test_09_relations_change_semantic_diff(self):
+        """换 relations → semantic_fp 变"""
+        from tbtools_cli.command_spec import CommandSpec
+        from tbtools_cli.workflow import semantic_fingerprint
+        a = CommandSpec(name="t", group="g", kind="manual", relations={"accepts": ["FASTA"]})
+        b = CommandSpec(name="t", group="g", kind="manual", relations={"accepts": ["GFF3"]})
+        assert semantic_fingerprint(a) != semantic_fingerprint(b)
+
+    def test_10_dependency_change_execution_diff(self, monkeypatch):
+        """换 dependency → execution_fp 变(依赖版本是执行身份一部分, 经 execution_fp 的
+        dependencies 字段, 非 contract_fp——contract 层不声明 dependencies)"""
+        import copy
+        from tbtools_cli import workflow as _wf
+        from tbtools_cli.command_spec import build_command_specs
+        _wf._DEP_VERSION_CACHE.clear()
+        # build_command_specs() 每次重建, 用 patch 控制返回 spec 的 dependencies
+        _base = copy.deepcopy(build_command_specs()["volcano"])
+        _s_muscle = copy.deepcopy(_base); _s_muscle.dependencies = ["muscle"]
+        _s_mafft = copy.deepcopy(_base); _s_mafft.dependencies = ["mafft"]
+        _cur = {"spec": _s_muscle}
+        monkeypatch.setattr("tbtools_cli.command_spec.build_command_specs",
+                            lambda: {"volcano": _cur["spec"]})
+        s = {"id": "t", "tool": "volcano",
+             "binding": {"inputs": ["examples/data/deg.txt"], "parameters": {}, "output": "/tmp/a.svg"}}
+        c1 = _wf.compile_step_full(s, "/tmp", {})
+        _cur["spec"] = _s_mafft
+        c2 = _wf.compile_step_full(s, "/tmp", {})
+        _wf._DEP_VERSION_CACHE.clear()
+        assert c1.execution_fingerprint != c2.execution_fingerprint, \
+            "依赖声明不同必须改变 execution_fp(dependency 属 Runtime Identity)"

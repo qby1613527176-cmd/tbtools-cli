@@ -1,10 +1,13 @@
-"""Workflow 一等公民(ADR-0007): YAML 声明的工作流——步骤依赖解析、Artifact 绑定、顺序执行、溯源 DAG。
+"""Workflow 一等公民(ADR-0007): YAML 声明的工作流——DAG 步骤依赖解析、Artifact 绑定、
+并行调度、溯源、fingerprint-aware resume。
 
-最小可用版(v1):
+能力(v1.4.20+):
 - workflow validate/plan/run/graph(provenance-graph 复用)
-- 步骤引用上游输出: input: $step_id.output
-- 顺序执行, 失败即停(返回结构化结果)
-- resume 为 v2(每步落盘 state 后可续)
+- 步骤引用上游输出: input: $step_id.output; binding 契约编译(CommandSpec)
+- DAG 并行调度(ready-queue; depends_on 声明; 环检测; fail-fast 早取消; cancel 传播)
+- 三层 identity fingerprint(contract/binding/execution; 内容寻址; resume 闸门)
+- resume: 每步落盘 state 后可续; fp 不匹配 → 重跑(篡改拦截)
+- artifact 登记 + provenance 旁文件(含三层 fingerprint; Agent 可读)
 """
 from __future__ import annotations
 
@@ -35,6 +38,17 @@ WORKFLOW_SCHEMA_CURRENT = "1.1"   # workflow schema: 1.0=args / 1.1=binding / 2.
 _DEP_VERSION_CACHE: dict = {}
 # ⑥ 评审 #106: fingerprint 计算规则版本(改规则即换版本→旧指纹自动失效,resume 安全)
 FP_SCHEME_VERSION = "fp1"
+# contract schema 版本(评审 #107 P0①): 独立于 workflow schema——
+# workflow YAML 语法升级 ≠ 工具契约变化; 契约结构变化才 bump 这个
+CONTRACT_SCHEMA_VERSION = "1"
+# 评审 #107 P1⑦: 已知依赖的精确版本命令(终态迁往 dependency_manifest 字段)
+# muscle5 只认 -version(--version 挂起/报错); 其余缺省回退 heuristic 顺序
+DEP_VERSION_ARGS: dict = {
+    "muscle": ("-version",),
+    "iqtree2": ("--version", "-version"),
+    "mafft": ("--version",),
+    "trimal": ("-version", "--version"),
+}
 # ⚠️ 命名区分(评审 #92 P1-4): 这是 **workflow schema version**,与 docs/agent-protocol.md 的
 # Agent Protocol version(调用协议)是两个独立版本线——改名/升版时勿混淆。
 
@@ -160,8 +174,11 @@ def _save_state(workdir: str, state: dict):
 
 
 # ⑤ 评审 #106: Execution Contract 字段——纯执行身份(不含 tool 名/语义)
-EXECUTION_CONTRACT_FIELDS = ("inputs", "outputs", "output_slots", "parameters",
+EXECUTION_CONTRACT_FIELDS = ("inputs", "output_slots", "parameters",
                              "layout", "named_flags")
+# 评审 #107 P1⑤: outputs 从 execution identity 删除——output_slots 是 output 唯一真相,
+# outputs 是投影(projection); 契约没变而投影实现变了不应改 execution identity。
+# canonical_contract() 仍含 outputs(metadata/投影层), 但 execution_contract_fingerprint 不再吃它。
 
 
 def canonical_execution_contract(spec) -> dict:
@@ -215,14 +232,17 @@ CANONICAL_SEMANTIC_FIELDS = ("capabilities", "relations", "dependencies")
 
 
 def execution_contract_fingerprint(spec) -> str:
-    """执行契约指纹(评审 #106 P0): 纯执行身份——
-    Execution Contract 字段(inputs/outputs/output_slots/parameters/layout/named_flags)
-    + tool + fp_scheme 版本。capabilities/relations/name 不进(语义层,semantic_fingerprint 承担)。"""
+    """执行契约指纹(评审 #106 P0 + #107 P0①): 纯执行身份——
+    Execution Contract 字段(inputs/output_slots/parameters/layout/named_flags)
+    + tool + contract_schema_version + fp_scheme。
+    capabilities/relations/name 不进(语义层,semantic_fingerprint 承担)。
+    schema_version 独立于 workflow schema: 契约结构变化才改(评审 #107)。"""
     import hashlib as _hc
     import json as _jc
     c = canonical_contract(spec)
     return _hc.sha256(_jc.dumps({**{k: c.get(k) for k in EXECUTION_CONTRACT_FIELDS},
                                  "tool": c.get("name"),
+                                 "schema_version": CONTRACT_SCHEMA_VERSION,
                                  "fp_scheme": FP_SCHEME_VERSION},
                                 sort_keys=True, default=str).encode()).hexdigest()
 
@@ -275,19 +295,48 @@ class CompiledInvocation:
         # ——raw binding 本身已含 inputs/parameters/output 的符号 refs;
         # 不混入已解析的 parameters(resolved 路径污染修复:
         # genome={input.genome} 换路径不应改变 binding identity)
-        # binding identity 归一化(评审 #104 性质⑤): 输入路径值 → 槽位占位。
-        # binding 表达"接线结构"(哪些槽位接了什么),内容身份由 input_shas 承载——
-        # 同内容换路径 → 同 fp;不同符号参数/refs → 不同 fp。
+        # binding identity 归一化(评审 #104 性质⑤ + #107 P0②):
+        #   具体文件路径(path) → 抽象为路径无关(路径非身份; 内容由 execution input_shas 承载)
+        #   symbolic ref({input.x}/$input.x) → **保留 ref 身份**(接线结构属于 binding identity)
+        #   slot 位置 → 保留(保序/保 key)
+        # 即: 路径无关 ≠ 引用无关——{input.genome} 和 {input.transcriptome} 必须不同 fp。
+        def _canon_ref(v: object) -> object:
+            """评审 #107 P0②: 路径抽象, ref 保留。"""
+            if isinstance(v, str):
+                _s = v.strip()
+                if (_s.startswith("{") and _s.endswith("}")) or _s.startswith("${"):
+                    return {"ref": _s}
+                if os.path.isfile(_s) or "/" in _s or "\\" in _s:
+                    return {"path": True}
+                return _s
+            if isinstance(v, list):
+                return [_canon_ref(x) for x in v]
+            if isinstance(v, dict):
+                return {k: _canon_ref(x) for k, x in v.items()}
+            return v
+
         _norm: dict[str, object] = {}
         for _k, _v in (symbolic_binding or {}).items():
             if _k == "inputs":
                 if isinstance(_v, list):
-                    _norm[_k] = [f"<input:{i}>" for i in range(len(_v))]
+                    _entries = []
+                    for _i, _x in enumerate(_v):
+                        _r = _canon_ref(_x)
+                        if isinstance(_r, dict):
+                            _e: dict[str, object] = {"slot": _i}
+                            _e.update(_r)
+                        else:
+                            _e = {"slot": _i, "value": _r}
+                        _entries.append(_e)
+                    _norm[_k] = _entries
                 elif isinstance(_v, dict):
-                    _norm[_k] = {sk: "<slot>" for sk in _v}
+                    _norm[_k] = {sk: _canon_ref(x) for sk, x in _v.items()}
                 else:
                     _norm[_k] = _v
             else:
+                # 非 inputs 键(parameters/output): 保留字面值——
+                # 评审 #107 P0②: 路径抽象只针对 inputs 接线槽位;
+                # output/parameters 是字面契约内容, 不同值必须不同 binding_fp
                 _norm[_k] = _v
         self.binding_fingerprint_full = _hc.sha256(
             _jc.dumps(_norm, sort_keys=True, default=str).encode()).hexdigest()
@@ -315,19 +364,32 @@ class CompiledInvocation:
             import shutil as _sh
             import subprocess as _sp4
             # 模块级缓存(防 flaky): 同一进程内 dep 版本只查一次——
-            # 每次 compile 都 fork 查版本会因超时/失败随机导致 execution_fp 漂移
+            # 每次 compile 都 fork 查版本会因超时/失败随机漂移 execution_fp
             _dep_names = []
             if '_sp3' in dir() and _sp3:
                 _dep_names = list(_sp3.dependencies or [])
             for _dn in _dep_names:
-                if _dn in _DEP_VERSION_CACHE:
-                    _deps[_dn] = _DEP_VERSION_CACHE[_dn]
-                    continue
+                # 缓存 key 带可执行文件身份(评审 #107 P1⑥): name + path + mtime + size——
+                # 防长期 Agent 进程缓存过期版本(10:00 muscle v5.2 → 12:00 系统升 v5.3, 不再锁旧)
+                # 同时保留防 flaky(同一二进制不重复 fork)
                 _dnorm = _dn.lower().replace("+", "").replace("-", "")
                 _bin = _sh.which(_dn) or _sh.which(_dnorm)
                 _resolved = "missing"
+                _cache_key = _dn
+                if _bin and os.path.isfile(_bin):
+                    try:
+                        _st = os.stat(_bin)
+                        _cache_key = f"{_dn}|{_bin}|{int(_st.st_mtime)}|{_st.st_size}"
+                    except OSError:
+                        pass
+                if _cache_key in _DEP_VERSION_CACHE:
+                    _deps[_dn] = _DEP_VERSION_CACHE[_cache_key]
+                    continue
                 if _bin:
-                    for _flag in ("--version", "-version", "-v"):
+                    # 评审 #107 P1⑦: 已知依赖的精确版本命令优先(停止纯 heuristic 猜 flag)——
+                    # 终态由 dependency_manifest 提供 executable/version_args, 此表为当前权威源
+                    _args = DEP_VERSION_ARGS.get(_dn, ("--version", "-version", "-v"))
+                    for _flag in _args:
                         try:
                             _rv = _sp4.run([_bin, _flag], capture_output=True, text=True, timeout=5)
                             _ver = (_rv.stdout or _rv.stderr).strip().splitlines()
@@ -336,8 +398,8 @@ class CompiledInvocation:
                                 break
                         except Exception:
                             continue
-                _deps[_dn] = _resolved
-                _DEP_VERSION_CACHE[_dn] = _resolved
+            _deps[_dn] = _resolved
+            _DEP_VERSION_CACHE[_cache_key] = _resolved
         except Exception:
             pass
         # P1-3(评审 #102): full SHA256(64 hex 内部;显示层才截断)
@@ -380,28 +442,14 @@ def compile_step_full(step: dict, workdir: str, outputs: dict,
         except ValueError as e:
             raise WorkflowError(f"WORKFLOW_COMPILE_ERROR: step {step.get('id')} 编译失败: {e}") from e
         # P0-1(评审 #100): binding_fp 用 raw symbolic binding(替换前 refs)
-        # + 内容寻址(评审 #104 Test⑤): binding 里的文件路径替换为内容 sha——
-        # 同内容换路径=同 execution(路径不是身份,内容才是)
+        # + 评审 #107 P1③: 不再把内容 sha 混入 binding——
+        #   binding_fp 只描述"怎么接"(wiring), 内容身份由 execution_fp 的 input_shas 承载。
+        #   (旧实现 _content_addr 把路径换成截断 16 hex sha 进 binding, 已删除——
+        #    截断身份 + 身份层耦合, 违反分层: binding=接线 / execution=接线+内容)
         _sym = symbolic_override or dict(binding)
-        def _content_addr(v):
-            if isinstance(v, str) and os.path.isfile(v):
-                try:
-                    import hashlib as _h4
-                    _hh = _h4.sha256()
-                    with open(v, "rb") as _f4:
-                        for _c4 in iter(lambda: _f4.read(1 << 20), b""):
-                            _hh.update(_c4)
-                    return "sha256:" + _hh.hexdigest()[:16]
-                except OSError:
-                    return v
-            if isinstance(v, list):
-                return [_content_addr(x) for x in v]
-            if isinstance(v, dict):
-                return {k: _content_addr(x) for k, x in v.items()}
-            return v
         return CompiledInvocation(argv=argv, inputs=inputs, outputs=outs,
                                   parameters=params, tool=bare,
-                                  symbolic_binding=_content_addr(_sym))
+                                  symbolic_binding=_sym)
     argv = [_resolve(a, outputs) if isinstance(a, str) else a for a in step.get("args", [])]
     return CompiledInvocation(argv=argv, inputs=[], outputs=[], parameters={}, tool=bare)
 
