@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.23] - 2026-10-02
+
+### 评审 #108 遗留 P1 三项完结
+- **resolver 读 dependency_manifest**: KNOWN_DEPENDENCIES_STRUCT 每条目加 executable/version_args(hmmsearch→-h, muscle→-version, iqtree2→--version 等 17 条);解析优先级 manifest → DEP_VERSION_ARGS 表 → heuristic;contract-driven 终态达成
+- **static_compile/runtime_resolve 分拆**: compile_step_full + CompiledInvocation 支持 runtime_resolve——validate 走 static 编译(不读输入内容/不 fork 外部工具, 保持纯静态检查), run 走完整 runtime identity;静态 contract/binding fp 两模式一致
+- **identity 测试独立成文件**: TestReview107/108 性质矩阵拆到 tests/test_identity_properties.py;command_metadata.json 重新生成(投影同步)
+- **门禁**: pytest 516 passed / ruff 0 / mypy 0
+
 ## [1.4.22] - 2026-10-01
 
 ### identity cleanup / dedup / invariant freeze(评审 #108)
