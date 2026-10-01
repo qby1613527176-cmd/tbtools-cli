@@ -2,15 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.20] - 2026-10-01
+
+### identity closure(第 31 份评审) + 门禁修复
+- **P0-1 tool + schema_version 进 execution contract identity**: 同契约形状换工具→fp 不同(不再错误复用)
+- **P0-2 relations 进 semantic canonical**: semantic_fp 名副其实(改 relations→fp 变)
+- **P1-3 input sha full 64 hex**(不再 [:16])
+- **P1-4 semantic_fingerprint 导出 metadata**(describe 可见; execution 侧不进)+ provenance 三层 fingerprint 补写
+- **P1-5 六个性质测试**(tool/schema/relations/capability/input 路径/input 内容)——路径换同内容 fp 不变(内容寻址), 内容变 fp 变
+- 门禁: pytest 500 passed / ruff 0 / mypy 0
+
 ## [1.4.19] - 2026-09-28
-
-### identity 数学化收官(第 30 份评审)
-- **binding_fp 纯符号化**: 只吃 raw symbolic binding(resolved 路径污染修复)
-- **四层拆分**: Execution Contract / Semantic Metadata / Binding / Execution 独立
-- **dependency identity contract-driven**: spec.dependencies 声明解析(不硬编码)
-- **full SHA256**: 内部 64 hex,显示层截断
-
-## [1.4.19] - 2026-09-29
 
 ### identity 数学化收官(第 30 份评审)
 - **binding_fp 纯符号化**: 只吃 raw symbolic binding(resolved 路径污染修复)
