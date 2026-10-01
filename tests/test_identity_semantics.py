@@ -244,3 +244,62 @@ class TestIdentityClosure:
               "binding": {"inputs": [str(p)], "parameters": {}, "output": "/tmp/a.svg"}}
         c1, c2 = compile_step_full(s1, "/tmp", {}), compile_step_full(s2, "/tmp", {})
         assert c1.execution_fingerprint != c2.execution_fingerprint
+
+
+class TestResumeIntegration:
+    """评审 #106 ③: Resume 集成测试——fp match 必 skip,fp mismatch 必 rerun"""
+
+    @pytest.mark.integration
+    def test_fp_match_skips(self, tmp_path):
+        """fp 完全一致 → resume 必须跳过(不重跑)"""
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR")
+        import shutil
+        wf = tmp_path / "w.yaml"
+        wf.write_text("""id: skip.test
+steps:
+  - id: v
+    tool: expr volcano
+    binding: {inputs: ["{workdir}/deg.txt"], parameters: {}, output: "{workdir}/v.svg"}
+""")
+        wd = tmp_path / "w.wf"
+        wd.mkdir()
+        shutil.copy("examples/data/deg.txt", wd / "deg.txt")
+        env = dict(os.environ, TBTOOLS_JAR=jar)
+        r1 = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                             str(wf), "--workdir", str(wd)], capture_output=True, text=True,
+                            cwd=ROOT, env=env, timeout=120)
+        assert json.loads(r1.stdout)["status"] == "succeeded"
+        # 无改动 resume → 必须 skip(无"重新执行")
+        r2 = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                             str(wf), "--workdir", str(wd), "--resume"],
+                            capture_output=True, text=True, cwd=ROOT, env=env, timeout=120)
+        assert "重新执行" not in r2.stderr, "fp 一致却重跑=假失败"
+        d2 = json.loads(r2.stdout)
+        assert d2["status"] == "succeeded"
+
+    @pytest.mark.integration
+    def test_provenance_has_fingerprint(self, tmp_path):
+        """provenance 含三层 fingerprint(评审 #106)"""
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR")
+        import shutil
+        wf = tmp_path / "w.yaml"
+        wf.write_text("""id: prov.test
+steps:
+  - id: v
+    tool: expr volcano
+    binding: {inputs: ["{workdir}/deg.txt"], parameters: {}, output: "{workdir}/v.svg"}
+""")
+        wd = tmp_path / "w.wf"
+        wd.mkdir()
+        shutil.copy("examples/data/deg.txt", wd / "deg.txt")
+        env = dict(os.environ, TBTOOLS_JAR=jar)
+        subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "workflow", "run",
+                        str(wf), "--workdir", str(wd)], capture_output=True, text=True,
+                       cwd=ROOT, env=env, timeout=120)
+        prov = json.loads((wd / "v.svg.tbtools.json").read_text())
+        assert prov.get("execution_fingerprint"), "provenance 缺 execution_fingerprint"
+        assert len(prov["execution_fingerprint"]) == 64
