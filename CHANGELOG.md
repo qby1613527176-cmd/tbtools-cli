@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.25] - 2026-10-02
+
+### Semantic Resolver 覆盖率(评审 #109)——语义发现 50% → 100%
+- **语义索引**: search hay 加入 capabilities/relations 层(此前只匹配 name+help+class 字面词, 浪费 planner 已验证语义数据)
+- **词干化**: extract↔extraction / genome↔genomes(仅词干相等防噪音工具)
+- **停用词过滤**: by/id/list/of/with 不参与 AND('extract sequences by id list' 噪音词稀释语义)
+- **排序重构**: 语义命中(能力/关系) > 全名精确 > name 凑巧——'blast sequences' 的 recipBlast(能力真源) 曾排 bestid(名字含 blast)之后
+- **测试**: tests/test_search_quality.py 17 用例;门禁 pytest 553 passed / ruff 0 / mypy 0
+
 ## [1.4.24] - 2026-10-02
 
 ### Planner 决策质量(评审 #109)——规划正确率 29% → 93%
