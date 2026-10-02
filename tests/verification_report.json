@@ -64,7 +64,17 @@
  "execution_verified": [
   "dehist",
   "dualsyn",
+  "genelocgff",
+  "genestructure",
+  "heatmap",
+  "iqtree",
   "mcscanx",
+  "muscle",
+  "pca",
+  "seqlogo",
+  "sixframe",
+  "trimal",
+  "venn2",
   "volcano"
  ]
 }

@@ -840,28 +840,42 @@ def register_top(cli, _LG):
                 _os.close(_saved_fd)
         dt = round(_time.time() - t0, 2)
         # 产物+错误: 明确输出识别(args 中最后产物参数 → 其 provenance), 非扫描猜测(评审 #56 P1-1 任意 artifact)
+        # 评审 #109(contract 可信度): 无 provenance 时兜底——muscle(Python 直调)/iqtree(java 桥)
+        # 不写 .tbtools.json 但产物真实存在; 此前 artifacts=[] 让 Agent 看不到结果, 兜底 build 修复
         artifacts, error = [], None
         for a in reversed(args):
             if a.endswith((".svg", ".png", ".pdf", ".tsv", ".txt", ".csv", ".json",
                            ".gff", ".gff3", ".gtf", ".nwk", ".fa", ".fasta", ".fastq",
                            ".xls", ".out", ".meme", ".tree", ".aln", ".collinearity")):
                 _po = a + ".tbtools.json"
+                from tbtools_cli.artifact import (build as _abuild, discover_outputs,
+                                                  from_provenance as _afrom)
+                _found_any = False
                 if os.path.isfile(_po):
                     try:
                         _prov = _json.load(open(_po, encoding="utf-8"))
                         error = _prov.get("error")
-                        # 统一 Artifact 模型(评审 #60-4)
-                        from tbtools_cli.artifact import (build as _abuild, discover_outputs,
-                                                          from_provenance as _afrom)
                         for _o in _prov.get("outputs", []):
                             _art = _afrom(_o) or _abuild(_o)
                             artifacts.append(_art.to_dict())
-                            # prefix 多输出发现(mcscanx 类: 主路径不存在时找 <out>.xxx 兄弟)
+                            _found_any = True
                             if not os.path.isfile(_o):
                                 for _x in discover_outputs(_o):
                                     artifacts.append(_abuild(_x).to_dict())
+                                    _found_any = True
                     except Exception:
                         pass
+                # 兜底: provenance 缺失但产物真实(手动/桥类引擎)——直接 build + prefix 发现
+                if not _found_any:
+                    _seen_paths = set()
+                    for _cand in ([a] + discover_outputs(a)):
+                        if os.path.isfile(_cand) and os.path.getsize(_cand) > 0 \
+                                and os.path.abspath(_cand) not in _seen_paths:
+                            _seen_paths.add(os.path.abspath(_cand))
+                            try:
+                                artifacts.append(_abuild(_cand).to_dict())
+                            except Exception:
+                                pass
                 break
         if _timed_out:
             error = {"code": "TB007_TOOL_TIMEOUT", "retryable": True,
