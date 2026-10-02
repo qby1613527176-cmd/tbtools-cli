@@ -603,6 +603,31 @@ KNOWN_RELATIONS = {
     "gsea":     {"accepts": ["EXPRESSION_TABLE", "PHENOTYPE_CLS"], "produces": ["GSEA_REPORT"]},
     "genestructure": {"accepts": ["GFF3", "GENE_ID_LIST"], "produces": ["GENE_STRUCTURE_PLOT"]},
     "kallisto": {"accepts": ["FASTQ"], "produces": ["QUANT_TABLE"], "next_step": ["tpmCalc"]},
+    # 评审 #109(Planner 决策质量): 精确 relations 覆盖教程实证场景——
+    # 组级兜底会污染同组工具(seq 组全部变 SEQUENCE_ARTIFACT 万能中介), 关键工具必须精确标注
+    "recipBlast": {"accepts": ["FASTA"], "produces": ["BLAST_HITS", "RBH_TABLE"],
+                   "next_step": ["filterCScore"], "related_to": ["twoSeqBlast"]},
+    "twoSeqBlast": {"accepts": ["FASTA"], "produces": ["BLAST_HITS"], "related_to": ["recipBlast"]},
+    "extractFasta": {"accepts": ["FASTA", "GENE_ID_LIST"], "produces": ["SEQUENCE_SUBSET", "FASTA"],
+                      "related_to": ["extractFastaSub"]},
+    "statFasta": {"accepts": ["FASTA"], "produces": ["FASTA_STATS", "TSV"], "related_to": ["fastaExtract"]},
+    "dnDsCalculate": {"accepts": ["ALIGNMENT"], "produces": ["KAKS_TABLE"], "related_to": ["muscle"]},
+    "hmmsearch": {"accepts": ["FASTA", "HMM_PROFILE"], "produces": ["HMM_HITS", "TSV"]},
+    "sixframe": {"accepts": ["DNA_FASTA"], "produces": ["PROTEIN_FASTA"], "related_to": ["longestorf"]},
+    "longestorf": {"accepts": ["DNA_FASTA"], "produces": ["PROTEIN_FASTA"], "related_to": ["sixframe"]},
+    "memerun": {"accepts": ["PROTEIN_FASTA"], "produces": ["MEME_XML"], "next_step": ["motif"]},
+    "tfbsShift": {"accepts": ["MEME_XML"], "produces": ["TFBS_TABLE"], "related_to": ["motif"]},
+    # 评审 #109: 清理 seq 组万能中介——组兜底把 pep2codon/structure/mastExtract 全变成
+    # FASTA→SEQUENCE_ARTIFACT 等价工具, planner 无法区分真实语义, 大量错误规划源于此
+    "pep2codon": {"accepts": ["PROTEIN_ALIGNMENT"], "produces": ["CODON_ALIGNMENT"], "related_to": ["muscle"]},
+    "structure": {"accepts": ["GFF3"], "produces": ["GENE_STRUCTURE_PLOT"], "related_to": ["genestructure"]},
+    "mastExtract": {"accepts": ["MEME_XML", "HMM_HITS"], "produces": ["SEQUENCE_SUBSET"], "related_to": ["memerun"]},
+    # 评审 #109: 空壳 spec 抢占——hmmerSearch(无 relations/caps 的空壳) 曾靠 name 命中 goal 抢走
+    # hmmsearch(真工具) 的规划; 空壳补精确关系让其可识别但语义明确
+    "hmmerSearch": {"accepts": ["FASTA", "HMM_PROFILE"], "produces": ["HMM_HITS"], "related_to": ["hmmsearch"]},
+    "calcRepeat": {"accepts": ["DNA_FASTA"], "produces": ["REPEAT_SCAN"], "related_to": ["careclassify"]},
+    "smart": {"accepts": ["PROTEIN_FASTA"], "produces": ["DOMAIN_ANNOTATION"], "related_to": ["cddmotif"]},
+    "memeViz": {"accepts": ["MEME_XML"], "produces": ["MOTIF_PLOT"], "related_to": ["memerun"]},
 }
 
 
@@ -661,6 +686,17 @@ KNOWN_CAPABILITIES = {
     "keggEnrich": ["enrichment"],
     "tpmCalc": ["rna_seq", "normalization"],
     "peaktss": ["chip_seq"],
+    # 评审 #109(Planner 决策质量): kind=tool/manual 工具缺能力标注 → goal 语义匹配永远选不到
+    "dnDsCalculate": ["ka_ks", "evolutionary_analysis"],
+    "extractFasta": ["sequence", "extraction"],
+    "statFasta": ["sequence", "statistics"],
+    "hmmerSearch": ["homology", "hmm_scan"],
+    "pep2codon": ["translation", "codon"],
+    "structure": ["gene_structure", "visualization"],
+    "mastExtract": ["motif", "sequence_extraction"],
+    "preparespecies": ["genome_preparation", "annotation"],
+    "fastaExtract": ["sequence", "extraction"],
+    "mastrun": ["motif", "scanning"],
 }
 # 精确标注补充(2026-09-23): 覆盖组级兜底的粗标签, 核心命令细化
 KNOWN_CAPABILITIES.update({

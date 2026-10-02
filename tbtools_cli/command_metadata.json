@@ -342,8 +342,8 @@
   "runner": "plot",
   "group": "engine",
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
-  "semantic_fingerprint": "f408f13eb3ae4581acb8795287998edad19cec88993ce8b9b143b8fef7798e52",
-  "semantic_fingerprint_short": "f408f13eb3ae4581",
+  "semantic_fingerprint": "6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca",
+  "semantic_fingerprint_short": "6fcdc59ed0ece961",
   "dependencies": [
    "jellyfish"
   ],
@@ -362,6 +362,17 @@
     ]
    }
   ],
+  "relations": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "REPEAT_SCAN"
+   ],
+   "related_to": [
+    "careclassify"
+   ]
+  },
   "inputs": [
    {
     "name": "fasta",
@@ -2412,25 +2423,28 @@
   "runner": "plot",
   "group": "seq",
   "help": "mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中",
-  "semantic_fingerprint": "b64e750a1cbc6b062795765ea30f3ea50cabb0e35d989dec4a16a2d6a765a916",
-  "semantic_fingerprint_short": "b64e750a1cbc6b06",
+  "semantic_fingerprint": "58c695423ae44798d6edcc9cc1edb9451b84bafc82cc6d8c9ba59064dae5e6b6",
+  "semantic_fingerprint_short": "58c695423ae44798",
   "capabilities": [
-   "sequence"
+   "motif",
+   "sequence_extraction"
   ],
   "capabilities_ontology": [
-   "sequence"
+   "motif",
+   "sequence",
+   "sequence.motif",
+   "sequence_extraction"
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "MEME_XML",
+    "HMM_HITS"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "SEQUENCE_SUBSET"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "memerun"
    ]
   }
  },
@@ -2646,8 +2660,8 @@
   "runner": "plot",
   "group": "seq",
   "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
-  "semantic_fingerprint": "67cf14531ce5aa064084fd36b5e40f0b0a4425205a90e07656b2f72a443001bf",
-  "semantic_fingerprint_short": "67cf14531ce5aa06",
+  "semantic_fingerprint": "71a9b415e2ec52efd2f35a11cc30187d8f587241121a518386c55370dd4066fc",
+  "semantic_fingerprint_short": "71a9b415e2ec52ef",
   "capabilities": [
    "motif",
    "discovery"
@@ -2661,15 +2675,13 @@
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "PROTEIN_FASTA"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "MEME_XML"
    ],
-   "related_to": [
-    "muscle",
-    "trimal"
+   "next_step": [
+    "motif"
    ]
   },
   "inputs": [
@@ -3364,25 +3376,27 @@
   "runner": "plot",
   "group": "seq",
   "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
-  "semantic_fingerprint": "1b359dc504c3cb1039fd30280c8fc37272f4ab1ec6c3fc6a98566f1037384238",
-  "semantic_fingerprint_short": "1b359dc504c3cb10",
+  "semantic_fingerprint": "c82fae59c87ae856f68e03f507ca88485b0f7b14f0e011b679a0e259a74ed247",
+  "semantic_fingerprint_short": "c82fae59c87ae856",
   "capabilities": [
-   "sequence"
+   "translation",
+   "codon"
   ],
   "capabilities_ontology": [
-   "sequence"
+   "codon",
+   "sequence",
+   "sequence.translation",
+   "translation"
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "PROTEIN_ALIGNMENT"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "CODON_ALIGNMENT"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "muscle"
    ]
   },
   "inputs": [
@@ -3578,15 +3592,17 @@
   "runner": "plot",
   "group": "asm",
   "help": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
-  "semantic_fingerprint": "c57aa937a5f38f79b7bcb8ce87dc57cc03ed501c23bc81d122cfa4f6b4c5fab7",
-  "semantic_fingerprint_short": "c57aa937a5f38f79",
+  "semantic_fingerprint": "5beea6519723aa4fe8a8fbc6660e8120b0a6842e68bc074909aa8d9c9073756b",
+  "semantic_fingerprint_short": "5beea6519723aa4f",
   "capabilities": [
-   "assembly"
+   "genome_preparation",
+   "annotation"
   ],
   "capabilities_ontology": [
-   "assembly",
+   "annotation",
+   "genome_preparation",
    "genomics",
-   "genomics.assembly"
+   "genomics.annotation"
   ],
   "relations": {
    "accepts": [
@@ -3791,8 +3807,8 @@
   "runner": "plot",
   "group": "blast",
   "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（ArgsParser 风格：参数必须 --key value 形态；依赖系统 blastp/makeblastdb）",
-  "semantic_fingerprint": "be028cbdcc32b74b2cd2a72050fa90c37dd85a30fbead8bf4f4523ff2a701838",
-  "semantic_fingerprint_short": "be028cbdcc32b74b",
+  "semantic_fingerprint": "3c5f03439c122e5b433fbb2d38e1cf38a0f3a6a785e71b5892c8071ddf0090ba",
+  "semantic_fingerprint_short": "3c5f03439c122e5b",
   "capabilities": [
    "homology",
    "reciprocal_best_hit"
@@ -3809,10 +3825,14 @@
     "FASTA"
    ],
    "produces": [
-    "BLAST_HITS"
+    "BLAST_HITS",
+    "RBH_TABLE"
    ],
    "next_step": [
     "filterCScore"
+   ],
+   "related_to": [
+    "twoSeqBlast"
    ]
   },
   "inputs": [
@@ -4515,8 +4535,8 @@
   "runner": "plot",
   "group": "blast",
   "help": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
-  "semantic_fingerprint": "153f0359ab8afe345c6585ee34e2847de745745d58665b64450ab2da975666b5",
-  "semantic_fingerprint_short": "153f0359ab8afe34",
+  "semantic_fingerprint": "c568e369fe4d701862985204f262fff9c4aa5677569262ef4853d72d318a9353",
+  "semantic_fingerprint_short": "c568e369fe4d7018",
   "capabilities": [
    "homology"
   ],
@@ -4532,8 +4552,8 @@
    "produces": [
     "BLAST_HITS"
    ],
-   "next_step": [
-    "filterCScore"
+   "related_to": [
+    "recipBlast"
    ]
   }
  },
@@ -4992,8 +5012,8 @@
   "runner": "java",
   "group": "seq",
   "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
-  "semantic_fingerprint": "546b6ffdc37754f14c894078c4a1a0f18b8b23bc766fa34cd9a83ac666463910",
-  "semantic_fingerprint_short": "546b6ffdc37754f1",
+  "semantic_fingerprint": "9c2453fdca739ed3ac7d1bd7057773d8a328f768e4aec6561bf670b087eed2ca",
+  "semantic_fingerprint_short": "9c2453fdca739ed3",
   "capabilities": [
    "translation",
    "sequence"
@@ -5005,15 +5025,13 @@
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "DNA_FASTA"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "PROTEIN_FASTA"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "longestorf"
    ]
   },
   "inputs": [
@@ -5046,8 +5064,8 @@
   "runner": "java",
   "group": "seq",
   "help": "longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
-  "semantic_fingerprint": "b68f99ffc8b0fe0a5f60b83be2a44855e232d8af848a793b1562982542e9d81d",
-  "semantic_fingerprint_short": "b68f99ffc8b0fe0a",
+  "semantic_fingerprint": "d4d6f5a9bcb6dd2e40561909cc7e9c2b6c4abc370c84c5782cdc2068672cea0d",
+  "semantic_fingerprint_short": "d4d6f5a9bcb6dd2e",
   "capabilities": [
    "orf_prediction",
    "sequence"
@@ -5059,15 +5077,13 @@
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "DNA_FASTA"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "PROTEIN_FASTA"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "sixframe"
    ]
   },
   "inputs": [
@@ -6344,8 +6360,30 @@
   "runner": "java",
   "group": "tool",
   "help": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
-  "semantic_fingerprint": "9aef2fcea89b3ad94cdcf196f2e7ed53ec53c6b2ea35e7d644248e011e3fa884",
-  "semantic_fingerprint_short": "9aef2fcea89b3ad9"
+  "semantic_fingerprint": "d21ab22d6059ede8c1551675ae0a6d5c616591058b650955b8b5e7359fb7088b",
+  "semantic_fingerprint_short": "d21ab22d6059ede8",
+  "capabilities": [
+   "sequence",
+   "extraction"
+  ],
+  "capabilities_ontology": [
+   "extraction",
+   "sequence",
+   "sequence.extraction"
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "SEQUENCE_SUBSET",
+    "FASTA"
+   ],
+   "related_to": [
+    "extractFastaSub"
+   ]
+  }
  },
  "extractFastaSub": {
   "name": "extractFastaSub",
@@ -6392,8 +6430,27 @@
   "runner": "java",
   "group": "tool",
   "help": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
-  "semantic_fingerprint": "eb21a633f2a1de62ece045459d23c2b715cc6a6706fa4c7654d246b5e05c5cb8",
-  "semantic_fingerprint_short": "eb21a633f2a1de62"
+  "semantic_fingerprint": "dc41861a795dd3a3568c7c4c98ba399c9f10669e52c358f5e6669791d18baade",
+  "semantic_fingerprint_short": "dc41861a795dd3a3",
+  "capabilities": [
+   "ka_ks",
+   "evolutionary_analysis"
+  ],
+  "capabilities_ontology": [
+   "evolutionary_analysis",
+   "ka_ks"
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "KAKS_TABLE"
+   ],
+   "related_to": [
+    "muscle"
+   ]
+  }
  },
  "ssrMiner": {
   "name": "ssrMiner",
@@ -6920,8 +6977,30 @@
   "runner": "java",
   "group": "tool",
   "help": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
-  "semantic_fingerprint": "2057fab13e80a29aedba1770b6a0a768f7bb03647fe640f58890e43503a51429",
-  "semantic_fingerprint_short": "2057fab13e80a29a"
+  "semantic_fingerprint": "9ba90e3e559f827602b4cf8a2b22045cdefb13a73236787770dade602560c3e7",
+  "semantic_fingerprint_short": "9ba90e3e559f8276",
+  "capabilities": [
+   "sequence",
+   "statistics"
+  ],
+  "capabilities_ontology": [
+   "expression",
+   "expression.statistics",
+   "sequence",
+   "statistics"
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "FASTA_STATS",
+    "TSV"
+   ],
+   "related_to": [
+    "fastaExtract"
+   ]
+  }
  },
  "goEnrichMerge": {
   "name": "goEnrichMerge",
@@ -7022,25 +7101,27 @@
   "runner": "plot",
   "group": "seq",
   "help": "基因结构图（外显子/UTR 从 GFF）",
-  "semantic_fingerprint": "fee8a467a05db71503bf57069d106f441284358cfc9c2e7eb0e32d6cee9e57d0",
-  "semantic_fingerprint_short": "fee8a467a05db715",
+  "semantic_fingerprint": "f24532072283b659d5c0f727fbf96d31e44013ea265511dfdbc848d68e03952c",
+  "semantic_fingerprint_short": "f24532072283b659",
   "capabilities": [
-   "sequence"
+   "gene_structure",
+   "visualization"
   ],
   "capabilities_ontology": [
-   "sequence"
+   "annotation",
+   "annotation.gene_structure",
+   "gene_structure",
+   "visualization"
   ],
   "relations": {
    "accepts": [
-    "FASTA",
     "GFF3"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "GENE_STRUCTURE_PLOT"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "genestructure"
    ]
   },
   "aliases": [
@@ -7628,8 +7709,8 @@
   "runner": "plot",
   "group": "hmm",
   "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
-  "semantic_fingerprint": "ce199b6d4abf8dfe649566791b77b928e7cb5e5f0bf155163f33c1cfd27c40a8",
-  "semantic_fingerprint_short": "ce199b6d4abf8dfe",
+  "semantic_fingerprint": "e7451fec71d9b65b013e8722a18c714d30f2cb77e1f891bbf4506adc6e675df5",
+  "semantic_fingerprint_short": "e7451fec71d9b65b",
   "capabilities": [
    "homology",
    "hmm_scan"
@@ -7659,6 +7740,16 @@
     ]
    }
   ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "HMM_PROFILE"
+   ],
+   "produces": [
+    "HMM_HITS",
+    "TSV"
+   ]
+  },
   "status": "platform-limited"
  },
  "gxfAttr": {
@@ -8218,8 +8309,31 @@
   "runner": "plot",
   "group": "hmm",
   "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
-  "semantic_fingerprint": "66a1cfca52b5d91a653436177e32123d00eae3b4ab4fdb9a19fa773c2e11e13e",
-  "semantic_fingerprint_short": "66a1cfca52b5d91a",
+  "semantic_fingerprint": "43a2550d9ee51f2c4df6a68c6351204e5e46d5a3916e5cfef1be46e69c48a1ca",
+  "semantic_fingerprint_short": "43a2550d9ee51f2c",
+  "capabilities": [
+   "homology",
+   "hmm_scan"
+  ],
+  "capabilities_ontology": [
+   "hmm_scan",
+   "homology",
+   "sequence",
+   "sequence.homology",
+   "sequence.homology.hmm_scan"
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "HMM_PROFILE"
+   ],
+   "produces": [
+    "HMM_HITS"
+   ],
+   "related_to": [
+    "hmmsearch"
+   ]
+  },
   "inputs": [
    {
     "name": "hmm",
@@ -8255,8 +8369,8 @@
   "runner": "plot",
   "group": "seq",
   "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
-  "semantic_fingerprint": "e25d38cf0587b2ca751c9bcdbe5e0ea778d80b67b4adb59087806adcfcfd5c41",
-  "semantic_fingerprint_short": "e25d38cf0587b2ca",
+  "semantic_fingerprint": "73875b412107b93f33499155d4a7af4988568a72a49eb895f18646419de1e076",
+  "semantic_fingerprint_short": "73875b412107b93f",
   "capabilities": [
    "motif",
    "visualization"
@@ -8269,15 +8383,13 @@
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "MEME_XML"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "MOTIF_PLOT"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "memerun"
    ]
   },
   "inputs": [
@@ -8364,8 +8476,8 @@
   "runner": "plot",
   "group": "seq",
   "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
-  "semantic_fingerprint": "b12615a4699afc902d7e11516c88358698a8ea6e7247b8dfc14b12e92697af03",
-  "semantic_fingerprint_short": "b12615a4699afc90",
+  "semantic_fingerprint": "13e13347c6e30463d66558c40efa759280726218be036b2e5ff3b42bb21b0dd6",
+  "semantic_fingerprint_short": "13e13347c6e30463",
   "capabilities": [
    "motif",
    "genome_scan"
@@ -8379,15 +8491,13 @@
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "MEME_XML"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "TFBS_TABLE"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "motif"
    ]
   },
   "inputs": [
@@ -8526,8 +8636,8 @@
   "runner": "plot",
   "group": "seq",
   "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
-  "semantic_fingerprint": "f78ee4bfe984a72d2d02ac04d4ec07d3ec366bc7e99664bd2849ac788cae186f",
-  "semantic_fingerprint_short": "f78ee4bfe984a72d",
+  "semantic_fingerprint": "1319449b755fb51dcf993d7cdfacedbfc76480ba640e06a927345ac881355712",
+  "semantic_fingerprint_short": "1319449b755fb51d",
   "capabilities": [
    "domain",
    "annotation"
@@ -8542,15 +8652,13 @@
   ],
   "relations": {
    "accepts": [
-    "FASTA",
-    "GFF3"
+    "PROTEIN_FASTA"
    ],
    "produces": [
-    "SEQUENCE_ARTIFACT"
+    "DOMAIN_ANNOTATION"
    ],
    "related_to": [
-    "muscle",
-    "trimal"
+    "cddmotif"
    ]
   },
   "inputs": [

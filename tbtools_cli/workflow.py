@@ -974,11 +974,25 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     goal_l = goal.lower()
     # ── 契约图搜索(评审 #70 P0-3): A.outputs ↔ B.inputs 真实配对,DFS 探索所有分支 ──
     def _accepts(tool_spec, fmt: str) -> bool:
+        """接受性判断(评审 #109): 字面 + 格式族语义匹配——
+        'aln' 应命中 ALIGNMENT 族, 'fa' 应命中 FASTA 族(原实现只字面相等, 组织级 ALIGNMENT 永远匹配不到 'aln')。"""
         if not fmt:
             return False
         ins_fmts = [i.format.lower() for i in (tool_spec.inputs or [])]
         rel_acc = [a.lower() for a in ((tool_spec.relations or {}).get("accepts") or [])]
-        return fmt.lower() in ins_fmts or fmt.lower() in rel_acc
+        if fmt.lower() in ins_fmts or fmt.lower() in rel_acc:
+            return True
+        # 格式族语义匹配(评审 #72 P1-1 复用): aln↔ALIGNMENT, fa↔FASTA, tsv↔TABLE
+        # _FORMAT_FAMILIES 在闭包内后定义, 调用时已存在(运行时解析)
+        in_family = {f: fam for fam, members in _FORMAT_FAMILIES.items() for f in members}
+        fmt_fam = in_family.get(fmt.lower())
+        if fmt_fam:
+            for acc in ins_fmts + rel_acc:
+                if acc in in_family and in_family[acc] == fmt_fam:
+                    return True
+                if acc.lower() == fmt_fam or fmt.lower() == acc.lower():
+                    return True
+        return False
 
     def _produces(tool_spec) -> list:
         outs = [str(o).lower() for o in (tool_spec.outputs or [])]
@@ -1166,7 +1180,12 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 return True
         return False
     starts.sort(key=lambda n: (0 if _goal_match(n) else 1, 0 if _reach_goal_2hop(n) else 1))
-    for st in starts[:16]:
+    # 评审 #109(Planner 决策质量): 起点截断不再丢关键工具——
+    # goal 直接命中的起点必须全保留(recipBlast 等 MULTI_INPUT 工具曾因排序靠后掉出 [:16] 永不被探索),
+    # 其余按序补足到上限(防爆炸仍保留)
+    _goal_starts = [n for n in starts if _goal_match(n)]
+    _rest = [n for n in starts if not _goal_match(n)]
+    for st in (_goal_starts + _rest)[:24]:
         _dfs([st], [])
     if not plans:
         direct = [n for n in specs if _goal_match(n)]
@@ -1190,6 +1209,31 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         # 工具全名直接出现在目标文本(最强语义信号: goal 含 "volcano" → volcano 工具)
         if chain[-1].lower() in goal_l:
             reasons.append("exact_name_in_goal"); score += 0.2
+        # 评审 #109(Planner 决策质量): capability 短语完全命中——
+        # goal "reciprocal best hit" 与 capability "reciprocal_best_hit" 归一化后相等 → 强信号。
+        # 解决 recipBlast(能力精确描述 goal) 单步 0.8 被泛泛链(0.9)压制的评分失真。
+        # 仅 2+ 词短语匹配(单词 'visualization' 会命中所有可视化工具=噪音)
+        _goal_ngrams = set()
+        _gwords = [w for w in goal_l.split() if len(w) > 2]
+        for _gi in range(len(_gwords)):
+            for _gj in range(_gi + 2, len(_gwords) + 1):
+                _goal_ngrams.add("_".join(_gwords[_gi:_gj]))
+        for _cap in (specs[chain[-1]].capabilities or []):
+            if _cap in _goal_ngrams:
+                reasons.append("capability_phrase_match"); score += 0.25
+                break
+        # 评审 #109(Planner 决策质量): 链起点与 goal 无关 → 扣分——
+        # recipBlast→mcscanx 曾靠"起点 input_exact + 终点弱命中 + 契约边"在 domain scan 场景
+        # 赢过 hmmsearch(2 词命中); 起点无 goal 命中 = 该链不是为这个 goal 服务的
+        if chain and not _goal_match(chain[0]):
+            score -= 0.2
+            reasons.append("irrelevant_start")
+        # capability 短语对 start 链工具同样有效(recipBlast 在链中段时)
+        for _mid_ in chain:
+            for _cap in (specs[_mid_].capabilities or []):
+                if _cap in _goal_ngrams and _mid_ != chain[-1]:
+                    score += 0.10
+                    break
         contract_edges = sum(1 for f in fmts if f and f != "relation")
         if contract_edges == len(chain) - 1 and len(chain) > 1:
             reasons.append("all_contract_edges"); score += 0.2
@@ -1205,19 +1249,48 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 score -= 0.3
                 reasons.append("content_type_conflict")
                 break
-        # 多必填输入降级(评审 #70 P0-2): planner 单输入绑定, >1 必填输入的工具当前不可执行
+        # 多必填输入降级(评审 #70 P0-2 → #109 修正): 仅当 slot resolver 无法绑定才罚。
+        # 绑定性探测用**多格式虚拟输入**(gff3+txt+fasta+tsv…)——单输入探测会让第二必填槽
+        # (如 genestructure 的 ids/txt)永远解析失败, 误伤真工具(genestructure 曾因此输给 memeViz)
+        _probe_inputs = {f"_src_{i}": f"input.{f}" for i, f in
+                         enumerate([input_format, "txt", "fasta", "tsv", "gff3", "nwk", "aln"] if input_format
+                                   else ["txt", "fasta", "tsv", "gff3"])}
         for t in chain:
             _req = [i for i in (specs[t].inputs or []) if i.required]
             if len(_req) > 1:
-                score -= 0.4
-                reasons.append("multi_input_unsupported")
+                if _bind_slots_local(t, "{input}", _probe_inputs) is None:
+                    score -= 0.4
+                    reasons.append("multi_input_unbindable")
+                    break
+        # 评审 #109(Planner 决策质量): 空壳 manual(0 inputs 无签名)不可执行 → 降权——
+        # structure/smart 等空壳曾靠 name/capability 词根赢过真工具(genestructure 2 inputs)
+        for t in chain:
+            _sp_t = specs[t]
+            if _sp_t.kind == "manual" and not (_sp_t.inputs or []) and not _sp_t.class_name:
+                score -= 0.25
+                reasons.append("shell_manual")
                 break
-        # 透传跳惩罚(评审 #70): 中间步 输入格式≈输出格式 且不相关 goal = 无增值(preparespecies→iqtree)
-        for mid in chain[1:-1] if len(chain) > 1 else []:
-            _ins = [i.format.lower() for i in (specs[mid].inputs or [])] +                    [a.lower() for a in ((specs[mid].relations or {}).get("accepts") or [])]
+        # 透传跳惩罚(评审 #70 → #109 加强): 输入格式≈输出格式 且不相关 goal = 无增值前缀/中间步。
+        # 覆盖链首(pep2codon 作 fasta→fasta 起点曾无限增值却抢规划)——
+        # exact 透传(fasta→fasta)重罚, 兼容透传(alignment→trimmed_alignment 修剪)轻罚;
+        # goal 匹配的步骤豁免(muscle 在 phylogeny 目标是增值)
+        for _mi, mid in enumerate(chain[:-1] if len(chain) > 1 else []):
+            _ins = [i.format.lower() for i in (specs[mid].inputs or [])] + \
+                    [a.lower() for a in ((specs[mid].relations or {}).get("accepts") or [])]
             _outs = _produces(specs[mid])
-            if any(_fmt_match(i, o) for i in _ins for o in _outs) and not _goal_match(mid):
-                score -= 0.15
+            if _goal_match(mid):
+                continue
+            _worst = 0.0
+            for _i in _ins:
+                for _o in _outs:
+                    _lv = _fmt_level(_i, _o)
+                    if _lv == "exact":
+                        _worst = max(_worst, 0.3)
+                    elif _lv == "compatible":
+                        _worst = max(_worst, 0.10)
+            if _worst:
+                score -= _worst
+                reasons.append("passthrough_prefix" if _mi == 0 else "passthrough_middle")
                 break
         return round(score, 2), reasons  # 内部不截断, 输出时 cap
     best = max(plans, key=lambda p: _score(*p)[0]) if plans else ([], [])
