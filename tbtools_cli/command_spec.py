@@ -727,7 +727,7 @@ KNOWN_CAPABILITIES.update({
     "diamond": ["homology", "alignment"],
     "blastp": ["homology", "alignment"],
     "blastn": ["homology", "alignment"],
-    "recipBlast": ["homology", "reciprocal_best_hit"],
+    "recipBlast": ["homology", "reciprocal_best_hit", "blast"],
     "filterCScore": ["homology", "filtering"],
     "kallisto": ["rna_seq", "quantification"],
     "fqTrim": ["ngs", "preprocessing"],

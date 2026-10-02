@@ -3807,13 +3807,15 @@
   "runner": "plot",
   "group": "blast",
   "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（ArgsParser 风格：参数必须 --key value 形态；依赖系统 blastp/makeblastdb）",
-  "semantic_fingerprint": "3c5f03439c122e5b433fbb2d38e1cf38a0f3a6a785e71b5892c8071ddf0090ba",
-  "semantic_fingerprint_short": "3c5f03439c122e5b",
+  "semantic_fingerprint": "1fb57ab5bcf2b5616b85b2ffc1ff99b4724fe5987682ac2305881cd265fd31d3",
+  "semantic_fingerprint_short": "1fb57ab5bcf2b561",
   "capabilities": [
    "homology",
-   "reciprocal_best_hit"
+   "reciprocal_best_hit",
+   "blast"
   ],
   "capabilities_ontology": [
+   "blast",
    "homology",
    "reciprocal_best_hit",
    "sequence",

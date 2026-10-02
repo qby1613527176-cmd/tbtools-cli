@@ -1385,7 +1385,10 @@ except Exception:
     def search_cmd(keyword, as_json, in_fmt, out_fmt, cap):
         """模糊搜索命令（匹配名称+doc）: tbtools search <关键词> [--json]"""
         import json as _json
-        # P1-6: ranking(评审 #56): 名称>能力>描述;canonical 优先(alias 降权)
+        # P1-6: ranking(评审 #56 → #109): 语义>名称凑巧——
+        # name 命中 +100 让 bestid/getseqdb(名字含 blast 但非 blast 核心工具)压过 recipBlast(能力真源),
+        # 改为: capability/relations 语义命中最高(能力是 planner/Agent 的语义真源),
+        # 全名精确命中次之, 部分词 name 命中轻加分; alias 降权保留
         def _ranked(hits):
             try:
                 import json as _jm
@@ -1393,15 +1396,27 @@ except Exception:
             except Exception:
                 meta_c = {}
             kw_l = (keyword or "").lower()
+            _kws = [w for w in kw_l.split() if w]
 
             def _score(h):
                 name, _cat, kind, _desc = h
                 s = 0
-                if kw_l and kw_l in name.lower():
-                    s += 100
-                if kw_l and any(kw_l in str(c) for c in (meta_c.get(name, {}).get("capabilities") or [])):
+                _m = meta_c.get(name, {}) or {}
+                _caps = [str(c).lower() for c in (_m.get("capabilities") or [])]
+                _rels = [str(x).lower() for x in
+                         ((_m.get("relations") or {}).get("produces") or [])]
+                _rels += [str(x).lower() for x in
+                          ((_m.get("relations") or {}).get("accepts") or [])]
+                # 语义命中(能力/关系)——recipBlast caps 'blast' 应排 bestid 前
+                _sem_hits = sum(1 for c in _caps + _rels if any(w in c or c.startswith(w) for w in _kws))
+                s += 60 * min(_sem_hits, 2)
+                # 全名精确命中(最强名称信号: volcano)
+                if kw_l.strip() and name.lower() == kw_l.strip():
                     s += 50
-                if meta_c.get(name, {}).get("alias_of"):
+                # 部分词 name 命中(弱于语义)
+                if any(w in name.lower() for w in _kws):
+                    s += 20
+                if _m.get("alias_of"):
                     s -= 30
                 if kind == "manual":
                     s += 10
@@ -1420,13 +1435,43 @@ except Exception:
             sys.exit(1)
         meta = _json.load(open(meta_path, encoding="utf-8"))
         # 多词查询: 空格拆分, 全部词须命中(名/help/class)——Agent 自然语言("gene structure")
-        kws = [w for w in (keyword or "").lower().split() if w]
+        # 评审 #109(语义 resolver): hay 加入 capabilities/relations 语义层——
+        # 此前只搜 name+help+class, 浪费了 planner 已验证的语义数据(recipBlast caps
+        # 'reciprocal_best_hit' 搜 "reciprocal best hit" 应该命中; mcscanx 'collinearity' 同理)
+        # 多词查询: 空格拆分, 全部词须命中(名/help/class)——Agent 自然语言("gene structure")
+        # 评审 #109: 停用词不参与 AND(by/id/list/of/with/from/to 是查询噪音, 会稀释语义)
+        _STOPWORDS = {"by", "id", "list", "of", "with", "from", "to", "and", "the", "using", "use", "for"}
+        kws = [w for w in (keyword or "").lower().split() if w and w not in _STOPWORDS]
+
+        def _stem(w: str) -> str:
+            """评审 #109(语义 resolver): 简单词干化——extract↔extraction, genome↔genomes。
+            仅对 >4 字符去常见后缀; 保留原词(词干化失败不丢词)。"""
+            for _suf in ("tion", "ing", "es", "ed", "s"):
+                if len(w) > 4 and w.endswith(_suf):
+                    return w[:-len(_suf)]
+            return w
+
+        def _kw_in_hay(w: str, hay: str) -> bool:
+            """关键词命中: 字面包含(原逻辑) 或 词干相等(评审 #109 语义容错)。
+            仅词干完全相等(extract↔extraction 去后缀后相同), 不做双向子串包含——
+            前述实现用 _sw in _shw 过度宽松, MIRPrediionResultStat 等噪音工具疯狂命中。"""
+            if w in hay:
+                return True
+            _sw = _stem(w)
+            return any(_stem(_hw) == _sw for _hw in hay.split())
+
         hits = []
         for name, v in meta.items():
+            _caps = " ".join(str(c).lower().replace("_", " ") for c in (v.get("capabilities") or []))
+            _rels = " ".join(str(x).lower().replace("_", " ") for x in
+                              ((v.get("relations") or {}).get("produces") or []))
+            _rela = " ".join(str(x).lower().replace("_", " ") for x in
+                              ((v.get("relations") or {}).get("accepts") or []))
             hay = " ".join([name.lower(),
                             (v.get("help", "") or "")[:300].lower(),
-                            (v.get("class", "") or "").lower()])
-            if all(w in hay for w in kws):
+                            (v.get("class", "") or "").lower(),
+                            _caps, _rels, _rela])
+            if all(_kw_in_hay(w, hay) for w in kws):
                 cat = _LG.CATEGORY_MAP.get(name, "engine")
                 kind = v.get("kind", "?")
                 desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
@@ -1434,9 +1479,15 @@ except Exception:
         if not hits and len(kws) > 1:
             # AND 无果回退 OR(Agent 宽松匹配优于无结果)
             for name, v in meta.items():
+                _caps = " ".join(str(c).lower().replace("_", " ") for c in (v.get("capabilities") or []))
+                _rels = " ".join(str(x).lower().replace("_", " ") for x in
+                                  ((v.get("relations") or {}).get("produces") or []))
+                _rela = " ".join(str(x).lower().replace("_", " ") for x in
+                                  ((v.get("relations") or {}).get("accepts") or []))
                 hay = " ".join([name.lower(), (v.get("help", "") or "")[:300].lower(),
-                                (v.get("class", "") or "").lower()])
-                if any(w in hay for w in kws):
+                                (v.get("class", "") or "").lower(),
+                                _caps, _rels, _rela])
+                if any(_kw_in_hay(w, hay) for w in kws):
                     cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
                     kind = v.get("kind", "?")
                     desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
