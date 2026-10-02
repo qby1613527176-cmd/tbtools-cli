@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.24] - 2026-10-02
+
+### Planner 决策质量(评审 #109)——规划正确率 29% → 93%
+- **spec 数据根治**: 关键工具补精确 relations/capabilities(recipBlast/extractFasta/statFasta/dnDsCalculate/hmmsearch/sixframe 等曾全空或 seq 组万能中介污染); produces 补真实输出格式(statFasta→TSV 等)
+- **算法改进**: _accepts 格式族语义匹配(aln↔ALIGNMENT); 起点截断不再丢 goal 命中工具; MULTI_INPUT 惩罚仅绑定失败才触发(recipBlast 曾被 -0.4 压制); capability 短语完全命中加分(2+ 词防噪音); 链起点与 goal 无关扣分; 透传跳覆盖链首
+- **架构债清偿**: YAML contract 覆盖反向——代码真源(KNOWN_*)优先, YAML 仅兑底(旧 YAML 快照曾循环覆盖新标注, 评审 #108 单一真源方向)
+- **测试**: tests/test_planner_quality.py 16 用例(教程实证 13 场景 + 高置信 + 无无关起点 + 数据无污染回归)
+- **门禁**: pytest 536 passed / ruff 0 / mypy 0
+
 ## [1.4.23] - 2026-10-02
 
 ### 评审 #108 遗留 P1 三项完结
