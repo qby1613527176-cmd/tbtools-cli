@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.26] - 2026-10-02
+
+### MCP/CLI DX 优化(评审 #109)
+- **错误命令建议全工具名**: candidates 加入全量 spec 工具名(此前 'recipblast' 只匹配分组名 'blast')——大小写不敏感 + 模糊匹配 + 结果映射回真实大小写(recipblast→recipBlast)
+- **MCP search 空输入引导**: 返回用法示例(非裸 {})——Agent 首次调用即知姿势
+- **测试**: tests/test_dx_quality.py 6 用例(纠错/引导/Agent 工作流链 search→describe→validate/version 权威计数)
+- **门禁**: pytest 559 passed / ruff 0 / mypy 0
+
 ## [1.4.25] - 2026-10-02
 
 ### Semantic Resolver 覆盖率(评审 #109)——语义发现 50% → 100%
