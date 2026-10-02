@@ -7101,17 +7101,13 @@
   "runner": "plot",
   "group": "seq",
   "help": "基因结构图（外显子/UTR 从 GFF）",
-  "semantic_fingerprint": "f24532072283b659d5c0f727fbf96d31e44013ea265511dfdbc848d68e03952c",
-  "semantic_fingerprint_short": "f24532072283b659",
+  "semantic_fingerprint": "f289567206a63de178fbedec3a719253921e5a91ac21cffbf5d90081d6fc3b9f",
+  "semantic_fingerprint_short": "f289567206a63de1",
   "capabilities": [
-   "gene_structure",
-   "visualization"
+   "sequence"
   ],
   "capabilities_ontology": [
-   "annotation",
-   "annotation.gene_structure",
-   "gene_structure",
-   "visualization"
+   "sequence"
   ],
   "relations": {
    "accepts": [

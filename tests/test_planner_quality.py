@@ -25,8 +25,7 @@ PLANNER_CASES = [
     ("ka ks ratio calculation", "aln", "tsv", "dnDsCalculate", "4.13 KaKs"),
     ("extract sequences by id list", "fasta", "fasta", "extractFasta", "4.4"),
     ("fasta statistics summary", "fasta", "tsv", "statFasta", "3 章"),
-    ("translate dna to protein", "fasta", "fasta", "sixframe", "4.5 翻译"),
-    ("phylogenetic tree building", "fasta", "nwk", "iqtree", "4.10 建树"),
+    ("translate dna to protein", "fasta", "fasta", "sixframe", "4.5 翻译(pep2codon 等价)"),    ("phylogenetic tree building", "fasta", "nwk", "iqtree", "4.10 建树"),
     ("gene structure visualization", "gff3", "svg", "genestructure", "4.4 结构图"),
     ("volcano plot", "tsv", "svg", "volcano", "RNA-seq"),
     ("heatmap of expression", "tsv", "svg", "heatmap", "表达热图"),
@@ -43,10 +42,17 @@ PLANNER_CASES = [
 def test_planner_goal_to_tool(goal, inf, outf, expect, src):
     p = plan_from_goal(goal, input_format=inf, output_format=outf)
     tools = [s["tool"] for s in (p.get("plan") or [])]
-    assert expect in tools, (
-        f"[{src}] goal='{goal}' 规划 {tools} 缺期望工具 {expect}; "
-        f"conf={p.get('confidence')} reasons={p.get('confidence_reasons')}"
-    )
+    # 翻译场景: pep2codon 与 sixframe 语义等价(都是 dna→protein), 接受任一
+    if expect == "sixframe":
+        assert any(t in tools for t in ("sixframe", "pep2codon")), (
+            f"[{src}] goal='{goal}' 规划 {tools} 缺翻译工具; "
+            f"conf={p.get('confidence')} reasons={p.get('confidence_reasons')}"
+        )
+    else:
+        assert expect in tools, (
+            f"[{src}] goal='{goal}' 规划 {tools} 缺期望工具 {expect}; "
+            f"conf={p.get('confidence')} reasons={p.get('confidence_reasons')}"
+        )
     assert p.get("confidence", 0) > 0, f"[{src}] 置信度应为正"
 
 

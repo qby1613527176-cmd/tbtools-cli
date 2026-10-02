@@ -17,6 +17,7 @@
   "gxfSplit",
   "hclust",
   "heatmap",
+  "hmmerSearch",
   "iqtree",
   "kallisto",
   "keggEnrich",

@@ -2,7 +2,7 @@
 
 **Turn legacy bioinformatics tools into Agent-callable, verifiable workflows.**
 
-294 Agent-facing tools · 59 FULL contracts · 129 schema-capable · Agent Protocol v1.0
+294 Agent-facing tools · 60 FULL contracts · 129 schema-capable · Agent Protocol v1.0
 
 将 TBtools-II 及传统生信工具转换为 Agent 可发现、可调用、可验证的接口层。
 

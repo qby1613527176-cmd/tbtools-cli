@@ -296,7 +296,11 @@ def _apply_contract_overlay(spec) -> None:
                                      note=p.get("note", ""), cli_name=p.get("cli_name", ""))
                            for p in c["parameters"]]
     if "capabilities" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
-        spec.capabilities = list(c["capabilities"])
+        # 评审 #109: YAML 仅兜底, 不覆盖代码真源(KNOWN_CAPABILITIES 已设的语义更准)——
+        # 旧 YAML 快照(如 mastExtract: ['sequence'])曾覆盖新标注(如 ['motif','sequence_extraction']),
+        # 造成 planner 语义丢失; 代码真源 > 生成产物(YAML 是 gen_metadata 导出物, 循环覆盖让旧值持久化)
+        if not spec.capabilities:
+            spec.capabilities = list(c["capabilities"])
     if "layout" in c:  # 评审 #94: presence semantics
         # layout 经 invocation 投影(named_flags 或 token layout)
         lay = c["layout"]
@@ -692,11 +696,13 @@ KNOWN_CAPABILITIES = {
     "statFasta": ["sequence", "statistics"],
     "hmmerSearch": ["homology", "hmm_scan"],
     "pep2codon": ["translation", "codon"],
-    "structure": ["gene_structure", "visualization"],
     "mastExtract": ["motif", "sequence_extraction"],
     "preparespecies": ["genome_preparation", "annotation"],
     "fastaExtract": ["sequence", "extraction"],
     "mastrun": ["motif", "scanning"],
+    # structure 是空壳 manual(无 class/inputs)占位, 不授予真工具语义——
+    # 曾因 name 'structure' 精确命中 goal 词赢过 genestructure(评审 #109)
+    "structure": ["sequence"],
 }
 # 精确标注补充(2026-09-23): 覆盖组级兜底的粗标签, 核心命令细化
 KNOWN_CAPABILITIES.update({
