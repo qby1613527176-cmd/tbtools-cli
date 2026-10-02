@@ -75,6 +75,14 @@ def _cli(*args: str, timeout: int = 300) -> str:
 def search(query: str = "") -> str:
     """发现工具: 关键词/自然语言; 支持 --input/--output/--capability 反向搜索。返回 JSON hits。"""
     q = query.strip()
+    if not q:
+        # 评审 #109(DX): 空查询返回用法引导而非裸 {}——Agent 首次调用即知可用姿势
+        return json.dumps({
+            "query": "", "hits": [], "error": "query 为空",
+            "usage": {"examples": ["search(query='volcano')", "search(query='phylogenetic tree')",
+                                       "search(query='') 配合 input_format/output_format 反向搜索"],
+                       "note": "可搭配 tool_describe(command) 看参数契约"},
+        }, ensure_ascii=False)
     out = _cli("search", q, "--json") if q else "{}"
     try:
         return json.dumps(json.loads(out), ensure_ascii=False)

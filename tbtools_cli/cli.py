@@ -104,11 +104,28 @@ class RootGroup(click.Group):
             for gname, g in _groups.items():
                 if name in g.commands:
                     return gname, g.commands[name], args[1:]  # F841 修复: 删未用 sub 变量
-            # 拼写纠错（对分组名+顶层命令；前缀匹配优先——venn2 案例：n=3 截断挤掉正确建议）
+            # 拼写纠错（对分组名+顶层命令+全量工具名；前缀匹配优先——venn2 案例：n=3 截断挤掉正确建议）
+            # 评审 #109(DX): candidates 加入全量 spec 工具名——此前只搜分组名+顶层命令,
+            # 'recipblast'(小写) 只匹配到分组名 'blast' 而非真工具 recipBlast
             import difflib
-            candidates = sorted(set(list(_groups.keys()) + [c for c in cli.commands.keys()]))
-            prefix_hits = [c for c in candidates if c.startswith(name)]
-            close = prefix_hits[:5] or difflib.get_close_matches(name, candidates, n=3, cutoff=0.6)
+            try:
+                from tbtools_cli.command_spec import build_command_specs as _bcs_dx
+                _tool_names = list(_bcs_dx().keys())
+            except Exception:
+                _tool_names = []
+            candidates = sorted(set(list(_groups.keys()) + list(cli.commands.keys()) + _tool_names))
+            # 大小写不敏感匹配(recipblast→recipBlast)
+            _lower_map = {c.lower(): c for c in candidates}
+            _lname = name.lower()
+            prefix_hits = [c for c in candidates if c.startswith(name)] or \
+                          [c for c in candidates if c.lower().startswith(_lname)]
+            _close_raw = prefix_hits[:5] or \
+                         ([_lower_map.get(_lname)] if _lname in _lower_map else []) or \
+                         difflib.get_close_matches(_lname, [c.lower() for c in candidates], n=3, cutoff=0.6) or []
+            # 映射回真实大小写(close_matches 对小写候选返回小写, recipblast→recipBlast)
+            close = [_lower_map.get(c, c) for c in _close_raw if c]
+            # 去重保序
+            close = list(dict.fromkeys(close))
             if close:
                 click.echo(_("❌ 未知命令: {n}", "❌ Unknown command: {n}").format(n=name), err=True)
                 click.echo(f"   你是不是想用: {' / '.join(close)}?", err=True)
