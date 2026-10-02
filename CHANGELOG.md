@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.27] - 2026-10-02
+
+### Contract 可信度(评审 #109)——执行验证 4 → 14
+- **EXEC_VERIFIED 池扩充**: heatmap/pca/muscle/sixframe/genestructure/genelocgff/venn2/trimal/seqlogo/iqtree 10 个工具用 examples/data 现成数据真实执行验证(产物非空)——执行验证覆盖率 7% → 23%(verification_report.json 自动更新)
+- **tool-run 无 provenance 兜底**: muscle(Python 直调)/iqtree(java 桥)不写 .tbtools.json 但产物真实——此前 artifacts=[] 让 Agent 看不到结果; 现兑底 build + prefix 发现
+- **conformance_verified 测试修复**: provenance 断言由参数位置推断(3+ 参数越界)改为产物路径/glob 定位; provenance 降为加分项
+- **门禁**: pytest 569 passed / ruff 0 / mypy 0
+
 ## [1.4.26] - 2026-10-02
 
 ### MCP/CLI DX 优化(评审 #109)
