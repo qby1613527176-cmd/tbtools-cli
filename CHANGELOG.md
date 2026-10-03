@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.34] - 2026-10-03
+
+### Contract Integrity Freeze(评审 #111)——P0×3 + P1×3
+- **P0-1 YAML 不再覆盖 runtime truth**: _apply_contract_overlay 从覆盖改校验(实测 0 工具依赖 YAML 兑底)——不一致 warn 提示重跑 gen_metadata, 不再静默回退旧快照
+- **P0-2 InputSpec.cli_name 进 identity + metadata**: canonical_contract inputs 加 cli_name(影响真实 argv 的字段必须进 fingerprint——1.4.31 加字段 1.4.33 才发现漏接); to_metadata_entry 导出 inputs cli_name(Agent 可见引擎真实 flag)
+- **P0-3 验证数字统一 26**: counts.md/version --json 的 execution_verified = EXECUTION_VERIFIED + CONFORMANCE_VERIFIED(census 单源); README 14→26; 发布流程须跑 gen_metadata --render(默认模式不导出 YAML/不更新 counts)
+- **P1-1 test_yaml_migration 独立真源比较**: _skip_overlay 拿纯代码 spec 对比快照; 修 10 个上限盲区(字母序靠后的 tpmCalc 从未被查——篡改测试实锤)
+- **P1-2 tool-readiness.md 5/5 改 metadata coverage**: 与 readiness(FULL) 严格区分并注明勿混读
+- **P1-3 execution-relevant fields 审计测试**: InputSpec 字段未进 canonical=测试失败(防复发)
+- **门禁**: pytest 584 passed / ruff 0 / mypy 0
+
 ## [1.4.33] - 2026-10-03
 
 ### 代码真源 vs YAML 生成快照定型(评审 #110 建议③——四项全部收官)
