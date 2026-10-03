@@ -31,7 +31,9 @@ from tbtools_cli.identity import (  # noqa: E402
 # dep 版本缓存(评审 #100 + #102 P1-2): 模块级声明, 防 flaky——同一进程内
 # 外部依赖版本只探测一次(每次 compile fork 查版本会因超时/失败随机漂移 execution_fp);
 # 缓存 key 带可执行文件身份(评审 #107 P1⑥: name+path+mtime+size)
-_DEP_VERSION_CACHE: dict = {}
+# 评审 #112 P2: 缓存实体迁到 dependency.py, 此处 re-export 同一对象(旧代码/测试
+# from workflow import _DEP_VERSION_CACHE 仍可用, 且与 dependency 共享状态)
+from tbtools_cli.dependency import _DEP_VERSION_CACHE  # noqa: E402,F401
 
 
 class WorkflowError(Exception):
@@ -283,67 +285,14 @@ class CompiledInvocation:
         # 🟠 dependency identity(评审 #100 + #102 P1-2): contract-driven——
         # 按 spec.dependencies 声明解析(不硬编码 muscle/iqtree2;换版=不同执行)
         # 评审 #108 P1-2: runtime_resolve=False 时也不探测依赖(validate 不 fork)
+        # 评审 #112 P2: 探测逻辑拆到 dependency.py(三级优先+缓存), workflow 只调用
         if self.runtime_resolve:
             try:
-                import shutil as _sh
-                import subprocess as _sp4
-                # 模块级缓存(防 flaky): 同一进程内 dep 版本只查一次——
-                # 每次 compile 都 fork 查版本会因超时/失败随机漂移 execution_fp
-                _dep_names = []
-                if '_sp3' in dir() and _sp3:
-                    _dep_names = list(_sp3.dependencies or [])
-                for _dn in _dep_names:
-                    # 评审 #108 P1-3: resolver 从 dependency_manifest 读精确 executable/version_args——
-                    # manifest → DEP_VERSION_ARGS 表(评审 #107 P1⑦) → heuristic 三级优先
-                    _manifest_entry = None
-                    try:
-                        from tbtools_cli.command_spec import KNOWN_DEPENDENCIES_STRUCT as _dep_struct
-                        if _sp3 and _sp3.name in _dep_struct:
-                            for _e in _dep_struct[_sp3.name]:
-                                if str(_e.get("name")) == _dn:
-                                    _manifest_entry = _e
-                                    break
-                    except Exception:
-                        pass
-                    _exe: str = _dn
-                    _exe_m = _manifest_entry.get("executable") if _manifest_entry else None
-                    if isinstance(_exe_m, str) and _exe_m:
-                        _exe = _exe_m
-                    # 缓存 key 带可执行文件身份(评审 #107 P1⑥): name + path + mtime + size——
-                    # 防长期 Agent 进程缓存过期版本(10:00 muscle v5.2 → 12:00 系统升 v5.3, 不再锁旧)
-                    # 同时保留防 flaky(同一二进制不重复 fork)
-                    _dnorm = _exe.lower().replace("+", "").replace("-", "")
-                    _bin = _sh.which(_exe) or _sh.which(_dnorm)
-                    _resolved = "missing"
-                    _cache_key = _dn
-                    if _bin and os.path.isfile(_bin):
-                        try:
-                            _st = os.stat(_bin)
-                            _cache_key = f"{_dn}|{_bin}|{int(_st.st_mtime)}|{_st.st_size}"
-                        except OSError:
-                            pass
-                    if _cache_key in _DEP_VERSION_CACHE:
-                        _deps[_dn] = _DEP_VERSION_CACHE[_cache_key]
-                        continue
-                    if _bin:
-                        # manifest version_args 优先(评审 #108 P1-3 终态: contract-driven)
-                        _args: tuple[str, ...] | None = None
-                        _va = _manifest_entry.get("version_args") if _manifest_entry else None
-                        if isinstance(_va, (list, tuple)) and _va:
-                            _args = tuple(str(x) for x in _va)
-                        if not _args:
-                            _args = DEP_VERSION_ARGS.get(_dn, ("--version", "-version", "-v"))
-                        for _flag in _args or ("--version", "-version", "-v"):
-                            try:
-                                _rv = _sp4.run([_bin, _flag], capture_output=True, text=True, timeout=5)
-                                _ver = (_rv.stdout or _rv.stderr).strip().splitlines()
-                                if _ver:
-                                    _resolved = _ver[0][:40]
-                                    break
-                            except Exception:
-                                continue
-                    _deps[_dn] = _resolved
-                    _DEP_VERSION_CACHE[_cache_key] = _resolved
+                from tbtools_cli.dependency import (resolve_dependencies,
+                                                    _DEP_VERSION_CACHE as _dep_cache_inst)
+                _dep_spec = _sp3 if '_sp3' in dir() and _sp3 else None
+                if _dep_spec is not None:
+                    _deps = resolve_dependencies(_dep_spec, _dep_cache_inst)
             except Exception:
                 pass
         # P1-3(评审 #102): full SHA256(64 hex 内部;显示层才截断)
