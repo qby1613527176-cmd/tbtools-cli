@@ -10,7 +10,7 @@ help: 'mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threa
 semantic_fingerprint: 4d43a05a47c418f3ffb1c8793946393deb83b3a2239f68f2034c292c56cf24dc
 semantic_fingerprint_short: 4d43a05a47c418f3
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - synteny
 capabilities_ontology:

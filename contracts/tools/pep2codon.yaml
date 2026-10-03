@@ -9,7 +9,7 @@ help: 'pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>'
 semantic_fingerprint: c82fae59c87ae856f68e03f507ca88485b0f7b14f0e011b679a0e259a74ed247
 semantic_fingerprint_short: c82fae59c87ae856
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - translation
 - codon

@@ -17,14 +17,16 @@
    "role": "file",
    "format": "fasta",
    "required": true,
-   "note": ""
+   "note": "",
+   "cli_name": "--inGenomeFa"
   },
   {
    "name": "gff",
    "role": "file",
    "format": "gff3",
    "required": true,
-   "note": ""
+   "note": "",
+   "cli_name": "--inGXF"
   }
  ],
  "outputs": [
@@ -34,7 +36,7 @@
  "semantic_fingerprint": "5beea6519723aa4fe8a8fbc6660e8120b0a6842e68bc074909aa8d9c9073756b",
  "semantic_fingerprint_short": "5beea6519723aa4f",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "GENOME",
@@ -49,5 +51,10 @@
    "name": "fasta",
    "format": "fasta"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "5aa40b64a74185b55d94a464ce55506edee49108a21f4bf38edf7bdfb229a545",
+  "verified_at": "2026-10-04T06:51:48",
+  "corpus": "examples/data"
+ }
 }

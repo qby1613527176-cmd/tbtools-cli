@@ -3146,7 +3146,7 @@
   "semantic_fingerprint": "c9b2b6e854da3981abb21c9d31d55b587d14ff15120c3a50c876d8183153ce58",
   "semantic_fingerprint_short": "c9b2b6e854da3981",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3575,7 +3575,7 @@
   "semantic_fingerprint": "c82fae59c87ae856f68e03f507ca88485b0f7b14f0e011b679a0e259a74ed247",
   "semantic_fingerprint_short": "c82fae59c87ae856",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "translation",
    "codon"
@@ -3801,7 +3801,7 @@
   "semantic_fingerprint": "5beea6519723aa4fe8a8fbc6660e8120b0a6842e68bc074909aa8d9c9073756b",
   "semantic_fingerprint_short": "5beea6519723aa4f",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "genome_preparation",
    "annotation"
@@ -3827,14 +3827,16 @@
     "role": "file",
     "format": "fasta",
     "required": true,
-    "note": ""
+    "note": "",
+    "cli_name": "--inGenomeFa"
    },
    {
     "name": "gff",
     "role": "file",
     "format": "gff3",
     "required": true,
-    "note": ""
+    "note": "",
+    "cli_name": "--inGXF"
    }
   ],
   "outputs": [
@@ -4028,7 +4030,7 @@
   "semantic_fingerprint": "1fb57ab5bcf2b5616b85b2ffc1ff99b4724fe5987682ac2305881cd265fd31d3",
   "semantic_fingerprint_short": "1fb57ab5bcf2b561",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "homology",
    "reciprocal_best_hit",
@@ -7959,7 +7961,7 @@
   "semantic_fingerprint": "54bd9c88444c5b183c5ea50aceba15c047448fce12fb0557d5a6fc717948cad8",
   "semantic_fingerprint_short": "54bd9c88444c5b18",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "clustering",
    "distance"
@@ -9102,7 +9104,7 @@
   "semantic_fingerprint": "4d43a05a47c418f3ffb1c8793946393deb83b3a2239f68f2034c292c56cf24dc",
   "semantic_fingerprint_short": "4d43a05a47c418f3",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny"
   ],
@@ -9283,7 +9285,7 @@
   "semantic_fingerprint": "c583df46cbb1e29dd9a39155f005d0052244d2cd0ea2cfe3d01fba252811de7e",
   "semantic_fingerprint_short": "c583df46cbb1e29d",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "microsynteny",
    "visualization"

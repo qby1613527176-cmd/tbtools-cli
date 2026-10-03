@@ -33,7 +33,7 @@
  "semantic_fingerprint": "54bd9c88444c5b183c5ea50aceba15c047448fce12fb0557d5a6fc717948cad8",
  "semantic_fingerprint_short": "54bd9c88444c5b18",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "DISTANCE_TABLE"
@@ -73,5 +73,10 @@
    "required": false,
    "note": "线程"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "9784bc9315033219d1b493898d557ef2267aa8975192592a8fb067014ba8e058",
+  "verified_at": "2026-10-04T06:51:48",
+  "corpus": "examples/data"
+ }
 }

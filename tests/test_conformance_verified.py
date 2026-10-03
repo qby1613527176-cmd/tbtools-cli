@@ -71,6 +71,13 @@ EXEC_VERIFIED = {
                            "examples/data/comparative/prepared.gff", "2"]),  # MCScanX-SuperFast
     "msy": ("syn", ["examples/data/synteny/msy/genes2.pos", "examples/data/synteny/msy/links2.txt",
                       "examples/data/synteny/msy/layout2.txt", "{out}.svg"]),
+    # 评审 #110 建议④ 第三批(2026-10-04 数据可造路线, examples/data/exec/ 现成):
+    "hclust": ("expr", ["examples/data/exec/hclust3col.tsv", "{out}.svg"]),  # 三列距离文件
+    "pep2codon": ("seq", ["examples/data/exec/pep_cds.fa", "examples/data/exec/pep_aln.fa", "{out}.fa"]),
+    "multisyn": ("syn", ["examples/data/exec/gxf_lst.txt", "examples/data/exec/collinear.lst.txt", "{out}.svg"]),
+    "preparespecies": ("asm", ["--prefix", "SPEC", "--inGenomeFa", "examples/data/comparative/input.genome.fa",
+                                "--inGXF", "examples/data/comparative/input.gff",
+                                "--outGenomeFa", "{out}.genome.fa", "--outGXF", "{out}.gff"]),
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过

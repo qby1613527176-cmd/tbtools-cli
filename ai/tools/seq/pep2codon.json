@@ -36,7 +36,7 @@
  "semantic_fingerprint": "c82fae59c87ae856f68e03f507ca88485b0f7b14f0e011b679a0e259a74ed247",
  "semantic_fingerprint_short": "c82fae59c87ae856",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "PROTEIN_ALIGNMENT"
@@ -54,5 +54,10 @@
    "format": "fasta",
    "content_type": "dna"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "175c3675f66a923b2b0b4e0503e34341109f52b6707e23dbc078bd6022006b03",
+  "verified_at": "2026-10-04T06:51:48",
+  "corpus": "examples/data"
+ }
 }

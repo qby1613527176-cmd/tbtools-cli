@@ -11,7 +11,7 @@ help: 'recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDir
 semantic_fingerprint: 1fb57ab5bcf2b5616b85b2ffc1ff99b4724fe5987682ac2305881cd265fd31d3
 semantic_fingerprint_short: 1fb57ab5bcf2b561
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - homology
 - reciprocal_best_hit

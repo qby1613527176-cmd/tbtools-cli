@@ -9,7 +9,7 @@ help: 'multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt'
 semantic_fingerprint: c9b2b6e854da3981abb21c9d31d55b587d14ff15120c3a50c876d8183153ce58
 semantic_fingerprint_short: c9b2b6e854da3981
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - synteny
 - visualization

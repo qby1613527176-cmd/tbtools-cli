@@ -439,7 +439,8 @@ KNOWN_SCHEMAS = {
     "barplotter": ([InputSpec("gff", format="gff3"), InputSpec("synteny", format="tsv")], ["svg"]),
     "calcRepeat": ([InputSpec("fasta", format="fasta")], ["tsv"]),
     "rnaplot": ([InputSpec("seq", format="fasta")], ["svg"]),
-    "preparespecies": ([InputSpec("genome", format="fasta"), InputSpec("gff", format="gff3")], ["fasta"]),
+    "preparespecies": ([InputSpec("genome", format="fasta", cli_name="--inGenomeFa"),
+                          InputSpec("gff", format="gff3", cli_name="--inGXF")], ["fasta"]),
 }
 
 

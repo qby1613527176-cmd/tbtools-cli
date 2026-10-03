@@ -33,7 +33,7 @@
  "semantic_fingerprint": "4d43a05a47c418f3ffb1c8793946393deb83b3a2239f68f2034c292c56cf24dc",
  "semantic_fingerprint_short": "4d43a05a47c418f3",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "SIMPLIFIED_GFF",
@@ -71,5 +71,10 @@
    "executable": "MCScanX",
    "version_args": []
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "152935d981edc39c048b263ce571f7f55d95cff9544b316e14b6185bb89e4b67",
+  "verified_at": "2026-10-04T06:51:48",
+  "corpus": "examples/data"
+ }
 }
