@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.39] - 2026-10-04
+
+### workflow.py 拆分 executor.py(评审 #112 P2 收官——四层全拆完)
+- workflow.py 1063→636 行(拆分前 1509, 四层拆分后 -58%), executor.py 独立 466 行: 状态机(_load_state/_save_state/_merge_state_step)/resume 闸门(_resume_gate)/执行器(_execute_step/_run_parallel)/入口(run)/validate_artifact
+- **命名**: 原 runtime.py 与 tbtools_cli/runtime/ 子包冲突(ImportError)——改 executor.py
+- **回归修复**: 拆分后 test_parallel_conformance 3 失败(测试 monkeypatch workflow._execute_step 失效)——_run_parallel/run 改经 workflow 命名空间延迟解析 _execute_step(测试 patch 恢复生效, 生产同源)
+- 评审 #112 P2 四层全部完成: identity✅(v1.4.22)/dependency✅(v1.4.36)/compiler✅(v1.4.38)/executor✅
+- **门禁**: pytest 588 passed / ruff 0 / mypy 0
+
 ## [1.4.38] - 2026-10-04
 
 ### workflow.py 拆分 compiler.py(评审 #112 P2 第二步)
