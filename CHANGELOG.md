@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.41] - 2026-10-04
+
+### 待办 #1 执行验证 29→33(覆盖率 48%→55%)——数据可造路线
+- **hclust**: 三列距离文件(此前 dist.tsv 是矩阵被拒——数据格式造对即过)
+- **pep2codon**: CDS+蛋白比对 ID 完全一致(此前 cds/pep 不配对)
+- **multisyn**: gxf.lst + collinear.lst 可造(此前缺 .lst 文件)
+- **preparespecies**: javap 反编译拿真实 flag(--prefix/--inGenomeFa/--inGXF/--outGenomeFa/--outGXF) + InputSpec cli_name 对齐
+- 数据入 examples/data/exec/(可重复验证)
+- **门禁**: pytest 595 passed / ruff 0 / mypy 0
+
 ## [1.4.40] - 2026-10-04
 
 ### 待办 #1/#2/#3——执行验证 26→29(48%) + 小修
