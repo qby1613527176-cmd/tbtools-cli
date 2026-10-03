@@ -147,3 +147,30 @@ class TestAiManifestInheritance:
         spec_rel = {n for n, s in specs.items() if s.relations}
         assert not (spec_rel - ai_rel), \
             f"ai/relations.json 缺 {len(spec_rel - ai_rel)} 个有 relations 的工具: {sorted(spec_rel - ai_rel)[:5]}(重跑 gen_metadata --render)"
+
+
+class TestVerificationDetailsProjection:
+    """评审 #112 P1: verification 证据对象投影——ai/tools/*.json 不只 level,
+    还有绑定证据(verified_at/corpus/contract_fingerprint), Agent 可判断证据新旧。"""
+
+    def _meta(self):
+        p = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+        return json.load(open(p, encoding="utf-8"))
+
+    def test_executed_tools_have_verification_details(self):
+        """EXECUTION/CONFORMANCE_VERIFIED 工具必须带 verification_details(证据对象)。"""
+        meta = self._meta()
+        _n = 0
+        for name, m in meta.items():
+            if m.get("verification") not in ("EXECUTION_VERIFIED", "CONFORMANCE_VERIFIED"):
+                continue
+            g = m.get("group", "engine")
+            p = os.path.join(ROOT, "ai", "tools", g, f"{name}.json")
+            assert os.path.isfile(p), f"{name}: ai schema 缺失"
+            ai = json.load(open(p, encoding="utf-8"))
+            det = ai.get("verification_details")
+            assert det, f"{name}: 执行验证工具缺 verification_details(证据对象未投影)"
+            for k in ("contract_fingerprint", "verified_at", "corpus"):
+                assert k in det, f"{name}: details 缺 {k}"
+            _n += 1
+        assert _n >= 5, f"应至少 5 个执行验证工具, 实际 {_n}(重跑 gen_metadata --render)"

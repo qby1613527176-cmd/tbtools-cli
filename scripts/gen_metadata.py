@@ -315,6 +315,16 @@ def render_ai_manifest(meta):
     import json as _json
     import os as _os
     ai_dir = _os.path.join(ROOT, "ai")
+    # 评审 #112 P1: verification 证据详情(从 tests/verification_report.json 读)
+    # ——ai/tools/*.json 的 verification_details 投影来源
+    _verif_details_map: dict = {}
+    try:
+        _vp = _os.path.join(ROOT, "tests", "verification_report.json")
+        if _os.path.isfile(_vp):
+            _vd = _json.load(open(_vp, encoding="utf-8"))
+            _verif_details_map = _vd.get("execution_verified_details") or {}
+    except Exception:
+        pass
     _os.makedirs(_os.path.join(ai_dir, "tools"), exist_ok=True)
     import shutil as _sh
     for _sub in _os.listdir(_os.path.join(ai_dir, "tools")):
@@ -355,6 +365,15 @@ def render_ai_manifest(meta):
                    "aliases"):
             if v.get(_k):
                 schema[_k] = v[_k]
+        # 评审 #112 P1: verification 证据对象投影——Agent 看到的不只是 level(EXECUTION_VERIFIED),
+        # 还有绑定证据(验证时间/语料/契约指纹), 可判断证据新旧/是否匹配当前 contract
+        _verif_details = _verif_details_map.get(name)
+        if _verif_details:
+            schema["verification_details"] = {
+                "contract_fingerprint": _verif_details.get("contract_fingerprint", ""),
+                "verified_at": _verif_details.get("verified_at", ""),
+                "corpus": _verif_details.get("corpus", ""),
+            }
         _json.dump(schema, open(_os.path.join(d, f"{name}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     try:
         from tbtools_cli.core import ERROR_CODES

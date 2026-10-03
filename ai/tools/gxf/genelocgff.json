@@ -47,5 +47,10 @@
    "name": "svg",
    "format": "svg"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "0174e6906ae5bb2d7015d1ebbd8ca234e195cd82a753844ffe7d4382ff6d19d3",
+  "verified_at": "2026-10-03T23:15:14",
+  "corpus": "examples/data"
+ }
 }

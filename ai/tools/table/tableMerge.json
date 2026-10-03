@@ -40,5 +40,10 @@
    "name": "tsv",
    "format": "tsv"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "bd660faf0bb5ba004e5a0535435acbc8a8c39b333d19a40281499c18ec74837c",
+  "verified_at": "2026-10-03T23:15:14",
+  "corpus": "examples/data"
+ }
 }

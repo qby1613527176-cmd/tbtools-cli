@@ -48,5 +48,10 @@
  ],
  "aliases": [
   "getLongestCompleteORF"
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "2f3e13a93f2e2674b9de6334c28134c74c8730e59dbf1dbea39fa384cc3c8420",
+  "verified_at": "2026-10-03T23:15:14",
+  "corpus": "examples/data"
+ }
 }

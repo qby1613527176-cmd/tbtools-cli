@@ -64,5 +64,10 @@
     "-version"
    ]
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "fac1d62a20a98c5c659e723c3812a4a398c287cc8f0de2ef303126de3e48d45e",
+  "verified_at": "2026-10-03T23:15:14",
+  "corpus": "examples/data"
+ }
 }
