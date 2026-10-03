@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.28] - 2026-10-03
+
+### 可信度证据链(评审 #110)——P0×2 + P1×4
+- **P0-1 execution-scoped artifact discovery**: discover_outputs 加 created_after（mtime >= 执行开始）——防 prefix discovery 捡旧 sibling 文件（程序失败/未重新生成时旧产物被当当前产物=假阳性）；tool-run 两处调用传 t0
+- **P0-2 plan 纯静态**: plan() 加 runtime_resolve 参数（默认 False）——规划/validate 不读输入 sha/不探测依赖；run() 显式 True 保留完整 execution_fp（resume 篡改检测，曾因静态化导致闸门失效，已回归修复）
+- **P1 verification 绑定 contract_fp**: execution_verified 记录 contract_fingerprint+verified_at+corpus——加载时比对当前 fp，contract 修改旧验证自动降级（篡改测试：volcano fp 变→EV 14→13）
+- **P1 counts.md 权威化**: agent_ready_full/partial/legacy + execution_verified 进 counts.md；README 数字统一（59→60 FULL / schema-capable 129→63 有 inputs 契约）
+- **门禁**: pytest 569 passed / ruff 0 / mypy 0
+
 ## [1.4.27] - 2026-10-02
 
 ### Contract 可信度(评审 #109)——执行验证 4 → 14
