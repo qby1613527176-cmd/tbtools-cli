@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.36] - 2026-10-03
+
+### workflow.py 拆分 dependency.py(评审 #112 P2)
+- 新建 tbtools_cli/dependency.py(92 行): resolve_dependencies(spec, cache) 三级优先(manifest→DEP_VERSION_ARGS→heuristic) + 模块级 _DEP_VERSION_CACHE(带可执行文件身份缓存 key)
+- workflow.py 1509→1458 行: 探测段替换为调用; _DEP_VERSION_CACHE 改 re-export 同一对象(旧代码/测试 from workflow import 仍可用且共享状态)
+- 功能等价验证: muscle 版本探测正常, identity/semantic/workflow/conformance 全绿
+- **门禁**: pytest 587 passed / ruff 0 / mypy 0
+
 ## [1.4.35] - 2026-10-03
 
 ### Contract Agent Surface Freeze(评审 #112)——P0×2 + P1×3 + P2×2
