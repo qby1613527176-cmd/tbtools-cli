@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.42] - 2026-10-04
+
+### 待办 #1 执行验证 33→35(覆盖率 55%→58%)
+- **goEnrich**: 造 mini.obo + gene2go.tsv + select_genes 收编(outDir 模式)
+- **gel**: javap 反编译拿真实 flag(--MarkerRange/--FragmentRangeArr/--LaneLabels/--outGraph)——FragmentRangeArr 格式是'起点,终点;起点,终点'(逗号分对分号分段), 收编后 145KB SVG
+- **产物发现 bug 修复(#113)**: workingDir 目录产物'仅当主产物为空时并入'→'总是并入去重'——goEnrich 的输入被误当主产物 → 目录扫描被跳过 → 真实 .xls 丢失
+- 未收编: barplotter(collinearity 与 gff 基因完全匹配要求高)/gsea(set_min=15 数据需求高)
+- **门禁**: pytest 597 passed / ruff 0 / mypy 0
+
 ## [1.4.41] - 2026-10-04
 
 ### 待办 #1 执行验证 29→33(覆盖率 48%→55%)——数据可造路线
