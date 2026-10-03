@@ -32,5 +32,52 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "873085bb2c14f7d4d0cf4fb48a94f71bf9567b1399643741ee253a5d4bf59c60",
+ "semantic_fingerprint_short": "873085bb2c14f7d4",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "GFF",
+   "BLAST_TAB6"
+  ],
+  "produces": [
+   "COLLINEARITY"
+  ],
+  "next_step": [
+   "dualsyn",
+   "dotplot"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "collinearity",
+   "format": "tsv",
+   "content_type": "table"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "t",
+   "type": "int",
+   "default": 4,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "w",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "h",
+   "type": "int",
+   "default": 800,
+   "required": false,
+   "note": ""
+  }
+ ]
 }

@@ -12,5 +12,23 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "f289567206a63de178fbedec3a719253921e5a91ac21cffbf5d90081d6fc3b9f",
+ "semantic_fingerprint_short": "f289567206a63de1",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GFF3"
+  ],
+  "produces": [
+   "GENE_STRUCTURE_PLOT"
+  ],
+  "related_to": [
+   "genestructure"
+  ]
+ },
+ "aliases": [
+  "genestructure"
+ ]
 }

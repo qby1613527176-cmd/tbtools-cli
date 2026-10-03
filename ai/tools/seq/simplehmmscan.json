@@ -12,5 +12,40 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "platform-limited"
+ "status": "platform-limited",
+ "semantic_fingerprint": "86788ec713e5576966c745ad746367f5cdcd4e027e01553fbfbdfdcd996e1e00",
+ "semantic_fingerprint_short": "86788ec713e55769",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ },
+ "dependencies": [
+  "hmmer"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "hmmer",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "hmmscan",
+   "version_args": [
+    "-h"
+   ]
+  }
+ ]
 }

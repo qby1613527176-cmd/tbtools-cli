@@ -24,5 +24,27 @@
  "outputs": [
   "fasta"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "9c2453fdca739ed3ac7d1bd7057773d8a328f768e4aec6561bf670b087eed2ca",
+ "semantic_fingerprint_short": "9c2453fdca739ed3",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "DNA_FASTA"
+  ],
+  "produces": [
+   "PROTEIN_FASTA"
+  ],
+  "related_to": [
+   "longestorf"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "pep",
+   "format": "fasta",
+   "content_type": "protein"
+  }
+ ]
 }

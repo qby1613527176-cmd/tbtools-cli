@@ -31,5 +31,24 @@
  "outputs": [
   "xls"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "12219a129428e8a93d29b183b4a26df598f9e0193c994c2c06075e24dadef258",
+ "semantic_fingerprint_short": "12219a129428e8a9",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "EXPRESSION_TABLE",
+   "PHENOTYPE_CLS"
+  ],
+  "produces": [
+   "GSEA_REPORT"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "xls",
+   "format": "xls"
+  }
+ ]
 }

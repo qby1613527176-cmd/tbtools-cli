@@ -12,5 +12,32 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "440563d66ceb258d8d7c5a83ed8183c2111c9b2d8f290dd8041a39ac669f20e7",
+ "semantic_fingerprint_short": "440563d66ceb258d",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "TABLE"
+  ],
+  "produces": [
+   "TABLE_OUT"
+  ]
+ },
+ "dependencies": [
+  "internet"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "internet",
+   "type": "capability",
+   "required": false,
+   "platforms": [
+    "linux",
+    "macos",
+    "windows"
+   ]
+  }
+ ]
 }

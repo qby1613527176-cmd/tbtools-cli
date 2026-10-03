@@ -30,5 +30,27 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "53c102f7f83af3fa35d2e0dbae58b7d8f4a3017fd7af0611f333fa0094cabd24",
+ "semantic_fingerprint_short": "53c102f7f83af3fa",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "EXPRESSION_TABLE"
+  ],
+  "produces": [
+   "PLOT"
+  ],
+  "related_to": [
+   "volcano",
+   "heatmap"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

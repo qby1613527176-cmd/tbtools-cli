@@ -12,5 +12,22 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "1f6f4681d3001470f4aff30e9c1ae3380aa41cd92566abec0167d85a04e2ceaa",
+ "semantic_fingerprint_short": "1f6f4681d3001470",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ }
 }

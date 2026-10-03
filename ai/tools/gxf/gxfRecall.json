@@ -12,5 +12,17 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "0212945d4a8c96ae6ae13d4cdc4d2ea1d5ceff86c8f3121a3a4d424033fc640d",
+ "semantic_fingerprint_short": "0212945d4a8c96ae",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GFF3"
+  ],
+  "produces": [
+   "ANNOTATION_OUT"
+  ]
+ }
 }

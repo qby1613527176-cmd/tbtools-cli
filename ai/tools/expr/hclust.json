@@ -29,5 +29,49 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "54bd9c88444c5b183c5ea50aceba15c047448fce12fb0557d5a6fc717948cad8",
+ "semantic_fingerprint_short": "54bd9c88444c5b18",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "DISTANCE_TABLE"
+  ],
+  "produces": [
+   "DENDROGRAM"
+  ],
+  "related_to": [
+   "heatmap"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "w",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "h",
+   "type": "int",
+   "default": 800,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "t",
+   "type": "int",
+   "default": 4,
+   "required": false,
+   "note": "线程"
+  }
+ ]
 }

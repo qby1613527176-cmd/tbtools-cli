@@ -30,5 +30,27 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "43a2550d9ee51f2c4df6a68c6351204e5e46d5a3916e5cfef1be46e69c48a1ca",
+ "semantic_fingerprint_short": "43a2550d9ee51f2c",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "HMM_PROFILE"
+  ],
+  "produces": [
+   "HMM_HITS"
+  ],
+  "related_to": [
+   "hmmsearch"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ]
 }

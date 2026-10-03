@@ -1,6 +1,1754 @@
 {
  "schema_version": "1.0",
  "relations": {
+  "amazingmeta": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "annocompare": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "bamMerge": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "bamindex": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "bamsort": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "bamstate": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "barplot": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "barplotter": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "batchReplace": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "calcRepeat": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "REPEAT_SCAN"
+   ],
+   "related_to": [
+    "careclassify"
+   ]
+  },
+  "cddmotif": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "circlegene": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "circos": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "collinearRegion": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "colorscheme": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "conflictpaf": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "ctgGroup": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "cubeheatmap": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "degramdom": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "distance": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "dotplot": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "DOTPLOT"
+   ]
+  },
+  "dualsyn": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ]
+  },
+  "efpHeat": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "exprCorr": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "fastaExtract": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  },
+  "fastaSubseq": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  },
+  "filterCScore": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "findblockdual": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "findblockmultiple": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "findpath": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "fqTrim": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  },
+  "fqfaConv": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "next_step": [
+    "kallisto",
+    "tpmCalc"
+   ]
+  },
+  "gbar": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "gdensity": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gel": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "genedensity": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "genelocation": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "genelocgff": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gfa": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "gfa2fa": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "goEnrich": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "goParse": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "golevel": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "groupCol": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "groupedbar": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "gxfAppend": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfFix": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfGenepos": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfMatch": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfOverlap": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfRecall": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfRegion": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfRename": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfRepGXF": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfRepIDs": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfStat": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "hicEnzyme": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "homoPhase": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "keggEnrich": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "layoutheatmap": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "levelGo": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "makemotif": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "mast": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "mast2tab": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "mastExtract": {
+   "accepts": [
+    "MEME_XML",
+    "HMM_HITS"
+   ],
+   "produces": [
+    "SEQUENCE_SUBSET"
+   ],
+   "related_to": [
+    "memerun"
+   ]
+  },
+  "mastrun": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "mcscanx": {
+   "accepts": [
+    "GFF",
+    "BLAST_TAB6"
+   ],
+   "produces": [
+    "COLLINEARITY"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ]
+  },
+  "meme": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "meme2tab": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "memerun": {
+   "accepts": [
+    "PROTEIN_FASTA"
+   ],
+   "produces": [
+    "MEME_XML"
+   ],
+   "next_step": [
+    "motif"
+   ]
+  },
+  "microgenome": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "microsyn": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "mountain": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "mpattern": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "multiEfp": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "multisyn": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "nwAlign": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "pafcomp": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "pafref": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "pafviz": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "partitionconflict": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "peakanno": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  },
+  "peakdist": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  },
+  "peaktss": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  },
+  "pep2codon": {
+   "accepts": [
+    "PROTEIN_ALIGNMENT"
+   ],
+   "produces": [
+    "CODON_ALIGNMENT"
+   ],
+   "related_to": [
+    "muscle"
+   ]
+  },
+  "pfammotif": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "phylotree": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "pileup": {
+   "accepts": [
+    "ALIGNMENT",
+    "PEAKS"
+   ],
+   "produces": [
+    "PEAK_ANNOTATION"
+   ]
+  },
+  "plotrna": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "preparespecies": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "qdot": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "qpcr": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "qpcrExp": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "quickFamily": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "recipBlast": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS",
+    "RBH_TABLE"
+   ],
+   "next_step": [
+    "filterCScore"
+   ],
+   "related_to": [
+    "twoSeqBlast"
+   ]
+  },
+  "regionAnno": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "rnaplot": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "sepChr": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "seqlentrack": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "simplehmmscan": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "sricher": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "supercircos": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "tableAppend": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableCast": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableColSel": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableColSelect": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableCollapse": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableMelt": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableMerge": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableSplit": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableTranspose": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tableUniq": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tauIndex": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "twoSeqBlast": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "related_to": [
+    "recipBlast"
+   ]
+  },
+  "upset": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
+  "venn2": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
+  "venn3": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
+  "venn4": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
+  "venn5": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
+  "venn6": {
+   "accepts": [
+    "GENE_LISTS"
+   ],
+   "produces": [
+    "SET_DIAGRAM"
+   ],
+   "related_to": [
+    "venn2",
+    "venn3",
+    "upset"
+   ]
+  },
+  "violin": {
+   "accepts": [
+    "EXPRESSION_TABLE"
+   ],
+   "produces": [
+    "PLOT"
+   ],
+   "related_to": [
+    "volcano",
+    "heatmap"
+   ]
+  },
+  "virusRecomb": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
+  "visualizeblock": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "kaks": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "sixframe": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "PROTEIN_FASTA"
+   ],
+   "related_to": [
+    "longestorf"
+   ]
+  },
+  "longestorf": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "PROTEIN_FASTA"
+   ],
+   "related_to": [
+    "sixframe"
+   ]
+  },
+  "protparam": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "seqpattern": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "bed2gff3": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "careclassify": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "subtree": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "protsim": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "iqtree": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "trimal": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "TRIMMED_ALIGNMENT"
+   ],
+   "next_step": [
+    "iqtree"
+   ]
+  },
+  "gblocks": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "goAnno": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "fasplit": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "famerge": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "clearchar": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "gb2fa": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "findhomolog": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "taxparse": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "srr2ena": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "sraxml2tab": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "sranum2info": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "blat": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "seqfetch": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "pubmed": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
+  "tpmCalc": {
+   "accepts": [
+    "COUNTS_TABLE",
+    "GENE_LENGTH"
+   ],
+   "produces": [
+    "TPM_TABLE"
+   ],
+   "next_step": [
+    "pca",
+    "heatmap",
+    "volcano"
+   ]
+  },
+  "extractFasta": {
+   "accepts": [
+    "FASTA",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "SEQUENCE_SUBSET",
+    "FASTA"
+   ],
+   "related_to": [
+    "extractFastaSub"
+   ]
+  },
+  "dnDsCalculate": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "KAKS_TABLE"
+   ],
+   "related_to": [
+    "muscle"
+   ]
+  },
+  "statFasta": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "FASTA_STATS",
+    "TSV"
+   ],
+   "related_to": [
+    "fastaExtract"
+   ]
+  },
+  "logo": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "msa": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "structure": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "GENE_STRUCTURE_PLOT"
+   ],
+   "related_to": [
+    "genestructure"
+   ]
+  },
+  "motif": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
   "volcano": {
    "accepts": [
     "DEG_TABLE"
@@ -15,17 +1763,6 @@
    "related_to": [
     "dehist",
     "heatmap"
-   ]
-  },
-  "dehist": {
-   "accepts": [
-    "DEG_TABLE"
-   ],
-   "produces": [
-    "DEG_HISTOGRAM"
-   ],
-   "related_to": [
-    "volcano"
    ]
   },
   "heatmap": {
@@ -61,35 +1798,141 @@
     "heatmap"
    ]
   },
-  "mcscanx": {
+  "dehist": {
    "accepts": [
-    "GFF",
-    "BLAST_TAB6"
+    "DEG_TABLE"
    ],
    "produces": [
-    "COLLINEARITY"
+    "DEG_HISTOGRAM"
+   ],
+   "related_to": [
+    "volcano"
+   ]
+  },
+  "draw": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
    ],
    "next_step": [
-    "dualsyn",
-    "dotplot"
+    "tree"
    ]
   },
-  "dualsyn": {
+  "unrooted": {
    "accepts": [
-    "SIMPLIFIED_GFF",
-    "COLLINEARITY"
+    "ALIGNMENT",
+    "NEWICK"
    ],
    "produces": [
-    "SYNTENY_PLOT"
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
    ]
   },
-  "dotplot": {
+  "rooting": {
    "accepts": [
-    "SIMPLIFIED_GFF",
-    "COLLINEARITY"
+    "ALIGNMENT",
+    "NEWICK"
    ],
    "produces": [
-    "DOTPLOT"
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "hmmsearch": {
+   "accepts": [
+    "FASTA",
+    "HMM_PROFILE"
+   ],
+   "produces": [
+    "HMM_HITS",
+    "TSV"
+   ]
+  },
+  "gxfAttr": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "kallisto": {
+   "accepts": [
+    "FASTQ"
+   ],
+   "produces": [
+    "QUANT_TABLE"
+   ],
+   "next_step": [
+    "tpmCalc"
+   ]
+  },
+  "fimo": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "xml2blasttab": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "xml2pairwise": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "fa2tab": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "tab2fa": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
    ]
   },
   "muscle": {
@@ -104,20 +1947,45 @@
     "iqtree"
    ]
   },
-  "trimal": {
+  "bestid": {
    "accepts": [
-    "ALIGNMENT"
+    "FASTA"
    ],
    "produces": [
-    "TRIMMED_ALIGNMENT"
+    "BLAST_HITS"
    ],
    "next_step": [
-    "iqtree"
+    "filterCScore"
    ]
   },
-  "iqtree": {
+  "getseqdb": {
    "accepts": [
-    "ALIGNMENT"
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
+   ]
+  },
+  "genomefilter": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  },
+  "notung": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
    ],
    "produces": [
     "PHYLOGENY_NWK"
@@ -126,197 +1994,16 @@
     "tree"
    ]
   },
-  "tpmCalc": {
+  "newickRename": {
    "accepts": [
-    "COUNTS_TABLE",
-    "GENE_LENGTH"
+    "ALIGNMENT",
+    "NEWICK"
    ],
    "produces": [
-    "TPM_TABLE"
+    "PHYLOGENY_NWK"
    ],
    "next_step": [
-    "pca",
-    "heatmap",
-    "volcano"
-   ]
-  },
-  "gsea": {
-   "accepts": [
-    "EXPRESSION_TABLE",
-    "PHENOTYPE_CLS"
-   ],
-   "produces": [
-    "GSEA_REPORT"
-   ]
-  },
-  "genestructure": {
-   "accepts": [
-    "GFF3",
-    "GENE_ID_LIST"
-   ],
-   "produces": [
-    "GENE_STRUCTURE_PLOT"
-   ]
-  },
-  "kallisto": {
-   "accepts": [
-    "FASTQ"
-   ],
-   "produces": [
-    "QUANT_TABLE"
-   ],
-   "next_step": [
-    "tpmCalc"
-   ]
-  },
-  "recipBlast": {
-   "accepts": [
-    "FASTA"
-   ],
-   "produces": [
-    "BLAST_HITS",
-    "RBH_TABLE"
-   ],
-   "next_step": [
-    "filterCScore"
-   ],
-   "related_to": [
-    "twoSeqBlast"
-   ]
-  },
-  "twoSeqBlast": {
-   "accepts": [
-    "FASTA"
-   ],
-   "produces": [
-    "BLAST_HITS"
-   ],
-   "related_to": [
-    "recipBlast"
-   ]
-  },
-  "extractFasta": {
-   "accepts": [
-    "FASTA",
-    "GENE_ID_LIST"
-   ],
-   "produces": [
-    "SEQUENCE_SUBSET",
-    "FASTA"
-   ],
-   "related_to": [
-    "extractFastaSub"
-   ]
-  },
-  "statFasta": {
-   "accepts": [
-    "FASTA"
-   ],
-   "produces": [
-    "FASTA_STATS",
-    "TSV"
-   ],
-   "related_to": [
-    "fastaExtract"
-   ]
-  },
-  "dnDsCalculate": {
-   "accepts": [
-    "ALIGNMENT"
-   ],
-   "produces": [
-    "KAKS_TABLE"
-   ],
-   "related_to": [
-    "muscle"
-   ]
-  },
-  "hmmsearch": {
-   "accepts": [
-    "FASTA",
-    "HMM_PROFILE"
-   ],
-   "produces": [
-    "HMM_HITS",
-    "TSV"
-   ]
-  },
-  "sixframe": {
-   "accepts": [
-    "DNA_FASTA"
-   ],
-   "produces": [
-    "PROTEIN_FASTA"
-   ],
-   "related_to": [
-    "longestorf"
-   ]
-  },
-  "longestorf": {
-   "accepts": [
-    "DNA_FASTA"
-   ],
-   "produces": [
-    "PROTEIN_FASTA"
-   ],
-   "related_to": [
-    "sixframe"
-   ]
-  },
-  "memerun": {
-   "accepts": [
-    "PROTEIN_FASTA"
-   ],
-   "produces": [
-    "MEME_XML"
-   ],
-   "next_step": [
-    "motif"
-   ]
-  },
-  "tfbsShift": {
-   "accepts": [
-    "MEME_XML"
-   ],
-   "produces": [
-    "TFBS_TABLE"
-   ],
-   "related_to": [
-    "motif"
-   ]
-  },
-  "pep2codon": {
-   "accepts": [
-    "PROTEIN_ALIGNMENT"
-   ],
-   "produces": [
-    "CODON_ALIGNMENT"
-   ],
-   "related_to": [
-    "muscle"
-   ]
-  },
-  "structure": {
-   "accepts": [
-    "GFF3"
-   ],
-   "produces": [
-    "GENE_STRUCTURE_PLOT"
-   ],
-   "related_to": [
-    "genestructure"
-   ]
-  },
-  "mastExtract": {
-   "accepts": [
-    "MEME_XML",
-    "HMM_HITS"
-   ],
-   "produces": [
-    "SEQUENCE_SUBSET"
-   ],
-   "related_to": [
-    "memerun"
+    "tree"
    ]
   },
   "hmmerSearch": {
@@ -331,15 +2018,62 @@
     "hmmsearch"
    ]
   },
-  "calcRepeat": {
+  "memeViz": {
    "accepts": [
-    "DNA_FASTA"
+    "MEME_XML"
    ],
    "produces": [
-    "REPEAT_SCAN"
+    "MOTIF_PLOT"
    ],
    "related_to": [
-    "careclassify"
+    "memerun"
+   ]
+  },
+  "gsea": {
+   "accepts": [
+    "EXPRESSION_TABLE",
+    "PHENOTYPE_CLS"
+   ],
+   "produces": [
+    "GSEA_REPORT"
+   ]
+  },
+  "tfbsShift": {
+   "accepts": [
+    "MEME_XML"
+   ],
+   "produces": [
+    "TFBS_TABLE"
+   ],
+   "related_to": [
+    "motif"
+   ]
+  },
+  "mcscanxd": {
+   "accepts": [
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
+   ],
+   "produces": [
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
+   ],
+   "related_to": [
+    "mcscanx"
+   ]
+  },
+  "quickAnno": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "next_step": [
+    "filterCScore"
    ]
   },
   "smart": {
@@ -353,15 +2087,69 @@
     "cddmotif"
    ]
   },
-  "memeViz": {
+  "msy": {
    "accepts": [
-    "MEME_XML"
+    "SIMPLIFIED_GFF",
+    "COLLINEARITY"
    ],
    "produces": [
-    "MOTIF_PLOT"
+    "SYNTENY_PLOT"
+   ],
+   "next_step": [
+    "dualsyn",
+    "dotplot"
    ],
    "related_to": [
-    "memerun"
+    "mcscanx"
+   ]
+  },
+  "gxfSplit": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfIdAppender": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "genestructure": {
+   "accepts": [
+    "GFF3",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "GENE_STRUCTURE_PLOT"
+   ]
+  },
+  "treeRooting": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "tree": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
    ]
   }
  }

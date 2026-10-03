@@ -32,5 +32,40 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "2059700e92dcb787236621e38d0a029c30cdd58f9ba5c2e9151da3e4256c69bf",
+ "semantic_fingerprint_short": "2059700e92dcb787",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "SIMPLIFIED_GFF",
+   "COLLINEARITY"
+  ],
+  "produces": [
+   "SYNTENY_PLOT"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "chr1",
+   "type": "string",
+   "default": null,
+   "required": false,
+   "note": "逗号分隔染色体"
+  },
+  {
+   "name": "chr2",
+   "type": "string",
+   "default": null,
+   "required": false,
+   "note": ""
+  }
+ ]
 }

@@ -23,5 +23,24 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "f8c3bc022c45e1c2c1462c6e4fc9edf62406998515d07298ba503ee884e88786",
+ "semantic_fingerprint_short": "f8c3bc022c45e1c2",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT",
+   "PEAKS"
+  ],
+  "produces": [
+   "PEAK_ANNOTATION"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ]
 }

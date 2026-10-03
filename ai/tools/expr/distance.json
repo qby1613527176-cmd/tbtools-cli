@@ -12,5 +12,21 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "fbfd0b3814dd955b684021e6eb8e0f6c111511e3167b5cfc934b74a8cd8840d8",
+ "semantic_fingerprint_short": "fbfd0b3814dd955b",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "EXPRESSION_TABLE"
+  ],
+  "produces": [
+   "PLOT"
+  ],
+  "related_to": [
+   "volcano",
+   "heatmap"
+  ]
+ }
 }

@@ -23,5 +23,26 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "13e13347c6e30463d66558c40efa759280726218be036b2e5ff3b42bb21b0dd6",
+ "semantic_fingerprint_short": "13e13347c6e30463",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "MEME_XML"
+  ],
+  "produces": [
+   "TFBS_TABLE"
+  ],
+  "related_to": [
+   "motif"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ]
 }

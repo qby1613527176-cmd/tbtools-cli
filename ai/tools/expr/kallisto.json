@@ -23,5 +23,44 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "ea7dcd17acb48263ecd91b28966e33c79163bbb11e1c8fccc92578b7e37ad2ec",
+ "semantic_fingerprint_short": "ea7dcd17acb48263",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "FASTQ"
+  ],
+  "produces": [
+   "QUANT_TABLE"
+  ],
+  "next_step": [
+   "tpmCalc"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ],
+ "dependencies": [
+  "kallisto"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "kallisto",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "kallisto",
+   "version_args": [
+    "version"
+   ]
+  }
+ ]
 }

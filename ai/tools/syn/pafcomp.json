@@ -12,5 +12,25 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "dcab2e58ccbd3dbeb990bfdffacfe2d456370f9bd271365ac199cbab7694dc6f",
+ "semantic_fingerprint_short": "dcab2e58ccbd3dbe",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "SIMPLIFIED_GFF",
+   "COLLINEARITY"
+  ],
+  "produces": [
+   "SYNTENY_PLOT"
+  ],
+  "next_step": [
+   "dualsyn",
+   "dotplot"
+  ],
+  "related_to": [
+   "mcscanx"
+  ]
+ }
 }

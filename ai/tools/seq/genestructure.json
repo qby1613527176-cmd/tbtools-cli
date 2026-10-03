@@ -33,5 +33,47 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "36cea377e1a4660eb2f24494a950c12ce49918aee5839ae03292130a302c6f37",
+ "semantic_fingerprint_short": "36cea377e1a4660e",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "GFF3",
+   "GENE_ID_LIST"
+  ],
+  "produces": [
+   "GENE_STRUCTURE_PLOT"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "w",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "h",
+   "type": "int",
+   "default": 800,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "genome",
+   "type": "string",
+   "default": null,
+   "required": false,
+   "note": "可选基因组 FASTA"
+  }
+ ]
 }

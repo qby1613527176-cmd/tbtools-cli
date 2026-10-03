@@ -23,5 +23,61 @@
  "outputs": [
   "nwk"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "6d8ecd58b43587b39820ea59e6ff47c6394c2917a9c7de52b13e0641c3e24a6c",
+ "semantic_fingerprint_short": "6d8ecd58b43587b3",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT"
+  ],
+  "produces": [
+   "PHYLOGENY_NWK"
+  ],
+  "next_step": [
+   "tree"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tree",
+   "format": "nwk",
+   "content_type": "tree"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "bb",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": "UFBoot ≥1000"
+  },
+  {
+   "name": "t",
+   "type": "int",
+   "default": 4,
+   "required": false,
+   "note": ""
+  }
+ ],
+ "dependencies": [
+  "iqtree2"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "iqtree2",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "iqtree2",
+   "version_args": [
+    "--version"
+   ]
+  }
+ ]
 }

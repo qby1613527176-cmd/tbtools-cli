@@ -12,5 +12,20 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "be0ca99e05e7709923ec8361082419586da7d9431d615c02e7b8d8c1932f8a01",
+ "semantic_fingerprint_short": "be0ca99e05e77099",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA"
+  ],
+  "produces": [
+   "BLAST_HITS"
+  ],
+  "next_step": [
+   "filterCScore"
+  ]
+ }
 }

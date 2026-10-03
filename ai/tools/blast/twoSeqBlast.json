@@ -12,5 +12,20 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "c568e369fe4d701862985204f262fff9c4aa5677569262ef4853d72d318a9353",
+ "semantic_fingerprint_short": "c568e369fe4d7018",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA"
+  ],
+  "produces": [
+   "BLAST_HITS"
+  ],
+  "related_to": [
+   "recipBlast"
+  ]
+ }
 }

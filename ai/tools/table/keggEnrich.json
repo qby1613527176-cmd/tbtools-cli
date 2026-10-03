@@ -32,5 +32,23 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "b7cb5c2a82e787536a49ffedcafbe078e60534bb7599f0725c320fcec52fd6f6",
+ "semantic_fingerprint_short": "b7cb5c2a82e78753",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "TABLE"
+  ],
+  "produces": [
+   "TABLE_OUT"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ]
 }

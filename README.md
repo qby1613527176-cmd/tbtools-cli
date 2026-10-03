@@ -420,7 +420,7 @@ tbtools-cli/
 │   ├── cli.py             # click 主 CLI（全命令注册 + rpc 自愈 + 纠错）
 │   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂(命令数以 `tbtools version` 为准)
 │   ├── cli_tools_registry.py  # CLI 工具共享注册表
-│   ├── command_metadata.json  # 命令元数据（gen_metadata 从 CommandSpec 生成,唯一数据源）
+│   ├── command_metadata.json  # 命令元数据（gen_metadata 从 CommandSpec 生成的唯一投影,非源）
 │   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
 │   ├── presets.py / scenarios.py / config.py
 ├── pyproject.toml         # ✅ pip 安装（tbtools console_script）

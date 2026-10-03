@@ -29,5 +29,42 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "dc38626d5b3abf9e491c1fb4aadbe1143b4f6cb4b66c3132aa53efd11c4913d2",
+ "semantic_fingerprint_short": "dc38626d5b3abf9e",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "DEG_TABLE"
+  ],
+  "produces": [
+   "DEG_HISTOGRAM"
+  ],
+  "related_to": [
+   "volcano"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "w",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "h",
+   "type": "int",
+   "default": 800,
+   "required": false,
+   "note": ""
+  }
+ ]
 }

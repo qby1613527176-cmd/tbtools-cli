@@ -23,5 +23,26 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "1319449b755fb51dcf993d7cdfacedbfc76480ba640e06a927345ac881355712",
+ "semantic_fingerprint_short": "1319449b755fb51d",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "PROTEIN_FASTA"
+  ],
+  "produces": [
+   "DOMAIN_ANNOTATION"
+  ],
+  "related_to": [
+   "cddmotif"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ]
 }

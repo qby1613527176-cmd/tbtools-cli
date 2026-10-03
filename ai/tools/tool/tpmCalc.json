@@ -36,5 +36,29 @@
  "outputs": [
   "tsv"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "f4829d21e6ee7c709cdcc5f1396b087ae4d9a110bda0004c2ac5075a1f4809fe",
+ "semantic_fingerprint_short": "f4829d21e6ee7c70",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "COUNTS_TABLE",
+   "GENE_LENGTH"
+  ],
+  "produces": [
+   "TPM_TABLE"
+  ],
+  "next_step": [
+   "pca",
+   "heatmap",
+   "volcano"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ]
 }

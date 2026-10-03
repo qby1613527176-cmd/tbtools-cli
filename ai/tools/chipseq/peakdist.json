@@ -12,5 +12,18 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "600f0e3952a3b59f7fc0e3fff23d850da0697c7e39db6c44d4f527b71012b270",
+ "semantic_fingerprint_short": "600f0e3952a3b59f",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT",
+   "PEAKS"
+  ],
+  "produces": [
+   "PEAK_ANNOTATION"
+  ]
+ }
 }

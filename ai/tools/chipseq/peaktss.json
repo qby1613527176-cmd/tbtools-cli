@@ -30,5 +30,24 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "cf14dbd3cb8067eff0c710adac46d30c04ef37a28e277b313b1236925178e17b",
+ "semantic_fingerprint_short": "cf14dbd3cb8067ef",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT",
+   "PEAKS"
+  ],
+  "produces": [
+   "PEAK_ANNOTATION"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

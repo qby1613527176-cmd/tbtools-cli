@@ -12,5 +12,17 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "network-required"
+ "status": "network-required",
+ "semantic_fingerprint": "70f20959741954e867be9e42cd46a9652501a5a1f93bf4871e9c074cea77b287",
+ "semantic_fingerprint_short": "70f20959741954e8",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "TABLE"
+  ],
+  "produces": [
+   "TABLE_OUT"
+  ]
+ }
 }

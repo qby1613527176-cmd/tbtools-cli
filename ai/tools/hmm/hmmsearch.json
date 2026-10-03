@@ -13,5 +13,37 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "platform-limited"
+ "status": "platform-limited",
+ "semantic_fingerprint": "e7451fec71d9b65b013e8722a18c714d30f2cb77e1f891bbf4506adc6e675df5",
+ "semantic_fingerprint_short": "e7451fec71d9b65b",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "HMM_PROFILE"
+  ],
+  "produces": [
+   "HMM_HITS",
+   "TSV"
+  ]
+ },
+ "dependencies": [
+  "hmmer"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "hmmer",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "hmmsearch",
+   "version_args": [
+    "-h"
+   ]
+  }
+ ]
 }

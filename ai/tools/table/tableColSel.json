@@ -12,5 +12,17 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "daae23149b2541ab71bcd9ea10ecf1d58b4093e11fa03ff3f32509bdbc0d32f3",
+ "semantic_fingerprint_short": "daae23149b2541ab",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "TABLE"
+  ],
+  "produces": [
+   "TABLE_OUT"
+  ]
+ }
 }

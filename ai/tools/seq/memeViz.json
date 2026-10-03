@@ -23,5 +23,26 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "73875b412107b93f33499155d4a7af4988568a72a49eb895f18646419de1e076",
+ "semantic_fingerprint_short": "73875b412107b93f",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "MEME_XML"
+  ],
+  "produces": [
+   "MOTIF_PLOT"
+  ],
+  "related_to": [
+   "memerun"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

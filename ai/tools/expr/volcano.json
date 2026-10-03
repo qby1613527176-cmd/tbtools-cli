@@ -29,5 +29,64 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "14ad46e479a9104db3eb30726f015d3ddc58e5942e82a025f6550f7c9d53889d",
+ "semantic_fingerprint_short": "14ad46e479a9104d",
+ "readiness": "FULL",
+ "verification": "CONFORMANCE_VERIFIED",
+ "relations": {
+  "accepts": [
+   "DEG_TABLE"
+  ],
+  "produces": [
+   "VOLCANO_PLOT"
+  ],
+  "next_step": [
+   "goEnrich",
+   "keggEnrich"
+  ],
+  "related_to": [
+   "dehist",
+   "heatmap"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "plot",
+   "format": "svg",
+   "content_type": "plot"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "pval_cutoff",
+   "type": "float",
+   "default": 0.05,
+   "required": false,
+   "note": "",
+   "cli_name": "--pval-cutoff"
+  },
+  {
+   "name": "fc_cutoff",
+   "type": "float",
+   "default": 1.0,
+   "required": false,
+   "note": "",
+   "cli_name": "--fc-cutoff"
+  },
+  {
+   "name": "w",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "h",
+   "type": "int",
+   "default": 800,
+   "required": false,
+   "note": ""
+  }
+ ]
 }

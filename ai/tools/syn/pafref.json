@@ -23,5 +23,31 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "2ff3fdba132c864a9f8c31a392cded4350216ccbabd474d8192202587fd83b6b",
+ "semantic_fingerprint_short": "2ff3fdba132c864a",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "SIMPLIFIED_GFF",
+   "COLLINEARITY"
+  ],
+  "produces": [
+   "SYNTENY_PLOT"
+  ],
+  "next_step": [
+   "dualsyn",
+   "dotplot"
+  ],
+  "related_to": [
+   "mcscanx"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

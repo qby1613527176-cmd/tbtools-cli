@@ -32,5 +32,27 @@
  "outputs": [
   "fasta"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "c82fae59c87ae856f68e03f507ca88485b0f7b14f0e011b679a0e259a74ed247",
+ "semantic_fingerprint_short": "c82fae59c87ae856",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "PROTEIN_ALIGNMENT"
+  ],
+  "produces": [
+   "CODON_ALIGNMENT"
+  ],
+  "related_to": [
+   "muscle"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "cds",
+   "format": "fasta",
+   "content_type": "dna"
+  }
+ ]
 }

@@ -22,5 +22,23 @@
  "outputs": [
   "gff3"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "9ac5aab96f248dcd220c6efe93219188afc7892a0f1504106b2def40ac84bc4e",
+ "semantic_fingerprint_short": "9ac5aab96f248dcd",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "GFF3"
+  ],
+  "produces": [
+   "ANNOTATION_OUT"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "gff3",
+   "format": "gff3"
+  }
+ ]
 }

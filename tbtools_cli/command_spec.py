@@ -294,20 +294,22 @@ def _apply_contract_overlay(spec) -> None:
     c = load_contracts().get(spec.name)
     if not c:
         return
-    # 一致性校验: inputs 存在性(名/格式)对比——不一致即快照过期
-    _yaml_inputs = c.get("inputs")
-    if _yaml_inputs is not None:
-        _code_names = [(i.name, i.format) for i in (spec.inputs or [])]
-        _yaml_names = [(i.get("name", ""), i.get("format", "")) for i in _yaml_inputs]
-        if _code_names and _yaml_names and _code_names != _yaml_names:
+    # 评审 #112 P0-1: 全量快照 equality 校验(canonical_snapshot 覆盖
+    # inputs/output_slots/parameters/layout/named_flags/capabilities/dependencies/relations/status/aliases)
+    # ——此前只查 inputs name+format, outputs/parameters/relations 等漂移测不出
+    try:
+        from tbtools_cli.identity import canonical_snapshot, yaml_to_snapshot
+        _code = canonical_snapshot(spec)
+        _yaml = yaml_to_snapshot(c)
+        if _code != _yaml:
             import warnings as _w
-            _w.warn(f"contracts/tools/{spec.name}.yaml 快照过期: inputs 与代码真源不一致"
-                    f"(代码 {_code_names} != 快照 {_yaml_names})——重跑 gen_metadata --render",
-                    stacklevel=2)
-    # capabilities 兜底保留(评审 #109): 代码未声明时用快照(0 依赖但无害)
-    if "capabilities" in c:
-        if not spec.capabilities:
-            spec.capabilities = list(c["capabilities"])
+            _diff_keys = sorted(k for k in _code if _code.get(k) != _yaml.get(k))
+            _w.warn(f"contracts/tools/{spec.name}.yaml 快照过期: {_diff_keys} 与代码真源不一致"
+                    f"——重跑 gen_metadata --render", stacklevel=2)
+    except Exception:
+        pass
+    # 评审 #112 P0-2: 删除 YAML→runtime capability 兑底——代码没有 capability 就是没有;
+    # YAML 有而代码没有 = 快照过期(上面 warn 已覆盖), 绝不补回来
 
 
 @dataclass

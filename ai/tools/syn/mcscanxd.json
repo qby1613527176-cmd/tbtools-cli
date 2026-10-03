@@ -29,5 +29,47 @@
  "outputs": [
   "collinearity"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "4d43a05a47c418f3ffb1c8793946393deb83b3a2239f68f2034c292c56cf24dc",
+ "semantic_fingerprint_short": "4d43a05a47c418f3",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "SIMPLIFIED_GFF",
+   "COLLINEARITY"
+  ],
+  "produces": [
+   "SYNTENY_PLOT"
+  ],
+  "next_step": [
+   "dualsyn",
+   "dotplot"
+  ],
+  "related_to": [
+   "mcscanx"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "collinearity",
+   "format": "collinearity"
+  }
+ ],
+ "dependencies": [
+  "mcscanx"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "mcscanx",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "MCScanX",
+   "version_args": []
+  }
+ ]
 }

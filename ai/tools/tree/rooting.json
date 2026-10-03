@@ -12,5 +12,24 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "3f11f3d70b26fa03d3b3a138e2c26b9c4c34855234074a5cc7581754fff014c8",
+ "semantic_fingerprint_short": "3f11f3d70b26fa03",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT",
+   "NEWICK"
+  ],
+  "produces": [
+   "PHYLOGENY_NWK"
+  ],
+  "next_step": [
+   "tree"
+  ]
+ },
+ "aliases": [
+  "treeRooting"
+ ]
 }

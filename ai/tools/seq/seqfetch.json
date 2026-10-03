@@ -12,5 +12,22 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "network-required"
+ "status": "network-required",
+ "semantic_fingerprint": "d227a1161ea3a05407ed22f3a6a710cc958bb821bcae158633f2431ad9a5fb6d",
+ "semantic_fingerprint_short": "d227a1161ea3a054",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ }
 }

@@ -24,5 +24,15 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "ee628f7ad9f3adb6e3004099861257c18c875e25d5cf421281d7e7f27b15c034",
+ "semantic_fingerprint_short": "ee628f7ad9f3adb6",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

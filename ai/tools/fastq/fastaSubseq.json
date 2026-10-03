@@ -13,5 +13,21 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "bf1fd0e9525a3eab857fe36795530fc44f5605d22a2559d2e57b2eae17c8a8fb",
+ "semantic_fingerprint_short": "bf1fd0e9525a3eab",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTQ"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "next_step": [
+   "kallisto",
+   "tpmCalc"
+  ]
+ }
 }

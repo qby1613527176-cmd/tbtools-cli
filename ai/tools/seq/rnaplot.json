@@ -22,5 +22,45 @@
  "outputs": [
   "svg"
  ],
- "status": "platform-limited"
+ "status": "platform-limited",
+ "semantic_fingerprint": "87ab9762e3a6860399bfbeca30ae952ca1506e3b7e4c76d154e63d91fdeeb70a",
+ "semantic_fingerprint_short": "87ab9762e3a68603",
+ "readiness": "PARTIAL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ],
+ "dependencies": [
+  "rnafold"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "rnafold",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux"
+   ],
+   "executable": "RNAfold",
+   "version_args": [
+    "--version"
+   ]
+  }
+ ]
 }

@@ -36,5 +36,28 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "21dc39b84013e68af058374585bb09d04f02f3809cb0f2682e49ab134f581f07",
+ "semantic_fingerprint_short": "21dc39b84013e68a",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "GENE_LISTS"
+  ],
+  "produces": [
+   "SET_DIAGRAM"
+  ],
+  "related_to": [
+   "venn2",
+   "venn3",
+   "upset"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

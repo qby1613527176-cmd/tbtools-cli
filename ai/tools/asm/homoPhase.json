@@ -12,5 +12,18 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "0d1237f3ea81ec5f0d2b4ff33ca8771fb5cd93592fe577310a744e4d5d17c9af",
+ "semantic_fingerprint_short": "0d1237f3ea81ec5f",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GENOME",
+   "GFF"
+  ],
+  "produces": [
+   "ASSEMBLY_OUT"
+  ]
+ }
 }

@@ -26,5 +26,23 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "cb7d8cb27cd641331fdd3379d767e1980c84c6a29894a6ebd4b14f24733ea81c",
+ "semantic_fingerprint_short": "cb7d8cb27cd64133",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "EXPRESSION_MATRIX"
+  ],
+  "produces": [
+   "PCA_PLOT"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ]
 }

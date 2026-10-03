@@ -13,5 +13,22 @@
  ],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "d21ab22d6059ede8c1551675ae0a6d5c616591058b650955b8b5e7359fb7088b",
+ "semantic_fingerprint_short": "d21ab22d6059ede8",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GENE_ID_LIST"
+  ],
+  "produces": [
+   "SEQUENCE_SUBSET",
+   "FASTA"
+  ],
+  "related_to": [
+   "extractFastaSub"
+  ]
+ }
 }

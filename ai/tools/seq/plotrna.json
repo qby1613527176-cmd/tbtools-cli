@@ -22,5 +22,45 @@
  "outputs": [
   "pdf"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "dd3f05afb8548a38f6357b8ad6b07af7a2b8790e75b1ce4baa2e44d31d82ddb0",
+ "semantic_fingerprint_short": "dd3f05afb8548a38",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "pdf",
+   "format": "pdf"
+  }
+ ],
+ "dependencies": [
+  "rnafold"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "rnafold",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux"
+   ],
+   "executable": "RNAfold",
+   "version_args": [
+    "--version"
+   ]
+  }
+ ]
 }

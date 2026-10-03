@@ -94,3 +94,56 @@ def test_metadata_covers_runtime_commands():
                        "genestructure", "one-step", "treeRooting"}
     real_missing = hidden - expected_hidden
     assert not real_missing, f"运行时命令在 metadata 中不可发现(发现层缺口): {sorted(real_missing)[:15]}"
+
+
+class TestAiManifestInheritance:
+    """评审 #112 P1: ai/ manifest 必须继承 CommandSpec metadata 的可信度字段——
+    防"tool-describe 信息完整 / ai/*.json 被削薄"双世界分裂复发。"""
+
+    def _meta(self):
+        p = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+        return json.load(open(p, encoding="utf-8"))
+
+    def test_ai_tool_schema_inherits_trust_fields(self):
+        """ai/tools/*.json 的 readiness/verification/semantic_fp/relations 等与 metadata 一致。"""
+        meta = self._meta()
+        # 抽查 3 个代表性工具(含 CONFORMANCE_VERIFIED 的 volcano)
+        for name in ("volcano", "muscle", "tpmCalc"):
+            g = meta[name].get("group", "engine")
+            p = os.path.join(ROOT, "ai", "tools", g, f"{name}.json")
+            assert os.path.isfile(p), f"ai/tools/{g}/{name}.json 缺失(重跑 gen_metadata --render)"
+            ai = json.load(open(p, encoding="utf-8"))
+            m = meta[name]
+            # 可信度字段必须继承(与 metadata 完全一致)
+            assert ai.get("readiness") == m.get("readiness"), f"{name}: readiness 未继承"
+            assert ai.get("verification") == m.get("verification"), f"{name}: verification 未继承"
+            assert ai.get("semantic_fingerprint") == m.get("semantic_fingerprint"), f"{name}: semantic_fp 未继承"
+            assert bool(ai.get("relations")) == bool(m.get("relations")), f"{name}: relations 未继承"
+            assert bool(ai.get("output_slots")) == bool(m.get("output_slots")), f"{name}: output_slots 未继承"
+
+    def test_ai_index_has_filter_fields(self):
+        """tool-index.jsonl 每条含 readiness/verification/semantic_fingerprint(筛选字段)。"""
+        p = os.path.join(ROOT, "ai", "tool-index.jsonl")
+        assert os.path.isfile(p), "tool-index.jsonl 缺失(重跑 gen_metadata --render)"
+        n = 0
+        with open(p, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                e = json.loads(line)
+                for k in ("readiness", "verification", "semantic_fingerprint"):
+                    assert k in e, f"index 缺 {k}(工具 {e.get('name')})"
+                n += 1
+        assert n > 0
+
+    def test_ai_relations_matches_spec(self):
+        """relations.json 与 CommandSpec 派生一致(含 GROUP_RELATIONS fallback)。"""
+        from tbtools_cli.command_spec import build_command_specs
+        p = os.path.join(ROOT, "ai", "relations.json")
+        assert os.path.isfile(p), "relations.json 缺失(重跑 gen_metadata --render)"
+        ai_rel = set(json.load(open(p, encoding="utf-8")).get("relations", {}).keys())
+        specs = build_command_specs()
+        spec_rel = {n for n, s in specs.items() if s.relations}
+        assert not (spec_rel - ai_rel), \
+            f"ai/relations.json 缺 {len(spec_rel - ai_rel)} 个有 relations 的工具: {sorted(spec_rel - ai_rel)[:5]}(重跑 gen_metadata --render)"

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""gen_metadata.py — command_metadata.json 唯一数据源生成器（架构重构批次 A）
+"""gen_metadata.py — command_metadata.json 唯一 metadata projection 生成器（架构重构批次 A）
+
+评审 #112 P2: 命名修正——多 registry(ENGINE_REGISTRY/CLI_TOOLS/cli manual/bridges)
+→ CommandSpec → metadata 投影。command_metadata.json 是唯一**投影**, 非唯一源。
 
 合并事实来源 → 单一 metadata：
   1. ENGINE_REGISTRY（auto_commands.py 表驱动，172 命令）— 运行时权威
@@ -324,7 +327,11 @@ def render_ai_manifest(meta):
                      "alias_of": v.get('alias_of', ""), "capabilities": v.get('capabilities', []),
                      "input_formats": sorted({i.get('format','') for i in v.get('inputs', []) if i.get('format')}),
                      "output_formats": v.get('outputs', []),
-                     "description": (v.get('help','') or '').replace('\n', ' ')[:160]}
+                     "description": (v.get('help','') or '').replace('\n', ' ')[:160],
+                     # 评审 #112 P1: 低体积高价值筛选字段——Agent 搜索后可直接按证据强度过滤,
+                     # 不必逐个 describe
+                     "readiness": v.get('readiness', ''), "verification": v.get('verification', ''),
+                     "semantic_fingerprint": v.get('semantic_fingerprint', '')}
             f.write(_json.dumps(entry, ensure_ascii=False) + '\n')
     cap_idx = {}
     for name, v in meta.items():
@@ -341,6 +348,13 @@ def render_ai_manifest(meta):
                   "invoke": f"tbtools {g} {name} <args...>" if g != 'engine' else f"tbtools engine {v.get('class','')} key=value",
                   "capabilities": v.get('capabilities', []), "inputs": v.get('inputs', []),
                   "outputs": v.get('outputs', []), "status": v.get('status', 'stable')}
+        # 评审 #112 P1: AI manifest 与 CommandSpec metadata 统一投影——trust 字段补齐,
+        # 防"tool-describe 信息完整 / ai/*.json 被削薄"双世界分裂
+        for _k in ("semantic_fingerprint", "semantic_fingerprint_short", "readiness", "verification",
+                   "relations", "output_slots", "parameters", "dependencies", "dependency_manifest",
+                   "aliases"):
+            if v.get(_k):
+                schema[_k] = v[_k]
         _json.dump(schema, open(_os.path.join(d, f"{name}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     try:
         from tbtools_cli.core import ERROR_CODES
@@ -371,8 +385,14 @@ def render_ai_manifest(meta):
          "outputs": ["nwk", "svg"]},
     ]
     try:
-        from tbtools_cli.command_spec import KNOWN_RELATIONS
-        _json.dump({"schema_version": "1.0", "relations": KNOWN_RELATIONS},
+        from tbtools_cli.command_spec import build_command_specs as _bcs_rel
+        # 评审 #112 P1: relations.json 从 CommandSpec 派生(含 GROUP_RELATIONS fallback)——
+        # 此前直读 KNOWN_RELATIONS, 只依赖 group 兜底的工具在 ai/relations.json 缺失(双轨)
+        _rels_all = {}
+        for _n, _sp in _bcs_rel().items():
+            if _sp.relations:
+                _rels_all[_n] = dict(_sp.relations)
+        _json.dump({"schema_version": "1.0", "relations": _rels_all},
                    open(_os.path.join(ai_dir, "relations.json"), "w", encoding="utf-8"),
                    ensure_ascii=False, indent=1)
     except Exception:

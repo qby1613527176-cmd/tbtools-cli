@@ -28,5 +28,59 @@
  "outputs": [
   "svg"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "6b359528864de66c5e3e1abf9e7ca07216874176a4a0f45a481db016d5d2b7c3",
+ "semantic_fingerprint_short": "6b359528864de66c",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "EXPRESSION_MATRIX"
+  ],
+  "produces": [
+   "HEATMAP"
+  ],
+  "next_step": [
+   "hclust"
+  ],
+  "related_to": [
+   "pca"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "svg",
+   "format": "svg"
+  }
+ ],
+ "parameters": [
+  {
+   "name": "w",
+   "type": "int",
+   "default": 1000,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "h",
+   "type": "int",
+   "default": 800,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "log2",
+   "type": "bool",
+   "default": false,
+   "required": false,
+   "note": ""
+  },
+  {
+   "name": "row_scale",
+   "type": "bool",
+   "default": false,
+   "required": false,
+   "note": ""
+  }
+ ]
 }

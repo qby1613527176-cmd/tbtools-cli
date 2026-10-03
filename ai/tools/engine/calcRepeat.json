@@ -20,5 +20,44 @@
  "outputs": [
   "tsv"
  ],
- "status": "platform-limited"
+ "status": "platform-limited",
+ "semantic_fingerprint": "6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca",
+ "semantic_fingerprint_short": "6fcdc59ed0ece961",
+ "readiness": "PARTIAL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "DNA_FASTA"
+  ],
+  "produces": [
+   "REPEAT_SCAN"
+  ],
+  "related_to": [
+   "careclassify"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "tsv",
+   "format": "tsv"
+  }
+ ],
+ "dependencies": [
+  "jellyfish"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "jellyfish",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "jellyfish",
+   "version_args": [
+    "--version"
+   ]
+  }
+ ]
 }

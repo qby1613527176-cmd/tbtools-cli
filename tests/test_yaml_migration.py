@@ -30,29 +30,28 @@ class TestYamlMigrationRule:
                           stacklevel=1)
 
     def test_yaml_snapshot_matches_known(self):
-        """YAML 快照与代码真源一致(评审 #110 建议③ + #111 P1-1 独立真源比较:
-        用 _skip_overlay 拿纯代码 spec, 不经任何 YAML 覆盖/兑底, 防"overlay 后 spec 比 YAML"自我验证)。
-        不一致=快照过期, 重跑 gen_metadata 而非手改 YAML。"""
+        """YAML 快照与代码真源全量 equality(评审 #110 建议③ + #111 P1-1 + #112 P0-1):
+        用 _skip_overlay 拿纯代码 spec, canonical_snapshot(code) == canonical(code 投影 YAML)——
+        一次覆盖 inputs/output_slots/parameters/layout/named_flags/capabilities/dependencies/
+        relations/status/aliases(此前逐个 assert 只查 capabilities+inputs, 59 个 output_slots
+        漂移测不出)。不一致=快照过期, 重跑 gen_metadata 而非手改 YAML。"""
         from tbtools_cli.command_spec import build_command_specs, load_contracts
+        from tbtools_cli.identity import canonical_snapshot, yaml_to_snapshot
         contracts = load_contracts()
         # 纯代码真源(跳过 YAML 校验/兑底)——这才是与快照对比的正确基准
         specs = build_command_specs(force=True, _skip_overlay=True)
-        # 评审 #111 P1-1 修正: 全量验证不提前 break——曾 10 个就停, 字母序靠后的工具
-        # (如 tpmCalc)从未被检查=评审指出的"测试抓不住问题"盲区
+        # 全量验证不提前 break(曾 10 个就停, 字母序靠后工具从未被查=盲区)
         checked = 0
         for name, c in contracts.items():
             sp = specs.get(name)
             if not sp:
                 continue
-            # capabilities: 代码真源 vs 快照(严格相等, 无兑底)
-            if c.get("capabilities"):
-                assert list(sp.capabilities) == list(c["capabilities"]),                     f"{name}: capabilities 快照过期(代码 {sp.capabilities} != 快照 {c['capabilities']}), 重跑 gen_metadata"
-                checked += 1
-            # inputs: 名称+格式 + cli_name(评审 #111 P0-2: cli_name 是执行语义, 必须一致)
-            if c.get("inputs"):
-                _code_in = [(i.name, i.format, getattr(i, "cli_name", "")) for i in sp.inputs]
-                _yaml_in = [(i.get("name", ""), i.get("format", ""), i.get("cli_name", ""))
-                            for i in c["inputs"]]
-                assert _code_in == _yaml_in,                     f"{name}: inputs 快照过期(代码 {_code_in} != 快照 {_yaml_in}), 重跑 gen_metadata"
-                checked += 1
+            _code = canonical_snapshot(sp)
+            _yaml = yaml_to_snapshot(c)
+            if _code != _yaml:
+                _diff = sorted(k for k in _code if _code.get(k) != _yaml.get(k))
+                raise AssertionError(
+                    f"{name}: 快照过期 {_diff}——代码 {str({k: _code.get(k) for k in _diff})[:120]} "
+                    f"!= 快照 {str({k: _yaml.get(k) for k in _diff})[:120]}, 重跑 gen_metadata --render")
+            checked += 1
         assert checked > 0

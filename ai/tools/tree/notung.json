@@ -30,5 +30,27 @@
  "outputs": [
   "nwk"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "70098a6ad211c7f36e7ae320bc336f8da495762ddbf6303fbd5552bfe787e5c8",
+ "semantic_fingerprint_short": "70098a6ad211c7f3",
+ "readiness": "FULL",
+ "verification": "COMPILEABLE",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT",
+   "NEWICK"
+  ],
+  "produces": [
+   "PHYLOGENY_NWK"
+  ],
+  "next_step": [
+   "tree"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "nwk",
+   "format": "nwk"
+  }
+ ]
 }

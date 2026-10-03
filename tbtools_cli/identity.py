@@ -82,6 +82,55 @@ def canonical_contract(spec) -> dict:
     }
 
 
+def canonical_snapshot(spec) -> dict:
+    """快照级完整契约结构(评审 #112 P0-1): canonical_contract 基础上补 status/aliases——
+    供 YAML 快照 ↔ 代码真源 的全量 equality 校验。
+    注意: 不加 fingerprint 用(contract_fp 源仍为 canonical_contract, 防指纹漂移), 只用于快照一致性。
+    outputs/output_slots 镜像 to_metadata_entry 投影逻辑(slots 为真相, 空时从 outputs 派生)——
+    否则与导出快照天然不一致(barplot: spec.output_slots=[] 但快照有派生 slots)。
+    """
+    from tbtools_cli.command_spec import OutputSpec as _OS
+    _c = canonical_contract(spec)
+    # 与 to_metadata_entry 相同投影: outputs 从 slots, 空 slots 从 outputs 派生
+    _outs = [o.format for o in spec.output_slots if o.format] if spec.output_slots else spec.outputs
+    _slots = spec.output_slots or [_OS(name=o, format=o) for o in spec.outputs]
+    _c["outputs"] = list(_outs or [])
+    _c["output_slots"] = [{"name": o.name, "format": o.format,
+                           "content_type": o.content_type} for o in _slots]
+    _c["status"] = getattr(spec, "status", "stable")
+    _c["aliases"] = sorted(getattr(spec, "aliases", []) or [])
+    return _c
+
+
+def yaml_to_snapshot(c: dict) -> dict:
+    """YAML 快照 dict → canonical_snapshot 同构结构(评审 #112 P0-1): 只保留契约字段,
+    丢弃导出物扩展(semantic_fp/readiness/verification/helpler/ontology)。"""
+    _o: dict = {"name": c.get("name", ""), "kind": c.get("kind", ""), "group": c.get("group", "")}
+    _o["inputs"] = [{"name": i.get("name", ""), "format": i.get("format", ""),
+                     "role": i.get("role", "file"), "required": i.get("required", True),
+                     "content_type": i.get("content_type", "generic"),
+                     "columns": i.get("columns"), "cli_name": i.get("cli_name", "")}
+                    for i in (c.get("inputs") or [])]
+    _o["outputs"] = list(c.get("outputs") or [])
+    _o["output_slots"] = [{"name": o.get("name", ""), "format": o.get("format", ""),
+                           "content_type": o.get("content_type", "generic")}
+                          for o in (c.get("output_slots") or [])]
+    _o["parameters"] = [{"name": p.get("name", ""), "type": p.get("type", "string"),
+                          "default": p.get("default"), "required": p.get("required", False),
+                          "cli_name": p.get("cli_name", "")}
+                         for p in (c.get("parameters") or [])]
+    _o["layout"] = c.get("layout") if c.get("layout") is not None else \
+        (c.get("named_flags") if isinstance(c.get("named_flags"), list) else None)
+    _nf = c.get("named_flags")
+    _o["named_flags"] = _nf if isinstance(_nf, dict) else None
+    _o["capabilities"] = list(c.get("capabilities") or [])
+    _o["dependencies"] = list(c.get("dependencies") or [])
+    _o["relations"] = dict(c.get("relations") or {})
+    _o["status"] = c.get("status", "stable")
+    _o["aliases"] = sorted(c.get("aliases") or [])
+    return _o
+
+
 # 四层 identity 字段形式化(评审 #102 P1-4):
 #   Execution Contract(执行身份): inputs/output_slots/parameters/layout/named_flags
 #   Semantic Metadata(语义元数据): capabilities/relations/ontology——搜索/规划用,非执行身份

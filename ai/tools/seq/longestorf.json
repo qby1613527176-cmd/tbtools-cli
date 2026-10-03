@@ -24,5 +24,29 @@
  "outputs": [
   "fa"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "d4d6f5a9bcb6dd2e40561909cc7e9c2b6c4abc370c84c5782cdc2068672cea0d",
+ "semantic_fingerprint_short": "d4d6f5a9bcb6dd2e",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "DNA_FASTA"
+  ],
+  "produces": [
+   "PROTEIN_FASTA"
+  ],
+  "related_to": [
+   "sixframe"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "fa",
+   "format": "fa"
+  }
+ ],
+ "aliases": [
+  "getLongestCompleteORF"
+ ]
 }

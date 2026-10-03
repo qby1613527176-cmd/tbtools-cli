@@ -10,5 +10,9 @@
  "capabilities": [],
  "inputs": [],
  "outputs": [],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "60b5401d6eea6be794bb7f934bfe393c7a8e713c2b669d976bb6aaeba2bba0d8",
+ "semantic_fingerprint_short": "60b5401d6eea6be7",
+ "readiness": "LEGACY",
+ "verification": "DECLARED"
 }

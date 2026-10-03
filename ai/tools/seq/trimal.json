@@ -24,5 +24,45 @@
  "outputs": [
   "fasta"
  ],
- "status": "stable"
+ "status": "stable",
+ "semantic_fingerprint": "2bea2f8aae74b07c5a719e178d9eeae31d0c7f24f5a1711abcce34f6496f4909",
+ "semantic_fingerprint_short": "2bea2f8aae74b07c",
+ "readiness": "FULL",
+ "verification": "EXECUTION_VERIFIED",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT"
+  ],
+  "produces": [
+   "TRIMMED_ALIGNMENT"
+  ],
+  "next_step": [
+   "iqtree"
+  ]
+ },
+ "output_slots": [
+  {
+   "name": "aln",
+   "format": "fasta",
+   "content_type": "alignment"
+  }
+ ],
+ "dependencies": [
+  "trimal"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "trimal",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "trimal",
+   "version_args": [
+    "-version"
+   ]
+  }
+ ]
 }
