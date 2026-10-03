@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.35] - 2026-10-03
+
+### Contract Agent Surface Freeze(评审 #112)——P0×2 + P1×3 + P2×2
+- **P0-1 完整 canonical snapshot equality**: overlay 从"只查 inputs name+format"升级为 canonical_snapshot(code)==yaml_to_snapshot(yaml) 全量比较——**立即抓到 59 个 output_slots/outputs 漂移**(此前盲区); canonical_snapshot 镜像 to_metadata_entry 的 slots 投影逻辑; test_yaml_migration 升级为全量 equality
+- **P0-2 删除 YAML→runtime capability 兑底**: 代码没 capability 就是没有, 快照有即过期 warn
+- **P1 ai/ manifest 统一投影**: ai/tools/*.json 补齐 semantic_fp/readiness/verification/relations/output_slots/parameters/dependencies/aliases(此前削薄=双世界分裂); tool-index.jsonl 加 readiness/verification/semantic_fp(低体积高价值筛选字段); relations.json 从 CommandSpec 派生含 GROUP_RELATIONS fallback(此前直读 KNOWN_RELATIONS 双轨)
+- **P2 gen_metadata 命名** "唯一数据源"→"唯一 metadata projection"; README 同步
+- **门禁**: pytest 587 passed / ruff 0 / mypy 0
+
 ## [1.4.34] - 2026-10-03
 
 ### Contract Integrity Freeze(评审 #111)——P0×3 + P1×3
