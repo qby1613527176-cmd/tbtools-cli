@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.40] - 2026-10-04
+
+### 待办 #1/#2/#3——执行验证 26→29(48%) + 小修
+- **#1 执行验证第二批**: recipBlast(blast 组, RBH 双向比对 4 产物)/mcscanxd(syn 组, MCScanX-SuperFast 4 产物)/msy(syn 组, 多物种共线 SVG)——examples/data 现成数据真实执行, 覆盖率 43%→48%(29/60)
+- **#2 错误模板 {cmd} 替换**: runtime/java.py ArgsParser 拒绝提示的 tool-describe 字面量替换为 command_name(实测 tool-describe tpmCalc)
+- **#3 README 绘图命令口径命名**: counts.md plot_commands_meta→metadata_plot_commands; README Plotting Engines 218→213(运行时真值)+锚点修正
+- 未收编及原因: hmmerSearch(数据非 HMMER 库)/gxfIdAppender(走 RPC 非独立)/notung(数据格式)/kallisto(缺 fastq)/efpHeat/dotplot(形态复杂)
+- **门禁**: pytest 591 passed / ruff 0 / mypy 0
+
 ## [1.4.39] - 2026-10-04
 
 ### workflow.py 拆分 executor.py(评审 #112 P2 收官——四层全拆完)
