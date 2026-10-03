@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.32] - 2026-10-03
+
+### 验证分层(评审 #110 建议①)——CONFORMANCE_VERIFIED + 两维正交
+- **新层**: CONFORMANCE_VERIFIED(金链级) = EXECUTION_VERIFIED + golden chain 全断言(compile→execute→artifact→sha256→provenance→artifact_id); volcano 首个标杆(test_conformance 金链驱动)
+- verification_level/census/contract_coverage 加 CONFORMANCE_VERIFIED 层
+- verification_report.json 加 conformance_verified 名单; contract fp 变 → 连 conformance 一并降级
+- **describe --json 暴露两维**: readiness(FULL/PARTIAL/LEGACY) + verification(CONFORMANCE/EXECUTION/COMPILEABLE/DECLARED)——Agent 直接可见"契约写得完整" vs "真的跑过", 防混淆
+- gen_metadata/to_metadata_entry 注入两维进 command_metadata.json
+- **门禁**: pytest 581 passed / ruff 0 / mypy 0
+
 ## [1.4.31] - 2026-10-03
 
 ### InputSpec cli_name——ArgsParser 工具契约与引擎参数名解耦(评审 #110 建议④)
