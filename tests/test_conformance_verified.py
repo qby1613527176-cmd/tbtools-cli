@@ -39,6 +39,26 @@ EXEC_VERIFIED = {
     "trimal": ("seq", ["examples/data/phylogeny/msa.fa", "{out}.fa"]),
     "seqlogo": ("seq", ["examples/data/sequences.fa", "{out}.svg"]),
     "iqtree": ("tree", ["examples/data/phylogeny/msa.fa", "{out}"]),  # 产物前缀展开(treefile/contree)
+    # 评审 #110 建议④(2026-10-03 实测扩充, 均用 examples/data 现成数据真实执行验证):
+    "barplot": ("expr", ["examples/data/misc/enrich.tsv", "{out}.svg", "Term", "Pvalue"]),  # 列名非索引
+    "circos": ("syn", ["examples/data/synteny/chrlen.txt", "examples/data/synteny/links.txt",
+                       "examples/data/synteny/genepos.txt", "{out}.svg"]),
+    "gxfAttr": ("gxf", ["examples/data/gxf/input.gff3", "{out}.txt"]),
+    "gxfSplit": ("gxf", ["examples/data/gxf/input.gff3", "{out}"]),
+    "longestorf": ("seq", ["--inFa", "examples/data/fasta/extract.in.fa", "--outORFs", "{out}.fa"]),
+    "newickRename": ("tree", ["--inNwk", "examples/data/phylogeny/phylo.nwk",
+                              "--renameMap", "examples/data/gxf/rename.map.tsv", "--outNwk", "{out}.nwk"]),
+    "tableMerge": ("table", ["--inFileArr", "examples/data/table/reshape/tab1.txt,examples/data/table/reshape/tab2.txt",
+                             "--inColIndexArr", "0,1", "--outTable", "{out}.tsv"]),
+    "treeRooting": ("tree", ["examples/data/treeRooting/unrooted.nwk", "{out}.nwk"]),
+    "upset": ("sets", ["examples/data/set_0.txt", "examples/data/set_1.txt", "{out}.svg"]),
+    "venn3": ("sets", ["--List1", "examples/data/set_0.txt", "--List2", "examples/data/set_1.txt",
+                        "--List3", "examples/data/set_2.txt", "--label1", "A", "--label2", "B", "--label3", "C",
+                        "--graph", "{out}.svg", "--prefix", "{out}"]),
+    "venn4": ("sets", ["--List1", "examples/data/set_0.txt", "--List2", "examples/data/set_1.txt",
+                        "--List3", "examples/data/set_2.txt", "--List4", "examples/data/set_3.txt",
+                        "--label1", "A", "--label2", "B", "--label3", "C", "--label4", "D",
+                        "--graph", "{out}.svg", "--prefix", "{out}"]),
 }
 
 

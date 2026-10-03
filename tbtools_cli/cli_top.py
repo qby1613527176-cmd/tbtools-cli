@@ -843,13 +843,33 @@ def register_top(cli, _LG):
         # 评审 #109(contract 可信度): 无 provenance 时兜底——muscle(Python 直调)/iqtree(java 桥)
         # 不写 .tbtools.json 但产物真实存在; 此前 artifacts=[] 让 Agent 看不到结果, 兜底 build 修复
         artifacts, error = [], None
+        from tbtools_cli.artifact import (build as _abuild, discover_outputs,
+                                         from_provenance as _afrom)
+        # 产物识别前的目录扫描(评审 #110 建议④): workingDir 模式工具(meme/mast/memerun)
+        # 产物在目录内——t0 后新建文件即候选(不为空才收), 防止把输入当产物
+        _dir_artifacts: list[dict] = []
+        for _a in args:
+            if os.path.isdir(_a):
+                try:
+                    for _root, _dirs, _files in os.walk(_a):
+                        for _fn in _files:
+                            _fp = os.path.join(_root, _fn)
+                            try:
+                                if os.path.getmtime(_fp) >= t0 and os.path.getsize(_fp) > 0 \
+                                        and not _fn.endswith(".tbtools.json"):
+                                    try:
+                                        _dir_artifacts.append(_abuild(_fp).to_dict())
+                                    except Exception:
+                                        pass
+                            except OSError:
+                                pass
+                except OSError:
+                    pass
         for a in reversed(args):
             if a.endswith((".svg", ".png", ".pdf", ".tsv", ".txt", ".csv", ".json",
                            ".gff", ".gff3", ".gtf", ".nwk", ".fa", ".fasta", ".fastq",
                            ".xls", ".out", ".meme", ".tree", ".aln", ".collinearity")):
                 _po = a + ".tbtools.json"
-                from tbtools_cli.artifact import (build as _abuild, discover_outputs,
-                                                  from_provenance as _afrom)
                 _found_any = False
                 if os.path.isfile(_po):
                     try:
@@ -859,11 +879,12 @@ def register_top(cli, _LG):
                             _art = _afrom(_o) or _abuild(_o)
                             artifacts.append(_art.to_dict())
                             _found_any = True
-                            if not os.path.isfile(_o):
-                                # 评审 #110 P0-1: 执行期新产物才认(mtime >= t0)——防捡旧 sibling
+                            # 0B 占位产物 → prefix 发现真产物(longestorf: out.fa 0B + NoORF/Pep.fa)
+                            if (not os.path.isfile(_o)) or os.path.getsize(_o) == 0:
                                 for _x in discover_outputs(_o, created_after=t0):
-                                    artifacts.append(_abuild(_x).to_dict())
-                                    _found_any = True
+                                    if os.path.getsize(_x) > 0 and _x != _o:
+                                        artifacts.append(_abuild(_x).to_dict())
+                                        _found_any = True
                     except Exception:
                         pass
                 # 兜底: provenance 缺失但产物真实(手动/桥类引擎)——直接 build + prefix 发现
@@ -904,6 +925,14 @@ def register_top(cli, _LG):
         result = {"$schema": "https://json-schema.org/draft/2020-12/schema",
                   "schema_version": "1.0", "exit_code": ec, "duration_s": dt,
                   "artifacts": artifacts, "error": error, "timed_out": _timed_out}
+        # 评审 #110 建议④: workingDir 目录产物并入(去重; 仅当主产物识别为空时补充,
+        # 避免把输入/无关文件混入——memerun 产物在 meme_out/ 子目录)
+        if _dir_artifacts and not artifacts:
+            _seen = {os.path.abspath(a.get("path", "")) for a in artifacts}
+            for _da in _dir_artifacts:
+                if os.path.abspath(_da.get("path", "")) not in _seen and _da.get("size", 0) > 0:
+                    artifacts.append(_da)
+            result["artifacts"] = artifacts
         if as_json:
             click.echo(_json.dumps(result, ensure_ascii=False, indent=1))
         else:

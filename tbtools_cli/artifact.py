@@ -197,7 +197,10 @@ def discover_outputs(base_path: str, max_extra: int = 10, created_after: float |
     未传时兼容旧行为(无过滤)。
     """
     if os.path.isfile(base_path):
-        return [os.path.abspath(base_path)]
+        # 评审 #110 建议④: 0B 占位文件不算真产物——继续 prefix 发现(引擎可能只写占位,
+        # 真产物在兄弟文件: longestorf 写 out.fa(0B) + out.fa.NoORF/out.fa.Pep.fa)
+        if os.path.getsize(base_path) > 0:
+            return [os.path.abspath(base_path)]
     d = os.path.dirname(os.path.abspath(base_path)) or "."
     prefix = os.path.basename(base_path)
     if not os.path.isdir(d):
