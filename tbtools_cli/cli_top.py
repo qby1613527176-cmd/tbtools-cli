@@ -939,9 +939,11 @@ def register_top(cli, _LG):
         result = {"$schema": "https://json-schema.org/draft/2020-12/schema",
                   "schema_version": "1.0", "exit_code": ec, "duration_s": dt,
                   "artifacts": artifacts, "error": error, "timed_out": _timed_out}
-        # 评审 #110 建议④: workingDir 目录产物并入(去重; 仅当主产物识别为空时补充,
-        # 避免把输入/无关文件混入——memerun 产物在 meme_out/ 子目录)
-        if _dir_artifacts and not artifacts:
+        # 评审 #110 建议④ + #113 修复: workingDir 目录产物**总是并入**(去重)——
+        # 此前'仅当主产物识别为空时补充'有 bug: 输入文件被误当主产物(goEnrich select2.txt)
+        # → artifacts 非空 → 目录扫描被跳过 → 真实 .xls 丢失。目录产物与主产物识别
+        # 是互补通道, 应合并。
+        if _dir_artifacts:
             _seen = {os.path.abspath(a.get("path", "")) for a in artifacts}
             for _da in _dir_artifacts:
                 if os.path.abspath(_da.get("path", "")) not in _seen and _da.get("size", 0) > 0:

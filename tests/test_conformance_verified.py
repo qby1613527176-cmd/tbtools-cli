@@ -78,6 +78,12 @@ EXEC_VERIFIED = {
     "preparespecies": ("asm", ["--prefix", "SPEC", "--inGenomeFa", "examples/data/comparative/input.genome.fa",
                                 "--inGXF", "examples/data/comparative/input.gff",
                                 "--outGenomeFa", "{out}.genome.fa", "--outGXF", "{out}.gff"]),
+    # 评审 #110 建议④ 第四批(2026-10-04, 造数据+反编译路线):
+    "goEnrich": ("table", ["examples/data/exec/mini.obo", "examples/data/exec/gene2go.tsv",
+                             "examples/data/exec/select_genes.txt", "{out}"]),  # outDir 模式
+    "gel": ("seq", ["--MarkerRange", "2000,1500,1000,750,500",
+                      "--FragmentRangeArr", "798,1233;228,1688",
+                      "--LaneLabels", "M,L1,L2", "--outGraph", "{out}.svg"]),
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
