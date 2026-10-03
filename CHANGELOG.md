@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.31] - 2026-10-03
+
+### InputSpec cli_name——ArgsParser 工具契约与引擎参数名解耦(评审 #110 建议④)
+- **发现(tpmCalc 实证)**: spec inputs 名(counts/lenInfo)与引擎真实 ArgsParser flag(--countsTable/--lenInfo)脱节——build_argv 按位置/缺省名拼, 引擎必然拒绝(Invalid arguments)
+- **修复**: InputSpec 加 cli_name 字段; build_argv 任一 input 有 cli_name → 按 --flag value 拼; tpmCalc 标 cli_name + named_flags(--outTable)
+- **执行验证 26/60(覆盖率 43%)**: tpmCalc 收编 EXEC_VERIFIED
+- **门禁**: pytest 581 passed / ruff 0 / mypy 0
+
 ## [1.4.30] - 2026-10-03
 
 ### 执行验证 14→25(评审 #110 建议④)——覆盖率 23% → 42%
