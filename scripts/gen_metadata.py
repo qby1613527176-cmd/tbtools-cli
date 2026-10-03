@@ -250,7 +250,7 @@ def render_commands_md(meta):
     n_auto = sum(1 for n in dir(_ac) if n.startswith("_") and n.endswith("_impl") and not n.startswith("__"))
     counts = {
         "metadata_commands": len(meta),          # 276: 唯一数据源全量
-        "plot_commands_meta": n_plot,            # 196: metadata 中非工具类(静态口径)
+        "metadata_plot_commands": n_plot,        # 214: metadata 静态口径(非工具类 bridge/direct/manual)
         "auto_commands": n_auto,                 # 201: 引擎注册表驱动的命令数
         "rpc_methods": 188,                      # RPC 方法(固定)
         "tools": len(_reg.CLI_TOOLS),            # 82: 工具注册表
@@ -268,8 +268,9 @@ def render_commands_md(meta):
         counts["conformance_verified"] = _vc2().get("CONFORMANCE_VERIFIED", 0)
     except Exception:
         pass
-    # 注: README/`tbtools version` 的 "218 绘图/分析命令" 是运行时全部分组命令数
-    # (含 engine 分组等),与 plot_commands_meta(静态注册口径)不同——两个口径都合法,勿互改
+    # 注(评审 #112): 两个绘图命令口径都合法勿互改——
+    #   metadata_plot_commands(本文件): metadata 静态注册口径
+    #   runtime 分组命令数: `tbtools version --json` 的 cli_commands(运行时全部分组,含 engine)
     counts_path = os.path.join(out_dir, "counts.md")
     with open(counts_path, "w", encoding="utf-8") as f:
         f.write("# 权威数字(自动生成,勿手改)\n\n")

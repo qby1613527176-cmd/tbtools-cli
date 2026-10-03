@@ -73,7 +73,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [Documentation](#documentation)
 - [Installation](#installation)
 - [Example Outputs](#example-outputs)
-- [Plotting Engines (200+)](#plotting-engines-218)
+- [Plotting Engines (200+)](#plotting-engines-213)
 - [RPC Data Tools](#rpc-data-tools-188-methods)
 - [CLI Tools](#cli-tools-82)
 - [Any Engine Reflection](#any-engine-reflection-universal-fallback)
@@ -324,7 +324,7 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 > 全部由本仓库 `examples/fulltest` 合成数据实测生成（`docs/images/`，SVG 可放大无损）。
 > 复现: `bash examples/scripts/run_examples.sh`。
 
-## 🎨 Plotting Engines (218)
+## 🎨 Plotting Engines (213)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
@@ -432,7 +432,7 @@ tbtools-cli/
 ├── scripts/               # rpc_regression_linux.sh 等工具脚本
 ├── tests/                 # pytest（83 passed：框架/命令/防漂移/输入保护）
 ├── docs/                  # detailed documentation
-│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（218 命令+82 工具+118 桥+46 坑位）
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（213 命令+82 工具+118 桥+46 坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md

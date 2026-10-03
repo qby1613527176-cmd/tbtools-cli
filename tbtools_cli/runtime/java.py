@@ -444,7 +444,8 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
             print(_("💡 该引擎使用 ArgsParser 风格（--key value 空格分隔）；位置参数会被忽略。",
                      "💡 This engine uses ArgsParser style (--key value); positional args are ignored."), file=sys.stderr)
             print(_("   用 tbtools tool-describe {cmd} --json 查看参数契约；或 --help 查看用法",
-                     "   See tbtools tool-describe {cmd} --json for parameter contract"), file=sys.stderr)
+                     "   See tbtools tool-describe {cmd} --json for parameter contract").format(
+                         cmd=command_name or "<tool>"), file=sys.stderr)
 
     if ec != 0:
         ec_out = ec
