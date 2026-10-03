@@ -1,0 +1,2 @@
+gene1	gene3
+gene2	gene4

@@ -84,6 +84,16 @@ EXEC_VERIFIED = {
     "gel": ("seq", ["--MarkerRange", "2000,1500,1000,750,500",
                       "--FragmentRangeArr", "798,1233;228,1688",
                       "--LaneLabels", "M,L1,L2", "--outGraph", "{out}.svg"]),
+    # 评审 #110 建议④ 第五批(2026-10-04, 造数据+反编译路线):
+    "dotplot": ("syn", ["--inGff", "examples/data/exec/dp_gff.txt",
+                         "--genePair", "examples/data/exec/dp_pairs.txt",
+                         "--chrLayout", "examples/data/exec/dp_layout.txt",
+                         "--outGraph", "{out}.svg"]),  # 4 列简化 GFF + Genome: 前缀 layout
+    "layoutheatmap": ("expr", ["examples/data/exec/lh_layout.tsv", "examples/data/exec/lh_expr.tsv",
+                                "{out}.svg"]),  # layout 在前 expr 在后, 样本名配对
+    "qdot": ("syn", ["examples/data/blast/filtercscore/blast.tab6", "examples/data/exec/dp_gff.txt",
+                      "examples/data/exec/dp_layout.txt", "{out}.svg"]),  # blast.tab + 4列gff + Genome: layout
+    "supercircos": ("syn", ["examples/data/exec/scc.cfg", "{out}.svg", "800", "800"]),  # 行导向 config
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
