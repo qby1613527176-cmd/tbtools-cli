@@ -80,72 +80,72 @@
  "execution_verified_details": {
   "dehist": {
    "contract_fingerprint": "0bb6c16ccd6bb6d48a66645b300b505ece4eb8b4836935b53ccbad65e06838bb",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "dualsyn": {
    "contract_fingerprint": "ff830764ecc2d6e0739a84b786217f582bdf6060e43fda617c46797f5dfce740",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "genelocgff": {
    "contract_fingerprint": "a504350c399634ae7b9a71eda3c818715a1b2e7dbb6e2ce4b96871b1e899f07a",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "genestructure": {
    "contract_fingerprint": "98ee1b99b8b5ca14a94fbfc70bd68f319dd31372fadbfaac9122a6064392ed98",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "heatmap": {
    "contract_fingerprint": "6fd6dfe5dbee26918d53cefb0368ea7b782209baa1402fc6f6c2d550b569e834",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "iqtree": {
    "contract_fingerprint": "1fac809d9b95d328c12d8239ab93b9a0ea8e61a304aa45d93cdd93aeb55f4af0",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "mcscanx": {
    "contract_fingerprint": "ca14f65f1da8ddbc22c195e3d27cab0d25180e79118da1e9b27ad0934e9affd3",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "muscle": {
    "contract_fingerprint": "08623eaa822dae5b2234208119c2119c4c96214c651a30dddf80b6f85b8bc3f8",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "pca": {
    "contract_fingerprint": "e629fd6c7e5daff22de0866c4c1e11941ec98ad3dbc6803e783caf7de9145258",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "seqlogo": {
    "contract_fingerprint": "644679941fd473e57357db1c23b0b2e90f2c13a3eda24a642dbbff96f1005a96",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "sixframe": {
    "contract_fingerprint": "9a8bb6d8747790a747051e06f4f3183cbaf8b3cce84be5d10c7ef64cca8e27f5",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "trimal": {
    "contract_fingerprint": "e29d00ee14bf29d48d0304d67c65d590624e37c1b0787b9a594e735ae38abebb",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "venn2": {
    "contract_fingerprint": "e804dcacf50eda08b0c0faa01ed827228caf524d9efb36adff91fd47ac558d76",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   },
   "volcano": {
    "contract_fingerprint": "936b9d7a18828c5c445b7ad6cbc709f03d3b5d0c2bc57a3b6e06171ccefb084d",
-   "verified_at": "2026-10-03T16:52:36",
+   "verified_at": "2026-10-03T19:11:24",
    "corpus": "examples/data"
   }
  }

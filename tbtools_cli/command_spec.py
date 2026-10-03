@@ -782,14 +782,25 @@ KNOWN_STATUS = {
 }
 
 
-def build_command_specs() -> dict[str, CommandSpec]:
+# SpecRegistry(评审 #110 P1): 一次性构建缓存——Agent 高频链 search/describe/plan/validate/run
+# 每次都重建 294 spec(~105ms)纯浪费; KNOWN_* 一旦变更调 _clear_specs_cache()
+_SPECS_CACHE: dict | None = None
+
+
+def build_command_specs(force: bool = False) -> dict[str, CommandSpec]:
     """构建统一命令模型(单一源, 兼容层: 不改变现运行行为)。
+
+    force=True 强制重建(测试/热更新用); 否则命中 SpecRegistry 缓存(评审 #110 P1,
+    294 spec 一次性构建, Agent 高频链不再重复重建)。
 
     来源:
       1. ENGINE_REGISTRY 表驱动(组 CATEGORY_MAP 归属)
       2. CLI_TOOLS 工具注册表
       3. 手动命令(经 cli_load 分组注册的 manual 命令, 从分组命令集补)
     """
+    global _SPECS_CACHE
+    if not force and _SPECS_CACHE is not None:
+        return _SPECS_CACHE
     specs: dict[str, CommandSpec] = {}
 
     # 1. 表驱动引擎命令
@@ -847,7 +858,14 @@ def build_command_specs() -> dict[str, CommandSpec]:
     # Contract Loader: YAML 覆盖层(评审 #80;YAML 胜出)
     for _sp in specs.values():
         _apply_contract_overlay(_sp)
+    _SPECS_CACHE = specs  # SpecRegistry 缓存(模块级写入; 调用方只读约定)
     return specs
+
+
+def clear_specs_cache() -> None:
+    """SpecRegistry 失效(评审 #110 P1): KNOWN_* / 注册表变更后强制下次重建。"""
+    global _SPECS_CACHE
+    _SPECS_CACHE = None
 
 
 def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
