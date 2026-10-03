@@ -277,6 +277,12 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
     """
     import threading
     from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
+    # 评审 #112 P2: _execute_step 经 workflow 命名空间解析——测试 monkeypatch
+    # workflow._execute_step 期望影响并行调度(原行为); 生产路径经 re-export 同源
+    try:
+        from tbtools_cli.workflow import _execute_step as _exec_hook
+    except Exception:
+        _exec_hook = _execute_step
     by_id = {s["id"]: s for s in steps}
     pending = set(by_id)
     done: dict = {}
@@ -310,7 +316,7 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
         # 条件含 running(竞态修复): pending 空但仍有在飞步骤时不能退出——否则结果丢失
         while (pending or running) and failed is None:
             for sid in _ready():
-                running[pool.submit(_execute_step, by_id[sid], workdir, timeout_s, state, resume,
+                running[pool.submit(_exec_hook, by_id[sid], workdir, timeout_s, state, resume,
                                     cancel_event, proc_registry)] = sid
                 pending.discard(sid)
             if not running:
@@ -357,8 +363,9 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
 
     resume=True 时跳过已成功步骤(读 .wf_state.json;v2 断点续跑)。
     """
-    # 评审 #112 P2: plan/_topo_sort 属 workflow 层, 函数内延迟 import 防循环
-    from tbtools_cli.workflow import _topo_sort, plan
+    # 评审 #112 P2: plan/_topo_sort 属 workflow 层, 函数内延迟 import 防循环;
+    # _execute_step 同样经 workflow 解析(测试 monkeypatch 兼容)
+    from tbtools_cli.workflow import _topo_sort, plan, _execute_step as _exec_hook2
     os.makedirs(workdir, exist_ok=True)
     # DAG: 有 depends_on 的步骤拓扑重排(评审 #66 P0-3)
     if any(s.get("depends_on") or s.get("dependsOn") for s in wf["steps"]):
@@ -409,7 +416,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
         results = []
         failed_at = None
         for st in steps:
-            res = _execute_step(st, workdir, timeout_s, state, resume)
+            res = _exec_hook2(st, workdir, timeout_s, state, resume)
             results.append(res)
             _pw = _merge_state_step(workdir, wf["id"], res)  # P0-2: 每步落盘
             if _pw:
