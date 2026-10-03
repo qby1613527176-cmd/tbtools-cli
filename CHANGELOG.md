@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.38] - 2026-10-04
+
+### workflow.py 拆分 compiler.py(评审 #112 P2 第二步)
+- workflow.py 1458→1056 行(-402), compiler.py 独立 428 行: CompiledInvocation(三层 fingerprint)/compile_step_full/compile_step/_resolve/_stable_wf_id/resolve_input_binding/_bind_slots/_plan_to_spec/_default_args/WorkflowError
+- workflow.py 从 compiler import 并 re-export(旧代码/测试 from workflow import compile_step_full/WorkflowError 仍可用, 符号同源验证); 无循环依赖(compiler 只依赖 identity/dependency)
+- **门禁**: pytest 588 passed / ruff 0 / mypy 0
+
 ## [1.4.37] - 2026-10-03
 
 ### verification 证据对象投影(评审 #112 P1 收尾)
