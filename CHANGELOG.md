@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.33] - 2026-10-03
+
+### 代码真源 vs YAML 生成快照定型(评审 #110 建议③——四项全部收官)
+- **实测**: contracts/tools/*.yaml 是 gen_metadata 单向导出(先清空重写, CommandSpec→YAML), 但 load_contracts docstring 仍声称 "YAML 声明优先"——文档与实现矛盾, 会让维护者把 YAML 当真源(1.4.15-1.4.24 双向覆盖复发)
+- **修复**: load_contracts/_apply_contract_overlay/构建注释 "YAML 胜出" → "代码真源优先, YAML 是生成快照"; contracts/README.md 新增真源优先级图+覆盖行为+修改契约正确方式+历史教训; test_yaml_migration 文档更新为快照一致性验证(测试逻辑不变, 行为仍通过)
+- **门禁**: pytest 581 passed / ruff 0 / mypy 0
+- **评审 #110 四项全部完成**: ①验证分层(v1.4.32) ②SpecRegistry(v1.4.29) ③YAML 真源改名(v1.4.33) ④执行实证 14→26(v1.4.30-31)
+
 ## [1.4.32] - 2026-10-03
 
 ### 验证分层(评审 #110 建议①)——CONFORMANCE_VERIFIED + 两维正交
