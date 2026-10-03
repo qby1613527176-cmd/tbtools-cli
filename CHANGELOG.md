@@ -2,6 +2,23 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.30] - 2026-10-03
+
+### 执行验证 14→25(评审 #110 建议④)——覆盖率 23% → 42%
+- **bridge 位置参数**: barplot(列名 Term/Pvalue 非索引)/circos/gxfAttr/gxfSplit/tableMerge(--inFileArr 形态)
+- **direct --flag 风格**: longestorf(--inFa/--outORFs)/venn3/venn4(--List1..4 --graph --prefix)
+- **plugin/manual**: newickRename(--inNwk/--renameMap/--outNwk)/treeRooting/upset
+- 全部 examples/data 现成数据真实执行验证(产物非空 + sha256 完整)
+
+### 产物发现三改进(实测驱动)
+- discover_outputs: 0B 占位文件不算真产物, 继续 prefix 发现(longestorf 写 out.fa 0B + NoORF/Pep.fa)
+- tool-run provenance 循环: 0B 产物走 prefix 发现(此前 _found_any 提前置真跳过兜底)
+- tool-run workingDir 目录产物: meme/mast 类产物在目录内(t0 后新建文件, 防把输入当产物)
+
+### 可信度发现
+- **memerun 声明 FULL 但 JAR 缺 QuickRunMEME 类**(NoClassDefFoundError)——契约声明≠可执行, 记录不收入验证池
+- **门禁**: pytest 580 passed / ruff 0 / mypy 0
+
 ## [1.4.29] - 2026-10-03
 
 ### SpecRegistry(评审 #110 P1)——294 spec 一次性构建缓存
