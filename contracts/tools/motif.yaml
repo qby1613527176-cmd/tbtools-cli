@@ -8,6 +8,8 @@ group: seq
 help: Motif 分布图（MEME XML）
 semantic_fingerprint: 1c8b742c1898d46e168c6178483fc5c497257819d33a2c908e4ed68c65154b88
 semantic_fingerprint_short: 1c8b742c1898d46e
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - motif
 - visualization

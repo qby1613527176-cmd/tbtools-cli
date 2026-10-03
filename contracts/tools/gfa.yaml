@@ -8,6 +8,8 @@ group: seq
 help: 'gfa: gfa <in.gfa> <out> [width] [height]'
 semantic_fingerprint: 3dc752d91b0fb46f17d5002f91e172d84a042973ca6f7301f29f46c4182c24e6
 semantic_fingerprint_short: 3dc752d91b0fb46f
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

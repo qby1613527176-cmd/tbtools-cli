@@ -47,6 +47,12 @@ def register_top(cli, _LG):
         from tbtools_cli.core import BRIDGES_DIR, PITFALL_HINTS
         bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 80
         from tbtools_cli import __version__ as _pkg_ver
+        # 评审 #111 P0-3: verification 唯一口径(与 counts.md 同源, 统一 26——census 单源)
+        def _vc_pair():
+            from tbtools_cli.command_spec import verification_census as _vcc
+            _c = _vcc()
+            return _c.get("EXECUTION_VERIFIED", 0) + _c.get("CONFORMANCE_VERIFIED", 0), _c.get("CONFORMANCE_VERIFIED", 0)
+        _exec_n, _conf_n = _vc_pair()
         if as_json:
             click.echo(_json.dumps({
                 "version": _pkg_ver,
@@ -57,6 +63,9 @@ def register_top(cli, _LG):
                 "bridges": bridge_count,
                 "pitfall_hints": len(PITFALL_HINTS),
                 "metadata_commands": len(_json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))) if os.path.isfile(os.path.join(ROOT, "tbtools_cli", "command_metadata.json")) else 0,
+                # 评审 #111 P0-3: verification 唯一口径(与 counts.md 同源, 统一 26)
+                "execution_verified": _exec_n,
+                "conformance_verified": _conf_n,
             }, ensure_ascii=False, indent=1))
             return
         click.echo(f"tbtools-cli v{_pkg_ver}")

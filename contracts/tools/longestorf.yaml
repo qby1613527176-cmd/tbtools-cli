@@ -9,6 +9,8 @@ help: 'longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 
   GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）'
 semantic_fingerprint: d4d6f5a9bcb6dd2e40561909cc7e9c2b6c4abc370c84c5782cdc2068672cea0d
 semantic_fingerprint_short: d4d6f5a9bcb6dd2e
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - orf_prediction
 - sequence

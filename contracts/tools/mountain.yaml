@@ -8,6 +8,8 @@ group: expr
 help: 'mountain: mountain <fold.txt> <out.tsv>'
 semantic_fingerprint: 356e75ec2fa2e38014b779a81db9c9fca31467421c83c963cf43421c2ba13c76
 semantic_fingerprint_short: 356e75ec2fa2e380
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - expression
 capabilities_ontology:

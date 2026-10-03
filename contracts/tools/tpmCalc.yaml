@@ -8,6 +8,8 @@ group: tool
 help: ''
 semantic_fingerprint: f4829d21e6ee7c709cdcc5f1396b087ae4d9a110bda0004c2ac5075a1f4809fe
 semantic_fingerprint_short: f4829d21e6ee7c70
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - rna_seq
 - normalization
@@ -33,6 +35,7 @@ inputs:
   format: tsv
   required: true
   note: counts 表
+  cli_name: --countsTable
 - name: lenInfo
   role: file
   format: tsv
@@ -41,8 +44,14 @@ inputs:
   columns:
   - GeneID
   - Length
+  cli_name: --lenInfo
 outputs:
 - tsv
 output_slots:
 - name: tsv
   format: tsv
+named_flags:
+  inputs:
+    counts: --countsTable
+    lenInfo: --lenInfo
+  output: --outTable

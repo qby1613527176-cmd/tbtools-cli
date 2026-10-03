@@ -8,6 +8,8 @@ group: syn
 help: 'pafref: pafref --inPaf <paf> --outTab <out.tsv>'
 semantic_fingerprint: 2ff3fdba132c864a9f8c31a392cded4350216ccbabd474d8192202587fd83b6b
 semantic_fingerprint_short: 2ff3fdba132c864a
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - synteny
 - visualization

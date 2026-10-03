@@ -9,6 +9,8 @@ help: 'taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆
   联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）'
 semantic_fingerprint: 11fa2828a247cac3e675bf9fd1472329cd2e2af4677a1381adea843fc46dad1e
 semantic_fingerprint_short: 11fa2828a247cac3
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - table_operations
 capabilities_ontology:

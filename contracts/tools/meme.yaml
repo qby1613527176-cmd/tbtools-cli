@@ -10,6 +10,8 @@ help: 'meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--
   meme；产物可与 memeViz/fimo 串联）'
 semantic_fingerprint: b629fd4f63086139dc488f10e1dbc487f8b98dfe5fffd4c22be33ec457f9efc5
 semantic_fingerprint_short: b629fd4f63086139
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

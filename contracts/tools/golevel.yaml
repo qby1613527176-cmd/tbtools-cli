@@ -9,6 +9,8 @@ help: 'golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph]
   W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）'
 semantic_fingerprint: 617a024046b6c8be9ef88da5d8e7bd3c06b5dec0dacdd21a68371eb7948c9929
 semantic_fingerprint_short: 617a024046b6c8be
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - table_operations
 capabilities_ontology:

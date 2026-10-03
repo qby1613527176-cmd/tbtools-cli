@@ -9,6 +9,8 @@ help: 'smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI �
   ismart.embl.de，约 10-60s，输出域位置+类型）'
 semantic_fingerprint: 1319449b755fb51dcf993d7cdfacedbfc76480ba640e06a927345ac881355712
 semantic_fingerprint_short: 1319449b755fb51d
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - domain
 - annotation

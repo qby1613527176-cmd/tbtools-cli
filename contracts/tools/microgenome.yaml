@@ -8,6 +8,8 @@ group: syn
 help: 'microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]'
 semantic_fingerprint: 04dacc6756ac215c0cd47f5b38a79638ad0cd4cb4f67bbcc48a31f09b5327d8a
 semantic_fingerprint_short: 04dacc6756ac215c
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - synteny
 capabilities_ontology:

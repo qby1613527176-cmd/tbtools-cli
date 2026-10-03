@@ -8,6 +8,8 @@ group: fastq
 help: 'fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]'
 semantic_fingerprint: bbfb6e5b9f66956843c3aafb1344e54a288e68b3d677dd86eb25824fe75f9822
 semantic_fingerprint_short: bbfb6e5b9f669568
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - ngs
 - preprocessing

@@ -8,6 +8,8 @@ group: asm
 help: 'hicEnzyme: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）'
 semantic_fingerprint: 163db54e6ac5bc2723386c307ad4a168688f6b449e3a97400636f62e88ba8b77
 semantic_fingerprint_short: 163db54e6ac5bc27
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - assembly
 capabilities_ontology:

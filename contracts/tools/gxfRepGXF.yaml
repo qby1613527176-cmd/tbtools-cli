@@ -8,6 +8,8 @@ group: gxf
 help: 'gxfRepGXF: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID'
 semantic_fingerprint: 579c0d985824250b799548df59ab255e39decee40ec6b9ef7463b74acce5d9a8
 semantic_fingerprint_short: 579c0d985824250b
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - annotation
 capabilities_ontology:

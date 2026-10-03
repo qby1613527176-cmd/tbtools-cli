@@ -10,6 +10,8 @@ help: 'nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EM
   Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）'
 semantic_fingerprint: 2df1026ce328a7aa3078a63bff09c91253ca0e48ae8a98af5d27ce7cbe743495
 semantic_fingerprint_short: 2df1026ce328a7aa
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - phylogeny
 capabilities_ontology:

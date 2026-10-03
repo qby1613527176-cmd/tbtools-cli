@@ -8,6 +8,8 @@ group: gxf
 help: 'gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>'
 semantic_fingerprint: a3794e89d0218a3cd58123e1f0faba226d709b18419f58a95ebf2344e78c268e
 semantic_fingerprint_short: a3794e89d0218a3c
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - annotation
 capabilities_ontology:

@@ -9,6 +9,8 @@ help: 'mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threa
   [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）'
 semantic_fingerprint: 4d43a05a47c418f3ffb1c8793946393deb83b3a2239f68f2034c292c56cf24dc
 semantic_fingerprint_short: 4d43a05a47c418f3
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - synteny
 capabilities_ontology:

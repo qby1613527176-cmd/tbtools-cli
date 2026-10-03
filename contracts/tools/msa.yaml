@@ -8,6 +8,8 @@ group: seq
 help: 多序列比对可视化
 semantic_fingerprint: fd3d683a25b643d1d8b50c48094a4e5a38942186e5e9fecf3bf51e1a5cf42c1f
 semantic_fingerprint_short: fd3d683a25b643d1
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - alignment
 - visualization

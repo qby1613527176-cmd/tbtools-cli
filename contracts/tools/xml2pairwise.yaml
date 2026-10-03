@@ -9,6 +9,8 @@ help: 'xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pair
   逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）'
 semantic_fingerprint: be0ca99e05e7709923ec8361082419586da7d9431d615c02e7b8d8c1932f8a01
 semantic_fingerprint_short: be0ca99e05e77099
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - homology
 capabilities_ontology:

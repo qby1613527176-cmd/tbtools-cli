@@ -11,6 +11,8 @@ help: 'gbar: gbar <data.tsv> <out.svg> [--header|--no-header] [--errorbar SEM|SD
 semantic_fingerprint: 19f9450581e9a6306a8e7364a0037756c0f2248053c3b8cc9032e41446761e60
 semantic_fingerprint_short: 19f9450581e9a630
 alias_of: groupedbar
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - expression
 capabilities_ontology:

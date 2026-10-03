@@ -9,6 +9,8 @@ help: 'hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer
   解析（插件 P00680 CLI 化，无需 idList）'
 semantic_fingerprint: 43a2550d9ee51f2c4df6a68c6351204e5e46d5a3916e5cfef1be46e69c48a1ca
 semantic_fingerprint_short: 43a2550d9ee51f2c
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - homology
 - hmm_scan

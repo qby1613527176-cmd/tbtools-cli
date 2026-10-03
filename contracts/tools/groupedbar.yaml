@@ -10,6 +10,8 @@ help: "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHea
   \ 崩溃——引擎缺陷）"
 semantic_fingerprint: fe94dcaec94252de037a2e36d4ff6d3c477e741645c87a2ae774ba496767cce2
 semantic_fingerprint_short: fe94dcaec94252de
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - expression
 capabilities_ontology:

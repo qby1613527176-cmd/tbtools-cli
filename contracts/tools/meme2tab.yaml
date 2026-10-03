@@ -9,6 +9,8 @@ help: 'meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→moti
   逆向接口 MEMESuiteXMLtoTab）'
 semantic_fingerprint: 929cae926deca625251b45591f55a29b3f3d401f5fdf248874841de180dcdae9
 semantic_fingerprint_short: 929cae926deca625
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

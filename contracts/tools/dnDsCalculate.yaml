@@ -8,6 +8,8 @@ group: tool
 help: ''
 semantic_fingerprint: dc41861a795dd3a3568c7c4c98ba399c9f10669e52c358f5e6669791d18baade
 semantic_fingerprint_short: dc41861a795dd3a3
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - ka_ks
 - evolutionary_analysis

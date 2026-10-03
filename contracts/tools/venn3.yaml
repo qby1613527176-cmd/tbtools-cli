@@ -9,6 +9,8 @@ help: 'venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --g
   <out> --prefix <out>'
 semantic_fingerprint: 21dc39b84013e68af058374585bb09d04f02f3809cb0f2682e49ab134f581f07
 semantic_fingerprint_short: 21dc39b84013e68a
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - set_operations
 capabilities_ontology:

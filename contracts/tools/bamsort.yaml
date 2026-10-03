@@ -8,6 +8,8 @@ group: asm
 help: 'bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]'
 semantic_fingerprint: 3eaf021340c2f4d96b4eba83352067b0f2c52fc4982339e38ed2a1a13405df9d
 semantic_fingerprint_short: 3eaf021340c2f4d9
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - assembly
 capabilities_ontology:

@@ -9,6 +9,8 @@ help: 'findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryI
   <ou'
 semantic_fingerprint: b4db67f7963df90bf8750e562667f535eb7cf4b84d9955c7c687aa375c892320
 semantic_fingerprint_short: b4db67f7963df90b
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - synteny
 capabilities_ontology:

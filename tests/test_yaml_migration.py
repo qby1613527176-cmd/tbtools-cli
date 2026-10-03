@@ -30,17 +30,29 @@ class TestYamlMigrationRule:
                           stacklevel=1)
 
     def test_yaml_snapshot_matches_known(self):
-        """YAML 快照与代码真源一致(评审 #110 建议③: 快照非真源, 一致性验证——
-        不一致=快照过期, 重跑 gen_metadata 而非手改 YAML)。"""
+        """YAML 快照与代码真源一致(评审 #110 建议③ + #111 P1-1 独立真源比较:
+        用 _skip_overlay 拿纯代码 spec, 不经任何 YAML 覆盖/兑底, 防"overlay 后 spec 比 YAML"自我验证)。
+        不一致=快照过期, 重跑 gen_metadata 而非手改 YAML。"""
         from tbtools_cli.command_spec import build_command_specs, load_contracts
         contracts = load_contracts()
-        specs = build_command_specs()
+        # 纯代码真源(跳过 YAML 校验/兑底)——这才是与快照对比的正确基准
+        specs = build_command_specs(force=True, _skip_overlay=True)
+        # 评审 #111 P1-1 修正: 全量验证不提前 break——曾 10 个就停, 字母序靠后的工具
+        # (如 tpmCalc)从未被检查=评审指出的"测试抓不住问题"盲区
         checked = 0
         for name, c in contracts.items():
-            if c.get("capabilities") and name in specs:
-                # 快照与代码一致(快照导出自代码); 若不一致说明快照过期
-                assert specs[name].capabilities == list(c["capabilities"]),                     f"{name}: YAML 快照与代码真源不一致(快照过期, 重跑 gen_metadata)"
+            sp = specs.get(name)
+            if not sp:
+                continue
+            # capabilities: 代码真源 vs 快照(严格相等, 无兑底)
+            if c.get("capabilities"):
+                assert list(sp.capabilities) == list(c["capabilities"]),                     f"{name}: capabilities 快照过期(代码 {sp.capabilities} != 快照 {c['capabilities']}), 重跑 gen_metadata"
                 checked += 1
-                if checked >= 5:
-                    break
+            # inputs: 名称+格式 + cli_name(评审 #111 P0-2: cli_name 是执行语义, 必须一致)
+            if c.get("inputs"):
+                _code_in = [(i.name, i.format, getattr(i, "cli_name", "")) for i in sp.inputs]
+                _yaml_in = [(i.get("name", ""), i.get("format", ""), i.get("cli_name", ""))
+                            for i in c["inputs"]]
+                assert _code_in == _yaml_in,                     f"{name}: inputs 快照过期(代码 {_code_in} != 快照 {_yaml_in}), 重跑 gen_metadata"
+                checked += 1
         assert checked > 0

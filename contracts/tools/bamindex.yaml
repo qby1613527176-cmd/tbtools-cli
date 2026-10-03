@@ -8,6 +8,8 @@ group: asm
 help: 'bamindex: bamindex <in.sorted.bam> [out.bai]'
 semantic_fingerprint: ed2e246b70eaed1701691094e1851ed7f18d9ca598ef1050cc671abe08f47d8e
 semantic_fingerprint_short: ed2e246b70eaed17
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - assembly
 capabilities_ontology:

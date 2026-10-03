@@ -8,6 +8,8 @@ group: seq
 help: 'mast2tab: mast2tab <mast|meme.xml> <out.tab>'
 semantic_fingerprint: c74c60fbe6175b931938eae0103f098f3fa83abe6d5ced257343bca50ae29de8
 semantic_fingerprint_short: c74c60fbe6175b93
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

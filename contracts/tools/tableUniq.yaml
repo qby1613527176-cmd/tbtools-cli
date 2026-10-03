@@ -8,6 +8,8 @@ group: table
 help: 'tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|'
 semantic_fingerprint: e470004a0a8151341645904af58231d1bd44f5cdf84650d3b4dca336915ef502
 semantic_fingerprint_short: e470004a0a815134
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - table_operations
 capabilities_ontology:

@@ -8,6 +8,8 @@ group: seq
 help: 'tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）'
 semantic_fingerprint: 4a590ed097a16371c8627c293cff3406f2577ea9e3a356a48726f0dd8cef4850
 semantic_fingerprint_short: 4a590ed097a16371
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

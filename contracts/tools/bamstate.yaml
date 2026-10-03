@@ -8,6 +8,8 @@ group: asm
 help: 'bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]'
 semantic_fingerprint: 2a925645de786db767d82bb6ad1d3fc0e4fcfcc9233c71463e22544aa4fe0836
 semantic_fingerprint_short: 2a925645de786db7
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - assembly
 capabilities_ontology:

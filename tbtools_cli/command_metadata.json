@@ -6364,7 +6364,8 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "counts 表"
+    "note": "counts 表",
+    "cli_name": "--countsTable"
    },
    {
     "name": "lenInfo",
@@ -6375,7 +6376,8 @@
     "columns": [
      "GeneID",
      "Length"
-    ]
+    ],
+    "cli_name": "--lenInfo"
    }
   ],
   "outputs": [

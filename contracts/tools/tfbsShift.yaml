@@ -9,6 +9,8 @@ help: 'tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结�
   P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）'
 semantic_fingerprint: 13e13347c6e30463d66558c40efa759280726218be036b2e5ff3b42bb21b0dd6
 semantic_fingerprint_short: 13e13347c6e30463
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - motif
 - genome_scan

@@ -8,6 +8,8 @@ group: tree
 help: 'phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]'
 semantic_fingerprint: 9ff350923d31f30ad3825838ecff958a753d038ce6694a95ba9c1966bfc1a6c0
 semantic_fingerprint_short: 9ff350923d31f30a
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - phylogeny
 capabilities_ontology:

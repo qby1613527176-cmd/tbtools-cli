@@ -10,6 +10,8 @@ help: 'genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3
   → ExtractFasta 提取；可选 GXF 同过滤）'
 semantic_fingerprint: 5e4d6fcdd7675c32a1db3fb08843a199068ce909d51ae7c7511103856cf0492b
 semantic_fingerprint_short: 5e4d6fcdd7675c32
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

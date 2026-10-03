@@ -9,6 +9,8 @@ help: 'notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参�
   reconcile（duplication/loss 推断，插件 P00651 CLI 化）'
 semantic_fingerprint: 70098a6ad211c7f36e7ae320bc336f8da495762ddbf6303fbd5552bfe787e5c8
 semantic_fingerprint_short: 70098a6ad211c7f3
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - phylogeny
 - reconciliation

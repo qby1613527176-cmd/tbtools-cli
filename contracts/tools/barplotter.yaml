@@ -8,6 +8,8 @@ group: expr
 help: 'barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>'
 semantic_fingerprint: ecf52b04c2a7f494326fd23b8841a3e9d1df75fcb21d61e5ad28a8dd8d5f9182
 semantic_fingerprint_short: ecf52b04c2a7f494
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - expression
 capabilities_ontology:

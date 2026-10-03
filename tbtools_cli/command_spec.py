@@ -283,50 +283,31 @@ def contract_load_errors() -> list:
 
 
 def _apply_contract_overlay(spec) -> None:
-    """YAML 生成快照覆盖到 spec(评审 #110 建议③: 代码真源优先——capabilities 已有代码>快照逻辑,
-    inputs/outputs/parameters 为向后兼容的覆盖层; YAML 是 gen_metadata 导出物, 非真源)。"""
+    """YAML 快照校验层(评审 #111 P0-1: Contract Integrity Freeze)。
+
+    实测: 0 个工具依赖 YAML 兜底(全部 inputs/outputs/parameters/layout 均为代码声明+
+    快照双有)——overlay 从此**不再覆盖 runtime truth**, 只做一致性校验:
+      - YAML 与代码一致 → 忽略(快照是导出物, 代码为准)
+      - 不一致 → warn(快照过期, 提示重跑 gen_metadata; runtime 用代码真源)
+    防止"开发者改代码未重跑 gen_metadata → 旧 YAML 静默回退 runtime"。
+    """
     c = load_contracts().get(spec.name)
     if not c:
         return
-    if "inputs" in c:  # 评审 #94: presence semantics(显式 []=清空)
-        # merge by slot name(评审: YAML 未声明 content_type 时保留内存标注,不冲掉 slot 语义)
-        _old_ct = {i.name: i.content_type for i in spec.inputs if i.content_type != "generic"}
-        spec.inputs = [InputSpec(name=i.get("name", ""), role=i.get("role", "file"),
-                                 format=i.get("format", ""), required=i.get("required", True),
-                                 note=i.get("note", ""), columns=i.get("columns"),
-                                 content_type=i.get("content_type")
-                                 or _old_ct.get(i.get("name", ""), "generic"))
-                       for i in c["inputs"]]
-    # 🔴 P0(评审 #96): output_slots 优先读 YAML 声明(slots 是唯一真相,outputs 为投影);
-    # 仅无 output_slots 时才从 outputs 重建(generic)——不再"用 outputs 覆盖掉 YAML 的 content_type"
-    if "output_slots" in c:
-        spec.output_slots = [OutputSpec(name=o.get("name", ""), format=o.get("format", ""),
-                                        content_type=o.get("content_type", "generic"))
-                             for o in c["output_slots"]]
-        # outputs 从 slots 投影(一致性)
-        spec.outputs = [o.format for o in spec.output_slots if o.format]
-    elif "outputs" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
-        spec.outputs = list(c["outputs"])
-        # P0-1(评审 #94): outputs 覆盖时同步重建 output_slots——消灭 outputs/output_slots 漂移
-        spec.output_slots = [OutputSpec(name=o, format=o) for o in c["outputs"]]
-    if "parameters" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
-        spec.parameters = [ParamSpec(name=p.get("name", ""), type=p.get("type", "string"),
-                                     default=p.get("default"), required=p.get("required", False),
-                                     note=p.get("note", ""), cli_name=p.get("cli_name", ""))
-                           for p in c["parameters"]]
-    if "capabilities" in c:  # P0-3(评审 #92): presence 检查——显式 [] 是有意清空
-        # 评审 #109: YAML 仅兜底, 不覆盖代码真源(KNOWN_CAPABILITIES 已设的语义更准)——
-        # 旧 YAML 快照(如 mastExtract: ['sequence'])曾覆盖新标注(如 ['motif','sequence_extraction']),
-        # 造成 planner 语义丢失; 代码真源 > 生成产物(YAML 是 gen_metadata 导出物, 循环覆盖让旧值持久化)
+    # 一致性校验: inputs 存在性(名/格式)对比——不一致即快照过期
+    _yaml_inputs = c.get("inputs")
+    if _yaml_inputs is not None:
+        _code_names = [(i.name, i.format) for i in (spec.inputs or [])]
+        _yaml_names = [(i.get("name", ""), i.get("format", "")) for i in _yaml_inputs]
+        if _code_names and _yaml_names and _code_names != _yaml_names:
+            import warnings as _w
+            _w.warn(f"contracts/tools/{spec.name}.yaml 快照过期: inputs 与代码真源不一致"
+                    f"(代码 {_code_names} != 快照 {_yaml_names})——重跑 gen_metadata --render",
+                    stacklevel=2)
+    # capabilities 兜底保留(评审 #109): 代码未声明时用快照(0 依赖但无害)
+    if "capabilities" in c:
         if not spec.capabilities:
             spec.capabilities = list(c["capabilities"])
-    if "layout" in c:  # 评审 #94: presence semantics
-        # layout 经 invocation 投影(named_flags 或 token layout)
-        lay = c["layout"]
-        if isinstance(lay, dict) and ("inputs" in lay or "output" in lay):
-            spec.__dict__["_contract_named_flags"] = lay
-        elif isinstance(lay, list):
-            spec.__dict__["_contract_layout"] = lay
 
 
 @dataclass
@@ -807,11 +788,13 @@ KNOWN_STATUS = {
 _SPECS_CACHE: dict | None = None
 
 
-def build_command_specs(force: bool = False) -> dict[str, CommandSpec]:
+def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dict[str, CommandSpec]:
     """构建统一命令模型(单一源, 兼容层: 不改变现运行行为)。
 
     force=True 强制重建(测试/热更新用); 否则命中 SpecRegistry 缓存(评审 #110 P1,
     294 spec 一次性构建, Agent 高频链不再重复重建)。
+    _skip_overlay=True: 跳过 YAML 快照校验/兑底(评审 #111 P1-1 独立真源比较用——
+    拿纯代码 CommandSpec 与快照对比, 防"overlay 后 spec 比 YAML"自我验证)。
 
     来源:
       1. ENGINE_REGISTRY 表驱动(组 CATEGORY_MAP 归属)
@@ -875,9 +858,11 @@ def build_command_specs(force: bool = False) -> dict[str, CommandSpec]:
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
         spec.parameters = KNOWN_PARAMS.get(name, [])
-    # Contract Loader: YAML 生成快照覆盖层(评审 #80 + #110 建议③: 代码真源优先, YAML 非真源)
-    for _sp in specs.values():
-        _apply_contract_overlay(_sp)
+    # Contract Loader: YAML 快照校验层(评审 #80 + #110 建议③ + #111 P0-1: 代码真源优先,
+    # YAML 仅校验不覆盖; _skip_overlay 用于独立真源比较测试)
+    if not _skip_overlay:
+        for _sp in specs.values():
+            _apply_contract_overlay(_sp)
     _SPECS_CACHE = specs  # SpecRegistry 缓存(模块级写入; 调用方只读约定)
     return specs
 
@@ -967,7 +952,9 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["inputs"] = [{"name": i.name, "role": i.role, "format": i.format,
                         "required": i.required, "note": i.note,
                         **({"columns": i.columns} if i.columns else {}),
-                        **({"content_type": i.content_type} if i.content_type != "generic" else {})}
+                        **({"content_type": i.content_type} if i.content_type != "generic" else {}),
+                        # 评审 #111 P0-2: cli_name 影响真实 argv, 必须导出给 Agent(引擎真实 flag)
+                        **({"cli_name": i.cli_name} if getattr(i, "cli_name", "") else {})}
                        for i in spec.inputs]
     # outputs 从 output_slots 投影(评审 #96 P0: slots 为真相——specs_from_scans 无 overlay 也一致)
     _outs = [o.format for o in spec.output_slots if o.format] if spec.output_slots else spec.outputs

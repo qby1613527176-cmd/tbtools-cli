@@ -8,6 +8,8 @@ group: sets
 help: 'venn6: venn6 <out> <setA..F.txt> [labels]'
 semantic_fingerprint: 95c7f5447721b332aca0795c59244f0bb332df1d21c4416c0e73e6910807f176
 semantic_fingerprint_short: 95c7f5447721b332
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - set_operations
 capabilities_ontology:

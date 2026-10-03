@@ -8,6 +8,8 @@ group: expr
 help: 'barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol'
 semantic_fingerprint: ffedb6eb2a0bdbd75253b375e6db47fbb7c5e735c3940f3a018909218bcc758a
 semantic_fingerprint_short: ffedb6eb2a0bdbd7
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - expression
 capabilities_ontology:

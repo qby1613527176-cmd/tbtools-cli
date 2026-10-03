@@ -8,6 +8,8 @@ group: engine
 help: 'calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min'
 semantic_fingerprint: 6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca
 semantic_fingerprint_short: 6fcdc59ed0ece961
+readiness: PARTIAL
+verification: COMPILEABLE
 dependencies:
 - jellyfish
 dependency_manifest:

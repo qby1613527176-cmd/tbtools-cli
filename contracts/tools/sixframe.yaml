@@ -9,6 +9,8 @@ help: 'sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranl
   6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）'
 semantic_fingerprint: 9c2453fdca739ed3ac7d1bd7057773d8a328f768e4aec6561bf670b087eed2ca
 semantic_fingerprint_short: 9c2453fdca739ed3
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - translation
 - sequence

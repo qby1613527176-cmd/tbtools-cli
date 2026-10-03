@@ -9,6 +9,8 @@ help: 'makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   #
   motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）'
 semantic_fingerprint: 256fb097f1324b0eaea7d784245ed84f8d3f2f7eaceca6d87d8f448b0f17b2a6
 semantic_fingerprint_short: 256fb097f1324b0e
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

@@ -11,6 +11,8 @@ help: 'goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--i
   idmappingDb 须 gzip 格式「ID; ID\tGO:num; GO:num」；产物 outDir/<输入名>.xls）'
 semantic_fingerprint: f232667c90725fcf792c4b8086e716b5ececa6cb928d65f248442499205b6a53
 semantic_fingerprint_short: f232667c90725fcf
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - table_operations
 capabilities_ontology:

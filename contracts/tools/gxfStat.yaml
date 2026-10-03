@@ -8,6 +8,8 @@ group: gxf
 help: 'gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C'
 semantic_fingerprint: 668ca25ee68fa320978440c4ae241e8a7b581e41598563466060c23ab3f88225
 semantic_fingerprint_short: 668ca25ee68fa320
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - annotation
 capabilities_ontology:

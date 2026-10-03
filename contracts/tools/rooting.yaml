@@ -8,6 +8,8 @@ group: tree
 help: MAD 系统发育定根
 semantic_fingerprint: 3f11f3d70b26fa03d3b3a138e2c26b9c4c34855234074a5cc7581754fff014c8
 semantic_fingerprint_short: 3f11f3d70b26fa03
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - phylogeny
 capabilities_ontology:

@@ -10,6 +10,8 @@ help: 'mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-
   QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）'
 semantic_fingerprint: 5ce712f2105729b1c630578e1a6e210a9f0e607f57d6a3eabb5d62771f3f9477
 semantic_fingerprint_short: 5ce712f2105729b1
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

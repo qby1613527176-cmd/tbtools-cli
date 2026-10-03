@@ -8,6 +8,8 @@ group: syn
 help: 'findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa'
 semantic_fingerprint: 3726af5083c5ff35c1d4360dc46cf577c99e52e06d76a92ebc999520694d2f0d
 semantic_fingerprint_short: 3726af5083c5ff35
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - synteny
 capabilities_ontology:

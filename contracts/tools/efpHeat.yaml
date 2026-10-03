@@ -8,6 +8,8 @@ group: expr
 help: 'efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s'
 semantic_fingerprint: 53c102f7f83af3fa35d2e0dbae58b7d8f4a3017fd7af0611f333fa0094cabd24
 semantic_fingerprint_short: 53c102f7f83af3fa
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - expression
 - visualization

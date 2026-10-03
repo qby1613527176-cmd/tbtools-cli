@@ -9,6 +9,8 @@ help: "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GX
   \ 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）"
 semantic_fingerprint: ca18453f8093af3b91513300447e2a810098326b4e989b94fa1ab315f5f16562
 semantic_fingerprint_short: ca18453f8093af3b
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - annotation
 capabilities_ontology:

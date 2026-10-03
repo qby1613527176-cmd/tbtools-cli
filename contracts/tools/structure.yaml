@@ -8,6 +8,8 @@ group: seq
 help: 基因结构图（外显子/UTR 从 GFF）
 semantic_fingerprint: f289567206a63de178fbedec3a719253921e5a91ac21cffbf5d90081d6fc3b9f
 semantic_fingerprint_short: f289567206a63de1
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

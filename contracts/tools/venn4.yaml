@@ -9,6 +9,8 @@ help: 'venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 
   --graph <out> --prefix <out>'
 semantic_fingerprint: eedac107e1455a785d35fd2cecd2bce6072a55bb9a0fb7fa4761cc6687e53850
 semantic_fingerprint_short: eedac107e1455a78
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - set_operations
 capabilities_ontology:

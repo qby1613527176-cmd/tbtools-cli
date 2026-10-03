@@ -10,6 +10,8 @@ help: 'cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor
   仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）'
 semantic_fingerprint: 07908b81679d125b4da84e4dbdc17220d7409619317aab4dd9ed6e907ce36216
 semantic_fingerprint_short: 07908b81679d125b
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - expression
 capabilities_ontology:

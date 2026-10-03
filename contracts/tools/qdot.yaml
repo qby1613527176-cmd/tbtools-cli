@@ -10,6 +10,8 @@ help: 'qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N
   mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）'
 semantic_fingerprint: 2ae7e5b9513b154dd9b9223bd84591ac09c6e3c5c0cfcb50b372ae0c553c052a
 semantic_fingerprint_short: 2ae7e5b9513b154d
+readiness: FULL
+verification: COMPILEABLE
 capabilities:
 - synteny
 - visualization

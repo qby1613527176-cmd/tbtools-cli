@@ -8,6 +8,8 @@ group: gxf
 help: 'gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀'
 semantic_fingerprint: 8ce4487c2eac18c15e71773be795106b7e5b2b300c320f94f5bc183b155f23e2
 semantic_fingerprint_short: 8ce4487c2eac18c1
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - annotation
 - gff_ops

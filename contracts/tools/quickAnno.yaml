@@ -9,6 +9,8 @@ help: 'quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [ma
   diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）'
 semantic_fingerprint: b44f314a06f989d230bff08fc19d8d8494f2aa5ce0931314bfb278c5a8052589
 semantic_fingerprint_short: b44f314a06f989d2
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - homology
 capabilities_ontology:

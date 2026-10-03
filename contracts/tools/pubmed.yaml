@@ -9,6 +9,8 @@ help: 'pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 P
   联网 eutils；输出期刊/标题/年份/IF/DOI 表）'
 semantic_fingerprint: 2a9ffbb8b4e46e04a42b1a6bc290f856c4b7f75551aa7ad4e48c5b39f03a5f6f
 semantic_fingerprint_short: 2a9ffbb8b4e46e04
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - table_operations
 capabilities_ontology:

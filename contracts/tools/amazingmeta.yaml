@@ -8,6 +8,8 @@ group: seq
 help: 'amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> ['
 semantic_fingerprint: 6296bc8b2ab5651f62a2b0fd49184a75565ac012f3c88a90edcf448fe49b53a6
 semantic_fingerprint_short: 6296bc8b2ab5651f
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

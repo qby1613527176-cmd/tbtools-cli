@@ -261,7 +261,8 @@ def render_commands_md(meta):
         counts["agent_ready_full"] = _rd.get("FULL", 0)
         counts["agent_ready_partial"] = _rd.get("PARTIAL", 0)
         counts["agent_ready_legacy"] = _rd.get("LEGACY", 0)
-        counts["execution_verified"] = _vc2().get("EXECUTION_VERIFIED", 0)
+        counts["execution_verified"] = _vc2().get("EXECUTION_VERIFIED", 0) + _vc2().get("CONFORMANCE_VERIFIED", 0)  # 评审 #111 P0-3: 统一口径=有真实执行证据的工具数
+        counts["conformance_verified"] = _vc2().get("CONFORMANCE_VERIFIED", 0)
     except Exception:
         pass
     # 注: README/`tbtools version` 的 "218 绘图/分析命令" 是运行时全部分组命令数
@@ -397,7 +398,10 @@ def render_ai_manifest(meta):
         partial = sum(1 for _, d, s in _rows if 3 <= s < 5)
         lines = ["# Tool Readiness Matrix(自动生成, 勿手改)", "",
                  f"总览: {len(_rows)} 工具 | 契约完整(5/5): {full} | 部分(3-4): {partial} | 基础(<3): {len(_rows)-full-partial}", "",
-                 "| 工具 | Schema | Params | Caps | Deps | Rels | 完备度 |",
+                 "> 评审 #111 P1-2: 本表的 5/5 是 **metadata coverage**（Schema/Params/Caps/Deps/Rels 五个元数据维度），",
+                 "> 与 readiness（FULL/PARTIAL/LEGACY, 判定维度 inputs/outputs/capabilities/parameters/stable）**不是同一套指标**",
+                 "> ——FULL 工具在 metadata coverage 可能 3/5（缺 deps/rels 声明）, 勿混读。", "",
+                 "| 工具 | Schema | Params | Caps | Deps | Rels | metadata coverage |",
                  "|---|---|---|---|---|---|---|"]
         for _n, _d, _s in _rows:
             def mark(b: bool) -> str:

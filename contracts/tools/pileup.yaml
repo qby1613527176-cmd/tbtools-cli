@@ -8,6 +8,8 @@ group: chipseq
 help: 'pileup: pileup <blast.xml> <out.svg> [--query NAME]'
 semantic_fingerprint: 05fccb3dfc72783ac0db81cf71e394c3b586b80bc53f9207bbd5d5f1138ac437
 semantic_fingerprint_short: 05fccb3dfc72783a
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - chip_seq
 capabilities_ontology:

@@ -3,9 +3,12 @@
 TestReview107PropertyMatrix: 10 性质(同路径/换路径/换内容/换ref/换slot/换tool/换schema/换capability/换relations/换dependency)
 TestReview108Cleanup:      outputs projection 回归 / 唯一常量 / 唯一入口 / schema_version 拆分
 TestReview108StaticRuntimeSplit: static compile(validate) vs runtime resolve(run) 分层
+TestReview111ExecutionRelevantFields: 评审 #111 P1-3 execution-relevant 字段审计(cli_name 进 canonical)
 """
 import os
 import shutil
+
+from tbtools_cli.command_spec import build_command_specs
 
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -254,3 +257,45 @@ steps:
         assert r["valid"] is True or not any(
             e["code"] == "WORKFLOW_COMPILE_ERROR" for e in r.get("errors", []))
 
+
+
+class TestReview111ExecutionRelevantFields:
+    """评审 #111 P1-3: execution-relevant fields 审计——InputSpec/ParamSpec 影响 argv 的字段
+    必须进入 canonical execution identity(否则"新增字段影响执行但 fingerprint 感知不到"复发,
+    如 1.4.31 加 cli_name → 1.4.33 才发现 identity 没接)。"""
+
+    def test_input_cli_name_in_canonical(self):
+        """InputSpec.cli_name 必须出现在 canonical_contract 的 inputs 里(评审 #111 P0-2)。"""
+        from tbtools_cli.identity import canonical_contract
+        specs = build_command_specs()
+        tpm = specs["tpmCalc"]
+        canon = canonical_contract(tpm)
+        tpm_input = next(i for i in canon["inputs"] if i["name"] == "counts")
+        assert tpm_input["cli_name"] == "--countsTable", \
+            "cli_name 未进 canonical contract——argv 语义与指纹脱节"
+
+    def test_all_execution_relevant_fields_in_canonical(self):
+        """正向审计:InputSpec 每个字段都必须在 canonical inputs 中(新增字段漏接=测试失败)。
+        防 1.4.31 cli_name 事件复发——以后加 InputSpec.xxx 若影响 argv, 此测试强制接 identity。"""
+        from dataclasses import fields
+        from tbtools_cli.command_spec import InputSpec
+        from tbtools_cli.identity import canonical_contract
+        specs = build_command_specs()
+        _sp = specs["volcano"]
+        canon_inputs = canonical_contract(_sp)["inputs"]
+        assert canon_inputs, "volcano 应有 inputs"
+        canon_keys = set(canon_inputs[0].keys())
+        # InputSpec 全字段(canonical 已显式含 cli_name; note 是文档字段不涉执行语义, 排除)
+        spec_fields = {f.name for f in fields(InputSpec)} - {"note"}
+        missing = spec_fields - canon_keys
+        assert not missing, \
+            f"InputSpec 字段未进 canonical contract: {missing}——执行语义字段必须在 identity 中"
+
+    def test_param_cli_name_in_canonical(self):
+        """ParamSpec.cli_name 已在 canonical(参数字段审计——与 inputs 同等要求)。"""
+        from tbtools_cli.identity import canonical_contract
+        specs = build_command_specs()
+        _sp = specs["volcano"]
+        canon = canonical_contract(_sp)
+        for p in canon["parameters"]:
+            assert "cli_name" in p, f"参数 {p['name']} 缺 cli_name 字段(应始终在 canonical 输出中)"

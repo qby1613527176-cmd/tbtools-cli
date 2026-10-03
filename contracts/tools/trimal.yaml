@@ -10,6 +10,8 @@ help: 'trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] 
   QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）'
 semantic_fingerprint: 2bea2f8aae74b07c5a719e178d9eeae31d0c7f24f5a1711abcce34f6496f4909
 semantic_fingerprint_short: 2bea2f8aae74b07c
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - alignment
 - filtering

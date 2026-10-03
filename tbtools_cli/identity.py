@@ -65,7 +65,8 @@ def canonical_contract(spec) -> dict:
         "name": spec.name, "kind": spec.kind, "group": spec.group,
         "inputs": [{"name": i.name, "format": i.format, "role": i.role,
                     "required": i.required, "content_type": i.content_type,
-                    "columns": i.columns} for i in (spec.inputs or [])],
+                    "columns": i.columns, "cli_name": getattr(i, "cli_name", "")}
+                   for i in (spec.inputs or [])],
         "outputs": list(spec.outputs or []),
         "output_slots": [{"name": o.name, "format": o.format, "content_type": o.content_type}
                          for o in (spec.output_slots or [])],

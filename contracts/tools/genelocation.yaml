@@ -8,6 +8,8 @@ group: gxf
 help: 'genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph'
 semantic_fingerprint: bfd6548eb18a3094e3453ea94d05f5401dbd3c395b3b7498b58e39eaee51e139
 semantic_fingerprint_short: bfd6548eb18a3094
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - annotation
 - visualization

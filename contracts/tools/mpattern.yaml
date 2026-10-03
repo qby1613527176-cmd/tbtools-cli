@@ -10,6 +10,8 @@ help: 'mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRec
   逆向接口，postGraph(String,panel) 重载绕弹窗）'
 semantic_fingerprint: efa193ae4b42183aca0318240c47294581b78ac2b94000ccb482aeda9d2fd7fa
 semantic_fingerprint_short: efa193ae4b42183a
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

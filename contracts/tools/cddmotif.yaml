@@ -8,6 +8,8 @@ group: seq
 help: 'cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new'
 semantic_fingerprint: 55dc246c5b1f74e78c32477fdda099fa64dde4a46a59370836cbb1df41d565ef
 semantic_fingerprint_short: 55dc246c5b1f74e7
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

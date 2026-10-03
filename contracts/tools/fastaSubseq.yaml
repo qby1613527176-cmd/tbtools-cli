@@ -8,6 +8,8 @@ group: fastq
 help: 'fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext'
 semantic_fingerprint: bf1fd0e9525a3eab857fe36795530fc44f5605d22a2559d2e57b2eae17c8a8fb
 semantic_fingerprint_short: bf1fd0e9525a3eab
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 - extraction

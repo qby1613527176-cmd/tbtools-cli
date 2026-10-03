@@ -8,6 +8,8 @@ group: blast
 help: 'filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]'
 semantic_fingerprint: 95bcec6568caac44b7bc944681fece658dc2e6d8fde222b9524cb24560fbec5f
 semantic_fingerprint_short: 95bcec6568caac44
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - homology
 - filtering

@@ -2,7 +2,11 @@
 
 总览: 294 工具 | 契约完整(5/5): 1 | 部分(3-4): 64 | 基础(<3): 229
 
-| 工具 | Schema | Params | Caps | Deps | Rels | 完备度 |
+> 评审 #111 P1-2: 本表的 5/5 是 **metadata coverage**（Schema/Params/Caps/Deps/Rels 五个元数据维度），
+> 与 readiness（FULL/PARTIAL/LEGACY, 判定维度 inputs/outputs/capabilities/parameters/stable）**不是同一套指标**
+> ——FULL 工具在 metadata coverage 可能 3/5（缺 deps/rels 声明）, 勿混读。
+
+| 工具 | Schema | Params | Caps | Deps | Rels | metadata coverage |
 |---|---|---|---|---|---|---|
 | `DecodeIlluminaFqPool` | — | — | — | — | — | 0/5 |
 | `ExtractFeaturefromGFF3andGenome` | — | — | — | — | — | 0/5 |

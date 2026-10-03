@@ -9,6 +9,8 @@ help: 'protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆�
   TSV）'
 semantic_fingerprint: dfea32ad178eed2dd4d0c4c4788630f8d95ff81ada15c8f61fcb2bde47a92036
 semantic_fingerprint_short: dfea32ad178eed2d
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - sequence
 capabilities_ontology:

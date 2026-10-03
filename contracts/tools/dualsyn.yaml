@@ -8,6 +8,8 @@ group: syn
 help: 'dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 "1,2"] '
 semantic_fingerprint: 2059700e92dcb787236621e38d0a029c30cdd58f9ba5c2e9151da3e4256c69bf
 semantic_fingerprint_short: 2059700e92dcb787
+readiness: FULL
+verification: EXECUTION_VERIFIED
 capabilities:
 - synteny
 - visualization

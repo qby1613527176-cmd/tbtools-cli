@@ -8,6 +8,8 @@ group: seq
 help: 'mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中'
 semantic_fingerprint: 58c695423ae44798d6edcc9cc1edb9451b84bafc82cc6d8c9ba59064dae5e6b6
 semantic_fingerprint_short: 58c695423ae44798
+readiness: PARTIAL
+verification: DECLARED
 capabilities:
 - motif
 - sequence_extraction
