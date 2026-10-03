@@ -96,10 +96,12 @@ def _resolve(value, outputs: dict):
     return value
 
 
-def plan(wf: dict, workdir: str) -> list[dict]:
+def plan(wf: dict, workdir: str, runtime_resolve: bool = False) -> list[dict]:
     """生成执行计划: 每步展开为 [cmd, args](顺序)。
 
     占位符: {workdir} → 执行目录;{input.X} → workflow inputs 声明;$step.output → 上游产物。
+    runtime_resolve(评审 #110 P0-2): 默认 False=纯静态(规划/validate 不读输入 sha);
+    run() 传 True 以获得完整 execution_fp(resume 闸门需要 input sha 检测篡改)。
     """
     steps: list = []
     outputs: dict = {}
@@ -122,7 +124,7 @@ def plan(wf: dict, workdir: str) -> list[dict]:
             _bj = _bj.replace("{workdir}", workdir)
             s["binding"] = json.loads(_bj)
             _ci = compile_step_full(s, workdir, outputs, symbolic_override=_raw_binding,
-                                    runtime_resolve=False)  # 评审 #110 P0-2: plan 纯静态——不读输入 sha/不探测依赖
+                                    runtime_resolve=runtime_resolve)  # 评审 #110 P0-2: 由 plan 参数决定
             args = _ci.argv
             # 输出登记编译结构(评审 #88 P0-1): binding.outputs 精确,不再 out_args[-1] 猜
             steps.append({"id": s["id"], "tool": s["tool"], "args": args,
@@ -768,7 +770,7 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
             state = {}
         else:
             print(f"♻️ resume: 跳过已完成 {sum(1 for s in state['steps'] if s.get('status')=='succeeded')} 步", file=sys.stderr)
-    steps = plan(wf, workdir)
+    steps = plan(wf, workdir, runtime_resolve=True)  # 评审 #110: run 需要完整 execution_fp(resume 篡改检测)
     # 每步输出父目录预创建(否则 Java 输出目录预检报错)。
     # 只为 workdir 内或图形产物参数建目录;坏输入路径(如 /no/such.txt)不建, 让引擎报真实错(v2)
     for st in steps:
