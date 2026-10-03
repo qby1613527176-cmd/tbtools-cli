@@ -1,5 +1,6 @@
-"""YAML 迁移规则(评审 #82 P1-5): contracts/tools/X.yaml 存在的字段,
-KNOWN_SCHEMAS/KNOWN_PARAMS/KNOWN_CAPABILITIES 不得与之冲突(YAML 胜出,双写漂移防护)。"""
+"""YAML 快照一致性(评审 #82 P1-5 + #110 建议③): contracts/tools/X.yaml 是 gen_metadata
+导出的生成快照——与代码真源(KNOWN_*)一致; 不一致即快照过期(重跑 gen_metadata)。
+评审 #110 建议③ 修正: 不再称 "YAML 胜出", 代码是唯一真源。"""
 import os
 import sys
 
@@ -28,15 +29,17 @@ class TestYamlMigrationRule:
             warnings.warn(f"YAML/KNOWN 双写漂移 {len(conflicts)} 处(迁移期容忍,v2 收敛): {conflicts[:3]}",
                           stacklevel=1)
 
-    def test_yaml_wins_where_present(self):
-        """YAML 存在的字段,spec 最终值 == YAML(overlay 胜出验证)"""
+    def test_yaml_snapshot_matches_known(self):
+        """YAML 快照与代码真源一致(评审 #110 建议③: 快照非真源, 一致性验证——
+        不一致=快照过期, 重跑 gen_metadata 而非手改 YAML)。"""
         from tbtools_cli.command_spec import build_command_specs, load_contracts
         contracts = load_contracts()
         specs = build_command_specs()
         checked = 0
         for name, c in contracts.items():
             if c.get("capabilities") and name in specs:
-                assert specs[name].capabilities == list(c["capabilities"]),                     f"{name}: YAML capabilities 未胜出"
+                # 快照与代码一致(快照导出自代码); 若不一致说明快照过期
+                assert specs[name].capabilities == list(c["capabilities"]),                     f"{name}: YAML 快照与代码真源不一致(快照过期, 重跑 gen_metadata)"
                 checked += 1
                 if checked >= 5:
                     break

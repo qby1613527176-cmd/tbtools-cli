@@ -239,8 +239,9 @@ _CONTRACTS_MTIME: tuple = ()  # 文件指纹(mtime+size tuple;评审 #92)
 
 
 def load_contracts() -> dict:
-    """加载 contracts/tools/*.yaml(评审: CommandSpec 从聚合器变成 contract loader;
-    YAML 声明优先于 KNOWN_* 内存表)。返回 {name: {inputs/outputs/parameters/capabilities/layout/...}}。"""
+    """加载 contracts/tools/*.yaml(评审 #110 建议③: YAML 是 gen_metadata 导出的**生成快照/覆盖层**,
+    代码真源(KNOWN_*/ENGINE_REGISTRY/CLI_TOOLS)优先——不再声称 YAML 声明优先, 防双向覆盖复发)。
+    返回 {name: {inputs/outputs/parameters/capabilities/layout/...}}。"""
     import glob as _g
 
     import yaml as _y
@@ -282,7 +283,8 @@ def contract_load_errors() -> list:
 
 
 def _apply_contract_overlay(spec) -> None:
-    """YAML 契约覆盖到 spec(YAML 胜出:inputs/outputs/parameters/capabilities/layout)。"""
+    """YAML 生成快照覆盖到 spec(评审 #110 建议③: 代码真源优先——capabilities 已有代码>快照逻辑,
+    inputs/outputs/parameters 为向后兼容的覆盖层; YAML 是 gen_metadata 导出物, 非真源)。"""
     c = load_contracts().get(spec.name)
     if not c:
         return
@@ -873,7 +875,7 @@ def build_command_specs(force: bool = False) -> dict[str, CommandSpec]:
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
         spec.parameters = KNOWN_PARAMS.get(name, [])
-    # Contract Loader: YAML 覆盖层(评审 #80;YAML 胜出)
+    # Contract Loader: YAML 生成快照覆盖层(评审 #80 + #110 建议③: 代码真源优先, YAML 非真源)
     for _sp in specs.values():
         _apply_contract_overlay(_sp)
     _SPECS_CACHE = specs  # SpecRegistry 缓存(模块级写入; 调用方只读约定)
