@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.37] - 2026-10-03
+
+### verification 证据对象投影(评审 #112 P1 收尾)
+- ai/tools/*.json 的 verification 此前只有 level(EXECUTION_VERIFIED), 缺证据详情——Agent 无法判断证据新旧/是否匹配当前 contract
+- gen_metadata 从 verification_report.json 读 execution_verified_details, ai/tools/*.json 加 verification_details{contract_fingerprint, verified_at, corpus}
+- test_metadata 加投影断言(执行验证工具必须带证据对象)
+- **门禁**: pytest 588 passed / ruff 0 / mypy 0
+
 ## [1.4.36] - 2026-10-03
 
 ### workflow.py 拆分 dependency.py(评审 #112 P2)
