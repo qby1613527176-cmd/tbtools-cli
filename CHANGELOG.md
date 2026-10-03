@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.29] - 2026-10-03
+
+### SpecRegistry(评审 #110 P1)——294 spec 一次性构建缓存
+- build_command_specs() 加模块级缓存(force=True 强制重建) + clear_specs_cache()
+- Agent 高频链 search/describe/plan/validate/run 此前每次重建 294 spec(~105ms);多步 workflow 编译每 step 一次 = 50 步 5 秒纯 spec 重建——现缓存命中 0.000ms
+- monkeypatch 场景兼容(测试可 patch 构建函数), clear_specs_cache() 供 KNOWN_* 变更后失效
+- **门禁**: pytest 569 passed / ruff 0 / mypy 0
+
 ## [1.4.28] - 2026-10-03
 
 ### 可信度证据链(评审 #110)——P0×2 + P1×4
