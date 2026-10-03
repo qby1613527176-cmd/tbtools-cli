@@ -1012,10 +1012,37 @@ def _load_verification_report() -> tuple[set, set]:
     if os.path.isfile(p):
         try:
             d = _j.load(open(p, encoding="utf-8"))
-            return set(d.get("execution_verified", [])), set(d.get("compile_verified", []))
+            _exec = set(d.get("execution_verified", []))
+            # 评审 #110 P1: execution_verified 绑定 contract_fingerprint——
+            # 入场合同变了(fp 不匹配)旧验证自动失效, 降级为未验证(防"contract 改但仍标已验")
+            _details = d.get("execution_verified_details") or {}
+            if _details:
+                from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
+                try:
+                    _specs_now = _bcs_for_verify()
+                except Exception:
+                    _specs_now = {}
+                for _t in list(_exec):
+                    _entry = _details.get(_t) or {}
+                    _old_fp = _entry.get("contract_fingerprint")
+                    _sp = _specs_now.get(_t)
+                    if _old_fp and _sp:
+                        try:
+                            if _fpfn(_sp) != _old_fp:
+                                _exec.discard(_t)  # contract 已变: 旧验证证据失效
+                        except Exception:
+                            pass
+                    elif not _old_fp:
+                        _exec.discard(_t)  # 无 fp 绑定的旧格式条目不信任
+            return _exec, set(d.get("compile_verified", []))
         except Exception:
             pass
     return set(), set()
+
+
+def _bcs_for_verify():
+    """verification 加载时构建 spec(模块内直接调用, 避免自 import 循环)。"""
+    return build_command_specs()
 
 
 _EXEC_VERIFIED, _COMPILE_VERIFIED = _load_verification_report()

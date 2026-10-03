@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout'
-semantic_fingerprint: 0717ec6260d82cf7
+semantic_fingerprint: 0717ec6260d82cf7ffb9892fdd78bc2f5deb7c0d65fd1d723912882162a95417
+semantic_fingerprint_short: 0717ec6260d82cf7
 capabilities:
 - synteny
 - visualization

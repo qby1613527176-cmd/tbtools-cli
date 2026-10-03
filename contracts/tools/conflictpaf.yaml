@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]'
-semantic_fingerprint: 7472d4677f6789c9
+semantic_fingerprint: 7472d4677f6789c958c80ab8373c8cdc864a742130c2fe668f01e65b26b9614b
+semantic_fingerprint_short: 7472d4677f6789c9
 capabilities:
 - synteny
 capabilities_ontology:

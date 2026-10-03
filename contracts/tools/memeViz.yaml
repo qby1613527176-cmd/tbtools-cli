@@ -7,7 +7,8 @@ runner: plot
 group: seq
 help: 'memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件
   P00700 CLI 化，每 motif 一面板）'
-semantic_fingerprint: e25d38cf0587b2ca
+semantic_fingerprint: 73875b412107b93f33499155d4a7af4988568a72a49eb895f18646419de1e076
+semantic_fingerprint_short: 73875b412107b93f
 capabilities:
 - motif
 - visualization
@@ -18,13 +19,11 @@ capabilities_ontology:
 - visualization
 relations:
   accepts:
-  - FASTA
-  - GFF3
+  - MEME_XML
   produces:
-  - SEQUENCE_ARTIFACT
+  - MOTIF_PLOT
   related_to:
-  - muscle
-  - trimal
+  - memerun
 inputs:
 - name: meme
   role: file

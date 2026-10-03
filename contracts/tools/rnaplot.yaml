@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R'
-semantic_fingerprint: 87ab9762e3a68603
+semantic_fingerprint: 87ab9762e3a6860399bfbeca30ae952ca1506e3b7e4c76d154e63d91fdeeb70a
+semantic_fingerprint_short: 87ab9762e3a68603
 capabilities:
 - sequence
 capabilities_ontology:
@@ -19,6 +20,9 @@ dependency_manifest:
   required: true
   platforms:
   - linux
+  executable: RNAfold
+  version_args:
+  - --version
 relations:
   accepts:
   - FASTA

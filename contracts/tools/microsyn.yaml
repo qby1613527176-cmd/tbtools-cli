@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star'
-semantic_fingerprint: 91a75654ab879e91
+semantic_fingerprint: 91a75654ab879e912514f5453e2405fa06b40825f8d0f8f8a7b1757c621597e0
+semantic_fingerprint_short: 91a75654ab879e91
 capabilities:
 - synteny
 - visualization

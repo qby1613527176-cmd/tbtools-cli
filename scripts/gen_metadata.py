@@ -254,6 +254,16 @@ def render_commands_md(meta):
         "bridges": len([f for f in os.listdir(os.path.join(ROOT, "bridges")) if f.endswith(".java")]),  # 118
         "pitfall_hints": len(_core.PITFALL_HINTS),  # 46
     }
+    # 评审 #110 P1: counts.md 成为 agent-ready 权威口径(README 数字以此对齐, 防 59/60 漂移)
+    try:
+        from tbtools_cli.command_spec import readiness_census as _rc2, verification_census as _vc2
+        _rd = _rc2()
+        counts["agent_ready_full"] = _rd.get("FULL", 0)
+        counts["agent_ready_partial"] = _rd.get("PARTIAL", 0)
+        counts["agent_ready_legacy"] = _rd.get("LEGACY", 0)
+        counts["execution_verified"] = _vc2().get("EXECUTION_VERIFIED", 0)
+    except Exception:
+        pass
     # 注: README/`tbtools version` 的 "218 绘图/分析命令" 是运行时全部分组命令数
     # (含 engine 分组等),与 plot_commands_meta(静态注册口径)不同——两个口径都合法,勿互改
     counts_path = os.path.join(out_dir, "counts.md")

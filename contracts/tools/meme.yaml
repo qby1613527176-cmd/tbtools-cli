@@ -8,7 +8,8 @@ group: seq
 help: 'meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw
   N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统
   meme；产物可与 memeViz/fimo 串联）'
-semantic_fingerprint: b629fd4f63086139
+semantic_fingerprint: b629fd4f63086139dc488f10e1dbc487f8b98dfe5fffd4c22be33ec457f9efc5
+semantic_fingerprint_short: b629fd4f63086139
 capabilities:
 - sequence
 capabilities_ontology:

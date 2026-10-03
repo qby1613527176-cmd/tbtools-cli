@@ -7,7 +7,8 @@ runner: plot
 group: blast
 help: 'xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向
   #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）'
-semantic_fingerprint: cf820e87f27d58ef
+semantic_fingerprint: cf820e87f27d58efc060f9423afcf5fd4d200bf680137eb22c71d51647d59765
+semantic_fingerprint_short: cf820e87f27d58ef
 capabilities:
 - homology
 capabilities_ontology:

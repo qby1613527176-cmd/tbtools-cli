@@ -7,7 +7,10 @@
  "class": "",
  "description": "Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
  "invoke": "tbtools hmm hmmerSearch <args...>",
- "capabilities": [],
+ "capabilities": [
+  "homology",
+  "hmm_scan"
+ ],
  "inputs": [
   {
    "name": "hmm",

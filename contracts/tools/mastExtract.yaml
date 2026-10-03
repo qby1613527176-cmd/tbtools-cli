@@ -6,17 +6,21 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中'
-semantic_fingerprint: b64e750a1cbc6b06
+semantic_fingerprint: 58c695423ae44798d6edcc9cc1edb9451b84bafc82cc6d8c9ba59064dae5e6b6
+semantic_fingerprint_short: 58c695423ae44798
 capabilities:
-- sequence
+- motif
+- sequence_extraction
 capabilities_ontology:
+- motif
 - sequence
+- sequence.motif
+- sequence_extraction
 relations:
   accepts:
-  - FASTA
-  - GFF3
+  - MEME_XML
+  - HMM_HITS
   produces:
-  - SEQUENCE_ARTIFACT
+  - SEQUENCE_SUBSET
   related_to:
-  - muscle
-  - trimal
+  - memerun

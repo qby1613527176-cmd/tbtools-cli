@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: sets
 help: 'venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]'
-semantic_fingerprint: 9d15e8260015d0a3
+semantic_fingerprint: 9d15e8260015d0a3f21961c60cb86b82baa9436c378beece152314e96ab533e1
+semantic_fingerprint_short: 9d15e8260015d0a3
 capabilities:
 - set_operations
 capabilities_ontology:

@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]'
-semantic_fingerprint: 5c5cd8d82a10245c
+semantic_fingerprint: 5c5cd8d82a10245c5639e07bdc4f539bedc0de9f503faaaaa15239621e52bf2a
+semantic_fingerprint_short: 5c5cd8d82a10245c
 capabilities:
 - expression
 - visualization

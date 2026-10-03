@@ -7,7 +7,8 @@ runner: java
 group: seq
 help: 'protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️
   联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）'
-semantic_fingerprint: 10f53c5f6fec17da
+semantic_fingerprint: 10f53c5f6fec17daa71832b8de5c18a24c590e72b21700e5e12a91b43500f6bb
+semantic_fingerprint_short: 10f53c5f6fec17da
 capabilities:
 - sequence
 capabilities_ontology:

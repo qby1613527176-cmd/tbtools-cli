@@ -6,13 +6,16 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>'
-semantic_fingerprint: c57aa937a5f38f79
+semantic_fingerprint: 5beea6519723aa4fe8a8fbc6660e8120b0a6842e68bc074909aa8d9c9073756b
+semantic_fingerprint_short: 5beea6519723aa4f
 capabilities:
-- assembly
+- genome_preparation
+- annotation
 capabilities_ontology:
-- assembly
+- annotation
+- genome_preparation
 - genomics
-- genomics.assembly
+- genomics.annotation
 relations:
   accepts:
   - GENOME

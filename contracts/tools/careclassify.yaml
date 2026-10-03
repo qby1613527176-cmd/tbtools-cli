@@ -7,7 +7,8 @@ runner: java
 group: seq
 help: 'careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列
   motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）'
-semantic_fingerprint: da3e0e5b780be5ab
+semantic_fingerprint: da3e0e5b780be5abddd571d492399bc22977ae3ef86f0bccb579bda54deeafbf
+semantic_fingerprint_short: da3e0e5b780be5ab
 capabilities:
 - sequence
 capabilities_ontology:

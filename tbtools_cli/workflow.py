@@ -121,7 +121,8 @@ def plan(wf: dict, workdir: str) -> list[dict]:
                     raise WorkflowError(f"step {s.get('id')} 引用 {{input}} 但 workflow 无 inputs 声明")
             _bj = _bj.replace("{workdir}", workdir)
             s["binding"] = json.loads(_bj)
-            _ci = compile_step_full(s, workdir, outputs, symbolic_override=_raw_binding)
+            _ci = compile_step_full(s, workdir, outputs, symbolic_override=_raw_binding,
+                                    runtime_resolve=False)  # 评审 #110 P0-2: plan 纯静态——不读输入 sha/不探测依赖
             args = _ci.argv
             # 输出登记编译结构(评审 #88 P0-1): binding.outputs 精确,不再 out_args[-1] 猜
             steps.append({"id": s["id"], "tool": s["tool"], "args": args,

@@ -1,6 +1,6 @@
 # Tool Readiness Matrix(自动生成, 勿手改)
 
-总览: 294 工具 | 契约完整(5/5): 1 | 部分(3-4): 61 | 基础(<3): 232
+总览: 294 工具 | 契约完整(5/5): 1 | 部分(3-4): 64 | 基础(<3): 229
 
 | 工具 | Schema | Params | Caps | Deps | Rels | 完备度 |
 |---|---|---|---|---|---|---|
@@ -43,7 +43,7 @@
 | `blastXmlSummaryTable` | — | — | — | — | — | 0/5 |
 | `blastXmlToTable` | — | — | — | — | — | 0/5 |
 | `blat` | — | — | ✅ | — | ✅ | 2/5 |
-| `calcRepeat` | ✅ | — | — | ✅ | — | 2/5 |
+| `calcRepeat` | ✅ | — | — | ✅ | ✅ | 3/5 |
 | `careclassify` | — | — | ✅ | — | ✅ | 2/5 |
 | `cddmotif` | — | — | ✅ | — | ✅ | 2/5 |
 | `cds2protein` | — | — | — | — | — | 0/5 |
@@ -60,7 +60,7 @@
 | `degramdom` | — | — | ✅ | — | ✅ | 2/5 |
 | `dehist` | ✅ | ✅ | ✅ | — | ✅ | 4/5 |
 | `distance` | — | — | ✅ | — | ✅ | 2/5 |
-| `dnDsCalculate` | — | — | — | — | — | 0/5 |
+| `dnDsCalculate` | — | — | ✅ | — | ✅ | 2/5 |
 | `dotplot` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `downLoadNCBIFasta` | — | — | — | — | — | 0/5 |
 | `draw` | — | — | ✅ | — | ✅ | 2/5 |
@@ -70,7 +70,7 @@
 | `eggnog` | — | — | — | — | — | 0/5 |
 | `emblToFasta` | — | — | — | — | — | 0/5 |
 | `exprCorr` | — | — | ✅ | — | ✅ | 2/5 |
-| `extractFasta` | — | — | — | — | — | 0/5 |
+| `extractFasta` | — | — | ✅ | — | ✅ | 2/5 |
 | `extractFastaSub` | — | — | — | — | — | 0/5 |
 | `extractFeatureFromGTF` | — | — | — | — | — | 0/5 |
 | `extractGff3Region` | — | — | — | — | — | 0/5 |
@@ -148,8 +148,8 @@
 | `heatmap2` | — | — | — | — | — | 0/5 |
 | `hicEnzyme` | — | — | ✅ | — | ✅ | 2/5 |
 | `hmmExtract` | — | — | — | — | — | 0/5 |
-| `hmmerSearch` | ✅ | — | — | — | — | 1/5 |
-| `hmmsearch` | — | — | ✅ | ✅ | — | 2/5 |
+| `hmmerSearch` | ✅ | — | ✅ | — | ✅ | 3/5 |
+| `hmmsearch` | — | — | ✅ | ✅ | ✅ | 3/5 |
 | `homoPhase` | — | — | ✅ | — | ✅ | 2/5 |
 | `iqtree` | ✅ | ✅ | ✅ | ✅ | ✅ | 5/5 |
 | `kaks` | — | — | ✅ | — | ✅ | 2/5 |
@@ -255,7 +255,7 @@
 | `sricher` | — | — | ✅ | — | ✅ | 2/5 |
 | `srr2ena` | — | — | ✅ | — | ✅ | 2/5 |
 | `ssrMiner` | — | — | — | — | — | 0/5 |
-| `statFasta` | — | — | — | — | — | 0/5 |
+| `statFasta` | — | — | ✅ | — | ✅ | 2/5 |
 | `structure` | — | — | ✅ | — | ✅ | 2/5 |
 | `subtree` | — | — | ✅ | — | ✅ | 2/5 |
 | `supercircos` | ✅ | — | ✅ | — | ✅ | 3/5 |

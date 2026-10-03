@@ -63,10 +63,22 @@ class TestTier1CompileVerified:
                 spec.invocation.build_argv(inputs=fake, parameters={"__nope__": "1"}, output="o.out")
             verified.append(tool)
         assert len(verified) == len(FULL_TOOLS),             f"compile-verified {len(verified)}/{len(FULL_TOOLS)}: 缺 {set(FULL_TOOLS) - set(verified)}"
-        # verification_report.json(评审 #86 P1-6): 测试产物驱动 verification_level
+        # verification_report.json(评审 #86 P1-6 + #110 P1): 测试产物驱动 verification_level
+        # #110: execution_verified 绑定 contract_fingerprint——contract 修改后旧验证自动失效
+        # (加载端比对当前 fp, 不匹配降级; 防"contract 变了但清单仍标 EXECUTION_VERIFIED")
+        import datetime as _dt
         import json as _jr
+        from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
+        _exec_entries = {}
+        for _t in sorted(EXEC_VERIFIED.keys()):
+            _exec_entries[_t] = {
+                "contract_fingerprint": _fpfn(SPECS[_t]),
+                "verified_at": _dt.datetime.now().isoformat(timespec="seconds"),
+                "corpus": "examples/data",
+            }
         _report = {"compile_verified": sorted(verified),
-                   "execution_verified": sorted(EXEC_VERIFIED.keys())}
+                   "execution_verified": sorted(EXEC_VERIFIED.keys()),
+                   "execution_verified_details": _exec_entries}
         _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
                  indent=1)
 

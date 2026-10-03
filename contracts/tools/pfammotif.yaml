@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic'
-semantic_fingerprint: 1f6f4681d3001470
+semantic_fingerprint: 1f6f4681d3001470f4aff30e9c1ae3380aa41cd92566abec0167d85a04e2ceaa
+semantic_fingerprint_short: 1f6f4681d3001470
 capabilities:
 - sequence
 capabilities_ontology:

@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: blast
 help: 'quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr'
-semantic_fingerprint: 38e157c4b347bff7
+semantic_fingerprint: 38e157c4b347bff7875655129030e250162b44aabe37a611aee11a7c34af0195
+semantic_fingerprint_short: 38e157c4b347bff7
 capabilities:
 - homology
 capabilities_ontology:

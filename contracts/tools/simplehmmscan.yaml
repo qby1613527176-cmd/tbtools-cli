@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt'
-semantic_fingerprint: 86788ec713e55769
+semantic_fingerprint: 86788ec713e5576966c745ad746367f5cdcd4e027e01553fbfbdfdcd996e1e00
+semantic_fingerprint_short: 86788ec713e55769
 capabilities:
 - sequence
 capabilities_ontology:
@@ -20,6 +21,9 @@ dependency_manifest:
   platforms:
   - linux
   - macos
+  executable: hmmscan
+  version_args:
+  - -h
 relations:
   accepts:
   - FASTA

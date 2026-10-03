@@ -9,7 +9,8 @@ help: 'seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.
   [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey
   KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️
   联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）'
-semantic_fingerprint: d227a1161ea3a054
+semantic_fingerprint: d227a1161ea3a05407ed22f3a6a710cc958bb821bcae158633f2431ad9a5fb6d
+semantic_fingerprint_short: d227a1161ea3a054
 capabilities:
 - sequence
 capabilities_ontology:

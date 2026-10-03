@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|'
-semantic_fingerprint: 6a8ef8fe902fcb9d
+semantic_fingerprint: 6a8ef8fe902fcb9d3602dc909814c019e575d69aa346d7ecdea449b73ebb7a03
+semantic_fingerprint_short: 6a8ef8fe902fcb9d
 capabilities:
 - expression
 capabilities_ontology:

@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>'
-semantic_fingerprint: 96f554e7e3c0e079
+semantic_fingerprint: 96f554e7e3c0e079fd0f98379f7dfe9493d344dce4bc0411c2b4bd76deb20c5a
+semantic_fingerprint_short: 96f554e7e3c0e079
 capabilities:
 - synteny
 - visualization

@@ -7,7 +7,8 @@ runner: java
 group: table
 help: 'sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx>
   <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）'
-semantic_fingerprint: 84a9957d682aea2b
+semantic_fingerprint: 84a9957d682aea2b60178a5d1aee7f904cf5b1507ad31113ebe049c9a0e4b81a
+semantic_fingerprint_short: 84a9957d682aea2b
 capabilities:
 - table_operations
 capabilities_ontology:

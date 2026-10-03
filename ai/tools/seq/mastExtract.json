@@ -8,7 +8,8 @@
  "description": "从 MAST XML 提取命中",
  "invoke": "tbtools seq mastExtract <args...>",
  "capabilities": [
-  "sequence"
+  "motif",
+  "sequence_extraction"
  ],
  "inputs": [],
  "outputs": [],

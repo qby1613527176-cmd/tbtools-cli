@@ -7,7 +7,8 @@ runner: plot
 group: seq
 help: 'smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL
   ismart.embl.de，约 10-60s，输出域位置+类型）'
-semantic_fingerprint: f78ee4bfe984a72d
+semantic_fingerprint: 1319449b755fb51dcf993d7cdfacedbfc76480ba640e06a927345ac881355712
+semantic_fingerprint_short: 1319449b755fb51d
 capabilities:
 - domain
 - annotation
@@ -20,13 +21,11 @@ capabilities_ontology:
 - sequence.domain
 relations:
   accepts:
-  - FASTA
-  - GFF3
+  - PROTEIN_FASTA
   produces:
-  - SEQUENCE_ARTIFACT
+  - DOMAIN_ANNOTATION
   related_to:
-  - muscle
-  - trimal
+  - cddmotif
 inputs:
 - name: seq
   role: file

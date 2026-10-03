@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: table
 help: 'levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]'
-semantic_fingerprint: 64efee2410c4e25f
+semantic_fingerprint: 64efee2410c4e25ff476a7cabf731882d726fea842e6e1d9725b4c7ac336f2fe
+semantic_fingerprint_short: 64efee2410c4e25f
 capabilities:
 - table_operations
 capabilities_ontology:

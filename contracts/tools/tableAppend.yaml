@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableAppend: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   #'
-semantic_fingerprint: 17d2c0a235d57357
+semantic_fingerprint: 17d2c0a235d5735738c52e0e29c0dd2a056d4f8ed917bbd457ad03ce495cf8af
+semantic_fingerprint_short: 17d2c0a235d57357
 capabilities:
 - table_operations
 capabilities_ontology:

@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引'
-semantic_fingerprint: 2c899af07d00b2f4
+semantic_fingerprint: 2c899af07d00b2f470e72b3254fe3716ca2193a857cb5fdc5a1eac1ce1fb39dd
+semantic_fingerprint_short: 2c899af07d00b2f4
 capabilities:
 - assembly
 capabilities_ontology:

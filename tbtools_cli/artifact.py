@@ -186,11 +186,15 @@ def resolve(ref: str) -> str | None:
             pass
     return None
 
-def discover_outputs(base_path: str, max_extra: int = 10) -> list[str]:
+def discover_outputs(base_path: str, max_extra: int = 10, created_after: float | None = None) -> list[str]:
     """prefix 型输出发现(多输出 Artifact): mcscanx <out> → <out>.collinearity/.html 等。
 
-    规则: base_path 不存在时,找同目录下以 base_path 名称为前缀的兄弟文件(t0 后新建);
+    规则: base_path 不存在时,找同目录下以 base_path 名称为前缀的兄弟文件(执行期新建);
     base_path 存在时返回自身。返回绝对路径列表(自身优先,按 mtime 排序)。
+
+    created_after(评审 #110 P0-1): 执行开始时间戳——只认 mtime >= created_after 的产物,
+    防止"程序失败/未重新生成时捡到旧 sibling 文件"的 stale-output 假阳性。
+    未传时兼容旧行为(无过滤)。
     """
     if os.path.isfile(base_path):
         return [os.path.abspath(base_path)]
@@ -206,6 +210,9 @@ def discover_outputs(base_path: str, max_extra: int = 10) -> list[str]:
             if name.startswith(prefix + ".") or name.startswith(prefix + "_"):
                 fp = os.path.join(d, name)
                 if os.path.isfile(fp) and os.path.getsize(fp) > 0:
+                    # execution-scoped(评审 #110): mtime 须 >= 执行开始时间
+                    if created_after is not None and os.path.getmtime(fp) < created_after:
+                        continue
                     found.append(fp)
     except OSError:
         return []

@@ -1,0 +1,23 @@
+name: dnDsCalculate
+kind: tool
+mode: tool
+class: biocjava.bioIO.KaKs.DnDsCalculate
+xmx: 3g
+runner: java
+group: tool
+help: ''
+semantic_fingerprint: dc41861a795dd3a3568c7c4c98ba399c9f10669e52c358f5e6669791d18baade
+semantic_fingerprint_short: dc41861a795dd3a3
+capabilities:
+- ka_ks
+- evolutionary_analysis
+capabilities_ontology:
+- evolutionary_analysis
+- ka_ks
+relations:
+  accepts:
+  - ALIGNMENT
+  produces:
+  - KAKS_TABLE
+  related_to:
+  - muscle

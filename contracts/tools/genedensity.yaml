@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: gxf
 help: 'genedensity: genedensity <in.gff3> <out.tsv> [binSize]'
-semantic_fingerprint: bc2e9e2049fff6d8
+semantic_fingerprint: bc2e9e2049fff6d879d4b7ef7d66c4e05032359dd729f5e2298069ac1bc98486
+semantic_fingerprint_short: bc2e9e2049fff6d8
 capabilities:
 - annotation
 capabilities_ontology:

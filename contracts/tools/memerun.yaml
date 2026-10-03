@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma'
-semantic_fingerprint: 67cf14531ce5aa06
+semantic_fingerprint: 71a9b415e2ec52efd2f35a11cc30187d8f587241121a518386c55370dd4066fc
+semantic_fingerprint_short: 71a9b415e2ec52ef
 capabilities:
 - motif
 - discovery
@@ -18,13 +19,11 @@ capabilities_ontology:
 - sequence.motif.discovery
 relations:
   accepts:
-  - FASTA
-  - GFF3
+  - PROTEIN_FASTA
   produces:
-  - SEQUENCE_ARTIFACT
-  related_to:
-  - muscle
-  - trimal
+  - MEME_XML
+  next_step:
+  - motif
 inputs:
 - name: fasta
   role: file

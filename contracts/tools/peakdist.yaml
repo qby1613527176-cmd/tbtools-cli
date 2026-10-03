@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: chipseq
 help: 'peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]'
-semantic_fingerprint: 600f0e3952a3b59f
+semantic_fingerprint: 600f0e3952a3b59f7fc0e3fff23d850da0697c7e39db6c44d4f527b71012b270
+semantic_fingerprint_short: 600f0e3952a3b59f
 capabilities:
 - chip_seq
 capabilities_ontology:

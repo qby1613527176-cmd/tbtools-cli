@@ -6,7 +6,8 @@ xmx: 2g
 runner: plot
 group: tree
 help: 无根树可视化
-semantic_fingerprint: 12443a183fcf7de8
+semantic_fingerprint: 12443a183fcf7de80f1d7368070ba74952de6cb65fd189e142ddbf19b0d75960
+semantic_fingerprint_short: 12443a183fcf7de8
 capabilities:
 - phylogeny
 capabilities_ontology:

@@ -7,7 +7,10 @@
  "class": "biocjava.bioIO.KaKs.DnDsCalculate",
  "description": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
  "invoke": "tbtools tool dnDsCalculate <args...>",
- "capabilities": [],
+ "capabilities": [
+  "ka_ks",
+  "evolutionary_analysis"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

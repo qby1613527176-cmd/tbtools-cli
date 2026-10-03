@@ -7,7 +7,10 @@
  "class": "biocjava.bioDoer.Fasta.ExtractFasta",
  "description": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
  "invoke": "tbtools tool extractFasta <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence",
+  "extraction"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

@@ -6,19 +6,18 @@ xmx: 2g
 runner: plot
 group: seq
 help: 基因结构图（外显子/UTR 从 GFF）
-semantic_fingerprint: fee8a467a05db715
+semantic_fingerprint: f289567206a63de178fbedec3a719253921e5a91ac21cffbf5d90081d6fc3b9f
+semantic_fingerprint_short: f289567206a63de1
 capabilities:
 - sequence
 capabilities_ontology:
 - sequence
 relations:
   accepts:
-  - FASTA
   - GFF3
   produces:
-  - SEQUENCE_ARTIFACT
+  - GENE_STRUCTURE_PLOT
   related_to:
-  - muscle
-  - trimal
+  - genestructure
 aliases:
 - genestructure

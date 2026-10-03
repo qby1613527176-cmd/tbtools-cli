@@ -7,7 +7,8 @@ runner: java
 group: seq
 help: 'fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   #
   FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）'
-semantic_fingerprint: 3fa550a5b46d3dbc
+semantic_fingerprint: 3fa550a5b46d3dbc858558e07969b5125024e33df5dcd11de20916d2eae0d263
+semantic_fingerprint_short: 3fa550a5b46d3dbc
 capabilities:
 - sequence
 capabilities_ontology:

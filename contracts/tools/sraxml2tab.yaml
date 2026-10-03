@@ -7,7 +7,8 @@ runner: java
 group: table
 help: 'sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向
   #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）'
-semantic_fingerprint: 440563d66ceb258d
+semantic_fingerprint: 440563d66ceb258d8d7c5a83ed8183c2111c9b2d8f290dd8041a39ac669f20e7
+semantic_fingerprint_short: 440563d66ceb258d
 capabilities:
 - table_operations
 capabilities_ontology:

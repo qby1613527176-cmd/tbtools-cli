@@ -6,7 +6,8 @@ xmx: 2g
 runner: plot
 group: tree
 help: 树+注释图（TreeTreeTree 多轨道）
-semantic_fingerprint: d483f0b0a822d008
+semantic_fingerprint: d483f0b0a822d0086ab0099306edd687a69d26a0c3222f85ef9cf4cb1e3c036f
+semantic_fingerprint_short: d483f0b0a822d008
 capabilities:
 - phylogeny
 capabilities_ontology:

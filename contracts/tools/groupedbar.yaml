@@ -8,7 +8,8 @@ group: expr
 help: "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader]\
   \ [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load\
   \ 崩溃——引擎缺陷）"
-semantic_fingerprint: fe94dcaec94252de
+semantic_fingerprint: fe94dcaec94252de037a2e36d4ff6d3c477e741645c87a2ae774ba496767cce2
+semantic_fingerprint_short: fe94dcaec94252de
 capabilities:
 - expression
 capabilities_ontology:

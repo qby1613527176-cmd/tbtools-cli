@@ -6,7 +6,8 @@ xmx: 2g
 runner: plot
 group: expr
 help: 热图（表达矩阵）
-semantic_fingerprint: 6b359528864de66c
+semantic_fingerprint: 6b359528864de66c5e3e1abf9e7ca07216874176a4a0f45a481db016d5d2b7c3
+semantic_fingerprint_short: 6b359528864de66c
 capabilities:
 - expression_matrix
 - clustering

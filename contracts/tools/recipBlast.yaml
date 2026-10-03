@@ -7,12 +7,15 @@ runner: plot
 group: blast
 help: 'recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix
   outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH
-  双向最优比对（⚠️ ArgsParser 风格：位置参数会被引擎忽略并静默退出——Bug3 实跑修复；依赖系统 blastp/makeblastdb）'
-semantic_fingerprint: be028cbdcc32b74b
+  双向最优比对（ArgsParser 风格：参数必须 --key value 形态；依赖系统 blastp/makeblastdb）'
+semantic_fingerprint: 1fb57ab5bcf2b5616b85b2ffc1ff99b4724fe5987682ac2305881cd265fd31d3
+semantic_fingerprint_short: 1fb57ab5bcf2b561
 capabilities:
 - homology
 - reciprocal_best_hit
+- blast
 capabilities_ontology:
+- blast
 - homology
 - reciprocal_best_hit
 - sequence
@@ -23,8 +26,11 @@ relations:
   - FASTA
   produces:
   - BLAST_HITS
+  - RBH_TABLE
   next_step:
   - filterCScore
+  related_to:
+  - twoSeqBlast
 inputs:
 - name: query
   role: file

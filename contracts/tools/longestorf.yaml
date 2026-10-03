@@ -7,7 +7,8 @@ runner: java
 group: seq
 help: 'longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17
   GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）'
-semantic_fingerprint: b68f99ffc8b0fe0a
+semantic_fingerprint: d4d6f5a9bcb6dd2e40561909cc7e9c2b6c4abc370c84c5782cdc2068672cea0d
+semantic_fingerprint_short: d4d6f5a9bcb6dd2e
 capabilities:
 - orf_prediction
 - sequence
@@ -17,13 +18,11 @@ capabilities_ontology:
 - sequence.orf-prediction
 relations:
   accepts:
-  - FASTA
-  - GFF3
+  - DNA_FASTA
   produces:
-  - SEQUENCE_ARTIFACT
+  - PROTEIN_FASTA
   related_to:
-  - muscle
-  - trimal
+  - sixframe
 inputs:
 - name: seq
   role: file

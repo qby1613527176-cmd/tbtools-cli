@@ -8,7 +8,8 @@ group: tree
 help: 'nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA]
   [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   #
   Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）'
-semantic_fingerprint: 2df1026ce328a7aa
+semantic_fingerprint: 2df1026ce328a7aa3078a63bff09c91253ca0e48ae8a98af5d27ce7cbe743495
+semantic_fingerprint_short: 2df1026ce328a7aa
 capabilities:
 - phylogeny
 capabilities_ontology:

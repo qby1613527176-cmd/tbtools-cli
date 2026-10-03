@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: asm
 help: 'bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）'
-semantic_fingerprint: e4d50eb122fb3872
+semantic_fingerprint: e4d50eb122fb3872b9a50be6f8313b27d0e9b6e0849c2a707751e6520997b9c4
+semantic_fingerprint_short: e4d50eb122fb3872
 capabilities:
 - assembly
 capabilities_ontology:

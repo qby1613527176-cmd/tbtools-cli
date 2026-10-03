@@ -9,7 +9,8 @@ help: 'blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wubl
   [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize
   N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra "opts"]   # BLAT 序列比对（GUI
   逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）'
-semantic_fingerprint: f7658639c4c71ce5
+semantic_fingerprint: f7658639c4c71ce5c0b1219f1e6eb1ebb09e77a0d896902e4fba161ca380a636
+semantic_fingerprint_short: f7658639c4c71ce5
 capabilities:
 - homology
 capabilities_ontology:

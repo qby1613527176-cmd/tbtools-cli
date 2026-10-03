@@ -860,15 +860,21 @@ def register_top(cli, _LG):
                             artifacts.append(_art.to_dict())
                             _found_any = True
                             if not os.path.isfile(_o):
-                                for _x in discover_outputs(_o):
+                                # 评审 #110 P0-1: 执行期新产物才认(mtime >= t0)——防捡旧 sibling
+                                for _x in discover_outputs(_o, created_after=t0):
                                     artifacts.append(_abuild(_x).to_dict())
                                     _found_any = True
                     except Exception:
                         pass
                 # 兜底: provenance 缺失但产物真实(手动/桥类引擎)——直接 build + prefix 发现
+                # 评审 #110 P0-1: 执行期新产物才认(created_after=t0)——旧 sibling 不算当前产物;
+                # 直接输出参数名 a 也须 mtime >= t0(防"程序失败但旧输出文件在"的假阳性)
                 if not _found_any:
                     _seen_paths = set()
-                    for _cand in ([a] + discover_outputs(a)):
+                    _cands = [a] if (os.path.isfile(a) and os.path.getsize(a) > 0
+                                     and os.path.getmtime(a) >= t0) else []
+                    _cands += discover_outputs(a, created_after=t0)
+                    for _cand in _cands:
                         if os.path.isfile(_cand) and os.path.getsize(_cand) > 0 \
                                 and os.path.abspath(_cand) not in _seen_paths:
                             _seen_paths.add(os.path.abspath(_cand))

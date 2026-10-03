@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: expr
 help: 'qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)'
-semantic_fingerprint: e4a11af334a8f0ac
+semantic_fingerprint: e4a11af334a8f0ac8f4f37d90bd6129c7869af3df3fa647684ac4d4e9fb6f125
+semantic_fingerprint_short: e4a11af334a8f0ac
 capabilities:
 - expression
 capabilities_ontology:

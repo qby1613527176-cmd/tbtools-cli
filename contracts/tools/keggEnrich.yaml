@@ -7,7 +7,8 @@ runner: java
 group: table
 help: 'keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   #
   KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）'
-semantic_fingerprint: b7cb5c2a82e78753
+semantic_fingerprint: b7cb5c2a82e787536a49ffedcafbe078e60534bb7599f0725c320fcec52fd6f6
+semantic_fingerprint_short: b7cb5c2a82e78753
 capabilities:
 - enrichment
 - pathway

@@ -168,6 +168,201 @@
    "next_step": [
     "tpmCalc"
    ]
+  },
+  "recipBlast": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS",
+    "RBH_TABLE"
+   ],
+   "next_step": [
+    "filterCScore"
+   ],
+   "related_to": [
+    "twoSeqBlast"
+   ]
+  },
+  "twoSeqBlast": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "BLAST_HITS"
+   ],
+   "related_to": [
+    "recipBlast"
+   ]
+  },
+  "extractFasta": {
+   "accepts": [
+    "FASTA",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "SEQUENCE_SUBSET",
+    "FASTA"
+   ],
+   "related_to": [
+    "extractFastaSub"
+   ]
+  },
+  "statFasta": {
+   "accepts": [
+    "FASTA"
+   ],
+   "produces": [
+    "FASTA_STATS",
+    "TSV"
+   ],
+   "related_to": [
+    "fastaExtract"
+   ]
+  },
+  "dnDsCalculate": {
+   "accepts": [
+    "ALIGNMENT"
+   ],
+   "produces": [
+    "KAKS_TABLE"
+   ],
+   "related_to": [
+    "muscle"
+   ]
+  },
+  "hmmsearch": {
+   "accepts": [
+    "FASTA",
+    "HMM_PROFILE"
+   ],
+   "produces": [
+    "HMM_HITS",
+    "TSV"
+   ]
+  },
+  "sixframe": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "PROTEIN_FASTA"
+   ],
+   "related_to": [
+    "longestorf"
+   ]
+  },
+  "longestorf": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "PROTEIN_FASTA"
+   ],
+   "related_to": [
+    "sixframe"
+   ]
+  },
+  "memerun": {
+   "accepts": [
+    "PROTEIN_FASTA"
+   ],
+   "produces": [
+    "MEME_XML"
+   ],
+   "next_step": [
+    "motif"
+   ]
+  },
+  "tfbsShift": {
+   "accepts": [
+    "MEME_XML"
+   ],
+   "produces": [
+    "TFBS_TABLE"
+   ],
+   "related_to": [
+    "motif"
+   ]
+  },
+  "pep2codon": {
+   "accepts": [
+    "PROTEIN_ALIGNMENT"
+   ],
+   "produces": [
+    "CODON_ALIGNMENT"
+   ],
+   "related_to": [
+    "muscle"
+   ]
+  },
+  "structure": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "GENE_STRUCTURE_PLOT"
+   ],
+   "related_to": [
+    "genestructure"
+   ]
+  },
+  "mastExtract": {
+   "accepts": [
+    "MEME_XML",
+    "HMM_HITS"
+   ],
+   "produces": [
+    "SEQUENCE_SUBSET"
+   ],
+   "related_to": [
+    "memerun"
+   ]
+  },
+  "hmmerSearch": {
+   "accepts": [
+    "FASTA",
+    "HMM_PROFILE"
+   ],
+   "produces": [
+    "HMM_HITS"
+   ],
+   "related_to": [
+    "hmmsearch"
+   ]
+  },
+  "calcRepeat": {
+   "accepts": [
+    "DNA_FASTA"
+   ],
+   "produces": [
+    "REPEAT_SCAN"
+   ],
+   "related_to": [
+    "careclassify"
+   ]
+  },
+  "smart": {
+   "accepts": [
+    "PROTEIN_FASTA"
+   ],
+   "produces": [
+    "DOMAIN_ANNOTATION"
+   ],
+   "related_to": [
+    "cddmotif"
+   ]
+  },
+  "memeViz": {
+   "accepts": [
+    "MEME_XML"
+   ],
+   "produces": [
+    "MOTIF_PLOT"
+   ],
+   "related_to": [
+    "memerun"
+   ]
   }
  }
 }

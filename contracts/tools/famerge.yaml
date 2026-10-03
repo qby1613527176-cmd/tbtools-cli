@@ -6,7 +6,8 @@ xmx: 2g
 runner: java
 group: seq
 help: 'famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）'
-semantic_fingerprint: c1152b3a63e594b5
+semantic_fingerprint: c1152b3a63e594b537c82ae38ef79e600675f826464420dd6d385ec172fc14da
+semantic_fingerprint_short: c1152b3a63e594b5
 capabilities:
 - sequence
 capabilities_ontology:

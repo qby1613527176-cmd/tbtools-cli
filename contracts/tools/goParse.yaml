@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: table
 help: 'goParse: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103'
-semantic_fingerprint: 0c8d5609330fc154
+semantic_fingerprint: 0c8d5609330fc1543be3c3b172630fa9d7546e37619d2e23b5173c62a3685a32
+semantic_fingerprint_short: 0c8d5609330fc154
 capabilities:
 - table_operations
 capabilities_ontology:

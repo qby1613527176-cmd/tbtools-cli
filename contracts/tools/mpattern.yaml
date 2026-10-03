@@ -8,7 +8,8 @@ group: seq
 help: 'mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval]
   [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI
   逆向接口，postGraph(String,panel) 重载绕弹窗）'
-semantic_fingerprint: efa193ae4b42183a
+semantic_fingerprint: efa193ae4b42183aca0318240c47294581b78ac2b94000ccb482aeda9d2fd7fa
+semantic_fingerprint_short: efa193ae4b42183a
 capabilities:
 - sequence
 capabilities_ontology:

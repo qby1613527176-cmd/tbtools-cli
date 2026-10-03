@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableCast: tableCast <inLong.txt> <outMatrix>'
-semantic_fingerprint: 13d9d90c24f81e1a
+semantic_fingerprint: 13d9d90c24f81e1af541e1f712403c80c7769d19bf8a6591dc09bfc68b3d3233
+semantic_fingerprint_short: 13d9d90c24f81e1a
 capabilities:
 - table_operations
 capabilities_ontology:

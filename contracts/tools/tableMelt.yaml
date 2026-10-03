@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: table
 help: 'tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）'
-semantic_fingerprint: 31d26bf2cc2353c7
+semantic_fingerprint: 31d26bf2cc2353c71f9a8b994a86af2869fd85f570b44251adc2cc7a700831a4
+semantic_fingerprint_short: 31d26bf2cc2353c7
 capabilities:
 - table_operations
 capabilities_ontology:

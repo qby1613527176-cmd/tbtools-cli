@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]'
-semantic_fingerprint: dd3f05afb8548a38
+semantic_fingerprint: dd3f05afb8548a38f6357b8ad6b07af7a2b8790e75b1ce4baa2e44d31d82ddb0
+semantic_fingerprint_short: dd3f05afb8548a38
 capabilities:
 - sequence
 capabilities_ontology:
@@ -19,6 +20,9 @@ dependency_manifest:
   required: true
   platforms:
   - linux
+  executable: RNAfold
+  version_args:
+  - --version
 relations:
   accepts:
   - FASTA

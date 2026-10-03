@@ -7,7 +7,10 @@
  "class": "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
  "description": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
  "invoke": "tbtools tool statFasta <args...>",
- "capabilities": [],
+ "capabilities": [
+  "sequence",
+  "statistics"
+ ],
  "inputs": [],
  "outputs": [],
  "status": "stable"

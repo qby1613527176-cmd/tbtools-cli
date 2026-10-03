@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: tree
 help: 'degramdom: degramdom <in.tsv> [out.nwk]'
-semantic_fingerprint: 85cb76e6f2ff869e
+semantic_fingerprint: 85cb76e6f2ff869eea68cac9e6ff5a41510bc1f221b460bc913682ee513953c1
+semantic_fingerprint_short: 85cb76e6f2ff869e
 capabilities:
 - phylogeny
 capabilities_ontology:

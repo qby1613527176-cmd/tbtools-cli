@@ -8,7 +8,8 @@ group: sets
 help: 'upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap
   N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode
   Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）'
-semantic_fingerprint: d1b264e79738c6df
+semantic_fingerprint: d1b264e79738c6dfcc9043b90e505e4cbe8e67499dc6daf05fb3f4541a0be9db
+semantic_fingerprint_short: d1b264e79738c6df
 capabilities:
 - set_operations
 capabilities_ontology:

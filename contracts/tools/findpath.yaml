@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: tree
 help: 'findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --'
-semantic_fingerprint: b80f5745be4f0ae8
+semantic_fingerprint: b80f5745be4f0ae8f7f0b9edf3ac1d2a5813d4f8d3ff043efd24bb1ffa58b0ab
+semantic_fingerprint_short: b80f5745be4f0ae8
 capabilities:
 - phylogeny
 capabilities_ontology:

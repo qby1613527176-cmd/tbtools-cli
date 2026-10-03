@@ -11,11 +11,9 @@
   "makemotif",
   "mast",
   "mast2tab",
-  "mastExtract",
   "meme",
   "meme2tab",
   "mpattern",
-  "pep2codon",
   "pfammotif",
   "plotrna",
   "rnaplot",
@@ -32,6 +30,8 @@
   "famerge",
   "gb2fa",
   "seqfetch",
+  "extractFasta",
+  "statFasta",
   "logo",
   "structure",
   "fa2tab",
@@ -55,6 +55,7 @@
   "gxfRepGXF",
   "gxfRepIDs",
   "gxfStat",
+  "preparespecies",
   "regionAnno",
   "bed2gff3",
   "gxfAttr",
@@ -71,7 +72,6 @@
   "ctgGroup",
   "hicEnzyme",
   "homoPhase",
-  "preparespecies",
   "sepChr",
   "virusRecomb"
  ],
@@ -184,7 +184,8 @@
  ],
  "extraction": [
   "fastaExtract",
-  "fastaSubseq"
+  "fastaSubseq",
+  "extractFasta"
  ],
  "homology": [
   "filterCScore",
@@ -198,6 +199,7 @@
   "xml2pairwise",
   "bestid",
   "getseqdb",
+  "hmmerSearch",
   "quickAnno"
  ],
  "filtering": [
@@ -228,6 +230,7 @@
   "keggEnrich"
  ],
  "motif": [
+  "mastExtract",
   "mastrun",
   "memerun",
   "motif",
@@ -235,6 +238,9 @@
   "memeViz",
   "tfbsShift",
   "seqlogo"
+ ],
+ "sequence_extraction": [
+  "mastExtract"
  ],
  "scanning": [
   "mastrun",
@@ -258,7 +264,20 @@
  "peak_calling": [
   "peaktss"
  ],
+ "translation": [
+  "pep2codon",
+  "sixframe"
+ ],
+ "codon": [
+  "pep2codon"
+ ],
+ "genome_preparation": [
+  "preparespecies"
+ ],
  "reciprocal_best_hit": [
+  "recipBlast"
+ ],
+ "blast": [
   "recipBlast"
  ],
  "set_operations": [
@@ -268,9 +287,6 @@
   "venn4",
   "venn5",
   "venn6"
- ],
- "translation": [
-  "sixframe"
  ],
  "orf_prediction": [
   "longestorf"
@@ -286,6 +302,15 @@
  ],
  "normalization": [
   "tpmCalc"
+ ],
+ "ka_ks": [
+  "dnDsCalculate"
+ ],
+ "evolutionary_analysis": [
+  "dnDsCalculate"
+ ],
+ "statistics": [
+  "statFasta"
  ],
  "differential_expression": [
   "volcano",
@@ -306,7 +331,8 @@
   "hclust"
  ],
  "hmm_scan": [
-  "hmmsearch"
+  "hmmsearch",
+  "hmmerSearch"
  ],
  "quantification": [
   "kallisto"

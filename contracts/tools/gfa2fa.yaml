@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: seq
 help: 'gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast'
-semantic_fingerprint: d5b8df410e01a8ea
+semantic_fingerprint: d5b8df410e01a8eae4528d6c203e916d445cc9a69ee51cd1b40c628b4777c659
+semantic_fingerprint_short: d5b8df410e01a8ea
 capabilities:
 - sequence
 capabilities_ontology:

@@ -7,7 +7,8 @@ runner: java
 group: gxf
 help: 'bed2gff3 <in.bed> <out.gff3> [genome.fa]   # exon BED→GFF3（GUI 逆向 #21 RegionBedToGFF3；⚠️
   BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）'
-semantic_fingerprint: 83dd1a2d2a5eb6bd
+semantic_fingerprint: 83dd1a2d2a5eb6bd8ccd3bb096154d7cbcb6d7565c6996a225a00120f8971bb3
+semantic_fingerprint_short: 83dd1a2d2a5eb6bd
 capabilities:
 - annotation
 capabilities_ontology:

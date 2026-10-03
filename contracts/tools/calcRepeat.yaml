@@ -6,7 +6,8 @@ xmx: 3g
 runner: plot
 group: engine
 help: 'calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min'
-semantic_fingerprint: f408f13eb3ae4581
+semantic_fingerprint: 6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca
+semantic_fingerprint_short: 6fcdc59ed0ece961
 dependencies:
 - jellyfish
 dependency_manifest:
@@ -16,6 +17,16 @@ dependency_manifest:
   platforms:
   - linux
   - macos
+  executable: jellyfish
+  version_args:
+  - --version
+relations:
+  accepts:
+  - DNA_FASTA
+  produces:
+  - REPEAT_SCAN
+  related_to:
+  - careclassify
 inputs:
 - name: fasta
   role: file

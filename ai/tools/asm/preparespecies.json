@@ -8,7 +8,8 @@
  "description": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
  "invoke": "tbtools asm preparespecies <args...>",
  "capabilities": [
-  "assembly"
+  "genome_preparation",
+  "annotation"
  ],
  "inputs": [
   {
