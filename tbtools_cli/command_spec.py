@@ -36,6 +36,9 @@ class InputSpec:
     columns: list[str] | None = None  # 列名契约(评审 #31: Agent 语义校验)
     # 生物学语义类型(biological semantic type;防 protein 进 dna 工具)
     content_type: str = "generic"  # dna | protein | alignment | table | annotation | tree | generic
+    # 引擎真实 flag(评审 #110 建议④): ArgsParser 工具的 inputs 与引擎参数名可能不同
+    # (tpmCalc: spec counts → 引擎 --countsTable); build_argv 据此拼 --flag value
+    cli_name: str = ""
 
 
 
@@ -154,10 +157,22 @@ class InvocationSpec:
             if output:
                 argv += [self.named_flags.get("output", "--output"), str(output)]
         else:
-            # positional 布局(默认): [输入(按声明序)] [输出路径]
-            argv += [str(i) for i in inputs]
-            if output:
-                argv.append(str(output))
+            # positional/flag 布局(默认): 任一 input 声明了 cli_name → 引擎是 ArgsParser 风格,
+            # 按 --flag value 拼(评审 #110 建议④: tpmCalc spec counts → 引擎 --countsTable);
+            # 否则纯位置参数 [输入(按声明序)] [输出路径]
+            _any_flag = any(getattr(i, "cli_name", "") for i in self.inputs)
+            if _any_flag:
+                for idx, path in enumerate(inputs):
+                    _cn = getattr(self.inputs[idx], "cli_name", "") if idx < len(self.inputs) else ""
+                    argv += [_cn or f"--{self.inputs[idx].name if idx < len(self.inputs) else 'in' + str(idx)}",
+                             str(path)]
+                if output:
+                    _out_cn = self.named_flags.get("output", "--output") if self.named_flags else "--output"
+                    argv += [_out_cn, str(output)]
+            else:
+                argv += [str(i) for i in inputs]
+                if output:
+                    argv.append(str(output))
         return argv
 
 
@@ -212,6 +227,8 @@ KNOWN_NAMED_FLAGS = {
     "venn3": {"inputs": {"list1": "--List1", "list2": "--List2", "list3": "--List3"}, "output": "--graph"},
     "recipBlast": {"inputs": {"query": "--querySeqFile", "subject": "--subjectSeqFile"},
                    "output": "--outDirAndPrefix"},
+    "tpmCalc": {"inputs": {"counts": "--countsTable", "lenInfo": "--lenInfo"},
+                 "output": "--outTable"},
     "autoMakeBlastDb": {"inputs": {"fasta": "--inFasta"}, "output": "--outBase"},
 }
 
@@ -398,7 +415,8 @@ KNOWN_SCHEMAS = {
     "venn4": ([InputSpec("list1", format="txt"), InputSpec("list2", format="txt"),
                InputSpec("list3", format="txt"), InputSpec("list4", format="txt")], ["svg"]),
     "upset": ([InputSpec("sets", format="txt", note="多个集合文件, 末参为输出")], ["svg"]),
-    "tpmCalc": ([InputSpec("counts", format="tsv", note="counts 表"), InputSpec("lenInfo", format="tsv", columns=["GeneID", "Length"])], ["tsv"]),
+    "tpmCalc": ([InputSpec("counts", format="tsv", note="counts 表", cli_name="--countsTable"),
+                   InputSpec("lenInfo", format="tsv", columns=["GeneID", "Length"], cli_name="--lenInfo")], ["tsv"]),
     "gxfSplit": ([InputSpec("gff", format="gff3")], ["tsv"]),
     "gxfAttr": ([InputSpec("gff", format="gff3")], ["tsv"]),
     "gxfIdAppender": ([InputSpec("gff", format="gff3")], ["gff3"]),

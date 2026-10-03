@@ -50,6 +50,8 @@ EXEC_VERIFIED = {
                               "--renameMap", "examples/data/gxf/rename.map.tsv", "--outNwk", "{out}.nwk"]),
     "tableMerge": ("table", ["--inFileArr", "examples/data/table/reshape/tab1.txt,examples/data/table/reshape/tab2.txt",
                              "--inColIndexArr", "0,1", "--outTable", "{out}.tsv"]),
+    "tpmCalc": ("tool", ["--countsTable", "examples/data/expression/counts.tsv",
+                           "--lenInfo", "examples/data/expression/gene_len.tsv", "--outTable", "{out}.tsv"]),
     "treeRooting": ("tree", ["examples/data/treeRooting/unrooted.nwk", "{out}.nwk"]),
     "upset": ("sets", ["examples/data/set_0.txt", "examples/data/set_1.txt", "{out}.svg"]),
     "venn3": ("sets", ["--List1", "examples/data/set_0.txt", "--List2", "examples/data/set_1.txt",
