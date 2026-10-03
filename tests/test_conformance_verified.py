@@ -63,6 +63,11 @@ EXEC_VERIFIED = {
                         "--graph", "{out}.svg", "--prefix", "{out}"]),
 }
 
+# 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
+# (compile→execute→artifact→sha256→provenance→artifact_id, test_conformance.py 金链测试驱动)
+# volcano 是首个金链标杆(6 步全断言); 升级条件: 跑成功+产物语义+sha256+provenance+artifact_id 全验
+CONFORMANCE_VERIFIED = {"volcano"}
+
 
 class TestTier1CompileVerified:
     """59 FULL 全部 compile-verified(契约编译行为一致)"""
@@ -100,6 +105,7 @@ class TestTier1CompileVerified:
             }
         _report = {"compile_verified": sorted(verified),
                    "execution_verified": sorted(EXEC_VERIFIED.keys()),
+                   "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
                    "execution_verified_details": _exec_entries}
         _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
                  indent=1)

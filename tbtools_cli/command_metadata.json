@@ -9,7 +9,9 @@
   "group": "engine",
   "help": "admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor",
   "semantic_fingerprint": "72802aaef6864d7ddbb1b4db91400ce168dfa4b10d48bf1dfa0b0288c28509c9",
-  "semantic_fingerprint_short": "72802aaef6864d7d"
+  "semantic_fingerprint_short": "72802aaef6864d7d",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "admixtureViz": {
   "name": "admixtureViz",
@@ -21,7 +23,9 @@
   "group": "engine",
   "help": "admixtureViz: admixtureViz <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id samples.txt] [--group group.txt] [--sort Qraito|Lexical|None]   # ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id）",
   "semantic_fingerprint": "5c16ece73ca1f6146db7cfc52d1f50c8cb88e17665c26961c7d76d478c33c53f",
-  "semantic_fingerprint_short": "5c16ece73ca1f614"
+  "semantic_fingerprint_short": "5c16ece73ca1f614",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "amazingmeta": {
   "name": "amazingmeta",
@@ -34,6 +38,8 @@
   "help": "amazingmeta: amazingmeta <meme.xml> <newick.treefile> <out.svg|png|pdf> [",
   "semantic_fingerprint": "6296bc8b2ab5651f62a2b0fd49184a75565ac012f3c88a90edcf448fe49b53a6",
   "semantic_fingerprint_short": "6296bc8b2ab5651f",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -65,6 +71,8 @@
   "help": "annocompare: annocompare <before.gff3> <after.gff3> <outDir> [runName] [r",
   "semantic_fingerprint": "f6a15369a7abb0e5eb8bf73cd627fece69a21154a5b38c4143a54e2716463b4b",
   "semantic_fingerprint_short": "f6a15369a7abb0e5",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -93,6 +101,8 @@
   "help": "bamMerge: bamMerge <gtf> <bamDir> <outDir>   # 按区域覆盖合并 BAM（多样本择优）",
   "semantic_fingerprint": "e4d50eb122fb3872b9a50be6f8313b27d0e9b6e0849c2a707751e6520997b9c4",
   "semantic_fingerprint_short": "e4d50eb122fb3872",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -122,6 +132,8 @@
   "help": "bamindex: bamindex <in.sorted.bam> [out.bai]",
   "semantic_fingerprint": "ed2e246b70eaed1701691094e1851ed7f18d9ca598ef1050cc671abe08f47d8e",
   "semantic_fingerprint_short": "ed2e246b70eaed17",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -151,6 +163,8 @@
   "help": "bamsort: bamsort <in.bam> <out.bam> [sortOrder] [tmpDir]",
   "semantic_fingerprint": "3eaf021340c2f4d96b4eba83352067b0f2c52fc4982339e38ed2a1a13405df9d",
   "semantic_fingerprint_short": "3eaf021340c2f4d9",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -180,6 +194,8 @@
   "help": "bamstate: bamstate <out.tsv> <gff3> <bam1> [<bam2> ...]",
   "semantic_fingerprint": "2a925645de786db767d82bb6ad1d3fc0e4fcfcc9233c71463e22544aa4fe0836",
   "semantic_fingerprint_short": "2a925645de786db7",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -209,6 +225,8 @@
   "help": "barplot: barplot <enrichment.tsv> <out> <termCol> <pvalCol> [classCol",
   "semantic_fingerprint": "ffedb6eb2a0bdbd75253b375e6db47fbb7c5e735c3940f3a018909218bcc758a",
   "semantic_fingerprint_short": "ffedb6eb2a0bdbd7",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "expression"
   ],
@@ -262,6 +280,8 @@
   "help": "barplotter: barplotter -g <gff> -s <synteny> -c <ctl> -o <out.png>",
   "semantic_fingerprint": "ecf52b04c2a7f494326fd23b8841a3e9d1df75fcb21d61e5ad28a8dd8d5f9182",
   "semantic_fingerprint_short": "ecf52b04c2a7f494",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "expression"
   ],
@@ -317,6 +337,8 @@
   "help": "batchReplace: batchReplace <inFile> <outFile> <patternMap.tsv> [--partial]",
   "semantic_fingerprint": "66dae2417ed486ef06783acc8ad731f2df628a338cd89c85948404d45bb7253c",
   "semantic_fingerprint_short": "66dae2417ed486ef",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -344,6 +366,8 @@
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
   "semantic_fingerprint": "6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca",
   "semantic_fingerprint_short": "6fcdc59ed0ece961",
+  "readiness": "PARTIAL",
+  "verification": "COMPILEABLE",
   "dependencies": [
    "jellyfish"
   ],
@@ -404,6 +428,8 @@
   "help": "cddmotif: cddmotif <cdd.hitdata.txt> <in.fasta> <out.svg|png|pdf> [new",
   "semantic_fingerprint": "55dc246c5b1f74e78c32477fdda099fa64dde4a46a59370836cbb1df41d565ef",
   "semantic_fingerprint_short": "55dc246c5b1f74e7",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -435,6 +461,8 @@
   "help": "circlegene: circlegene <gff> <geneID.txt> <out> [--rename f --link f --r",
   "semantic_fingerprint": "9742dca57b1097a9152f253383b346f53a4bf490cb24877752308e03da47ddaf",
   "semantic_fingerprint_short": "9742dca57b1097a9",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -471,6 +499,8 @@
   "help": "circos: circos <chrLen.txt> <link.txt> <genePos.txt> <outFile> [w] [",
   "semantic_fingerprint": "b284199ee081c72fe0c5a9b1c8c23a6bbe4faf80f6ba1ec5721aa596a12029eb",
   "semantic_fingerprint_short": "b284199ee081c72f",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "visualization",
    "genome_circos"
@@ -541,6 +571,8 @@
   "help": "collinearRegion: collinearRegion <in.collinearity> <simGff> <out.txt>",
   "semantic_fingerprint": "96f554e7e3c0e079fd0f98379f7dfe9493d344dce4bc0411c2b4bd76deb20c5a",
   "semantic_fingerprint_short": "96f554e7e3c0e079",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny",
    "visualization"
@@ -579,6 +611,8 @@
   "help": "colorscheme: colorscheme <inTab> <outTab> <refColIndex>",
   "semantic_fingerprint": "9fde4cc288aa0402b14e97c9dd83cac898ccd24d46f2b8b5622caac9bb18b1fb",
   "semantic_fingerprint_short": "9fde4cc288aa0402",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -609,6 +643,8 @@
   "help": "conflictpaf: conflictpaf <in.paf> <out.tsv> [binSize]",
   "semantic_fingerprint": "7472d4677f6789c958c80ab8373c8cdc864a742130c2fe668f01e65b26b9614b",
   "semantic_fingerprint_short": "7472d4677f6789c9",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -645,6 +681,8 @@
   "help": "ctgGroup: ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap>",
   "semantic_fingerprint": "1c58f155d771102d9079bda0ca3fb86c7588359014b1adacdc4f7eb431fe808e",
   "semantic_fingerprint_short": "1c58f155d771102d",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -674,6 +712,8 @@
   "help": "cubeheatmap: cubeheatmap <expr.tsv> <group.tsv> <out> [--log10 --minColor <c> --midColor <c> --maxColor <c>]   # 3D 立方体热图（N4: group.tsv 引擎对列数有严格假设，官方 cube_group.tsv 仍会 ArrayIndexOutOfBounds——引擎缺陷；喂分组格式: 行=样本/基因，列数须与引擎预期一致，建议先 tbtools check）",
   "semantic_fingerprint": "07908b81679d125b4da84e4dbdc17220d7409619317aab4dd9ed6e907ce36216",
   "semantic_fingerprint_short": "07908b81679d125b",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -705,6 +745,8 @@
   "help": "degramdom: degramdom <in.tsv> [out.nwk]",
   "semantic_fingerprint": "85cb76e6f2ff869eea68cac9e6ff5a41510bc1f221b460bc913682ee513953c1",
   "semantic_fingerprint_short": "85cb76e6f2ff869e",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -735,6 +777,8 @@
   "help": "distance: distance <in.tsv> <col1> <col2> <euclidean|pearson|pearsonDi",
   "semantic_fingerprint": "fbfd0b3814dd955b684021e6eb8e0f6c111511e3167b5cfc934b74a8cd8840d8",
   "semantic_fingerprint_short": "fbfd0b3814dd955b",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -765,6 +809,8 @@
   "help": "dotplot: dotplot --inGff <gff> --genePair <pairs> --chrLayout <layout",
   "semantic_fingerprint": "0717ec6260d82cf7ffb9892fdd78bc2f5deb7c0d65fd1d723912882162a95417",
   "semantic_fingerprint_short": "0717ec6260d82cf7",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny",
    "visualization"
@@ -821,6 +867,8 @@
   "help": "dualsyn: dualsyn <simplifiedGff> <collinearity> <out> [--chr1 \"1,2\"] ",
   "semantic_fingerprint": "2059700e92dcb787236621e38d0a029c30cdd58f9ba5c2e9151da3e4256c69bf",
   "semantic_fingerprint_short": "2059700e92dcb787",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny",
    "visualization"
@@ -895,6 +943,8 @@
   "help": "efpHeat: efpHeat <inTGA> <sample2cc.txt> <expMat.tsv> <geneId> <out.s",
   "semantic_fingerprint": "53c102f7f83af3fa35d2e0dbae58b7d8f4a3017fd7af0611f333fa0094cabd24",
   "semantic_fingerprint_short": "53c102f7f83af3fa",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "expression",
    "visualization"
@@ -951,7 +1001,9 @@
   "group": "engine",
   "help": "eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb> [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）",
   "semantic_fingerprint": "b6fd91f6e9cb34b80c5a723c1975476f583691f568b89a5f1221f6221599fe10",
-  "semantic_fingerprint_short": "b6fd91f6e9cb34b8"
+  "semantic_fingerprint_short": "b6fd91f6e9cb34b8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "exprCorr": {
   "name": "exprCorr",
@@ -964,6 +1016,8 @@
   "help": "exprCorr: exprCorr <inFPKM> <outCorrMat>",
   "semantic_fingerprint": "830cf209013fa98ab167255f00655b8399da907c36fff85aa4ac90da9143d91e",
   "semantic_fingerprint_short": "830cf209013fa98a",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -994,6 +1048,8 @@
   "help": "fastaExtract: fastaExtract <in.fa> <idList.txt> <out.fa> [--mode Match|Con",
   "semantic_fingerprint": "077e329a4b8b134af782632c4a2e776d8de7dd60971c5c76b9e513c89394962a",
   "semantic_fingerprint_short": "077e329a4b8b134a",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence",
    "extraction"
@@ -1027,6 +1083,8 @@
   "help": "fastaSubseq: fastaSubseq <in.fa> <pos.txt> <out.fa>   # 按坐标提子序列（第92引擎，Ext",
   "semantic_fingerprint": "bf1fd0e9525a3eab857fe36795530fc44f5605d22a2559d2e57b2eae17c8a8fb",
   "semantic_fingerprint_short": "bf1fd0e9525a3eab",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence",
    "extraction"
@@ -1059,7 +1117,9 @@
   "group": "engine",
   "help": "filesplit: filesplit <inFile> <numParts>",
   "semantic_fingerprint": "0b6a6da33d2d25d17775196b6c291deca67319c442e9f5484ce537b552184a26",
-  "semantic_fingerprint_short": "0b6a6da33d2d25d1"
+  "semantic_fingerprint_short": "0b6a6da33d2d25d1",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "filterCScore": {
   "name": "filterCScore",
@@ -1072,6 +1132,8 @@
   "help": "filterCScore: filterCScore <in.blast.tab6> <out.tab6> [--cscore 0.5]",
   "semantic_fingerprint": "95bcec6568caac44b7bc944681fece658dc2e6d8fde222b9524cb24560fbec5f",
   "semantic_fingerprint_short": "95bcec6568caac44",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology",
    "filtering"
@@ -1106,6 +1168,8 @@
   "help": "findblockdual: findblockdual <queryGenome.fa> <query.gff> <subjectGenome.fa",
   "semantic_fingerprint": "3726af5083c5ff35c1d4360dc46cf577c99e52e06d76a92ebc999520694d2f0d",
   "semantic_fingerprint_short": "3726af5083c5ff35",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -1142,6 +1206,8 @@
   "help": "findblockmultiple: findblockmultiple <queryGenome.fa> <query.gff> <queryId> <ou",
   "semantic_fingerprint": "b4db67f7963df90bf8750e562667f535eb7cf4b84d9955c7c687aa375c892320",
   "semantic_fingerprint_short": "b4db67f7963df90b",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -1178,6 +1244,8 @@
   "help": "findpath: findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> --",
   "semantic_fingerprint": "b80f5745be4f0ae8f7f0b9edf3ac1d2a5813d4f8d3ff043efd24bb1ffa58b0ab",
   "semantic_fingerprint_short": "b80f5745be4f0ae8",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -1208,6 +1276,8 @@
   "help": "fqTrim: fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N]",
   "semantic_fingerprint": "bbfb6e5b9f66956843c3aafb1344e54a288e68b3d677dd86eb25824fe75f9822",
   "semantic_fingerprint_short": "bbfb6e5b9f669568",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "ngs",
    "preprocessing"
@@ -1243,6 +1313,8 @@
   "help": "fqfaConv: fqfaConv <input> <output> <fq2fa|fa2fq>   # FASTQ/FASTA 互转（第",
   "semantic_fingerprint": "d9173071cdf18995e670f9357f1cba5384042cc7abcabc1e00f76ab84a0d3393",
   "semantic_fingerprint_short": "d9173071cdf18995",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence",
    "conversion"
@@ -1277,6 +1349,8 @@
   "semantic_fingerprint": "19f9450581e9a6306a8e7364a0037756c0f2248053c3b8cc9032e41446761e60",
   "semantic_fingerprint_short": "19f9450581e9a630",
   "alias_of": "groupedbar",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -1308,6 +1382,8 @@
   "semantic_fingerprint": "25f2e2cab13fd265252862f3cbb46daee5f9a7856f07a05dddef6d676439d0b5",
   "semantic_fingerprint_short": "25f2e2cab13fd265",
   "alias_of": "genedensity",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1336,6 +1412,8 @@
   "help": "gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶电泳图（GelImage.Marker；⚠️ 无参调用会挂起 N32）",
   "semantic_fingerprint": "d18be74d2d31cb52f4de1c9dca88d36a3e9d49a412272b12f7397b0b83e6966f",
   "semantic_fingerprint_short": "d18be74d2d31cb52",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "sequence"
   ],
@@ -1385,6 +1463,8 @@
   "help": "genedensity: genedensity <in.gff3> <out.tsv> [binSize]",
   "semantic_fingerprint": "bc2e9e2049fff6d879d4b7ef7d66c4e05032359dd729f5e2298069ac1bc98486",
   "semantic_fingerprint_short": "bc2e9e2049fff6d8",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1416,6 +1496,8 @@
   "help": "genelocation: genelocation --ChrLen <chrlen> --FeaturePos <pos> --OutGraph",
   "semantic_fingerprint": "bfd6548eb18a3094e3453ea94d05f5401dbd3c395b3b7498b58e39eaee51e139",
   "semantic_fingerprint_short": "bfd6548eb18a3094",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation",
    "visualization"
@@ -1446,6 +1528,8 @@
   "help": "genelocgff: genelocgff <gff3> <idList> <out> [--chrLen len.tsv] [--renam",
   "semantic_fingerprint": "541ac77f00942ce7688949d68713cee43bf0368824e547d75663acc09763bdef",
   "semantic_fingerprint_short": "541ac77f00942ce7",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "annotation"
   ],
@@ -1498,7 +1582,9 @@
   "group": "engine",
   "help": "generic: generic <engineClass> <method[+method2]> <out> [--set field ",
   "semantic_fingerprint": "6dbc9f444a64a2d52725eef5369a0990457d22b9d450b4d5de1df57c81f521b2",
-  "semantic_fingerprint_short": "6dbc9f444a64a2d5"
+  "semantic_fingerprint_short": "6dbc9f444a64a2d5",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "gfa": {
   "name": "gfa",
@@ -1511,6 +1597,8 @@
   "help": "gfa: gfa <in.gfa> <out> [width] [height]",
   "semantic_fingerprint": "3dc752d91b0fb46f17d5002f91e172d84a042973ca6f7301f29f46c4182c24e6",
   "semantic_fingerprint_short": "3dc752d91b0fb46f",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -1542,6 +1630,8 @@
   "help": "gfa2fa: gfa2fa <in.gfa> <out.fa>   # GFA 组装图 → FASTA（第91引擎，GFAtoFast",
   "semantic_fingerprint": "d5b8df410e01a8eae4528d6c203e916d445cc9a69ee51cd1b40c628b4777c659",
   "semantic_fingerprint_short": "d5b8df410e01a8ea",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -1573,6 +1663,8 @@
   "help": "goEnrich: goEnrich <go.obo> <gene2go.tsv> <selectGenes.txt> <outDir>   # GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐）",
   "semantic_fingerprint": "390ad02a4e26751236fe8ec369badb5fb05e57b2a8e94aff32c5a5607202010a",
   "semantic_fingerprint_short": "390ad02a4e267512",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "enrichment",
    "gene_ontology"
@@ -1631,6 +1723,8 @@
   "help": "goParse: goParse <gene2Go.txt> <oboFile> [--level N]   # GO 词典解析（第103",
   "semantic_fingerprint": "0c8d5609330fc1543be3c3b172630fa9d7546e37619d2e23b5173c62a3685a32",
   "semantic_fingerprint_short": "0c8d5609330fc154",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -1658,6 +1752,8 @@
   "help": "golevel: golevel <go.obo> <gene2go.tsv> <outPrefix> [--level N] [--graph] [--width W] [--height H]   # GO 层级统计+柱状图（GUI 逆向接口；统计表纯逻辑，图需 xvfb）",
   "semantic_fingerprint": "617a024046b6c8be9ef88da5d8e7bd3c06b5dec0dacdd21a68371eb7948c9929",
   "semantic_fingerprint_short": "617a024046b6c8be",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -1685,6 +1781,8 @@
   "help": "groupCol: groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean|",
   "semantic_fingerprint": "6a8ef8fe902fcb9d3602dc909814c019e575d69aa346d7ecdea449b73ebb7a03",
   "semantic_fingerprint_short": "6a8ef8fe902fcb9d",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -1715,6 +1813,8 @@
   "help": "groupedbar: groupedbar <data.tsv> <out> [plotType] [errorBarType] [hasHeader] [title]   # 分组柱状图（N5: 数据格式=每行 <group>\t<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在 GroupedBarRawData.load 崩溃——引擎缺陷）",
   "semantic_fingerprint": "fe94dcaec94252de037a2e36d4ff6d3c477e741645c87a2ae774ba496767cce2",
   "semantic_fingerprint_short": "fe94dcaec94252de",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -1748,7 +1848,9 @@
   "group": "engine",
   "help": "gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax",
   "semantic_fingerprint": "3902479a90942f6154efd972ea2002fbd65a2d91ea2f6f8866616066f0aaabbe",
-  "semantic_fingerprint_short": "3902479a90942f61"
+  "semantic_fingerprint_short": "3902479a90942f61",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "gxfAppend": {
   "name": "gxfAppend",
@@ -1761,6 +1863,8 @@
   "help": "gxfAppend: gxfAppend <in.gff3> <out.gff3> <prefix>   # GFF seqid+ID 加前缀",
   "semantic_fingerprint": "8ce4487c2eac18c15e71773be795106b7e5b2b300c320f94f5bc183b155f23e2",
   "semantic_fingerprint_short": "8ce4487c2eac18c1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation",
    "gff_ops"
@@ -1792,6 +1896,8 @@
   "help": "gxfFix: gxfFix <in.gff3> <out.gff3>   # GFF 修复（重复ID前缀/CDS phase/dang",
   "semantic_fingerprint": "84fab0ee5b17fb40c5493a800666ac62cab2c03b41f198f0ef81580fe9c23e94",
   "semantic_fingerprint_short": "84fab0ee5b17fb40",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1820,6 +1926,8 @@
   "help": "gxfGenepos: gxfGenepos <in.gff3> <outGenepos> <outChrLen> [feature]  # G",
   "semantic_fingerprint": "228dda83f26070eaaf523633c476fb814b8f742c8c539c8bfa87e75dbb010788",
   "semantic_fingerprint_short": "228dda83f26070ea",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1848,6 +1956,8 @@
   "help": "gxfMatch: gxfMatch <in.gff3> <inGenome.fa>",
   "semantic_fingerprint": "5d255728f210f318d6927f2408b757eed7d00d86c0f21430c871c2c6b32f4760",
   "semantic_fingerprint_short": "5d255728f210f318",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1876,6 +1986,8 @@
   "help": "gxfOverlap: gxfOverlap <in.gff3> <region.txt> <out.gff3> [--ignoreStrand",
   "semantic_fingerprint": "4fa7fc47caf95fcb70cea007dec3a4ca57c3d1d5d66c066883c30c02a94195ba",
   "semantic_fingerprint_short": "4fa7fc47caf95fcb",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1904,6 +2016,8 @@
   "help": "gxfRecall: gxfRecall <in.gff3> <out.gff3>   # 从 gene 行恢复 mRNA 特征（第82引擎，",
   "semantic_fingerprint": "0212945d4a8c96ae6ae13d4cdc4d2ea1d5ceff86c8f3121a3a4d424033fc640d",
   "semantic_fingerprint_short": "0212945d4a8c96ae",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1932,6 +2046,8 @@
   "help": "gxfRegion: gxfRegion <in.gff3> <region.txt> <out.gff3> [--ignoreStrand]",
   "semantic_fingerprint": "a49290ade46240c0df45783c4de71858ccbf9c6f246e1961e5acdafaeac9c4a7",
   "semantic_fingerprint_short": "a49290ade46240c0",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1960,6 +2076,8 @@
   "help": "gxfRename: gxfRename <in.gff3> <out.gff3> <renameMap.tsv>",
   "semantic_fingerprint": "a3794e89d0218a3cd58123e1f0faba226d709b18419f58a95ebf2344e78c268e",
   "semantic_fingerprint_short": "a3794e89d0218a3c",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -1988,6 +2106,8 @@
   "help": "gxfRepGXF: gxfRepGXF <in.gff3> <out.gff3> [--featureID CDS] [--attachID",
   "semantic_fingerprint": "579c0d985824250b799548df59ab255e39decee40ec6b9ef7463b74acce5d9a8",
   "semantic_fingerprint_short": "579c0d985824250b",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -2016,6 +2136,8 @@
   "help": "gxfRepIDs: gxfRepIDs <in.gff3> <out.txt>",
   "semantic_fingerprint": "261bb4c574ecb590499852890ce0449942b939089bd254bccd1ca01facacd3a3",
   "semantic_fingerprint_short": "261bb4c574ecb590",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -2044,6 +2166,8 @@
   "help": "gxfStat: gxfStat <in.gff3> <outStat.xls>   # GFF 统计（基因/mRNA/外显子/内含子/C",
   "semantic_fingerprint": "668ca25ee68fa320978440c4ae241e8a7b581e41598563466060c23ab3f88225",
   "semantic_fingerprint_short": "668ca25ee68fa320",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -2071,7 +2195,9 @@
   "group": "engine",
   "help": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>",
   "semantic_fingerprint": "fbbcec66938b1068df4e25fec3911c4ae517a83763b0eed5ad10ebcb423e32d7",
-  "semantic_fingerprint_short": "fbbcec66938b1068"
+  "semantic_fingerprint_short": "fbbcec66938b1068",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "gxfsort": {
   "name": "gxfsort",
@@ -2083,7 +2209,9 @@
   "group": "engine",
   "help": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>",
   "semantic_fingerprint": "fbe8c5b55cf2d0f88ab25a7e706c2caa632a2e7d8dd6639cba252072e2324beb",
-  "semantic_fingerprint_short": "fbe8c5b55cf2d0f8"
+  "semantic_fingerprint_short": "fbe8c5b55cf2d0f8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "hicEnzyme": {
   "name": "hicEnzyme",
@@ -2096,6 +2224,8 @@
   "help": "hicEnzyme: hicEnzyme <inHiC.fastq>   # HiC 限制酶预测（第76引擎）",
   "semantic_fingerprint": "163db54e6ac5bc2723386c307ad4a168688f6b449e3a97400636f62e88ba8b77",
   "semantic_fingerprint_short": "163db54e6ac5bc27",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -2124,7 +2254,9 @@
   "group": "hmm",
   "help": "hmmExtract: hmmExtract <in.hmm> <idList.txt> <out.hmm>   # 从 HMM 文件按 NAM",
   "semantic_fingerprint": "74d3527ec82debc48b07bf87e44e3cec8af7887712aac5daa1fe2ef9f86f3007",
-  "semantic_fingerprint_short": "74d3527ec82debc4"
+  "semantic_fingerprint_short": "74d3527ec82debc4",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "homoPhase": {
   "name": "homoPhase",
@@ -2137,6 +2269,8 @@
   "help": "homoPhase: homoPhase <inContigGrpMap> <outPhasedMap>",
   "semantic_fingerprint": "0d1237f3ea81ec5f0d2b4ff33ca8771fb5cd93592fe577310a744e4d5d17c9af",
   "semantic_fingerprint_short": "0d1237f3ea81ec5f",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -2166,6 +2300,8 @@
   "help": "keggEnrich: keggEnrich <reference.keg> <annotation.tsv> <selectIds.txt> <out.xls>   # KEGG 富集分析（G4 补齐，需真实 .keg 参考文件）",
   "semantic_fingerprint": "b7cb5c2a82e787536a49ffedcafbe078e60534bb7599f0725c320fcec52fd6f6",
   "semantic_fingerprint_short": "b7cb5c2a82e78753",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "enrichment",
    "pathway"
@@ -2224,6 +2360,8 @@
   "help": "layoutheatmap: layoutheatmap <layout.tsv> <expr.tsv> <out> [--options]",
   "semantic_fingerprint": "5c5cd8d82a10245c5639e07bdc4f539bedc0de9f503faaaaa15239621e52bf2a",
   "semantic_fingerprint_short": "5c5cd8d82a10245c",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "expression",
    "visualization"
@@ -2281,6 +2419,8 @@
   "help": "levelGo: levelGo <gene2Go.txt> <outTable> <oboFile> [--level N]",
   "semantic_fingerprint": "64efee2410c4e25ff476a7cabf731882d726fea842e6e1d9725b4c7ac336f2fe",
   "semantic_fingerprint_short": "64efee2410c4e25f",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -2308,6 +2448,8 @@
   "help": "makemotif: makemotif <in.seqs.txt> <out.meme> [--mol DNA|RNA|Protein]   # 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast）",
   "semantic_fingerprint": "256fb097f1324b0eaea7d784245ed84f8d3f2f7eaceca6d87d8f448b0f17b2a6",
   "semantic_fingerprint_short": "256fb097f1324b0e",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -2338,7 +2480,9 @@
   "group": "engine",
   "help": "marker: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe",
   "semantic_fingerprint": "fb232631d8d264a8ccf0a92fba437ae47f0b8eefa0606b796861570336af9a13",
-  "semantic_fingerprint_short": "fb232631d8d264a8"
+  "semantic_fingerprint_short": "fb232631d8d264a8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "markertools": {
   "name": "markertools",
@@ -2350,7 +2494,9 @@
   "group": "engine",
   "help": "markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi",
   "semantic_fingerprint": "5861af8281a54ce91908826542c4b4144e50019378b4f40e02736b8137770bca",
-  "semantic_fingerprint_short": "5861af8281a54ce9"
+  "semantic_fingerprint_short": "5861af8281a54ce9",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "mast": {
   "name": "mast",
@@ -2363,6 +2509,8 @@
   "help": "mast: mast <sequence.fa> <motifs.meme|meme.xml> <workingDir> [--motif-to-use N] [--max-motif-pvalue 0.0001] [--max-seq-evalue 10]   # MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物 mast.html/txt/xml）",
   "semantic_fingerprint": "5ce712f2105729b1c630578e1a6e210a9f0e607f57d6a3eabb5d62771f3f9477",
   "semantic_fingerprint_short": "5ce712f2105729b1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -2394,6 +2542,8 @@
   "help": "mast2tab: mast2tab <mast|meme.xml> <out.tab>",
   "semantic_fingerprint": "c74c60fbe6175b931938eae0103f098f3fa83abe6d5ced257343bca50ae29de8",
   "semantic_fingerprint_short": "c74c60fbe6175b93",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -2425,6 +2575,8 @@
   "help": "mastExtract: mastExtract <in.fa> <mast.xml> <out.txt>   # 从 MAST XML 提取命中",
   "semantic_fingerprint": "58c695423ae44798d6edcc9cc1edb9451b84bafc82cc6d8c9ba59064dae5e6b6",
   "semantic_fingerprint_short": "58c695423ae44798",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "motif",
    "sequence_extraction"
@@ -2459,6 +2611,8 @@
   "help": "mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--",
   "semantic_fingerprint": "be9da29d99d090a7d1fd9e25e400d0a713f0af40d4d0b1189ca4acdd5db64717",
   "semantic_fingerprint_short": "be9da29d99d090a7",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "motif",
    "scanning"
@@ -2513,6 +2667,8 @@
   "help": "mcscanx: mcscanx <gff> <blast> <outPrefix> [--html]   # 共线性检测",
   "semantic_fingerprint": "873085bb2c14f7d4d0cf4fb48a94f71bf9567b1399643741ee253a5d4bf59c60",
   "semantic_fingerprint_short": "873085bb2c14f7d4",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny",
    "collinearity_detection"
@@ -2600,6 +2756,8 @@
   "help": "meme: meme <in.fa> <workingDir> <outMemeXml> [--nmotifs N] [--minw N] [--maxw N] [--evt 0.05] [--mod zoops|oops|anr]   # MEME motif 发现（GUI 逆向接口 QuickRunMEME，需系统 meme；产物可与 memeViz/fimo 串联）",
   "semantic_fingerprint": "b629fd4f63086139dc488f10e1dbc487f8b98dfe5fffd4c22be33ec457f9efc5",
   "semantic_fingerprint_short": "b629fd4f63086139",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -2631,6 +2789,8 @@
   "help": "meme2tab: meme2tab <meme.xml|mast.xml> <out.tab>   # MEME/MAST XML→motif 域表（GUI 逆向接口 MEMESuiteXMLtoTab）",
   "semantic_fingerprint": "929cae926deca625251b45591f55a29b3f3d401f5fdf248874841de180dcdae9",
   "semantic_fingerprint_short": "929cae926deca625",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -2662,6 +2822,8 @@
   "help": "memerun: memerun <in.fasta> <workingDir> [--motif N] [--minW N] [--ma",
   "semantic_fingerprint": "71a9b415e2ec52efd2f35a11cc30187d8f587241121a518386c55370dd4066fc",
   "semantic_fingerprint_short": "71a9b415e2ec52ef",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "motif",
    "discovery"
@@ -2713,7 +2875,9 @@
   "group": "engine",
   "help": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked",
   "semantic_fingerprint": "fbfac92ded9b039bcb829bd828f8c7f4b082cd75c154608d30b785508f297cb7",
-  "semantic_fingerprint_short": "fbfac92ded9b039b"
+  "semantic_fingerprint_short": "fbfac92ded9b039b",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "microgenome": {
   "name": "microgenome",
@@ -2726,6 +2890,8 @@
   "help": "microgenome: microgenome <inGBK> <anno.tsv> <out> [micro|macro]",
   "semantic_fingerprint": "04dacc6756ac215c0cd47f5b38a79638ad0cd4cb4f67bbcc48a31f09b5327d8a",
   "semantic_fingerprint_short": "04dacc6756ac215c",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -2762,6 +2928,8 @@
   "help": "microsyn: microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star",
   "semantic_fingerprint": "91a75654ab879e912514f5453e2405fa06b40825f8d0f8f8a7b1757c621597e0",
   "semantic_fingerprint_short": "91a75654ab879e91",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny",
    "visualization"
@@ -2824,7 +2992,9 @@
   "group": "mirna",
   "help": "mirnaIdentify: mirnaIdentify <genome.fa> <targetSo.tsv> <outPredict.txt> <outChecklog.txt> [--checkARM BOTH|FIVE|THREE] [--maxAsy N] [--maxBulge N]   # miRNA 前体鉴定（GUI 逆向 #78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29）",
   "semantic_fingerprint": "316d97b879ea11157ac315c1100b12fb1dd15f4058ca5a9c8c36161da28977f1",
-  "semantic_fingerprint_short": "316d97b879ea1115"
+  "semantic_fingerprint_short": "316d97b879ea1115",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "mirnaTarget2": {
   "name": "mirnaTarget2",
@@ -2836,7 +3006,9 @@
   "group": "mirna",
   "help": "mirnaTarget2: mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true",
   "semantic_fingerprint": "286da21b8268adf3799a6251eea4c04754ba023163b41ef581b03582fc6e6d77",
-  "semantic_fingerprint_short": "286da21b8268adf3"
+  "semantic_fingerprint_short": "286da21b8268adf3",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "mountain": {
   "name": "mountain",
@@ -2849,6 +3021,8 @@
   "help": "mountain: mountain <fold.txt> <out.tsv>",
   "semantic_fingerprint": "356e75ec2fa2e38014b779a81db9c9fca31467421c83c963cf43421c2ba13c76",
   "semantic_fingerprint_short": "356e75ec2fa2e380",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -2879,6 +3053,8 @@
   "help": "mpattern: mpattern <mast.xml> <out.svg> [--max-motif N] [--shape RoundRect|Rect|Oval] [--line Middle|Up|Down|Splice] [--gradient] [--show-num]   # MEME/MAST motif 序列标注图（GUI 逆向接口，postGraph(String,panel) 重载绕弹窗）",
   "semantic_fingerprint": "efa193ae4b42183aca0318240c47294581b78ac2b94000ccb482aeda9d2fd7fa",
   "semantic_fingerprint_short": "efa193ae4b42183a",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -2910,6 +3086,8 @@
   "help": "multiEfp: multiEfp <inTGA> <sample2cc> <expMat1[,expMat2,...]> <geneId",
   "semantic_fingerprint": "93e3e2e21670ed67ef3092518946e50fa8d549e247d6001d1e6d5b12d5243f69",
   "semantic_fingerprint_short": "93e3e2e21670ed67",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "expression",
    "visualization"
@@ -2967,6 +3145,8 @@
   "help": "multisyn: multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt",
   "semantic_fingerprint": "c9b2b6e854da3981abb21c9d31d55b587d14ff15120c3a50c876d8183153ce58",
   "semantic_fingerprint_short": "c9b2b6e854da3981",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3030,6 +3210,8 @@
   "help": "nwAlign: nwAlign <seq1.fa> <seq2.fa> <out> [--protein|--dna] [--format EMBOSS|FASTA] [--gap-open N] [--gap-extend N] [--end-gap-open N] [--end-gap-extend N] [--end-weight]   # Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 SimpleBatchProcess 静默无产物已替换）",
   "semantic_fingerprint": "2df1026ce328a7aa3078a63bff09c91253ca0e48ae8a98af5d27ce7cbe743495",
   "semantic_fingerprint_short": "2df1026ce328a7aa",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -3061,6 +3243,8 @@
   "help": "pafcomp: pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q",
   "semantic_fingerprint": "dcab2e58ccbd3dbeb990bfdffacfe2d456370f9bd271365ac199cbab7694dc6f",
   "semantic_fingerprint_short": "dcab2e58ccbd3dbe",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -3097,6 +3281,8 @@
   "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
   "semantic_fingerprint": "2ff3fdba132c864a9f8c31a392cded4350216ccbabd474d8192202587fd83b6b",
   "semantic_fingerprint_short": "2ff3fdba132c864a",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3153,6 +3339,8 @@
   "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
   "semantic_fingerprint": "c79665ee5953a2c2895428b84c7d7625d0ac7b57e897262326060b90429f9386",
   "semantic_fingerprint_short": "c79665ee5953a2c2",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3209,6 +3397,8 @@
   "help": "partitionconflict: partitionconflict <inConflictFreq.tsv> <polyPoid> <outCluste",
   "semantic_fingerprint": "090a0929473f2f722d806452748c6d1fe067d4841784093b099ce2e8e3513b26",
   "semantic_fingerprint_short": "090a0929473f2f72",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -3245,6 +3435,8 @@
   "help": "peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]",
   "semantic_fingerprint": "f8c3bc022c45e1c2c1462c6e4fc9edf62406998515d07298ba503ee884e88786",
   "semantic_fingerprint_short": "f8c3bc022c45e1c2",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "chip_seq",
    "peak_annotation"
@@ -3294,6 +3486,8 @@
   "help": "peakdist: peakdist <chrLen.tsv> <macs2_peak.xls> <out> [--chrHeight H]",
   "semantic_fingerprint": "600f0e3952a3b59f7fc0e3fff23d850da0697c7e39db6c44d4f527b71012b270",
   "semantic_fingerprint_short": "600f0e3952a3b59f",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "chip_seq"
   ],
@@ -3322,6 +3516,8 @@
   "help": "peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b",
   "semantic_fingerprint": "cf14dbd3cb8067eff0c710adac46d30c04ef37a28e277b313b1236925178e17b",
   "semantic_fingerprint_short": "cf14dbd3cb8067ef",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "chip_seq",
    "peak_calling"
@@ -3378,6 +3574,8 @@
   "help": "pep2codon: pep2codon <cds.fa> <pep.aln.fa> <codon.aln.out>",
   "semantic_fingerprint": "c82fae59c87ae856f68e03f507ca88485b0f7b14f0e011b679a0e259a74ed247",
   "semantic_fingerprint_short": "c82fae59c87ae856",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "translation",
    "codon"
@@ -3439,6 +3637,8 @@
   "help": "pfammotif: pfammotif <pfamscan.txt> <in.fasta> <out.svg|png|pdf> [newic",
   "semantic_fingerprint": "1f6f4681d3001470f4aff30e9c1ae3380aa41cd92566abec0167d85a04e2ceaa",
   "semantic_fingerprint_short": "1f6f4681d3001470",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -3470,6 +3670,8 @@
   "help": "phylotree: phylotree <in.nwk> <out> [vertical] [width] [height]",
   "semantic_fingerprint": "9ff350923d31f30ad3825838ecff958a753d038ce6694a95ba9c1966bfc1a6c0",
   "semantic_fingerprint_short": "9ff350923d31f30a",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -3500,6 +3702,8 @@
   "help": "pileup: pileup <blast.xml> <out.svg> [--query NAME]",
   "semantic_fingerprint": "05fccb3dfc72783ac0db81cf71e394c3b586b80bc53f9207bbd5d5f1138ac437",
   "semantic_fingerprint_short": "05fccb3dfc72783a",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "chip_seq"
   ],
@@ -3528,6 +3732,8 @@
   "help": "plotrna: plotrna <genomeFA> <region> <SAM> [--directPDF out.pdf]",
   "semantic_fingerprint": "dd3f05afb8548a38f6357b8ad6b07af7a2b8790e75b1ce4baa2e44d31d82ddb0",
   "semantic_fingerprint_short": "dd3f05afb8548a38",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "sequence"
   ],
@@ -3594,6 +3800,8 @@
   "help": "preparespecies: preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa>",
   "semantic_fingerprint": "5beea6519723aa4fe8a8fbc6660e8120b0a6842e68bc074909aa8d9c9073756b",
   "semantic_fingerprint_short": "5beea6519723aa4f",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "genome_preparation",
    "annotation"
@@ -3650,6 +3858,8 @@
   "help": "qdot: qdot <blast.tab> <in.gff> <chrLayout.txt> <out.svg> [--point-size N] [--highlight genes.txt]   # 基因组 dot plot（插件 P00380 CLI 化；blast/gff/chrLayout 可由 mcscanxd 产出，绕开插件 quickShow GUI 崩溃直驱 dotdotdot）",
   "semantic_fingerprint": "2ae7e5b9513b154dd9b9223bd84591ac09c6e3c5c0cfcb50b372ae0c553c052a",
   "semantic_fingerprint_short": "2ae7e5b9513b154d",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3706,6 +3916,8 @@
   "help": "qpcr: qpcr <data.txt> <out> [w] [h]   (data: name       mean    sd)",
   "semantic_fingerprint": "e4a11af334a8f0ac8f4f37d90bd6129c7869af3df3fa647684ac4d4e9fb6f125",
   "semantic_fingerprint_short": "e4a11af334a8f0ac",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -3736,6 +3948,8 @@
   "help": "qpcrExp: qpcrExp <in.qpcr.tab> <out.xls>",
   "semantic_fingerprint": "e4cabeffeaee1de129e170e19e88cdfb93b53fcc732f176d8f81f47af3042cc1",
   "semantic_fingerprint_short": "e4cabeffeaee1de1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -3765,7 +3979,9 @@
   "group": "engine",
   "help": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>",
   "semantic_fingerprint": "d4e4064e216b252c43ba03aa0d6f0e8409d01d3d9e2be70fab178ef608d01b37",
-  "semantic_fingerprint_short": "d4e4064e216b252c"
+  "semantic_fingerprint_short": "d4e4064e216b252c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "quickFamily": {
   "name": "quickFamily",
@@ -3778,6 +3994,8 @@
   "help": "quickFamily: quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPr",
   "semantic_fingerprint": "38e157c4b347bff7875655129030e250162b44aabe37a611aee11a7c34af0195",
   "semantic_fingerprint_short": "38e157c4b347bff7",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -3809,6 +4027,8 @@
   "help": "recipBlast: recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix [--queryIdListFile ids.txt] [--evalue 1e-5] [--NumOfthreads 4]   # RBH 双向最优比对（ArgsParser 风格：参数必须 --key value 形态；依赖系统 blastp/makeblastdb）",
   "semantic_fingerprint": "1fb57ab5bcf2b5616b85b2ffc1ff99b4724fe5987682ac2305881cd265fd31d3",
   "semantic_fingerprint_short": "1fb57ab5bcf2b561",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "homology",
    "reciprocal_best_hit",
@@ -3884,6 +4104,8 @@
   "help": "regionAnno: regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [-",
   "semantic_fingerprint": "6c183dc6f1c8d244b2284058bb30b0cf4eef6745062739c0c6ee40e2f773c2d8",
   "semantic_fingerprint_short": "6c183dc6f1c8d244",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -3911,7 +4133,9 @@
   "group": "engine",
   "help": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]",
   "semantic_fingerprint": "594bdd4242a99d0b54ec6b5d8640a7f62d4915dfb9b50a1b651888a3a793b553",
-  "semantic_fingerprint_short": "594bdd4242a99d0b"
+  "semantic_fingerprint_short": "594bdd4242a99d0b",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "rnaplot": {
   "name": "rnaplot",
@@ -3924,6 +4148,8 @@
   "help": "rnaplot: rnaplot <seq.fa|rawSeq> <out> [--colorMap \"seq1=R,G,B;seq2=R",
   "semantic_fingerprint": "87ab9762e3a6860399bfbeca30ae952ca1506e3b7e4c76d154e63d91fdeeb70a",
   "semantic_fingerprint_short": "87ab9762e3a68603",
+  "readiness": "PARTIAL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "sequence"
   ],
@@ -3990,7 +4216,9 @@
   "group": "engine",
   "help": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]",
   "semantic_fingerprint": "9842a84de9c13bb809ba55dbd07e014d56e20ade820228544d7bbf4f4d0407a7",
-  "semantic_fingerprint_short": "9842a84de9c13bb8"
+  "semantic_fingerprint_short": "9842a84de9c13bb8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "sepChr": {
   "name": "sepChr",
@@ -4003,6 +4231,8 @@
   "help": "sepChr: sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap>",
   "semantic_fingerprint": "576fa1affc9231af5dc783a02decc41d378dbe514774d0e757cc659947a3b400",
   "semantic_fingerprint_short": "576fa1affc9231af",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -4031,7 +4261,9 @@
   "group": "engine",
   "help": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>",
   "semantic_fingerprint": "efc997897fcfa93eed2c96d8c0b8597969c201569d58beeb5ba96301140dac16",
-  "semantic_fingerprint_short": "efc997897fcfa93e"
+  "semantic_fingerprint_short": "efc997897fcfa93e",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "seqlentrack": {
   "name": "seqlentrack",
@@ -4044,6 +4276,8 @@
   "help": "seqlentrack: seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile]",
   "semantic_fingerprint": "13767a420bd8a4e9802e66827287dd99854d63670b9b418dd6a9bf4204b13b4d",
   "semantic_fingerprint_short": "13767a420bd8a4e9",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -4075,6 +4309,8 @@
   "help": "simplehmmscan: simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt",
   "semantic_fingerprint": "86788ec713e5576966c745ad746367f5cdcd4e027e01553fbfbdfdcd996e1e00",
   "semantic_fingerprint_short": "86788ec713e55769",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -4125,6 +4361,8 @@
   "help": "sricher: sricher <in.tsv> <out.xls> <totalAnnoIdx> <totalHitIdx> <selAnnoIdx> <selHitIdx> [--header]   # 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO）",
   "semantic_fingerprint": "84a9957d682aea2b60178a5d1aee7f904cf5b1507ad31113ebe049c9a0e4b81a",
   "semantic_fingerprint_short": "84a9957d682aea2b",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4152,6 +4390,8 @@
   "help": "supercircos: supercircos <config.cfg> <out> [width] [height]",
   "semantic_fingerprint": "be1bc96b206d458f0b9c91d80e9aa6d14c99d0f7a631a033e9707526bd4b4869",
   "semantic_fingerprint_short": "be1bc96b206d458f",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny"
   ],
@@ -4206,6 +4446,8 @@
   "help": "tableAppend: tableAppend <inTab1> <inTab2> <outTab> [--c1 N] [--c2 N]   #",
   "semantic_fingerprint": "17d2c0a235d5735738c52e0e29c0dd2a056d4f8ed917bbd457ad03ce495cf8af",
   "semantic_fingerprint_short": "17d2c0a235d57357",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4233,6 +4475,8 @@
   "help": "tableCast: tableCast <inLong.txt> <outMatrix>",
   "semantic_fingerprint": "13d9d90c24f81e1af541e1f712403c80c7769d19bf8a6591dc09bfc68b3d3233",
   "semantic_fingerprint_short": "13d9d90c24f81e1a",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4263,6 +4507,8 @@
   "help": "tableColSel: tableColSel <inTable> <outTable> <idList.txt> [--mode Match|",
   "semantic_fingerprint": "daae23149b2541ab71bcd9ea10ecf1d58b4093e11fa03ff3f32509bdbc0d32f3",
   "semantic_fingerprint_short": "daae23149b2541ab",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4290,6 +4536,8 @@
   "help": "tableColSelect: tableColSelect <inTable> <outTable> <colName1> [colName2...]",
   "semantic_fingerprint": "97e2e39dd62cc8b3707e570c227a90fe9faf3368de7ad15c2b0021e68c201b46",
   "semantic_fingerprint_short": "97e2e39dd62cc8b3",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4317,6 +4565,8 @@
   "help": "tableCollapse: tableCollapse <inTable> <keyColIndex> <outTable> [hasHeader ",
   "semantic_fingerprint": "2188d400c79ca2ba34719cd85cd56aa9a654f0b8adf19a8821eb4997359f77a5",
   "semantic_fingerprint_short": "2188d400c79ca2ba",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4344,6 +4594,8 @@
   "help": "tableMelt: tableMelt <inTable> <outTable>   # 宽表转长表（第88引擎，TableMelt）",
   "semantic_fingerprint": "31d26bf2cc2353c71f9a8b994a86af2869fd85f570b44251adc2cc7a700831a4",
   "semantic_fingerprint_short": "31d26bf2cc2353c7",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4371,6 +4623,8 @@
   "help": "tableMerge: tableMerge --inFileArr \"f1,f2,...\" --inColIndexArr \"0,1,...\" --outTable <out> [--defaultNAvalue NA] [--appendMergedKey true|false] [--rmKeyColumns true|false]   # 按键合并多个表格(TableMerger；⚠️ ArgsParser 式，旧 docstring 位置参数写法已废弃 N3；位置参数兼容见 _tableMerge_impl)",
   "semantic_fingerprint": "d2ac57c58585a9688f45c162c4b388436a7f3f027d36157e1b55c7e6c25f49d1",
   "semantic_fingerprint_short": "d2ac57c58585a968",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "table_operations"
   ],
@@ -4416,6 +4670,8 @@
   "help": "tableSplit: tableSplit <inTab> <outDir> [--colIndex N] [--suffix .txt]",
   "semantic_fingerprint": "97b4b94c85a627289d234b408db70717c50ada0a8112afd6946adc7791375e11",
   "semantic_fingerprint_short": "97b4b94c85a62728",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4443,6 +4699,8 @@
   "help": "tableTranspose: tableTranspose <inTable> <outTable>   # 表格转置（第95引擎，TableTran",
   "semantic_fingerprint": "67dd6b75c7515e89f13ecba2e9d8ae9157e40229f872ce43cf2d0de1cdc745c0",
   "semantic_fingerprint_short": "67dd6b75c7515e89",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4470,6 +4728,8 @@
   "help": "tableUniq: tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true|",
   "semantic_fingerprint": "e470004a0a8151341645904af58231d1bd44f5cdf84650d3b4dca336915ef502",
   "semantic_fingerprint_short": "e470004a0a815134",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -4497,6 +4757,8 @@
   "help": "tauIndex: tauIndex <inExpTab> <outTAU>",
   "semantic_fingerprint": "582f0d27a684bde9c623122d0c461e45d487cdc440626e8fd96b513d310021b6",
   "semantic_fingerprint_short": "582f0d27a684bde9",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -4526,7 +4788,9 @@
   "group": "engine",
   "help": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]",
   "semantic_fingerprint": "4704692cc2605073e1f2177c150acdb9e9d48e2b3d9b6a7679de53832c545971",
-  "semantic_fingerprint_short": "4704692cc2605073"
+  "semantic_fingerprint_short": "4704692cc2605073",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "twoSeqBlast": {
   "name": "twoSeqBlast",
@@ -4539,6 +4803,8 @@
   "help": "twoSeqBlast: twoSeqBlast <query.fa> <subject.fa> <out.txt> [--prog blastp",
   "semantic_fingerprint": "c568e369fe4d701862985204f262fff9c4aa5677569262ef4853d72d318a9353",
   "semantic_fingerprint_short": "c568e369fe4d7018",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -4570,6 +4836,8 @@
   "help": "upset: upset <set1.txt> <set2.txt> [<set3.txt>...] <out.svg> [--min-overlap N] [--rank1 Size|Count|Name] [--rank2 ...] [--rank3 ...] [--size-mode/--count-mode/--name-mode Increasing|Decreasing]   # UpSet 集合图（GUI 逆向接口 UpSetPlot.plot，绕 show 弹窗）",
   "semantic_fingerprint": "d1b264e79738c6dfcc9043b90e505e4cbe8e67499dc6daf05fb3f4541a0be9db",
   "semantic_fingerprint_short": "d1b264e79738c6df",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "set_operations"
   ],
@@ -4620,6 +4888,8 @@
   "help": "venn2: venn2 --List1 <setA.txt> --List2 <setB.txt> --label1 A --label2 B --graph <out> --prefix <out> [--bgNum N]",
   "semantic_fingerprint": "11994e83d510ba0275734ccd57bfc65a04a6fdfddc795297edf2a5dae2a41ac5",
   "semantic_fingerprint_short": "11994e83d510ba02",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "set_operations"
   ],
@@ -4684,6 +4954,8 @@
   "help": "venn3: venn3 --List1 <A> --List2 <B> --List3 <C> --label1..3 <labels> --graph <out> --prefix <out>",
   "semantic_fingerprint": "21dc39b84013e68af058374585bb09d04f02f3809cb0f2682e49ab134f581f07",
   "semantic_fingerprint_short": "21dc39b84013e68a",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "set_operations"
   ],
@@ -4756,6 +5028,8 @@
   "help": "venn4: venn4 --List1 <A> --List2 <B> --List3 <C> --List4 <D> --label1..4 <labels> --graph <out> --prefix <out>",
   "semantic_fingerprint": "eedac107e1455a785d35fd2cecd2bce6072a55bb9a0fb7fa4761cc6687e53850",
   "semantic_fingerprint_short": "eedac107e1455a78",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "set_operations"
   ],
@@ -4827,6 +5101,8 @@
   "help": "venn5: venn5 <out> <setA.txt> <setB.txt> <setC.txt> <setD.txt> <setE.txt> [labels]",
   "semantic_fingerprint": "9d15e8260015d0a3f21961c60cb86b82baa9436c378beece152314e96ab533e1",
   "semantic_fingerprint_short": "9d15e8260015d0a3",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "set_operations"
   ],
@@ -4859,6 +5135,8 @@
   "help": "venn6: venn6 <out> <setA..F.txt> [labels]",
   "semantic_fingerprint": "95c7f5447721b332aca0795c59244f0bb332df1d21c4416c0e73e6910807f176",
   "semantic_fingerprint_short": "95c7f5447721b332",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "set_operations"
   ],
@@ -4891,6 +5169,8 @@
   "help": "violin: violin <in.tsv> <out> [width] [height]",
   "semantic_fingerprint": "0eee12c825d4ad8e3d8b3e27faa222bc9a2afd1cf00c8e90b3f6431fcc41bf86",
   "semantic_fingerprint_short": "0eee12c825d4ad8e",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "expression"
   ],
@@ -4921,6 +5201,8 @@
   "help": "virusRecomb: virusRecomb <inDB.fa> <inContig.fa> <outDir>   # 病毒重组分析（第77引",
   "semantic_fingerprint": "2c899af07d00b2f470e72b3254fe3716ca2193a857cb5fdc5a1eac1ce1fb39dd",
   "semantic_fingerprint_short": "2c899af07d00b2f4",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "assembly"
   ],
@@ -4950,6 +5232,8 @@
   "help": "visualizeblock: visualizeblock <inBlockOut> <out.pdf> [--labels \"Genome1,Gen",
   "semantic_fingerprint": "32d213da2a6b28f6f26a17f67f91a5892383ec7cd2c180edaefb700036bb39b2",
   "semantic_fingerprint_short": "32d213da2a6b28f6",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "synteny"
   ],
@@ -4986,6 +5270,8 @@
   "help": "kaks --inCDS <cds.fa> --inGenePair <pairs.txt> --outKaks <out.xls> [--inCPU N] [--inPep pep.fa]   # 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--key value；inGenePair 为 ID1\\tID2 每行，缺文件时自动全两两配对并翻译 CDS）",
   "semantic_fingerprint": "37acda943624cbb5b4562503350009a757d23fd01acb7d0724d24844e2254e3f",
   "semantic_fingerprint_short": "37acda943624cbb5",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -5016,6 +5302,8 @@
   "help": "sixframe <in.fa> <out.fa>   # 六框翻译（GUI 逆向 #16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框 12 条；注意引擎类名拼写 SixFrameTranlater 少一个 s）",
   "semantic_fingerprint": "9c2453fdca739ed3ac7d1bd7057773d8a328f768e4aec6561bf670b087eed2ca",
   "semantic_fingerprint_short": "9c2453fdca739ed3",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "translation",
    "sequence"
@@ -5068,6 +5356,8 @@
   "help": "longestorf --inFa <seq.fa> --outORFs <out.fa>   # 批量最长完整 ORF 预测（GUI 逆向 #17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带 ArgsParser）",
   "semantic_fingerprint": "d4d6f5a9bcb6dd2e40561909cc7e9c2b6c4abc370c84c5782cdc2068672cea0d",
   "semantic_fingerprint_short": "d4d6f5a9bcb6dd2e",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "orf_prediction",
    "sequence"
@@ -5122,6 +5412,8 @@
   "help": "protparam --inFa <pep.fa> --outTab <out.txt>   # 蛋白理化性质批量计算（GUI 逆向 #18 ProtParamWrapper.batchCalc；⚠️ 联网 POST Expasy。输出：分子量/pI/不稳定指数/脂肪族指数/GRAVY）",
   "semantic_fingerprint": "10f53c5f6fec17daa71832b8de5c18a24c590e72b21700e5e12a91b43500f6bb",
   "semantic_fingerprint_short": "10f53c5f6fec17da",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5153,6 +5445,8 @@
   "help": "seqpattern --inFasta <seq.fa> --pattern <ATG|regex> --outTab <out.gff3> [--overlap] [--maxSeqLen <len>]   # 序列模式定位（GUI 逆向 #20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔）",
   "semantic_fingerprint": "e58b30bf679cc14cd5b6f29e8ff0d5e91ecdcee60818ec55a839e034776a0592",
   "semantic_fingerprint_short": "e58b30bf679cc14c",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5184,6 +5478,8 @@
   "help": "bed2gff3 <in.bed> <out.gff3> [genome.fa]   # exon BED→GFF3（GUI 逆向 #21 RegionBedToGFF3；⚠️ BED 第4列须为 ID:链向:编码 如 G01:+:C；同 ID 多行合并出 mRNA+exon）",
   "semantic_fingerprint": "83dd1a2d2a5eb6bd8ccd3bb096154d7cbcb6d7565c6996a225a00120f8971bb3",
   "semantic_fingerprint_short": "83dd1a2d2a5eb6bd",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "annotation"
   ],
@@ -5212,6 +5508,8 @@
   "help": "careclassify <plantcare.tab> <out.xls>   # PlantCARE 顺式元件分类（GUI 逆向 #22；第8列 motif 名查 jar 内置 97 类表，行尾追加大类/亚类；查不到 NA）",
   "semantic_fingerprint": "da3e0e5b780be5abddd571d492399bc22977ae3ef86f0bccb579bda54deeafbf",
   "semantic_fingerprint_short": "da3e0e5b780be5ab",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5243,6 +5541,8 @@
   "help": "subtree <tree.nwk> <idList.txt> <out.nwk> [--contain]   # Newick 子树提取（GUI 逆向 #23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contain 模糊匹配；引擎重算诱导子树内部枝长）",
   "semantic_fingerprint": "aace10bce6ff95e1cd220437b60f81f5bec14f764643fda9b48d5e0b289fd46c",
   "semantic_fingerprint_short": "aace10bce6ff95e1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -5273,6 +5573,8 @@
   "help": "protsim <pep.fa> <out.matrix>   # 蛋白两两相似度矩阵（GUI 逆向 #24 ProteinPairwiseSimilarityMatrixGUIPanel→CalculateSimilarity；百分比矩阵 TSV）",
   "semantic_fingerprint": "dfea32ad178eed2dd4d0c4c4788630f8d95ff81ada15c8f61fcb2bde47a92036",
   "semantic_fingerprint_short": "dfea32ad178eed2d",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5304,6 +5606,8 @@
   "help": "iqtree <aln.fa> <outPrefix> [--model MFP] [--ufboot 1000] [--boot N] [--freerate] [--asc] [--threads N] [--redo]   # IQ-TREE ML 建树（GUI 逆向 #28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.treefile；依赖系统 iqtree）",
   "semantic_fingerprint": "6d8ecd58b43587b39820ea59e6ff47c6394c2917a9c7de52b13e0641c3e24a6c",
   "semantic_fingerprint_short": "6d8ecd58b43587b3",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "phylogeny"
   ],
@@ -5387,6 +5691,8 @@
   "help": "trimal <in.aln> <out.aln> [--mode gappyout|strict|strictplus|automated1] [--format fasta|clustal|phylip|nexus|mega|nbrf] [--keepheader]   # trimAl 比对修剪（GUI 逆向 #29 QuickTrimAL；默认 automated1；依赖系统 trimal；muscle→trimal→iqtree 管线）",
   "semantic_fingerprint": "2bea2f8aae74b07c5a719e178d9eeae31d0c7f24f5a1711abcce34f6496f4909",
   "semantic_fingerprint_short": "2bea2f8aae74b07c",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "alignment",
    "filtering"
@@ -5460,6 +5766,8 @@
   "help": "gblocks <in.aln.fa> <out.aln.fa> [--is 0.5] [--fs 0.85] [--cp 8] [--bl1 15] [--bl2 10] [--nongap 0.5] [--gaptreat none|half|all]   # Gblocks 保守区修剪（GUI 逆向 #30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能 validSites=0 合法）",
   "semantic_fingerprint": "246acad312ca272c9f793d84d41a899ee08e9ea32fdfba8144f49526e09b9c14",
   "semantic_fingerprint_short": "246acad312ca272c",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5491,6 +5799,8 @@
   "help": "goAnno --IdmappingDb <idmapping.DB.gz> --BlastxAnnoFile <blastx.xml> [--inPutFileType BlastxXml|Query2GiTable] [--maxEvalue 1e-5] [--minQueryCov 0.33] [--outDir dir] [--isDoDbFormat]   # GO 注释管道（GUI 逆向 #32 GoAnnotationGUIPanel→GoAnnoPipe；自带 ArgsParser；⚠️ idmappingDb 须 gzip 格式「ID; ID\\tGO:num; GO:num」；产物 outDir/<输入名>.xls）",
   "semantic_fingerprint": "f232667c90725fcf792c4b8086e716b5ececa6cb928d65f248442499205b6a53",
   "semantic_fingerprint_short": "f232667c90725fcf",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5518,6 +5828,8 @@
   "help": "fasplit --inFa <in.fa> --outPre <prefix> --NumPerFile <N> [--byCount true]   # FASTA 按记录数拆分（GUI 逆向 #33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物 prefix.N.split.fa）",
   "semantic_fingerprint": "3fa550a5b46d3dbc858558e07969b5125024e33df5dcd11de20916d2eae0d263",
   "semantic_fingerprint_short": "3fa550a5b46d3dbc",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5549,6 +5861,8 @@
   "help": "famerge <out.fa> <in1.fa> <in2.fa> [...]   # 多 FASTA 合并（GUI 逆向 #33 FastaMergerAndSpliter.Merge）",
   "semantic_fingerprint": "c1152b3a63e594b537c82ae38ef79e600675f826464420dd6d385ec172fc14da",
   "semantic_fingerprint_short": "c1152b3a63e594b5",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5580,6 +5894,8 @@
   "help": "clearchar <in.txt> <out.txt>   # 文件非法字符清理（GUI 逆向 #34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告）",
   "semantic_fingerprint": "ce35c32ec9b32a15824a2dc90d8d2c5a8fd4151b7b10cbcc377ef7c6a9cfccaa",
   "semantic_fingerprint_short": "ce35c32ec9b32a15",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5607,6 +5923,8 @@
   "help": "gb2fa <in.gb> <out.fa>   # GenBank→FASTA 转换（GUI 逆向 #36 genBank2Fasta；头含 locus/accession/organism/definition）",
   "semantic_fingerprint": "a02559e1cbdcaa03f26075703bdd3b28952f3198aae2bd4e6322c9211703326e",
   "semantic_fingerprint_short": "a02559e1cbdcaa03",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5638,6 +5956,8 @@
   "help": "findhomolog --inQueryProteinSet <query.pep> --inSubjectProteinSet <subject.pep> --targetIDs <ID[,ID2]> --outDir <dir> [--threads N] [--extendClade] [--sensitive N] [--similarity 0.x] [--weightCov 0.x] [--plot] [--directGraph]   # 最优同源查找（GUI 逆向 #37 FindBestHomology，同引擎覆盖 GenomeAnnotationSlim+FindBestHomology 两面板；自带 ArgsParser；BLAST+可选建树）",
   "semantic_fingerprint": "13ea5a4960e078ac2e5e319880361c740db6c0419002dc5158029d6a0a2da399",
   "semantic_fingerprint_short": "13ea5a4960e078ac",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -5669,6 +5989,8 @@
   "help": "taxparse <idList.txt> <out.xls>   # 物种名批量分类解析（GUI 逆向 #38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出 9 级分类+透传列；单次版=tbtools tool NCBITaxonomy）",
   "semantic_fingerprint": "11fa2828a247cac3e675bf9fd1472329cd2e2af4677a1381adea843fc46dad1e",
   "semantic_fingerprint_short": "11fa2828a247cac3",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5711,6 +6033,8 @@
   "help": "srr2ena <srrList.txt> <out.xls>   # SRR→ENA 下载链接解析（GUI 逆向 #39 GetENALinksOfSRR；⚠️ 联网 ENA filereport API+引擎自带 0~3s 限速；17 字段含 fastq_ftp/aspera）",
   "semantic_fingerprint": "70f20959741954e867be9e42cd46a9652501a5a1f93bf4871e9c074cea77b287",
   "semantic_fingerprint_short": "70f20959741954e8",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5739,6 +6063,8 @@
   "help": "sraxml2tab --sraFullXML <sra.xml> --outTab <out.xls>   # SRA XML→信息表（GUI 逆向 #40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch db=sra 获取）",
   "semantic_fingerprint": "440563d66ceb258d8d7c5a83ed8183c2111c9b2d8f290dd8041a39ac669f20e7",
   "semantic_fingerprint_short": "440563d66ceb258d",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5781,6 +6107,8 @@
   "help": "sranum2info --sraIdList <srrList.txt> --outTabInfo <out.xls>   # SRR 批量信息表（GUI 逆向 #41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带 ArgsParser；SRA 组 3/3 全清）",
   "semantic_fingerprint": "a21d8ab2dfb25a60fab684a4b7e2cc2801c55ad97b91b7aa5e7037704c005e72",
   "semantic_fingerprint_short": "a21d8ab2dfb25a60",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5808,6 +6136,8 @@
   "help": "blat <db.fa> <query.fa> <out> [--format blast9|psl|pslx|axt|maf|sim4|wublast|blast|blast8] [--minScore N] [--minIdentity 0.x] [--noHead] [--mode auto|dnadna|dnarna] [--tileSize N] [--stepSize N] [--maxGap N] [--maxIntron N] [--extra \"opts\"]   # BLAT 序列比对（GUI 逆向 #42 BlatExecutor；org.ucsc.blat 纯 Java 实现内嵌 jar 无需外部二进制）",
   "semantic_fingerprint": "f7658639c4c71ce5c0b1219f1e6eb1ebb09e77a0d896902e4fba161ca380a636",
   "semantic_fingerprint_short": "f7658639c4c71ce5",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -5838,7 +6168,9 @@
   "group": "engine",
   "help": "seqrecommend <genomeSize1n_bp> [--polyploid] [--het 0.01] [--level Minimum|Draft|Haplotyped_Resolved|Haplotyped_T2T]   # 基因组组装测序量推荐（GUI 逆向 #43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量）",
   "semantic_fingerprint": "ad910d3e98e04087cec2e34c090a2a1f0219121229f3eee6a6af9afb2ae9b192",
-  "semantic_fingerprint_short": "ad910d3e98e04087"
+  "semantic_fingerprint_short": "ad910d3e98e04087",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "seqfetch": {
   "name": "seqfetch",
@@ -5851,6 +6183,8 @@
   "help": "seqfetch --inFile <idList.txt> --outSeqFile <out.fa> --outReport <report.txt> [--targetDb nuccore|protein] [--preferDb db] [--format fasta] [--greedyMode] [--apiKey KEY] [--auditFile f]   # NCBI 智能序列下载（GUI 逆向 #44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID 自动检测/转换/审计；支持 apiKey 提速）",
   "semantic_fingerprint": "d227a1161ea3a05407ed22f3a6a710cc958bb821bcae158633f2431ad9a5fb6d",
   "semantic_fingerprint_short": "d227a1161ea3a054",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -5883,6 +6217,8 @@
   "help": "pubmed <query> <out.xls>   # PubMed 文献检索汇总（GUI 逆向 #45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表）",
   "semantic_fingerprint": "2a9ffbb8b4e46e04a42b1a6bc290f856c4b7f75551aa7ad4e48c5b39f03a5f6f",
   "semantic_fingerprint_short": "2a9ffbb8b4e46e04",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "table_operations"
   ],
@@ -5910,7 +6246,9 @@
   "group": "gwas",
   "help": "vcfAddID: vcfAddID --inFile <vcf> --outFile <out.vcf>   # VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz）",
   "semantic_fingerprint": "4ebffe73b2954a81aa115991e771e6ed9b7d229ec6c5435edccf75e566d9699e",
-  "semantic_fingerprint_short": "4ebffe73b2954a81"
+  "semantic_fingerprint_short": "4ebffe73b2954a81",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "mimicVqsr": {
   "name": "mimicVqsr",
@@ -5922,7 +6260,9 @@
   "group": "gwas",
   "help": "mimicVqsr: mimicVqsr --inFile <vcf> --outFile <out.txt>   # VCF 质量指标（QD/MQ/FS/SOR；GWAS）",
   "semantic_fingerprint": "d475e1699cea22882eb0b45b376cd97bbb1278e1650920c4420bb143b51ab2d7",
-  "semantic_fingerprint_short": "d475e1699cea2288"
+  "semantic_fingerprint_short": "d475e1699cea2288",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "DecodeIlluminaFqPool": {
   "name": "DecodeIlluminaFqPool",
@@ -5934,7 +6274,9 @@
   "group": "tool",
   "help": "DecodeIlluminaFqPool: DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode Illumina Fq Pool",
   "semantic_fingerprint": "e1810695e50fbc8ac2b9f96799b2f6002535ec3d73f5596cb408aac9187b52af",
-  "semantic_fingerprint_short": "e1810695e50fbc8a"
+  "semantic_fingerprint_short": "e1810695e50fbc8a",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "fastaIDAppender": {
   "name": "fastaIDAppender",
@@ -5946,7 +6288,9 @@
   "group": "tool",
   "help": "fastaIDAppender: fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender",
   "semantic_fingerprint": "fe928e5b150febce370dc44f5d9d32fc118fe10e194b56bb2ed25f2d4c22d953",
-  "semantic_fingerprint_short": "fe928e5b150febce"
+  "semantic_fingerprint_short": "fe928e5b150febce",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "rpkmCal": {
   "name": "rpkmCal",
@@ -5958,7 +6302,9 @@
   "group": "tool",
   "help": "rpkmCal: rpkmCal (tool, RPKMcalculator) — R P K Mcalculator",
   "semantic_fingerprint": "f39007fa473e1af57fc297b55f5fedad04373a2e19e539371df1b60448590eb1",
-  "semantic_fingerprint_short": "f39007fa473e1af5"
+  "semantic_fingerprint_short": "f39007fa473e1af5",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "fpkmToTpm": {
   "name": "fpkmToTpm",
@@ -5970,7 +6316,9 @@
   "group": "tool",
   "help": "fpkmToTpm: fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M",
   "semantic_fingerprint": "b7ecb9e6ff528e05621ffe98d4ce02f2e8f810552df5efe7c9c6a53e92511969",
-  "semantic_fingerprint_short": "b7ecb9e6ff528e05"
+  "semantic_fingerprint_short": "b7ecb9e6ff528e05",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "tpmCalc": {
   "name": "tpmCalc",
@@ -5983,6 +6331,8 @@
   "help": "tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator",
   "semantic_fingerprint": "f4829d21e6ee7c709cdcc5f1396b087ae4d9a110bda0004c2ac5075a1f4809fe",
   "semantic_fingerprint_short": "f4829d21e6ee7c70",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "rna_seq",
    "normalization"
@@ -6036,7 +6386,14 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "named_flags": {
+   "inputs": {
+    "counts": "--countsTable",
+    "lenInfo": "--lenInfo"
+   },
+   "output": "--outTable"
+  }
  },
  "autoMakeBlastDb": {
   "name": "autoMakeBlastDb",
@@ -6049,6 +6406,8 @@
   "help": "autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb",
   "semantic_fingerprint": "44adf32e858503d37ce7fce5bff140ac7ae517b7de7a7ba04b820a8e32fcd317",
   "semantic_fingerprint_short": "44adf32e858503d3",
+  "readiness": "LEGACY",
+  "verification": "COMPILEABLE",
   "inputs": [
    {
     "name": "fasta",
@@ -6085,7 +6444,9 @@
   "group": "tool",
   "help": "autoRemoteBlast: autoRemoteBlast (tool, remoteblast) — remoteblast",
   "semantic_fingerprint": "5ac70c62c830a14cbf7351d4cb6ecb38ca13e000dfd0813c5defb78ad9e8cdc0",
-  "semantic_fingerprint_short": "5ac70c62c830a14c"
+  "semantic_fingerprint_short": "5ac70c62c830a14c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "GoCompareBar": {
   "name": "GoCompareBar",
@@ -6097,7 +6458,9 @@
   "group": "tool",
   "help": "GoCompareBar: GoCompareBar (tool, GoCompare) — Go Compare",
   "semantic_fingerprint": "b36eb65dfd09a3f71926b592e89aff73c01949b9e70415de749ef1525ec50254",
-  "semantic_fingerprint_short": "b36eb65dfd09a3f7"
+  "semantic_fingerprint_short": "b36eb65dfd09a3f7",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "plotRNAfoldloci": {
   "name": "plotRNAfoldloci",
@@ -6109,7 +6472,9 @@
   "group": "tool",
   "help": "plotRNAfoldloci: plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold",
   "semantic_fingerprint": "076c9c43bd68827c392a3f5a0667fc041bfd961b9e12c2c6d7f75ebef4d224ab",
-  "semantic_fingerprint_short": "076c9c43bd68827c"
+  "semantic_fingerprint_short": "076c9c43bd68827c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "getLongestCompleteORF": {
   "name": "getLongestCompleteORF",
@@ -6122,7 +6487,9 @@
   "help": "getLongestCompleteORF: getLongestCompleteORF (tool, ORF) — O R F",
   "semantic_fingerprint": "d740418a6691a6c007020ccd4a5b50471c492e52cee95c895e1b4cc3a16c876f",
   "semantic_fingerprint_short": "d740418a6691a6c0",
-  "alias_of": "longestorf"
+  "alias_of": "longestorf",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "ExtractFeaturefromGFF3andGenome": {
   "name": "ExtractFeaturefromGFF3andGenome",
@@ -6134,7 +6501,9 @@
   "group": "tool",
   "help": "ExtractFeaturefromGFF3andGenome: ExtractFeaturefromGFF3andGenome (tool, ExtractFeaturefromGFF3andGenome) — Extract Featurefrom G F F3and Genome",
   "semantic_fingerprint": "90dd271331d1826f4f71d5d83fd39c2ae12b0351701ccfb5ec0efd0a55bf819c",
-  "semantic_fingerprint_short": "90dd271331d1826f"
+  "semantic_fingerprint_short": "90dd271331d1826f",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "Fasta36m10toTable": {
   "name": "Fasta36m10toTable",
@@ -6146,7 +6515,9 @@
   "group": "tool",
   "help": "Fasta36m10toTable: Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to Table",
   "semantic_fingerprint": "da03aa05578e504f2402adf76d1c00e4caf153d8e485bdf19356893149f4ae7a",
-  "semantic_fingerprint_short": "da03aa05578e504f"
+  "semantic_fingerprint_short": "da03aa05578e504f",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "FastaIDRenamer": {
   "name": "FastaIDRenamer",
@@ -6158,7 +6529,9 @@
   "group": "tool",
   "help": "FastaIDRenamer: FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer",
   "semantic_fingerprint": "99982eb42db624fb0743d2c260eb40ebe1a3028da5d7ee849b7c02a44c75ed08",
-  "semantic_fingerprint_short": "99982eb42db624fb"
+  "semantic_fingerprint_short": "99982eb42db624fb",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "FastaIDSimplifier": {
   "name": "FastaIDSimplifier",
@@ -6170,7 +6543,9 @@
   "group": "tool",
   "help": "FastaIDSimplifier: FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D Simplifier",
   "semantic_fingerprint": "9366211ed70eec6a9a5d4725022f2270aacec299bf0a4e3fc8a741e3afa0dd5b",
-  "semantic_fingerprint_short": "9366211ed70eec6a"
+  "semantic_fingerprint_short": "9366211ed70eec6a",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "FastaLongestRepresentater": {
   "name": "FastaLongestRepresentater",
@@ -6182,7 +6557,9 @@
   "group": "tool",
   "help": "FastaLongestRepresentater: FastaLongestRepresentater (tool, FastaLongestRepresentater) — Fasta Longest Representater",
   "semantic_fingerprint": "b3979d128daa0c0b80e78449275d6d7720b8a798cb3b70aa0cf167ac0e6f64de",
-  "semantic_fingerprint_short": "b3979d128daa0c0b"
+  "semantic_fingerprint_short": "b3979d128daa0c0b",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "FoldStructureStater": {
   "name": "FoldStructureStater",
@@ -6194,7 +6571,9 @@
   "group": "tool",
   "help": "FoldStructureStater: FoldStructureStater (tool, FoldStructureStater) — Fold Structure Stater",
   "semantic_fingerprint": "f0af9ee6369f056adcbecef52257d98b91610731f188be8e9826e39d5f09c3ae",
-  "semantic_fingerprint_short": "f0af9ee6369f056a"
+  "semantic_fingerprint_short": "f0af9ee6369f056a",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "GXFOverlaper": {
   "name": "GXFOverlaper",
@@ -6206,7 +6585,9 @@
   "group": "tool",
   "help": "GXFOverlaper: GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper",
   "semantic_fingerprint": "6cfc21e4784b0b9908bdc02fb8fbc03fc5ce4ed51f5046351cda8e3b73813612",
-  "semantic_fingerprint_short": "6cfc21e4784b0b99"
+  "semantic_fingerprint_short": "6cfc21e4784b0b99",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "NCBITaxonomy": {
   "name": "NCBITaxonomy",
@@ -6218,7 +6599,9 @@
   "group": "tool",
   "help": "NCBITaxonomy: NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy",
   "semantic_fingerprint": "60b5401d6eea6be794bb7f934bfe393c7a8e713c2b669d976bb6aaeba2bba0d8",
-  "semantic_fingerprint_short": "60b5401d6eea6be7"
+  "semantic_fingerprint_short": "60b5401d6eea6be7",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "OneStepMirGraph": {
   "name": "OneStepMirGraph",
@@ -6230,7 +6613,9 @@
   "group": "tool",
   "help": "OneStepMirGraph: OneStepMirGraph (tool, OneStepMirGraph) — One Step Mir Graph",
   "semantic_fingerprint": "eb25679a0c1efcf8a730ad575147e93a4583604e03b935583da34825b5a6197e",
-  "semantic_fingerprint_short": "eb25679a0c1efcf8"
+  "semantic_fingerprint_short": "eb25679a0c1efcf8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "OverlapGeneModels": {
   "name": "OverlapGeneModels",
@@ -6242,7 +6627,9 @@
   "group": "tool",
   "help": "OverlapGeneModels: OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene Models",
   "semantic_fingerprint": "1fc024a1c4b1e4825967678c7148023b61b4d530e369a4f8ca97c8cc7b794ec2",
-  "semantic_fingerprint_short": "1fc024a1c4b1e482"
+  "semantic_fingerprint_short": "1fc024a1c4b1e482",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "PredictMirSTAR": {
   "name": "PredictMirSTAR",
@@ -6254,7 +6641,9 @@
   "group": "tool",
   "help": "PredictMirSTAR: PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R",
   "semantic_fingerprint": "e03c321474e8bbbbcf73e1383fb09f3aad3ddab121d4456b41b2ba55ea96ce4d",
-  "semantic_fingerprint_short": "e03c321474e8bbbb"
+  "semantic_fingerprint_short": "e03c321474e8bbbb",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "RNAplotAdvance": {
   "name": "RNAplotAdvance",
@@ -6266,7 +6655,9 @@
   "group": "tool",
   "help": "RNAplotAdvance: RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance",
   "semantic_fingerprint": "90bd7319bd6f576cac0107dd3f478e4306b04e280acc1e1904d20fdbb63fa39a",
-  "semantic_fingerprint_short": "90bd7319bd6f576c"
+  "semantic_fingerprint_short": "90bd7319bd6f576c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "MIRPrediionResultStat": {
   "name": "MIRPrediionResultStat",
@@ -6278,7 +6669,9 @@
   "group": "tool",
   "help": "MIRPrediionResultStat: MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R Prediion Result Stat",
   "semantic_fingerprint": "bc3d23ffda9f3f5141202329e2bc201ab85d5c693054ab521814003dfff5eb77",
-  "semantic_fingerprint_short": "bc3d23ffda9f3f51"
+  "semantic_fingerprint_short": "bc3d23ffda9f3f51",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "ReciprocalBlast": {
   "name": "ReciprocalBlast",
@@ -6290,7 +6683,9 @@
   "group": "tool",
   "help": "ReciprocalBlast: ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast",
   "semantic_fingerprint": "c82d253fd32301bb093dad74375c7c010c3788ea1d8d06368ffb41f7a1975797",
-  "semantic_fingerprint_short": "c82d253fd32301bb"
+  "semantic_fingerprint_short": "c82d253fd32301bb",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "RegionGXFOverlapAnnotation": {
   "name": "RegionGXFOverlapAnnotation",
@@ -6302,7 +6697,9 @@
   "group": "tool",
   "help": "RegionGXFOverlapAnnotation: RegionGXFOverlapAnnotation (tool, RegionGXFOverlapAnnotation) — Region G X F Overlap Annotation",
   "semantic_fingerprint": "cd9e4b460c127a9d362028180bf7855131a93603e01fcddf57dce9b3d7f32247",
-  "semantic_fingerprint_short": "cd9e4b460c127a9d"
+  "semantic_fingerprint_short": "cd9e4b460c127a9d",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "TableCast": {
   "name": "TableCast",
@@ -6315,7 +6712,9 @@
   "help": "TableCast: TableCast (tool, TableCast) — Table Cast",
   "semantic_fingerprint": "a24b17a93760c1e4678e058127ec1411c2a8406e34a4b86de000daba13dc8ce6",
   "semantic_fingerprint_short": "a24b17a93760c1e4",
-  "alias_of": "tableCast"
+  "alias_of": "tableCast",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "TableColSelector": {
   "name": "TableColSelector",
@@ -6327,7 +6726,9 @@
   "group": "tool",
   "help": "TableColSelector: TableColSelector (tool, TableColSelector) — Table Col Selector",
   "semantic_fingerprint": "ff0647862c906e6d001dfcd33ae5da527e7d2a6a22405f1783c8a889170791b0",
-  "semantic_fingerprint_short": "ff0647862c906e6d"
+  "semantic_fingerprint_short": "ff0647862c906e6d",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "TableMelt": {
   "name": "TableMelt",
@@ -6339,7 +6740,9 @@
   "group": "tool",
   "help": "TableMelt: TableMelt (tool, TableMelt) — Table Melt",
   "semantic_fingerprint": "c0ce11883d4783191a8b9b244316e807d4fdcdaaea21ef872923d487b6366408",
-  "semantic_fingerprint_short": "c0ce11883d478319"
+  "semantic_fingerprint_short": "c0ce11883d478319",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "downLoadNCBIFasta": {
   "name": "downLoadNCBIFasta",
@@ -6351,7 +6754,9 @@
   "group": "tool",
   "help": "downLoadNCBIFasta: downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C B I Fasta",
   "semantic_fingerprint": "09c6dad4873e674d9ebe086caa4b168ccb0b003ec09c6c51e0f72140e1bedaf6",
-  "semantic_fingerprint_short": "09c6dad4873e674d"
+  "semantic_fingerprint_short": "09c6dad4873e674d",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "extractFasta": {
   "name": "extractFasta",
@@ -6364,6 +6769,8 @@
   "help": "extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta",
   "semantic_fingerprint": "d21ab22d6059ede8c1551675ae0a6d5c616591058b650955b8b5e7359fb7088b",
   "semantic_fingerprint_short": "d21ab22d6059ede8",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence",
    "extraction"
@@ -6397,7 +6804,9 @@
   "group": "tool",
   "help": "extractFastaSub: extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta Subseq",
   "semantic_fingerprint": "88c4123f6a2968421c8e1eb7c4f51ea67a13fbbf73f80eda6d1f9cc2d33a5b28",
-  "semantic_fingerprint_short": "88c4123f6a296842"
+  "semantic_fingerprint_short": "88c4123f6a296842",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "keggEnrichment": {
   "name": "keggEnrichment",
@@ -6409,7 +6818,9 @@
   "group": "tool",
   "help": "keggEnrichment: keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment",
   "semantic_fingerprint": "ba94cf5563c2779ce12203669e3fa830256f7c6fdfcdad294e44adf72a1cca6a",
-  "semantic_fingerprint_short": "ba94cf5563c2779c"
+  "semantic_fingerprint_short": "ba94cf5563c2779c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "goAnnoPipe": {
   "name": "goAnnoPipe",
@@ -6421,7 +6832,9 @@
   "group": "tool",
   "help": "goAnnoPipe: goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe",
   "semantic_fingerprint": "e7068dd795389aee48783822eef23d012e2b38e87c97b64fd937e25ec05d6780",
-  "semantic_fingerprint_short": "e7068dd795389aee"
+  "semantic_fingerprint_short": "e7068dd795389aee",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "dnDsCalculate": {
   "name": "dnDsCalculate",
@@ -6434,6 +6847,8 @@
   "help": "dnDsCalculate: dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate",
   "semantic_fingerprint": "dc41861a795dd3a3568c7c4c98ba399c9f10669e52c358f5e6669791d18baade",
   "semantic_fingerprint_short": "dc41861a795dd3a3",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "ka_ks",
    "evolutionary_analysis"
@@ -6464,7 +6879,9 @@
   "group": "tool",
   "help": "ssrMiner: ssrMiner (tool, SSRminer) — S S Rminer",
   "semantic_fingerprint": "85966aa2c38610f4d76e9f500afd634c9cb322ca292bc9a842086b8538d44be6",
-  "semantic_fingerprint_short": "85966aa2c38610f4"
+  "semantic_fingerprint_short": "85966aa2c38610f4",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "checkPrimer": {
   "name": "checkPrimer",
@@ -6476,7 +6893,9 @@
   "group": "tool",
   "help": "checkPrimer: checkPrimer (tool, CheckPrimer) — Check Primer",
   "semantic_fingerprint": "989da609819d223749c4f674edf63627b191a433877e08206ed692bffc0558f2",
-  "semantic_fingerprint_short": "989da609819d2237"
+  "semantic_fingerprint_short": "989da609819d2237",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "quickLocateSeqPattern": {
   "name": "quickLocateSeqPattern",
@@ -6488,7 +6907,9 @@
   "group": "tool",
   "help": "quickLocateSeqPattern: quickLocateSeqPattern (tool, QuickLocateSeqPattern) — Quick Locate Seq Pattern",
   "semantic_fingerprint": "86b9a27bf28b112c8c2662f1768387221aab588ecf645fd51f3f2644bbf25d6f",
-  "semantic_fingerprint_short": "86b9a27bf28b112c"
+  "semantic_fingerprint_short": "86b9a27bf28b112c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "blastXmlSummaryTable": {
   "name": "blastXmlSummaryTable",
@@ -6500,7 +6921,9 @@
   "group": "tool",
   "help": "blastXmlSummaryTable: blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X M L Summary Table",
   "semantic_fingerprint": "ec6d6f48e5af47c94a8e26f55085b5459b71576efc5be3c2fc6e0ebec62fce9d",
-  "semantic_fingerprint_short": "ec6d6f48e5af47c9"
+  "semantic_fingerprint_short": "ec6d6f48e5af47c9",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "emblToFasta": {
   "name": "emblToFasta",
@@ -6512,7 +6935,9 @@
   "group": "tool",
   "help": "emblToFasta: emblToFasta (tool, emblToFasta) — embl To Fasta",
   "semantic_fingerprint": "fd832fbaf66b7c348b03b7f0f8fa579576185b9be1b3ea48c5a556c8368490a1",
-  "semantic_fingerprint_short": "fd832fbaf66b7c34"
+  "semantic_fingerprint_short": "fd832fbaf66b7c34",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "gbff2gff": {
   "name": "gbff2gff",
@@ -6524,7 +6949,9 @@
   "group": "tool",
   "help": "gbff2gff: gbff2gff (tool, gbff2gff) — gbff2gff",
   "semantic_fingerprint": "5c4ee0c202bf45d86c3f5f3c5219be107ef7fd80ad8d43c882bc9d5e0e4bc1b4",
-  "semantic_fingerprint_short": "5c4ee0c202bf45d8"
+  "semantic_fingerprint_short": "5c4ee0c202bf45d8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "extractGff3Region": {
   "name": "extractGff3Region",
@@ -6536,7 +6963,9 @@
   "group": "tool",
   "help": "extractGff3Region: extractGff3Region (tool, ExtractGff3Region) — Extract Gff3 Region",
   "semantic_fingerprint": "a86b0d1c82be367f9deaae101f0684d8f6da55264f6ced4d2a4a37c5d3e3736d",
-  "semantic_fingerprint_short": "a86b0d1c82be367f"
+  "semantic_fingerprint_short": "a86b0d1c82be367f",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "vcfBinCount": {
   "name": "vcfBinCount",
@@ -6548,7 +6977,9 @@
   "group": "tool",
   "help": "vcfBinCount: vcfBinCount (tool, VCFBINCount) — V C F B I N Count",
   "semantic_fingerprint": "3392af1cf7191b98a954eeed6e030d0b3169cdbcc8ab8ff48e8b6c268d6595b0",
-  "semantic_fingerprint_short": "3392af1cf7191b98"
+  "semantic_fingerprint_short": "3392af1cf7191b98",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "getLongestORF": {
   "name": "getLongestORF",
@@ -6560,7 +6991,9 @@
   "group": "tool",
   "help": "getLongestORF: getLongestORF (tool, GetLongestORF) — Get Longest O R F",
   "semantic_fingerprint": "e00a1a61993f57f6f83b5ce4a5e70f354c8a38036f5f2d254f6fcb137c300e03",
-  "semantic_fingerprint_short": "e00a1a61993f57f6"
+  "semantic_fingerprint_short": "e00a1a61993f57f6",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "translater": {
   "name": "translater",
@@ -6572,7 +7005,9 @@
   "group": "tool",
   "help": "translater: translater (tool, Translater) — Translater",
   "semantic_fingerprint": "17adff1cfd49588283bb08046e3c12b095bb06f2d8f0084e5b43b25fdf0cc051",
-  "semantic_fingerprint_short": "17adff1cfd495882"
+  "semantic_fingerprint_short": "17adff1cfd495882",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "makeFastaIndex": {
   "name": "makeFastaIndex",
@@ -6584,7 +7019,9 @@
   "group": "tool",
   "help": "makeFastaIndex: makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index",
   "semantic_fingerprint": "767fcefe2ab14a8f1e45f90363c8aaf90b8fea1d44d50e27f93b31fb3876bd39",
-  "semantic_fingerprint_short": "767fcefe2ab14a8f"
+  "semantic_fingerprint_short": "767fcefe2ab14a8f",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "quickSplitFasta": {
   "name": "quickSplitFasta",
@@ -6596,7 +7033,9 @@
   "group": "tool",
   "help": "quickSplitFasta: quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta",
   "semantic_fingerprint": "47ea447b4b67dc2c7222d72b43e9f1eac7352e70ec23a8403b1b9bdfb2e7878c",
-  "semantic_fingerprint_short": "47ea447b4b67dc2c"
+  "semantic_fingerprint_short": "47ea447b4b67dc2c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "fastaFragmenter": {
   "name": "fastaFragmenter",
@@ -6608,7 +7047,9 @@
   "group": "tool",
   "help": "fastaFragmenter: fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter",
   "semantic_fingerprint": "18ff363572466d59c312ff0a1abe146c997cb27c9459aac51a48813ff74b9021",
-  "semantic_fingerprint_short": "18ff363572466d59"
+  "semantic_fingerprint_short": "18ff363572466d59",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "eggNogMapperResult": {
   "name": "eggNogMapperResult",
@@ -6620,7 +7061,9 @@
   "group": "tool",
   "help": "eggNogMapperResult: eggNogMapperResult (tool, eggNogMapperResult) — egg Nog Mapper Result",
   "semantic_fingerprint": "ae69dbcfe0e68ae918210d704dfc74a4078f526c709f1e037239e1d4647ffff2",
-  "semantic_fingerprint_short": "ae69dbcfe0e68ae9"
+  "semantic_fingerprint_short": "ae69dbcfe0e68ae9",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "tandemDupFinder": {
   "name": "tandemDupFinder",
@@ -6632,7 +7075,9 @@
   "group": "tool",
   "help": "tandemDupFinder: tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder",
   "semantic_fingerprint": "a8c76550f63070116dfc4ff64134336246c815ce5a4ea62393e6541a0f7196c2",
-  "semantic_fingerprint_short": "a8c76550f6307011"
+  "semantic_fingerprint_short": "a8c76550f6307011",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "genePairExpCorr": {
   "name": "genePairExpCorr",
@@ -6644,7 +7089,9 @@
   "group": "tool",
   "help": "genePairExpCorr: genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr",
   "semantic_fingerprint": "740dad3593fdd094ccf33461fb50f0761a0b9344fe7aa61e515b0986a604b4f6",
-  "semantic_fingerprint_short": "740dad3593fdd094"
+  "semantic_fingerprint_short": "740dad3593fdd094",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "slurmScriptPrepare": {
   "name": "slurmScriptPrepare",
@@ -6656,7 +7103,9 @@
   "group": "tool",
   "help": "slurmScriptPrepare: slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script Prepare",
   "semantic_fingerprint": "de762ddeef55208c78f5726e051acc0bbc0c1b068d88a75d2a0bdedd12733f93",
-  "semantic_fingerprint_short": "de762ddeef55208c"
+  "semantic_fingerprint_short": "de762ddeef55208c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "geneExpFilter": {
   "name": "geneExpFilter",
@@ -6668,7 +7117,9 @@
   "group": "tool",
   "help": "geneExpFilter: geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter",
   "semantic_fingerprint": "97ddf1eaf101393b82c0b2d86925eaab924f8f2326a27454602c535d21b81657",
-  "semantic_fingerprint_short": "97ddf1eaf101393b"
+  "semantic_fingerprint_short": "97ddf1eaf101393b",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "prepareFileFromMCScanXtoTBtools": {
   "name": "prepareFileFromMCScanXtoTBtools",
@@ -6680,7 +7131,9 @@
   "group": "tool",
   "help": "prepareFileFromMCScanXtoTBtools: prepareFileFromMCScanXtoTBtools (tool, PrepareFileFromMCScanXtoTBtools) — Prepare File From M C Scan Xto T Btools",
   "semantic_fingerprint": "06945b64aa4bc34679c78aa226f9666ee268688855031778a94e09953e851238",
-  "semantic_fingerprint_short": "06945b64aa4bc346"
+  "semantic_fingerprint_short": "06945b64aa4bc346",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "blastXmlToTable": {
   "name": "blastXmlToTable",
@@ -6692,7 +7145,9 @@
   "group": "tool",
   "help": "blastXmlToTable: blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast Xml To Self Defined Table",
   "semantic_fingerprint": "6ad2e77e064fe4b05b256128367322762431b0aa792c4e668955ad64c1be62f7",
-  "semantic_fingerprint_short": "6ad2e77e064fe4b0"
+  "semantic_fingerprint_short": "6ad2e77e064fe4b0",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "targetSoPipe": {
   "name": "targetSoPipe",
@@ -6704,7 +7159,9 @@
   "group": "tool",
   "help": "targetSoPipe: targetSoPipe (tool, TargetSoPipe) — Target So Pipe",
   "semantic_fingerprint": "16a94ca00c609e2bfca37da1661bb80beb39f301cc10b5d911929fa7d3a5e8c0",
-  "semantic_fingerprint_short": "16a94ca00c609e2b"
+  "semantic_fingerprint_short": "16a94ca00c609e2b",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "target2TablePipe": {
   "name": "target2TablePipe",
@@ -6716,7 +7173,9 @@
   "group": "tool",
   "help": "target2TablePipe: target2TablePipe (tool, Target2TablePipe) — Target2 Table Pipe",
   "semantic_fingerprint": "6f23f1857ba68514ef32cf4c8196b2252896a702b9a47351a6052004ae240354",
-  "semantic_fingerprint_short": "6f23f1857ba68514"
+  "semantic_fingerprint_short": "6f23f1857ba68514",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "mirIdentifierBasedOnTargetSo": {
   "name": "mirIdentifierBasedOnTargetSo",
@@ -6728,7 +7187,9 @@
   "group": "tool",
   "help": "mirIdentifierBasedOnTargetSo: mirIdentifierBasedOnTargetSo (tool, MIRidentifierBasedOnTargetSoResult) — M I Ridentifier Based On Target So Result",
   "semantic_fingerprint": "c957853682f11cb72d5455a9f858fac070a8268d2afdd857112e2247eefde28f",
-  "semantic_fingerprint_short": "c957853682f11cb7"
+  "semantic_fingerprint_short": "c957853682f11cb7",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "regionBlast": {
   "name": "regionBlast",
@@ -6740,7 +7201,9 @@
   "group": "tool",
   "help": "regionBlast: regionBlast (tool, regionBlast) — region Blast",
   "semantic_fingerprint": "8354d0c15a2fb5a5067b08f34fd219d555b8bc3d4dd6bdb230c8ac529798438d",
-  "semantic_fingerprint_short": "8354d0c15a2fb5a5"
+  "semantic_fingerprint_short": "8354d0c15a2fb5a5",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "findBestHomologyBatch": {
   "name": "findBestHomologyBatch",
@@ -6752,7 +7215,9 @@
   "group": "tool",
   "help": "findBestHomologyBatch: findBestHomologyBatch (tool, FindBestHomologyBatch) — Find Best Homology Batch",
   "semantic_fingerprint": "11a004bb0f7bbf9cf1208b9dc3c7893e3963f814af0fd5da098eecca7f5d6278",
-  "semantic_fingerprint_short": "11a004bb0f7bbf9c"
+  "semantic_fingerprint_short": "11a004bb0f7bbf9c",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "collinearityToRegion": {
   "name": "collinearityToRegion",
@@ -6764,7 +7229,9 @@
   "group": "tool",
   "help": "collinearityToRegion: collinearityToRegion (tool, CollinearityToRegion) — Collinearity To Region",
   "semantic_fingerprint": "632aa5428a826949d70fe612b96c367c01dc5a645116e71897a3b5452c7bf897",
-  "semantic_fingerprint_short": "632aa5428a826949"
+  "semantic_fingerprint_short": "632aa5428a826949",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "pairWiseKaKsCalculator": {
   "name": "pairWiseKaKsCalculator",
@@ -6776,7 +7243,9 @@
   "group": "tool",
   "help": "pairWiseKaKsCalculator: pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair Wise Ka Ks Calculator",
   "semantic_fingerprint": "ccd1837376ce622bcf534fb81c6b4e1032fdb722a7e0b12ecbf4a358938aa3a2",
-  "semantic_fingerprint_short": "ccd1837376ce622b"
+  "semantic_fingerprint_short": "ccd1837376ce622b",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "simpleBatchProcess": {
   "name": "simpleBatchProcess",
@@ -6788,7 +7257,9 @@
   "group": "tool",
   "help": "simpleBatchProcess: simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch Process",
   "semantic_fingerprint": "9f15b22d902b7fcfef0294ad66fed1eeb73d53ebeedd729c45d92b3488ca70df",
-  "semantic_fingerprint_short": "9f15b22d902b7fcf"
+  "semantic_fingerprint_short": "9f15b22d902b7fcf",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "quickGeneFamilyIdentification": {
   "name": "quickGeneFamilyIdentification",
@@ -6800,7 +7271,9 @@
   "group": "tool",
   "help": "quickGeneFamilyIdentification: quickGeneFamilyIdentification (tool, QuickGeneFamilyIdentification) — Quick Gene Family Identification",
   "semantic_fingerprint": "f14a2894f5fa146eefe7d5d288f64b1b867fd1c20edaf638b4cc9a8f05b07b14",
-  "semantic_fingerprint_short": "f14a2894f5fa146e"
+  "semantic_fingerprint_short": "f14a2894f5fa146e",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "gffCdsPhaseCorrector": {
   "name": "gffCdsPhaseCorrector",
@@ -6812,7 +7285,9 @@
   "group": "tool",
   "help": "gffCdsPhaseCorrector: gffCdsPhaseCorrector (tool, GffCdsPhaseCorrector) — Gff Cds Phase Corrector",
   "semantic_fingerprint": "250060bf1b3a922d96b7e6d30cbb9538434f14537b2ef09a69f961654334775b",
-  "semantic_fingerprint_short": "250060bf1b3a922d"
+  "semantic_fingerprint_short": "250060bf1b3a922d",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "parallelMD5Check": {
   "name": "parallelMD5Check",
@@ -6824,7 +7299,9 @@
   "group": "tool",
   "help": "parallelMD5Check: parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5 Check",
   "semantic_fingerprint": "b34aa1f06e3d4497c7a31ac4e6196821cf96a89d81b796aeaa11cfc486ddc40a",
-  "semantic_fingerprint_short": "b34aa1f06e3d4497"
+  "semantic_fingerprint_short": "b34aa1f06e3d4497",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "pafRefBaseCoverCalc": {
   "name": "pafRefBaseCoverCalc",
@@ -6836,7 +7313,9 @@
   "group": "tool",
   "help": "pafRefBaseCoverCalc: pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref Base Cover Calc",
   "semantic_fingerprint": "0a9ad37ec36594e841121478072f523324a13caf0b0d4c33f727eb1d638bdba1",
-  "semantic_fingerprint_short": "0a9ad37ec36594e8"
+  "semantic_fingerprint_short": "0a9ad37ec36594e8",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "sRNAseqReadLenStat": {
   "name": "sRNAseqReadLenStat",
@@ -6848,7 +7327,9 @@
   "group": "tool",
   "help": "sRNAseqReadLenStat: sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq Read Len Stat",
   "semantic_fingerprint": "9576b1bb5f4351bf5bd8328d26dc4a06611e70f6a0a450af0cb13df1c8a1dc91",
-  "semantic_fingerprint_short": "9576b1bb5f4351bf"
+  "semantic_fingerprint_short": "9576b1bb5f4351bf",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "sRNAReadTrimmer": {
   "name": "sRNAReadTrimmer",
@@ -6860,7 +7341,9 @@
   "group": "tool",
   "help": "sRNAReadTrimmer: sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read Trimmer",
   "semantic_fingerprint": "02c4ce79517811f31029123ff4794970a7451e8e9f2280b64886da9ca875ae16",
-  "semantic_fingerprint_short": "02c4ce79517811f3"
+  "semantic_fingerprint_short": "02c4ce79517811f3",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "sRNAseqAdaperRemover": {
   "name": "sRNAseqAdaperRemover",
@@ -6872,7 +7355,9 @@
   "group": "tool",
   "help": "sRNAseqAdaperRemover: sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N Aseq Adaper Remover",
   "semantic_fingerprint": "15d184b680cc335f3039a3eceafad688fc283a5496d271471af9d15ccae8b0f2",
-  "semantic_fingerprint_short": "15d184b680cc335f"
+  "semantic_fingerprint_short": "15d184b680cc335f",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "fastqParallelTrimmer": {
   "name": "fastqParallelTrimmer",
@@ -6884,7 +7369,9 @@
   "group": "tool",
   "help": "fastqParallelTrimmer: fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq Parallel Trimmer",
   "semantic_fingerprint": "50d2243045b2648987f3b4bdcf0ed011acb33cfe61299db8e948e0c88805e955",
-  "semantic_fingerprint_short": "50d2243045b26489"
+  "semantic_fingerprint_short": "50d2243045b26489",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "fastqParallelSubBest": {
   "name": "fastqParallelSubBest",
@@ -6896,7 +7383,9 @@
   "group": "tool",
   "help": "fastqParallelSubBest: fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq Parallel Sub Best",
   "semantic_fingerprint": "737d38ad97c76db1125046e0993fbaed0fa9402d8c22251fec315c2436f5bb6b",
-  "semantic_fingerprint_short": "737d38ad97c76db1"
+  "semantic_fingerprint_short": "737d38ad97c76db1",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "fastqAndFasta": {
   "name": "fastqAndFasta",
@@ -6908,7 +7397,9 @@
   "group": "tool",
   "help": "fastqAndFasta: fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta",
   "semantic_fingerprint": "4978c0cca86b67e9b0c98e56bef31b9b887675daffcf43d1710c307ac81921a0",
-  "semantic_fingerprint_short": "4978c0cca86b67e9"
+  "semantic_fingerprint_short": "4978c0cca86b67e9",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "extractFeatureFromGTF": {
   "name": "extractFeatureFromGTF",
@@ -6920,7 +7411,9 @@
   "group": "tool",
   "help": "extractFeatureFromGTF: extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome) — Extract Featurefrom G T Fand Genome",
   "semantic_fingerprint": "91ce14a213d458e580b2e96b567b151b0c49d92b9042c2466df9284b10dc4abe",
-  "semantic_fingerprint_short": "91ce14a213d458e5"
+  "semantic_fingerprint_short": "91ce14a213d458e5",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "sRNAseqCollasper": {
   "name": "sRNAseqCollasper",
@@ -6932,7 +7425,9 @@
   "group": "tool",
   "help": "sRNAseqCollasper: sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq Collasper",
   "semantic_fingerprint": "01ad8d3f8e155414181fc40a26f4d13d0faf8e36aab20980b4123179963400dc",
-  "semantic_fingerprint_short": "01ad8d3f8e155414"
+  "semantic_fingerprint_short": "01ad8d3f8e155414",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "generateMotifFromSequences": {
   "name": "generateMotifFromSequences",
@@ -6944,7 +7439,9 @@
   "group": "tool",
   "help": "generateMotifFromSequences: generateMotifFromSequences (tool, GenerateMotifFromSequences) — Generate Motif From Sequences",
   "semantic_fingerprint": "f5a26c753d1dccf4e22ccbad57ab91577be0f82c7f8624f7959f8c1da5d3995f",
-  "semantic_fingerprint_short": "f5a26c753d1dccf4"
+  "semantic_fingerprint_short": "f5a26c753d1dccf4",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "sRNAseqDeCollasper": {
   "name": "sRNAseqDeCollasper",
@@ -6956,7 +7453,9 @@
   "group": "tool",
   "help": "sRNAseqDeCollasper: sRNAseqDeCollasper (tool, sRNAseqDeCollasper) — s R N Aseq De Collasper",
   "semantic_fingerprint": "f744a9799aa12f0783947af23c399070d2f4fd57cee65d0cb0133c8ab76b0fc5",
-  "semantic_fingerprint_short": "f744a9799aa12f07"
+  "semantic_fingerprint_short": "f744a9799aa12f07",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "findBestForkerRootTree": {
   "name": "findBestForkerRootTree",
@@ -6968,7 +7467,9 @@
   "group": "tool",
   "help": "findBestForkerRootTree: findBestForkerRootTree (tool, FindBestForkerRootTree) — Find Best Forker Root Tree",
   "semantic_fingerprint": "58e99e6ccb1203bdefe5cf711c75f57345b08dbde42dee4579565cf34f595046",
-  "semantic_fingerprint_short": "58e99e6ccb1203bd"
+  "semantic_fingerprint_short": "58e99e6ccb1203bd",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "statFasta": {
   "name": "statFasta",
@@ -6981,6 +7482,8 @@
   "help": "statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta",
   "semantic_fingerprint": "9ba90e3e559f827602b4cf8a2b22045cdefb13a73236787770dade602560c3e7",
   "semantic_fingerprint_short": "9ba90e3e559f8276",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence",
    "statistics"
@@ -7014,7 +7517,9 @@
   "group": "tool",
   "help": "goEnrichMerge: goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O Enrichment Merge Bubble",
   "semantic_fingerprint": "f5f21f73000b6e7073e6f40a88dab5f1a02499c8febcd768a4c7fe18dc3c53be",
-  "semantic_fingerprint_short": "f5f21f73000b6e70"
+  "semantic_fingerprint_short": "f5f21f73000b6e70",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "bigMarkerRandomDesign": {
   "name": "bigMarkerRandomDesign",
@@ -7026,7 +7531,9 @@
   "group": "tool",
   "help": "bigMarkerRandomDesign: bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big Marker Random Design",
   "semantic_fingerprint": "3c5458a929f3db736c296ac270050f68f824ba0f4ad10d6e4140172f106c98de",
-  "semantic_fingerprint_short": "3c5458a929f3db73"
+  "semantic_fingerprint_short": "3c5458a929f3db73",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "logo": {
   "name": "logo",
@@ -7039,6 +7546,8 @@
   "help": "序列 LOGO 图",
   "semantic_fingerprint": "6166bd94bede7940498277e6092594304071ee7876fec847f09427fbb0bd77f5",
   "semantic_fingerprint_short": "6166bd94bede7940",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -7070,6 +7579,8 @@
   "help": "多序列比对可视化",
   "semantic_fingerprint": "fd3d683a25b643d1d8b50c48094a4e5a38942186e5e9fecf3bf51e1a5cf42c1f",
   "semantic_fingerprint_short": "fd3d683a25b643d1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "alignment",
    "visualization"
@@ -7105,6 +7616,8 @@
   "help": "基因结构图（外显子/UTR 从 GFF）",
   "semantic_fingerprint": "f289567206a63de178fbedec3a719253921e5a91ac21cffbf5d90081d6fc3b9f",
   "semantic_fingerprint_short": "f289567206a63de1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -7137,6 +7650,8 @@
   "help": "Motif 分布图（MEME XML）",
   "semantic_fingerprint": "1c8b742c1898d46e168c6178483fc5c497257819d33a2c908e4ed68c65154b88",
   "semantic_fingerprint_short": "1c8b742c1898d46e",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "motif",
    "visualization"
@@ -7197,6 +7712,8 @@
   "help": "火山图（DEG: GeneID Log2FC pvalue）",
   "semantic_fingerprint": "14ad46e479a9104db3eb30726f015d3ddc58e5942e82a025f6550f7c9d53889d",
   "semantic_fingerprint_short": "14ad46e479a9104d",
+  "readiness": "FULL",
+  "verification": "CONFORMANCE_VERIFIED",
   "capabilities": [
    "differential_expression",
    "visualization"
@@ -7292,6 +7809,8 @@
   "help": "热图（表达矩阵）",
   "semantic_fingerprint": "6b359528864de66c5e3e1abf9e7ca07216874176a4a0f45a481db016d5d2b7c3",
   "semantic_fingerprint_short": "6b359528864de66c",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "expression_matrix",
    "clustering",
@@ -7383,6 +7902,8 @@
   "help": "PCA 图",
   "semantic_fingerprint": "cb7d8cb27cd641331fdd3379d767e1980c84c6a29894a6ebd4b14f24733ea81c",
   "semantic_fingerprint_short": "cb7d8cb27cd64133",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "dimension_reduction",
    "expression_matrix"
@@ -7435,6 +7956,8 @@
   "help": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
   "semantic_fingerprint": "54bd9c88444c5b183c5ea50aceba15c047448fce12fb0557d5a6fc717948cad8",
   "semantic_fingerprint_short": "54bd9c88444c5b18",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "clustering",
    "distance"
@@ -7516,6 +8039,8 @@
   "help": "差异表达双直方图",
   "semantic_fingerprint": "dc38626d5b3abf9e491c1fb4aadbe1143b4f6cb4b66c3132aa53efd11c4913d2",
   "semantic_fingerprint_short": "dc38626d5b3abf9e",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "differential_expression",
    "visualization"
@@ -7589,6 +8114,8 @@
   "help": "树+注释图（TreeTreeTree 多轨道）",
   "semantic_fingerprint": "d483f0b0a822d0086ab0099306edd687a69d26a0c3222f85ef9cf4cb1e3c036f",
   "semantic_fingerprint_short": "d483f0b0a822d008",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -7622,6 +8149,8 @@
   "help": "无根树可视化",
   "semantic_fingerprint": "12443a183fcf7de80f1d7368070ba74952de6cb65fd189e142ddbf19b0d75960",
   "semantic_fingerprint_short": "12443a183fcf7de8",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -7652,6 +8181,8 @@
   "help": "MAD 系统发育定根",
   "semantic_fingerprint": "3f11f3d70b26fa03d3b3a138e2c26b9c4c34855234074a5cc7581754fff014c8",
   "semantic_fingerprint_short": "3f11f3d70b26fa03",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "phylogeny"
   ],
@@ -7684,7 +8215,9 @@
   "group": "tool",
   "help": "CDS → 蛋白质翻译",
   "semantic_fingerprint": "c757b07cd3beca9d55c1535f0dcdc2b9a6b4d27b9c6b73cf5ba34ca7cfff55b0",
-  "semantic_fingerprint_short": "c757b07cd3beca9d"
+  "semantic_fingerprint_short": "c757b07cd3beca9d",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "make": {
   "name": "make",
@@ -7696,7 +8229,9 @@
   "group": "engine",
   "help": "工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）",
   "semantic_fingerprint": "5e22a14a5cb3582580fe2c54c227f2c8465bee1811d0d490aa85232f3bf7b342",
-  "semantic_fingerprint_short": "5e22a14a5cb35825"
+  "semantic_fingerprint_short": "5e22a14a5cb35825",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "hmmsearch": {
   "name": "hmmsearch",
@@ -7709,6 +8244,8 @@
   "help": "hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）",
   "semantic_fingerprint": "e7451fec71d9b65b013e8722a18c714d30f2cb77e1f891bbf4506adc6e675df5",
   "semantic_fingerprint_short": "e7451fec71d9b65b",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology",
    "hmm_scan"
@@ -7761,6 +8298,8 @@
   "help": "gxfAttr: gxfAttr <in.gff3|gtf> <out.tsv> [--feature mRNA] [--attrs ID,Name,Parent]   # GXF 属性/ID 对照表提取（G7 补齐，Python 原生，jar 无此引擎）",
   "semantic_fingerprint": "4e77431f2e548cd5c4025a3db6f9dd205db599cdbb8ba94194361c7133478fba",
   "semantic_fingerprint_short": "4e77431f2e548cd5",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "annotation"
   ],
@@ -7807,6 +8346,8 @@
   "help": "kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundance> [--kmer N] [--threads N] [--bootstrap N] [--bias] [--single] [--frag-len N] [--frag-sd N]   # RNA-seq 定量（插件 P00740 CLI 化，直调 ",
   "semantic_fingerprint": "ea7dcd17acb48263ecd91b28966e33c79163bbb11e1c8fccc92578b7e37ad2ec",
   "semantic_fingerprint_short": "ea7dcd17acb48263",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "rna_seq",
    "quantification"
@@ -7877,6 +8418,8 @@
   "help": "fimo: fimo --o <outDir> <motifs.meme> <promoter.fa>   # MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite）",
   "semantic_fingerprint": "bf172c8f67d3518203f1fac9e33291acc6f37893d89ea31e8e1caac39d75974b",
   "semantic_fingerprint_short": "bf172c8f67d35182",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "motif",
    "scanning"
@@ -7913,6 +8456,8 @@
   "help": "xml2blasttab: xml2blasttab <in.xml> <out.txt>   # BLAST XML→标准 12 列表（GUI 逆向 #25 BlastXmlToBlastFoolTable.xml2ShowerTable；QueryID/SubjectID/Identity/E-value/BitScore...）",
   "semantic_fingerprint": "cf820e87f27d58efc060f9423afcf5fd4d200bf680137eb22c71d51647d59765",
   "semantic_fingerprint_short": "cf820e87f27d58ef",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -7944,6 +8489,8 @@
   "help": "xml2pairwise: xml2pairwise <in.xml> <out.txt>   # BLAST XML→网页 pairwise 对齐文本（GUI 逆向 #25 BlastXMLToPairwise.parse；⚠️ 需 Hsp_query-frame/Hsp_hit-frame 字段）",
   "semantic_fingerprint": "be0ca99e05e7709923ec8361082419586da7d9431d615c02e7b8d8c1932f8a01",
   "semantic_fingerprint_short": "be0ca99e05e77099",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -7975,6 +8522,8 @@
   "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
   "semantic_fingerprint": "a5a9475da11c1d7da718582dc9d89b096de2f59f08c4e7c35be0ba9e2c0c770a",
   "semantic_fingerprint_short": "a5a9475da11c1d7d",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -8006,6 +8555,8 @@
   "help": "tab2fa: tab2fa <in.tab> <out.fa>   # 表格→FASTA（GUI 逆向 #26 FastaTable.tab2fa）",
   "semantic_fingerprint": "4a590ed097a16371c8627c293cff3406f2577ea9e3a356a48726f0dd8cef4850",
   "semantic_fingerprint_short": "4a590ed097a16371",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -8037,6 +8588,8 @@
   "help": "muscle: muscle <in.fa> <out.aln> [--super5] [--threads N]   # MUSCLE 多序列比对（GUI 逆向 #27 MuscleGUIPanel→QuickRunMUSCLE；⚠️ 引擎硬编码 muscle3 -in/-out 语法在 v5 系统崩 → Python 直调自动适配；依赖系统 muscle）",
   "semantic_fingerprint": "93b70add00a10c9593c1176036e92ecf0abbaabc4fb6a0baf1c819ad721b14ab",
   "semantic_fingerprint_short": "93b70add00a10c95",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "alignment"
   ],
@@ -8107,6 +8660,8 @@
   "help": "bestid: bestid --inQuery <query.pep> --Subject <subject.pep> --OutPrefix <outPrefix> [--useDiamond] [--threads N]   # 双向 BLAST 最优 ID 转换（GUI 逆向 #31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
   "semantic_fingerprint": "873ac7c24a5df7a1ce6d118fbb4f8273fc4f83b969eb3d8c56035d90b68c8d2f",
   "semantic_fingerprint_short": "873ac7c24a5df7a1",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -8138,6 +8693,8 @@
   "help": "getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST 库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，",
   "semantic_fingerprint": "507e303fe85824b90566cf4e5f19a096a739cc52b61eacb612cfcc3e74afddc4",
   "semantic_fingerprint_short": "507e303fe85824b9",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -8169,6 +8726,8 @@
   "help": "genomefilter: genomefilter <in.fa> <out.fa> --min-len <N> [--gxf <in.gff3>]   # 按序列长度过滤（GUI 逆向 #19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen 过滤 ID → ExtractFasta 提取；可选 GXF 同过滤）",
   "semantic_fingerprint": "5e4d6fcdd7675c32a1db3fb08843a199068ce909d51ae7c7511103856cf0492b",
   "semantic_fingerprint_short": "5e4d6fcdd7675c32",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "sequence"
   ],
@@ -8200,6 +8759,8 @@
   "help": "notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
   "semantic_fingerprint": "70098a6ad211c7f36e7ae320bc336f8da495762ddbf6303fbd5552bfe787e5c8",
   "semantic_fingerprint_short": "70098a6ad211c7f3",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "phylogeny",
    "reconciliation"
@@ -8258,6 +8819,8 @@
   "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
   "semantic_fingerprint": "c06c470c8dac7a9195702af7269a872fe513e4cfbe82c518902b1f5c51afabb7",
   "semantic_fingerprint_short": "c06c470c8dac7a91",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "phylogeny",
    "tree_editing"
@@ -8309,6 +8872,8 @@
   "help": "hmmerSearch: hmmerSearch <target.fa> <hmmDb> <out.tsv>   # Advanced HMMer 全库扫描+domtblout 解析（插件 P00680 CLI 化，无需 idList）",
   "semantic_fingerprint": "43a2550d9ee51f2c4df6a68c6351204e5e46d5a3916e5cfef1be46e69c48a1ca",
   "semantic_fingerprint_short": "43a2550d9ee51f2c",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "homology",
    "hmm_scan"
@@ -8369,6 +8934,8 @@
   "help": "memeViz: memeViz <meme.xml> <out.svg> [width] [height]   # MEME motif 批量可视化（插件 P00700 CLI 化，每 motif 一面板）",
   "semantic_fingerprint": "73875b412107b93f33499155d4a7af4988568a72a49eb895f18646419de1e076",
   "semantic_fingerprint_short": "73875b412107b93f",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "motif",
    "visualization"
@@ -8420,6 +8987,8 @@
   "help": "gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 GSEA（插件 P00342 CLI 化，GSEAPreranked 全套报告；⚠️ set_min=15 小基因集会被过滤）",
   "semantic_fingerprint": "12219a129428e8a93d29b183b4a26df598f9e0193c994c2c06075e24dadef258",
   "semantic_fingerprint_short": "12219a129428e8a9",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "enrichment"
   ],
@@ -8476,6 +9045,8 @@
   "help": "tfbsShift: tfbsShift <query.pep> <outPrefix> [threads]   # 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置 ath.pep+binding.motifs）",
   "semantic_fingerprint": "13e13347c6e30463d66558c40efa759280726218be036b2e5ff3b42bb21b0dd6",
   "semantic_fingerprint_short": "13e13347c6e30463",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "motif",
    "genome_scan"
@@ -8528,6 +9099,8 @@
   "help": "mcscanxd: mcscanxd <wkDir> <genome1.fa> <genome2.fa> <gxf1> <gxf2> [threads] [blastHits] [evalue]   # OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包）",
   "semantic_fingerprint": "4d43a05a47c418f3ffb1c8793946393deb83b3a2239f68f2034c292c56cf24dc",
   "semantic_fingerprint_short": "4d43a05a47c418f3",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "synteny"
   ],
@@ -8605,6 +9178,8 @@
   "help": "quickAnno: quickAnno <query.pep> <swissprotDb.fa> <out.txt> [threads] [maxHits]   # diamond 蛋白快速注释（插件 P00480 CLI 化；⚠️ db 需带描述行，否则 Top 词频为空报错）",
   "semantic_fingerprint": "b44f314a06f989d230bff08fc19d8d8494f2aa5ce0931314bfb278c5a8052589",
   "semantic_fingerprint_short": "b44f314a06f989d2",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
   "capabilities": [
    "homology"
   ],
@@ -8636,6 +9211,8 @@
   "help": "smart: smart <in.fa> <out.txt>   # SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约 10-60s，输出域位置+类型）",
   "semantic_fingerprint": "1319449b755fb51dcf993d7cdfacedbfc76480ba640e06a927345ac881355712",
   "semantic_fingerprint_short": "1319449b755fb51d",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "domain",
    "annotation"
@@ -8688,7 +9265,9 @@
   "group": "mirna",
   "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]\n       # miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli\n       #   原表驱动误把本",
   "semantic_fingerprint": "0dd732c4784caa3339a2cfd6ae61e8198e777e8e099227e15ca217666fc0b1cb",
-  "semantic_fingerprint_short": "0dd732c4784caa33"
+  "semantic_fingerprint_short": "0dd732c4784caa33",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "msy": {
   "name": "msy",
@@ -8701,6 +9280,8 @@
   "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n       #   engineClass 导致 ClassNo",
   "semantic_fingerprint": "c583df46cbb1e29dd9a39155f005d0052244d2cd0ea2cfe3d01fba252811de7e",
   "semantic_fingerprint_short": "c583df46cbb1e29d",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "microsynteny",
    "visualization"
@@ -8772,6 +9353,8 @@
   "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）",
   "semantic_fingerprint": "ca18453f8093af3b91513300447e2a810098326b4e989b94fa1ab315f5f16562",
   "semantic_fingerprint_short": "ca18453f8093af3b",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "annotation"
   ],
@@ -8819,6 +9402,8 @@
   "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
   "semantic_fingerprint": "9ac5aab96f248dcd220c6efe93219188afc7892a0f1504106b2def40ac84bc4e",
   "semantic_fingerprint_short": "9ac5aab96f248dcd",
+  "readiness": "FULL",
+  "verification": "COMPILEABLE",
   "capabilities": [
    "annotation"
   ],
@@ -8866,6 +9451,8 @@
   "semantic_fingerprint": "36cea377e1a4660eb2f24494a950c12ce49918aee5839ae03292130a302c6f37",
   "semantic_fingerprint_short": "36cea377e1a4660e",
   "alias_of": "structure",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "gene_structure",
    "annotation",
@@ -8951,6 +9538,8 @@
   "semantic_fingerprint": "d1974459d437882252b09b9a8dea53186396586cf95876513749f48cea183c31",
   "semantic_fingerprint_short": "d1974459d4378822",
   "alias_of": "rooting",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "phylogeny",
    "rooting"
@@ -9002,6 +9591,8 @@
   "help": "(alias of logo) 序列 LOGO 图",
   "semantic_fingerprint": "ee628f7ad9f3adb6e3004099861257c18c875e25d5cf421281d7e7f27b15c034",
   "semantic_fingerprint_short": "ee628f7ad9f3adb6",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "motif",
    "visualization"
@@ -9042,7 +9633,9 @@
   "group": "engine",
   "help": "(alias of heatmap) 热图（表达矩阵）",
   "semantic_fingerprint": "3437424ac5b5b7d21470dd7cd5b40ed3ff7595cf80e3e02476b8a4e2a4f2c6a9",
-  "semantic_fingerprint_short": "3437424ac5b5b7d2"
+  "semantic_fingerprint_short": "3437424ac5b5b7d2",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
  },
  "tree": {
   "name": "tree",

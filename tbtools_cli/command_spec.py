@@ -943,6 +943,10 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         pass
     if spec.alias_of:
         e["alias_of"] = spec.alias_of
+    # 评审 #110 建议①: readiness 与 verification 两维正交注入 metadata——
+    # Agent 直接可见"契约写得完整(FULL)" vs "真的跑过(EXECUTION/CONFORMANCE_VERIFIED)", 防混淆
+    e["readiness"] = agent_readiness(spec)
+    e["verification"] = verification_level(spec)
     if spec.capabilities:
         e["capabilities"] = spec.capabilities
         e["capabilities_ontology"] = expand_ontology(spec.capabilities)
@@ -1019,7 +1023,7 @@ def contract_coverage() -> dict:
     """契约覆盖三层(评审 #82 P1-7): declared(声明)/compileable(可编译)/verified(执行验证)。
     保留六维明细(向后兼容)。"""
     specs = build_command_specs()
-    tiers = {"DECLARED": 0, "COMPILEABLE": 0, "EXECUTION_VERIFIED": 0}
+    tiers = {"DECLARED": 0, "COMPILEABLE": 0, "EXECUTION_VERIFIED": 0, "CONFORMANCE_VERIFIED": 0}  # #110 建议①: 金链级
     for s in specs.values():
         tiers[verification_level(s)] += 1
     # 评审 #96 P1-3: COMPILE_VERIFIED(测试产物名单)单独统计——与 COMPILEABLE(声明可编译)区分
@@ -1038,10 +1042,10 @@ def contract_coverage() -> dict:
     }
 
 # ── Execution Verification 分级(评审 #80 P1-8 + #82 P1-6): 与 Agent-ready 正交 ──
-def _load_verification_report() -> tuple[set, set]:
+def _load_verification_report() -> tuple[set, set, set]:
     """从测试产物读 verification 名单(评审 #82 P1-6 + #86 P1-6 + #90 P0-2:
     名单由测试生成;报告不存在时**不回退过时内置名单**——假的 EXECUTION_VERIFIED 比 DECLARED 更危险)。
-    返回 (execution_verified, compile_verified)。"""
+    返回 (conformance_verified, execution_verified, compile_verified)。"""
     import json as _j
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     p = os.path.join(root, "tests", "verification_report.json")
@@ -1049,6 +1053,7 @@ def _load_verification_report() -> tuple[set, set]:
         try:
             d = _j.load(open(p, encoding="utf-8"))
             _exec = set(d.get("execution_verified", []))
+            _conf = set(d.get("conformance_verified", []))
             # 评审 #110 P1: execution_verified 绑定 contract_fingerprint——
             # 入场合同变了(fp 不匹配)旧验证自动失效, 降级为未验证(防"contract 改但仍标已验")
             _details = d.get("execution_verified_details") or {}
@@ -1058,22 +1063,24 @@ def _load_verification_report() -> tuple[set, set]:
                     _specs_now = _bcs_for_verify()
                 except Exception:
                     _specs_now = {}
-                for _t in list(_exec):
+                for _t in (list(_exec) + list(_conf)):
                     _entry = _details.get(_t) or {}
                     _old_fp = _entry.get("contract_fingerprint")
                     _sp = _specs_now.get(_t)
                     if _old_fp and _sp:
                         try:
                             if _fpfn(_sp) != _old_fp:
-                                _exec.discard(_t)  # contract 已变: 旧验证证据失效
+                                _exec.discard(_t)
+                                _conf.discard(_t)  # 评审 #110 建议①: contract 变 → 连 conformance 一并失效
                         except Exception:
                             pass
                     elif not _old_fp:
-                        _exec.discard(_t)  # 无 fp 绑定的旧格式条目不信任
-            return _exec, set(d.get("compile_verified", []))
+                        _exec.discard(_t)
+                        _conf.discard(_t)
+            return _conf, _exec, set(d.get("compile_verified", []))
         except Exception:
             pass
-    return set(), set()
+    return set(), set(), set()
 
 
 def _bcs_for_verify():
@@ -1081,16 +1088,20 @@ def _bcs_for_verify():
     return build_command_specs()
 
 
-_EXEC_VERIFIED, _COMPILE_VERIFIED = _load_verification_report()
+_CONFORMANCE_VERIFIED, _EXEC_VERIFIED, _COMPILE_VERIFIED = _load_verification_report()
+CONFORMANCE_VERIFIED_TOOLS = _CONFORMANCE_VERIFIED
 EXECUTION_VERIFIED_TOOLS = _EXEC_VERIFIED
 
 
 def verification_level(spec) -> str:
-    """执行验证分级(评审 #80):
-    EXECUTION_VERIFIED = conformance 真实执行通过(Tier2)
+    """执行验证分级(评审 #80 + #110 建议① 再分层):
+    CONFORMANCE_VERIFIED = 金链 conformance 全断言通过(Tier2+; 评审 #110: 真跑+expected argv+产物语义+provenance)
+    EXECUTION_VERIFIED = 真实执行通过(Tier2; 产物非空+sha256 完整)
     COMPILEABLE = InvocationSpec 可编译(有 inputs 契约)
     DECLARED = 仅注册声明
     """
+    if spec.name in CONFORMANCE_VERIFIED_TOOLS:
+        return "CONFORMANCE_VERIFIED"
     if spec.name in EXECUTION_VERIFIED_TOOLS:
         return "EXECUTION_VERIFIED"
     if spec.name in _COMPILE_VERIFIED:
@@ -1103,7 +1114,8 @@ def verification_level(spec) -> str:
 def verification_census() -> dict:
     """评审 #98 P1-3: COMPILE_VERIFIED(测试产物名单)入 census——
     与 COMPILEABLE(声明可编译)区分,API 统一(不再只在 coverage 里有)。"""
-    out = {"EXECUTION_VERIFIED": 0, "COMPILEABLE": 0, "DECLARED": 0, "COMPILE_VERIFIED": 0}
+    out = {"CONFORMANCE_VERIFIED": 0, "EXECUTION_VERIFIED": 0,
+           "COMPILEABLE": 0, "DECLARED": 0, "COMPILE_VERIFIED": 0}
     for s in build_command_specs().values():
         out[verification_level(s)] += 1
     for s in build_command_specs().values():

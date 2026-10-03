@@ -615,6 +615,11 @@ def register_top(cli, _LG):
             "help": help_txt,
             "invoke": f"tbtools {group} {command} <args...>" if group != "engine" else f"tbtools engine {cls} key=value",
             "class": cls,
+            # 评审 #110 建议①: readiness(readiness FULL/PARTIAL/LEGACY) 与
+            # verification(CONFORMANCE/EXECUTION/COMPILEABLE/DECLARED)两维正交暴露——
+            # Agent 直接可见"契约写得完整" vs "真的跑过", 防混淆
+            "readiness": v.get("readiness", ""),
+            "verification": v.get("verification", ""),
             "pitfall": get_pitfall_hint(command),
         }
         if v.get("alias_of"):
