@@ -74,9 +74,12 @@
   "iqtree",
   "longestorf",
   "mcscanx",
+  "mcscanxd",
+  "msy",
   "muscle",
   "newickRename",
   "pca",
+  "recipBlast",
   "seqlogo",
   "sixframe",
   "tableMerge",
@@ -95,132 +98,147 @@
  "execution_verified_details": {
   "barplot": {
    "contract_fingerprint": "36256f97b412e2c4b6e62b86787e559786df7c967cc4531a90dffa1d1dea67a8",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "circos": {
    "contract_fingerprint": "efa01206faa1f21b19c7d2b474eb54dcae94ec7e94e128cac97801a3304dfd05",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "dehist": {
    "contract_fingerprint": "6eba67158a4a423abd683687bdc7e32e279924afb6258315b67bbc78ebb987e1",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "dualsyn": {
    "contract_fingerprint": "fdedfd71714d7e3e7812955b64c95bf8747368bcdf3e94ec5fc8bb9796801720",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "genelocgff": {
    "contract_fingerprint": "0174e6906ae5bb2d7015d1ebbd8ca234e195cd82a753844ffe7d4382ff6d19d3",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "genestructure": {
    "contract_fingerprint": "7195b724db79b80fbd0774ca811b45ee1d2ff244560badb1b524845bf9e9f064",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "gxfAttr": {
    "contract_fingerprint": "72e39a185ad1e4086b517e86c72e9eb80ae2a4eb45ebb6d2b9ed0c9b1c5bb6bd",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "gxfSplit": {
    "contract_fingerprint": "07255e22ebbf3590415fc668c3605d5ab83d4bc07cbe0ca78c029eacd3af4317",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "heatmap": {
    "contract_fingerprint": "e4f09c24bb4dbf646f01d4f469573758044fb901c5376f4289e187dee00bfcf1",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "iqtree": {
    "contract_fingerprint": "bc32dbb2ebd701afdb9806edb94fe4cccf6e740cde1a17e8b99325d4cfee65db",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "longestorf": {
    "contract_fingerprint": "2f3e13a93f2e2674b9de6334c28134c74c8730e59dbf1dbea39fa384cc3c8420",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "mcscanx": {
    "contract_fingerprint": "a9810438f8eb22a3bc61d04b01f05dd41fb60fc3119c99b650cc1d9c91e11e7d",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
+   "corpus": "examples/data"
+  },
+  "mcscanxd": {
+   "contract_fingerprint": "152935d981edc39c048b263ce571f7f55d95cff9544b316e14b6185bb89e4b67",
+   "verified_at": "2026-10-04T06:30:59",
+   "corpus": "examples/data"
+  },
+  "msy": {
+   "contract_fingerprint": "48eb519b97bf9b547a1eb6623b96c22ed4cef62cb984004e7eab537faaa30140",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "muscle": {
    "contract_fingerprint": "f807ea935d9ff529007d4b7c6f06cf8ba3abfc7acb27d2bbabb16bcbcab551ce",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "newickRename": {
    "contract_fingerprint": "fb4d87bcf45a24a3a1efb6e4922a4568a8b2cf94f209d898bfa830cf3a8e9211",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "pca": {
    "contract_fingerprint": "7b83f1d4a44ab8e6692c4d6574d3dbfd3678cccb8b91fe77d3573a0a616f7920",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
+   "corpus": "examples/data"
+  },
+  "recipBlast": {
+   "contract_fingerprint": "37b70ab10c857c36d0ae8292d98b03a0f67840b49bbf28b28067937b39c1dcfe",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "seqlogo": {
    "contract_fingerprint": "6af44163e3b50152200b5e7eefd796d7f372e7368af1be28c43dcbdd37ff130c",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "sixframe": {
    "contract_fingerprint": "e85651d21e62e8848a9daa666eed104dba8b7ca2a8af9927c7001b24fe257f13",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "tableMerge": {
    "contract_fingerprint": "bd660faf0bb5ba004e5a0535435acbc8a8c39b333d19a40281499c18ec74837c",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "tpmCalc": {
    "contract_fingerprint": "9d49354c48da20e8611fa05ced566ac80d0ad49929778b6a49208b4d024d95f6",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "treeRooting": {
    "contract_fingerprint": "f8ee47fc87354f1f48895d86f83c38171ef85b3337ed3665463bc1ff6bb5ebd8",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "trimal": {
    "contract_fingerprint": "fac1d62a20a98c5c659e723c3812a4a398c287cc8f0de2ef303126de3e48d45e",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "upset": {
    "contract_fingerprint": "76bb010f8636eee18689de38319c0e81e02ee64d4530a054f646932fb95dae61",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "venn2": {
    "contract_fingerprint": "6301f255bac40fee6543fe8b4664e66773267813fb3d3dc76df10d229e14e902",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "venn3": {
    "contract_fingerprint": "478fa2b00f7d768705c27d47f16e933dcd128f74623dcd7ee3817f7d2eb5780d",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "venn4": {
    "contract_fingerprint": "eed0cf2c9bd18c96be0c76c94a2dd9f2bf52babea2b1aee15614b8a7970974a3",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   },
   "volcano": {
    "contract_fingerprint": "4a8f8c80438d3f41ddb7e2b8339faa8e20fb4f1b8f6db4d601149e13f20db9f9",
-   "verified_at": "2026-10-04T01:52:47",
+   "verified_at": "2026-10-04T06:30:59",
    "corpus": "examples/data"
   }
  }

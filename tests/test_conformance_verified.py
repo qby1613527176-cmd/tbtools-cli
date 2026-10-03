@@ -61,6 +61,16 @@ EXEC_VERIFIED = {
                         "--List3", "examples/data/set_2.txt", "--List4", "examples/data/set_3.txt",
                         "--label1", "A", "--label2", "B", "--label3", "C", "--label4", "D",
                         "--graph", "{out}.svg", "--prefix", "{out}"]),
+    # 评审 #110 建议④ 第二批(2026-10-04 实测扩充, examples/data 现成数据):
+    "recipBlast": ("blast", ["--querySeqFile", "examples/data/blast/recipblast/query.short.fa",
+                              "--subjectSeqFile", "examples/data/blast/recipblast/subject.short.fa",
+                              "--outDirAndPrefix", "{out}"]),  # RBH 双向比对, 4 产物
+    "mcscanxd": ("syn", ["{out}", "examples/data/comparative/input.genome.fa",
+                           "examples/data/comparative/prepared.genome.fa",
+                           "examples/data/comparative/input.gff",
+                           "examples/data/comparative/prepared.gff", "2"]),  # MCScanX-SuperFast
+    "msy": ("syn", ["examples/data/synteny/msy/genes2.pos", "examples/data/synteny/msy/links2.txt",
+                      "examples/data/synteny/msy/layout2.txt", "{out}.svg"]),
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
