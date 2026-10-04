@@ -1,0 +1,11 @@
+K00844	HK; hexokinase	Glycolysis	Glycolysis / Gluconeogenesis	Metabolism
+K01834	PFK; 6-phosphofructokinase	Glycolysis	Glycolysis / Gluconeogenesis	Metabolism
+K01689	ALDO; fructose-bisphosphate aldolase	Glycolysis	Glycolysis / Gluconeogenesis	Metabolism
+K00134	GAPDH; glyceraldehyde-3-phosphate dehydrogenase	Glycolysis	Glycolysis / Gluconeogenesis	Metabolism
+K01681	CS; citrate synthase	Citrate cycle	Citrate cycle (TCA cycle)	Metabolism
+K01647	ACO; aconitate hydratase	Citrate cycle	Citrate cycle (TCA cycle)	Metabolism
+K00164	IDH; isocitrate dehydrogenase	Citrate cycle	Citrate cycle (TCA cycle)	Metabolism
+K00031	MDH; malate dehydrogenase	Citrate cycle	Citrate cycle (TCA cycle)	Metabolism
+K02114	ATP5A; ATP synthase alpha	Oxidative phosphorylation	Oxidative phosphorylation	Metabolism
+K02133	ATP5B; ATP synthase beta	Oxidative phosphorylation	Oxidative phosphorylation	Metabolism
+K02266	COX2; cytochrome c oxidase subunit 2	Oxidative phosphorylation	Oxidative phosphorylation	Metabolism

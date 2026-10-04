@@ -13,30 +13,38 @@
  ],
  "inputs": [
   {
-   "name": "background",
+   "name": "ref_keg",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "",
+   "note": "扁平 5 列 .keg: Knum/Desc/Pathway/SubClass/MainClass",
    "content_type": "table"
   },
   {
-   "name": "target",
+   "name": "annotation",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "",
+   "note": "gene→K 对应表",
+   "content_type": "table"
+  },
+  {
+   "name": "select_ids",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": "目标基因集每行一个",
    "content_type": "table"
   }
  ],
  "outputs": [
-  "tsv"
+  "xls"
  ],
  "status": "stable",
  "semantic_fingerprint": "b7cb5c2a82e787536a49ffedcafbe078e60534bb7599f0725c320fcec52fd6f6",
  "semantic_fingerprint_short": "b7cb5c2a82e78753",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "TABLE"
@@ -47,8 +55,13 @@
  },
  "output_slots": [
   {
-   "name": "tsv",
-   "format": "tsv"
+   "name": "xls",
+   "format": "xls"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "132016708241042f0a7772270e4b9a6b776de45d97344f37bb11d7e658fb8a1f",
+  "verified_at": "2026-10-04T22:30:37",
+  "corpus": "examples/data"
+ }
 }
