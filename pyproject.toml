@@ -86,8 +86,12 @@ ignore_missing_imports = true
 check_untyped_defs = true  # 与 CI 一致(第七轮评审: 配置分裂)
 disallow_any_generics = false
 no_implicit_optional = false
-# 第三方库无类型 stub(yaml 等)不报——与 ignore_missing_imports 同语义,
-# mypy>=1.0 把无 stub import 拆为 import-untyped 独立错误码, ignore_missing_imports 不再吞掉
+# 评审 #115 预审 P2-7(E3): import-untyped 豁免从全局收窄到 tbtools_cli.* per-module——
+# 全局禁用放水半径随时间扩大(未来新增无 stub 依赖的模块 import 错被静默);
+# 现仅 tbtools_cli 包内 yaml import(command_spec/workflow) 豁免, 新模块不受牵制。
+
+[[tool.mypy.overrides]]
+module = "tbtools_cli.*"
 disable_error_code = ["import-untyped"]
 
 [tool.coverage.run]

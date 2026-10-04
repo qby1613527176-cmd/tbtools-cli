@@ -9,6 +9,7 @@
 - **版本**：v1.4.55（v1.4.19→v1.4.55 三十七连发）
 - **执行验证**：54/60 = 90%（v1.4.27 的 7% 一路）
 - **门禁**：pytest 619 passed / ruff 0 / mypy 0（三件套本地齐跑）
+  - ⚠️ 口径注（评审 #115 预审 E4）：54 条 EXECUTION_VERIFIED 断言需**含 examples/data 的环境**实跑；clean CI clone 下 52 条 skipped=缺数据 exec，90% 无法复算——CI 应含数据或显式报 skip 清单
 - **最近波次**：47 波 = peakanno/peaktss 收编（90% 里程碑）（扁平 .keg 格式实锤）
 
 ## 待办需求（DRIVER = 需求；IMP = 实现；VER = 验证）

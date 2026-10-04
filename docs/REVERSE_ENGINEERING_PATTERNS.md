@@ -25,13 +25,20 @@
 
 **实证**：Notung（`<gene>.reconciled` 派生名）、kallisto（abundance.tsv 在临时目录）。
 **动作**：外部工具产物路径不受控时，impl 内 `--outputdir/--out 指定` + glob 搬运到 out 参数，测试天然通过。
+**失败模式（评审 #115 预审 P2-6 补录）**：多产物/重名场景 glob 会扫错文件（`<gene>.*reconciled*` 匹配多个时取错）；
+  搬运必须按 outputdir 白名单 + 主产物优先级，且搬运后校验内容语义（衔接 P1 内容断言）。
 
-## P4: 时间戳/元数据 ≠ 契约内容 —— 门禁对比要区分
+<!-- P4(时间戳≠契约内容)/P5(单源 census) 已于 2026-10-05 移出本文档——
+    二者是管线/发布纪律而非逆向工程模式(评审 #115 预审 P2-6); 落点在
+    docs/_worklog/PLAN.md 发布纪律区与总清单波次记录。 -->
 
-**实证**：verified_at 每次测试刷新 → ai/tools 漂移恒定假阳性（v1.4.47 双端修复：生成端 fp 未变保鲜、check 端结构化忽略）。
-**动作**：freshness 门禁对比时，把"何时验证"与"验证了什么"分离。
+## 模式证据强度标注
 
-## P5: README/help 里 README.md 计数 ≠ 运行时口径 —— 单源 census
+> 评审 #115 预审 P2-6 质疑「单例归纳成模式」成立——各模式标注证据计数与状态：
+> - n≥2 = 模式（有跨案例支撑）；n=1 = hypothesis（经验级，待第二案例验证）
 
-**实证**：v1.4.34 P0-3 后 verification 数字统一 census 单源；收编新工具必须 `gen_metadata --render` 全视图原子同步。
-**动作**：收编/改 spec 后发布流程必跑 render（v1.4.47/48 曾漏跑致 ai/ 时间戳滞后）。
+| 模式 | 证据计数 | 状态 |
+|:--|:--|:--|
+| P1 声称格式≠实际解析格式→javap | n=4（keggEnrich/gsea/notung/efpHeat） | ✅ 模式 |
+| P2 main 硬编码→绕 setter+核心方法 | n=2（multiEfp 成功 / pafref 尝试失败实证缺陷） | ✅ 模式 |
+| P3 产物派生名→impl 搬运 | n=2（Notung/kallisto） | ✅ 模式 |
