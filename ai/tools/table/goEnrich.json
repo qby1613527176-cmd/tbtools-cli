@@ -36,7 +36,7 @@
  "semantic_fingerprint": "390ad02a4e26751236fe8ec369badb5fb05e57b2a8e94aff32c5a5607202010a",
  "semantic_fingerprint_short": "390ad02a4e267512",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "TABLE"
@@ -50,5 +50,10 @@
    "name": "tsv",
    "format": "tsv"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "db8bc1df4d42394a736d92963d34a5f4f6597d7d7d542f334f78e9fd4c010117",
+  "verified_at": "2026-10-04T10:30:06",
+  "corpus": "examples/data"
+ }
 }

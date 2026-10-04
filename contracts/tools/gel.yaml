@@ -10,7 +10,7 @@ help: 'gel: gel <FragmentRangeArr> <LaneLabels> <MarkerRange> <out>   # 凝胶�
 semantic_fingerprint: d18be74d2d31cb52f4de1c9dca88d36a3e9d49a412272b12f7397b0b83e6966f
 semantic_fingerprint_short: d18be74d2d31cb52
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - sequence
 capabilities_ontology:

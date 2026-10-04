@@ -26,7 +26,7 @@
  "semantic_fingerprint": "d18be74d2d31cb52f4de1c9dca88d36a3e9d49a412272b12f7397b0b83e6966f",
  "semantic_fingerprint_short": "d18be74d2d31cb52",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "FASTA",
@@ -45,5 +45,10 @@
    "name": "svg",
    "format": "svg"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "eadde4c12652ac9635e30c46a8fe851486aa6ac2f9900b1122245a2bea87a17d",
+  "verified_at": "2026-10-04T10:30:06",
+  "corpus": "examples/data"
+ }
 }

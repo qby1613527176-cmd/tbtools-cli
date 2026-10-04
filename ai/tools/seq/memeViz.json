@@ -27,7 +27,7 @@
  "semantic_fingerprint": "73875b412107b93f33499155d4a7af4988568a72a49eb895f18646419de1e076",
  "semantic_fingerprint_short": "73875b412107b93f",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "MEME_XML"
@@ -44,5 +44,10 @@
    "name": "svg",
    "format": "svg"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "dd1b351f32ecf23b35b1a19c8b7e82337b379d8ac73db1872955a1c691f03302",
+  "verified_at": "2026-10-04T10:30:06",
+  "corpus": "examples/data"
+ }
 }

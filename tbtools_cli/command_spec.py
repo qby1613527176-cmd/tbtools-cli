@@ -421,7 +421,7 @@ KNOWN_SCHEMAS = {
     "microsyn": ([InputSpec("gff", format="tsv", note="简化 GFF"),
                   InputSpec("links", format="tsv")], ["svg"]),
     "multisyn": ([InputSpec("gff", format="tsv"), InputSpec("gxf_lst", format="txt")], ["svg"]),
-    "pafviz": ([InputSpec("paf", format="tsv", note="13 列 PAF")], ["svg"]),
+    "pafviz": ([InputSpec("paf", format="tsv", note="PAF alignment table; 标准 12 核心列 + 可选附加列")], ["svg"]),
     "pafref": ([InputSpec("paf", format="tsv", note="含 cg:Z CIGAR")], ["svg"]),
     "peakanno": ([InputSpec("peaks", format="tsv", note="MACS2, 百万级坐标")], ["tsv"]),
     "supercircos": ([InputSpec("config", format="txt", note="[chrLen] 等节")], ["svg"]),
@@ -603,6 +603,9 @@ KNOWN_RELATIONS = {
                  "next_step": ["dualsyn", "dotplot"]},
     "dualsyn":  {"accepts": ["SIMPLIFIED_GFF", "COLLINEARITY"], "produces": ["SYNTENY_PLOT"]},
     "dotplot":  {"accepts": ["SIMPLIFIED_GFF", "COLLINEARITY"], "produces": ["DOTPLOT"]},
+    "pafviz":   {"accepts": ["PAF"], "produces": ["SYNTENY_PLOT"],
+                  "related_to": ["dualsyn", "dotplot"]},  # 评审 #113: PAF 输入(非群默认 SIMPLIFIED_GFF/COLLINEARITY)
+    "pafref":   {"accepts": ["PAF"], "produces": ["PAF_REF_COVERAGE"]},
     "muscle":   {"accepts": ["FASTA"], "produces": ["ALIGNMENT"], "next_step": ["trimal", "iqtree"]},
     "trimal":   {"accepts": ["ALIGNMENT"], "produces": ["TRIMMED_ALIGNMENT"], "next_step": ["iqtree"]},
     "iqtree":   {"accepts": ["ALIGNMENT"], "produces": ["PHYLOGENY_NWK"], "next_step": ["tree"]},

@@ -8,10 +8,10 @@ group: syn
 help: 'pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None]
   [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕
   quickShow）'
-semantic_fingerprint: c79665ee5953a2c2895428b84c7d7625d0ac7b57e897262326060b90429f9386
-semantic_fingerprint_short: c79665ee5953a2c2
+semantic_fingerprint: a487b9149ac23c3f5b2d5f6f4485be816668a41b8638d2135a9673785f7acf02
+semantic_fingerprint_short: a487b9149ac23c3f
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - synteny
 - visualization
@@ -22,21 +22,18 @@ capabilities_ontology:
 - visualization
 relations:
   accepts:
-  - SIMPLIFIED_GFF
-  - COLLINEARITY
+  - PAF
   produces:
   - SYNTENY_PLOT
-  next_step:
+  related_to:
   - dualsyn
   - dotplot
-  related_to:
-  - mcscanx
 inputs:
 - name: paf
   role: file
   format: tsv
   required: true
-  note: 13 列 PAF
+  note: PAF alignment table; 标准 12 核心列 + 可选附加列
 outputs:
 - svg
 output_slots:

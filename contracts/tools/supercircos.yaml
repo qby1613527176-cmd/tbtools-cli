@@ -9,7 +9,7 @@ help: 'supercircos: supercircos <config.cfg> <out> [width] [height]'
 semantic_fingerprint: be1bc96b206d458f0b9c91d80e9aa6d14c99d0f7a631a033e9707526bd4b4869
 semantic_fingerprint_short: be1bc96b206d458f
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - synteny
 capabilities_ontology:

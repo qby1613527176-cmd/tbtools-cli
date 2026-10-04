@@ -810,7 +810,7 @@
   "semantic_fingerprint": "0717ec6260d82cf7ffb9892fdd78bc2f5deb7c0d65fd1d723912882162a95417",
   "semantic_fingerprint_short": "0717ec6260d82cf7",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny",
    "visualization"
@@ -1413,7 +1413,7 @@
   "semantic_fingerprint": "d18be74d2d31cb52f4de1c9dca88d36a3e9d49a412272b12f7397b0b83e6966f",
   "semantic_fingerprint_short": "d18be74d2d31cb52",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "sequence"
   ],
@@ -1664,7 +1664,7 @@
   "semantic_fingerprint": "390ad02a4e26751236fe8ec369badb5fb05e57b2a8e94aff32c5a5607202010a",
   "semantic_fingerprint_short": "390ad02a4e267512",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "enrichment",
    "gene_ontology"
@@ -2361,7 +2361,7 @@
   "semantic_fingerprint": "5c5cd8d82a10245c5639e07bdc4f539bedc0de9f503faaaaa15239621e52bf2a",
   "semantic_fingerprint_short": "5c5cd8d82a10245c",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "expression",
    "visualization"
@@ -2612,7 +2612,7 @@
   "semantic_fingerprint": "be9da29d99d090a7d1fd9e25e400d0a713f0af40d4d0b1189ca4acdd5db64717",
   "semantic_fingerprint_short": "be9da29d99d090a7",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "motif",
    "scanning"
@@ -3279,8 +3279,8 @@
   "runner": "plot",
   "group": "syn",
   "help": "pafref: pafref --inPaf <paf> --outTab <out.tsv>",
-  "semantic_fingerprint": "2ff3fdba132c864a9f8c31a392cded4350216ccbabd474d8192202587fd83b6b",
-  "semantic_fingerprint_short": "2ff3fdba132c864a",
+  "semantic_fingerprint": "9357bf87fe611bb04d06d8eb876175adeef5d105faeced0582261192304ff299",
+  "semantic_fingerprint_short": "9357bf87fe611bb0",
   "readiness": "FULL",
   "verification": "COMPILEABLE",
   "capabilities": [
@@ -3295,18 +3295,10 @@
   ],
   "relations": {
    "accepts": [
-    "SIMPLIFIED_GFF",
-    "COLLINEARITY"
+    "PAF"
    ],
    "produces": [
-    "SYNTENY_PLOT"
-   ],
-   "next_step": [
-    "dualsyn",
-    "dotplot"
-   ],
-   "related_to": [
-    "mcscanx"
+    "PAF_REF_COVERAGE"
    ]
   },
   "inputs": [
@@ -3337,10 +3329,10 @@
   "runner": "plot",
   "group": "syn",
   "help": "pafviz: pafviz <in.paf> <out.svg> [--graph-size N] [--color Target|Query|None] [--seed N] [--min-len N] [--switch-qnt] [--rc-color]   # PAF 比对 dot 图（GUI 逆向接口 PafViz.process，绕 quickShow）",
-  "semantic_fingerprint": "c79665ee5953a2c2895428b84c7d7625d0ac7b57e897262326060b90429f9386",
-  "semantic_fingerprint_short": "c79665ee5953a2c2",
+  "semantic_fingerprint": "a487b9149ac23c3f5b2d5f6f4485be816668a41b8638d2135a9673785f7acf02",
+  "semantic_fingerprint_short": "a487b9149ac23c3f",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny",
    "visualization"
@@ -3353,18 +3345,14 @@
   ],
   "relations": {
    "accepts": [
-    "SIMPLIFIED_GFF",
-    "COLLINEARITY"
+    "PAF"
    ],
    "produces": [
     "SYNTENY_PLOT"
    ],
-   "next_step": [
+   "related_to": [
     "dualsyn",
     "dotplot"
-   ],
-   "related_to": [
-    "mcscanx"
    ]
   },
   "inputs": [
@@ -3373,7 +3361,7 @@
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": "13 列 PAF"
+    "note": "PAF alignment table; 标准 12 核心列 + 可选附加列"
    }
   ],
   "outputs": [
@@ -3861,7 +3849,7 @@
   "semantic_fingerprint": "2ae7e5b9513b154dd9b9223bd84591ac09c6e3c5c0cfcb50b372ae0c553c052a",
   "semantic_fingerprint_short": "2ae7e5b9513b154d",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny",
    "visualization"
@@ -4393,7 +4381,7 @@
   "semantic_fingerprint": "be1bc96b206d458f0b9c91d80e9aa6d14c99d0f7a631a033e9707526bd4b4869",
   "semantic_fingerprint_short": "be1bc96b206d458f",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "synteny"
   ],
@@ -7655,7 +7643,7 @@
   "semantic_fingerprint": "1c8b742c1898d46e168c6178483fc5c497257819d33a2c908e4ed68c65154b88",
   "semantic_fingerprint_short": "1c8b742c1898d46e",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "motif",
    "visualization"
@@ -8877,7 +8865,7 @@
   "semantic_fingerprint": "43a2550d9ee51f2c4df6a68c6351204e5e46d5a3916e5cfef1be46e69c48a1ca",
   "semantic_fingerprint_short": "43a2550d9ee51f2c",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "homology",
    "hmm_scan"
@@ -8939,7 +8927,7 @@
   "semantic_fingerprint": "73875b412107b93f33499155d4a7af4988568a72a49eb895f18646419de1e076",
   "semantic_fingerprint_short": "73875b412107b93f",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "motif",
    "visualization"

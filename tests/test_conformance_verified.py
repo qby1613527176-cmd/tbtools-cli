@@ -145,10 +145,30 @@ class TestTier1CompileVerified:
                 "verified_at": _dt.datetime.now().isoformat(timespec="seconds"),
                 "corpus": "examples/data",
             }
+        # 评审 #113 P1-1: verified_tools 单层 evidence map(tool → evidence object)——
+        # 不再"名单一份+details 一份"两段式(防 execution_verified 有 44 但 details 只有 33);
+        # 保留旧 list 字段兼容既有读取器(_load_verification_report)
+        _verified_tools = {}
+        for _t in sorted(EXEC_VERIFIED.keys()):
+            _verified_tools[_t] = {
+                "level": "EXECUTION_VERIFIED",
+                "contract_fingerprint": _exec_entries[_t]["contract_fingerprint"],
+                "verified_at": _exec_entries[_t]["verified_at"],
+                "corpus": _exec_entries[_t]["corpus"],
+            }
+        for _t in CONFORMANCE_VERIFIED:
+            if _t in _verified_tools:
+                _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
+            else:
+                _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
+                                       "contract_fingerprint": _exec_entries.get(_t, {}).get("contract_fingerprint", ""),
+                                       "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
+                                       "corpus": _exec_entries.get(_t, {}).get("corpus", "")}
         _report = {"compile_verified": sorted(verified),
                    "execution_verified": sorted(EXEC_VERIFIED.keys()),
                    "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
-                   "execution_verified_details": _exec_entries}
+                   "execution_verified_details": _exec_entries,
+                   "verified_tools": _verified_tools}
         _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
                  indent=1)
 

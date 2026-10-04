@@ -174,3 +174,59 @@ class TestVerificationDetailsProjection:
                 assert k in det, f"{name}: details 缺 {k}"
             _n += 1
         assert _n >= 5, f"应至少 5 个执行验证工具, 实际 {_n}(重跑 gen_metadata --render)"
+
+
+class TestGeneratedSurfaceFreshness:
+    """评审 #113 P1-3: Generated Surface freshness——所有 Agent-facing 视图必须共享
+    同一份最新 verification 事实(防 44/33/26 漂移复发)。"""
+
+    def _meta(self):
+        p = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+        return json.load(open(p, encoding="utf-8"))
+
+    def test_verification_consistent_across_surfaces(self):
+        """抽查 5 个执行验证工具: runtime(CommandSpec) == metadata == ai == yaml verification。"""
+        import yaml
+        from tbtools_cli.command_spec import build_command_specs, verification_level
+        specs = build_command_specs(force=True, _skip_overlay=True)
+        meta = self._meta()
+        samples = ["volcano", "pca", "pafviz", "gel", "memeViz"]
+        for name in samples:
+            rv = verification_level(specs[name])
+            mv = meta[name].get("verification")
+            assert rv == mv, f"{name}: runtime={rv} != metadata={mv}(重跑 gen_metadata --render)"
+            g = meta[name].get("group", "engine")
+            ai = json.load(open(os.path.join(ROOT, "ai", "tools", g, f"{name}.json"), encoding="utf-8"))
+            assert ai.get("verification") == mv, f"{name}: ai={ai.get('verification')} != metadata={mv}"
+            yp = os.path.join(ROOT, "contracts", "tools", f"{name}.yaml")
+            if os.path.isfile(yp):
+                yc = yaml.safe_load(open(yp, encoding="utf-8"))
+                assert yc.get("verification") == mv, f"{name}: yaml={yc.get('verification')} != metadata={mv}"
+
+    def test_counts_equals_live_census(self):
+        """counts.md 的 execution_verified == 运行时 census(EXECUTION_VERIFIED + CONFORMANCE_VERIFIED)。"""
+        from tbtools_cli.command_spec import verification_census
+        c = verification_census()
+        live = c.get("EXECUTION_VERIFIED", 0) + c.get("CONFORMANCE_VERIFIED", 0)
+        counts = {}
+        with open(os.path.join(ROOT, "docs", "_generated", "counts.md"), encoding="utf-8") as f:
+            for line in f:
+                if line.startswith("- "):
+                    k, _, v = line[2:].strip().partition(": ")
+                    counts[k] = int(v)
+        assert counts.get("execution_verified") == live, \
+            f"counts.md={counts.get('execution_verified')} != live census={live}(重跑 gen_metadata --render)"
+
+    def test_verified_tools_single_layer(self):
+        """report 的 verified_tools 单层 evidence map 完整(防 list/details 两段式不一致)。"""
+        p = os.path.join(ROOT, "tests", "verification_report.json")
+        rep = json.load(open(p, encoding="utf-8"))
+        vt = rep.get("verified_tools") or {}
+        exec_list = set(rep.get("execution_verified", []))
+        # verified_tools 必须覆盖全部 execution_verified
+        missing = exec_list - set(vt.keys())
+        assert not missing, f"verified_tools 缺 {sorted(missing)[:5]}(单层 map 不完整)"
+        # 每个都有 contract_fingerprint
+        for t, ev in vt.items():
+            assert ev.get("contract_fingerprint"), f"{t}: verified_tools 缺 contract_fingerprint"
+            assert ev.get("level") in ("EXECUTION_VERIFIED", "CONFORMANCE_VERIFIED")

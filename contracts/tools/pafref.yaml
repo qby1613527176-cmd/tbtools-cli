@@ -6,8 +6,8 @@ xmx: 3g
 runner: plot
 group: syn
 help: 'pafref: pafref --inPaf <paf> --outTab <out.tsv>'
-semantic_fingerprint: 2ff3fdba132c864a9f8c31a392cded4350216ccbabd474d8192202587fd83b6b
-semantic_fingerprint_short: 2ff3fdba132c864a
+semantic_fingerprint: 9357bf87fe611bb04d06d8eb876175adeef5d105faeced0582261192304ff299
+semantic_fingerprint_short: 9357bf87fe611bb0
 readiness: FULL
 verification: COMPILEABLE
 capabilities:
@@ -20,15 +20,9 @@ capabilities_ontology:
 - visualization
 relations:
   accepts:
-  - SIMPLIFIED_GFF
-  - COLLINEARITY
+  - PAF
   produces:
-  - SYNTENY_PLOT
-  next_step:
-  - dualsyn
-  - dotplot
-  related_to:
-  - mcscanx
+  - PAF_REF_COVERAGE
 inputs:
 - name: paf
   role: file

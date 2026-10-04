@@ -9,7 +9,7 @@ help: 'mastrun: mastrun <meme.xml> <seq.fasta> <workingDir> [--motifs M] [--'
 semantic_fingerprint: be9da29d99d090a7d1fd9e25e400d0a713f0af40d4d0b1189ca4acdd5db64717
 semantic_fingerprint_short: be9da29d99d090a7
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - motif
 - scanning

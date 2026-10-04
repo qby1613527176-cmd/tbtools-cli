@@ -34,7 +34,7 @@
  "semantic_fingerprint": "43a2550d9ee51f2c4df6a68c6351204e5e46d5a3916e5cfef1be46e69c48a1ca",
  "semantic_fingerprint_short": "43a2550d9ee51f2c",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "FASTA",
@@ -52,5 +52,10 @@
    "name": "tsv",
    "format": "tsv"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "501739b43bbc78002eeea6e3771c23ec937f497d7b0b24a696983e2922205a1e",
+  "verified_at": "2026-10-04T10:30:06",
+  "corpus": "examples/data"
+ }
 }

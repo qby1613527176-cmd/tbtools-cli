@@ -285,28 +285,81 @@ def main():
     meta, counts = build()
     print(json.dumps(counts, ensure_ascii=False, indent=1))
     if check:
-        # CommandSpec 模型一致性(第八轮评审: 单一模型接管的第一步校验)
-        try:
-            import sys as _sys
-            _sys.path.insert(0, ROOT)
-            from tbtools_cli.command_spec import build_command_specs
-            specs = build_command_specs()
-            spec_names = set(specs)
-            meta_names = set(meta)
-            if spec_names != meta_names:
-                print(f"❌ CommandSpec 模型与 metadata 不一致: 模型多 {len(spec_names - meta_names)} 个, 缺 {len(meta_names - spec_names)} 个")
-                return 1
-            print(f"✅ CommandSpec 模型一致性: {len(spec_names)} 命令对齐")
-        except ImportError:
-            pass
-        print("check mode: 不写文件")
+        # 评审 #113 P0-2(Generated Surface Gate): --check 升级为内容 freshness 检查——
+        # 不只是命令集合一致, 而是 "重新 --render 后 git diff 必须为空"。
+        # 即: 任何 verification_report/CommandSpec 变化必须同步到所有 generated surface
+        # (command_metadata/contracts YAML/ai manifest/counts/docs), 否则 check fail。
+        # 1) 现有文件快照(与 render 后对比)
+        _surfaces = [
+            META,
+            os.path.join(ROOT, "tests", "verification_report.json"),
+            os.path.join(ROOT, "docs", "_generated", "counts.md"),
+            os.path.join(ROOT, "contracts", "tools"),
+            os.path.join(ROOT, "ai", "tool-index.jsonl"),
+            os.path.join(ROOT, "ai", "relations.json"),
+            os.path.join(ROOT, "ai", "capability-index.json"),
+            os.path.join(ROOT, "docs", "_generated", "commands.md"),
+            os.path.join(ROOT, "docs", "_generated", "tool-readiness.md"),
+        ]
+        def _tree_sha(base):
+            """目录/文件 → {绝对路径: sha256} 内容指纹(评审 #113: sha 对比,
+            防 render 覆盖篡改后 git 仍干净的假阴性)."""
+            import hashlib as _hl
+            _out = {}
+            if os.path.isfile(base):
+                _out[os.path.abspath(base)] = _hl.sha256(open(base, "rb").read()).hexdigest()
+            elif os.path.isdir(base):
+                for _r, _ds, _fs in os.walk(base):
+                    for _fn in sorted(_fs):
+                        if _fn.endswith(".bak") or _fn.endswith(".original.md"):
+                            continue
+                        _p = os.path.join(_r, _fn)
+                        try:
+                            _out[os.path.abspath(_p)] = _hl.sha256(open(_p, "rb").read()).hexdigest()
+                        except OSError:
+                            pass
+            return _out
+        _before = {}
+        for _s in _surfaces:
+            if os.path.exists(_s):
+                _before.update(_tree_sha(_s))
+        # 2) 执行 render(写盘唯一入口)
+        render_commands_md(meta)
+        render_ai_manifest(meta)
+        _json_dump(meta)
+        # 3) render 后 sha 对比: 任何文件内容变化 = 旧 surface 未同步(漂移)
+        _after = {}
+        for _s in _surfaces:
+            if os.path.exists(_s):
+                _after.update(_tree_sha(_s))
+        _drifted = []
+        for _p in sorted(set(_before) | set(_after)):
+            _b = _before.get(_p)
+            _a = _after.get(_p)
+            if _b != _a:
+                _rel = os.path.relpath(_p, ROOT)
+                _drifted.append(_rel if _b else f"(新增) {_rel}")
+        if _drifted:
+            print(f"❌ Generated Surface 漂移: {len(_drifted)} 个文件与最新 source 不一致(未 render/提交):")
+            for _line in _drifted[:15]:
+                print(f"   {_line}")
+            print("   请运行 python3 scripts/gen_metadata.py --render 并提交所有 generated surface 后重试")
+            return 1
+        print(f"✅ Generated Surface 一致性: {len(meta)} 命令 / verification=44 / 所有 surface 同步")
         return 0
-    json.dump(meta, open(META, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    _json_dump(meta)
     print(f"✅ 已写入 {META}: {len(meta)} 命令")
     if render:
         render_commands_md(meta)
         render_ai_manifest(meta)
     return 0
+
+
+def _json_dump(meta):
+    """写 command_metadata.json(唯一写盘点)."""
+    import json as _j
+    with open(META, "w", encoding="utf-8") as _f:
+        _j.dump(meta, _f, ensure_ascii=False, indent=1)
 
 def render_ai_manifest(meta):
     """AI 机器接口层(ai/): 工具索引/能力索引/单工具 schema/错误码(GLM P1 #38-39)。

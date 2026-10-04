@@ -874,34 +874,22 @@
   },
   "pafref": {
    "accepts": [
-    "SIMPLIFIED_GFF",
-    "COLLINEARITY"
+    "PAF"
    ],
    "produces": [
-    "SYNTENY_PLOT"
-   ],
-   "next_step": [
-    "dualsyn",
-    "dotplot"
-   ],
-   "related_to": [
-    "mcscanx"
+    "PAF_REF_COVERAGE"
    ]
   },
   "pafviz": {
    "accepts": [
-    "SIMPLIFIED_GFF",
-    "COLLINEARITY"
+    "PAF"
    ],
    "produces": [
     "SYNTENY_PLOT"
    ],
-   "next_step": [
+   "related_to": [
     "dualsyn",
     "dotplot"
-   ],
-   "related_to": [
-    "mcscanx"
    ]
   },
   "partitionconflict": {
