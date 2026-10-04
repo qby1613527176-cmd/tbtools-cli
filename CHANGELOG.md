@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.44] - 2026-10-04
+
+### 待办 #1 执行验证 39→43(覆盖率 65%→72%)——MEME 套件造真输出
+- **memeViz**: 系统 meme 造真 MEME XML, 可视化 12KB SVG
+- **motif**: ids 用序列名(非 motif id, 引擎 ID 匹配要求)
+- **mastrun**: workingDir 模式 + harness 目录预创建修复(引擎 working directory 须已存在)
+- **hmmerSearch**: target.fa 在前 hmmDb 在后(参数序) + hmmbuild 造真库 .raw 产物 890B
+- 未收编: tfbsShift(blastp 子进程引擎误判成功为失败, 引擎缺陷)/microsyn(MCScanX 精确格式)
+- **门禁**: pytest 604 passed / ruff 0 / mypy 0
+
 ## [1.4.43] - 2026-10-04
 
 ### 待办 #1 执行验证 35→39(覆盖率 58%→65%)
