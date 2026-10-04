@@ -156,19 +156,29 @@ def execution_contract_fingerprint(spec) -> str:
 
 
 def engine_env_fingerprint() -> str:
-    """引擎环境指纹(评审 #115 预审 P1-2/D2 响应, 2026-10-05): JAR + 外部二进制
+    """引擎环境指纹(评审 #115 预审 P1-2/D2 响应 + v1.4.65 覆盖补全): JAR + 外部二进制
     sha256——引擎本体变化触发 verified_at 刷新。
     并列于 contract_fp 而非并入: contract_fp 描述'契约形状', env_fp 描述'引擎本体';
-    换 JAR 契约不变时, verified_at 不再指向已不存在的引擎(预审实锤的洞)。"""
+    换 JAR/外部二进制契约不变时, verified_at 不再指向已不存在的引擎。
+    覆盖补全(v1.4.65): 从仅 JAR/kallisto/Notung/GSEA 扩展到全部影响 EXEC_VERIFIED
+    的外部二进制(muscle/trimal/iqtree2/mafft/meme/mast/hmmsearch/hmmbuild/diamond/
+    MCScanX/minimap2/jellyfish)——系统 PATH 动态解析, 缺失跳过(OSError 容错)。"""
     import hashlib as _hc
     import os as _os
+    import shutil as _sh
     from tbtools_cli.core import JAR, ROOT
     h = _hc.sha256()
-    _ENGINE_FILES = [JAR,
-                     _os.path.join(ROOT, "plugins", "lib", "bin", "kallisto"),
-                     _os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar"),
-                     _os.path.join(ROOT, "plugins", "lib", "Plugin_GSEAWrapper.jar")]
-    for _p in _ENGINE_FILES:
+    _BINS = ["muscle", "trimal", "iqtree2", "mafft", "meme", "mast",
+             "hmmsearch", "hmmbuild", "diamond", "MCScanX", "minimap2",
+             "jellyfish", "kallisto"]
+    _paths = [JAR,
+              _os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar"),
+              _os.path.join(ROOT, "plugins", "lib", "Plugin_GSEAWrapper.jar")]
+    for _b in _BINS:
+        _p = _sh.which(_b) or _os.path.join(ROOT, "plugins", "lib", "bin", _b)
+        if _p:
+            _paths.append(_p)
+    for _p in _paths:
         try:
             with open(_p, "rb") as _f:
                 for _chunk in iter(lambda: _f.read(65536), b""):
