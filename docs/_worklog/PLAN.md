@@ -7,24 +7,20 @@
 ## 当前快照（2026-10-04 22:45）
 
 - **版本**：v1.4.55（v1.4.19→v1.4.55 三十七连发）
-- **执行验证**：52/60 = 87%（v1.4.27 的 7% 一路）
-- **门禁**：pytest 617 passed / ruff 0 / mypy 0（三件套本地齐跑）
-- **最近波次**：45 波 = keggEnrich 收编（扁平 .keg 格式实锤）
+- **执行验证**：54/60 = 90%（v1.4.27 的 7% 一路）
+- **门禁**：pytest 619 passed / ruff 0 / mypy 0（三件套本地齐跑）
+- **最近波次**：47 波 = peakanno/peaktss 收编（90% 里程碑）（扁平 .keg 格式实锤）
 
 ## 待办需求（DRIVER = 需求；IMP = 实现；VER = 验证）
 
-### A. 执行验证剩余 8 个（87% → 100%）
+### A. 执行验证（✅ 完结于 90%，v1.4.57）
 
-| ID | 工具 | 障碍类型 | 策略 | IMP | VER |
-|:--|:--|:--|:--|:--|:--|
-| A1 | pafref | 引擎缺陷（NPE this.text null） | 反编译定位；不可修则归档为引擎级缺陷 | ☐ | ☐ |
-| A2 | tfbsShift | 引擎缺陷（blastp 子进程误判成功为失败） | 同上 | ☐ | ☐ |
-| A3 | microsyn | 引擎缺陷（MCScanX 精确格式） | 同上 | ☐ | ☐ |
-| A4 | memerun | JAR 缺 QuickRunMEME 类 | 引擎缺陷归档 | ☐ | ☐ |
-| A5 | smart | 联网依赖 | 归档为 network-required | ☐ | ☐ |
-| A6 | gxfIdAppender | RPC 8765 依赖 | 归档为 rpc-dependent | ☐ | ☐ |
-| A7 | peakanno | MACS2 严格格式 + sorted GXF | 造数据再试一轮（AST 压缩辅助读代码） | ☐ | ☐ |
-| A8 | peaktss | 同上 | 同上 | ☐ | ☐ |
+> 剩余 6 个（A1-A6）已定性归档至 `docs/_worklog/EXEC_VERIFIED_LEFTOVER.md`（引擎缺陷/外部依赖，复攻条件见档）
+
+| ID | 工具 | 状态 |
+|:--|:--|:--|
+| A1-A6 | pafref/tfbsShift/microsyn/memerun/smart/gxfIdAppender | 🗂️ 已归档（引擎缺陷 4 + 外部依赖 2），详见 EXEC_VERIFIED_LEFTOVER.md |
+| A7-A8 | peakanno/peaktss | ✅ 已收编（v1.4.57，bin0 边界绕过） |
 
 ### B. 系统改进（50/50 规则，第③招）
 
