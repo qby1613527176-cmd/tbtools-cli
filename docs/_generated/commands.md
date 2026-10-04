@@ -365,7 +365,7 @@
 | `iqtree` | 桥 | 28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物 outPrefix.tr |
 | `kaks` | 直连 | 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带 ArgsParser：--ke |
 | `newickRename` | 手动 | 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName） |
-| `notung` | 手动 | 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化） |
+| `notung` | 手动 | Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir |
 | `nwAlign` | 桥 | Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧 Simple |
 | `phylotree` | 桥 | phylotree <in.nwk> <out> [vertical] [width] [height] |
 | `subtree` | 桥 | 23 GetSubNewickTreeGUIPanel→PhyloTreeMan.getSubTree；--contai |

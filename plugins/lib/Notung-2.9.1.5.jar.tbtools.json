@@ -1,9 +1,13 @@
 {
  "command": "notung",
- "invocation": "/usr/bin/java -Xmx2g -jar /home/elysia/tbtools-cli/plugins/lib/Notung-2.9.1.5.jar /tmp/nt4/gene.nwk -s /tmp/nt4/species.nwk --reconcile",
- "tbtools_cli": "1.4.42",
+ "invocation": "/usr/bin/java -Xmx2g -jar /home/elysia/tbtools-cli/plugins/lib/Notung-2.9.1.5.jar examples/data/exec/notung/gene.nwk -s examples/data/exec/notung/species.nwk --reconcile ...",
+ "tbtools_cli": "1.4.46",
  "exit_code": 0,
- "parameters": {},
+ "parameters": {
+  "speciestag": "prefix",
+  "treeoutput": "newick",
+  "outputdir": "/tmp/notung_out_twycb9kr"
+ },
  "error": null,
  "outputs": [
   "/home/elysia/tbtools-cli/plugins/lib/Notung-2.9.1.5.jar"
@@ -15,14 +19,14 @@
    "sha256": "00261dabda30e0dbf1a799d052a615fe404afff7530e50444eb75a30c4f8d9d5"
   },
   {
-   "path": "/tmp/nt4/gene.nwk",
-   "sha256": "761498ac7a92c0e12d855073ea0f41a8f3dc4d630ce32bd6aff74a975b16e355"
+   "path": "examples/data/exec/notung/gene.nwk",
+   "sha256": "51da40211cd853a4b66ce0b76ea4fd778cc88c40b738bac1649f0545bd6cd973"
   },
   {
-   "path": "/tmp/nt4/species.nwk",
-   "sha256": "07bacb35dcf9a3de1020c32e1c1e087d0c9f661beecef3875238a2e52cc86468"
+   "path": "examples/data/exec/notung/species.nwk",
+   "sha256": "2cead55aa9365339f55531d03a9973092b4c1d2a66503e615296d53c826612b6"
   }
  ],
- "timestamp": "2026-10-04T07:49:18",
- "java_args_count": 8
+ "timestamp": "2026-10-04T21:52:13",
+ "java_args_count": 14
 }

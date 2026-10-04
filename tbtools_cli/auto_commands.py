@@ -649,13 +649,48 @@ def _genomefilter_impl(args, verbose=False, quiet=False):
 
 
 def _notung_impl(args, verbose=False, quiet=False):
-    """notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）"""
+    """notung: notung <gene.nwk> -s <species.nwk> --out <out.nwk> [--reconcile 原生参数...]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）
+    产物搬运: Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir → 复制到 out。
+    out 用显式 --out 传参(不解析位置参数——Notung 带值 flag 众多(--speciestag/
+    --treeoutput/--mapping...), 黑名单解析脆弱: 曾把 --speciestag 的值 prefix 当
+    位置参数致 Notung 报 '--treeoutput is not a valid argument for --speciestag')。"""
     notung = os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar")
     if not os.path.isfile(notung):
         print(f"❌ Notung 引擎缺失: {notung}", file=sys.stderr)
         return 1
-    java_args = ["java", "-Xmx2g", "-jar", notung] + args
-    return run_java(java_args, verbose=verbose, quiet=quiet, command_name="notung")
+    import glob as _gl
+    import shutil as _sh2
+    # --out <path> 显式提取; 其余参数原样透传(不再自作解析)
+    out = None
+    passthru, i = [], 0
+    while i < len(args):
+        if args[i] == "--out" and i + 1 < len(args):
+            out = args[i + 1]
+            i += 2
+            continue
+        passthru.append(args[i])
+        i += 1
+    if out is None or not passthru:
+        print("用法: notung <gene.nwk> -s <species.nwk> --out <out.nwk> [--reconcile 原生参数...]", file=sys.stderr)
+        return 1
+    tmp_out = tempfile.mkdtemp(prefix="notung_out_")
+    try:
+        java_args = ["java", "-Xmx2g", "-jar", notung] + passthru + ["--outputdir", tmp_out]
+        r = run_java(java_args, verbose=verbose, quiet=quiet, command_name="notung")
+        if r != 0:
+            return r
+        hits = [f for f in _gl.glob(os.path.join(tmp_out, "*"))
+                if os.path.isfile(f) and os.path.getsize(f) > 0]
+        if not hits:
+            print("❌ Notung 无产物输出", file=sys.stderr)
+            return 1
+        _sh2.copy2(hits[0], out)
+        if not quiet:
+            print(f"[notung] {os.path.basename(out)} 已写出(源自 {os.path.basename(hits[0])})", file=sys.stderr)
+        return 0
+    finally:
+        import shutil as _sh3
+        _sh3.rmtree(tmp_out, ignore_errors=True)
 
 
 def _newickRename_impl(args, verbose=False, quiet=False):

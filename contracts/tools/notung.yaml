@@ -5,12 +5,13 @@ class: ''
 xmx: 2g
 runner: plot
 group: tree
-help: 'notung: notung <gene.nwk> -s <species.nwk> --reconcile [Notung 原生参数]   # 基因树-物种树
-  reconcile（duplication/loss 推断，插件 P00651 CLI 化）'
+help: "notung: notung <gene.nwk> -s <species.nwk> --out <out.nwk> [--reconcile 原生参数...]\
+  \   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）\n    产物搬运: Notung 输出\
+  \ <gene>.reconciled(基因树派生名) 到 --outputdir "
 semantic_fingerprint: 70098a6ad211c7f36e7ae320bc336f8da495762ddbf6303fbd5552bfe787e5c8
 semantic_fingerprint_short: 70098a6ad211c7f3
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - phylogeny
 - reconciliation

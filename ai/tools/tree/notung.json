@@ -5,7 +5,7 @@
  "group": "tree",
  "kind": "manual",
  "class": "",
- "description": "基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）",
+ "description": "基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）\n    产物搬运: Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir",
  "invoke": "tbtools tree notung <args...>",
  "capabilities": [
   "phylogeny",
@@ -34,7 +34,7 @@
  "semantic_fingerprint": "70098a6ad211c7f36e7ae320bc336f8da495762ddbf6303fbd5552bfe787e5c8",
  "semantic_fingerprint_short": "70098a6ad211c7f3",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "ALIGNMENT",
@@ -52,5 +52,10 @@
    "name": "nwk",
    "format": "nwk"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "f0833d2b95138b02488511fb6b8fa19746d62e6f52b53e9af75b56b41fa0745f",
+  "verified_at": "2026-10-04T21:44:28",
+  "corpus": "examples/data"
+ }
 }

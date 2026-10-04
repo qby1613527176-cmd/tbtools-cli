@@ -122,6 +122,10 @@ EXEC_VERIFIED = {
                             "examples/data/exec/kallisto/reads.fq",
                             "{out}.tsv", "--kmer", "15", "--bootstrap", "0",
                             "--single", "--frag-len", "76", "--frag-sd", "10"]),  # 二进制直调, 切片 reads 100% 配对
+    "notung": ("tree", ["examples/data/exec/notung/gene.nwk", "-s",
+                          "examples/data/exec/notung/species.nwk",
+                          "--reconcile", "--speciestag", "prefix",
+                          "--treeoutput", "newick", "--out", "{out}.nwk"]),  # Notung jar 直调 + impl 产物搬运(--out 显式)
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过

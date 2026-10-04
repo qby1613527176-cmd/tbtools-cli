@@ -52,3 +52,6 @@ htmlcov/
 .pytest_cache/
 *.wf/
 __pycache__/
+
+# tool-run 对 -jar 引擎误写 jar 旁 provenance 的残留
+plugins/lib/*.tbtools.json
