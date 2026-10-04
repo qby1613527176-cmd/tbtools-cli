@@ -1,0 +1,10 @@
+##gff-version 3
+Chr1	TBtools	gene	1000	3000	.	+	.	ID=gene1
+Chr1	TBtools	mRNA	1000	3000	.	+	.	ID=gene1.1;Parent=gene1
+Chr1	TBtools	CDS	1000	1800	.	+	0	Parent=gene1.1
+Chr1	TBtools	gene	5000	7000	.	-	.	ID=gene2
+Chr1	TBtools	mRNA	5000	7000	.	-	.	ID=gene2.1;Parent=gene2
+Chr1	TBtools	CDS	5200	7000	.	-	0	Parent=gene2.1
+Chr1	TBtools	gene	9000	11000	.	+	.	ID=gene3
+Chr1	TBtools	mRNA	9000	11000	.	+	.	ID=gene3.1;Parent=gene3
+Chr1	TBtools	CDS	9000	10800	.	+	0	Parent=gene3.1

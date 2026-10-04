@@ -1,0 +1,4 @@
+chr	start	end	length	abs_summit	tags	-10*log10pvalue
+Chr1	1100	1400	300	1250	25	50
+Chr1	5100	5400	300	5250	30	60
+Chr1	9200	9500	300	9350	20	40
