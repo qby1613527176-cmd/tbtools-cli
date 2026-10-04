@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.46] - 2026-10-04
+
+### Generated Surface Gate(评审 #113)——P0×2 + P1×3
+- **P0-1 生成物原子同步**: 重 render 让 command_metadata/ai/YAML/counts/README 全部同步到 execution_verified=44(pafviz COMPILEABLE→EXECUTION_VERIFIED); README 26→44——根因是收编新工具后没跑 gen_metadata --render
+- **P0-2 gen_metadata --check 升级**: 命令集合检查→内容 freshness 检查(sha 对比 render 前后全部 surface)——模拟篡改 YAML 抓到漂移 1 文件; CI 防 44/33/26 复发
+- **P1-1 verification registry 单层 evidence map**: report 加 verified_tools{tool: {level/contract_fingerprint/verified_at/corpus}}(不再 list+details 两段式)
+- **P1-2 pafviz contract 语义修正**: note 13 列→PAF alignment 通用描述; KNOWN_RELATIONS 加 pafviz/pafref accepts PAF
+- **P1-3 generated surface freshness 测试×3**: 抽查 5 工具四视图一致/counts==live census/verified_tools 单层完整
+- **门禁**: pytest 609 passed / ruff 0 / mypy 0
+
 ## [1.4.45] - 2026-10-04
 
 ### 待办 #1 执行验证 43→44(覆盖率 72%→73%)
