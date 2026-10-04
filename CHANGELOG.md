@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.43] - 2026-10-04
+
+### 待办 #1 执行验证 35→39(覆盖率 58%→65%)
+- **dotplot**: 4 列简化 GFF(chr gene start end, split[3] 需第 4 列) + genePair + 'Genome: chr list' layout
+- **layoutheatmap**: layout 在前 expr 在后 + 样本名配对(S1-S4)——此前 expr 表头 A-E 与 layout SampleA-E 不配
+- **qdot**: 现成 blast.tab6 + 4 列 gff + Genome: layout(QuickGenomeDotCli)
+- **supercircos**: 行导向 config([chrLen]/[link]/[width])
+- **门禁**: pytest 601 passed / ruff 0 / mypy 0
+
 ## [1.4.42] - 2026-10-04
 
 ### 待办 #1 执行验证 33→35(覆盖率 55%→58%)
