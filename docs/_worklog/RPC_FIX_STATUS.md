@@ -1,3 +1,4 @@
+> 🗂️ 已归档（2026-10-04）——活 plan 见 PLAN.md；本文为历史存档
 # RPC 交付包修复状态(N1–N41)
 
 > 来源: `workspace/TBtools_RPC测试交付包.zip`(WorkBuddy Windows 穷举测试,~1665 项/~812 通过)

@@ -6,7 +6,7 @@
 - rpc_methods: 188
 - tools: 82
 - bridges: 118
-- pitfall_hints: 46
+- pitfall_hints: 49
 - agent_ready_full: 60
 - agent_ready_partial: 132
 - agent_ready_legacy: 102

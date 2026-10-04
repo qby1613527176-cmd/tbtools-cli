@@ -6,7 +6,7 @@
  "parameters": {
   "speciestag": "prefix",
   "treeoutput": "newick",
-  "outputdir": "/tmp/notung_out_vz5xjdvj"
+  "outputdir": "/tmp/notung_out_luob_bbq"
  },
  "error": null,
  "outputs": [
@@ -27,6 +27,6 @@
    "sha256": "2cead55aa9365339f55531d03a9973092b4c1d2a66503e615296d53c826612b6"
   }
  ],
- "timestamp": "2026-10-04T22:35:23",
+ "timestamp": "2026-10-04T22:58:20",
  "java_args_count": 14
 }

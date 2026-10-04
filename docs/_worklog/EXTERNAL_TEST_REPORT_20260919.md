@@ -1,3 +1,4 @@
+> 🗂️ 已归档（2026-10-04）——活 plan 见 PLAN.md；本文为历史存档
 <!-- 外部实测报告存档：WorkBuddy 2026-09-18/19, Windows Server + TBtools-II 2.475, 油茶 WOX 真实数据 -->
 <!-- P0-1/P0-2 已按本文补丁修复合入（见 CHANGELOG Unreleased）；未修项见 §4/§8 -->
 

@@ -231,7 +231,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 
 | 文档 | 内容 |
 |:-----|:-----|
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80+ 个 CLI 工具（18 类功能分组）+ 110+ 个桥 Javadoc（输入格式权威来源）+ 46 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80+ 个 CLI 工具（18 类功能分组）+ 110+ 个桥 Javadoc（输入格式权威来源）+ 49 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 180+ 方法参考（参数/返回值,自动生成） |
 
 ```bash
