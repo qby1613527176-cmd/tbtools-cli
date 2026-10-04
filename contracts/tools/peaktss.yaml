@@ -9,7 +9,7 @@ help: 'peaktss: peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b'
 semantic_fingerprint: cf14dbd3cb8067eff0c710adac46d30c04ef37a28e277b313b1236925178e17b
 semantic_fingerprint_short: cf14dbd3cb8067ef
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - chip_seq
 - peak_calling
@@ -34,7 +34,7 @@ inputs:
   role: file
   format: tsv
   required: true
-  note: MACS2
+  note: MACS2, 坐标须百万级(bin 0 边界避让)
 outputs:
 - svg
 output_slots:

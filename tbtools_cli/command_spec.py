@@ -373,7 +373,7 @@ KNOWN_SCHEMAS = {
              InputSpec("links", format="tsv"), InputSpec("layout", format="txt")], ["svg"]),
     "genestructure": ([InputSpec("gff", format="gff3"), InputSpec("ids", format="txt")], ["svg"]),
     "motif": ([InputSpec("meme_xml", format="xml"), InputSpec("ids", format="txt")], ["svg"]),
-    "peaktss": ([InputSpec("gxf", format="gff3"), InputSpec("peaks", format="tsv", note="MACS2")], ["svg"]),
+    "peaktss": ([InputSpec("gxf", format="gff3"), InputSpec("peaks", format="tsv", note="MACS2, 坐标须百万级(bin 0 边界避让)")], ["svg"]),
     "tableMerge": ([InputSpec("tables", format="tsv", note="多个输入表")], ["tsv"]),
     "qdot": ([InputSpec("gff", format="tsv", note="4 列简化: Chr\tGene\tStart\tEnd")], ["svg"]),
     # 二期扩展批(高频绘图/工具)
@@ -426,7 +426,8 @@ KNOWN_SCHEMAS = {
     "multisyn": ([InputSpec("gff", format="tsv"), InputSpec("gxf_lst", format="txt")], ["svg"]),
     "pafviz": ([InputSpec("paf", format="tsv", note="PAF alignment table; 标准 12 核心列 + 可选附加列")], ["svg"]),
     "pafref": ([InputSpec("paf", format="tsv", note="含 cg:Z CIGAR")], ["svg"]),
-    "peakanno": ([InputSpec("peaks", format="tsv", note="MACS2, 百万级坐标")], ["tsv"]),
+    "peakanno": ([InputSpec("gxf", format="gff3", note="peaks 注释用 GXF"),
+                    InputSpec("peaks", format="tsv", note="MACS2, 坐标须百万级(bin 0 边界避让)")], ["tsv"]),
     "supercircos": ([InputSpec("config", format="txt", note="[chrLen] 等节")], ["svg"]),
     "gel": ([InputSpec("lanes", format="tsv", note="LaneLabels 逗号分隔")], ["svg"]),
     "plotrna": ([InputSpec("genome", format="fasta", note="基因组 fasta"),

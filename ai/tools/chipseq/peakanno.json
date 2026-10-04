@@ -13,11 +13,18 @@
  ],
  "inputs": [
   {
+   "name": "gxf",
+   "role": "file",
+   "format": "gff3",
+   "required": true,
+   "note": "peaks 注释用 GXF"
+  },
+  {
    "name": "peaks",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": "MACS2, 百万级坐标"
+   "note": "MACS2, 坐标须百万级(bin 0 边界避让)"
   }
  ],
  "outputs": [
@@ -27,7 +34,7 @@
  "semantic_fingerprint": "f8c3bc022c45e1c2c1462c6e4fc9edf62406998515d07298ba503ee884e88786",
  "semantic_fingerprint_short": "f8c3bc022c45e1c2",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "ALIGNMENT",
@@ -42,5 +49,10 @@
    "name": "tsv",
    "format": "tsv"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "414f58aff2e08b60f16e2c77b1270ef664d83f9e0a84c0615948a518b21602ff",
+  "verified_at": "2026-10-04T23:24:33",
+  "corpus": "examples/data"
+ }
 }

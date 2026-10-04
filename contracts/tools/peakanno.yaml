@@ -9,7 +9,7 @@ help: 'peakanno: peakanno <gxf> <macs2_peak.xls> <out.tsv> [--dist N]'
 semantic_fingerprint: f8c3bc022c45e1c2c1462c6e4fc9edf62406998515d07298ba503ee884e88786
 semantic_fingerprint_short: f8c3bc022c45e1c2
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - chip_seq
 - peak_annotation
@@ -25,11 +25,16 @@ relations:
   produces:
   - PEAK_ANNOTATION
 inputs:
+- name: gxf
+  role: file
+  format: gff3
+  required: true
+  note: peaks 注释用 GXF
 - name: peaks
   role: file
   format: tsv
   required: true
-  note: MACS2, 百万级坐标
+  note: MACS2, 坐标须百万级(bin 0 边界避让)
 outputs:
 - tsv
 output_slots:

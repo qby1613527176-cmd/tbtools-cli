@@ -136,6 +136,12 @@ EXEC_VERIFIED = {
                                "examples/data/exec/kegg/annotation.tsv",
                                "examples/data/exec/kegg/selectIds.txt",
                                "{out}.xls"]),  # KeggEnrichment 桥(扁平 .keg 5 列)
+    "peakanno": ("chipseq", ["--inGXF", "examples/data/exec/peak/genes.gff3",
+                                "--peakInfo", "examples/data/exec/peak/peaks.xls",
+                                "--outTab", "{out}.tsv"]),  # MACS2viz bin0 边界→百万级坐标
+    "peaktss": ("chipseq", ["--inGxf", "examples/data/exec/peak/genes.gff3",
+                              "--inPeak", "examples/data/exec/peak/peaks.xls",
+                              "--outGraph", "{out}.svg"]),  # 同上
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过

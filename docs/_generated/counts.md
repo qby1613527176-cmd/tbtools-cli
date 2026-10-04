@@ -10,5 +10,5 @@
 - agent_ready_full: 60
 - agent_ready_partial: 132
 - agent_ready_legacy: 102
-- execution_verified: 52
+- execution_verified: 54
 - conformance_verified: 1

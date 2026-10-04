@@ -97,6 +97,8 @@
   "notung",
   "pafviz",
   "pca",
+  "peakanno",
+  "peaktss",
   "pep2codon",
   "plotrna",
   "preparespecies",
@@ -292,6 +294,16 @@
   "pca": {
    "contract_fingerprint": "7b83f1d4a44ab8e6692c4d6574d3dbfd3678cccb8b91fe77d3573a0a616f7920",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "peakanno": {
+   "contract_fingerprint": "414f58aff2e08b60f16e2c77b1270ef664d83f9e0a84c0615948a518b21602ff",
+   "verified_at": "2026-10-04T23:24:33",
+   "corpus": "examples/data"
+  },
+  "peaktss": {
+   "contract_fingerprint": "1c033777f443420c5af9170dd034ffa77469bed88bbc68b2421ccf05f5203d70",
+   "verified_at": "2026-10-04T23:24:33",
    "corpus": "examples/data"
   },
   "pep2codon": {
@@ -589,6 +601,18 @@
    "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "7b83f1d4a44ab8e6692c4d6574d3dbfd3678cccb8b91fe77d3573a0a616f7920",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "peakanno": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "414f58aff2e08b60f16e2c77b1270ef664d83f9e0a84c0615948a518b21602ff",
+   "verified_at": "2026-10-04T23:24:33",
+   "corpus": "examples/data"
+  },
+  "peaktss": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "1c033777f443420c5af9170dd034ffa77469bed88bbc68b2421ccf05f5203d70",
+   "verified_at": "2026-10-04T23:24:33",
    "corpus": "examples/data"
   },
   "pep2codon": {
