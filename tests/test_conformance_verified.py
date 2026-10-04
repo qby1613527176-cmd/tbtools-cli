@@ -108,6 +108,16 @@ EXEC_VERIFIED = {
                               "-s", "examples/data/exec/barplotter/bplot.synteny",
                               "-c", "examples/data/exec/barplotter/bplot.ctl",
                               "-o", "{out}.png"]),  # BarPlotterCli 桥(MainCl 真入口 main1)
+    # 评审 #110 建议④ 第八批(2026-10-04, ArgsParser 直调):
+    "efpHeat": ("expr", ["--inTGA", "examples/data/efp/plant_bg.tga",
+                          "--inSample2CC", "examples/data/efp/sample2cc.txt",
+                          "--expMat", "examples/data/efp/expmat.tsv",
+                          "--geneId", "GENE1",
+                          "--outImg", "{out}.svg"]),  # generateSuperHeatMap 独立类, main 无硬编码
+    "multiEfp": ("expr", ["examples/data/efp/plant_bg.tga",
+                            "examples/data/efp/sample2cc.txt",
+                            "examples/data/efp/expmat.tsv",
+                            "GENE1", "{out}.svg"]),  # MultiSuperHeatCli 桥(绕 main 硬编码)
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
