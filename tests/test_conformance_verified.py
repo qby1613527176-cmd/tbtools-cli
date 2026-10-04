@@ -144,6 +144,51 @@ EXEC_VERIFIED = {
                               "--outGraph", "{out}.svg"]),  # 同上
 }
 
+# 评审 #115 预审 P1-1(E2/E1) 响应(2026-10-05): 语义断言表——确定性产物加内容级断言。
+# 背景: 原断言只验 sha256 为 64 hex 格式(= EXECUTION_RAN), 产物内容不受约束;
+# 合成数据 seed 固定理应产出确定性结果(SVG/PDF 时间戳字段除外), 可做内容断言。
+# 语义断言函数: fn(真实产物路径列表) -> bool; 失败信息用 desc。
+# 样板: keggEnrich 富集表 p 值核对(预审点名推广为必须项)。
+def _read_text(p: str) -> str:
+    try:
+        with open(p, encoding="utf-8", errors="ignore") as f:
+            return f.read()
+    except OSError:
+        return ""
+
+
+SEMANTIC_CHECKS = {
+    # (描述, 断言函数)
+    "keggEnrich": ("富集表含糖酵解通路且 p 值显著(E-4)", lambda ps: any(
+        "Glycolysis / Gluconeogenesis" in _read_text(p) and "E-4" in _read_text(p)
+        for p in ps if p.endswith((".xls", ".tsv")))),
+    "kallisto": ("abundance.tsv 5 转录本行且含 TX1 定量", lambda ps: any(
+        sum(1 for ln in _read_text(p).splitlines() if ln.startswith("TX")) == 5
+        and "TX1" in _read_text(p) and "est_counts" in _read_text(p)
+        for p in ps if p.endswith(".tsv"))),
+    "notung": ("reconciled 树含内部节点标记(n2/n8)", lambda ps: any(
+        "n2" in _read_text(p) and "n8" in _read_text(p) for p in ps if p.endswith(".nwk"))),
+    "gsea": ("outDir 含富集报告(gsea_report/GO term 文件)", lambda ps: any(
+        any(k in p for k in ("gsea_report_for_na", "GO_0008150", "enplot")) for p in ps)),
+    "peakanno": ("3 peak 全注释(gene1/gene3 出现)", lambda ps: any(
+        "gene1" in _read_text(p) and "gene3" in _read_text(p) for p in ps if p.endswith(".tsv"))),
+    "efpHeat": ("SVG 含表达色块(≈200 rect)且尺寸 30-50KB", lambda ps: any(
+        _read_text(p).count("<rect ") >= 100 and 30000 < os.path.getsize(p) < 50000
+        for p in ps if p.endswith(".svg"))),
+    "multiEfp": ("SVG 含表达色块(≥100 rect)且尺寸 25-60KB", lambda ps: any(
+        _read_text(p).count("<rect ") >= 100 and 25000 < os.path.getsize(p) < 60000
+        for p in ps if p.endswith(".svg"))),
+    "barplotter": ("PNG 魔数 + 尺寸合理(5-30KB)", lambda ps: any(
+        open(p, "rb").read(8) == b"\x89PNG\r\n\x1a\n" and 5000 < os.path.getsize(p) < 30000
+        for p in ps if p.endswith(".png"))),
+    "plotrna": ("PDF 魔数 + 尺寸合理(20-120KB)", lambda ps: any(
+        open(p, "rb").read(4) == b"%PDF" and 20000 < os.path.getsize(p) < 120000
+        for p in ps if p.endswith(".pdf"))),
+    "peaktss": ("SVG 含 JIG 绘制元素(≥5 rect 基因块 + ≥5 line)", lambda ps: any(
+        _read_text(p).count("<rect ") >= 5 and _read_text(p).count("<line ") >= 5
+        for p in ps if p.endswith(".svg"))),
+}
+
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
 # (compile→execute→artifact→sha256→provenance→artifact_id, test_conformance.py 金链测试驱动)
 # volcano 是首个金链标杆(6 步全断言); 升级条件: 跑成功+产物语义+sha256+provenance+artifact_id 全验
@@ -252,11 +297,18 @@ class TestTier2ExecutionVerified:
         # 产物+溯源验证
         arts = d.get("artifacts") or []
         assert arts, f"{tool} 无产物"
-        # 多输出: 任一真实产物(非空)sha256 完整即可(prefix 主路径可能 0B)
+        # 多输出: 任一真实产物(非空)sha256 已记录即可(prefix 主路径可能 0B)
         real = [a for a in arts if a.get("size", 0) > 0]
         assert real, f"{tool} 无真实产物"
-        assert all(len(a["sha256"]) == 64 for a in real), "sha256 完整"
-        # 评审 #109(contract 可信度): 产物验证核心=真实执行出非空产物 + sha256 完整。
+        assert all(len(a["sha256"]) == 64 for a in real), "sha256 已记录(64 hex)"
+        # 评审 #115 预审 P1-1(E2/E1): 语义断言——确定性产物内容级验证;
+        # 原断言只验 sha256 格式(= EXECUTION_RAN), 产物内容不受约束(任何非空垃圾都过);
+        # 合成数据 seed 固定理应确定性, 内容断言把「EXECUTION_RAN」提升到「VERIFIED」。
+        if tool in SEMANTIC_CHECKS:
+            _desc, _fn = SEMANTIC_CHECKS[tool]
+            assert _fn([str(a.get("path", "")) for a in real]), \
+                f"{tool} 语义断言失败: {_desc}"
+        # 评审 #109(contract 可信度): 产物验证核心=真实执行出非空产物 + sha256 记录。
         # provenance(.tbtools.json)是加分项非必需——muscle(Python 直调)/iqtree(java 桥)
         # 不写 provenance 但产物真实(tool-run 已实现无 provenance 兑底报告);
         # 有 provenance 的引擎额外验证其存在(其余不判 fail)
