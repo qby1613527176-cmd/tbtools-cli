@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.45] - 2026-10-04
+
+### 待办 #1 执行验证 43→44(覆盖率 72%→73%)
+- **pafviz**: minimap2 造 PAF(18 列标准格式兼容) + syn 组收编
+- 未收编: pafref(PafRefBaseCoverCalc --inPaf/--outTab 后 NPE this.text null 引擎缺陷)/kallisto(reads.fq 与 sequences.fa 不配对, 0 reads pseudoaligned 数据不匹配)
+- **门禁**: pytest 606 passed / ruff 0 / mypy 0
+
 ## [1.4.44] - 2026-10-04
 
 ### 待办 #1 执行验证 39→43(覆盖率 65%→72%)——MEME 套件造真输出
