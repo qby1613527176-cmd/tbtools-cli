@@ -1,0 +1,17 @@
+format-version: 1.2
+ontology: go
+
+[Term]
+id: GO:0008150
+name: biological_process
+namespace: biological_process
+
+[Term]
+id: GO:0003674
+name: molecular_function
+namespace: molecular_function
+
+[Term]
+id: GO:0005575
+name: cellular_component
+namespace: cellular_component

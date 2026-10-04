@@ -1,0 +1,3 @@
+GO_0008150_BP_biological_process	TBtools	g20	g11	g10	g13	g12	g15	g1	g14	g2	g17	g3	g16	g4	g19	g5	g18	g6	g7	g8	g9
+GO_0005575_CC_cellular_component	TBtools	g11	g10	g13	g12	g15	g14	g17	g16	g19	g5	g18	g6	g7	g8	g9
+GO_0003674_MF_molecular_function	TBtools	g31	g30	g33	g22	g32	g21	g35	g24	g34	g23	g26	g36	g25	g28	g27	g29

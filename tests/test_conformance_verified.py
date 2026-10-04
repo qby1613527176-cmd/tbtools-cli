@@ -126,6 +126,9 @@ EXEC_VERIFIED = {
                           "examples/data/exec/notung/species.nwk",
                           "--reconcile", "--speciestag", "prefix",
                           "--treeoutput", "newick", "--out", "{out}.nwk"]),  # Notung jar 直调 + impl 产物搬运(--out 显式)
+    "gsea": ("table", ["examples/data/exec/gsea/go.obo",
+                         "examples/data/exec/gsea/query2go.tsv",
+                         "examples/data/exec/gsea/rank.rnk", "{out}"]),  # outDir 模式, 3 GO 集过 set_min
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过

@@ -35,7 +35,7 @@
  "semantic_fingerprint": "12219a129428e8a93d29b183b4a26df598f9e0193c994c2c06075e24dadef258",
  "semantic_fingerprint_short": "12219a129428e8a9",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "EXPRESSION_TABLE",
@@ -50,5 +50,10 @@
    "name": "xls",
    "format": "xls"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "be1f78a0fe653378085ea341266866ffb32c204f9b712f516aeefdf3420de28f",
+  "verified_at": "2026-10-04T22:01:20",
+  "corpus": "examples/data"
+ }
 }

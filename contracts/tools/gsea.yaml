@@ -10,7 +10,7 @@ help: 'gsea: gsea <go.obo> <query2go.tsv> <rank.rnk> <outDir>   # GO 预排序 G
 semantic_fingerprint: 12219a129428e8a93d29b183b4a26df598f9e0193c994c2c06075e24dadef258
 semantic_fingerprint_short: 12219a129428e8a9
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - enrichment
 capabilities_ontology:
