@@ -138,11 +138,27 @@ class TestTier1CompileVerified:
         import datetime as _dt
         import json as _jr
         from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
+        # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新——契约未变则保留
+        # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
+        # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
+        # → render 后 ai/tools 漂移 → --check 恒定假阳性(2026-10-04 实测 19:22→19:26)
+        _old_verified = {}
+        _old_vp = os.path.join(ROOT, "tests", "verification_report.json")
+        if os.path.isfile(_old_vp):
+            try:
+                _old_verified = (_jr.load(open(_old_vp, encoding="utf-8")).get("verified_tools")
+                                 or {})
+            except Exception:
+                _old_verified = {}
         _exec_entries = {}
         for _t in sorted(EXEC_VERIFIED.keys()):
+            _fp = _fpfn(SPECS[_t])
+            _old = _old_verified.get(_t, {})
             _exec_entries[_t] = {
-                "contract_fingerprint": _fpfn(SPECS[_t]),
-                "verified_at": _dt.datetime.now().isoformat(timespec="seconds"),
+                "contract_fingerprint": _fp,
+                "verified_at": (_old.get("verified_at")
+                                if _old.get("contract_fingerprint") == _fp
+                                else _dt.datetime.now().isoformat(timespec="seconds")),
                 "corpus": "examples/data",
             }
         # 评审 #113 P1-1: verified_tools 单层 evidence map(tool → evidence object)——

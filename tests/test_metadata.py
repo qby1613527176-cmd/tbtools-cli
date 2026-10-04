@@ -43,7 +43,9 @@ class TestMetadataConsistency:
         r = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "gen_metadata.py"), "--check"],
                            capture_output=True, text=True, timeout=60)
         assert r.returncode == 0, f"gen_metadata --check 失败:\n{r.stdout}\n{r.stderr}"
-        assert "registry" in r.stdout
+        # 评审 #114: v2 --check 输出为 Generated Surface 一致性(旧 "registry" 字样已随
+        # renderer 自报 surface 改造消失)
+        assert "Generated Surface 一致性" in r.stdout
 
     def test_meta_kinds_consistent(self):
         """metadata 每条都有 kind 字段（无 '?' 残留）"""

@@ -289,6 +289,31 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
     return _written
 
 
+def _surface_hash(rel: str, path: str) -> str:
+    """Generated surface 内容哈希——JSON 结构忽略 verified_at(测试运行元数据,
+    每次 conformance 刷新, 非契约内容; 防时间戳变化致 --check 恒定假阳性,
+    2026-10-04 实测 19:22→19:26 同一契约仅时间戳刷新)。非 JSON 文件整字节哈希。"""
+    import hashlib as _hl
+    import json as _j
+    if rel.endswith(".json"):
+        try:
+            with open(path, encoding="utf-8") as _f:
+                _o = _j.load(_f)
+
+            def _strip(_x):
+                if isinstance(_x, dict):
+                    return {_k: _strip(_v) for _k, _v in _x.items() if _k != "verified_at"}
+                if isinstance(_x, list):
+                    return [_strip(_i) for _i in _x]
+                return _x
+
+            _s = _j.dumps(_strip(_o), sort_keys=True, ensure_ascii=False)
+            return _hl.sha256(_s.encode("utf-8")).hexdigest()
+        except Exception:
+            pass
+    return _hl.sha256(open(path, "rb").read()).hexdigest()
+
+
 def main():
     check = "--check" in sys.argv or "-c" in sys.argv
     render = "--render" in sys.argv or "-r" in sys.argv
@@ -299,7 +324,6 @@ def main():
         # 渲染到临时目录, 与仓库现有 generated surfaces 对比(绝不修改工作树)。
         # 评审 #114 P1-4: 用 renderer 自报的 written set(不再手工维护 _surfaces 白名单)。
         import tempfile as _tf
-        import hashlib as _hl
         _tmp = _tf.mkdtemp(prefix="genmeta_check_")
         try:
             # 1) 渲染到临时目录(out_root), 收集 renderer 自报的全部 generated 相对路径
@@ -315,11 +339,11 @@ def main():
             for _rel in sorted(_written):
                 _fresh = os.path.join(_tmp, _rel)
                 _repo = os.path.join(ROOT, _rel)
-                _fb = _hl.sha256(open(_fresh, "rb").read()).hexdigest() if os.path.isfile(_fresh) else None
                 if not os.path.isfile(_repo):
                     _drifted.append(f"(缺失) {_rel}")
                     continue
-                _rb = _hl.sha256(open(_repo, "rb").read()).hexdigest()
+                _fb = _surface_hash(_rel, _fresh)
+                _rb = _surface_hash(_rel, _repo)
                 if _fb != _rb:
                     _drifted.append(_rel)
             # 3) 动态 verification 数(评审 #114 P1-3: 不硬编码 44)
