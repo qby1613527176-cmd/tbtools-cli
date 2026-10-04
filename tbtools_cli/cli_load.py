@@ -231,7 +231,7 @@ def _load_dynamic_commands():
         if gname in ("tool", "rpc"):
             continue
         if not hasattr(g, "resolve_command") or g.__class__.__name__ == "Group":
-            g.resolve_command = _smart_resolve.__get__(g, type(g))
+            g.resolve_command = _smart_resolve.__get__(g, type(g))  # type: ignore[method-assign]  # 运行时 monkey-patch click Group 实例
 
 _META_JSON = None
 def _load_meta_json():
@@ -329,7 +329,7 @@ def _make_passthrough(name, group=None):
     
     # 先设置 docstring，再装饰
     _cmd_impl.__doc__ = help_text
-    _cmd_impl = click.pass_context(_cmd_impl)
+    _cmd_impl = click.pass_context(_cmd_impl)  # type: ignore[arg-type]  # click 动态装饰(签名比实际严格)
     for opt_args, opt_kwargs in [
         (("--verbose", "-V"), {"is_flag": True, "default": False, "help": "显示完整堆栈"}),
         (("--quiet", "-q"), {"is_flag": True, "default": False, "help": "静默模式"}),

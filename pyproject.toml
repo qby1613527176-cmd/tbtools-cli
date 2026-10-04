@@ -86,6 +86,9 @@ ignore_missing_imports = true
 check_untyped_defs = true  # 与 CI 一致(第七轮评审: 配置分裂)
 disallow_any_generics = false
 no_implicit_optional = false
+# 第三方库无类型 stub(yaml 等)不报——与 ignore_missing_imports 同语义,
+# mypy>=1.0 把无 stub import 拆为 import-untyped 独立错误码, ignore_missing_imports 不再吞掉
+disable_error_code = ["import-untyped"]
 
 [tool.coverage.run]
 source = ["tbtools_cli"]

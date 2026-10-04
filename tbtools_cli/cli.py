@@ -120,7 +120,7 @@ class RootGroup(click.Group):
             prefix_hits = [c for c in candidates if c.startswith(name)] or \
                           [c for c in candidates if c.lower().startswith(_lname)]
             _close_raw = prefix_hits[:5] or \
-                         ([_lower_map.get(_lname)] if _lname in _lower_map else []) or \
+                         ([_lower_map[_lname]] if _lname in _lower_map else []) or \
                          difflib.get_close_matches(_lname, [c.lower() for c in candidates], n=3, cutoff=0.6) or []
             # 映射回真实大小写(close_matches 对小写候选返回小写, recipblast→recipBlast)
             close = [_lower_map.get(c, c) for c in _close_raw if c]
@@ -445,10 +445,10 @@ class ToolGroup(click.Group):
                 count = 0
                 for n in sorted(dir(_ac)):
                     if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
-                        cmd = n[1:-5]
+                        _cname = n[1:-5]
                         doc = getattr(_ac, n).__doc__ or ''
                         short = doc.split(':',1)[1].strip()[:50] if ':' in doc else ''
-                        click.echo(f"  {cmd:20s} {short}", file=sys.stderr)
+                        click.echo(f"  {_cname:20s} {short}", file=sys.stderr)
                         count += 1
                 for _tn, _ts in sorted(_bcs_cli().items()):
                     if _ts.kind != "tool" or getattr(_ac, f'_{_tn}_impl', None):
