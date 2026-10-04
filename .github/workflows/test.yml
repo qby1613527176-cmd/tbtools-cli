@@ -46,10 +46,12 @@ jobs:
           pip install -q pytest-cov
           python3 -m pytest --cov=tbtools_cli --cov-report=term-missing tests/ -q 2>&1 | tail -6
 
-      - name: Run full pytest suite
+      - name: Run full pytest suite (评审 #115 E4: skip 口径显式报告)
         run: |
           set -o pipefail
-          python3 -m pytest tests/ -q --tb=short
+          python3 -m pytest tests/ -q --tb=short -rfs 2>&1 | tail -40
+          echo "⚠️ 若输出含 52 skipped: 其中为 EXECUTION_VERIFIED 断言(CI 无 TBTOOLS_JAR)"
+          echo "   —— 执行验证 54/60=90% 需含 JAR + examples/data 环境实跑, 口径见 docs/_worklog/PLAN.md"
 
       # ── L1.5: 无 jar 的 CLI 冒烟（真实命令,非 import）──────────────────
       - name: CLI smoke without jar (version/list/help/纠错/new/check)
