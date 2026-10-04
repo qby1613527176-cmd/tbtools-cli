@@ -222,6 +222,11 @@ class TestTier1CompileVerified:
         import datetime as _dt
         import json as _jr
         from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
+        from tbtools_cli.identity import engine_env_fingerprint as _envfp
+        # 评审 #115 预审 P1-2(D2) 响应: verified_at 刷新双条件——contract_fp 变 OR
+        # 引擎环境指纹(env_fp) 变; 换 JAR/二进制契约不变时不再保留旧验证时间(防
+        # verified_at 指向不存在的引擎)。env_fp 与 contract_fp 并列, 不并入(语义分离)。
+        _env_fp = _envfp()
         # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新——契约未变则保留
         # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
         # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
@@ -240,8 +245,10 @@ class TestTier1CompileVerified:
             _old = _old_verified.get(_t, {})
             _exec_entries[_t] = {
                 "contract_fingerprint": _fp,
+                "env_fingerprint": _env_fp,
                 "verified_at": (_old.get("verified_at")
-                                if _old.get("contract_fingerprint") == _fp
+                                if (_old.get("contract_fingerprint") == _fp
+                                    and _old.get("env_fingerprint") == _env_fp)
                                 else _dt.datetime.now().isoformat(timespec="seconds")),
                 "corpus": "examples/data",
             }
@@ -253,6 +260,7 @@ class TestTier1CompileVerified:
             _verified_tools[_t] = {
                 "level": "EXECUTION_VERIFIED",
                 "contract_fingerprint": _exec_entries[_t]["contract_fingerprint"],
+                "env_fingerprint": _exec_entries[_t]["env_fingerprint"],  # 评审 #115 预审 P1-2
                 "verified_at": _exec_entries[_t]["verified_at"],
                 "corpus": _exec_entries[_t]["corpus"],
             }
@@ -262,6 +270,7 @@ class TestTier1CompileVerified:
             else:
                 _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
                                        "contract_fingerprint": _exec_entries.get(_t, {}).get("contract_fingerprint", ""),
+                                       "env_fingerprint": _exec_entries.get(_t, {}).get("env_fingerprint", ""),
                                        "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
                                        "corpus": _exec_entries.get(_t, {}).get("corpus", "")}
         _report = {"compile_verified": sorted(verified),

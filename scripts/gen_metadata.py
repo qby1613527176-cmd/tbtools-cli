@@ -359,6 +359,30 @@ def main():
                     print(f"   {_line}")
                 print("   请运行 python3 scripts/gen_metadata.py --render 并提交所有 generated surface 后重试")
                 return 1
+            # 评审 #115 预审 P1-2(D2) 响应: verified_at 软 TTL——验证超过 90 天
+            # 只 WARNING 不 fail(保留新鲜度信号但不扰门禁); 契约/引擎不变时
+            # 时间戳冻结属设计语义, TTL 提醒"该考虑环境漂移了"。
+            try:
+                _vp2 = os.path.join(ROOT, "tests", "verification_report.json")
+                if os.path.isfile(_vp2):
+                    import datetime as _dt2
+                    _vt = json.load(open(_vp2, encoding="utf-8")).get("verified_tools") or {}
+                    _old_days = []
+                    _now2 = _dt2.datetime.now()
+                    for _t2, _v2 in _vt.items():
+                        _va = _v2.get("verified_at", "")
+                        if _va:
+                            try:
+                                _age = (_now2 - _dt2.datetime.fromisoformat(_va)).days
+                                if _age > 90:
+                                    _old_days.append((_t2, _age))
+                            except Exception:
+                                pass
+                    if _old_days:
+                        print(f"⚠️ 验证超龄({len(_old_days)} 个 >90 天, 软告警不阻断): "
+                              + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
+            except Exception:
+                pass
             print(f"✅ Generated Surface 一致性: {len(meta)} 命令 / verification={_verif_n} / "
                   f"{len(_written)} 个 surface 全同步(只读检查未写盘)")
             return 0

@@ -155,6 +155,29 @@ def execution_contract_fingerprint(spec) -> str:
                                 sort_keys=True, default=str).encode()).hexdigest()
 
 
+def engine_env_fingerprint() -> str:
+    """引擎环境指纹(评审 #115 预审 P1-2/D2 响应, 2026-10-05): JAR + 外部二进制
+    sha256——引擎本体变化触发 verified_at 刷新。
+    并列于 contract_fp 而非并入: contract_fp 描述'契约形状', env_fp 描述'引擎本体';
+    换 JAR 契约不变时, verified_at 不再指向已不存在的引擎(预审实锤的洞)。"""
+    import hashlib as _hc
+    import os as _os
+    from tbtools_cli.core import JAR, ROOT
+    h = _hc.sha256()
+    _ENGINE_FILES = [JAR,
+                     _os.path.join(ROOT, "plugins", "lib", "bin", "kallisto"),
+                     _os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar"),
+                     _os.path.join(ROOT, "plugins", "lib", "Plugin_GSEAWrapper.jar")]
+    for _p in _ENGINE_FILES:
+        try:
+            with open(_p, "rb") as _f:
+                for _chunk in iter(lambda: _f.read(65536), b""):
+                    h.update(_chunk)
+        except OSError:
+            pass
+    return h.hexdigest()
+
+
 def semantic_fingerprint(spec) -> str:
     """语义指纹(评审 #106 P0): name + capabilities + relations + dependencies——
     搜索/规划语义层身份,与执行身份独立(评审明令: 不接 resume/execution)。"""
