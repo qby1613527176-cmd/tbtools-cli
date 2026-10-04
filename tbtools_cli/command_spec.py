@@ -1047,11 +1047,21 @@ def _load_verification_report() -> tuple[set, set, set]:
     if os.path.isfile(p):
         try:
             d = _j.load(open(p, encoding="utf-8"))
-            _exec = set(d.get("execution_verified", []))
-            _conf = set(d.get("conformance_verified", []))
+            # 评审 #114 P1-1: verified_tools(单层 evidence map)是 canonical source——
+            # 优先读它, 旧 execution_verified/execution_verified_details 仅兼容投影
+            _vt = d.get("verified_tools") or {}
+            if _vt:
+                _exec = {t for t, e in _vt.items() if e.get("level") == "EXECUTION_VERIFIED"}
+                _conf = {t for t, e in _vt.items() if e.get("level") == "CONFORMANCE_VERIFIED"}
+                _details = {t: {k: v for k, v in e.items() if k != "level"}
+                            for t, e in _vt.items()}
+            else:
+                # 旧格式兼容投影(list + details)
+                _exec = set(d.get("execution_verified", []))
+                _conf = set(d.get("conformance_verified", []))
+                _details = d.get("execution_verified_details") or {}
             # 评审 #110 P1: execution_verified 绑定 contract_fingerprint——
             # 入场合同变了(fp 不匹配)旧验证自动失效, 降级为未验证(防"contract 改但仍标已验")
-            _details = d.get("execution_verified_details") or {}
             if _details:
                 from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
                 try:

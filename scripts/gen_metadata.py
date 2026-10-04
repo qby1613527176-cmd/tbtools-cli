@@ -197,12 +197,19 @@ def build():
     return meta, counts
 
 
-def render_commands_md(meta):
-    """按分组生成全量命令清单 docs/_generated/commands.md（metadata 驱动,防漂移）"""
-    sys.path.insert(0, ROOT)
+def render_commands_md(meta, out_root: str | None = None) -> set:
+    """按分组生成全量命令清单 docs/_generated/commands.md（metadata 驱动,防漂移）。
+
+    out_root(评审 #114 P0-2): 渲染根目录——--check 传临时目录实现完全只读检查;
+    默认 ROOT(正式写盘)。返回写过的相对路径集(评审 #114 P1-4: Gate 自动覆盖,
+    不再手工维护 surface 白名单)。"""
+    import sys as _sys2
+    _sys2.path.insert(0, ROOT)
     from tbtools_cli.cli_load import CATEGORY_MAP, GROUPS
-    out_dir = os.path.join(ROOT, "docs", "_generated")
+    _out_root = out_root or ROOT
+    out_dir = os.path.join(_out_root, "docs", "_generated")
     os.makedirs(out_dir, exist_ok=True)
+    _written: set = set()
     lines = ["# 命令全量清单（自动生成,勿手改）",
              "",
              "> 由 `python3 scripts/gen_metadata.py --render` 生成,来源 command_metadata.json。",
@@ -240,7 +247,8 @@ def render_commands_md(meta):
     lines.append("")
     path = os.path.join(out_dir, "commands.md")
     open(path, "w", encoding="utf-8").write("\n".join(lines))
-    print(f"✅ 已生成 {path}（{len(meta)} 命令,{len(lines)} 行）")
+    _written.add(os.path.relpath(path, _out_root))
+    print(f"✅ 已生成 {os.path.relpath(path, ROOT)}（{len(meta)} 命令,{len(lines)} 行）")
 
     # 权威数字摘要(README/徽章/文档口径单一源)
     import tbtools_cli.auto_commands as _ac
@@ -276,7 +284,9 @@ def render_commands_md(meta):
         f.write("# 权威数字(自动生成,勿手改)\n\n")
         for k, v in counts.items():
             f.write(f"- {k}: {v}\n")
-    print(f"✅ 已生成 {counts_path}: {counts}")
+    _written.add(os.path.relpath(counts_path, _out_root))
+    print(f"✅ 已生成 {os.path.relpath(counts_path, ROOT)}: {counts}")
+    return _written
 
 
 def main():
@@ -285,68 +295,52 @@ def main():
     meta, counts = build()
     print(json.dumps(counts, ensure_ascii=False, indent=1))
     if check:
-        # 评审 #113 P0-2(Generated Surface Gate): --check 升级为内容 freshness 检查——
-        # 不只是命令集合一致, 而是 "重新 --render 后 git diff 必须为空"。
-        # 即: 任何 verification_report/CommandSpec 变化必须同步到所有 generated surface
-        # (command_metadata/contracts YAML/ai manifest/counts/docs), 否则 check fail。
-        # 1) 现有文件快照(与 render 后对比)
-        _surfaces = [
-            META,
-            os.path.join(ROOT, "tests", "verification_report.json"),
-            os.path.join(ROOT, "docs", "_generated", "counts.md"),
-            os.path.join(ROOT, "contracts", "tools"),
-            os.path.join(ROOT, "ai", "tool-index.jsonl"),
-            os.path.join(ROOT, "ai", "relations.json"),
-            os.path.join(ROOT, "ai", "capability-index.json"),
-            os.path.join(ROOT, "docs", "_generated", "commands.md"),
-            os.path.join(ROOT, "docs", "_generated", "tool-readiness.md"),
-        ]
-        def _tree_sha(base):
-            """目录/文件 → {绝对路径: sha256} 内容指纹(评审 #113: sha 对比,
-            防 render 覆盖篡改后 git 仍干净的假阴性)."""
-            import hashlib as _hl
-            _out = {}
-            if os.path.isfile(base):
-                _out[os.path.abspath(base)] = _hl.sha256(open(base, "rb").read()).hexdigest()
-            elif os.path.isdir(base):
-                for _r, _ds, _fs in os.walk(base):
-                    for _fn in sorted(_fs):
-                        if _fn.endswith(".bak") or _fn.endswith(".original.md"):
-                            continue
-                        _p = os.path.join(_r, _fn)
-                        try:
-                            _out[os.path.abspath(_p)] = _hl.sha256(open(_p, "rb").read()).hexdigest()
-                        except OSError:
-                            pass
-            return _out
-        _before = {}
-        for _s in _surfaces:
-            if os.path.exists(_s):
-                _before.update(_tree_sha(_s))
-        # 2) 执行 render(写盘唯一入口)
-        render_commands_md(meta)
-        render_ai_manifest(meta)
-        _json_dump(meta)
-        # 3) render 后 sha 对比: 任何文件内容变化 = 旧 surface 未同步(漂移)
-        _after = {}
-        for _s in _surfaces:
-            if os.path.exists(_s):
-                _after.update(_tree_sha(_s))
-        _drifted = []
-        for _p in sorted(set(_before) | set(_after)):
-            _b = _before.get(_p)
-            _a = _after.get(_p)
-            if _b != _a:
-                _rel = os.path.relpath(_p, ROOT)
-                _drifted.append(_rel if _b else f"(新增) {_rel}")
-        if _drifted:
-            print(f"❌ Generated Surface 漂移: {len(_drifted)} 个文件与最新 source 不一致(未 render/提交):")
-            for _line in _drifted[:15]:
-                print(f"   {_line}")
-            print("   请运行 python3 scripts/gen_metadata.py --render 并提交所有 generated surface 后重试")
-            return 1
-        print(f"✅ Generated Surface 一致性: {len(meta)} 命令 / verification=44 / 所有 surface 同步")
-        return 0
+        # 评审 #114 P0-2(Generated Surface Gate v2): --check **完全只读**——
+        # 渲染到临时目录, 与仓库现有 generated surfaces 对比(绝不修改工作树)。
+        # 评审 #114 P1-4: 用 renderer 自报的 written set(不再手工维护 _surfaces 白名单)。
+        import tempfile as _tf
+        import hashlib as _hl
+        _tmp = _tf.mkdtemp(prefix="genmeta_check_")
+        try:
+            # 1) 渲染到临时目录(out_root), 收集 renderer 自报的全部 generated 相对路径
+            _written = set()
+            _written |= render_commands_md(meta, out_root=_tmp)
+            _written |= render_ai_manifest(meta, out_root=_tmp)
+            _json_dump(meta, out_root=_tmp)
+            _written.add("tbtools_cli/command_metadata.json")
+            # 注: tests/verification_report.json 是测试产物(pytest 生成), 非 gen_metadata
+            # render 的 surface——它被 render 读作输入, 不入 _written
+            # 2) 逐个对比: 临时目录生成的 vs 仓库现有 —— 内容不同/缺失 = 漂移
+            _drifted = []
+            for _rel in sorted(_written):
+                _fresh = os.path.join(_tmp, _rel)
+                _repo = os.path.join(ROOT, _rel)
+                _fb = _hl.sha256(open(_fresh, "rb").read()).hexdigest() if os.path.isfile(_fresh) else None
+                if not os.path.isfile(_repo):
+                    _drifted.append(f"(缺失) {_rel}")
+                    continue
+                _rb = _hl.sha256(open(_repo, "rb").read()).hexdigest()
+                if _fb != _rb:
+                    _drifted.append(_rel)
+            # 3) 动态 verification 数(评审 #114 P1-3: 不硬编码 44)
+            try:
+                from tbtools_cli.command_spec import verification_census as _vc3
+                _vc = _vc3()
+                _verif_n = _vc.get("EXECUTION_VERIFIED", 0) + _vc.get("CONFORMANCE_VERIFIED", 0)
+            except Exception:
+                _verif_n = "?"
+            if _drifted:
+                print(f"❌ Generated Surface 漂移: {len(_drifted)} 个文件与最新 source 不一致(未 render/提交):")
+                for _line in _drifted[:15]:
+                    print(f"   {_line}")
+                print("   请运行 python3 scripts/gen_metadata.py --render 并提交所有 generated surface 后重试")
+                return 1
+            print(f"✅ Generated Surface 一致性: {len(meta)} 命令 / verification={_verif_n} / "
+                  f"{len(_written)} 个 surface 全同步(只读检查未写盘)")
+            return 0
+        finally:
+            import shutil as _sh2
+            _sh2.rmtree(_tmp, ignore_errors=True)
     _json_dump(meta)
     print(f"✅ 已写入 {META}: {len(meta)} 命令")
     if render:
@@ -355,20 +349,28 @@ def main():
     return 0
 
 
-def _json_dump(meta):
-    """写 command_metadata.json(唯一写盘点)."""
+def _json_dump(meta, out_root: str | None = None):
+    """写 command_metadata.json(唯一写盘点; out_root 供 --check 临时渲染)."""
     import json as _j
-    with open(META, "w", encoding="utf-8") as _f:
+    _p = (out_root or ROOT) + "/tbtools_cli/command_metadata.json"
+    _os_d = os.path.dirname(_p)
+    if not os.path.isdir(_os_d):
+        os.makedirs(_os_d, exist_ok=True)
+    with open(_p, "w", encoding="utf-8") as _f:
         _j.dump(meta, _f, ensure_ascii=False, indent=1)
 
-def render_ai_manifest(meta):
+def render_ai_manifest(meta, out_root: str | None = None) -> set:
     """AI 机器接口层(ai/): 工具索引/能力索引/单工具 schema/错误码(GLM P1 #38-39)。
 
     由 gen_metadata --render 统一生成, 与 metadata 单一数据源联动。
+    out_root(评审 #114 P0-2): --check 传临时目录实现只读检查; 默认 ROOT。
+    返回写过的相对路径集(Gate 自动覆盖, 不再手工维护 surface 白名单)。
     """
     import json as _json
     import os as _os
-    ai_dir = _os.path.join(ROOT, "ai")
+    _out_root = out_root or ROOT
+    ai_dir = _os.path.join(_out_root, "ai")
+    _written: set = set()
     # 评审 #112 P1: verification 证据详情(从 tests/verification_report.json 读)
     # ——ai/tools/*.json 的 verification_details 投影来源
     _verif_details_map: dict = {}
@@ -376,7 +378,7 @@ def render_ai_manifest(meta):
         _vp = _os.path.join(ROOT, "tests", "verification_report.json")
         if _os.path.isfile(_vp):
             _vd = _json.load(open(_vp, encoding="utf-8"))
-            _verif_details_map = _vd.get("execution_verified_details") or {}
+            _verif_details_map = _vd.get("verified_tools") or _vd.get("execution_verified_details") or {}  # 评审 #114: verified_tools canonical
     except Exception:
         pass
     _os.makedirs(_os.path.join(ai_dir, "tools"), exist_ok=True)
@@ -500,14 +502,14 @@ def render_ai_manifest(meta):
             def mark(b: bool) -> str:
                 return "✅" if b else "—"
             lines.append(f"| `{_n}` | {mark(_d['schema'])} | {mark(_d['params'])} | {mark(_d['caps'])} | {mark(_d['deps'])} | {mark(_d['rels'])} | {_s}/5 |")
-        open(_os.path.join(ROOT, "docs", "_generated", "tool-readiness.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
+        open(_os.path.join(_out_root, "docs", "_generated", "tool-readiness.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
     except Exception:
         pass
 
     # P1-9: contracts YAML 导出(评审 #56;CommandSpec → contracts/tools/*.yaml, 协议可读形式)
     try:
         import yaml as _y
-        cdir = _os.path.join(ROOT, "contracts", "tools")
+        cdir = _os.path.join(_out_root, "contracts", "tools")
         _os.makedirs(cdir, exist_ok=True)
         for _sub in _os.listdir(cdir):
             _p = _os.path.join(cdir, _sub)
@@ -530,7 +532,24 @@ def render_ai_manifest(meta):
                           "execute": "tbtools tool-run <args...> --json",
                           "provenance": "tbtools tool-provenance <output>"}}
     _json.dump(manifest, open(_os.path.join(ai_dir, "manifest.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    # 评审 #114 P1-4: renderer 自报 generated files——扫描 out_root 下本函数生成的
+    # 全部区域(ai/ + contracts/tools/*.yaml + tool-readiness.md), Gate 自动覆盖
+    # 未来新增文件(不再手工维护 surface 白名单)。
+    # ⚠️ 路径基准: 记相对 **out_root**(非 ROOT)——check 对比时统一拼 ROOT 与 tmp
+    for _root_area in (_os.path.join(_out_root, "ai"),
+                       _os.path.join(_out_root, "contracts", "tools"),
+                       _os.path.join(_out_root, "docs", "_generated", "tool-readiness.md")):
+        if _os.path.isfile(_root_area):
+            _written.add(_os.path.relpath(_root_area, _out_root))
+        elif _os.path.isdir(_root_area):
+            for _r, _ds, _fs in _os.walk(_root_area):
+                for _fn in _fs:
+                    _p = _os.path.join(_r, _fn)
+                    if _fn.endswith((".bak", ".original.md")):
+                        continue
+                    _written.add(_os.path.relpath(_p, _out_root))
     print(f"✅ ai/ 生成: 工具索引 {len(meta)} + 能力 {len(cap_idx)} + 单工具 schema + 错误码")
+    return _written
 
 
 if __name__ == "__main__":
