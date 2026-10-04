@@ -102,6 +102,7 @@ EXEC_VERIFIED = {
                          "{out}"]),  # workingDir 模式, MAST 产物
     "hmmerSearch": ("hmm", ["examples/data/fasta/extract.in.fa", "examples/data/exec/hmm/test.hmm",
                              "{out}.tsv"]),  # target.fa 在前 hmmDb 在后, .raw 产物
+    "pafviz": ("syn", ["examples/data/exec/test.paf", "{out}.svg"]),  # minimap2 造 PAF
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
