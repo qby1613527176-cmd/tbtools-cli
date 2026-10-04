@@ -94,6 +94,14 @@ EXEC_VERIFIED = {
     "qdot": ("syn", ["examples/data/blast/filtercscore/blast.tab6", "examples/data/exec/dp_gff.txt",
                       "examples/data/exec/dp_layout.txt", "{out}.svg"]),  # blast.tab + 4列gff + Genome: layout
     "supercircos": ("syn", ["examples/data/exec/scc.cfg", "{out}.svg", "800", "800"]),  # 行导向 config
+    # 评审 #110 建议④ 第六批(2026-10-04, MEME 套件造真输出):
+    "memeViz": ("seq", ["examples/data/exec/meme/meme.xml", "{out}.svg"]),  # MEME XML 可视化
+    "motif": ("seq", ["examples/data/exec/meme/meme.xml", "examples/data/exec/meme/motif_ids.txt",
+                       "{out}.svg"]),  # ids 用序列名(非 motif id)
+    "mastrun": ("seq", ["examples/data/exec/meme/meme.xml", "examples/data/exec/meme/meme_in.fa",
+                         "{out}"]),  # workingDir 模式, MAST 产物
+    "hmmerSearch": ("hmm", ["examples/data/fasta/extract.in.fa", "examples/data/exec/hmm/test.hmm",
+                             "{out}.tsv"]),  # target.fa 在前 hmmDb 在后, .raw 产物
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
@@ -156,6 +164,9 @@ class TestTier2ExecutionVerified:
         group, args_tpl = EXEC_VERIFIED[tool]
         out_base = str(tmp_path / "o")
         args = [a.replace("{out}", out_base) for a in args_tpl]
+        # 评审 #110 建议④: outDir/workingDir 模式工具(mastrun/goEnrich/msy)要求目录已存在——
+        # 测试预创建 out_base 目录(引擎 'Please set a valid working directory' 失败修复)
+        os.makedirs(out_base, exist_ok=True)
         env = dict(os.environ, TBTOOLS_JAR=jar)
         r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "tool-run",
                             group, tool, *args, "--json"],
