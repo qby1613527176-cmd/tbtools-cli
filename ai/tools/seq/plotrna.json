@@ -12,11 +12,18 @@
  ],
  "inputs": [
   {
-   "name": "seq",
+   "name": "genome",
    "role": "file",
    "format": "fasta",
    "required": true,
-   "note": ""
+   "note": "基因组 fasta"
+  },
+  {
+   "name": "sam",
+   "role": "file",
+   "format": "tsv",
+   "required": true,
+   "note": "SAM 比对文件"
   }
  ],
  "outputs": [
@@ -26,7 +33,7 @@
  "semantic_fingerprint": "dd3f05afb8548a38f6357b8ad6b07af7a2b8790e75b1ce4baa2e44d31d82ddb0",
  "semantic_fingerprint_short": "dd3f05afb8548a38",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "FASTA",
@@ -62,5 +69,10 @@
     "--version"
    ]
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "a6ef8c68b48d855740fed74a0f31031bf5b9c82bdb16583bfb909845fea07d1d",
+  "verified_at": "2026-10-04T22:15:25",
+  "corpus": "examples/data"
+ }
 }

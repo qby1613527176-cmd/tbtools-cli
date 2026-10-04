@@ -97,6 +97,7 @@
   "pafviz",
   "pca",
   "pep2codon",
+  "plotrna",
   "preparespecies",
   "qdot",
   "recipBlast",
@@ -290,6 +291,11 @@
   "pep2codon": {
    "contract_fingerprint": "175c3675f66a923b2b0b4e0503e34341109f52b6707e23dbc078bd6022006b03",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "plotrna": {
+   "contract_fingerprint": "a6ef8c68b48d855740fed74a0f31031bf5b9c82bdb16583bfb909845fea07d1d",
+   "verified_at": "2026-10-04T22:15:25",
    "corpus": "examples/data"
   },
   "preparespecies": {
@@ -577,6 +583,12 @@
    "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "175c3675f66a923b2b0b4e0503e34341109f52b6707e23dbc078bd6022006b03",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "plotrna": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "a6ef8c68b48d855740fed74a0f31031bf5b9c82bdb16583bfb909845fea07d1d",
+   "verified_at": "2026-10-04T22:15:25",
    "corpus": "examples/data"
   },
   "preparespecies": {

@@ -6,7 +6,7 @@
  "parameters": {
   "speciestag": "prefix",
   "treeoutput": "newick",
-  "outputdir": "/tmp/notung_out_fbplyvga"
+  "outputdir": "/tmp/notung_out__8_o2g7g"
  },
  "error": null,
  "outputs": [
@@ -27,6 +27,6 @@
    "sha256": "2cead55aa9365339f55531d03a9973092b4c1d2a66503e615296d53c826612b6"
   }
  ],
- "timestamp": "2026-10-04T22:06:15",
+ "timestamp": "2026-10-04T22:20:07",
  "java_args_count": 14
 }

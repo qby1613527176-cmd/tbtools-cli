@@ -129,6 +129,9 @@ EXEC_VERIFIED = {
     "gsea": ("table", ["examples/data/exec/gsea/go.obo",
                          "examples/data/exec/gsea/query2go.tsv",
                          "examples/data/exec/gsea/rank.rnk", "{out}"]),  # outDir 模式, 3 GO 集过 set_min
+    "plotrna": ("seq", ["--genomeFA", "examples/data/exec/plotrna/genome.fa",
+                          "--region", "chr1:1-1000", "--SAM", "examples/data/exec/plotrna/reads.sam",
+                          "--directPDF", "{out}.pdf"]),  # PlotRNAfold coverage 图(引擎内置折叠算法)
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
