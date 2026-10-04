@@ -16,24 +16,31 @@
    "role": "file",
    "format": "gff3",
    "required": true,
-   "note": ""
+   "note": "简化 GFF: chr\tgene\tend"
   },
   {
    "name": "synteny",
    "role": "file",
    "format": "tsv",
    "required": true,
-   "note": ""
+   "note": "MCScanX collinearity 格式"
+  },
+  {
+   "name": "ctl",
+   "role": "file",
+   "format": "txt",
+   "required": true,
+   "note": "4 行: xdim/ydim/xchr逗号分隔/ychr逗号分隔"
   }
  ],
  "outputs": [
-  "svg"
+  "png"
  ],
  "status": "stable",
  "semantic_fingerprint": "ecf52b04c2a7f494326fd23b8841a3e9d1df75fcb21d61e5ad28a8dd8d5f9182",
  "semantic_fingerprint_short": "ecf52b04c2a7f494",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "EXPRESSION_TABLE"
@@ -48,8 +55,13 @@
  },
  "output_slots": [
   {
-   "name": "svg",
-   "format": "svg"
+   "name": "png",
+   "format": "png"
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",
+  "verified_at": "2026-10-04T20:40:00",
+  "corpus": "examples/data"
+ }
 }

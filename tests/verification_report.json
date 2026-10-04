@@ -63,6 +63,7 @@
  ],
  "execution_verified": [
   "barplot",
+  "barplotter",
   "circos",
   "dehist",
   "dotplot",
@@ -114,6 +115,11 @@
   "barplot": {
    "contract_fingerprint": "36256f97b412e2c4b6e62b86787e559786df7c967cc4531a90dffa1d1dea67a8",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "barplotter": {
+   "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",
+   "verified_at": "2026-10-04T20:40:00",
    "corpus": "examples/data"
   },
   "circos": {
@@ -337,6 +343,12 @@
    "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "36256f97b412e2c4b6e62b86787e559786df7c967cc4531a90dffa1d1dea67a8",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "barplotter": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",
+   "verified_at": "2026-10-04T20:40:00",
    "corpus": "examples/data"
   },
   "circos": {

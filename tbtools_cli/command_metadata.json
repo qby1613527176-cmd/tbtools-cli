@@ -281,7 +281,7 @@
   "semantic_fingerprint": "ecf52b04c2a7f494326fd23b8841a3e9d1df75fcb21d61e5ad28a8dd8d5f9182",
   "semantic_fingerprint_short": "ecf52b04c2a7f494",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "expression"
   ],
@@ -306,23 +306,30 @@
     "role": "file",
     "format": "gff3",
     "required": true,
-    "note": ""
+    "note": "简化 GFF: chr\tgene\tend"
    },
    {
     "name": "synteny",
     "role": "file",
     "format": "tsv",
     "required": true,
-    "note": ""
+    "note": "MCScanX collinearity 格式"
+   },
+   {
+    "name": "ctl",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": "4 行: xdim/ydim/xchr逗号分隔/ychr逗号分隔"
    }
   ],
   "outputs": [
-   "svg"
+   "png"
   ],
   "output_slots": [
    {
-    "name": "svg",
-    "format": "svg"
+    "name": "png",
+    "format": "png"
    }
   ]
  },

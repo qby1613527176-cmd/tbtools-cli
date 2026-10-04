@@ -1,0 +1,4 @@
+## Alignment 0: score=123 e_value=1e-20 N=3 1&2 plus
+  0-0:	GENE1	GENE4	1e-50
+  0-1:	GENE2	GENE5	1e-40
+  0-2:	GENE3	GENE4	1e-30

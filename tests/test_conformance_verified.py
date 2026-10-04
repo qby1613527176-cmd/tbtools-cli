@@ -103,6 +103,11 @@ EXEC_VERIFIED = {
     "hmmerSearch": ("hmm", ["examples/data/fasta/extract.in.fa", "examples/data/exec/hmm/test.hmm",
                              "{out}.tsv"]),  # target.fa 在前 hmmDb 在后, .raw 产物
     "pafviz": ("syn", ["examples/data/exec/test.paf", "{out}.svg"]),  # minimap2 造 PAF
+    # 评审 #110 建议④ 第七批(2026-10-04, 桥现成+数据可造):
+    "barplotter": ("expr", ["-g", "examples/data/exec/barplotter/bplot.gff",
+                              "-s", "examples/data/exec/barplotter/bplot.synteny",
+                              "-c", "examples/data/exec/barplotter/bplot.ctl",
+                              "-o", "{out}.png"]),  # BarPlotterCli 桥(MainCl 真入口 main1)
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过
