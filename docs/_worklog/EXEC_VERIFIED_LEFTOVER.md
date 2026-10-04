@@ -10,16 +10,19 @@
 |:--|:--|:--|:--|:--|
 | pafref | 引擎缺陷 | PafRefBaseCoverCalc `--inPaf/--outTab` 后 `this.text` NPE | v1.4.45 | 需上游修 JAR |
 | tfbsShift | 引擎缺陷 | blastp 子进程误判成功为失败（子进程状态码逻辑反） | v1.4.44 | 需上游修 JAR |
-| microsyn | 引擎缺陷 | MCScanX 精确格式（跨物种 GXF/共线性严格匹配） | v1.4.44 / v1.4.32 | 需上游修 JAR 或真实 MCScanX 数据 |
+| microsyn | 数据合成未攻克 | MCScanX 精确格式（跨物种 GXF/共线性严格匹配）——专门造数据无法复现官方数据形态 | v1.4.44 / v1.4.32 | 真实 MCScanX 数据或工厂式数据生成 |
 | memerun | 引擎缺陷 | JAR 缺 `QuickRunMEME` 类（NoClassDefFoundError） | v1.4.30 | JAR 升级带上该类 |
 | smart | 外部依赖 | SMART 数据库联网查询（域注释） | v1.4.33-34 多波 | 网络通道或本地 SMART DB |
 | gxfIdAppender | 外部依赖 | 走 RPC 8765（非独立引擎） | v1.4.30 | RPC 服务层暴露独立入口 |
 
 ## 逐条详情
 
-### 1. pafref（PafRefBaseCoverCalc）— 引擎缺陷
+### 1. pafref（PafRefBaseCoverCalc）— 引擎缺陷（P2 路径已实试）
 - 现象：`--inPaf/--outTab` 真实执行后 NPE `Cannot invoke "String.toString()" because "this.text" is null`（paint 前状态缺失）
-- 判定：引擎内部状态机缺陷，非调用/数据问题（PAF 数据格式已标准验证）
+- **P2 模式补试（2026-10-05，评审 #115 预审 P1-3 质疑响应）**：setInFile/setOutFile/process() setter 直调同样 NPE——
+  `java.util.regex.Matcher.getTextLength` on null `this.text` at process:69；setter 路径无法初始化该字段，
+  引擎缺陷确凿（main 与 setter 双路径均无法绕）
+- 判定：引擎内部状态字段初始化缺陷，非调用/数据问题
 - 波次：v1.4.45（第三十四波）
 
 ### 2. tfbsShift（Plugin_PlantTFbindingMotifShift）— 引擎缺陷
@@ -27,9 +30,11 @@
 - 判定：引擎对子进程结果的误判，非输入问题（motif 参考数据完整）
 - 波次：v1.4.44（第三十三波）
 
-### 3. microsyn（MicroSyntenicAdvance）— 引擎缺陷/数据严格
+### 3. microsyn（MicroSyntenicAdvance）— 数据合成未攻克（分类修正，2026-10-05）
 - 现象：MCScanX 精确格式要求（跨物种 GXF 基因匹配 + collinearity 结构），合成数据多次试配失败
-- 判定：格式容忍度低（官方数据也需精确匹配），策略上同族 multisyn/msy 已覆盖微共线性需求
+- **分类修正（评审 #115 预审 P1 质疑响应）**：从「引擎缺陷」改类为「数据合成未攻克」——与
+  本轮 10 个收编工具（合成数据攻坚成功）同属一类，只是难度更高（跨物种格式严格）
+- 判定：非引擎缺陷；复攻条件 = 真实 MCScanX 数据或工厂式生成器
 - 波次：v1.4.44 / v1.4.32
 
 ### 4. memerun（QuickRunMEME）— JAR 缺类
@@ -49,4 +54,4 @@
 
 ## 结论
 - **执行验证 54/60 = 90% 收官**（v1.4.27 的 7% 起，连续 47→54 共 17 个实测收编）
-- 剩余 6 个不降级新建/不重复攻坚；若上游 TBtools JAR 升级（pafref/tfbsShift/microsyn/memerun）或网络/服务通道就位（smart/gxfIdAppender），按本表复攻条件恢复
+- 剩余 6 个不降级新建/不重复攻坚（其中 microsyn 按数据角度归类，非引擎缺陷）；若上游 JAR 升级（pafref/tfbsShift/memerun）或数据/通道就位（microsyn/smart/gxfIdAppender），按本表复攻条件恢复
