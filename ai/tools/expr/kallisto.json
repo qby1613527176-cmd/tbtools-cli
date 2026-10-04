@@ -27,7 +27,7 @@
  "semantic_fingerprint": "ea7dcd17acb48263ecd91b28966e33c79163bbb11e1c8fccc92578b7e37ad2ec",
  "semantic_fingerprint_short": "ea7dcd17acb48263",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "FASTQ"
@@ -62,5 +62,10 @@
     "version"
    ]
   }
- ]
+ ],
+ "verification_details": {
+  "contract_fingerprint": "d57b6c5578e24435eb59649cc5e1b1d9384a179f357496dad7f6ae0dfd614ded",
+  "verified_at": "2026-10-04T21:27:56",
+  "corpus": "examples/data"
+ }
 }

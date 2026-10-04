@@ -79,6 +79,7 @@
   "heatmap",
   "hmmerSearch",
   "iqtree",
+  "kallisto",
   "layoutheatmap",
   "longestorf",
   "mastrun",
@@ -197,6 +198,11 @@
   "iqtree": {
    "contract_fingerprint": "bc32dbb2ebd701afdb9806edb94fe4cccf6e740cde1a17e8b99325d4cfee65db",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "kallisto": {
+   "contract_fingerprint": "d57b6c5578e24435eb59649cc5e1b1d9384a179f357496dad7f6ae0dfd614ded",
+   "verified_at": "2026-10-04T21:27:56",
    "corpus": "examples/data"
   },
   "layoutheatmap": {
@@ -451,6 +457,12 @@
    "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "bc32dbb2ebd701afdb9806edb94fe4cccf6e740cde1a17e8b99325d4cfee65db",
    "verified_at": "2026-10-04T19:22:45",
+   "corpus": "examples/data"
+  },
+  "kallisto": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "d57b6c5578e24435eb59649cc5e1b1d9384a179f357496dad7f6ae0dfd614ded",
+   "verified_at": "2026-10-04T21:27:56",
    "corpus": "examples/data"
   },
   "layoutheatmap": {

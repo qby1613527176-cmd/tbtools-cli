@@ -118,6 +118,10 @@ EXEC_VERIFIED = {
                             "examples/data/efp/sample2cc.txt",
                             "examples/data/efp/expmat.tsv",
                             "GENE1", "{out}.svg"]),  # MultiSuperHeatCli 桥(绕 main 硬编码)
+    "kallisto": ("expr", ["examples/data/exec/kallisto/tx.fa",
+                            "examples/data/exec/kallisto/reads.fq",
+                            "{out}.tsv", "--kmer", "15", "--bootstrap", "0",
+                            "--single", "--frag-len", "76", "--frag-sd", "10"]),  # 二进制直调, 切片 reads 100% 配对
 }
 
 # 评审 #110 建议① 验证分层: CONFORMANCE_VERIFIED = 金链 conformance 全断言通过

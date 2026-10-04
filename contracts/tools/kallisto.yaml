@@ -11,7 +11,7 @@ help: 'kallisto: kallisto <transcriptome.fa> <reads.fq[,reads2.fq]> <outAbundanc
 semantic_fingerprint: ea7dcd17acb48263ecd91b28966e33c79163bbb11e1c8fccc92578b7e37ad2ec
 semantic_fingerprint_short: ea7dcd17acb48263
 readiness: FULL
-verification: COMPILEABLE
+verification: EXECUTION_VERIFIED
 capabilities:
 - rna_seq
 - quantification
