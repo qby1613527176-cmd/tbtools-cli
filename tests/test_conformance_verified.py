@@ -364,9 +364,11 @@ class TestTier2ExecutionVerified:
         d = json.loads(r.stdout)
         arts = d.get("artifacts") or []
         real = [a for a in arts if a.get("size", 0) > 0]
-        # 预期: 引擎缺陷 → 无真实产物(静默空跑); JAR 修复后此断言 xpass 翻红提示复测
-        pytest.xfail(reason=f"GxFOverlapIndexer bin0 边界缺陷(v1.4.57): {tool} 低坐标无命中")
-        assert real, f"{tool} 低坐标应无产物(引擎缺陷 bin0)"
+        # 预期: 引擎缺陷 → 无真实产物(静默空跑)。JAR 修复后 real 非空 →
+        # 断言真跑并转 PASS（-rfs 下可见），提示移除本 xfail 分支并纳入 EXEC_VERIFIED 复测
+        if not real:
+            pytest.xfail(reason=f"GxFOverlapIndexer bin0 边界缺陷(v1.4.57): {tool} 低坐标无命中")
+        assert real, f"{tool} 应有真实产物——若 JAR 已修复, 请移除本 xfail 分支并纳入 EXEC_VERIFIED" 
 
 
 class TestConformanceReport:

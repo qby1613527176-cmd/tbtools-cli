@@ -216,7 +216,7 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
              "> 分组归类参考 cli_load.CATEGORY_MAP;数字防漂移由 gen_metadata.py --check 与 pytest 保证。",
              ""]
     # 分组 → 命令
-    grouped = {}
+    grouped: dict[str, list] = {}
     for name, v in meta.items():
         cat = CATEGORY_MAP.get(name, "engine")
         grouped.setdefault(cat, []).append((name, v))
@@ -346,6 +346,22 @@ def main():
                 _rb = _surface_hash(_rel, _repo)
                 if _fb != _rb:
                     _drifted.append(_rel)
+            # P0-2 自指陷阱修复(自审 gate F2): renderer 自报的 _written 只含"生成成功"的文件——
+            # render 中途崩掉会少生成 → 旧文件不进对比集 → --check 反而报全同步(崩得越多越绿)。
+            # 补 repo→fresh 方向: git 跟踪的全部 generated surface 必须在 fresh 里也存在。
+            import subprocess as _sp2
+            try:
+                _git_surfaces = _sp2.check_output(["git", "ls-files"], cwd=ROOT, text=True).splitlines()
+            except Exception:
+                _git_surfaces = []
+            _gen_prefixes = ("ai/", "docs/_generated/", "tbtools_cli/command_metadata.json", "counts.md")
+            for _rel in _git_surfaces:
+                if not _rel.startswith(_gen_prefixes):
+                    continue
+                if _rel.endswith(".min.py"):  # ast_minfy 产物, 非 gen_metadata surface
+                    continue
+                if not os.path.isfile(os.path.join(_tmp, _rel)):
+                    _drifted.append(f"(render 缺失) {_rel}")
             # 3) 动态 verification 数(评审 #114 P1-3: 不硬编码 44)
             try:
                 from tbtools_cli.command_spec import verification_census as _vc3
@@ -383,6 +399,29 @@ def main():
                               + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
             except Exception:
                 pass
+            # 自审 docs F1/F3(gate P0-3) 版本门禁: pyproject version == 最新 git tag == README 声称线
+            import re as _re2
+            import subprocess as _sp3
+            try:
+                _py_m = _re2.search(r'^version = "([^"]+)"',
+                                     open(os.path.join(ROOT, "pyproject.toml"), encoding="utf-8").read(), _re2.M)
+                _py_ver = _py_m.group(1) if _py_m else ""
+                _git_tags = _sp3.check_output(["git", "tag"], cwd=ROOT, text=True).splitlines()
+                _latest_tag = sorted((t for t in _git_tags if t.startswith("v")), key=lambda t: [int(x) for x in t[1:].split(".")])
+                _latest = _latest_tag[-1][1:] if _latest_tag else ""
+                _readme_txt = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
+                _ver_lt = [int(x) for x in _py_ver.split(".")] if _py_ver else []
+                _tag_lt = [int(x) for x in _latest.split(".")] if _latest else []
+                # 允许 pyproject 领先 tag(待发状态), 仅拦"落后漂移"(发了版没 bump)
+                if _ver_lt and _tag_lt and _ver_lt < _tag_lt:
+                    print(f"❌ 版本漂移: pyproject={_py_ver} < 最新 tag={_latest}——发版必须同步 bump")
+                    return 1
+                if _ver_lt and f"v{_py_ver}" not in _readme_txt:
+                    print(f"❌ README 未提当前版本 v{_py_ver}——文档与发布线脱节")
+                    return 1
+                print(f"✅ 版本一致性: pyproject={_py_ver} (tag v{_latest}) && README 含 v{_py_ver}")
+            except Exception as _e4:
+                print(f"⚠️ 版本门禁不可用(非阻断): {_e4}", file=sys.stderr)
             print(f"✅ Generated Surface 一致性: {len(meta)} 命令 / verification={_verif_n} / "
                   f"{len(_written)} 个 surface 全同步(只读检查未写盘)")
             return 0
@@ -447,7 +486,7 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
                      "readiness": v.get('readiness', ''), "verification": v.get('verification', ''),
                      "semantic_fingerprint": v.get('semantic_fingerprint', '')}
             f.write(_json.dumps(entry, ensure_ascii=False) + '\n')
-    cap_idx = {}
+    cap_idx: dict[str, list] = {}
     for name, v in meta.items():
         for c in v.get('capabilities', []):
             cap_idx.setdefault(c, []).append(name)
@@ -482,8 +521,8 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
     try:
         from tbtools_cli.core import ERROR_CODES
         _json.dump(ERROR_CODES, open(_os.path.join(ai_dir, "error-codes.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
-    except Exception:
-        pass
+    except Exception as _e1:
+        print(f"⚠️ gen_metadata: error-codes.json 写盘失败: {_e1}", file=sys.stderr)  # 自审 gate P0-2: 静默 except 可见化
     workflows = [
         {"id": "gene-family-analysis", "title": "基因家族分析(GRAS 实测)",
          "steps": [{"tool": "muscle", "role": "msa"}, {"tool": "trimal", "role": "trim"},
@@ -551,12 +590,12 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
                 return "✅" if b else "—"
             lines.append(f"| `{_n}` | {mark(_d['schema'])} | {mark(_d['params'])} | {mark(_d['caps'])} | {mark(_d['deps'])} | {mark(_d['rels'])} | {_s}/5 |")
         open(_os.path.join(_out_root, "docs", "_generated", "tool-readiness.md"), "w", encoding="utf-8").write("\n".join(lines) + "\n")
-    except Exception:
-        pass
+    except Exception as _e2:
+        print(f"⚠️ gen_metadata: tool-readiness.md 写盘失败: {_e2}", file=sys.stderr)  # 自审 gate P0-2: 静默 except 可见化
 
     # P1-9: contracts YAML 导出(评审 #56;CommandSpec → contracts/tools/*.yaml, 协议可读形式)
     try:
-        import yaml as _y
+        import yaml as _y  # type: ignore[import-untyped]
         cdir = _os.path.join(_out_root, "contracts", "tools")
         _os.makedirs(cdir, exist_ok=True)
         for _sub in _os.listdir(cdir):
@@ -569,8 +608,8 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
             if _e.get("inputs") or _e.get("parameters") or _e.get("capabilities"):
                 _y.safe_dump(_e, open(_os.path.join(cdir, f"{_n}.yaml"), "w", encoding="utf-8"),
                              allow_unicode=True, sort_keys=False)
-    except Exception:
-        pass
+    except Exception as _e3:
+        print(f"⚠️ gen_metadata: contracts YAML 导出失败: {_e3}", file=sys.stderr)  # 自审 gate P0-2: 静默 except 可见化
     manifest = {"schema_version": "1.0",
                 "description": "tbtools-cli AI 机器接口层(Agent 程序化发现/理解/调用工具)",
                 "files": ["tool-index.jsonl", "capability-index.json", "error-codes.json", "workflows.json", "relations.json", "tools/<group>/<cmd>.json"],

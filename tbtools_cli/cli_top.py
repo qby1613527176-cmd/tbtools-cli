@@ -809,8 +809,18 @@ def register_top(cli, _LG):
             for d in _deps:
                 _dep_map[str(d)] = {"ready": _sh2.which(str(d)) is not None}
             _deps_ready = all(v["ready"] for v in _dep_map.values())
-            click.echo(_json2.dumps({"schema_version": "1.0", "status": "ready" if ok else "not_ready",
-                                     "tool": args[-1] if args else "", "inputs_valid": ok,
+            # P0-2: status 语义 = inputs_valid AND dependencies_ready(此前只查输入, 与 deps 自相矛盾)
+            _reasons = []
+            if not ok:
+                _reasons.append("inputs_invalid")
+            if not _deps_ready:
+                _reasons.append("dependencies_missing")
+            _ready = ok and _deps_ready
+            # P0-1: tool 字段 = 命令名 args[1](此前取 args[-1] = 最后位置参数即输出文件名)
+            _tool_name = args[1] if len(args) >= 2 else (args[0] if args else "")
+            click.echo(_json2.dumps({"schema_version": "1.0", "status": "ready" if _ready else "not_ready",
+                                     "tool": _tool_name, "inputs_valid": ok,
+                                     "status_reasons": _reasons,
                                      "dependencies": _dep_map,
                                      "dependencies_ready": _deps_ready,
                                      "estimated_artifacts": est,

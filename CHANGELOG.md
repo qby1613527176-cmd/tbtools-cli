@@ -2,6 +2,75 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.66] - 2026-10-05
+
+### 五视角自审响应轮（5×subagent 独立批判审查 → P0×8/P1×21/P2×24）
+- **P0-1 tool-run --dry-run 解析修复**（自审 product F1）：tool 字段取命令名（args[1]）而非最后一个位置参数（输出文件名）；契约测试钉死
+- **P0-2 dry-run status 语义修复**（自审 product F2）：status = inputs_valid AND dependencies_ready，新增 status_reasons 数组（此前自相矛盾误导 Agent）
+- **P0-3 版本单一源修复**（自审 docs F1/gate P0-3）：pyproject 1.4.46→1.4.65（47 连发从未 bump）；CHANGELOG 补录 1.4.47–65 共 19 个版本
+- **P0-4 gen_metadata 进门禁 + 静默 except 可见化**（自审 gate P0-1/P0-2）：mypy 覆盖 scripts/（修 3 错）；--check 补 repo→fresh 双向对比（render 缺失→红，自指陷阱闭环）；3 处写盘 except 改 stderr 告警
+- **P1 响应**：xfail 翻红死代码修复（条件式：缺陷在→xfail，修复后→真断言 PASS）；supercircos cfg /tmp 易失→仓库相对路径（WSL 重启可复现修复）；README 数字同步（44→54 / 83→619 / 82→80 / 46→49）；RELEASING.md 发布流程 SOP（两个 P0 根因）；ruff exclude docs/_generated
+- **门禁**: pytest 619+ passed / ruff 0 / mypy 0 / gen_metadata --check 全绿（含版本一致性）
+
+
+## [1.4.65] - 2026-10-05
+- **env_fp 覆盖补全**: engine_env_fingerprint 扩展到 13 个外部二进制(shutil.which 回退 plugins/lib/bin)——评审 #115 预审 P1-2 响应闭环
+- **门禁**: pytest 619 passed + 52 skipped + 2 xfailed / ruff 0 / mypy 0
+
+## [1.4.64] - 2026-10-05
+- **CI skip 口径显式化**: test.yml 加 -rfs 使 EXECUTION_VERIFIED skip 自解释(评审 #115 E4/P2-8 延伸)
+
+## [1.4.63] - 2026-10-05
+- **评审 #115 送审包合一**: REVIEW_PACKAGE_115_SUBMISSION.md——输入 + 预审意见 + 逐条响应记录 + 4 焦点问题, 待外发
+
+## [1.4.62] - 2026-10-05
+- **评审 #115 预审 P2×3 收尾**: 模式表 P4/P5 移出重分类 + mypy import-untyped 按模块收窄 + skip 记账说明入 PLAN.md
+
+## [1.4.61] - 2026-10-05
+- **评审 #115 预审 P1-4**: bin0 缺陷 xfail 固定测试(peaktss/peakanno 低坐标)+ report domain_note 输入域标注
+
+## [1.4.60] - 2026-10-05
+- **评审 #115 预审 P1×3 响应**: env_fp 引擎环境指纹(与 contract_fp 并列不合并)+ verified_at TTL 软告警(>90 天); pafref P2 补试实证(引擎缺陷确认); microsyn 改类(数据合成未攻克); 语义断言 SEMANTIC_CHECKS 覆盖 10 工具(EXECUTION_RAN→VERIFIED)
+
+## [1.4.59] - 2026-10-05
+- **评审 #115 输入包 + AST 压缩版**: REVIEW_PACKAGE_115.md(v1.4.58 快照, 决策 D1-D4)+ scripts/ast_minfy.py 压缩(command_spec 1136→182 行, ~45% token)
+
+## [1.4.58] - 2026-10-05
+- **执行验证台账收官**: 剩余 6 工具归档 EXEC_VERIFIED_LEFTOVER.md(引擎缺陷 4: pafref/tfbsShift/microsyn/memrun + 外部依赖 2: smart/gxfIdAppender)——54/60 = 90% 收官
+
+## [1.4.57] - 2026-10-05
+- **执行验证 52→54(90%)**: peakanno+peaktss 收编——GxGOverlapIndexer bin0 引擎缺陷(坐标<10000 无命中)示例数据平移 +1e6 绕过; 属性优先级 gene: ID>geneID>gene_name, mRNA: Parent>geneID>gene_name
+
+## [1.4.56] - 2026-10-05
+- **Compound Engineering 三招落地**: 单一活 plan(PLAN.md A/B/C 分区)+ 模式归纳(REVERSE_ENGINEERING_PATTERNS P1-P5)+ PITFALL 补全; 清理 Notung provenance 残留
+
+## [1.4.55] - 2026-10-05
+- **执行验证 51→52(87%)**: keggEnrich 收编——真实 .keg 是扁平 5 列表(非 KEGG 层次格式)实锤
+
+## [1.4.54] - 2026-10-05
+- **执行验证 50→51(85%)**: plotrna 收编——名称误导实为 coverage plot(--genomeFA/--region/--SAM), spec 重写; 引擎内置折叠算法, RNAfold 依赖虚惊
+
+## [1.4.53] - 2026-10-05
+- **执行验证 49→50(83%)**: gsea 收编——query2go 一基因一行 + terms 逗号分隔(否则空 gmt); 归入 table group
+
+## [1.4.52] - 2026-10-05
+- **执行验证 48→49(82%)**: notung 收编——引擎忽略 out 参数写派生名; --outputdir tmp + impl glob move; 教训: 不黑名单解析外部工具参数, 用显式 --out 约定 + 原样透传
+
+## [1.4.51] - 2026-10-05
+- **执行验证 47→48(80%)**: kallisto 收编——reads 与 transcripts 配对(seed=42 自造 tx.fa + 76bp 切片 reads)
+
+## [1.4.50] - 2026-10-05
+- **执行验证 45→47(78%)**: efpHeat/multiEfp 收编——TGA 需 TrueColor type2; multiEfp 引擎硬编码 Windows 路径 → 自建 bridge MultiSuperHeatCli(setter + 反射调私有 initExp + save2SVG)
+
+## [1.4.49] - 2026-10-05
+- **执行验证 44→45(75%)**: barplotter 收编——数据格式三连坑(MCScanX collinearity / ctl 4 行逗号分隔 / gff 精确 ID 匹配); 引擎只出 PNG
+
+## [1.4.48] - 2026-10-05
+- **mypy 门禁本地落地**: 1.19.1(apt 装, PyPI 被墙)——修复 6 处类型错误, pyproject 配置对齐(ignore_missing_imports 收窄为按模块 override)
+
+## [1.4.47] - 2026-10-05
+- **Generated Surface Gate v2(评审 #114)**: P0×2 + P1×4——verified_at 假阳性漂移修复(时间戳与 contract_fp 分离, 否则新鲜度门禁恒定假阳性); --check 升级结构化对比
+
 ## [1.4.46] - 2026-10-04
 
 ### Generated Surface Gate(评审 #113)——P0×2 + P1×3

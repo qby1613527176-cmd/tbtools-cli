@@ -103,6 +103,12 @@ def test_contract_dry_run_schema():
     d = json.loads(r.stdout)
     assert d["status"] in ("ready", "not_ready")
     assert "inputs_valid" in d and "estimated_artifacts" in d
+    # P0-1(自审 product F1): tool 字段必须是命令名(第二个位置参数), 不得是输出文件/最后一个参数
+    assert d["tool"] == "volcano", f"tool 字段应=命令名 volcano, 实得 {d['tool']!r}"
+    # P0-2(自审 product F2): status 与 dependencies_ready 不得自相矛盾
+    assert (d["status"] == "ready") == (d["inputs_valid"] and d["dependencies_ready"]), \
+        f"status 与 inputs/deps 矛盾: {d}"
+    assert "status_reasons" in d, "应带 status_reasons 数组"
 
 
 def test_manifest_contract():

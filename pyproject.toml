@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "tbtools-cli"
-version = "1.4.46"
+version = "1.4.66"
 description = "TBtools-II command-line wrapper: 200+ engines, 188+ RPC methods, journal presets, pitfall hints (exact counts via `tbtools version`)"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -63,7 +63,7 @@ markers = [
 # core 正确性规则 + py310 目标（target-version 须在顶层；lint 段不支持）
 target-version = "py310"
 # 转换生成的回归脚本(scripts/rpc_regression_linux.sh 产物)非手写代码,不 lint
-exclude = ["tests/rpc_regression_linux"]
+exclude = ["tests/rpc_regression_linux", "docs/_generated"]  # _generated: ast_minfy/gen_metadata 自动产物
 
 [tool.ruff.lint]
 # 核心正确性规则（F=pyflakes），忽略低危风格类（捕获性 except 是 CLI 容错设计）

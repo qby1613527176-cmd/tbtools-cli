@@ -9,13 +9,14 @@
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![version](https://img.shields.io/badge/version-v1.4.66-blue.svg)](pyproject.toml)  <!-- 自审 docs F1: 与 pyproject 同步; gen_metadata --check 验证 -->
 [![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
 > **294 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 63**(有 inputs 契约) | Registered 294(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 180+ RPC + 80+ CLI 工具 + 110+ Java 桥 + 引擎反射(逃生舱)。
 > 分级定义: FULL=契约完整(inputs+outputs+parameters+capabilities+stable);PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
-> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(44)。
+> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(54)。
 > 分级定义: FULL=契约完整(inputs+outputs+parameters+capabilities+stable);PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
 > 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)。
 
@@ -430,9 +431,9 @@ tbtools-cli/
 ├── scripts/               # tbtools-completion.bash + tbtools.1 + 工具脚本
 ├── examples/              # example data + scripts
 ├── scripts/               # rpc_regression_linux.sh 等工具脚本
-├── tests/                 # pytest（83 passed：框架/命令/防漂移/输入保护）
+├── tests/                 # pytest（619 passed+52 skipped+2 xfailed：框架/命令/防漂移/输入保护）
 ├── docs/                  # detailed documentation
-│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（213 命令+82 工具+118 桥+46 坑位）
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（213 命令+80 工具+118 桥+49 坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md

@@ -36,10 +36,10 @@ jobs:
             bash -n "$f" && echo "✅ $f syntax OK"
           done
 
-      - name: Type check with mypy (check_untyped_defs; 评审 #27 对齐)
+      - name: Type check with mypy (check_untyped_defs; 评审 #27 对齐; 自审 gate P0-1: scripts/ 纳入——守门人自身受检)
         run: |
           pip install mypy
-          python3 -m mypy tbtools_cli/
+          python3 -m mypy tbtools_cli/ scripts/gen_metadata.py
 
       - name: Coverage report (visible, non-blocking)
         run: |
