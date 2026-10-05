@@ -378,6 +378,9 @@ def main():
             # 评审 #115 预审 P1-2(D2) 响应: verified_at 软 TTL——验证超过 90 天
             # 只 WARNING 不 fail(保留新鲜度信号但不扰门禁); 契约/引擎不变时
             # 时间戳冻结属设计语义, TTL 提醒"该考虑环境漂移了"。
+            # 自审 gate P1-5: 软告警升级——TBTOOLS_TTL_STRICT=1(nightly-e2e)时 >90 天
+            # 直接 fail(nightly 有真实 JAR 应回写保鲜; 超龄 = 保鲜机制失效 → 红)。
+            _ttl_strict = os.environ.get("TBTOOLS_TTL_STRICT") == "1"
             try:
                 _vp2 = os.path.join(ROOT, "tests", "verification_report.json")
                 if os.path.isfile(_vp2):
@@ -395,6 +398,12 @@ def main():
                             except Exception:
                                 pass
                     if _old_days:
+                        _msg = (f"❌ 验证超龄 {len(_old_days)} 个(>90 天, TTL 严格模式阻断): "
+                                + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
+                        if _ttl_strict:
+                            print(_msg)
+                            print("   —— nightly 应已回写保鲜; 超龄说明保鲜失效, 需人工重验", file=sys.stderr)
+                            return 1
                         print(f"⚠️ 验证超龄({len(_old_days)} 个 >90 天, 软告警不阻断): "
                               + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
             except Exception:

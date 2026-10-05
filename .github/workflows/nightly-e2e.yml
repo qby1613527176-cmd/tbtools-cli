@@ -39,6 +39,34 @@ jobs:
 
       - name: Gate — pytest (wrapper layer)
         run: |
-          pip install pytest ruff mypy
+          pip install -r requirements-ci.txt  # 自审 gate P1-2: 锁定与本地对齐
           python3 -m pytest tests/ -q 2>&1 | tail -1
           ruff check . 2>&1 | tail -1
+
+      # ── 自审 gate P1-5: 真实引擎执行验证回写(证据保鲜)────────────
+      # nightly 有真实 JAR——跑 conformance 执行验证全量, TBTOOLS_WRITE_REPORT=1
+      # 回写 verification_report.json(verified_at/env_fp 刷新) → 提交 PR 让主分支
+      # 的 EXECUTION_VERIFIED 证据持续保鲜(不再依赖"有人记得本机跑")。
+      - name: Execution verification refresh (real JAR → report writeback)
+        run: |
+          pip install pytest-cov
+          export TBTOOLS_WRITE_REPORT=1
+          python3 -m pytest tests/test_conformance_verified.py -q --tb=short 2>&1 | tail -12
+
+      # 自审 gate P1-5: TTL 严格检查——身份/报告保鲜确认(>90 天未刷新 → 红)
+      - name: Verification TTL gate (strict)
+        run: |
+          export TBTOOLS_TTL_STRICT=1
+          python3 scripts/gen_metadata.py --check 2>&1 | tail -6
+
+      - name: Report writeback PR (evidence freshness)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore: verification_report 夜间保鲜(真实引擎执行)"
+          title: "[nightly] verification report refresh (real engine)"
+          branch: nightly/verification-refresh
+          delete-branch: true
+          labels: automation
+          token: ${{ secrets.GITHUB_TOKEN }}
+          add-paths: |
+            tests/verification_report.json

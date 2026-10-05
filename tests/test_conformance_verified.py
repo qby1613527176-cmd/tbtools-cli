@@ -342,8 +342,35 @@ class TestTier1CompileVerified:
                    "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
                    "execution_verified_details": _exec_entries,
                    "verified_tools": _verified_tools}
-        _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
-                 indent=1)
+        # 自审 gate P1-3: 报告写入改显式 opt-in——pytest 默认只读校验(证据文件不被"跑了
+        # pytest"而非"完成了验证"的环境污染); 显式刷新用 TBTOOLS_WRITE_REPORT=1
+        # (本机验证/nightly 回写时设)。证据可复现性 = 写入者=验证者。
+        if os.environ.get("TBTOOLS_WRITE_REPORT") == "1":
+            _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
+                     indent=1)
+        else:
+            # 只读校验(默认): 报告名单与当前 EXEC/CONF 名单漂移 → 红(提醒显式刷新),
+            # 防"验证名单改了但报告没同步"静默漂移。
+            try:
+                _cur = _jr.load(open(os.path.join(ROOT, "tests", "verification_report.json"), encoding="utf-8"))
+                _cur_exec = set(_cur.get("execution_verified", []))
+                _cur_conf = set(_cur.get("conformance_verified", []))
+                _want_exec = set(EXEC_VERIFIED.keys())
+                _reported = _cur_exec == _want_exec and _cur_conf == set(CONFORMANCE_VERIFIED)
+                if not _reported:
+                    _missing = _want_exec - _cur_exec
+                    _extra = _cur_exec - _want_exec
+                    print(f"⚠️ verification_report.json 与当前名单不同步: 缺 {sorted(_missing)} 多 {sorted(_extra)}"
+                          f"——验证名单变更后需 TBTOOLS_WRITE_REPORT=1 显式刷新", file=sys.stderr)
+                    raise AssertionError(
+                        f"verification_report.json 漂移: 缺 {sorted(_missing)} 多 {sorted(_extra)}。")
+            except FileNotFoundError:
+                print("⚠️ 无 verification_report.json——需 TBTOOLS_WRITE_REPORT=1 首刷", file=sys.stderr)
+                raise
+            except AssertionError:
+                raise
+            except Exception as _e5:
+                print(f"⚠️ 报告只读校验异常: {_e5}", file=sys.stderr)
 
 
 @pytest.mark.integration

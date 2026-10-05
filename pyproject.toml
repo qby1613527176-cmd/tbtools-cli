@@ -96,8 +96,13 @@ disable_error_code = ["import-untyped"]
 
 [tool.coverage.run]
 source = ["tbtools_cli"]
+# omit 说明(自审 gate P1-1 响应): cli_load.py 承载 CATEGORY_MAP/gen_metadata 分组推断
+# 依赖的元数据加载逻辑(测试面少但被间接覆盖); runtime/__init__.py 纯 re-export 门面。
 omit = ["tbtools_cli/cli_load.py", "tbtools_cli/runtime/__init__.py"]
 
 [tool.coverage.report]
 show_missing = true
 skip_covered = true
+# 自审 gate P1-1: coverage 从"纯展示"升级为门禁成员——fail_under 基线 35%
+# (2026-10-06 实测 37%, 留 2pt 缓冲防 flaky; 覆盖率随测试膨胀不得无信号下降)
+fail_under = 35

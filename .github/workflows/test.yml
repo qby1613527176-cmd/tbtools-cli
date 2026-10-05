@@ -14,7 +14,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb shellcheck
-          pip install click pytest ruff pyyaml
+          pip install -r requirements-ci.txt  # 自审 gate P1-2: 锁定版本与本地对齐
 
       # ── L1: 框架/静态/lint（无 TBtools jar 依赖）────────────────────────
       - name: Lint with ruff (硬失败)
@@ -38,19 +38,17 @@ jobs:
 
       - name: Type check with mypy (check_untyped_defs; 评审 #27 对齐; 自审 gate P0-1: scripts/ 纳入——守门人自身受检)
         run: |
-          pip install mypy
           python3 -m mypy tbtools_cli/ scripts/gen_metadata.py
 
-      - name: Coverage report (visible, non-blocking)
+      - name: "Coverage report (硬门槛: fail_under 35%, 自审 gate P1-1 升级为门禁成员)"
         run: |
-          pip install -q pytest-cov
-          python3 -m pytest --cov=tbtools_cli --cov-report=term-missing tests/ -q 2>&1 | tail -6
+          python3 -m pytest --cov=tbtools_cli --cov-report=term-missing tests/ -q 2>&1 | tail -6  # pytest-cov 已在 requirements-ci.txt
 
-      - name: Run full pytest suite (评审 #115 E4: skip 口径显式报告)
+      - name: "Run full pytest suite (评审 #115 E4: skip 口径显式报告; 自审 gate P1-4: 不硬编码 skip 数)"
         run: |
           set -o pipefail
           python3 -m pytest tests/ -q --tb=short -rfs 2>&1 | tail -40
-          echo "⚠️ 若输出含 52 skipped: 其中为 EXECUTION_VERIFIED 断言(CI 无 TBTOOLS_JAR)"
+          echo "⚠️ EXECUTION_VERIFIED 断言在 CI(无 TBTOOLS_JAR)下 skip——准确数量见上方 -rfs 报告, 论证口径见 docs/_worklog/PLAN.md"
           echo "   —— 执行验证 54/60=90% 需含 JAR + examples/data 环境实跑, 口径见 docs/_worklog/PLAN.md"
 
       # ── L1.5: 无 jar 的 CLI 冒烟（真实命令,非 import）──────────────────

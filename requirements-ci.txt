@@ -1,0 +1,8 @@
+# CI/本地门禁依赖锁定(自审 gate P1-2 响应)——与本地环境对齐, 防 ruff/mypy 版本滚动 CI 突然红
+# 更新方式: pip freeze 相关行拷贝回此文件; CI 与本地共用
+click==8.4.2
+pytest==9.0.2
+ruff==0.16.8
+mypy==1.19.1
+PyYAML==6.0.3
+pytest-cov==7.1.0
