@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.73] - 2026-10-06
+
+### 自审 P2 批(死代码/句柄/缓存/硬下限)
+- **verified F5**: test_report_counts 数据可用性硬下限(≥40/54)——删数据文件必须红; flag 参数跳过判定修正
+- **verified F6**: provenance glob 死代码→PROV_COVERAGE 收集+汇总可见(缺口可审计)
+- **verified F9**: 报告写入手柄 with 关闭
+- **arch F8**: env_fp 身份缓存(mtime/size 短路, 0.7s→0.22s); hash 语义不变
+- **arch F10**: 快照校验器裸 except→warn(校验器自身崩溃不再静默)
+- **门禁**: pytest 相关 190 passed / ruff 0 / mypy 0
+
 ## [1.4.72] - 2026-10-06
 
 ### 自审 product F4 响应(最后一个 P1)
