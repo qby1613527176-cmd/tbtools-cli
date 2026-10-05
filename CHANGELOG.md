@@ -2,6 +2,12 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.72] - 2026-10-06
+
+### 自审 product F4 响应(最后一个 P1)
+- **quickstart/index 数字对齐**: 218 绘图命令→213(权威 version --json); index 218 引擎/82 工具/v1.1.0→213+294+188+80/v1.4.71——版本叙事不再三处打架
+- 自审 8 P0 + 21 P1 全部响应完毕
+
 ## [1.4.71] - 2026-10-06
 
 ### 自审 product F3/F5/F6 响应
