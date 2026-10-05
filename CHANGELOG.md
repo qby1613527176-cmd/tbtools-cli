@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.71] - 2026-10-06
+
+### 自审 product F3/F5/F6 响应
+- **F3 错误分类误导**: tool-run 执行前输入预检(flag 状态机)——缺失输入直接 TB002(check input path), 不再误导 TB001 wrapper bug; help 提示补 group 前缀
+- **F5 list 静默吞参**: list plots 真正过滤绘图分组(原与全量相同); 未知类别报错; list --json 机器可读
+- **F6 元数据截断**: _clip_desc 词边界截断+省略号(原 60 字符硬切出 [sor 半词); tool-index 无契约命令显式 schema:null(101/294); tree readiness=None 修复
+- **门禁**: pytest 111 passed / ruff 0 / mypy 0
+
 ## [1.4.70] - 2026-10-06
 
 ### 自审 gate P1×5 响应(门禁体系补全)

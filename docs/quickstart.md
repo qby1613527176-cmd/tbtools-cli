@@ -10,7 +10,7 @@ tbtools fetch-jar --yes        # 自动下载官方包提取 JAR
 tbtools expr volcano examples/data/deg.txt volcano.svg --pval-cutoff 0.05
 
 # 3. 探索
-tbtools list plots             # 218 个绘图命令
+tbtools list plots             # 213 个绘图命令(权威数: tbtools version --json)
 tbtools search volcano         # 模糊搜索
 tbtools help volcano           # 命令详情(含坑位提示)
 tbtools new                    # 交互式向导
