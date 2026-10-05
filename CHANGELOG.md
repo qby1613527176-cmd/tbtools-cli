@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.67] - 2026-10-06
+
+### 自审 arch 响应轮(P0×1 + P1×4)
+- **P0 F1 snapshot_inputs 反向破坏**: 输出文件被当输入快照 → verify_and_restore 把引擎新产物回滚成旧内容(静默数据破坏, 实测复现)。修复: impl 工厂从 doc 解析 <out...> 占位符 → output_hint 显式剔除(140/170 注册条覆盖) + 回归测试
+- **P1 F2 N30 死代码**: 删尾部 ec_out 无条件复位(输出缺失检测永不生效) + err_text 初始化
+- **P1 F3 env_fp 活性化**: 消费端比对 env_fingerprint(换 JAR/二进制 → 验证失效降级); 无 JAR 环境(CI)不刷新 env_fp 防交替全降级
+- **P1 F4 env_fp 覆盖缺口**: _BINS 从 KNOWN_DEPENDENCIES_STRUCT 派生(补 blast 套件/RNAfold/hmmscan) + 插件 JAR 全量入指纹
+- **门禁**: pytest 相关 60 passed / ruff 0 / mypy 0 / gen_metadata --check 全绿(verification=54)
+
 ## [1.4.66] - 2026-10-05
 
 ### 五视角自审响应轮（5×subagent 独立批判审查 → P0×8/P1×21/P2×24）
