@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.74] - 2026-10-06
+
+### 自审 P2 批二(活文档 + 数据纪律)
+- **docs F7**: PLAN.md 快照刷新 v1.4.55→v1.4.73 + 快照纪律注记(防再漂移) + C1-C3 评审表全状态
+- **verified F4**: exec/README.md 数据来源全文档化(24 项/种子/生成方法); 引擎中间产物移出 git 防再入; peaks.xls length 列矛盾修正
+- **门禁**: peakanno/peaktss 4 passed / ruff 0 / mypy 0
+
 ## [1.4.73] - 2026-10-06
 
 ### 自审 P2 批(死代码/句柄/缓存/硬下限)
