@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.76] - 2026-10-06
+
+### 自审 P2 批四(Agent 可执行性)
+- **product F9**: search 分组标签改读元数据 group 字段——与 describe 同源(engine 是 runner 概念不再混入), Agent 不拼错命令
+- **product F8**: tool-describe 支持批量(多命令 + --json 数组)——文案与行为一致; 未知命令集中报错; 补 readiness/verification 显示
+- **门禁**: pytest 226 passed / ruff 0 / mypy 0
+
 ## [1.4.75] - 2026-10-06
 
 ### 自审 P2 批三(缓存失效 + 副作用清扫)
