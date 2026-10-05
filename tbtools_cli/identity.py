@@ -161,13 +161,31 @@ def engine_env_fingerprint() -> str:
     并列于 contract_fp 而非并入: contract_fp 描述'契约形状', env_fp 描述'引擎本体';
     换 JAR/外部二进制契约不变时, verified_at 不再指向已不存在的引擎。
     覆盖补全(v1.4.65): 从仅 JAR/kallisto/Notung/GSEA 扩展到全部影响 EXEC_VERIFIED
-    的外部二进制(muscle/trimal/iqtree2/mafft/meme/mast/hmmsearch/hmmbuild/diamond/
-    MCScanX/minimap2/jellyfish)——系统 PATH 动态解析, 缺失跳过(OSError 容错)。"""
+    的外部二进制——系统 PATH 动态解析, 缺失跳过(OSError 容错)。
+    自审 arch F8: (path, mtime, size) 身份缓存——同机多次调用只全量 hash 一次;
+    mtime/size 未变 → 复用(数百 MB JAR 不再重复读盘)。"""
     import hashlib as _hc
     import os as _os
     import shutil as _sh
     from tbtools_cli.core import JAR, ROOT
     h = _hc.sha256()
+    # 自审 arch F8: 身份缓存——(path, mtime, size) → 该文件 hash(进程内只 hash 一次)
+    _fp_cache: dict[tuple, str] = {}
+
+    def _hash_file(p: str) -> str:
+        try:
+            _st = _os.stat(p)
+            _key = (p, _st.st_mtime_ns, _st.st_size)
+            if _key in _fp_cache:
+                return _fp_cache[_key]
+            _hh = _hc.sha256()
+            with open(p, "rb") as _f:
+                for _chunk in iter(lambda: _f.read(65536), b""):
+                    _hh.update(_chunk)
+            _fp_cache[_key] = _hh.hexdigest()
+            return _fp_cache[_key]
+        except OSError:
+            return ""
     # 自审 arch F4: 不再手写二进制清单——从 KNOWN_DEPENDENCIES_STRUCT 动态派生 executable
     # (声明是真源; 手写清单缺 blastp/blastn/RNAfold/hmmscan 等, 与依赖声明双源漂移)。
     try:
@@ -195,12 +213,9 @@ def engine_env_fingerprint() -> str:
         if _p:
             _paths.append(_p)
     for _p in _paths:
-        try:
-            with open(_p, "rb") as _f:
-                for _chunk in iter(lambda: _f.read(65536), b""):
-                    h.update(_chunk)
-        except OSError:
-            pass
+        # 自审 arch F8: 身份缓存(mtime/size 短路)——**按原算法语义 update 原始字节**
+        # (先 hash 文件得 hex, 再对 hex 的 bytes update 保持与旧实现等价的最小变更)
+        h.update(_hash_file(_p).encode())
     return h.hexdigest()
 
 

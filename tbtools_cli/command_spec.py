@@ -306,8 +306,11 @@ def _apply_contract_overlay(spec) -> None:
             _diff_keys = sorted(k for k in _code if _code.get(k) != _yaml.get(k))
             _w.warn(f"contracts/tools/{spec.name}.yaml 快照过期: {_diff_keys} 与代码真源不一致"
                     f"——重跑 gen_metadata --render", stacklevel=2)
-    except Exception:
-        pass
+    except Exception as _e10:
+        # 自审 arch F10: 裸 pass 让"快照一致性校验自身崩溃"静默——校验器坏了还像好的。
+        import warnings as _w10
+        _w10.warn(f"Contract Integrity Freeze 校验自身失败(snapshot check broke): {_e10}"
+                  f"—— canonical_snapshot/yaml_to_snapshot 需要修复, 不是快照过期", stacklevel=2)
     # 评审 #112 P0-2: 删除 YAML→runtime capability 兑底——代码没有 capability 就是没有;
     # YAML 有而代码没有 = 快照过期(上面 warn 已覆盖), 绝不补回来
 

@@ -241,6 +241,9 @@ SEMANTIC_CHECKS = {
 # volcano 是首个金链标杆(6 步全断言); 升级条件: 跑成功+产物语义+sha256+provenance+artifact_id 全验
 CONFORMANCE_VERIFIED = {"volcano"}
 
+# 自审 verified F6: provenance 覆盖统计(execution 验证收集, 结束后汇总可见)
+PROV_COVERAGE: dict[str, bool] = {}
+
 
 class TestTier1CompileVerified:
     """59 FULL 全部 compile-verified(契约编译行为一致)"""
@@ -282,7 +285,7 @@ class TestTier1CompileVerified:
         # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
         # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
         # → render 后 ai/tools 漂移 → --check 恒定假阳性(2026-10-04 实测 19:22→19:26)
-        _old_verified = {}
+        _old_verified: dict = {}
         _old_vp = os.path.join(ROOT, "tests", "verification_report.json")
         if os.path.isfile(_old_vp):
             try:
@@ -346,8 +349,10 @@ class TestTier1CompileVerified:
         # pytest"而非"完成了验证"的环境污染); 显式刷新用 TBTOOLS_WRITE_REPORT=1
         # (本机验证/nightly 回写时设)。证据可复现性 = 写入者=验证者。
         if os.environ.get("TBTOOLS_WRITE_REPORT") == "1":
-            _jr.dump(_report, open(os.path.join(ROOT, "tests", "verification_report.json"), "w"),
-                     indent=1)
+            # 自审 verified F9: with 块确保句柄关闭(裸 open 句柄泄漏)
+            with open(os.path.join(ROOT, "tests", "verification_report.json"), "w",
+                      encoding="utf-8") as _fout:
+                _jr.dump(_report, _fout, indent=1)
         else:
             # 只读校验(默认): 报告名单与当前 EXEC/CONF 名单漂移 → 红(提醒显式刷新),
             # 防"验证名单改了但报告没同步"静默漂移。
@@ -418,6 +423,9 @@ class TestTier2ExecutionVerified:
             import glob as _glob
             _out_base_stem = out_base.rsplit(".", 1)[0] if "." in os.path.basename(out_base) else out_base
             _has_any_prov = bool(_glob.glob(out_base + "*tbtools.json") or _glob.glob(_out_base_stem + "*tbtools.json"))
+        # 自审 verified F6: 此计算结果此前从未被使用(死代码)。现在可见——provenance
+        # 缺失不判 fail(桥不写是合法的), 但 Agent/开发者需要知道覆盖缺口。
+        PROV_COVERAGE[tool] = _has_any_prov
         # provenance 缺失(如 muscle/iqtree 桥)不失败——工具已真实执行出产物即机器实证;
         # 仅当产物也缺失时才算失败(前面 real 断言已覆盖)
 
@@ -458,7 +466,21 @@ class TestConformanceReport:
     """conformance 报告: verified 计数(Conformance Verified 阶段交付物)"""
 
     def test_report_counts(self):
+        # 自审 verified F6: provenance 覆盖汇总可见(此前死代码, 缺口不可审计)
+        if PROV_COVERAGE:
+            _no_prov = sorted(t for t, has in PROV_COVERAGE.items() if not has)
+            print(f"\nProvenance 覆盖: {sum(PROV_COVERAGE.values())}/{len(PROV_COVERAGE)} 工具; 缺失 {len(_no_prov)} 个: {_no_prov}")
+        # 自审 verified F5: 数据可用性硬下限——Flag 参数(--List1/--inFa)不是文件,
+        # 需跳过 flag 找真实文件路径(此前只取 [0] 误判 flag 为文件)
+        def _first_data_file(t):
+            for a in EXEC_VERIFIED[t][1]:
+                if isinstance(a, str) and not a.startswith("-") and "{" not in a:
+                    return a
+            return None
         exec_ok = [t for t in EXEC_VERIFIED
-                   if os.path.isfile(os.path.join(ROOT, EXEC_VERIFIED[t][1][0]))]
+                   if (_p := _first_data_file(t)) is not None
+                   and os.path.isfile(os.path.join(ROOT, _p))]
         print(f"\nConformance Verified: compile {len(FULL_TOOLS)} / execution-data {len(exec_ok)}")
         assert len(FULL_TOOLS) >= 50, "FULL 池应 >= 50"
+        # 硬下限: 数据文件缺失(删了 examples/data 文件)必须红
+        assert len(exec_ok) >= 40, f"EXEC_VERIFIED 数据文件缺失严重: {len(exec_ok)}/54 可用"
