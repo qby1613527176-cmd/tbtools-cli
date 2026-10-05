@@ -188,13 +188,15 @@ def ensure_bridge(bridge_name: str) -> None:
             subprocess.run(["javac", "-encoding", "UTF-8", "-d", BUILD_DIR, fake_src], capture_output=True)
 
 # ---- xvfb-run 包装 ----
-def run_plot(java_args: list, verbose: bool = False, quiet: bool = False, use_xvfb: bool = True, command_name: str | None = None) -> int:
+def run_plot(java_args: list, verbose: bool = False, quiet: bool = False, use_xvfb: bool = True,
+             command_name: str | None = None, output_hint: str | None = None) -> int:
     """执行绘图引擎（需要 xvfb-run）"""
     if use_xvfb and shutil.which("xvfb-run"):
         full_args = ["xvfb-run", "-a"] + java_args
     else:
         full_args = java_args
-    return run_java(full_args, verbose=verbose, quiet=quiet, command_name=command_name)
+    return run_java(full_args, verbose=verbose, quiet=quiet, command_name=command_name,
+                    output_hint=output_hint)
 
 
 # ---- ANSI 彩色（仅 TTY 时启用）----

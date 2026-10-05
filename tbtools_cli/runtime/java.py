@@ -61,6 +61,21 @@ _OUT_FLAG_RE = re.compile(
     re.IGNORECASE)
 _MAX_SNAPSHOT_COPY = 50 * 1024 * 1024  # >50MB 只记 (size, mtime)，不复制（无法恢复，只报警）
 
+# 产物后缀表(自审 arch F1 响应): 输出槽识别——positional 末位参数若扩展名属已知产物
+# 后缀 → 视为输出而非输入，不纳入快照(否则重跑时旧输出被当输入快照, verify_and_restore
+# 会把引擎刚写的新产物回滚成旧内容——P0 静默数据破坏)。
+_PRODUCT_EXT = (".svg", ".png", ".pdf", ".tsv", ".csv", ".xls", ".txt", ".json",
+                ".fa", ".fasta", ".fq", ".fastq", ".gff", ".gff3", ".gtf", ".nwk",
+                ".tree", ".aln", ".meme", ".collinearity", ".out", ".tab", ".bam",
+                ".sam", ".sorted", ".stats", ".matrix", ".clu", ".xml", ".html", ".gbk")
+
+
+def _is_product_path(p: str) -> bool:
+    """路径扩展名属已知产物后缀(输出槽识别用)。"""
+    low = p.lower()
+    return low.endswith(_PRODUCT_EXT)
+
+
 def _sha256_file(f) -> str:
     """完整 SHA-256(分块读, 不截断;评审 #66: provenance/artifact 统一完整 64 位)。"""
     h = hashlib.sha256()
@@ -77,13 +92,17 @@ def _sha1_file(f):
             h.update(_chunk)
     return h.hexdigest()
 
-def snapshot_inputs(java_args: list) -> list:
+def snapshot_inputs(java_args: list, output_hint: str | None = None) -> list:
     snaps: list = []
     """识别 java_args 中的输入文件并快照。
 
     返回 [(path, backup|None, size, mtime)]；
     规则：跳过执行器/-cp/-D/-X/-jar 值、跳过输出型参数名（_OUT_FLAG_RE）、
     跳过 .jar/.class 与空文件。
+    输出槽识别(自审 arch F1 P0 响应):
+      - output_hint(impl 工厂显式传入的输出路径) → 直接剔除;
+      - positional 末位参数且扩展名属已知产物后缀 → 视为输出剔除。
+      (否则重跑时旧输出被当输入快照, 引擎写新产物后被 verify_and_restore 回滚成旧内容)
     """
     snaps = []
     tmpdir = None
@@ -101,6 +120,8 @@ def snapshot_inputs(java_args: list) -> list:
         flag = prev
         prev = None
         if flag and (_OUT_FLAG_RE.search(flag) or flag in ("-cp", "-classpath", "-jar", "-o")):
+            continue
+        if output_hint and os.path.abspath(_a) == os.path.abspath(output_hint):
             continue
         if not os.path.isfile(_a):
             continue
@@ -328,7 +349,8 @@ def _security_check_generic(java_args: list, command_name: str | None = None) ->
     return None
 
 
-def run_java(java_args: list, verbose: bool = False, quiet: bool = False, command_name: str | None = None) -> int:
+def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
+             command_name: str | None = None, output_hint: str | None = None) -> int:
     _sec = _security_check_generic(java_args, command_name)
     if _sec:
         click.echo(_sec, err=True)
@@ -346,6 +368,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
     P0 保护：调用前快照输入，调用后恢复被改写输入 + 清理副作用文件。
     """
     err_file = safe_temp(prefix="tbtools_err.")
+    err_text = ""  # 自审 arch F2: 函数开头初始化——成功分支 N30 置 ec_out=1 后走自动修复不再 NameError
     import time as _time
     _t0 = _time.perf_counter()
     
@@ -387,7 +410,7 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
                 n19_tmp = None
     
     # ── P0：输入快照（在原 java_args 上做，含 query 原文件，兜底验证）──
-    snaps = snapshot_inputs(java_args)
+    snaps = snapshot_inputs(java_args, output_hint=output_hint)
     _wall_t0 = _time.time()
     # P0-10: t0 目录清单快照(cleanup 只删清单外新文件)
     try:
@@ -510,10 +533,8 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False, comman
         os.unlink(err_file)
     except:
         pass
-    
-    # 成功时 ec_out = 0
-    if ec == 0:
-        ec_out = 0
+    # 自审 arch F2: 删除"成功时 ec_out = 0"无条件复位——N30 刚在成功分支把 ec_out 置 1
+    # (声明输出未生成), 此行把它清零 → N30 变死代码。ec==0 时 ec_out 本就是 0, 此行多余。
     # FailureSpec 自动修复(评审 #52 P2-36): 已知失败模式 → 修复 → 重试一次
     global _REPAIR_RETRIED
     if ec_out != 0 and err_text and not _REPAIR_RETRIED:

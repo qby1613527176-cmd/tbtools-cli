@@ -48,6 +48,43 @@ class TestSnapshotInputs:
         finally:
             shutil.rmtree(td, ignore_errors=True)
 
+    def test_positional_tail_output_not_snapshotted(self):
+        """自审 arch F1 P0: positional 输出槽经 impl 层 output_hint 显式剔除——
+        重跑时旧输出不被当输入快照(否则 verify_and_restore 把新产物回滚成旧内容)。
+        (尾位启发式改为 doc 输出槽解析: auto_commands._out_hint 提取 → output_hint 传快照层)
+        """
+        td = tempfile.mkdtemp()
+        try:
+            inp = os.path.join(td, "in.tsv")
+            out = os.path.join(td, "out.svg")  # 已存在=重跑场景
+            _mkfa(inp)
+            with open(out, "w") as f:
+                f.write("<svg>OLD</svg>")
+            args = ["java", "-Xmx2g", "-cp", core.JAR, "SomeCli", inp, out]
+            snaps = core.snapshot_inputs(args, output_hint=out)
+            paths = [s[0] for s in snaps]
+            assert inp in paths, "真实输入应被快照"
+            assert out not in paths, f"输出槽不应被快照: {paths}"
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+
+    def test_output_hint_always_excluded(self):
+        """自审 arch F1 P0: output_hint 显式指定的输出路径, 无论位置/后缀一律剔除。"""
+        td = tempfile.mkdtemp()
+        try:
+            inp = os.path.join(td, "in.tsv")
+            out = os.path.join(td, "result.dat")  # 非产物后缀, 但显式 output_hint
+            _mkfa(inp)
+            with open(out, "w") as f:
+                f.write("old")
+            args = ["java", "-Xmx2g", "-cp", core.JAR, "SomeCli", inp, "--customOut", out]
+            snaps = core.snapshot_inputs(args, output_hint=out)
+            paths = [s[0] for s in snaps]
+            assert inp in paths
+            assert out not in paths, f"output_hint 路径不应被快照: {paths}"
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+
 
 class TestVerifyRestore:
     def test_restores_modified_input(self):

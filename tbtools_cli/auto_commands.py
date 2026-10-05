@@ -247,6 +247,26 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
     """工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名）"""
     # N28: Gxf 族引擎对 GTF 输入解析 NPE（GENCODE 真 GTF 实证），输入预检警告
     gxf_cmd = cmd.startswith("gxf") or cmd in ("gsadiag", "annocompare", "genedensity", "gblocks")
+    # 自审 arch F1 P0: 从 doc 解析输出槽位置(positional 布局的 <out...> 占位符)
+    # → impl 显式传 output_hint, 快照层剔除(重跑时旧输出不被当输入快照/回滚)。
+    _OUT_HINT_IDX = None
+    _doc_pos = doc.split(":", 1)[1] if ":" in doc else doc
+    import re as _re_out
+    _pos_ph = [m.group(1) for m in _re_out.finditer(r"<([^>]+)>", _doc_pos)]
+    for _i2, _ph in enumerate(_pos_ph):
+        if _re_out.match(r"^(out|output|prefix|graph|result)", _ph, _re_out.I):
+            _OUT_HINT_IDX = _i2
+            break
+
+    def _out_hint(args):
+        """从 args 按输出槽位置索引提取 output_hint(越界/flag 值 → None)。"""
+        if _OUT_HINT_IDX is None or _OUT_HINT_IDX >= len(args):
+            return None
+        _v = args[_OUT_HINT_IDX]
+        if not isinstance(_v, str) or _v.startswith("-"):
+            return None
+        return _v
+
     if kind == "bridge":
         def impl(args, verbose=False, quiet=False):
             if cmd in _NOARG_HANG and not args:
@@ -257,8 +277,10 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             ensure_bridge(cls)
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
-                return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
-            return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
+                return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
+                                output_hint=_out_hint(args))
+            return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
+                            output_hint=_out_hint(args))
     else:  # direct
         def impl(args, verbose=False, quiet=False):
             if cmd in _NOARG_HANG and not args:
@@ -269,8 +291,10 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             # N27: direct 类也含 build/（fake jaxb DatatypeConverter 等），否则 JDK9+ 缺 javax.xml.bind
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
-                return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
-            return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd)
+                return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
+                                output_hint=_out_hint(args))
+            return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
+                            output_hint=_out_hint(args))
     impl.__doc__ = doc
     impl.__name__ = f"_{cmd}_impl"
     return impl

@@ -168,12 +168,28 @@ def engine_env_fingerprint() -> str:
     import shutil as _sh
     from tbtools_cli.core import JAR, ROOT
     h = _hc.sha256()
-    _BINS = ["muscle", "trimal", "iqtree2", "mafft", "meme", "mast",
-             "hmmsearch", "hmmbuild", "diamond", "MCScanX", "minimap2",
-             "jellyfish", "kallisto"]
+    # 自审 arch F4: 不再手写二进制清单——从 KNOWN_DEPENDENCIES_STRUCT 动态派生 executable
+    # (声明是真源; 手写清单缺 blastp/blastn/RNAfold/hmmscan 等, 与依赖声明双源漂移)。
+    try:
+        from tbtools_cli.command_spec import KNOWN_DEPENDENCIES_STRUCT as _kds
+        _BINS: list[str] = sorted({str(d.get("executable") or d["name"])
+                                   for _deps in _kds.values() for d in _deps
+                                   if (d.get("executable") or d.get("name")) not in ("internet",)})
+    except Exception:
+        _BINS = ["muscle", "trimal", "iqtree2", "mafft", "meme", "mast",
+                 "hmmsearch", "hmmbuild", "diamond", "MCScanX", "minimap2",
+                 "jellyfish", "kallisto"]
     _paths = [JAR,
               _os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar"),
               _os.path.join(ROOT, "plugins", "lib", "Plugin_GSEAWrapper.jar")]
+    # 自审 arch F4: 插件 JAR(引擎反射依赖)入指纹——手写清单此前漏 7 个
+    _plugins_dir = _os.path.join(ROOT, "plugins", "lib")
+    if _os.path.isdir(_plugins_dir):
+        for _jar in _os.listdir(_plugins_dir):
+            if _jar.endswith(".jar"):
+                _p = _os.path.join(_plugins_dir, _jar)
+                if _p not in _paths:
+                    _paths.append(_p)
     for _b in _BINS:
         _p = _sh.which(_b) or _os.path.join(ROOT, "plugins", "lib", "bin", _b)
         if _p:

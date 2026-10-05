@@ -227,7 +227,11 @@ class TestTier1CompileVerified:
         # 评审 #115 预审 P1-2(D2) 响应: verified_at 刷新双条件——contract_fp 变 OR
         # 引擎环境指纹(env_fp) 变; 换 JAR/二进制契约不变时不再保留旧验证时间(防
         # verified_at 指向不存在的引擎)。env_fp 与 contract_fp 并列, 不并入(语义分离)。
-        _env_fp = _envfp()
+        # 自审 arch F3 后修正: JAR 缺失(CI/无引擎环境)时 **不刷新 env_fp**——
+        # Tier1 编译验证不依赖 JAR, 无 JAR 重写会把有 JAR 环境的验证证据洗掉
+        # (报告绑定"最后跑测试的环境" → 本地/CI 交替全降级)。JAR 缺席时沿用旧值。
+        from tbtools_cli.core import JAR as _JAR
+        _env_fp = _envfp() if os.path.isfile(_JAR) else None
         # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新——契约未变则保留
         # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
         # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
@@ -244,12 +248,14 @@ class TestTier1CompileVerified:
         for _t in sorted(EXEC_VERIFIED.keys()):
             _fp = _fpfn(SPECS[_t])
             _old = _old_verified.get(_t, {})
+            _env_w = _env_fp if _env_fp is not None else _old.get("env_fingerprint")  # 无 JAR: 保留旧证据
+            # verified_at 保留: 有 JAR 时需 contract+env 双匹配; 无 JAR 时只看 contract(env 沿用旧值不刷新)
+            _keep_va = _old.get("contract_fingerprint") == _fp and (
+                _env_fp is None or _old.get("env_fingerprint") == _env_fp)
             _exec_entries[_t] = {
                 "contract_fingerprint": _fp,
-                "env_fingerprint": _env_fp,
-                "verified_at": (_old.get("verified_at")
-                                if (_old.get("contract_fingerprint") == _fp
-                                    and _old.get("env_fingerprint") == _env_fp)
+                "env_fingerprint": _env_w,
+                "verified_at": (_old.get("verified_at") if _keep_va
                                 else _dt.datetime.now().isoformat(timespec="seconds")),
                 "corpus": "examples/data",
                 # 评审 #115 预审 P1-4/D1 响应: 输入域标注——bin0(<10000) 引擎缺陷

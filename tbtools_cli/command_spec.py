@@ -1070,8 +1070,12 @@ def _load_verification_report() -> tuple[set, set, set]:
                 _details = d.get("execution_verified_details") or {}
             # 评审 #110 P1: execution_verified 绑定 contract_fingerprint——
             # 入场合同变了(fp 不匹配)旧验证自动失效, 降级为未验证(防"contract 改但仍标已验")
+            # 自审 arch F3: 消费 env_fingerprint(评审 #115 P1-2 写入但此前只写不查)——
+            # 换 JAR/外部二进制后验证同样失效(否则标签指向已不存在的引擎)
             if _details:
-                from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
+                from tbtools_cli.identity import (execution_contract_fingerprint as _fpfn,
+                                                  engine_env_fingerprint as _envfp)
+                _env_now = None  # 惰性计算(锁报告绝大部分条目无 env 字段时省一次全量 hash)
                 try:
                     _specs_now = _bcs_for_verify()
                 except Exception:
@@ -1079,6 +1083,7 @@ def _load_verification_report() -> tuple[set, set, set]:
                 for _t in (list(_exec) + list(_conf)):
                     _entry = _details.get(_t) or {}
                     _old_fp = _entry.get("contract_fingerprint")
+                    _old_env = _entry.get("env_fingerprint")
                     _sp = _specs_now.get(_t)
                     if _old_fp and _sp:
                         try:
@@ -1090,6 +1095,15 @@ def _load_verification_report() -> tuple[set, set, set]:
                     elif not _old_fp:
                         _exec.discard(_t)
                         _conf.discard(_t)
+                    if _old_env:
+                        try:
+                            if _env_now is None:
+                                _env_now = _envfp()
+                            if _env_now != _old_env:
+                                _exec.discard(_t)
+                                _conf.discard(_t)  # 引擎本体变 → 验证失效
+                        except Exception:
+                            pass
             return _conf, _exec, set(d.get("compile_verified", []))
         except Exception:
             pass
