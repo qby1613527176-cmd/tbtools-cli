@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.68] - 2026-10-06
+
+### 自审 arch F5/F6 响应(P1×2)
+- **F5 impl 双轨守卫死代码 + 选错版**: 冲突守卫移模块尾部 assert(循环内恒假=结构性死代码); cli_load 改 globals(手写版)优先——N3/N27 修复(tableMerge/efpHeat)不再被工厂版旁路; 头注释 13→33 计数修正
+- **F6 executor 循环依赖闭合**: 不再绕行 workflow 门面 import 自己的 _execute_step(自引用); 测试 monkeypatch 移到真实位置; workflow re-export 仅作兼容
+- **门禁**: pytest 相关 31 passed / ruff 0 / mypy 0
+
 ## [1.4.67] - 2026-10-06
 
 ### 自审 arch 响应轮(P0×1 + P1×4)
