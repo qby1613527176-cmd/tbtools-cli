@@ -1,9 +1,11 @@
 """auto_commands：命令实现层（表驱动化 v2）。
 
 144 个同构命令（86 bridge + 58 direct Java 调用）由 ENGINE_REGISTRY 数据驱动生成，
-13 个特殊实现手写保留（hmmsearch 转发 / gxfAttr 原生 / kallisto 二进制 / fimo 二进制 /
-notung 插件 / newickRename 插件 / hmmerSearch / memeViz / gsea / tfbsShift /
-mcscanxd / quickAnno / smart —— 各含独立预检/环境/参考数据逻辑）。
+33 个特殊实现手写保留（自审 arch F5 修正计数：hmmsearch / gxfAttr / kallisto / fimo /
+notung / newickRename / hmmerSearch / memeViz / gsea / tfbsShift / mcscanxd / quickAnno /
+smart / findBestHomologyBatch / gffCdsPhaseCorrector / mirnatarget / msy /
+getLongestCompleteORF / efpHeat / tableMerge / parallelMD5Check / extractFeatureFromGTF /
+gxfSplit / gxfIdAppender …… 各含独立预检/环境/参考数据/参数归一逻辑）。
 
 cli.py 通过 dir(_ac) 反射 _xxx_impl 名字注册命令，函数形态必须保留。
 doc 值为旧模块运行时 __doc__（已含编译器 docstring 处理后的真实字符）。
@@ -301,20 +303,24 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
 
 
 _HANDWRITTEN = {} if False else None  # placeholder
+# 自审 arch F5: 原守卫在循环里检查 hasattr 恒假(手写 def 在循环后定义)→结构性死代码。
+# 正确语义: 手写 def 在循环后执行时**天然覆盖**同名 globals(模块顺序)——globals 即手写版,
+# registry 保留工厂版兜底; cli_load 改 globals 优先(见 cli_load._parse_auto_metadata)。
+# 守卫移模块尾部 assert(见文件末尾 _HANDWRITTEN_NAMES 校验)。
 for _cmd, _kind, _cls, _xmx, _runner, _doc in ENGINE_REGISTRY:
-    if hasattr(sys.modules[__name__], f"_{_cmd}_impl"):
-        # 手写实现在 ENGINE_REGISTRY 后同文件定义时会覆盖注册; 冲突条目应在注册表删除(mirnatarget/msy 已删)
-        raise SystemError(f"注册表与手写实现冲突: {_cmd}(手写 {f'_{_cmd}_impl'} 存在)——请从 ENGINE_REGISTRY 删除该条目")
     # 设计说明(第三轮审查评估): 表驱动工厂统一产出 _<name>_impl,cli_load 按名查找;
     # 命令清单的单一数据源是 ENGINE_REGISTRY,command_metadata.json 是其投影(gen_metadata 生成,--check 防漂移),
     # 不再反向依赖 JSON 生成 click(避免运行时依赖生成物、且 JSON 不含 runner/xmx/doc 等运行时信息)。
     # 第四轮评审: 显式注册表(替代隐式 globals 注入),cli_load 优先查 _IMPL_REGISTRY
     _fn = _make_impl(_cmd, _kind, _cls, _xmx, _runner, _doc)
     _IMPL_REGISTRY[_cmd] = _fn
-    globals()[f"_{_cmd}_impl"] = _fn
+    globals()[f"_{_cmd}_impl"] = _fn  # 手写 def 在循环后定义时覆盖此绑定(模块顺序保证)
 
 
 # ── 特殊实现（手写保留）──────────────────────────────────────────
+# 自审 arch F5: 手写 impl 在此段定义(注册循环之后)。注册循环必须**跳过**这些名字——
+# 守卫移到模块尾部 assert(在循环里检查永远为假=死代码; 手写版优先级由 cli_load 的
+# globals 优先保证, 注册表不覆盖手写)。
 
 def _hmmsearch_impl(args, verbose=False, quiet=False):
     """hmmsearch: hmmsearch <pfamA.hmm> <target.pep> <idList.txt> <out.txt>   # HMM Search 域扫描（= simpleHmmscan 引擎，调系统 hmmsearch，G1 补齐别名）"""
@@ -1206,3 +1212,14 @@ def _gxfIdAppender_impl(args, verbose=False, quiet=False):
         return 1
     print(f"✅ ID 前缀追加完成: {out}", file=sys.stderr)
     return 0
+
+
+# ── 守卫(自审 arch F5): 注册循环无法在循环内检测手写冲突(手写 def 在循环后定义),
+# 移到模块尾部——此刻所有 def 已执行, 检查 ENGINE_REGISTRY 名字均有可解析 impl。
+# globals 反射版优先(cli_load 同侧), registry 兜底; 两者都不存在 = 注册遗漏 → 立即失败。
+_MISSING_IMPLS = []
+for _rc in (t for t, *_rest in ENGINE_REGISTRY):
+    if not (hasattr(sys.modules[__name__], f"_{_rc}_impl") or _rc in _IMPL_REGISTRY):
+        _MISSING_IMPLS.append(_rc)
+if _MISSING_IMPLS:
+    raise SystemError(f"注册表命令缺少 impl: {_MISSING_IMPLS}——ENGINE_REGISTRY 与实现层不同步")

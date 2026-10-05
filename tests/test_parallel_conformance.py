@@ -25,7 +25,9 @@ class TestParallelDiamondWorkflow:
             {"id": "d", "tool": "t", "args": [], "depends_on": ["b", "c"]},
         ]
         # monkeypatch _execute_step 为快速假实现(免 Java)
-        import tbtools_cli.workflow as wfm
+        import tbtools_cli.workflow as _wfm_orig
+        import tbtools_cli.executor as wfm
+        _wfm_orig_keep = _wfm_orig
         orig = wfm._execute_step
         wfm._execute_step = lambda st, wd, to, state, resume, ce=None, pr=None: {
             "id": st["id"], "tool": "t", "exit_code": 0, "status": "succeeded",
@@ -43,7 +45,9 @@ class TestFailFastCancelWorkflow:
     """fail-fast: A 失败 → cancel_event 设置 + 在飞步骤被杀/未启动跳过(状态收敛)"""
 
     def test_cancel_on_failure(self, tmp_path):
-        import tbtools_cli.workflow as wfm
+        import tbtools_cli.workflow as _wfm_orig
+        import tbtools_cli.executor as wfm
+        _wfm_orig_keep = _wfm_orig
 
         started, killed = [], []
         orig = wfm._execute_step
@@ -139,8 +143,15 @@ class TestContractYamlLoader:
 
     def test_verification_tiers(self):
         from tbtools_cli.command_spec import verification_census
+        from tbtools_cli.core import JAR
         c = verification_census()
-        assert c["EXECUTION_VERIFIED"] >= 3
+        if os.path.isfile(JAR):
+            # 有 JAR: env_fp 匹配 → EXECUTION_VERIFIED 证据保留
+            assert c["EXECUTION_VERIFIED"] >= 3
+        else:
+            # 无 JAR: env_fp 失配 → 验证降级为 0(防"标签指向不存在的引擎", 自审 arch F3)
+            assert c["EXECUTION_VERIFIED"] == 0, \
+                f"无 JAR 环境应降级验证证据(env_fp 机制), 实得 {c['EXECUTION_VERIFIED']}"
         assert c["COMPILEABLE"] > 0
 
 
@@ -148,7 +159,9 @@ class TestFailurePropagation:
     """失败传播(评审 #82 P0-4): A→B→C 链,B 失败则 C 不启动"""
 
     def test_chain_failure_stops_downstream(self, tmp_path):
-        import tbtools_cli.workflow as wfm
+        import tbtools_cli.workflow as _wfm_orig
+        import tbtools_cli.executor as wfm
+        _wfm_orig_keep = _wfm_orig
         started = []
         orig = wfm._execute_step
 

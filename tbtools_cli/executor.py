@@ -277,12 +277,9 @@ def _run_parallel(steps: list, workdir: str, timeout_s: int, state: dict, resume
     """
     import threading
     from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
-    # 评审 #112 P2: _execute_step 经 workflow 命名空间解析——测试 monkeypatch
-    # workflow._execute_step 期望影响并行调度(原行为); 生产路径经 re-export 同源
-    try:
-        from tbtools_cli.workflow import _execute_step as _exec_hook
-    except Exception:
-        _exec_hook = _execute_step
+    # 自审 arch F6: _execute_step 定义在本模块——不再绕行 workflow 门面(自引用)。
+    # 测试 monkeypatch 改到真实位置(tbtools_cli.executor._execute_step, 见 test_parallel_conformance)。
+    _exec_hook = _execute_step
     by_id = {s["id"]: s for s in steps}
     pending = set(by_id)
     done: dict = {}
@@ -363,9 +360,10 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
 
     resume=True 时跳过已成功步骤(读 .wf_state.json;v2 断点续跑)。
     """
-    # 评审 #112 P2: plan/_topo_sort 属 workflow 层, 函数内延迟 import 防循环;
-    # _execute_step 同样经 workflow 解析(测试 monkeypatch 兼容)
-    from tbtools_cli.workflow import _topo_sort, plan, _execute_step as _exec_hook2
+    # 自审 arch F6: plan/_topo_sort 属 workflow(plan)层合理跨层依赖;
+    # _execute_step 定义在本模块, 直接引用(不经 workflow 门面自引用)。
+    from tbtools_cli.workflow import _topo_sort, plan
+    _exec_hook2 = _execute_step
     os.makedirs(workdir, exist_ok=True)
     # DAG: 有 depends_on 的步骤拓扑重排(评审 #66 P0-3)
     if any(s.get("depends_on") or s.get("dependsOn") for s in wf["steps"]):

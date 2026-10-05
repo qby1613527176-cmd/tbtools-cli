@@ -248,7 +248,7 @@ def _load_meta_json():
 
 def _parse_auto_metadata(name):
     """从 auto_commands.py 解析命令元数据（docstring + 坑位）"""
-    impl = _ac._IMPL_REGISTRY.get(name) or getattr(_ac, f'_{name}_impl', None)  # 显式注册表优先(第四轮评审)
+    impl = getattr(_ac, f'_{name}_impl', None) or _ac._IMPL_REGISTRY.get(name)  # 自审 arch F5: globals(手写版)优先——手写修复不再被工厂版旁路; registry 兜底
     doc = (impl.__doc__ or "").strip() if impl else ""
     # N33: 优先 command_metadata.json 完整 help（含可选位；docstring 常被表驱动截断）
     _meta = _load_meta_json().get(name)
