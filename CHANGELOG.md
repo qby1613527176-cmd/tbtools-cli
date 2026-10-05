@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.69] - 2026-10-06
+
+### 自审 verified F2 响应(标签诚实性)
+- **semantic_checked 分级**: verification_report.json 的 verified_tools 加 semantic_checked 字段(10/54 内容级)——下游可区分"验过内容"与"只验过跑过", 不再标签超卖
+- **语义断言升级×4**: barplotter(PNG 像素色≥3)/plotrna(PDF 页面对象)/peakanno(基因-链向映射精确匹配)/keggEnrich(同行断言)——垃圾/错配内容不再通过
+- **any() 评估**: 升级后断言函数内部已定向映射, gsea outDir 任一报告语义合理
+- **门禁**: pytest 58 passed / ruff 0 / mypy 0
+
 ## [1.4.68] - 2026-10-06
 
 ### 自审 arch F5/F6 响应(P1×2)
