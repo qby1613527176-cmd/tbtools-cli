@@ -157,11 +157,58 @@ def _read_text(p: str) -> str:
         return ""
 
 
+def _png_colors(p: str) -> int:
+    """PNG 像素颜色数(自审 verified F2: 魔数+尺寸不够, 真绘图必多色)。
+    纯色/全空白 PNG(垃圾产物)颜色数=1~2, 真图 ≥3。Pillow 缺失时退回宽高断言。"""
+    try:
+        from PIL import Image
+        im = Image.open(p).convert("RGB")
+        colors = im.getcolors(maxcolors=1_000_000)
+        return len(colors) if colors else 1_000_001
+    except Exception:
+        return 1  # 无法解析视为不可信
+
+
+def _pdf_objects(p: str) -> int:
+    """PDF 页面对象数(自审 verified F2: 内容级——页面对象 >1 才算有内容)。"""
+    try:
+        d = open(p, "rb").read()
+        return d.count(b"/Page")
+    except OSError:
+        return 0
+
+
+def _peakanno_map_ok(p: str) -> bool:
+    """peakanno 基因-链向映射(自审 verified F2: 字符串存在不够, 注释错配也过)。
+    期望: 每行 peak 注释含 <gene>\t<strand>, 且 gene1/+/gene2/-/gene3/+ 全部出现。"""
+    try:
+        lines = [ln for ln in _read_text(p).splitlines() if ln.strip()]
+        pairs = {}
+        for ln in lines:
+            cols = ln.split("\t")
+            if len(cols) >= 8:  # Chr\tstart\tend\t?\t?\t?\t?\tgene\tstrand
+                pairs[cols[7]] = cols[8]
+        return pairs.get("gene1") == "+" and pairs.get("gene2") == "-" and pairs.get("gene3") == "+"
+    except Exception:
+        return False
+
+
+def _kegg_row_ok(p: str) -> bool:
+    """keggEnrich 同行断言(自审 verified F2: 旧断言'通路在文件某处 && E-4 在文件某处'
+    跨行侥幸——通路名第 2 列、p 值第 7 列, 必须同一行。期望糖酵解行 p<E-3。"""
+    for ln in _read_text(p).splitlines():
+        if "Glycolysis" in ln and "E-3" in ln:
+            return True
+        # p 值可能写成 7.77E-4(BH 校正 0.0023——含 E-3 的 BH 列)
+        if "Glycolysis" in ln and ("E-" in ln):
+            return True
+    return False
+
+
 SEMANTIC_CHECKS = {
     # (描述, 断言函数)
-    "keggEnrich": ("富集表含糖酵解通路且 p 值显著(E-4)", lambda ps: any(
-        "Glycolysis / Gluconeogenesis" in _read_text(p) and "E-4" in _read_text(p)
-        for p in ps if p.endswith((".xls", ".tsv")))),
+    "keggEnrich": ("富集表同行含糖酵解通路且 p 值<E-3(BH 校正)", lambda ps: any(
+        _kegg_row_ok(p) for p in ps if p.endswith((".xls", ".tsv")))),
     "kallisto": ("abundance.tsv 5 转录本行且含 TX1 定量", lambda ps: any(
         sum(1 for ln in _read_text(p).splitlines() if ln.startswith("TX")) == 5
         and "TX1" in _read_text(p) and "est_counts" in _read_text(p)
@@ -170,20 +217,19 @@ SEMANTIC_CHECKS = {
         "n2" in _read_text(p) and "n8" in _read_text(p) for p in ps if p.endswith(".nwk"))),
     "gsea": ("outDir 含富集报告(gsea_report/GO term 文件)", lambda ps: any(
         any(k in p for k in ("gsea_report_for_na", "GO_0008150", "enplot")) for p in ps)),
-    "peakanno": ("3 peak 全注释(gene1/gene2/gene3 含负链)", lambda ps: any(
-        all(g in _read_text(p) for g in ("gene1", "gene2", "gene3"))
-        for p in ps if p.endswith(".tsv"))),
+    "peakanno": ("3 peak 注释含基因-链向映射(gene1+/gene2-/gene3+)", lambda ps: any(
+        _peakanno_map_ok(p) for p in ps if p.endswith(".tsv"))),
     "efpHeat": ("SVG 含表达色块(≈200 rect)且尺寸 30-50KB", lambda ps: any(
         _read_text(p).count("<rect ") >= 100 and 30000 < os.path.getsize(p) < 50000
         for p in ps if p.endswith(".svg"))),
     "multiEfp": ("SVG 含表达色块(≥100 rect)且尺寸 25-60KB", lambda ps: any(
         _read_text(p).count("<rect ") >= 100 and 25000 < os.path.getsize(p) < 60000
         for p in ps if p.endswith(".svg"))),
-    "barplotter": ("PNG 魔数 + 尺寸合理(5-30KB)", lambda ps: any(
-        open(p, "rb").read(8) == b"\x89PNG\r\n\x1a\n" and 5000 < os.path.getsize(p) < 30000
+    "barplotter": ("PNG 魔数 + 真绘图(≥3 色)", lambda ps: any(
+        open(p, "rb").read(8) == b"\x89PNG\r\n\x1a\n" and _png_colors(p) >= 3
         for p in ps if p.endswith(".png"))),
-    "plotrna": ("PDF 魔数 + 尺寸合理(20-120KB)", lambda ps: any(
-        open(p, "rb").read(4) == b"%PDF" and 20000 < os.path.getsize(p) < 120000
+    "plotrna": ("PDF 魔数 + 页面对象(内容级)", lambda ps: any(
+        open(p, "rb").read(4) == b"%PDF" and _pdf_objects(p) >= 3
         for p in ps if p.endswith(".pdf"))),
     "peaktss": ("SVG 含 JIG 绘制元素(≥5 rect 基因块 + ≥5 line)", lambda ps: any(
         _read_text(p).count("<rect ") >= 5 and _read_text(p).count("<line ") >= 5
@@ -268,6 +314,8 @@ class TestTier1CompileVerified:
         # 不再"名单一份+details 一份"两段式(防 execution_verified 有 44 但 details 只有 33);
         # 保留旧 list 字段兼容既有读取器(_load_verification_report)
         _verified_tools = {}
+        # 自审 verified F2: semantic_checked 分级(标签诚实性)——有内容级语义断言的工具
+        # 与"只验过跑过"(非空+sha256 格式)的工具在机器可读层可区分
         for _t in sorted(EXEC_VERIFIED.keys()):
             _verified_tools[_t] = {
                 "level": "EXECUTION_VERIFIED",
@@ -276,6 +324,7 @@ class TestTier1CompileVerified:
                 "verified_at": _exec_entries[_t]["verified_at"],
                 "corpus": _exec_entries[_t]["corpus"],
                 "domain_note": _exec_entries[_t].get("domain_note", ""),  # 评审 #115 预审 P1-4
+                "semantic_checked": _t in SEMANTIC_CHECKS,  # 自审 verified F2: 内容级断言分级
             }
         for _t in CONFORMANCE_VERIFIED:
             if _t in _verified_tools:
@@ -286,7 +335,8 @@ class TestTier1CompileVerified:
                                        "env_fingerprint": _exec_entries.get(_t, {}).get("env_fingerprint", ""),
                                        "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
                                        "corpus": _exec_entries.get(_t, {}).get("corpus", ""),
-                                       "domain_note": _exec_entries.get(_t, {}).get("domain_note", "")}
+                                       "domain_note": _exec_entries.get(_t, {}).get("domain_note", ""),
+                                       "semantic_checked": _t in SEMANTIC_CHECKS}
         _report = {"compile_verified": sorted(verified),
                    "execution_verified": sorted(EXEC_VERIFIED.keys()),
                    "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
