@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.75] - 2026-10-06
+
+### 自审 P2 批三(缓存失效 + 副作用清扫)
+- **arch F7**: clear_specs_cache 统一清三处缓存(specs/_SPEC_GROUPS/_META_JSON)——死钩子变活入口; 注释修正
+- **arch F11**: cleanup_side_effects 扩展扫输入目录(extra_dirs)——N37 副作用不再在别处 cwd 永久残留; P0-10 安全保留
+- **门禁**: pytest 18 passed / ruff 0 / mypy 0
+
 ## [1.4.74] - 2026-10-06
 
 ### 自审 P2 批二(活文档 + 数据纪律)
