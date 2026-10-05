@@ -1097,11 +1097,15 @@ def _load_verification_report() -> tuple[set, set, set]:
                         _conf.discard(_t)
                     if _old_env:
                         try:
-                            if _env_now is None:
-                                _env_now = _envfp()
-                            if _env_now != _old_env:
-                                _exec.discard(_t)
-                                _conf.discard(_t)  # 引擎本体变 → 验证失效
+                            # 有 JAR 才比对 env_fp(引擎本体可算); 无 JAR 环境无法验证 →
+                            # 保守信任报告(与写入端对称: 无 JAR 不刷新不降级, 防 CI--check 漂移)
+                            from tbtools_cli.core import JAR as _JAR2
+                            if os.path.isfile(_JAR2):
+                                if _env_now is None:
+                                    _env_now = _envfp()
+                                if _env_now != _old_env:
+                                    _exec.discard(_t)
+                                    _conf.discard(_t)  # 引擎本体变 → 验证失效
                         except Exception:
                             pass
             return _conf, _exec, set(d.get("compile_verified", []))
