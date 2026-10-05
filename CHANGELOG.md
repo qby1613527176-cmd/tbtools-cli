@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.70] - 2026-10-06
+
+### 自审 gate P1×5 响应(门禁体系补全)
+- **P1-1 coverage 门禁化**: fail_under=35(实测 37% 基线)——覆盖率不再随测试膨胀无信号下降; omit 规则透明注释
+- **P1-2 CI 依赖锁定**: requirements-ci.txt(ruff/mypy/pytest/click/PyYAML/pytest-cov 对齐本地)——防版本滚动 CI 突然红
+- **P1-3 报告写入 opt-in**: TBTOOLS_WRITE_REPORT=1 才写 verification_report.json; 默认只读校验(名单漂移→红)——证据文件不被"跑了 pytest"污染
+- **P1-4 skip 口径动态化**: CI 不再硬编码 52, 准确数见 -rfs 报告
+- **P1-5 Tier-2 保鲜闭环**: nightly-e2e 真实 JAR 回写报告 + create-PR 提交; TTL 严格模式(>90 天 fail)
+- **门禁**: pytest 26 passed(相关)/ruff 0/mypy 0/workflow YAML 校验通过
+
 ## [1.4.69] - 2026-10-06
 
 ### 自审 verified F2 响应(标签诚实性)
