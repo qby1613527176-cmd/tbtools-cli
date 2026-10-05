@@ -801,7 +801,7 @@ KNOWN_STATUS = {
 
 
 # SpecRegistry(评审 #110 P1): 一次性构建缓存——Agent 高频链 search/describe/plan/validate/run
-# 每次都重建 294 spec(~105ms)纯浪费; KNOWN_* 一旦变更调 _clear_specs_cache()
+# 每次都重建 294 spec(~105ms)纯浪费; KNOWN_* / 注册表变更调 clear_specs_cache()(统一失效)
 _SPECS_CACHE: dict | None = None
 
 
@@ -885,9 +885,17 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
 
 
 def clear_specs_cache() -> None:
-    """SpecRegistry 失效(评审 #110 P1): KNOWN_* / 注册表变更后强制下次重建。"""
+    """SpecRegistry 失效(评审 #110 P1): KNOWN_* / 注册表变更后强制下次重建。
+    自审 arch F7: 统一清三处缓存——specs(command_spec._SPECS_CACHE) + 分组(cli_load._SPEC_GROUPS)
+    + metadata(cli_load._META_JSON)——此前三套缓存各自为政且全部无失效入口。"""
     global _SPECS_CACHE
     _SPECS_CACHE = None
+    try:
+        import tbtools_cli.cli_load as _cl
+        _cl._SPEC_GROUPS.clear()
+        _cl._META_JSON = None
+    except Exception:
+        pass
 
 
 def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:

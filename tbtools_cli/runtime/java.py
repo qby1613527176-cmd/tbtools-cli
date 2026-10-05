@@ -193,36 +193,44 @@ def verify_and_restore(snaps: list) -> list[tuple[str, str]]:
                 problems.append((path, "verify-error"))
     return problems
 
-def cleanup_side_effects(t0: float, preexisting: frozenset | None = None) -> int:
+def cleanup_side_effects(t0: float, preexisting: frozenset | None = None,
+                         extra_dirs: set | None = None) -> int:
     """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。
 
     P0-10 安全化: 只删**不在 t0 目录清单里**的新文件(preexisting 快照判定)——
     t0 前已存在的文件(即使本次被引擎修改 mtime)一律不删, 防误删用户文件。
     preexisting 缺省时退回 mtime 判定(旧行为兼容)。
+    自审 arch F11: extra_dirs(输入文件所在目录)——N37 副作用落在输入旁边,
+    此前只扫 CWD 导致 /data/q.fa.TBtoolsDB.* 在别处 cwd 时永久残留。
     """
-    try:
-        cwd = os.getcwd()
-        names = os.listdir(cwd)
-    except Exception:
-        return 0
     n = 0
-    for fn in names:
-        if not _SIDE_EFFECT_RE.search(fn):
-            continue
-        fp = os.path.join(cwd, fn)
+    dirs = {os.getcwd()}
+    if extra_dirs:
+        dirs |= {str(d) for d in extra_dirs if d}
+    for _d in sorted(dirs):
         try:
-            if not os.path.isfile(fp):
-                continue
-            if preexisting is not None:
-                if fn in preexisting:
-                    continue  # t0 前已存在(P0-10: 即使被引擎修改也不删)
-                os.unlink(fp)
-                n += 1
-            elif os.path.getmtime(fp) >= t0 - 2:
-                os.unlink(fp)
-                n += 1
+            names = os.listdir(_d)
         except Exception:
-            pass
+            continue
+        for fn in names:
+            if not _SIDE_EFFECT_RE.search(fn):
+                continue
+            fp = os.path.join(_d, fn)
+            try:
+                if not os.path.isfile(fp):
+                    continue
+                if preexisting is not None:
+                    if os.path.dirname(os.path.abspath(fp)) == os.getcwd() and fn in preexisting:
+                        continue  # t0 前已存在(P0-10: 即使被引擎修改也不删)
+                    # 非 CWD 目录无 preexisting 快照 → 用 t0 判定(只删本次新建)
+                    if os.path.getmtime(fp) < t0 - 2:
+                        continue
+                elif os.path.getmtime(fp) < t0 - 2:
+                    continue
+                os.unlink(fp)
+                n += 1
+            except Exception:
+                pass
     return n
 
 # 强输出参数名：调用成功后对应文件必须存在（N30：长路径/引擎静默跳过兜底）
@@ -443,7 +451,9 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
     
     # ── P0：输入保护（无论成败都执行）──
     _problems = verify_and_restore(snaps)
-    _clean_n = cleanup_side_effects(_wall_t0, preexisting=_pre_listing)
+    # 自审 arch F11: N37 副作用落在输入文件旁边——额外扫输入目录(防别处 cwd 永久残留)
+    _inp_dirs = {os.path.dirname(os.path.abspath(s[0])) for s in snaps} if snaps else set()
+    _clean_n = cleanup_side_effects(_wall_t0, preexisting=_pre_listing, extra_dirs=_inp_dirs)
     if _problems:
         print(file=sys.stderr)
         print(_("⚠️ 输入保护：检测到引擎修改/删除了输入文件，已自动恢复：",
