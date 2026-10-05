@@ -609,85 +609,94 @@ def register_top(cli, _LG):
                 click.echo(f"  {k}: {'✅' if v else '—'}")
 
     @cli.command(name="tool-describe")
-    @click.argument("command")
+    @click.argument("commands", nargs=-1, required=True)  # 自审 product F8: 支持批量(Agent 一次拿多工具 schema)
     @click.option("--json", "as_json", is_flag=True, help="输出机器 schema(JSON, 供 Agent)")
-    def tool_describe(command, as_json):
-        """命令机器描述(schema): tbtools tool-describe <命令> [--json](Agent 能力)"""
+    def tool_describe(commands, as_json):
+        """命令机器描述(schema): tbtools tool-describe <命令...> [--json](Agent 能力, 支持批量)"""
         import json as _json
         meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
         meta = _json.load(open(meta_path, encoding="utf-8")) if os.path.isfile(meta_path) else {}
-        if command not in meta:
-            click.echo(f"❌ 未知命令: {command}(见 tbtools list / search)", err=True)
+        # 自审 product F8: 批量支持——所有命令先解析, 未知命令集中报错
+        _unknown = [c for c in commands if c not in meta]
+        if _unknown:
+            click.echo(f"❌ 未知命令: {', '.join(_unknown)}(见 tbtools list / search)", err=True)
             sys.exit(1)
-        v = meta[command]
-        # 分组: metadata group 字段优先(gen_metadata 注入), 运行时 _groups 兜底
-        group = v.get("group") or next((g for g, grp in _LG._groups.items() if command in grp.commands),
-                                       _LG.CATEGORY_MAP.get(command, "engine"))
-        # help: metadata 优先, 回退点击命令对象(手动命令)
-        help_txt = (v.get("help", "") or "").split("#")[-1].strip()
-        if not help_txt:
-            grp = _LG._groups.get(group)
-            cmd_obj = grp.commands.get(command) if grp else None
-            help_txt = (cmd_obj.help or "") if cmd_obj else ""
-        cls = v.get("class") or ("" if command not in _LG._groups.get("engine", type("x", (), {"commands": {}})).commands else "")
-        desc = {
-            "$schema": "https://json-schema.org/draft/2020-12/schema",
-            "schema_version": "1.0",
-            "id": f"tbtools.{group}.{command}",
-            "uri": f"tbtools://{group}/{command}",  # 稳定标识(评审 #9 URI)
-            "name": command,
-            "group": group,
-            "kind": v.get("kind", "?"),
-            "help": help_txt,
-            "invoke": f"tbtools {group} {command} <args...>" if group != "engine" else f"tbtools engine {cls} key=value",
-            "class": cls,
-            # 评审 #110 建议①: readiness(readiness FULL/PARTIAL/LEGACY) 与
-            # verification(CONFORMANCE/EXECUTION/COMPILEABLE/DECLARED)两维正交暴露——
-            # Agent 直接可见"契约写得完整" vs "真的跑过", 防混淆
-            "readiness": v.get("readiness", ""),
-            "verification": v.get("verification", ""),
-            "pitfall": get_pitfall_hint(command),
-        }
-        if v.get("alias_of"):
-            desc["alias_of"] = v["alias_of"]
-        if v.get("relations"):
-            desc["relations"] = v["relations"]
-        if v.get("capabilities"):
-            desc["capabilities"] = v["capabilities"]
-        # 评审 #104 P1-4: semantic_fingerprint 进 describe(Agent 规划侧可读)
-        if v.get("semantic_fingerprint"):
-            desc["semantic_fingerprint"] = v["semantic_fingerprint"]
-        # P1-7: platforms 能力矩阵(评审 #62-11;Agent 不再瞎撞)
-        _st = v.get("status", "stable")
-        _kind = v.get("kind", "manual")
-        if _st == "platform-limited" or _kind == "bridge":
-            desc["platforms"] = {"linux": "full", "macos": "full", "windows": "partial"}
-        elif _st == "network-required":
-            desc["platforms"] = {"linux": "full", "macos": "full", "windows": "full",
-                                 "network": "conditional"}
-        else:
-            desc["platforms"] = {"linux": "full", "macos": "full", "windows": "full"}
-        if v.get("parameters"):
-            desc["parameters"] = v["parameters"]
-        if v.get("dependencies"):
-            import shutil as _sh
-            desc["dependencies"] = v["dependencies"]
-            desc["availability"] = {
-                "status": "ready" if all(_sh.which(d) for d in v["dependencies"]) else "missing_dependencies",
-                "missing": [d for d in v["dependencies"] if not _sh.which(d)],
+        _all_desc = []
+        for command in commands:
+            v = meta[command]
+            # 分组: metadata group 字段优先(gen_metadata 注入), 运行时 _groups 兜底
+            group = v.get("group") or next((g for g, grp in _LG._groups.items() if command in grp.commands),
+                                           _LG.CATEGORY_MAP.get(command, "engine"))
+            # help: metadata 优先, 回退点击命令对象(手动命令)
+            help_txt = (v.get("help", "") or "").split("#")[-1].strip()
+            if not help_txt:
+                grp = _LG._groups.get(group)
+                cmd_obj = grp.commands.get(command) if grp else None
+                help_txt = (cmd_obj.help or "") if cmd_obj else ""
+            cls = v.get("class") or ""
+            desc = {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "schema_version": "1.0",
+                "id": f"tbtools.{group}.{command}",
+                "uri": f"tbtools://{group}/{command}",  # 稳定标识(评审 #9 URI)
+                "name": command,
+                "group": group,
+                "kind": v.get("kind", "?"),
+                "help": help_txt,
+                "invoke": f"tbtools {group} {command} <args...>" if group != "engine" else f"tbtools engine {cls} key=value",
+                "class": cls,
+                # 评审 #110 建议①: readiness(readiness FULL/PARTIAL/LEGACY) 与
+                # verification(CONFORMANCE/EXECUTION/COMPILEABLE/DECLARED)两维正交暴露——
+                # Agent 直接可见"契约写得完整" vs "真的跑过", 防混淆
+                "readiness": v.get("readiness", ""),
+                "verification": v.get("verification", ""),
+                "pitfall": get_pitfall_hint(command),
             }
-        if v.get("inputs"):
-            desc["inputs"] = v["inputs"]
-        if v.get("outputs"):
-            desc["outputs"] = v["outputs"]
+            if v.get("alias_of"):
+                desc["alias_of"] = v["alias_of"]
+            if v.get("relations"):
+                desc["relations"] = v["relations"]
+            if v.get("capabilities"):
+                desc["capabilities"] = v["capabilities"]
+            # 评审 #104 P1-4: semantic_fingerprint 进 describe(Agent 规划侧可读)
+            if v.get("semantic_fingerprint"):
+                desc["semantic_fingerprint"] = v["semantic_fingerprint"]
+            # P1-7: platforms 能力矩阵(评审 #62-11;Agent 不再瞎撞)
+            _st = v.get("status", "stable")
+            _kind = v.get("kind", "manual")
+            if _st == "platform-limited" or _kind == "bridge":
+                desc["platforms"] = {"linux": "full", "macos": "full", "windows": "partial"}
+            elif _st == "network-required":
+                desc["platforms"] = {"linux": "full", "macos": "full", "windows": "full",
+                                     "network": "conditional"}
+            else:
+                desc["platforms"] = {"linux": "full", "macos": "full", "windows": "full"}
+            if v.get("parameters"):
+                desc["parameters"] = v["parameters"]
+            if v.get("dependencies"):
+                import shutil as _sh
+                desc["dependencies"] = v["dependencies"]
+                desc["availability"] = {
+                    "status": "ready" if all(_sh.which(d) for d in v["dependencies"]) else "missing_dependencies",
+                    "missing": [d for d in v["dependencies"] if not _sh.which(d)],
+                }
+            if v.get("inputs"):
+                desc["inputs"] = v["inputs"]
+            if v.get("outputs"):
+                desc["outputs"] = v["outputs"]
+            _all_desc.append(desc)
         if as_json:
-            click.echo(_json.dumps(desc, ensure_ascii=False, indent=1))
+            # 自审 product F8: 批量 --json → 数组(单命令兼容: 仍返回单对象? 统一数组, 文档注明)
+            click.echo(_json.dumps(_all_desc if len(_all_desc) > 1 else _all_desc[0],
+                                   ensure_ascii=False, indent=1))
         else:
-            click.echo(f"  {desc['id']}")
-            click.echo(f"  描述: {desc['help']}")
-            click.echo(f"  调用: {desc['invoke']}")
-            click.echo(f"  坑位: {desc['pitfall'] or '无'}")
-
+            for desc in _all_desc:
+                click.echo(f"  {desc['id']}")
+                click.echo(f"  描述: {desc['help']}")
+                click.echo(f"  调用: {desc['invoke']}")
+                click.echo(f"  坑位: {desc['pitfall'] or '无'}")
+                click.echo(f"  readiness={desc['readiness']} / verification={desc['verification']}")
+                click.echo("")
     @cli.command(name="tool-validate")
     @click.argument("command")
     @click.argument("inputs", nargs=-1, required=True)
@@ -1619,7 +1628,7 @@ except Exception:
                             (v.get("class", "") or "").lower(),
                             _caps, _rels, _rela])
             if all(_kw_in_hay(w, hay) for w in kws):
-                cat = _LG.CATEGORY_MAP.get(name, "engine")
+                cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")  # 自审 product F9: 与 describe/元数据同源(此前 engine 是 runner 概念混入)
                 kind = v.get("kind", "?")
                 desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                 hits.append((name, cat, kind, desc))
