@@ -56,3 +56,10 @@ __pycache__/
 # tool-run 对 -jar 引擎误写 jar 旁 provenance 的残留
 plugins/lib/*.tbtools.json
 nonexist.txt.tbtools.json
+
+# 引擎运行中间产物(自审 verified F4: 不入库, 测试 tmp 生成)
+examples/data/exec/**/_engine_cache/
+examples/data/exec/**/*.sorted.sam
+examples/data/exec/**/*.sai
+examples/data/exec/**/*.TBtools.fa
+examples/data/exec/**/*.fai
