@@ -13,6 +13,8 @@
  "inputs": [],
  "outputs": [],
  "status": "stable",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
  "relations": {
   "accepts": [
    "ALIGNMENT",

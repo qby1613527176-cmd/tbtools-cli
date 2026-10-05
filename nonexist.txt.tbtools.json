@@ -1,0 +1,21 @@
+{
+ "command": "volcano",
+ "invocation": "xvfb-run -a java -Xmx2g -cp /home/elysia/tbtools-cli/build GenericCli biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot ...",
+ "tbtools_cli": "1.4.70",
+ "exit_code": 1,
+ "parameters": {
+  "set": "showTopChangeNum"
+ },
+ "error": {
+  "code": "TB009_ENGINE_CRASH",
+  "retryable": false,
+  "suggested_action": "engine-level defect; see PITFALL/docs"
+ },
+ "outputs": [
+  "nonexist.txt"
+ ],
+ "input_count": 0,
+ "inputs": [],
+ "timestamp": "2026-10-06T02:57:18",
+ "java_args_count": 31
+}

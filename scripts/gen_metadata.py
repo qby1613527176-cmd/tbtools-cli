@@ -158,6 +158,7 @@ def build():
             meta[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
                            "xmx": "2g", "runner": "plot", "help": _d.get("help", ""),
                            "alias_of": disp, "src": "cli_manual", "group": _d.get("group", "engine"),
+                           "readiness": _d.get("readiness", ""), "verification": _d.get("verification", ""),
                            **({k: _d[k] for k in ("capabilities", "capabilities_ontology", "relations") if k in _d})}
 
     # 兜底: 旧 metadata 遗留条目统一补 kind（兼容历史数据）
@@ -234,7 +235,9 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
             desc = (v.get("help", "") or "").split("#")[-1].strip() or (v.get("help", "") or "")[:40]
             if ":" in desc:
                 desc = desc.split(":", 1)[-1].strip()
-            lines.append(f"| `{name}` | {icon} | {desc[:60]} |")
+            # 自审 product F6: 按词边界截断(原 desc[:60] 硬切出半词 [sor 瑕疵)
+            desc = desc if len(desc) <= 60 else (desc[:61].rsplit(" ", 1)[0] + "…" if " " in desc[:61] else desc[:60] + "…")
+            lines.append(f"| `{name}` | {icon} | {desc} |")
         lines.append("")
     # 数字统计(权威口径)
     from collections import Counter
@@ -483,13 +486,19 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         _sh.rmtree(_os.path.join(ai_dir, "tools", _sub), ignore_errors=True)  # 防残影(与 metadata 全重建一致)
     with open(_os.path.join(ai_dir, "tool-index.jsonl"), "w", encoding="utf-8") as f:
         for name, v in meta.items():
+            _inputs = v.get('inputs') or []
+            _caps = v.get('capabilities') or []
+            # 自审 product F6: 无契约命令显式 schema:null(空数组语义="无输入"还是"未知"?
+            # 对 LEGACY/PARTIAL 无契约者, Agent 不该把 [] 当"可跑无参"——显式 null 表示未知)
+            _has_contract = bool(_inputs or _caps or v.get('parameters'))
             entry = {"id": f"tbtools.{v.get('group','engine')}.{name}",
                      "uri": f"tbtools://{v.get('group','engine')}/{name}", "name": name,
                      "group": v.get('group', 'engine'), "kind": v.get('kind', '?'),
-                     "alias_of": v.get('alias_of', ""), "capabilities": v.get('capabilities', []),
-                     "input_formats": sorted({i.get('format','') for i in v.get('inputs', []) if i.get('format')}),
+                     "alias_of": v.get('alias_of', ""), "capabilities": _caps,
+                     "input_formats": sorted({i.get('format','') for i in _inputs if i.get('format')}),
                      "output_formats": v.get('outputs', []),
                      "description": (v.get('help','') or '').replace('\n', ' ')[:160],
+                     "schema": None if not _has_contract else "tool_schema_v1",  # F6: 无契约显式 null
                      # 评审 #112 P1: 低体积高价值筛选字段——Agent 搜索后可直接按证据强度过滤,
                      # 不必逐个 describe
                      "readiness": v.get('readiness', ''), "verification": v.get('verification', ''),

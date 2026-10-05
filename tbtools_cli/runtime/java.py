@@ -350,7 +350,8 @@ def _security_check_generic(java_args: list, command_name: str | None = None) ->
 
 
 def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
-             command_name: str | None = None, output_hint: str | None = None) -> int:
+             command_name: str | None = None, output_hint: str | None = None,
+             group: str | None = None) -> int:
     _sec = _security_check_generic(java_args, command_name)
     if _sec:
         click.echo(_sec, err=True)
@@ -503,7 +504,9 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
             if pitfall:
                 print(f"   ⚠️ 已知坑位: {pitfall}", file=sys.stderr)
         
-        print(f"   📖 查看帮助: tbtools {command_name} --help" if command_name else "   📖 查看帮助: tbtools --help", file=sys.stderr)
+        # 自审 product F3: help 提示补 group 前缀(否则照做撞未知命令)
+        _help_prefix = f"tbtools {group} {command_name}" if group else f"tbtools {command_name}"
+        print(f"   📖 查看帮助: {_help_prefix} --help" if command_name else "   📖 查看帮助: tbtools --help", file=sys.stderr)
         
         if verbose:
             print("   🔍 完整堆栈:", file=sys.stderr)

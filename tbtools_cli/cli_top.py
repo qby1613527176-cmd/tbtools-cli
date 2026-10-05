@@ -24,6 +24,23 @@ from tbtools_cli.command_spec import build_command_specs
 from tbtools_cli.presets import PRESETS, list_presets
 
 
+def _clip_desc(text: str, width: int = 60) -> str:
+    """按词边界截断 + 省略号(自审 product F6: 原硬切片 [sor 半词——机器/人读都坏)。
+    空/None 返回空; 超宽时从最后一个完整词切断并以 … 结尾。"""
+    if not text:
+        return ""
+    t = str(text).strip()
+    if len(t) <= width:
+        return t
+    cut = t[: width + 1]
+    if " " in cut:
+        cut = cut.rsplit(" ", 1)[0]
+    else:
+        cut = cut[:width]
+    return cut.rstrip() + "…"
+
+
+
 
 def _detect_java_ver():
     """检测 Java 版本(无 java 返回 None;不崩)"""
@@ -837,6 +854,61 @@ def register_top(cli, _LG):
             _os.dup2(_devnull, 1)
             _os.close(_devnull)
 
+        # 自审 product F3: 执行前输入预检(与 dry-run 同规则)——缺失输入直接 TB002,
+        # 不跑引擎白给 "TB001 wrapper bug"(误导 Agent 去报 bug 而非修路径)。
+        # ⚠️ 必须放在 stdout 重定向(上述 as_json dup2)**之前**的代码会丢 stdout——
+        # 本段位于重定向后, 输出经 _saved_fd(原 stdout 副本)显式写出。
+        _pre_probs = []
+        try:
+            # flag 状态机(对齐 snapshot_inputs): flag 及其值跳过, 只检裸输入槽
+            _prev_flag = False
+            _pos_only = [a for a in args if isinstance(a, str) and not a.startswith("-")]
+            _skip_pre = 2 if len(_pos_only) >= 3 else 1  # 跳过 <group> <cmd>
+            _OUT_EXT_PRE = (".svg", ".png", ".pdf", ".nwk", ".fa", ".fasta", ".fastq",
+                            ".gff", ".gff3", ".gtf", ".meme", ".tree", ".aln", ".collinearity")  # 仅图形/专用产物后缀; .txt/.tsv/.xls 等既可能是输入也可能是输出, 不预判
+            _pre_skip = 0
+            _prev_flag = False
+            for _a in args:
+                if not isinstance(_a, str) or not _a:
+                    continue
+                if _a.startswith("-"):
+                    # flag: 下一参数是它的值(如 --chr1 1)——不吃值则残留; 显式处理
+                    if _a in ("--json", "--dry-run", "--quiet"):
+                        _prev_flag = False  # 无值 flag
+                        continue
+                    _prev_flag = True
+                    continue
+                if _prev_flag:
+                    _prev_flag = False  # flag 的值(如 --chr1 1)——不检
+                    continue
+                if _pre_skip > 0:
+                    _pre_skip -= 1
+                    continue
+                if _pos_only and _a in _pos_only[:_skip_pre]:
+                    continue  # <group> <cmd>
+                if _a.endswith(_OUT_EXT_PRE):
+                    continue  # 输出槽
+                if not os.path.isfile(_a):
+                    _pre_probs.append(_a)
+        except Exception:
+            pass
+        if _pre_probs and as_json:
+            # 结构化错误(与 errors.py 对齐): TB002 文件缺失, 引导修路径
+            from tbtools_cli.errors import ERROR_CODES as _EC2
+            _meta2 = _EC2.get("TB002_FILE_NOT_FOUND", {})
+            _err2 = {"code": "TB002_FILE_NOT_FOUND", "category": "input",
+                     "retryable": False,
+                     "suggested_action": f"check the input file path exists: {_pre_probs[0]}"}
+            _payload = _json.dumps({"$schema": "https://json-schema.org/draft/2020-12/schema",
+                                  "schema_version": "1.0", "exit_code": 2,
+                                  "duration_s": 0.0, "artifacts": [], "error": _err2,
+                                  "timed_out": False}, ensure_ascii=False)
+            # stdout 已重定向到 /dev/null(as_json 协议)——写回原 stdout 副本(_saved_fd)
+            import os as _os2
+            if _saved_fd is not None:
+                _os2.write(_saved_fd, (_payload + "\n").encode())
+            sys.exit(2)
+
         t0 = _time.time()
         _timed_out = False
         try:
@@ -1549,7 +1621,7 @@ except Exception:
             if all(_kw_in_hay(w, hay) for w in kws):
                 cat = _LG.CATEGORY_MAP.get(name, "engine")
                 kind = v.get("kind", "?")
-                desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
+                desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                 hits.append((name, cat, kind, desc))
         if not hits and len(kws) > 1:
             # AND 无果回退 OR(Agent 宽松匹配优于无结果)
@@ -1565,7 +1637,7 @@ except Exception:
                 if any(_kw_in_hay(w, hay) for w in kws):
                     cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
                     kind = v.get("kind", "?")
-                    desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
+                    desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                     hits.append((name, cat, kind, desc))
 
         # 反向/能力过滤(GLM: 能力图搜索; --input/--output/--capability)
@@ -1586,7 +1658,7 @@ except Exception:
                     if cap not in caps and cap not in _onto:
                         continue
                 cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
-                desc = (v.get("help", "") or "").split("#")[-1].strip()[:60]
+                desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                 filtered.append((name, cat, v.get("kind", "?"), desc))
             hits = filtered
         if not hits:
@@ -1612,20 +1684,35 @@ except Exception:
 
     @cli.command(name='list')
     @click.argument('category', required=False)
-    def listing(category):
+    @click.option('--json', 'as_json', is_flag=True, help="结构化输出(Agent 可读, 自审 product F5)")
+    def listing(category, as_json):
         """列出可用命令（plots/tools/rpc）——TTY 下自动分页"""
+        import json as _lj
         lines = []
-        if not category or category == 'plots':
+        # 自审 product F5: plots 真正过滤绘图分组(此前 plots 与无参全量相同, 静默吞参);
+        # 绘图分组 = seq/expr/tree/syn/sets/chipseq + 工具分组内的绘图类
+        _plot_groups = {'seq', 'expr', 'tree', 'syn', 'sets', 'chipseq'}
+        if category == 'plots':
+            lines.append(c("绘图/分析命令：", "bold"))
+            for gname in sorted(_LG.GROUPS.keys()):
+                if gname not in _plot_groups:
+                    continue  # 只列绘图分组(F5: 与 tools 互补)
+                g = _LG._groups.get(gname)
+                if g and g.commands:
+                    lines.append(f"\n  {c(gname, 'cyan', bold=True)} — {_LG.GROUPS[gname]}")
+                    for cname, cmd in sorted(g.commands.items()):
+                        short = _clip_desc((cmd.help or '').split('\n')[0])
+                        lines.append(f"    {c(f'{cname:20s}', 'green')} {short}")
+        elif not category:
             lines.append(c("绘图/分析命令：", "bold"))
             for gname in sorted(_LG.GROUPS.keys()):
                 g = _LG._groups.get(gname)
                 if g and g.commands:
                     lines.append(f"\n  {c(gname, 'cyan', bold=True)} — {_LG.GROUPS[gname]}")
                     for cname, cmd in sorted(g.commands.items()):
-                        short = (cmd.help or '').split('\n')[0][:60]
+                        short = _clip_desc((cmd.help or '').split('\n')[0])
                         lines.append(f"    {c(f'{cname:20s}', 'green')} {short}")
-            if not category:
-                lines.append("\n用法: tbtools list tools|rpc")
+            lines.append("\n用法: tbtools list plots|tools|rpc")
         elif category == 'tools':
             lines.append("命令行工具：")
             # 排除绘图类命令（属于 seq/expr/tree/syn/sets/chipseq 分组的）
@@ -1641,7 +1728,7 @@ except Exception:
                     if cat in plot_groups and cmd not in plugin_tools:
                         continue  # 跳过绘图类（插件工具除外）
                     doc = getattr(_ac, n).__doc__ or ''
-                    short = doc.split(':',1)[1].strip()[:60] if ':' in doc else ''
+                    short = doc.split(':',1)[1] if ':' in doc else ''
                     lines.append(f"  {cmd:20s} {short}")
                     count += 1
             # 加上共享注册表（P0-3：82 个 CLI 工具，排除已被 _impl 覆盖的）
@@ -1661,6 +1748,17 @@ except Exception:
         else:
             click.echo(f"未知类别: {category}。可用: plots|tools|rpc", err=True)
             sys.exit(1)
+        # 自审 product F5: --json 机器可读清单(Agent 需要结构化命令列表, 人读格式不可解析)
+        if as_json:
+            import re as _ljre
+            _records = []
+            for _ln in lines:
+                _m = _ljre.match(r"^    (\S+)\s{2,}(.*)$", _ln) if isinstance(_ln, str) else None
+                if _m:
+                    _records.append({"name": _m.group(1), "desc": _m.group(2).strip()})
+            click.echo(_lj.dumps({"category": category or "all", "commands": _records,
+                                  "count": len(_records)}, ensure_ascii=False, indent=1))
+            return
         # 输出：TTY 且行数多 → pager；否则直接打印（管道/重定向可 grep）
         text = "\n".join(lines)
         is_tty = hasattr(sys.stdout, "isatty") and sys.stdout.isatty()

@@ -259,6 +259,13 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
         if _re_out.match(r"^(out|output|prefix|graph|result)", _ph, _re_out.I):
             _OUT_HINT_IDX = _i2
             break
+    # 自审 product F3: group 前缀(help 提示用)——_group_of 优先 CommandSpec 模型,
+    # CATEGORY_MAP 兜底; 缺失时 None(run_java 输出裸 `tbtools <cmd> --help`)
+    try:
+        from tbtools_cli.cli_load import _group_of as _grp_of
+        _GROUP = _grp_of(cmd)
+    except Exception:
+        _GROUP = None
 
     def _out_hint(args):
         """从 args 按输出槽位置索引提取 output_hint(越界/flag 值 → None)。"""
@@ -280,9 +287,9 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
                 return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                                output_hint=_out_hint(args))
+                                output_hint=_out_hint(args), group=_GROUP)
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                            output_hint=_out_hint(args))
+                            output_hint=_out_hint(args), group=_GROUP)
     else:  # direct
         def impl(args, verbose=False, quiet=False):
             if cmd in _NOARG_HANG and not args:
@@ -294,9 +301,9 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
                 return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                                output_hint=_out_hint(args))
+                                output_hint=_out_hint(args), group=_GROUP)
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                            output_hint=_out_hint(args))
+                            output_hint=_out_hint(args), group=_GROUP)
     impl.__doc__ = doc
     impl.__name__ = f"_{cmd}_impl"
     return impl
