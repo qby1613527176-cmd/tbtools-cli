@@ -61,7 +61,7 @@
  ],
  "verification_details": {
   "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",
-  "verified_at": "2026-10-05T02:23:03",
+  "verified_at": "2026-10-06T00:00:03",
   "corpus": "examples/data"
  }
 }
