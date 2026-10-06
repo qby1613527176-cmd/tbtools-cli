@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.81] - 2026-10-06
+
+### 外部红队审查响应(4 个 P1, 无 P0)——Evidence Surface 一致性
+- **P1-1 CommandSpec 唯一运行真源**: 退掉 metadata fallback(manual 从源码扫描, 与 gen_metadata 同源); 别名注入双侧统一(依赖/manifest 对齐); 修互指环+死循环; 投影等价 0 差异(298=298)
+- **P1-2 FULL 定义一致**: README 修正(parameters 恒声明, 无参数工具合法)
+- **P1-3 证据完整投影**: verification_details 补 env_fingerprint/semantic_checked/domain_note
+- **P1-4 叙事分层**: semantic_checked 10/54 明示
+- **门禁**: pytest 264 passed / ruff 0 / mypy 0
+
 ## [1.4.80] - 2026-10-06
 
 ### 自审 P2 收官(product F11 命名约定)
