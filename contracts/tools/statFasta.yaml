@@ -5,7 +5,7 @@ class: biocjava.bioIO.FastX.FastaIndex.QuickStatFasta
 xmx: 3g
 runner: java
 group: tool
-help: ''
+help: 'statFasta: statFasta (tool, QuickStatFasta) — Quick Stat Fasta'
 semantic_fingerprint: 9ba90e3e559f827602b4cf8a2b22045cdefb13a73236787770dade602560c3e7
 semantic_fingerprint_short: 9ba90e3e559f8276
 readiness: PARTIAL

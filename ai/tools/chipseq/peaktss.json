@@ -51,8 +51,12 @@
   }
  ],
  "verification_details": {
+  "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "1c033777f443420c5af9170dd034ffa77469bed88bbc68b2421ccf05f5203d70",
+  "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
   "verified_at": "2026-10-06T03:59:46",
-  "corpus": "examples/data"
+  "corpus": "examples/data",
+  "semantic_checked": true,
+  "domain_note": "verified for coords >= binSize(10000); bin0 engine defect documented (v1.4.57 xfail)"
  }
 }

@@ -1,0 +1,34 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.stat-fasta",
+ "name": "stat-fasta",
+ "group": "tool",
+ "kind": "manual",
+ "class": "",
+ "description": "FASTA 序列统计",
+ "invoke": "tbtools tool stat-fasta <args...>",
+ "capabilities": [],
+ "inputs": [
+  {
+   "name": "fasta",
+   "role": "file",
+   "format": "fasta",
+   "required": true,
+   "note": ""
+  }
+ ],
+ "outputs": [
+  "xls"
+ ],
+ "status": "stable",
+ "semantic_fingerprint": "476c7dba639701a81ea147371fef335e020d6483e641234ba198655d2feb53a5",
+ "semantic_fingerprint_short": "476c7dba639701a8",
+ "readiness": "LEGACY",
+ "verification": "COMPILEABLE",
+ "output_slots": [
+  {
+   "name": "xls",
+   "format": "xls"
+  }
+ ]
+}

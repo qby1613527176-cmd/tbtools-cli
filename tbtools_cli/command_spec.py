@@ -772,15 +772,27 @@ KNOWN_CAPABILITIES.update({
 
 
 
+# 自审红队 P1-1: 顶层 Agent/管理命令白名单(非生信工具, 不进 CommandSpec 模型;
+# 与 gen_metadata.scan_manual_commands 排除名单对齐——单一真源下两处共用此语义)
+KNOWN_TOP_MANUAL = frozenset({
+    "list", "check", "doctor", "version", "new", "completion", "examples",
+    "presets", "help", "setup", "fetch-jar",
+    "search", "mcp", "capabilities", "plugin", "provenance-graph",
+    "tool-run", "tool-submit", "tool-describe", "tool-validate",
+    "tool-result", "tool-provenance",
+    "job-status", "job-result", "job-cancel", "job-log", "job-clean",
+})
+
 KNOWN_ALIASES = {
     "treeRooting": "rooting",
     "TableCast": "tableCast",
     "gbar": "groupedbar",
     "gdensity": "genedensity",
     "getLongestCompleteORF": "longestorf",
-    "one-step": "onesteptree",
     "genestructure": "structure",  # 旧名 → seq structure? 保留注释: genestructure 是独立命令
     # 显示别名(与 gen_metadata 特判一致, 评审 #56 两路径统一): draw→tree, one-step→onesteptree, rooting→treeRooting
+    # 自审红队 P1-1: 互指环修正——canonical 是 one-step(cli.py 装饰器名), onesteptree 是
+    # 引擎 command_name 别名; 保留 onesteptree→one-step 单向, 删反向
     "tree": "draw",
     "onesteptree": "one-step",
 }
@@ -831,27 +843,64 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
         )
 
     # 2. CLI 工具(runner/xmx 对齐现 metadata 条目: java/3g)
+    # 自审红队 P1-1: 派生 help(类名末段 → 可读标题)——与 gen_metadata.scan_cli_tools 同源,
+    # 否则 spec.doc 空而 metadata.help 非空, 两模型不等价
+    import re as _re_pretty
     for name, cls in CLI_TOOLS.items():
+        _short = cls.split(".")[-1] if isinstance(cls, str) else str(cls)
+        _pretty = _re_pretty.sub(r"(?<!^)(?=[A-Z])", " ", _short) if _short else name
         specs.setdefault(name, CommandSpec(name=name, group="tool", kind="tool", class_name=cls,
-                                           runner="java", xmx="3g"))
+                                           runner="java", xmx="3g",
+                                           doc=f"{name}: {name} (tool, {_short}) — {_pretty}"))
 
 
-    # 3. 手动命令: 从现有 metadata 回退(kind=manual 且未被表驱动/工具覆盖)
-    #    (完整版应遍历 cli 分组命令树; 骨架期以 metadata 为准, 单一模型逐步接管)
+    # 3. 手动命令: 从 CLI 源码 + auto_commands 手写 impl 扫描(自审红队 P1-1: 退掉
+    #    metadata fallback——command_metadata.json 是 projection 不是 source, runtime
+    #    不能回填它; 真源 = cli.py 装饰器命令 + _xxx_impl 手写实现, 与 gen_metadata 同逻辑)
     try:
-        import json as _json
-        import os as _os
-        meta_path = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
-                                  "tbtools_cli", "command_metadata.json")
-        if _os.path.isfile(meta_path):
-            meta = _json.load(open(meta_path, encoding="utf-8"))
-            for name, v in meta.items():
-                if v.get("kind") == "manual" and name not in specs:
-                    specs[name] = CommandSpec(
-                        name=name, group=v.get("group", "engine"), kind="manual",
-                        runner="plot",  # 与 specs_from_scans 一致(评审 #56 两路径统一)
-                        doc=v.get("help", ""),
+        import re as _re_man
+        cli_src = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                                    "tbtools_cli", "cli.py"), encoding="utf-8").read()
+        # 自审红队 P1-1 修复: manual 分组从**装饰器前缀**推断(@expr_group.command → expr)——
+        # CATEGORY_MAP 只覆盖 189 命令, manual 命令(logo/volcano/structure 等)不在其中,
+        # 用 CATEGORY_MAP 回退会错标 engine。group 推断与 gen_metadata._infer_group 同源。
+        for _m in _re_man.finditer(
+                r'@(\w+_group)\.command\(\s*[\'"]([a-zA-Z][a-zA-Z0-9_-]*)[\'"]'
+                r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*"""([^"]{0,300})',
+                cli_src, _re_man.M | _re_man.S):
+            _grp, _n, _d = _m.group(1), _m.group(2), _m.group(3).strip()
+            if _n not in specs and _n not in KNOWN_TOP_MANUAL:
+                specs[_n] = CommandSpec(
+                    name=_n, group=_grp[:-6], kind="manual",  # expr_group → expr
+                    runner="plot", doc=_d or "",
+                )
+        # auto_commands 手写 impl(msy/mirnatarget/tableMerge 等必须可发现)
+        try:
+            ac_src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "auto_commands.py"),
+                          encoding="utf-8").read()
+            for _m in _re_man.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\"]{0,300})",
+                                       ac_src, _re_man.M | _re_man.S):
+                _n, _d = _m.group(1), _m.group(2).strip()
+                if _n not in specs and _n not in KNOWN_TOP_MANUAL:
+                    specs[_n] = CommandSpec(
+                        name=_n, group=CATEGORY_MAP.get(_n, "engine"), kind="manual",
+                        runner="plot", doc=_d or "",
                     )
+        except Exception:
+            pass
+        # add_command 显式注册(seqlogo→logo? 实际 name=seqlogo; heatmap→heatmap2)
+        # ——装饰器正则抓不到, gen_metadata scan_manual_commands 第 4 步同源逻辑
+        # 注意: 此路径的 group 对齐 gen_metadata(_infer_group 对 add_command 无装饰器可推,
+        # 回退 CATEGORY_MAP/engine——metadata 投影同源, 不能自创 seq/expr)
+        for _m in _re_man.finditer(
+                r"(?:\w+_group)\.add_command\(\w+,\s*name=[\'\"]([a-zA-Z][a-zA-Z0-9_]*)[\'\"]\)",
+                cli_src):
+            _n = _m.group(1)
+            if _n not in specs and _n not in KNOWN_TOP_MANUAL:
+                specs[_n] = CommandSpec(
+                    name=_n, group=CATEGORY_MAP.get(_n, "engine"), kind="manual",
+                    runner="plot", doc="",
+                )
     except Exception:
         pass
 
@@ -875,6 +924,26 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
         spec.dependencies = KNOWN_DEPENDENCIES.get(name, [])
         spec.relations = KNOWN_RELATIONS.get(name, {}) or GROUP_RELATIONS.get(spec.group, {})
         spec.parameters = KNOWN_PARAMS.get(name, [])
+    # 别名注入(自审红队 P1-1: 单一真源下别名保持一致——tree=draw 等命令级别名
+    # 与 gen_metadata 的渲染同源, 否则 runtime 不认识 tree)
+    for _alias, _target in KNOWN_ALIASES.items():
+        if _alias in specs:
+            continue
+        _t = specs.get(_target)
+        if _t is not None:
+            specs[_alias] = CommandSpec(
+                name=_alias, group=_t.group, kind="manual", runner="plot",
+                doc=_t.doc or _t.name, alias_of=_target,
+            )
+            specs[_alias].capabilities = list(_t.capabilities)
+            specs[_alias].relations = dict(_t.relations) if _t.relations else {}
+            specs[_alias].status = _t.status
+            specs[_alias].inputs = list(_t.inputs)
+            specs[_alias].outputs = list(_t.outputs)
+            # 自审红队 P1-1: 依赖/参数继承——别名若在 KNOWN_DEPENDENCIES 有显式声明
+            # (onesteptree→iqtree2)优先, 否则继承 target; 与 gen_metadata 别名特判投影一致
+            specs[_alias].dependencies = list(KNOWN_DEPENDENCIES.get(_alias) or _t.dependencies)
+            specs[_alias].parameters = list(KNOWN_PARAMS.get(_alias) or _t.parameters)
     # Contract Loader: YAML 快照校验层(评审 #80 + #110 建议③ + #111 P0-1: 代码真源优先,
     # YAML 仅校验不覆盖; _skip_overlay 用于独立真源比较测试)
     if not _skip_overlay:

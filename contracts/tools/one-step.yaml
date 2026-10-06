@@ -1,0 +1,26 @@
+name: one-step
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tree
+help: 一步法 ML 树（muscle → trimal → IQ-TREE）
+semantic_fingerprint: 629b5a4e639c3fe277da60f14872aa22ebeaea4ec4d5b4bb77d172772a73bcfa
+semantic_fingerprint_short: 629b5a4e639c3fe2
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree
+aliases:
+- onesteptree

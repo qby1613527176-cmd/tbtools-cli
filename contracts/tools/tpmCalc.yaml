@@ -5,7 +5,7 @@ class: biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator
 xmx: 3g
 runner: java
 group: tool
-help: ''
+help: 'tpmCalc: tpmCalc (tool, TPMcalculator) — T P Mcalculator'
 semantic_fingerprint: f4829d21e6ee7c709cdcc5f1396b087ae4d9a110bda0004c2ac5075a1f4809fe
 semantic_fingerprint_short: f4829d21e6ee7c70
 readiness: FULL

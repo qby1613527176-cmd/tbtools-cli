@@ -43,7 +43,7 @@
 | `peaktss` | 直连 | peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b |
 | `pileup` | 桥 | pileup <blast.xml> <out.svg> [--query NAME] |
 
-## engine — 通用（109 个）
+## engine — 通用（112 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
@@ -88,6 +88,7 @@
 | `extractFastaSub` | 工具 | extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta… |
 | `extractFeatureFromGTF` | 工具 | extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome)… |
 | `extractGff3Region` | 工具 | extractGff3Region (tool, ExtractGff3Region) — Extract Gff3… |
+| `fasta-extract` | 手动 | 一行一个 ID,不带 > 号;与原始 header 精确匹配） |
 | `fastaFragmenter` | 工具 | fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter |
 | `fastaIDAppender` | 工具 | fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender |
 | `fastqAndFasta` | 工具 | fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta |
@@ -120,6 +121,7 @@
 | `markertools` | 桥 | markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi |
 | `mggxf` | 桥 | mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked |
 | `mirIdentifierBasedOnTargetSo` | 工具 | mirIdentifierBasedOnTargetSo (tool,… |
+| `one-step` | 手动 | 一步法 ML 树（muscle → trimal → IQ-TREE） |
 | `pafRefBaseCoverCalc` | 工具 | pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref… |
 | `pairWiseKaKsCalculator` | 工具 | pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair… |
 | `parallelMD5Check` | 工具 | parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5… |
@@ -145,6 +147,7 @@
 | `simpleBatchProcess` | 工具 | simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch… |
 | `slurmScriptPrepare` | 工具 | slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script… |
 | `ssrMiner` | 工具 | ssrMiner (tool, SSRminer) — S S Rminer |
+| `stat-fasta` | 手动 | FASTA 序列统计 |
 | `statFasta` | 工具 | statFasta (tool, QuickStatFasta) — Quick Stat Fasta |
 | `structure` | 手动 | 基因结构图（外显子/UTR 从 GFF） |
 | `tandemDupFinder` | 工具 | tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder |
@@ -356,7 +359,7 @@
 | `tableUniq` | 直连 | tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true| |
 | `taxparse` | 桥 | 38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出… |
 
-## tree — 树/进化（11 个）
+## tree — 树/进化（12 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
@@ -367,6 +370,7 @@
 | `newickRename` | 手动 | 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName） |
 | `notung` | 手动 | Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir |
 | `nwAlign` | 桥 | Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧… |
+| `onesteptree` | 手动 | 一步法 ML 树（muscle → trimal → IQ-TREE） |
 | `phylotree` | 桥 | phylotree <in.nwk> <out> [vertical] [width] [height] |
 | `subtree` | 桥 | 23… |
 | `treeRooting` | 手动 | (alias of rooting) MAD 系统发育定根 |
@@ -374,8 +378,8 @@
 
 ## 统计
 
-- 命令总数: 294
+- 命令总数: 298
 - bridge: 100
 - tool: 80
 - direct: 70
-- manual: 44
+- manual: 48

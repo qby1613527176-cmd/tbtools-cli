@@ -177,10 +177,12 @@
   "draw",
   "unrooted",
   "rooting",
+  "one-step",
   "notung",
   "newickRename",
   "treeRooting",
-  "tree"
+  "tree",
+  "onesteptree"
  ],
  "extraction": [
   "fastaExtract",

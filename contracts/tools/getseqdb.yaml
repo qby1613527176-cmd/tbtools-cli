@@ -7,7 +7,7 @@ runner: plot
 group: blast
 help: 'getseqdb: getseqdb <dbPrefix> <idList.txt> <out.fa> [--entry ID]   # 从 BLAST
   库批量提取序列（GUI 逆向 #35 GetSeqFromBlastDBGUIPanel $5：blastdbcmd -db X -entry_batch ids
-  -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，'
+  -out Y；⚠️ 库须 makeblastdb -parse_seqids 建，否则 Skipped；依赖系统 blastdbcmd）'
 semantic_fingerprint: 507e303fe85824b90566cf4e5f19a096a739cc52b61eacb612cfcc3e74afddc4
 semantic_fingerprint_short: 507e303fe85824b9
 readiness: PARTIAL

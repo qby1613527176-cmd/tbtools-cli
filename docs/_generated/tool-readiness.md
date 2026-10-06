@@ -1,6 +1,6 @@
 # Tool Readiness Matrix(自动生成, 勿手改)
 
-总览: 294 工具 | 契约完整(5/5): 1 | 部分(3-4): 64 | 基础(<3): 229
+总览: 298 工具 | 契约完整(5/5): 1 | 部分(3-4): 65 | 基础(<3): 232
 
 > 评审 #111 P1-2: 本表的 5/5 是 **metadata coverage**（Schema/Params/Caps/Deps/Rels 五个元数据维度），
 > 与 readiness（FULL/PARTIAL/LEGACY, 判定维度 inputs/outputs/capabilities/parameters/stable）**不是同一套指标**
@@ -81,6 +81,7 @@
 | `fa2tab` | — | — | ✅ | — | ✅ | 2/5 |
 | `famerge` | — | — | ✅ | — | ✅ | 2/5 |
 | `fasplit` | — | — | ✅ | — | ✅ | 2/5 |
+| `fasta-extract` | — | — | — | — | — | 0/5 |
 | `fastaExtract` | — | — | ✅ | — | ✅ | 2/5 |
 | `fastaFragmenter` | — | — | — | — | — | 0/5 |
 | `fastaIDAppender` | — | — | — | — | — | 0/5 |
@@ -198,6 +199,8 @@
 | `newickRename` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `notung` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `nwAlign` | — | — | ✅ | — | ✅ | 2/5 |
+| `one-step` | — | — | ✅ | — | ✅ | 2/5 |
+| `onesteptree` | — | — | ✅ | ✅ | ✅ | 3/5 |
 | `pafRefBaseCoverCalc` | — | — | — | — | — | 0/5 |
 | `pafcomp` | — | — | ✅ | — | ✅ | 2/5 |
 | `pafref` | ✅ | — | ✅ | — | ✅ | 3/5 |
@@ -259,6 +262,7 @@
 | `sricher` | — | — | ✅ | — | ✅ | 2/5 |
 | `srr2ena` | — | — | ✅ | — | ✅ | 2/5 |
 | `ssrMiner` | — | — | — | — | — | 0/5 |
+| `stat-fasta` | ✅ | — | — | — | — | 1/5 |
 | `statFasta` | — | — | ✅ | — | ✅ | 2/5 |
 | `structure` | — | — | ✅ | — | ✅ | 2/5 |
 | `subtree` | — | — | ✅ | — | ✅ | 2/5 |

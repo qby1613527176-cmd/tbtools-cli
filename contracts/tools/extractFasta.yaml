@@ -5,7 +5,7 @@ class: biocjava.bioDoer.Fasta.ExtractFasta
 xmx: 3g
 runner: java
 group: tool
-help: ''
+help: 'extractFasta: extractFasta (tool, ExtractFasta) — Extract Fasta'
 semantic_fingerprint: d21ab22d6059ede8c1551675ae0a6d5c616591058b650955b8b5e7359fb7088b
 semantic_fingerprint_short: d21ab22d6059ede8
 readiness: PARTIAL

@@ -1,0 +1,50 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tree.onesteptree",
+ "name": "onesteptree",
+ "group": "tree",
+ "kind": "manual",
+ "class": "",
+ "description": "一步法 ML 树（muscle → trimal → IQ-TREE）",
+ "invoke": "tbtools tree onesteptree <args...>",
+ "capabilities": [
+  "phylogeny"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "c83c0a14b3ceb1fde72e624d51b1f8517ba7566a49412959f0affa9c95410a96",
+ "semantic_fingerprint_short": "c83c0a14b3ceb1fd",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "ALIGNMENT",
+   "NEWICK"
+  ],
+  "produces": [
+   "PHYLOGENY_NWK"
+  ],
+  "next_step": [
+   "tree"
+  ]
+ },
+ "dependencies": [
+  "iqtree2"
+ ],
+ "dependency_manifest": [
+  {
+   "name": "iqtree2",
+   "type": "binary",
+   "required": true,
+   "platforms": [
+    "linux",
+    "macos"
+   ],
+   "executable": "iqtree2",
+   "version_args": [
+    "--version"
+   ]
+  }
+ ]
+}

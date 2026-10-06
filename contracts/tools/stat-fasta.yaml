@@ -1,0 +1,23 @@
+name: stat-fasta
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tool
+help: FASTA 序列统计
+semantic_fingerprint: 476c7dba639701a81ea147371fef335e020d6483e641234ba198655d2feb53a5
+semantic_fingerprint_short: 476c7dba639701a8
+readiness: LEGACY
+verification: COMPILEABLE
+inputs:
+- name: fasta
+  role: file
+  format: fasta
+  required: true
+  note: ''
+outputs:
+- xls
+output_slots:
+- name: xls
+  format: xls

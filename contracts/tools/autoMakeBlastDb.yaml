@@ -5,7 +5,7 @@ class: biocjava.bioDoer.BLAST.makeblastdb
 xmx: 3g
 runner: java
 group: tool
-help: ''
+help: 'autoMakeBlastDb: autoMakeBlastDb (tool, makeblastdb) — makeblastdb'
 semantic_fingerprint: 44adf32e858503d37ce7fce5bff140ac7ae517b7de7a7ba04b820a8e32fcd317
 semantic_fingerprint_short: 44adf32e858503d3
 readiness: LEGACY

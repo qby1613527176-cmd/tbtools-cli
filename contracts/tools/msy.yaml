@@ -7,7 +7,8 @@ runner: plot
 group: syn
 help: "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n  \
   \     # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli\
-  \ 透传，用户参数被当\n       #   engineClass 导致 ClassNo"
+  \ 透传，用户参数被当\n       #   engineClass 导致 ClassNotFoundException——现按 tbplot.sh 已验证调用方式显式拼参数）\n\
+  \       # 格式: pos=Chr\\\\tGene\\\\tStart\\\\tEnd；links=GeneA\\\\t"
 semantic_fingerprint: c583df46cbb1e29dd9a39155f005d0052244d2cd0ea2cfe3d01fba252811de7e
 semantic_fingerprint_short: c583df46cbb1e29d
 readiness: FULL

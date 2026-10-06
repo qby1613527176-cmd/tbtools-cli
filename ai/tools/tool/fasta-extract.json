@@ -1,0 +1,18 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.tool.fasta-extract",
+ "name": "fasta-extract",
+ "group": "tool",
+ "kind": "manual",
+ "class": "",
+ "description": "按 ID 列表提取 FASTA 序列（idList: 一行一个 ID,不带 > 号;与原始 header 精确匹配）",
+ "invoke": "tbtools tool fasta-extract <args...>",
+ "capabilities": [],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "6d5501b88ab80e70ed0c5039c1c08bee7694e7b50f42f4933056643db55d75ed",
+ "semantic_fingerprint_short": "6d5501b88ab80e70",
+ "readiness": "LEGACY",
+ "verification": "DECLARED"
+}

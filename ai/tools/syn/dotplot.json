@@ -51,8 +51,12 @@
   }
  ],
  "verification_details": {
+  "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "a522dbfd7421f2c4c001fc7c030be7690fac47d8e2b0a691b5fc7ee250a83184",
+  "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
   "verified_at": "2026-10-06T03:59:46",
-  "corpus": "examples/data"
+  "corpus": "examples/data",
+  "semantic_checked": false,
+  "domain_note": ""
  }
 }

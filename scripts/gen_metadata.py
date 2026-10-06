@@ -56,7 +56,7 @@ def scan_manual_commands():
     src = open(CLI, encoding="utf-8").read()
     cmds = {}
     # 1) 装饰器命令(顶层管理命令跳过)
-    for name in re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_]*)['\"]", src):
+    for name in re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_-]*)['\"]", src):
         # 顶层 Agent/管理命令(非生信工具, 不进 metadata 模型; 含 09/23 新增 Agent 接口层)
         if name in ("list", "check", "doctor", "version", "new", "completion", "examples",
                     "presets", "help", "setup", "fetch-jar",
@@ -69,7 +69,7 @@ def scan_manual_commands():
                       "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
     # 2) docstring 首行(跨 click 装饰器): 装饰器+def+docstring
     for m in re.finditer(
-        r'@(?:\w+_group|\w+)\.command\(\s*[\"\']([a-zA-Z][a-zA-Z0-9_]*)[\"\']\)'
+        r'@(?:\w+_group|\w+)\.command\(\s*[\"\']([a-zA-Z][a-zA-Z0-9_-]*)[\"\']\)'
         r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*\"\"\"([^\"]{0,300})',
         src, re.M | re.S):
         cmd, d = m.group(1), m.group(2).strip()[:200]
@@ -154,12 +154,39 @@ def build():
     # tree 分组别名（显示名 ≠ 函数名）: draw→tree, one-step→onesteptree, rooting→treeRooting
     for alias, disp in (("tree", "draw"), ("onesteptree", "one-step"), ("treeRooting", "rooting")):
         if alias not in meta and disp in meta:
-            _d = meta[disp]
-            meta[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
-                           "xmx": "2g", "runner": "plot", "help": _d.get("help", ""),
-                           "alias_of": disp, "src": "cli_manual", "group": _d.get("group", "engine"),
-                           "readiness": _d.get("readiness", ""), "verification": _d.get("verification", ""),
-                           **({k: _d[k] for k in ("capabilities", "capabilities_ontology", "relations") if k in _d})}
+            # 自审红队 P1-1: 别名特判改为从 CommandSpec 模型投影(而非手工 dict)——
+            # 确保 dependency_manifest 等展开与 build_command_specs 完全一致(单一投影源)
+            try:
+                from tbtools_cli.command_spec import (CommandSpec,
+                                                      KNOWN_DEPENDENCIES as _kd2,
+                                                                                                            KNOWN_STATUS as _kst2)
+                _alias_spec = CommandSpec(
+                    name=alias, group=meta[disp].get("group", "engine"), kind="manual",
+                    runner="plot", doc=meta[disp].get("help", ""), alias_of=disp,
+                )
+                _alias_spec.status = _kst2.get(alias, "stable")
+                # 名字列表(与 build_command_specs 侧一致): manifest 由 to_metadata_entry
+                # 从 STRUCT 展开——设 STRUCT dict 列表会与 spec 侧展开撞车
+                _alias_spec.dependencies = list(_kd2.get(alias) or _kd2.get(disp) or [])
+                _alias_spec.capabilities = meta[disp].get("capabilities") or []
+                _alias_spec.relations = meta[disp].get("relations") or {}
+                from tbtools_cli.command_spec import to_metadata_entry as _tme2
+                meta[alias] = _tme2(_alias_spec)
+            except Exception:
+                # 兜底: 手工 dict(原行为)
+                _d = meta[disp]
+                _dep: list = []
+                try:
+                    from tbtools_cli.command_spec import KNOWN_DEPENDENCIES as _kd2
+                    _dep = _kd2.get(alias) or _kd2.get(disp) or []
+                except Exception:
+                    pass
+                meta[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
+                               "xmx": "2g", "runner": "plot", "help": _d.get("help", ""),
+                               "alias_of": disp, "src": "cli_manual", "group": _d.get("group", "engine"),
+                               "readiness": _d.get("readiness", ""), "verification": _d.get("verification", ""),
+                               **({k: _d[k] for k in ("capabilities", "capabilities_ontology", "relations") if k in _d}),
+                               "dependencies": _dep}
 
     # 兜底: 旧 metadata 遗留条目统一补 kind（兼容历史数据）
     for _v in meta.values():
@@ -530,10 +557,16 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         # 还有绑定证据(验证时间/语料/契约指纹), 可判断证据新旧/是否匹配当前 contract
         _verif_details = _verif_details_map.get(name)
         if _verif_details:
+            # 自审红队 P1-3: 完整投影验证证据——Agent 需要区分"跑过" vs "跑过+内容级检查"
+            # (semantic_checked) + 环境身份(env_fingerprint) + 验证域(domain_note)
             schema["verification_details"] = {
+                "level": _verif_details.get("level", ""),
                 "contract_fingerprint": _verif_details.get("contract_fingerprint", ""),
+                "env_fingerprint": _verif_details.get("env_fingerprint", ""),
                 "verified_at": _verif_details.get("verified_at", ""),
                 "corpus": _verif_details.get("corpus", ""),
+                "semantic_checked": bool(_verif_details.get("semantic_checked", False)),
+                "domain_note": _verif_details.get("domain_note", ""),
             }
         _json.dump(schema, open(_os.path.join(d, f"{name}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     try:

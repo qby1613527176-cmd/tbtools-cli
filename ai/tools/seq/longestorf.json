@@ -50,8 +50,12 @@
   "getLongestCompleteORF"
  ],
  "verification_details": {
+  "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "2f3e13a93f2e2674b9de6334c28134c74c8730e59dbf1dbea39fa384cc3c8420",
+  "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
   "verified_at": "2026-10-06T03:59:46",
-  "corpus": "examples/data"
+  "corpus": "examples/data",
+  "semantic_checked": false,
+  "domain_note": ""
  }
 }

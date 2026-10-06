@@ -1,0 +1,37 @@
+name: onesteptree
+kind: manual
+mode: manual
+class: ''
+xmx: 2g
+runner: plot
+group: tree
+help: 一步法 ML 树（muscle → trimal → IQ-TREE）
+semantic_fingerprint: c83c0a14b3ceb1fde72e624d51b1f8517ba7566a49412959f0affa9c95410a96
+semantic_fingerprint_short: c83c0a14b3ceb1fd
+alias_of: one-step
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- phylogeny
+capabilities_ontology:
+- phylogeny
+dependencies:
+- iqtree2
+dependency_manifest:
+- name: iqtree2
+  type: binary
+  required: true
+  platforms:
+  - linux
+  - macos
+  executable: iqtree2
+  version_args:
+  - --version
+relations:
+  accepts:
+  - ALIGNMENT
+  - NEWICK
+  produces:
+  - PHYLOGENY_NWK
+  next_step:
+  - tree

@@ -1,20 +1,20 @@
 {
  "schema_version": "1.0",
- "id": "tbtools.tree.tree",
- "name": "tree",
+ "id": "tbtools.tree.one-step",
+ "name": "one-step",
  "group": "tree",
  "kind": "manual",
  "class": "",
- "description": "树+注释图（TreeTreeTree 多轨道）",
- "invoke": "tbtools tree tree <args...>",
+ "description": "一步法 ML 树（muscle → trimal → IQ-TREE）",
+ "invoke": "tbtools tree one-step <args...>",
  "capabilities": [
   "phylogeny"
  ],
  "inputs": [],
  "outputs": [],
  "status": "stable",
- "semantic_fingerprint": "596f76186cae9bca3569118cd0b9e37de12c85908747386f809bd8c55cf1a33a",
- "semantic_fingerprint_short": "596f76186cae9bca",
+ "semantic_fingerprint": "629b5a4e639c3fe277da60f14872aa22ebeaea4ec4d5b4bb77d172772a73bcfa",
+ "semantic_fingerprint_short": "629b5a4e639c3fe2",
  "readiness": "PARTIAL",
  "verification": "DECLARED",
  "relations": {
@@ -28,5 +28,8 @@
   "next_step": [
    "tree"
   ]
- }
+ },
+ "aliases": [
+  "onesteptree"
+ ]
 }
