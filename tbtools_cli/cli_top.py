@@ -616,6 +616,16 @@ def register_top(cli, _LG):
         import json as _json
         meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
         meta = _json.load(open(meta_path, encoding="utf-8")) if os.path.isfile(meta_path) else {}
+        # 自审 v1.4.82 verified N1: 证据对象投影同源数据——verification_report.json 的
+        # verified_tools(单层 evidence map, canonical source)
+        _verif_details_map: dict = {}
+        _vrp = os.path.join(ROOT, "tests", "verification_report.json")
+        if os.path.isfile(_vrp):
+            try:
+                _vrd = _json.load(open(_vrp, encoding="utf-8"))
+                _verif_details_map = _vrd.get("verified_tools") or {}
+            except Exception:
+                _verif_details_map = {}
         # 自审 product F8: 批量支持——所有命令先解析, 未知命令集中报错
         _unknown = [c for c in commands if c not in meta]
         if _unknown:
@@ -652,6 +662,21 @@ def register_top(cli, _LG):
                 "verification": v.get("verification", ""),
                 "pitfall": get_pitfall_hint(command),
             }
+            # 自审 v1.4.82 verified N1(红队 P1-4 闭环): README 权威源行指向
+            # tool-describe --json verification_details——补全证据对象投影(与
+            # ai/tools/*.json 同源: tests/verification_report.json verified_tools),
+            # 否则 Agent/用户照 README 查证会扑空(标签分层只活在静态投影层)。
+            _vd = _verif_details_map.get(command)
+            if _vd:
+                desc["verification_details"] = {
+                    "level": _vd.get("level", ""),
+                    "contract_fingerprint": _vd.get("contract_fingerprint", ""),
+                    "env_fingerprint": _vd.get("env_fingerprint", ""),
+                    "verified_at": _vd.get("verified_at", ""),
+                    "corpus": _vd.get("corpus", ""),
+                    "semantic_checked": bool(_vd.get("semantic_checked", False)),
+                    "domain_note": _vd.get("domain_note", ""),
+                }
             if v.get("alias_of"):
                 desc["alias_of"] = v["alias_of"]
             if v.get("relations"):

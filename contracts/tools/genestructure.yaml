@@ -5,7 +5,7 @@ class: ''
 xmx: 2g
 runner: plot
 group: seq
-help: ''
+help: (alias of structure) 基因结构图（外显子/UTR 从 GFF）
 semantic_fingerprint: 36cea377e1a4660eb2f24494a950c12ce49918aee5839ae03292130a302c6f37
 semantic_fingerprint_short: 36cea377e1a4660e
 alias_of: structure

@@ -56,14 +56,12 @@ def scan_manual_commands():
     src = open(CLI, encoding="utf-8").read()
     cmds = {}
     # 1) 装饰器命令(顶层管理命令跳过)
+    # 自审 v1.4.82 arch N4: KNOWN_TOP_MANUAL 单一来源——此前两份字面拷贝, 改一边漏一边
+    # 会破 298=298 等价。从 command_spec 导入(真源)。
+    from tbtools_cli.command_spec import KNOWN_TOP_MANUAL as _KNOWN_TOP_MANUAL
     for name in re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_-]*)['\"]", src):
         # 顶层 Agent/管理命令(非生信工具, 不进 metadata 模型; 含 09/23 新增 Agent 接口层)
-        if name in ("list", "check", "doctor", "version", "new", "completion", "examples",
-                    "presets", "help", "setup", "fetch-jar",
-                    "search", "mcp", "capabilities", "plugin", "provenance-graph",
-                    "tool-run", "tool-submit", "tool-describe", "tool-validate",
-                    "tool-result", "tool-provenance",
-                    "job-status", "job-result", "job-cancel", "job-log", "job-clean"):
+        if name in _KNOWN_TOP_MANUAL:
             continue
         cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
                       "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
@@ -72,7 +70,7 @@ def scan_manual_commands():
         r'@(?:\w+_group|\w+)\.command\(\s*[\"\']([a-zA-Z][a-zA-Z0-9_-]*)[\"\']\)'
         r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*\"\"\"([^\"]{0,300})',
         src, re.M | re.S):
-        cmd, d = m.group(1), m.group(2).strip()[:200]
+        cmd, d = m.group(1), m.group(2).strip()[:300]
         if cmd in cmds and d:
             cmds[cmd]["help"] = d
     # 3) auto_commands 手写 impl(N23/N26 后 msy/mirnatarget 等必须可发现)
@@ -83,7 +81,7 @@ def scan_manual_commands():
             if name in cmds or name in ("simplehmmscan", "longestorf"):
                 continue
             cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
-                          "xmx": "", "runner": "plot", "help": docfirst[:200], "src": "auto_manual"}
+                          "xmx": "", "runner": "plot", "help": docfirst[:300], "src": "auto_manual"}
     except Exception:
         pass
     # 4) add_command 别名(help 借用须在 1-3 之后, 目标 help 已填)
@@ -304,6 +302,20 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
         counts["agent_ready_legacy"] = _rd.get("LEGACY", 0)
         counts["execution_verified"] = _vc2().get("EXECUTION_VERIFIED", 0) + _vc2().get("CONFORMANCE_VERIFIED", 0)  # 评审 #111 P0-3: 统一口径=有真实执行证据的工具数
         counts["conformance_verified"] = _vc2().get("CONFORMANCE_VERIFIED", 0)
+        # 自审 v1.4.82 verified N4(P2): semantic_checked 动态计数进权威数字——
+        # 此前 README "10" 是手写静态文本, counts.md 不含该数, SEMANTIC_CHECKS 增删
+        # 一条就静默漂移(P1-4 "动态口径"落点)。从 verification_report 的
+        # verified_tools(单层 evidence map, canonical)实时统计。
+        try:
+            _vrp2 = os.path.join(ROOT, "tests", "verification_report.json")
+            if os.path.isfile(_vrp2):
+                _vrd2 = json.load(open(_vrp2, encoding="utf-8"))
+                _vt2 = _vrd2.get("verified_tools") or {}
+                counts["semantic_checked"] = sum(1 for e in _vt2.values() if e.get("semantic_checked"))
+            else:
+                counts["semantic_checked"] = 0
+        except Exception:
+            counts["semantic_checked"] = 0
     except Exception:
         pass
     # 注(评审 #112): 两个绘图命令口径都合法勿互改——

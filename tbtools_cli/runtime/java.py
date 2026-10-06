@@ -76,6 +76,41 @@ def _is_product_path(p: str) -> bool:
     return low.endswith(_PRODUCT_EXT)
 
 
+def _true_positional_files(java_args: list, output_hint: str | None = None) -> list:
+    """预扫描: 返回『真 positional 文件』的索引列表。
+
+    真 positional = 前一个 token 不是 flag(flag=None) 且是已存在的普通文件
+    (非 jar/class, 且未被 output_hint 点名)。带 flag 的值(如 --set inData deg.tsv 的
+    deg.tsv)不算真 positional——它们由 flag 语义归属, 不会被误判为输出槽。
+
+    保守兜底(arch N1 P0 修复): 仅当真 positional 文件 ≥2 个(保证前面确有输入)且
+    当前是最后一个真 positional 且扩展名属产物后缀 → 视为输出槽剔除。
+    """
+    idx: list[int] = []
+    prev = None
+    for _i, _a in enumerate(java_args):
+        if _i == 0 or not isinstance(_a, str):
+            continue
+        if _a in ("-cp", "-classpath", "-jar") or _a.startswith(("-D", "-X", "-J", "--module-path")):
+            prev = None
+            continue
+        if _a.startswith("-"):
+            prev = _a
+            continue
+        flag = prev
+        prev = None
+        if flag:
+            continue  # 带 flag 的值 → 非真 positional
+        if output_hint and os.path.abspath(_a) == os.path.abspath(output_hint):
+            continue
+        if not os.path.isfile(_a):
+            continue
+        if _a.endswith((".jar", ".class")):
+            continue
+        idx.append(_i)
+    return idx
+
+
 def _sha256_file(f) -> str:
     """完整 SHA-256(分块读, 不截断;评审 #66: provenance/artifact 统一完整 64 位)。"""
     h = hashlib.sha256()
@@ -93,20 +128,21 @@ def _sha1_file(f):
     return h.hexdigest()
 
 def snapshot_inputs(java_args: list, output_hint: str | None = None) -> list:
-    snaps: list = []
     """识别 java_args 中的输入文件并快照。
 
     返回 [(path, backup|None, size, mtime)]；
     规则：跳过执行器/-cp/-D/-X/-jar 值、跳过输出型参数名（_OUT_FLAG_RE）、
     跳过 .jar/.class 与空文件。
-    输出槽识别(自审 arch F1 P0 响应):
-      - output_hint(impl 工厂显式传入的输出路径) → 直接剔除;
-      - positional 末位参数且扩展名属已知产物后缀 → 视为输出剔除。
-      (否则重跑时旧输出被当输入快照, 引擎写新产物后被 verify_and_restore 回滚成旧内容)
+    输出槽识别(arch F1 P0 响应, 修复 v1.4.65 声明与实现不符):
+      - output_hint(调用方显式传入的输出路径) → 直接剔除;
+      - 保守兜底: 整个 java_args 的最后一个 token 若是已存在的产物后缀文件 → 剔除。
+        (仅限末位: 位置靠前的 .fa/.tsv 可能是输入, 不能靠扩展名猜——v1.4.67 教训)
+      否则重跑时旧输出被当输入快照, 引擎写新产物后被 verify_and_restore 回滚成旧内容。
     """
-    snaps = []
+    snaps: list = []
     tmpdir = None
     prev = None
+    _pos_files = _true_positional_files(java_args, output_hint)
     for _i, _a in enumerate(java_args):
         if _i == 0 or not isinstance(_a, str):
             continue
@@ -126,6 +162,11 @@ def snapshot_inputs(java_args: list, output_hint: str | None = None) -> list:
         if not os.path.isfile(_a):
             continue
         if _a.endswith((".jar", ".class")):
+            continue
+        # 保守兜底(arch N1 P0): 真 positional ≥2 且当前为最后一个真 positional
+        # 且产物后缀 → 视为输出槽(重跑时旧输出不被快照/回滚)。单输入(≥1)不启用,
+        # 避免 .fa/.tsv 双角色误伤——v1.4.67 教训。
+        if len(_pos_files) >= 2 and _i == _pos_files[-1] and _is_product_path(_a):
             continue
         try:
             size = os.path.getsize(_a)

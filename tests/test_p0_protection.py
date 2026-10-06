@@ -85,6 +85,63 @@ class TestSnapshotInputs:
         finally:
             shutil.rmtree(td, ignore_errors=True)
 
+    def test_last_positional_product_tail_not_snapshotted(self):
+        """自审 v1.4.82 arch N1 P0: 无 output_hint 时, 整个 java_args 末位 token
+        若是已存在的产物后缀文件 → 视为输出槽剔除(保守兜底)。
+        复现 arch 实测场景: rooting 双 positional (input_nwk output_nwk),
+        重跑时旧 output_nwk 若被快照 → verify_and_restore 把新产物回滚成旧内容。
+        """
+        td = tempfile.mkdtemp()
+        try:
+            inp = os.path.join(td, "in.nwk")
+            out = os.path.join(td, "out.nwk")  # 已存在=重跑场景
+            _mkfa(inp, n=1, seq="ACGT")
+            with open(out, "w") as f:
+                f.write("(OLD_TREE);")
+            # 无 output_hint（manual 命令漏传时的防线）
+            args = ["java", "-Xmx2g", "-cp", core.JAR, "TreeRootingCli", inp, out]
+            snaps = core.snapshot_inputs(args)
+            paths = [s[0] for s in snaps]
+            assert inp in paths, "真实输入应被快照"
+            assert out not in paths, f"末位产物后缀不应被快照: {paths}"
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+
+    def test_middle_product_ext_still_snapshotted(self):
+        """带 flag 的值(如 --set inData deg.tsv)不算真 positional;
+        output_hint 剔除 out 后, 单输入 deg.tsv(计数=1)不触发兜底, 仍被快照。
+        """
+        td = tempfile.mkdtemp()
+        try:
+            deg = os.path.join(td, "deg.tsv")
+            out = os.path.join(td, "out.svg")  # 已存在
+            _mkfa(deg, n=1, seq="ACGT")
+            with open(out, "w") as f:
+                f.write("<svg>OLD</svg>")
+            args = ["java", "-cp", core.JAR, "GenericCli", "...vocanoPlot", "show",
+                    out, "--set", "inData", deg]
+            snaps = core.snapshot_inputs(args, output_hint=out)
+            paths = [s[0] for s in snaps]
+            assert deg in paths, "带 --set 的输入 .tsv 应被快照"
+            assert out not in paths, "output_hint 输出不应被快照"
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+
+    def test_single_positional_input_not_excluded(self):
+        """兜底只认 ≥2 真 positional: 单输入 `Eng in.fa` 时 in.fa 是输入,
+        虽为产物后缀(.fa)且是末位, 也必须被快照(v1.4.67 教训: .fa 双角色)。
+        """
+        td = tempfile.mkdtemp()
+        try:
+            inp = os.path.join(td, "in.fa")
+            _mkfa(inp)
+            args = ["java", "-cp", core.JAR, "Eng", inp]
+            snaps = core.snapshot_inputs(args)
+            paths = [s[0] for s in snaps]
+            assert inp in paths, "单输入 positional 应被快照"
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+
 
 class TestVerifyRestore:
     def test_restores_modified_input(self):

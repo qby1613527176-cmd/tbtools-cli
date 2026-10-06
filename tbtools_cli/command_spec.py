@@ -893,14 +893,27 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
         # 注意: 此路径的 group 对齐 gen_metadata(_infer_group 对 add_command 无装饰器可推,
         # 回退 CATEGORY_MAP/engine——metadata 投影同源, 不能自创 seq/expr)
         for _m in _re_man.finditer(
-                r"(?:\w+_group)\.add_command\(\w+,\s*name=[\'\"]([a-zA-Z][a-zA-Z0-9_]*)[\'\"]\)",
+                r"(?:\w+_group)\.add_command\((\w+),\s*name=[\'\"]([a-zA-Z][a-zA-Z0-9_]*)[\'\"]\)",
                 cli_src):
-            _n = _m.group(1)
+            _fn, _n = _m.group(1), _m.group(2)
             if _n not in specs and _n not in KNOWN_TOP_MANUAL:
                 specs[_n] = CommandSpec(
                     name=_n, group=CATEGORY_MAP.get(_n, "engine"), kind="manual",
                     runner="plot", doc="",
                 )
+            # 自审 v1.4.82 arch N2: add_command 别名 help 借用上移真源——否则
+            # genestructure/seqlogo/treeRooting/heatmap2 的 doc 为空, 借用逻辑只活
+            # 在 gen_metadata 投影层, 破坏 P1-1 "specs 唯一真源"方向性承诺。
+            if _n in specs and not specs[_n].doc:
+                _target = {"seqlogo": "logo"}.get(_fn, _fn)
+                for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
+                    if _target.startswith(_p):
+                        _target = _target[len(_p):]
+                        break
+                if _target in specs and specs[_target].doc:
+                    specs[_n].doc = f"(alias of {_target}) " + specs[_target].doc
+                elif _fn in specs and specs[_fn].doc:
+                    specs[_n].doc = f"(alias of {_fn}) " + specs[_fn].doc
     except Exception:
         pass
 

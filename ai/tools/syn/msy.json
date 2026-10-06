@@ -5,7 +5,7 @@
  "group": "syn",
  "kind": "manual",
  "class": "",
- "description": "engineClass 导致 ClassNo",
+ "description": "格式: pos=Chr\\\\tGene\\\\tStart\\\\tEnd；links=GeneA\\\\t",
  "invoke": "tbtools syn msy <args...>",
  "capabilities": [
   "microsynteny",

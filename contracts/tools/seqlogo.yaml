@@ -5,7 +5,7 @@ class: ''
 xmx: 2g
 runner: plot
 group: engine
-help: ''
+help: (alias of logo) 序列 LOGO 图
 semantic_fingerprint: ee628f7ad9f3adb6e3004099861257c18c875e25d5cf421281d7e7f27b15c034
 semantic_fingerprint_short: ee628f7ad9f3adb6
 readiness: FULL

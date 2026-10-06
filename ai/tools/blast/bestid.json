@@ -5,7 +5,7 @@
  "group": "blast",
  "kind": "manual",
  "class": "",
- "description": "31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threa",
+ "description": "31 BestIDConverter；RBH 互撞 Excellent/Poor；⚠️ 引擎强制 --threads，CLI 公共 -t 会吃掉它——缺省自动注入 4，精确指定用 --config parameter.txt；依赖 blastp/diamond）",
  "invoke": "tbtools blast bestid <args...>",
  "capabilities": [
   "homology"

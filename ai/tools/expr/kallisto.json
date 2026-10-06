@@ -5,7 +5,7 @@
  "group": "expr",
  "kind": "manual",
  "class": "",
- "description": "RNA-seq 定量（插件 P00740 CLI 化，直调",
+ "description": "RNA-seq 定量（插件 P00740 CLI 化，直调 kallisto 二进制——插件 wrapper 的 Linux 分支有拼接 bug 已绕开）",
  "invoke": "tbtools expr kallisto <args...>",
  "capabilities": [
   "rna_seq",

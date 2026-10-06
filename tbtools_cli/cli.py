@@ -164,7 +164,7 @@ def seqlogo(input_file, output_file, scale_ic, show_pos, verbose, quiet, fmt, pr
         args += ["--scaleIC=false"]
     if show_pos:
         args += ["--showPos=true"]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="seqlogo")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="seqlogo", output_hint=output_file)
     sys.exit(ec)
 
 @seq_group.command("msa")
@@ -179,7 +179,7 @@ def seq_msa(aligned_fasta, output_file, padding, verbose, quiet, fmt, preset, he
             "MSACli", aligned_fasta, output_file]
     if padding:
         args += ["--padding", str(padding)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="msa")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="msa", output_hint=output_file)
     sys.exit(ec)
 
 @seq_group.command("structure")
@@ -197,7 +197,7 @@ def seq_structure(gff_file, id_list, output_file, genome, verbose, quiet, fmt, p
         args += [genome]
     if width: args += [str(width)]
     if height: args += [str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="structure")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="structure", output_hint=output_file)
     sys.exit(ec)
 
 
@@ -216,7 +216,7 @@ def seq_motif(meme_xml, id_list, output_file, verbose, quiet, fmt, preset, heigh
             "MotifCli", meme_xml, id_list, output_file]
     if width: args += [str(width)]
     if height: args += [str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="motif")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="motif", output_hint=output_file)
     sys.exit(ec)
 
 # ---- 命令组：表达/统计 ----
@@ -243,7 +243,7 @@ def volcano(deg_file, output_file, pval_cutoff, fc_cutoff, verbose, quiet, fmt, 
         args += ["--width", str(width)]
     if height:
         args += ["--height", str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="volcano")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="volcano", output_hint=output_file)
     sys.exit(ec)
 
 @expr_group.command("heatmap")
@@ -271,7 +271,7 @@ def heatmap(matrix_file, output_file, log2, row_scale, cluster_row, cluster_col,
         args += ["--width", str(width)]
     if height:
         args += ["--height", str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="heatmap")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="heatmap", output_hint=output_file)
     sys.exit(ec)
 
 @expr_group.command("pca")
@@ -293,7 +293,7 @@ def expr_pca(matrix_file, output_file, direction, scale, verbose, quiet, fmt, pr
     args += ["--set", "pointSize", "8.0", "--set", "showLabel", "true"]
     if width: args += ["--width", str(width)]
     if height: args += ["--height", str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="pca")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="pca", output_hint=output_file)
     sys.exit(ec)
 
 @expr_group.command("hclust")
@@ -305,7 +305,7 @@ def expr_hclust(distance_file, output_file, verbose, quiet, fmt, preset, height,
     output_file, width, height = _plot_prelude("hclust", distance_file, output_file, preset, width, height, fmt, "HclustCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "HclustCli", distance_file, output_file]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="hclust")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="hclust", output_hint=output_file)
     sys.exit(ec)
 
 @expr_group.command("dehist")
@@ -323,7 +323,7 @@ def expr_dehist(deg_file, output_file, verbose, quiet, fmt, preset, height, widt
             "DeHistCli", deg_file, output_file]
     if width: args += [str(width)]
     if height: args += [str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="dehist")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="dehist", output_hint=output_file)
     sys.exit(ec)
 
 # ---- 命令组：树/进化 ----
@@ -340,7 +340,7 @@ def tree_draw(config_file, output_file, verbose, quiet, fmt, preset, height, wid
     output_file, width, height = _plot_prelude("draw", config_file, output_file, preset, width, height, fmt, "TreeCli")
     args = ["java", "-Xmx3g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "TreeCli", config_file, output_file]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="draw")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="draw", output_hint=output_file)
     sys.exit(ec)
 
 @tree_group.command("unrooted")
@@ -354,7 +354,7 @@ def tree_unrooted(newick_file, output_file, verbose, quiet, fmt, preset, height,
             "UnrootedTreeCli", newick_file, output_file]
     if width: args += ["--width", str(width)]
     if height: args += ["--height", str(height)]
-    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="unrooted")
+    ec = run_plot(args, verbose=verbose, quiet=quiet, command_name="unrooted", output_hint=output_file)
     sys.exit(ec)
 
 @tree_group.command("rooting")
@@ -368,7 +368,7 @@ def tree_rooting(input_nwk, output_nwk, verbose, quiet, fmt, preset, height, wid
     ensure_bridge("TreeRootingCli")
     args = ["java", "-Xmx2g", "-cp", cp(os.path.join(ROOT, "build"), JAR),
             "TreeRootingCli", input_nwk, output_nwk]
-    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="rooting")
+    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="rooting", output_hint=output_nwk)
     sys.exit(ec)
 
 
@@ -501,7 +501,7 @@ def tool_stat_fasta(input_file, output_file, verbose, quiet, fmt, preset, height
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioIO.FastX.FastaIndex.QuickStatFasta",
             "--inFasta", input_file, "--outPutFile", output_file]
-    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="stat_fasta")
+    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="stat_fasta", output_hint=output_file)
     sys.exit(ec)
 
 @tool_group.command("cds2protein")
@@ -516,7 +516,7 @@ def tool_cds2protein(cds_fasta, output_file, verbose, quiet, fmt, preset, height
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioIO.ORF.Translater",
             "--inFa", cds_fasta, "--outFa", output_file]
-    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="cds2protein")
+    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="cds2protein", output_hint=output_file)
     sys.exit(ec)
 
 @tool_group.command("fasta-extract")
@@ -536,7 +536,7 @@ def tool_fasta_extract(input_fasta, id_list, output_file, verbose, quiet, fmt, p
     args = ["java", "-Xmx2g", "-cp", JAR,
             "biocjava.bioDoer.Fasta.ExtractFasta",
             "--inFa", input_fasta, "--inIDList", id_list, "--outFa", output_file]
-    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="fasta_extract")
+    ec = run_java(args, verbose=verbose, quiet=quiet, command_name="fasta_extract", output_hint=output_file)
     sys.exit(ec)
 
 # ---- 动态装配(批次 B: cli_load)----
