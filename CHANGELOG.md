@@ -2,6 +2,13 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.77] - 2026-10-06
+
+### 自审 P2 批五(docs 可接续性)
+- **docs F9**: docs/README.md 维护者索引(活 plan/编年史/评审流向/生成物 vs 手写物/纪律)——新会话/贡献者不再靠口口相传; README Documentation 表加入口
+- **docs F8**: 编年史补记第五十二至六十二波(v1.4.63-76)——记忆载体恢复完整
+- **门禁**: ruff 0 / mypy 0
+
 ## [1.4.76] - 2026-10-06
 
 ### 自审 P2 批四(Agent 可执行性)
