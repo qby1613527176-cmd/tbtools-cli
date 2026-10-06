@@ -10,7 +10,7 @@
 | **当前进度/待办**（活 plan） | `_worklog/PLAN.md`（唯一活 plan；快照纪律：只记可即时核对事实，波次细节归编年史） |
 | **项目编年史**（波次记录/决策过程） | 仓库外：`workflows/tbtools_cli化_总清单.md`（workspace 侧）；仓库内波次级细节看 CHANGELOG |
 | **发布流程**（硬 checklist） | `RELEASING.md`（bump/CHANGELOG/数字同步/tag 校验——自审 docs F5 补） |
-| **命令参考**（用户侧权威） | `COMMAND_REFERENCE.md` + 自动生成 `_generated/commands.md` |
+| **命令参考**（用户侧权威） | `COMMAND_REFERENCE.md`（首部含**命名约定**：camelCase/全小写/别名计划/tree 特例/engine 分组语义）+ 自动生成 `_generated/commands.md` |
 | **评审材料流向** | `REVIEW_PACKAGE_115.md`（输入包）→ `_PREVIEW.md`（预审意见）→ `_SUBMISSION.md`（送审包，待外发）；自审战役意见在 `_worklog/self_review/` |
 | **架构/模式** | `REVERSE_ENGINEERING_PATTERNS.md`（引擎逆向模式）+ `_worklog/` 各批状态 + `adr/` |
 | **GUI 逆向 SOP** | `GUI-INTERFACE-SOP.md` |

@@ -2,6 +2,15 @@
 
 > 自动提取自 `tbplot.sh` + `bridges/*.java` + `tbcli.py`。用法注释来自源码，坑位来自 2026-08-31 全量回归测试实测。
 
+## 命名约定（自审 product F11 响应）
+
+> **短期不改名**（破坏兼容），三派并存是有意为之的过渡态：
+> - **camelCase**（`bamMerge` / `admixtureViz` / `filterCScore`）：引擎类名直译（桥名即类名），逆向工程期约定
+> - **全小写**（`bamsort` / `volcano` / `blat`）：手写/规范化命名，新建命令**默认全小写**
+> - **别名计划**：camelCase 命令保留原名（兼容），不另设 snake_case 别名（避免双入口）——改名只在新一代工具收编时按全小写落地
+> - **`tree` 特例**：既是分组名又是命令名（alias_of=draw）——命令本身可正常 `tbtools tree tree ...`（v1.4.71 已修遮蔽致 readiness=null 问题）
+> - **engine 分组 ≠ 绘图引擎**：分组 `engine` = 通用反射区（109 个，Java 类直调）；README 的「Plotting Engines」= 引擎数量叙事——两者用词撞车但语义不同，文档语境区分
+
 ## 目录
 
 - [一、快速导航](#一快速导航)
