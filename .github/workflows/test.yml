@@ -3,6 +3,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 自审 gate P1-1: 浅克隆无 tags → 版本门禁 tag 腿在 CI 整条静默跳过, 必须全量拉取
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -77,6 +79,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # 自审 gate P1-1: 同上, tag 腿需要全量历史
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install

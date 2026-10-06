@@ -838,11 +838,9 @@ def register_top(cli, _LG):
                 if not os.path.isfile(a):
                     ok = False
                     probs.append(f"missing input: {a}")
-            # P1-1: dry-run 产物预估任意 artifact(不止图形;评审 #56)
-            _OUT_EXTS = (".svg", ".png", ".pdf", ".tsv", ".txt", ".csv", ".json",
-                         ".gff", ".gff3", ".gtf", ".nwk", ".fa", ".fasta", ".fastq",
-                         ".xls", ".out", ".meme", ".tree", ".aln", ".collinearity")
-            est = [a for a in args[_skip:] if a.endswith(_OUT_EXTS)]
+            # P1-1 + v1.4.82 product P1-3: dry-run 产物预估——与执行预检共用同一
+            # 输出槽判定(_OUT_EXT_COMMON, 文本类后缀不预判: .txt/.tsv 可能是输入)
+            est = [a for a in args[_skip:] if a.endswith(_OUT_EXT_COMMON)]
             # P0-6: 真实依赖检查(shutil.which 逐依赖探测, 非仅 JAR;评审 #56)
             _deps, _net, _mem, _dep_map = [], None, None, {}
             try:
@@ -888,18 +886,18 @@ def register_top(cli, _LG):
             _os.dup2(_devnull, 1)
             _os.close(_devnull)
 
-        # 自审 product F3: 执行前输入预检(与 dry-run 同规则)——缺失输入直接 TB002,
-        # 不跑引擎白给 "TB001 wrapper bug"(误导 Agent 去报 bug 而非修路径)。
-        # ⚠️ 必须放在 stdout 重定向(上述 as_json dup2)**之前**的代码会丢 stdout——
-        # 本段位于重定向后, 输出经 _saved_fd(原 stdout 副本)显式写出。
+        # 自审 product F3 + v1.4.82 product P1-5: 执行前输入预检(与 dry-run 同规则)——
+        # 缺失输入直接 TB002, 不跑引擎白给 "TB001 wrapper bug"(误导 Agent 去报 bug 而非修路径)。
+        # v1.4.82 修复: 预检从『仅 as_json』提前为全部路径——非 --json 下人类同样拿
+        # TB002/exit 2/正确 group 前缀 help(旧: TB009 engine-level defect/exit 1/help 缺
+        # 前缀, 与 quickstart 退出码承诺分裂)。
         _pre_probs = []
         try:
             # flag 状态机(对齐 snapshot_inputs): flag 及其值跳过, 只检裸输入槽
             _prev_flag = False
             _pos_only = [a for a in args if isinstance(a, str) and not a.startswith("-")]
             _skip_pre = 2 if len(_pos_only) >= 3 else 1  # 跳过 <group> <cmd>
-            _OUT_EXT_PRE = (".svg", ".png", ".pdf", ".nwk", ".fa", ".fasta", ".fastq",
-                            ".gff", ".gff3", ".gtf", ".meme", ".tree", ".aln", ".collinearity")  # 仅图形/专用产物后缀; .txt/.tsv/.xls 等既可能是输入也可能是输出, 不预判
+            _OUT_EXT_PRE = _OUT_EXT_COMMON  # 共享常量: 仅图形/专用产物后缀; .txt/.tsv/.xls 等既可能是输入也可能是输出, 不预判
             _pre_skip = 0
             _prev_flag = False
             for _a in args:
@@ -926,10 +924,19 @@ def register_top(cli, _LG):
                     _pre_probs.append(_a)
         except Exception:
             pass
-        if _pre_probs and as_json:
-            # 结构化错误(与 errors.py 对齐): TB002 文件缺失, 引导修路径
+        if _pre_probs:
             from tbtools_cli.errors import ERROR_CODES as _EC2
             _meta2 = _EC2.get("TB002_FILE_NOT_FOUND", {})
+            # v1.4.82 product P1-5: 非 --json 路径也不进引擎——人读版 TB002 提示
+            # (正确 group 前缀 help 行) + exit 2, 与 quickstart 退出码承诺一致。
+            if not as_json and _saved_fd is None:
+                click.echo(f"❌ 输入文件不存在: {_pre_probs[0]}", err=True)
+                click.echo("   修复: 检查路径或创建文件后重试 (TB002_FILE_NOT_FOUND, exit 2)", err=True)
+                # 正确 group 前缀 help: 从参数前两段推导 <group> <cmd>
+                _gn = args[0] if len(args) >= 1 and args[0] in _LG.GROUPS else None
+                if _gn and len(args) >= 2:
+                    click.echo(f"   📖 tbtools {_gn} {args[1]} --help", err=True)
+                sys.exit(2)
             _err2 = {"code": "TB002_FILE_NOT_FOUND", "category": "input",
                      "retryable": False,
                      "suggested_action": f"check the input file path exists: {_pre_probs[0]}"}
@@ -1716,6 +1723,12 @@ except Exception:
             click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")
         click.echo("\n查看详情: tbtools help <命令> | 全量: tbtools list")
 
+    # 自审 v1.4.82 product P1-3: 输出槽扩展名单一权威(此前 dry-run _OUT_EXTS 与执行
+    # 预检 _OUT_EXT_PRE 两套启发式, dry-run 含 .txt/.tsv/.csv → 把输入列产物; 统一为
+    # 保守集——仅图形/专用产物后缀, 文本类后缀不预判)
+    _OUT_EXT_COMMON = (".svg", ".png", ".pdf", ".nwk", ".fa", ".fasta", ".fastq",
+                       ".gff", ".gff3", ".gtf", ".meme", ".tree", ".aln", ".collinearity")
+
     @cli.command(name='list')
     @click.argument('category', required=False)
     @click.option('--json', 'as_json', is_flag=True, help="结构化输出(Agent 可读, 自审 product F5)")
@@ -1723,6 +1736,9 @@ except Exception:
         """列出可用命令（plots/tools/rpc）——TTY 下自动分页"""
         import json as _lj
         lines = []
+        # 自审 v1.4.82 product P1-4: --json 直接从数据源构建 records(废弃文本刮取——
+        # 旧实现正则要求 4 空格缩进, tools 分支 2 空格 → 静默空清单 exit 0, 人机两视图事实相反)
+        _records: list[dict] = []
         # 自审 product F5: plots 真正过滤绘图分组(此前 plots 与无参全量相同, 静默吞参);
         # 绘图分组 = seq/expr/tree/syn/sets/chipseq + 工具分组内的绘图类
         _plot_groups = {'seq', 'expr', 'tree', 'syn', 'sets', 'chipseq'}
@@ -1737,6 +1753,7 @@ except Exception:
                     for cname, cmd in sorted(g.commands.items()):
                         short = _clip_desc((cmd.help or '').split('\n')[0])
                         lines.append(f"    {c(f'{cname:20s}', 'green')} {short}")
+                        _records.append({"name": cname, "desc": short, "group": gname})
         elif not category:
             lines.append(c("绘图/分析命令：", "bold"))
             for gname in sorted(_LG.GROUPS.keys()):
@@ -1746,6 +1763,7 @@ except Exception:
                     for cname, cmd in sorted(g.commands.items()):
                         short = _clip_desc((cmd.help or '').split('\n')[0])
                         lines.append(f"    {c(f'{cname:20s}', 'green')} {short}")
+                        _records.append({"name": cname, "desc": short, "group": gname})
             lines.append("\n用法: tbtools list plots|tools|rpc")
         elif category == 'tools':
             lines.append("命令行工具：")
@@ -1764,6 +1782,7 @@ except Exception:
                     doc = getattr(_ac, n).__doc__ or ''
                     short = doc.split(':',1)[1] if ':' in doc else ''
                     lines.append(f"  {cmd:20s} {short}")
+                    _records.append({"name": cmd, "desc": short, "group": cat})
                     count += 1
             # 加上共享注册表（P0-3：82 个 CLI 工具，排除已被 _impl 覆盖的）
             reg_count = 0
@@ -1771,6 +1790,8 @@ except Exception:
                 if _ts2.kind != "tool" or getattr(_ac, f'_{_tn2}_impl', None):
                     continue  # 已在上面列出
                 lines.append(f"  {_tn2:20s} {_ts2.class_name.split('.')[-1]}")
+                _records.append({"name": _tn2, "desc": _ts2.class_name.split('.')[-1],
+                                 "group": _ts2.group})
                 reg_count += 1
             # 加上手动注册的 3 个
             lines.append(f"\n共 {count + reg_count + 3} 个工具（含 {reg_count} 个注册表工具 + 3 个手动迁移）")
@@ -1782,14 +1803,11 @@ except Exception:
         else:
             click.echo(f"未知类别: {category}。可用: plots|tools|rpc", err=True)
             sys.exit(1)
-        # 自审 product F5: --json 机器可读清单(Agent 需要结构化命令列表, 人读格式不可解析)
+        # 自审 product F5 + v1.4.82 product P1-4: --json 机器可读清单直接来自数据源
+        # (_records 已在各分支构建)——旧实现正则刮取人读文本(4 空格缩进假设)致 tools/rpc
+        # 分支静默空清单 exit 0; 人机两视图事实相反。rpc 分支下 records 为空属预期
+        # (RPC 方法列表在 tbtools_rpc.sh, 人读页已注明)。
         if as_json:
-            import re as _ljre
-            _records = []
-            for _ln in lines:
-                _m = _ljre.match(r"^    (\S+)\s{2,}(.*)$", _ln) if isinstance(_ln, str) else None
-                if _m:
-                    _records.append({"name": _m.group(1), "desc": _m.group(2).strip()})
             click.echo(_lj.dumps({"category": category or "all", "commands": _records,
                                   "count": len(_records)}, ensure_ascii=False, indent=1))
             return

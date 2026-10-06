@@ -449,7 +449,11 @@ def main():
                         print(f"⚠️ 验证超龄({len(_old_days)} 个 >90 天, 软告警不阻断): "
                               + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
             except Exception:
-                pass
+                # 自审 gate P1-2: TTL 检查异常不再静默——strict 模式下显式报错
+                # (此前整块 try-except-pass 吞异常, TBTOOLS_TTL_STRICT 存在静默失效路径)
+                if os.environ.get("TBTOOLS_TTL_STRICT") == "1":
+                    print("❌ TTL 检查异常(TBTOOLS_TTL_STRICT=1 下视为失败): 无法读取 verification_report", file=sys.stderr)
+                    return 1
             # 自审 docs F1/F3(gate P0-3) 版本门禁: pyproject version == 最新 git tag == README 声称线
             import re as _re2
             import subprocess as _sp3
