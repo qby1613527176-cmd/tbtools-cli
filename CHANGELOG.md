@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.82] - 2026-10-06
+
+### 自评 5 视角响应(v1.4.81 后, P0×1 + 跨视角 P1 闭环)
+- **P0 arch N1**: snapshot_inputs 输出回滚实测复现——cli.py manual 命令 15 处补 output_hint; java.py 接通保守兜底(真 positional ≥2 且末位产物后缀); docstring 对齐; 3 回归测试
+- **README 294→298**: v1.4.81 统一到 298 后英雄行未同步(3 处)
+- **tool-describe --json 补 verification_details**: 证据对象完整投影(权威源行指向真实字段)
+- **counts.md 补 semantic_checked 动态计数**: 告别手写静态 '10'
+- **arch N2/N3/N4**: add_command 别名 help 上移真源 / 截断 200→300 统一 / KNOWN_TOP_MANUAL 单一来源
+- **门禁**: --check 298 命令/504 surface 全绿 / ruff 0 / mypy 0 / 149 passed
+
 ## [1.4.81] - 2026-10-06
 
 ### 外部红队审查响应(4 个 P1, 无 P0)——Evidence Surface 一致性
