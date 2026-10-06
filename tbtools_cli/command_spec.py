@@ -1018,7 +1018,9 @@ def agent_readiness(spec) -> str:
     has_schema = bool(spec.inputs)
     has_outputs = bool(spec.outputs)
     # parameters 用"声明存在"判定(dataclass 字段总是存在;无参数工具声明空列表=合法)
-    params_declared = True  # CommandSpec.parameters 总是声明(空=无可选参数, 仍算契约完整)
+    # 自审 arch F12-5: params_declared 恒真——KNOWN_PARAMS 仅 8 工具有契约, 该维度
+    # 实际不参与分级; 保留变量只为语义完整性, 勿误读为"parameters 参与 FULL 判定"
+    params_declared = True  # 恒真(见上)——FULL 判定实际只靠 caps/schema/outputs/status
     if has_caps and has_schema and has_outputs and params_declared and spec.status == "stable":
         return "FULL"
     if has_caps or spec.status != "stable":

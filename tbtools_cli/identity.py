@@ -136,7 +136,8 @@ def yaml_to_snapshot(c: dict) -> dict:
 #   Semantic Metadata(语义元数据): capabilities/relations/ontology——搜索/规划用,非执行身份
 #   Runtime Identity(运行环境): tool/schema_version/runtime/deps
 # ⚠️ 唯一真源: EXECUTION_CONTRACT_FIELDS 只此一套(评审 #108 P0)——已删旧重复常量
-CANONICAL_SEMANTIC_FIELDS = ("capabilities", "relations", "dependencies")
+# 自审 arch F12-2: 删 CANONICAL_SEMANTIC_FIELDS 死常量(全仓零使用, 语义字段组在
+# canonical_semantic_identity 硬编码——常量和它同值, 留双源纯属漂移风险)
 
 
 def execution_contract_fingerprint(spec) -> str:
@@ -235,7 +236,7 @@ def contract_fingerprint_for(spec) -> str:
 
 __all__ = [
     "WORKFLOW_SCHEMA_CURRENT", "FP_SCHEME_VERSION", "CONTRACT_SCHEMA_VERSION",
-    "DEP_VERSION_ARGS", "EXECUTION_CONTRACT_FIELDS", "CANONICAL_SEMANTIC_FIELDS",
+    "DEP_VERSION_ARGS", "EXECUTION_CONTRACT_FIELDS",  # 自审 F12-2: CANONICAL_SEMANTIC_FIELDS 死常量已删
     "canonical_execution_contract", "canonical_semantic_identity", "canonical_contract",
     "execution_contract_fingerprint", "semantic_fingerprint", "contract_fingerprint_for",
 ]
