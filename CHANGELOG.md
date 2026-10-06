@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.79] - 2026-10-06
+
+### 自审 P2 批七(验证叙事诚实化)
+- **arch F12-4**: _write_provenance 脆弱写法("snaps" in dir())→显式引用; inputs_set 语义注释修正
+- **verified F7**: LEFTOVER 表加「活监控」列——6 工具明示有/无测试盯着(归档不再静态)
+- **verified F8**: 报告 verification_tiers_note(CONFORMANCE_VERIFIED 试验层 n=1 明示, 防三层叙事超卖)
+- **门禁**: pytest 15 passed / ruff 0 / mypy 0
+
 ## [1.4.78] - 2026-10-06
 
 ### 自审 P2 批六(死常量 + 新用户路径)
