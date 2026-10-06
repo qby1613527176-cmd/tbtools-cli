@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.85] - 2026-10-07
+
+### 自评 P2 四连(agent 面可读性)
+- **product P2-5**: tool-index.jsonl description 词边界截断 + usage 噪音清理
+- **product P2-6**: list plots 页脚注明口径(115 分组注册 vs 引擎反射)
+- **product P2-7**: quickstart 退出码表修正(exit 1 去 TB102, 同一条件不再两行两码)
+- **gate P2-2**: rpc_methods 注明外部能力来源(188, JAR 内置)
+- **门禁**: --check 298 命令/504 surface 全绿 / ruff 0 / mypy 0 / 149 passed
+
 ## [1.4.84] - 2026-10-07
 
 ### 自评高价值 P2 闭环(5 条)
