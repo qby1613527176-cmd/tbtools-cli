@@ -344,7 +344,12 @@ class TestTier1CompileVerified:
                    "execution_verified": sorted(EXEC_VERIFIED.keys()),
                    "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
                    "execution_verified_details": _exec_entries,
-                   "verified_tools": _verified_tools}
+                   "verified_tools": _verified_tools,
+                   # 自审 verified F8: 三层体系明示——CONFORMANCE_VERIFIED 是试验层(n=1, volcano 标杆),
+                   # 金链升级路线暂无第二批推广计划; 防"三层叙事"超卖(实际两层+展品)
+                   "verification_tiers_note": "CONFORMANCE_VERIFIED = 试验层(n=1, volcano 金链标杆): "
+                                             "compile→execute→artifact→sha256→provenance→id 全断言通过; "
+                                             "舱批工具升级候选与时间表未定——读取方勿按'三层全满'解读。"}
         # 自审 gate P1-3: 报告写入改显式 opt-in——pytest 默认只读校验(证据文件不被"跑了
         # pytest"而非"完成了验证"的环境污染); 显式刷新用 TBTOOLS_WRITE_REPORT=1
         # (本机验证/nightly 回写时设)。证据可复现性 = 写入者=验证者。

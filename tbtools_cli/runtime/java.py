@@ -562,7 +562,9 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
                 _REPAIR_RETRIED = False
 
     # 运行 provenance: 识别输出文件, 旁写 <out>.tbtools.json(成功/失败都写, 含结构化 error)
-    _inputs_before = {s[0] for s in snaps} if "snaps" in dir() else None
+    # 自审 arch F12-4: "snaps" in dir() 脆弱(脚本上下文可能为 False)——snaps 恒在
+    # 本函数作用域(run_java 入口快照), 显式引用; inputs_set 用运行前快照(输出文件不在内)
+    _inputs_before = {s[0] for s in snaps} if snaps else None
     _write_provenance(java_args, command_name, ec_out, err_text if ec_out != 0 else "",
                       inputs_set=_inputs_before)
     return ec_out

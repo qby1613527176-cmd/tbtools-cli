@@ -6,14 +6,14 @@
 
 ## 定性总表
 
-| 工具 | 类别 | 根因 | 证据（波次） | 复攻条件 |
-|:--|:--|:--|:--|:--|
-| pafref | 引擎缺陷 | PafRefBaseCoverCalc `--inPaf/--outTab` 后 `this.text` NPE | v1.4.45 | 需上游修 JAR |
-| tfbsShift | 引擎缺陷 | blastp 子进程误判成功为失败（子进程状态码逻辑反） | v1.4.44 | 需上游修 JAR |
-| microsyn | 数据合成未攻克 | MCScanX 精确格式（跨物种 GXF/共线性严格匹配）——专门造数据无法复现官方数据形态 | v1.4.44 / v1.4.32 | 真实 MCScanX 数据或工厂式数据生成 |
-| memerun | 引擎缺陷 | JAR 缺 `QuickRunMEME` 类（NoClassDefFoundError） | v1.4.30 | JAR 升级带上该类 |
-| smart | 外部依赖 | SMART 数据库联网查询（域注释） | v1.4.33-34 多波 | 网络通道或本地 SMART DB |
-| gxfIdAppender | 外部依赖 | 走 RPC 8765（非独立引擎） | v1.4.30 | RPC 服务层暴露独立入口 |
+| 工具 | 类别 | 根因 | 证据（波次） | 复攻条件 | 活监控（自审 verified F7） |
+|:--|:--|:--|:--|:--|:--|
+| pafref | 引擎缺陷 | PafRefBaseCoverCalc `--inPaf/--outTab` 后 `this.text` NPE | v1.4.45 | 需上游修 JAR | ⚠️ 无活测试（建议照 bin0 模式补 xfail 固定） |
+| tfbsShift | 引擎缺陷 | blastp 子进程误判成功为失败（子进程状态码逻辑反） | v1.4.44 | 需上游修 JAR | ⚠️ 无活测试（建议同上） |
+| microsyn | 数据合成未攻克 | MCScanX 精确格式（跨物种 GXF/共线性严格匹配）——专门造数据无法复现官方数据形态 | v1.4.44 / v1.4.32 | 真实 MCScanX 数据或工厂式数据生成 | ⚠️ 无测试/数据占位/生成器雏形——'同类'只停留定性表 |
+| memerun | 引擎缺陷 | JAR 缺 `QuickRunMEME` 类（NoClassDefFoundError） | v1.4.30 | JAR 升级带上该类 | ⚠️ 无活测试（建议补 xfail 固定） |
+| smart | 外部依赖 | SMART 数据库联网查询（域注释） | v1.4.33-34 多波 | 网络通道或本地 SMART DB | ✅ 联网即可人工复验（外部通道） |
+| gxfIdAppender | 外部依赖 | 走 RPC 8765（非独立引擎） | v1.4.30 | RPC 服务层暴露独立入口 | ⚠️ 无 issue/计划锚点——RPC 改造无限期挂起 |
 
 ## 逐条详情
 
