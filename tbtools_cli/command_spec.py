@@ -813,7 +813,7 @@ KNOWN_STATUS = {
 
 
 # SpecRegistry(评审 #110 P1): 一次性构建缓存——Agent 高频链 search/describe/plan/validate/run
-# 每次都重建 294 spec(~105ms)纯浪费; KNOWN_* / 注册表变更调 clear_specs_cache()(统一失效)
+# 每次都重建 298 spec(~105ms)纯浪费; KNOWN_* / 注册表变更调 clear_specs_cache()(统一失效)
 _SPECS_CACHE: dict | None = None
 
 
@@ -821,7 +821,7 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
     """构建统一命令模型(单一源, 兼容层: 不改变现运行行为)。
 
     force=True 强制重建(测试/热更新用); 否则命中 SpecRegistry 缓存(评审 #110 P1,
-    294 spec 一次性构建, Agent 高频链不再重复重建)。
+    298 spec 一次性构建, Agent 高频链不再重复重建)。
     _skip_overlay=True: 跳过 YAML 快照校验/兑底(评审 #111 P1-1 独立真源比较用——
     拿纯代码 CommandSpec 与快照对比, 防"overlay 后 spec 比 YAML"自我验证)。
 

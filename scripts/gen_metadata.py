@@ -280,16 +280,19 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
 
     # 权威数字摘要(README/徽章/文档口径单一源)
     import tbtools_cli.auto_commands as _ac
-    import tbtools_cli.cli_tools_registry as _reg
     import tbtools_cli.core as _core
     n_plot = sum(1 for v in meta.values() if v.get("kind") in ("bridge", "direct", "manual"))
     n_auto = sum(1 for n in dir(_ac) if n.startswith("_") and n.endswith("_impl") and not n.startswith("__"))
+    from tbtools_cli.command_spec import build_command_specs as _bcs_specs  # P2-1: 与 version --json 同源
     counts = {
         "metadata_commands": len(meta),          # 276: 唯一数据源全量
         "metadata_plot_commands": n_plot,        # 214: metadata 静态口径(非工具类 bridge/direct/manual)
         "auto_commands": n_auto,                 # 201: 引擎注册表驱动的命令数
         "rpc_methods": 188,                      # RPC 方法(固定)
-        "tools": len(_reg.CLI_TOOLS),            # 82: 工具注册表
+        # 自审 v1.4.83 product P2-1: tools 计数统一为 spec kind=="tool" 口径
+        # (与 version --json 一致)——此前 counts.md 用 len(CLI_TOOLS)=82, version --json
+        # 用 specs kind=="tool"=80, 两个权威自动源互相矛盾; 191 是人读页脚残留口径。
+        "tools": sum(1 for s in _bcs_specs().values() if s.kind == "tool"),  # 80: 与 version --json 同源
         "bridges": len([f for f in os.listdir(os.path.join(ROOT, "bridges")) if f.endswith(".java")]),  # 118
         "pitfall_hints": len(_core.PITFALL_HINTS),  # 46
     }

@@ -2,7 +2,7 @@
 
 **Turn legacy bioinformatics tools into Agent-callable, verifiable workflows.**
 
-298 Agent-facing tools · 60 FULL contracts · 63 schema-capable · Agent Protocol v1.0
+298 Agent-facing tools · 60 FULL contracts · 64 schema-capable · Agent Protocol v1.0
 
 将 TBtools-II 及传统生信工具转换为 Agent 可发现、可调用、可验证的接口层。
 
@@ -16,9 +16,7 @@
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
 > **298 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 63**(有 inputs 契约) | Registered 298(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 180+ RPC + 80+ CLI 工具 + 110+ Java 桥 + 引擎反射(逃生舱)。
 > 分级定义: FULL=契约完整(inputs+outputs+capabilities+stable; parameters 恒声明, 无参数工具视为"已声明无参数");PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
-> 数字权威源: [docs/_generated/counts.md](docs/_generated/counts.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(54)/semantic_checked(内容级断言工具数); 运行时计数见 `tbtools version --json`(execution_verified 等); 单工具证据详见 `tool-describe <命令> --json` verification_details(level/env_fingerprint/semantic_checked/domain_note)。
-> 分级定义: FULL=契约完整(inputs+outputs+capabilities+stable; parameters 恒声明, 无参数工具视为"已声明无参数");PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
-> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)。
+> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(54)/semantic_checked(内容级断言工具数), 单工具证据详见 `tool-describe <命令> --json` verification_details(level/env_fingerprint/semantic_checked/domain_note)。
 
 <div align="center">
 

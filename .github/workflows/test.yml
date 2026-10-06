@@ -50,8 +50,7 @@ jobs:
         run: |
           set -o pipefail
           python3 -m pytest tests/ -q --tb=short -rfs 2>&1 | tail -40
-          echo "⚠️ EXECUTION_VERIFIED 断言在 CI(无 TBTOOLS_JAR)下 skip——准确数量见上方 -rfs 报告, 论证口径见 docs/_worklog/PLAN.md"
-          echo "   —— 执行验证 54/60=90% 需含 JAR + examples/data 环境实跑, 口径见 docs/_worklog/PLAN.md"
+          echo "⚠️ EXECUTION_VERIFIED 断言在 CI(无 TBTOOLS_JAR)下 skip——准确数量见上方 -rfs 报告, 口径见 docs/_generated/counts.md(执行验证需含 JAR + examples/data 环境实跑)"
 
       # ── L1.5: 无 jar 的 CLI 冒烟（真实命令,非 import）──────────────────
       - name: CLI smoke without jar (version/list/help/纠错/new/check)

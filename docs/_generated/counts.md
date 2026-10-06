@@ -4,7 +4,7 @@
 - metadata_plot_commands: 218
 - auto_commands: 201
 - rpc_methods: 188
-- tools: 82
+- tools: 80
 - bridges: 118
 - pitfall_hints: 49
 - agent_ready_full: 60
