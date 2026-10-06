@@ -9,7 +9,7 @@
 [![CI](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml/badge.svg)](https://github.com/qby1613527176-cmd/tbtools-cli/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
-[![version](https://img.shields.io/badge/version-v1.4.77-blue.svg)](pyproject.toml)  <!-- 自审 docs F1: 与 pyproject 同步; gen_metadata --check 验证 -->
+[![version](https://img.shields.io/badge/version-v1.4.78-blue.svg)](pyproject.toml)  <!-- 自审 docs F1: 与 pyproject 同步; gen_metadata --check 验证 -->
 [![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 

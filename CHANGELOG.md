@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.78] - 2026-10-06
+
+### 自审 P2 批六(死常量 + 新用户路径)
+- **arch F12-2**: CANONICAL_SEMANTIC_FIELDS 死常量删除(双重源漂移风险)
+- **arch F12-5**: agent_readiness 注释明示 params_declared 恒真(维度实际不参与分级)
+- **product F10**: quickstart 重写(每条命令 JAR 依赖标注 + 零配置行为 + 退出码/错误码表 + readiness×verification 矩阵); reference.md 升级为参考入口
+- **门禁**: pytest 44 passed / ruff 0 / mypy 0
+
 ## [1.4.77] - 2026-10-06
 
 ### 自审 P2 批五(docs 可接续性)
