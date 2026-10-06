@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.83] - 2026-10-06
+
+### 自评剩余 P1 闭环(8 条: docs 3 + product 3 + gate 2)
+- **product P1-3**: dry-run 产物预估统一 _OUT_EXT_COMMON(输入不再列产物)
+- **product P1-4**: list tools --json 从数据源构建 records(188 条, 弃正则刮取)
+- **product P1-5**: 非 --json tool-run 缺失输入 → TB002/exit 2/正确 help 前缀
+- **docs F-NEW-2/3/4**: README 权威源归属修正 / index.md 去硬编码版本 / faq JDK 口径
+- **gate P1-1/2**: CI checkout fetch-depth 0(tag 腿复活) / TTL 检查不再静默
+- **门禁**: --check 298 命令/504 surface 全绿 / ruff 0 / mypy 0 / 149 passed
+
 ## [1.4.82] - 2026-10-06
 
 ### 自评 5 视角响应(v1.4.81 后, P0×1 + 跨视角 P1 闭环)
