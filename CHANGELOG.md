@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.84] - 2026-10-07
+
+### 自评高价值 P2 闭环(5 条)
+- **product P2-1**: counts.md tools 口径统一 spec kind==tool(80, 与 version --json 同源)——82/80/191 三源归一
+- **gate P2-4**: CI echo 硬编码 '54/60=90%' 移除(改指 counts.md)
+- **docs F-NEW-5/6/7/8**: README 63→64 schema-capable / 引用块去重合并 / PLAN.md 去手写版本 / command_spec 294→298 注释
+- **门禁**: --check 298 命令/504 surface 全绿 / ruff 0 / mypy 0 / 149 passed
+
 ## [1.4.83] - 2026-10-06
 
 ### 自评剩余 P1 闭环(8 条: docs 3 + product 3 + gate 2)
