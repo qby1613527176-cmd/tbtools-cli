@@ -1754,6 +1754,9 @@ except Exception:
                         short = _clip_desc((cmd.help or '').split('\n')[0])
                         lines.append(f"    {c(f'{cname:20s}', 'green')} {short}")
                         _records.append({"name": cname, "desc": short, "group": gname})
+            # 自审 v1.4.85 product P2-6: 口径注明——此处只列 6 个绘图分组的注册命令,
+            # 引擎反射的 ~100 个绘图命令不在内(避免 Agent 低估绘图能力 46%)
+            lines.append(f"\n（口径: 此处 {len(_records)} 条为分组注册命令; 引擎反射绘图命令见 `tbtools engine list`)")
         elif not category:
             lines.append(c("绘图/分析命令：", "bold"))
             for gname in sorted(_LG.GROUPS.keys()):

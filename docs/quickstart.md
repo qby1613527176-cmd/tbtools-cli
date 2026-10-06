@@ -40,8 +40,8 @@ tbtools new                    # 交互式向导
 | 退出码 | 含义 |
 |:--|:--|
 | 0 | 成功 |
-| 1 | 参数/数据错（TB001 参数无效 → `--help`；TB102 文件缺失 → 检查路径） |
-| 2 | 文件缺失或未知命令（TB002 → `check the input file path exists`） |
+| 1 | 参数/数据错（TB001 参数无效 → `--help`；分层码 TB101） |
+| 2 | 文件缺失（TB002_FILE_NOT_FOUND → `check the input file path exists`；分层码 TB102） |
 | 3 | 格式不匹配（TB003/TB004 → 检查列数/类型/分隔符/schema） |
 | 4 | 内存不足（TB008 → `config.toml [defaults] memory` 调大） |
 

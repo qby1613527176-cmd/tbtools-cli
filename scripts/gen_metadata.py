@@ -288,7 +288,10 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
         "metadata_commands": len(meta),          # 276: 唯一数据源全量
         "metadata_plot_commands": n_plot,        # 214: metadata 静态口径(非工具类 bridge/direct/manual)
         "auto_commands": n_auto,                 # 201: 引擎注册表驱动的命令数
-        "rpc_methods": 188,                      # RPC 方法(固定)
+        # 自审 v1.4.85 gate P2-2: rpc_methods 注明口径——188 是 TBtools JAR 内置
+        # RPC 方法数(外部引擎能力, 本地无注册源可动态统计), 硬编码有正当理由;
+        # 已标注来源防被误当"可派生数字"。变更需随 JAR 升级人工核对。
+        "rpc_methods": 188,  # 来源: TBtools_JRE1.6.jar RPC 服务器(外部能力, 非本地注册表)
         # 自审 v1.4.83 product P2-1: tools 计数统一为 spec kind=="tool" 口径
         # (与 version --json 一致)——此前 counts.md 用 len(CLI_TOOLS)=82, version --json
         # 用 specs kind=="tool"=80, 两个权威自动源互相矛盾; 191 是人读页脚残留口径。
@@ -504,6 +507,19 @@ def _json_dump(meta, out_root: str | None = None):
     with open(_p, "w", encoding="utf-8") as _f:
         _j.dump(meta, _f, ensure_ascii=False, indent=1)
 
+def _clip_words(text: str, limit: int) -> str:
+    """词边界截断(自审 product P2-5): limit 处不断半词; 顺带清理 usage 噪音
+    (|None]/[ 残片)进 description。"""
+    import re as _r
+    _clean = _r.sub(r"\|None\]|#|\[", "", text)
+    _clean = _r.sub(r"\s+", " ", _clean).strip()
+    if len(_clean) <= limit:
+        return _clean
+    if " " not in _clean[:limit + 1]:
+        return _clean[:limit] + "…"
+    return _clean[:limit + 1].rsplit(" ", 1)[0] + "…"
+
+
 def render_ai_manifest(meta, out_root: str | None = None) -> set:
     """AI 机器接口层(ai/): 工具索引/能力索引/单工具 schema/错误码(GLM P1 #38-39)。
 
@@ -543,7 +559,9 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
                      "alias_of": v.get('alias_of', ""), "capabilities": _caps,
                      "input_formats": sorted({i.get('format','') for i in _inputs if i.get('format')}),
                      "output_formats": v.get('outputs', []),
-                     "description": (v.get('help','') or '').replace('\n', ' ')[:160],
+                     # 自审 v1.4.85 product P2-5: description 词边界截断(原 [:160]
+                     # 硬切出半词 + usage 噪音; 与 commands.md F6 同策略)
+                     "description": _clip_words((v.get('help','') or '').replace('\n', ' '), 160),
                      "schema": None if not _has_contract else "tool_schema_v1",  # F6: 无契约显式 null
                      # 评审 #112 P1: 低体积高价值筛选字段——Agent 搜索后可直接按证据强度过滤,
                      # 不必逐个 describe
