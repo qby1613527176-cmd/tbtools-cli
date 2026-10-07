@@ -44,6 +44,15 @@
    git add -A && git commit -m "chore: generated surface 同步(v1.4.XX)" && git tag v1.4.XX
    ```
 8. **记忆同步**（MOSS 工作区惯例）：总清单追加波次 → MEMORY.md → 当日 daily note
+9. **PyPI 发布（可选但推荐，2026-10-07 沉淀一键脚本）**：
+   ```bash
+   python3 scripts/release_pypi.py            # 全流程(门禁→快照→build→twine check→冒烟→upload→拉取验证)
+   python3 scripts/release_pypi.py --dry-run  # 只 build+check+冒烟, 不上传(验证打包质量)
+   ```
+   - 前置：`~/.pypirc` token(600 权限)；pyproject 版本已 bump + tag 已打
+   - 流程要点：verification_report.json 复制为包内快照(安装态 census/describe 可见验证证据，否则 exec_verified=0)；
+     sdist 由 MANIFEST.in 约束(prune plugins/examples/tests, 防 JAR/二进制 75.8MB 进包)；
+     twine/冒烟 venv 自动临时创建；上传后 simple 索引传播延迟自动重试拉取验证
 
 ## 版本一致性门禁（自动化）
 
