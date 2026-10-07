@@ -5,7 +5,7 @@ auto_commands.py 提取命令名+docstring, 脆弱点:
   1. 装饰器正则强制 docstring(无 docstring 的新命令 → 进 metadata 不进 specs → 漂移)
   2. `@\\w+_group.command` vs 顶层 `@cli.command` 两侧口径不同 → 单侧漂移
   3. 参数段 `[^)]*` 遇默认值含 `)` 断链, 后续命令 doc 错配
-  4. 非贪婪 `[\s\S]*?` 无 docstring 时把下一条命令的 docstring 错配给前一条
+  4. 非贪婪 `[\\s\\S]*?` 无 docstring 时把下一条命令的 docstring 错配给前一条
   5. `[^"]` docstring 内双引号提前截断(如 tableMerge --inFileArr "f1,f2")
 
 AST 方案: ast.parse 一次, FunctionDef 的 decorator_list + 模块级 add_command Call
