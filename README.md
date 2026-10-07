@@ -75,7 +75,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [Plotting Engines (200+)](#plotting-engines-213)
 - [RPC Data Tools](#rpc-data-tools-188-methods)
 - [CLI Tools](#cli-tools-82)
-- [Any Engine Reflection](#any-engine-reflection-universal-fallback)
+- [Engine Reflection](#engine-reflection通用兜底)
 - [Project Structure](#project-structure)
 - [兼容层退役计划](#兼容层退役计划)
 - [Naming Convention](#naming-convention)
@@ -397,12 +397,17 @@ tbtools tool extractFasta          # extract/filter FASTA by ID list
 
 > 全部工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`(数量见 counts.md)
 
-## 🔬 Any Engine Reflection (universal fallback)
+## 🔬 Engine Reflection(通用兜底)
+
+两层入口(2026-10-07 修正: 旧示例引用的类名直调已退役, 现为注册制):
 
 ```bash
-tbtools engine <full.class.Name> key=value [--call method]
-# example: QuickStatFasta
-tbtools engine biocjava.bioIO.FastX.FastaIndex.QuickStatFasta inFile=seqs.fa --call stat
+# ① 注册反射命令(常用引擎一键, 170 个): tbtools engine <命令>  →  tbtools engine list 全览
+# ② 任意引擎类 setter 反射(Advanced):
+#    tbtools engine generic <engineClass> <method[+method2]> <out> --set field=value
+# 示例(离线纯计算, 秒回):
+tbtools engine seqrecommend 500000000
+#   → Hifi Depth: 15.0X - 20.0X / Hifi DataSize: 7.5E9 - 1.0E10(基因组组装测序量推荐)
 ```
 
 ---
