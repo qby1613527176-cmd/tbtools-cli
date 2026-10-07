@@ -1,0 +1,18 @@
+# sdist 瘦身(2026-10-07 PyPI 发布前检查: 无 MANIFEST.in 时 sdist 全量打包
+# plugins JAR/二进制 75.8MB——PyPI 源码包不应含二进制/测试/示例)
+include README.md
+include LICENSE
+include CHANGELOG.md
+recursive-include tbtools_cli *.py *.json *.toml
+recursive-include bridges *.java
+prune plugins
+prune examples
+prune tests
+prune scripts
+prune workflows
+prune docs
+prune ai
+prune dist
+prune .git
+prune *.egg-info
+global-exclude *.jar *.so *.exe *.pyc __pycache__ .pytest_cache

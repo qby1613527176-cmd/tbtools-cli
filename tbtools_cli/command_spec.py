@@ -1139,6 +1139,11 @@ def _load_verification_report() -> tuple[set, set, set]:
     import json as _j
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     p = os.path.join(root, "tests", "verification_report.json")
+    if not os.path.isfile(p):
+        # 安装态(pip wheel): report 作为发布时点验证证据经 data-files 装进包内
+        _pkg_p = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verification_report.json")
+        if os.path.isfile(_pkg_p):
+            p = _pkg_p
     if os.path.isfile(p):
         try:
             d = _j.load(open(p, encoding="utf-8"))

@@ -8,7 +8,8 @@ version = "1.4.90"
 description = "TBtools-II command-line wrapper: 200+ engines, 188+ RPC methods, journal presets, pitfall hints (exact counts via `tbtools version`)"
 readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
     { name = "tbtools-cli contributors" }
 ]
@@ -23,10 +24,12 @@ classifiers = [
 ]
 dependencies = [
     "click>=8.1",
+    "PyYAML>=6.0",  # command_spec _apply_contract_overlay YAML 快照校验(干净 venv 实测缺它 CLI 崩)
 ]
 
 [project.optional-dependencies]
 test = ["pytest>=7.0"]
+mcp = ["mcp"]  # tbtools mcp 子命令(MCP server, 延迟 import, 非核心)
 
 [project.urls]
 Homepage = "https://github.com/qby1613527176-cmd/tbtools-cli"  # 本仓库
@@ -51,7 +54,7 @@ include = ["tbtools_cli*"]
 "tbtools_cli/bridges" = ["bridges/*.java"]
 
 [tool.setuptools.package-data]
-tbtools_cli = ["command_metadata.json", "config.example.toml"]
+tbtools_cli = ["command_metadata.json", "command_metadata.fingerprint.json", "verification_report.json", "config.example.toml"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

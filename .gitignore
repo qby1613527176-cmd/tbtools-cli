@@ -65,3 +65,6 @@ examples/data/exec/**/*.sorted.sam
 examples/data/exec/**/*.sai
 examples/data/exec/**/*.TBtools.fa
 examples/data/exec/**/*.fai
+
+# PyPI 发布构建产物(发布时点验证证据快照; 真源= tests/verification_report.json)
+tbtools_cli/verification_report.json

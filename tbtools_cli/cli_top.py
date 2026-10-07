@@ -641,6 +641,8 @@ def register_top(cli, _LG):
         # verified_tools(单层 evidence map, canonical source)
         _verif_details_map: dict = {}
         _vrp = os.path.join(ROOT, "tests", "verification_report.json")
+        if not os.path.isfile(_vrp):
+            _vrp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "verification_report.json")
         if os.path.isfile(_vrp):
             try:
                 _vrd = _json.load(open(_vrp, encoding="utf-8"))
