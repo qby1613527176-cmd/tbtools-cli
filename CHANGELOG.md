@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.86] - 2026-10-07
+
+### 自评 P2 四连(验证语义 + 发布流程)
+- **verified N2**: verification_details 分叉时条件投影(顶层与嵌套 level 失配即不挂, 对齐降级语义)
+- **verified N3**: agent-protocol.md 补 env_fingerprint 爆破半径文档(全局单值语义)
+- **arch N7-F7**: clear_specs_cache 死钩子成因说明(静态注册表无 mutate 入口)
+- **docs F-NEW-9**: RELEASING step3 结构化(--render+--check 全绿即数字同步, 弃人工核对)
+- **门禁**: --check 298 命令/504 surface 全绿 / ruff 0 / mypy 0 / 149 passed
+
 ## [1.4.85] - 2026-10-07
 
 ### 自评 P2 四连(agent 面可读性)
