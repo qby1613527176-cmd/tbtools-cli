@@ -47,7 +47,7 @@ def _rpc_ping(port, timeout=5):
             data=json.dumps({"jsonrpc": "2.0", "method": "system.listMethods",
                              "params": {}, "id": 1}).encode(),
             headers={"Content-Type": "application/json"})
-        resp = opener.open(req, timeout=timeout, encoding="utf-8")
+        resp = opener.open(req, timeout=timeout)
         result = json.loads(resp.read())
         return "result" in result
     except Exception:
@@ -116,7 +116,7 @@ def _rpc_start_lock(port, timeout_s=20):
     """
     import time as _t
     lock = os.path.expanduser(f"~/.config/tbtools-cli/rpc-{port}.lock")
-    fd = os.open(lock, os.O_CREAT | os.O_RDWR, 0o644, encoding="utf-8")
+    fd = os.open(lock, os.O_CREAT | os.O_RDWR, 0o644)
     _locker = None
     try:
         import fcntl as _f
@@ -325,7 +325,7 @@ def rpc_methods(port, mem, autostart):
             f"http://127.0.0.1:{port}/rpc",
             data=json.dumps({"jsonrpc": "2.0", "method": "system.listMethods", "params": {}, "id": 1}).encode(),
             headers={"Content-Type": "application/json"})
-        resp = opener.open(req, timeout=15, encoding="utf-8")
+        resp = opener.open(req, timeout=15)
         result = json.loads(resp.read())
         res = result.get('result', [])
         methods = res.get('methods', res) if isinstance(res, dict) else res
@@ -356,7 +356,7 @@ def rpc_call(method, params, port, mem, timeout, no_autostart):
             f"http://127.0.0.1:{port}/rpc",
             data=json.dumps({"jsonrpc": "2.0", "method": method, "params": params_obj, "id": 1}).encode(),
             headers={"Content-Type": "application/json"})
-        resp = opener.open(req, timeout=timeout, encoding="utf-8")
+        resp = opener.open(req, timeout=timeout)
         result = json.loads(resp.read())
         if result.get('error'):
             # N38: 引擎错误 message 空/占位符时补友好提示（GffReconstructorBatch 等家族）

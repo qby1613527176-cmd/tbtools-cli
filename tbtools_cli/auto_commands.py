@@ -1197,7 +1197,7 @@ def _gxfSplit_impl(args, verbose=False, quiet=False):
     body = _json.dumps({"jsonrpc":"2.0","method":"GxfSplit.process",
         "params":{"inputPath": inp, "outputPrefix": prefix, "numOfFile": num}, "id":1}).encode()
     req = _ur.Request("http://127.0.0.1:8765/rpc", data=body, headers={"Content-Type":"application/json"})
-    resp = _json.loads(_ur.urlopen(req, timeout=120, encoding="utf-8").read())
+    resp = _json.loads(_ur.urlopen(req, timeout=120).read())
     if resp.get("error"):
         print(f"❌ RPC 错误: {resp['error']}", file=sys.stderr)
         return 1
@@ -1227,7 +1227,7 @@ def _gxfIdAppender_impl(args, verbose=False, quiet=False):
     body = _json.dumps({"jsonrpc":"2.0","method":"GxfIdAppender.process",
         "params":{"inputPath": inp, "outputPath": out, "prefix": prefix}, "id":1}).encode()
     req = _ur.Request("http://127.0.0.1:8765/rpc", data=body, headers={"Content-Type":"application/json"})
-    resp = _json.loads(_ur.urlopen(req, timeout=120, encoding="utf-8").read())
+    resp = _json.loads(_ur.urlopen(req, timeout=120).read())
     if resp.get("error"):
         print(f"❌ RPC 错误: {resp['error']}", file=sys.stderr)
         return 1
