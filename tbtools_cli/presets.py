@@ -94,7 +94,7 @@ def load_custom_preset(path):
     """从 JSON 文件加载自定义预设"""
     if not os.path.isfile(path):
         return None
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         data = json.load(f)
     PRESETS[data.get("name", "custom")] = data
     return data

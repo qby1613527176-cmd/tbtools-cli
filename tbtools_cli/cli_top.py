@@ -390,7 +390,7 @@ def register_top(cli, _LG):
                 req = urllib.request.Request("https://api.github.com/repos/CJ-Chen/TBtools-II/releases",
                     headers={"Accept": "application/vnd.github+json", "User-Agent": "tbtools-cli"})
                 import json
-                rels = json.loads(urllib.request.urlopen(req, timeout=30).read())
+                rels = json.loads(urllib.request.urlopen(req, timeout=30, encoding="utf-8").read())
                 tag = next((r["tag_name"] for r in rels
                             if any("portable" in a["name"] for a in r.get("assets", []))), None)
                 if not tag:
@@ -407,7 +407,7 @@ def register_top(cli, _LG):
             req = urllib.request.Request(f"https://api.github.com/repos/CJ-Chen/TBtools-II/releases/tags/{tag}",
                 headers={"Accept": "application/vnd.github+json", "User-Agent": "tbtools-cli"})
             import json
-            rel = json.loads(urllib.request.urlopen(req, timeout=30).read())
+            rel = json.loads(urllib.request.urlopen(req, timeout=30, encoding="utf-8").read())
             zip_name = next((a["name"] for a in rel.get("assets", []) if "portable" in a["name"] and a["name"].endswith(".zip")), None)
         except Exception as e:
             click.echo(f"❌ 查询资产失败: {e}", err=True)
@@ -419,7 +419,7 @@ def register_top(cli, _LG):
         size_mb = None
         try:
             req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "tbtools-cli"})
-            resp = urllib.request.urlopen(req, timeout=30)
+            resp = urllib.request.urlopen(req, timeout=30, encoding="utf-8")
             size_mb = int(resp.headers.get("Content-Length", 0)) / 1024 / 1024
         except Exception:
             pass
@@ -433,7 +433,7 @@ def register_top(cli, _LG):
         click.echo("  ⏳ 下载中（约 300MB，请稍候）...")
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "tbtools-cli"})
-            with urllib.request.urlopen(req, timeout=600) as r, open(tmp, "wb") as f:
+            with urllib.request.urlopen(req, timeout=600, encoding="utf-8") as r, open(tmp, "wb") as f:
                 import shutil as _sh
                 _sh.copyfileobj(r, f)
         except Exception as e:
@@ -454,7 +454,7 @@ def register_top(cli, _LG):
                 for n in z.namelist():
                     if n.endswith("TBtools_JRE1.6.jar"):
                         click.echo(f"  📂 提取 {n}")
-                        with z.open(n) as src, open(jar_target, "wb") as dst:
+                        with z.open(n, encoding="utf-8") as src, open(jar_target, "wb") as dst:
                             _sh = __import__("shutil")
                             _sh.copyfileobj(src, dst)
                         found = True
@@ -936,7 +936,7 @@ def register_top(cli, _LG):
         if as_json:
             import os as _os
             _saved_fd = _os.dup(1)
-            _devnull = _os.open(_os.devnull, _os.O_WRONLY)
+            _devnull = _os.open(_os.devnull, _os.O_WRONLY, encoding="utf-8")
             _os.dup2(_devnull, 1)
             _os.close(_devnull)
 
@@ -1117,7 +1117,7 @@ try:
     job = json.load(open(jf, encoding='utf-8'))
     jd = os.path.dirname(jf)
     log = open(os.path.join(jd, job['id'] + '.log'), 'w', encoding='utf-8')
-    p = subprocess.Popen([sys.executable, '-m', 'tbtools_cli.cli'] + job['args'], stdout=log, stderr=subprocess.STDOUT, close_fds=True)
+    p = subprocess.Popen([sys.executable, '-m', 'tbtools_cli.cli'] + job['args'], stdout=log, stderr=subprocess.STDOUT, close_fds=True, encoding="utf-8")
     job['pid'] = p.pid; job['status'] = 'running'
     json.dump(job, open(jf, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     try:
@@ -1990,7 +1990,7 @@ except Exception:
             with open(path, 'rb') as fh:
                 head = fh.read(4)
             gz = head[:2] == b'\x1f\x8b'
-            lines = sum(1 for _ in open(path, 'r', errors='replace')) if size < 50_000_000 else None
+            lines = sum(1 for _ in open(path, 'r', errors='replace', encoding="utf-8")) if size < 50_000_000 else None
             click.echo(f"\n📄 {path}")
             click.echo(f"   格式: {fmt}{'+gzip' if gz else ''}   大小: {size:,}B" + (f"   行数: {lines:,}" if lines is not None else ""))
             if ncols:

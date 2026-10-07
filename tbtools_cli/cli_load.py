@@ -202,7 +202,7 @@ def _load_dynamic_commands():
     tbplot_sh = os.path.join(ROOT, "bin", "tbplot.sh")
     if not os.path.isfile(tbplot_sh):
         return
-    with open(tbplot_sh) as f:
+    with open(tbplot_sh, encoding="utf-8") as f:
         content = f.read()
     cmds = set(re.findall(r'^  ([a-zA-Z][a-zA-Z0-9]+)\)$', content, re.MULTILINE))
     # 已迁移命令的原始名（不动态转发）——用 tbplot.sh 里的原始命令名

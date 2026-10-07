@@ -47,7 +47,7 @@ def _rpc_ping(port, timeout=5):
             data=json.dumps({"jsonrpc": "2.0", "method": "system.listMethods",
                              "params": {}, "id": 1}).encode(),
             headers={"Content-Type": "application/json"})
-        resp = opener.open(req, timeout=timeout)
+        resp = opener.open(req, timeout=timeout, encoding="utf-8")
         result = json.loads(resp.read())
         return "result" in result
     except Exception:
@@ -57,7 +57,7 @@ def _rpc_read_pid(port):
     """读 pid 文件；进程不存在或与 RPC 无关则清理并返回 None"""
     pid_file = _rpc_pid_file(port)
     try:
-        with open(pid_file) as f:
+        with open(pid_file, encoding="utf-8") as f:
             pid = int(f.read().strip())
     except Exception:
         return None
@@ -94,7 +94,7 @@ def _rpc_launch(port, mem):
         raise FileNotFoundError(
             "TBtools jar 未找到。请设置 TBTOOLS_JAR 环境变量或放入常见位置")
     log_path = _rpc_log_file(port)
-    log_fh = open(log_path, "ab", buffering=0)
+    log_fh = open(log_path, "ab", buffering=0, encoding="utf-8")
     args = [
         "java", f"-Xmx{mem}",
         # N35: OOM 时宁可崩溃（可自愈拉起）也不要僵尸悬挂；同时留堆转储供排查
@@ -116,7 +116,7 @@ def _rpc_start_lock(port, timeout_s=20):
     """
     import time as _t
     lock = os.path.expanduser(f"~/.config/tbtools-cli/rpc-{port}.lock")
-    fd = os.open(lock, os.O_CREAT | os.O_RDWR, 0o644)
+    fd = os.open(lock, os.O_CREAT | os.O_RDWR, 0o644, encoding="utf-8")
     _locker = None
     try:
         import fcntl as _f
@@ -149,7 +149,7 @@ def _rpc_start_lock(port, timeout_s=20):
 _RPC_CRASHES: dict = {}  # port -> [崩溃时间戳...](P1-20 crash-loop breaker)
 
 
-def _rpc_breaker_open(port) -> bool:
+def _rpc_breaker_open(port, encoding="utf-8") -> bool:
     """60s 内 ≥3 次启动崩溃 → breaker OPEN(停止自动重启)"""
     import time as _t
     now = _t.time()
@@ -197,7 +197,7 @@ def _ensure_rpc(port, mem="4g", wait_s=30, quiet=False):
         click.echo(_tr("⚠️ RPC 服务器不可达（端口 {p}），自动拉起...", "⚠️ RPC server unreachable (port {p}) — auto-restarting...").format(p=port), err=True)
     try:
         # P1-20: crash-loop breaker(反复崩溃不再自动重启)
-        if _rpc_breaker_open(port):
+        if _rpc_breaker_open(port, encoding="utf-8"):
             click.echo(f"🛑 RPC crash-loop breaker: 60s 内 ≥3 次启动失败, 停止自动重启。"
                        f"诊断: tbtools rpc logs -p {port};手动恢复: tbtools rpc start -p {port} --force", err=True)
             _rpc_record_crash(port)
@@ -325,7 +325,7 @@ def rpc_methods(port, mem, autostart):
             f"http://127.0.0.1:{port}/rpc",
             data=json.dumps({"jsonrpc": "2.0", "method": "system.listMethods", "params": {}, "id": 1}).encode(),
             headers={"Content-Type": "application/json"})
-        resp = opener.open(req, timeout=15)
+        resp = opener.open(req, timeout=15, encoding="utf-8")
         result = json.loads(resp.read())
         res = result.get('result', [])
         methods = res.get('methods', res) if isinstance(res, dict) else res
@@ -356,7 +356,7 @@ def rpc_call(method, params, port, mem, timeout, no_autostart):
             f"http://127.0.0.1:{port}/rpc",
             data=json.dumps({"jsonrpc": "2.0", "method": method, "params": params_obj, "id": 1}).encode(),
             headers={"Content-Type": "application/json"})
-        resp = opener.open(req, timeout=timeout)
+        resp = opener.open(req, timeout=timeout, encoding="utf-8")
         result = json.loads(resp.read())
         if result.get('error'):
             # N38: 引擎错误 message 空/占位符时补友好提示（GffReconstructorBatch 等家族）

@@ -562,7 +562,7 @@ def _muscle_impl(args, verbose=False, quiet=False):
         print(f"❌ muscle 失败:\n{r.stderr[-500:]}", file=sys.stderr)
         return r.returncode or 1
     if not quiet:
-        n = sum(1 for l in open(out_aln) if l.startswith(">"))
+        n = sum(1 for l in open(out_aln, encoding="utf-8") if l.startswith(">"))
         print(f"[muscle] 比对完成({'v5' if is_v5 else 'v3'} 语法): {n} 条 → {out_aln}", file=sys.stderr)
     return 0
 
@@ -610,7 +610,7 @@ def _getseqdb_impl(args, verbose=False, quiet=False):
         print(f"❌ blastdbcmd 失败:\n{r.stderr[-400:]}", file=sys.stderr)
         return r.returncode or 1
     if not quiet:
-        n = sum(1 for l in open(out_fa) if l.startswith(">"))
+        n = sum(1 for l in open(out_fa, encoding="utf-8") if l.startswith(">"))
         print(f"[getseqdb] 提取 {n} 条 → {out_fa}", file=sys.stderr)
     return 0
 
@@ -694,7 +694,8 @@ def _genomefilter_impl(args, verbose=False, quiet=False):
         else:
             print(f"⚠️ GXF 文件不存在，跳过: {gxf}", file=sys.stderr)
     if not quiet:
-        print(f"[genomefilter] {len(keep_ids)}/{len(open(in_fa).readlines())} 序列保留 → {out_fa}", file=sys.stderr)
+        _n_total = len(open(in_fa, encoding="utf-8").readlines())
+        print(f"[genomefilter] {len(keep_ids)}/{_n_total} 序列保留 → {out_fa}", file=sys.stderr)
     return 0
 
 
@@ -885,7 +886,7 @@ def _findBestHomologyBatch_impl(args, verbose=False, quiet=False):
             print("❌ query FASTA 无序列头", file=sys.stderr)
             return 3
         tmp_targets = safe_temp(prefix="tb_fbh.", suffix=".tsv")
-        with open(tmp_targets, "w") as fh:
+        with open(tmp_targets, "w", encoding="utf-8") as fh:
             fh.write(f"{kw.get('targetName') or 'All'}\t{','.join(ids)}\n")
         target_list = tmp_targets
     try:
@@ -993,7 +994,7 @@ def _mirnatarget_impl(args, verbose=False, quiet=False):
         os.makedirs(od, exist_ok=True)
     tmp_m10 = safe_temp(prefix="tb_mirna.", suffix=".m10")
     try:
-        with open(tmp_m10, "w") as fh:
+        with open(tmp_m10, "w", encoding="utf-8") as fh:
             r = subprocess.run([ssearch, "-w", "100", "-W", "25", "-E", str(evalue),
                                 "-m", "10", "-T", "1", "-i", "-U", mirna, target],
                                stdout=fh, stderr=subprocess.PIPE)
@@ -1196,7 +1197,7 @@ def _gxfSplit_impl(args, verbose=False, quiet=False):
     body = _json.dumps({"jsonrpc":"2.0","method":"GxfSplit.process",
         "params":{"inputPath": inp, "outputPrefix": prefix, "numOfFile": num}, "id":1}).encode()
     req = _ur.Request("http://127.0.0.1:8765/rpc", data=body, headers={"Content-Type":"application/json"})
-    resp = _json.loads(_ur.urlopen(req, timeout=120).read())
+    resp = _json.loads(_ur.urlopen(req, timeout=120, encoding="utf-8").read())
     if resp.get("error"):
         print(f"❌ RPC 错误: {resp['error']}", file=sys.stderr)
         return 1
@@ -1226,7 +1227,7 @@ def _gxfIdAppender_impl(args, verbose=False, quiet=False):
     body = _json.dumps({"jsonrpc":"2.0","method":"GxfIdAppender.process",
         "params":{"inputPath": inp, "outputPath": out, "prefix": prefix}, "id":1}).encode()
     req = _ur.Request("http://127.0.0.1:8765/rpc", data=body, headers={"Content-Type":"application/json"})
-    resp = _json.loads(_ur.urlopen(req, timeout=120).read())
+    resp = _json.loads(_ur.urlopen(req, timeout=120, encoding="utf-8").read())
     if resp.get("error"):
         print(f"❌ RPC 错误: {resp['error']}", file=sys.stderr)
         return 1

@@ -123,7 +123,7 @@ def register(art: "Artifact") -> str | None:
                 _fcntl_mod = None  # type: ignore[assignment]
                 _lock_mode = "none"
         lock_path = p + ".lock"
-        with open(lock_path, "w") as _lf:
+        with open(lock_path, "w", encoding="utf-8") as _lf:
             if _fcntl_mod:
                 try:
                     if _lock_mode == "fcntl":
