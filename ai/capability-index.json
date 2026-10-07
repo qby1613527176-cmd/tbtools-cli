@@ -58,11 +58,11 @@
   "preparespecies",
   "regionAnno",
   "bed2gff3",
+  "genestructure",
   "gxfAttr",
   "smart",
   "gxfSplit",
-  "gxfIdAppender",
-  "genestructure"
+  "gxfIdAppender"
  ],
  "assembly": [
   "bamMerge",
@@ -158,10 +158,10 @@
   "volcano",
   "heatmap",
   "dehist",
-  "memeViz",
-  "msy",
   "genestructure",
-  "seqlogo"
+  "seqlogo",
+  "memeViz",
+  "msy"
  ],
  "genome_circos": [
   "circos"
@@ -178,9 +178,9 @@
   "unrooted",
   "rooting",
   "one-step",
+  "treeRooting",
   "notung",
   "newickRename",
-  "treeRooting",
   "tree",
   "onesteptree"
  ],
@@ -236,10 +236,10 @@
   "mastrun",
   "memerun",
   "motif",
+  "seqlogo",
   "fimo",
   "memeViz",
-  "tfbsShift",
-  "seqlogo"
+  "tfbsShift"
  ],
  "sequence_extraction": [
   "mastExtract"
@@ -332,6 +332,12 @@
  "distance": [
   "hclust"
  ],
+ "gene_structure": [
+  "genestructure"
+ ],
+ "rooting": [
+  "treeRooting"
+ ],
  "hmm_scan": [
   "hmmsearch",
   "hmmerSearch"
@@ -353,11 +359,5 @@
  ],
  "microsynteny": [
   "msy"
- ],
- "gene_structure": [
-  "genestructure"
- ],
- "rooting": [
-  "treeRooting"
  ]
 }

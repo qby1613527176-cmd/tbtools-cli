@@ -53,54 +53,50 @@ def scan_cli_tools():
 
 
 def scan_manual_commands():
-    src = open(CLI, encoding="utf-8").read()
-    cmds = {}
-    # 1) 装饰器命令(顶层管理命令跳过)
+    """手动命令扫描——arch N5 中期: 与 command_spec 共用 AST 扫描器(source_scan),
+    替代三组脆弱正则(装饰器强制 docstring/[^)]* 断链/无 docstring 错配/引号截断),
+    保证两侧(模型/投影)同源同果。
+
+    产出 cmds: {name: {name, kind, mode, class, xmx, runner, help, src}}。
+    help = docstring cleandoc 首 300(与 command_spec.doc 同源)。"""
+    from tbtools_cli.source_scan import ast_scan_commands as _ast_scan
     # 自审 v1.4.82 arch N4: KNOWN_TOP_MANUAL 单一来源——此前两份字面拷贝, 改一边漏一边
     # 会破 298=298 等价。从 command_spec 导入(真源)。
     from tbtools_cli.command_spec import KNOWN_TOP_MANUAL as _KNOWN_TOP_MANUAL
-    for name in re.findall(r"@(?:\w+_group|\w+)\.command\(\s*['\"]([a-zA-Z][a-zA-Z0-9_-]*)['\"]", src):
-        # 顶层 Agent/管理命令(非生信工具, 不进 metadata 模型; 含 09/23 新增 Agent 接口层)
-        if name in _KNOWN_TOP_MANUAL:
-            continue
-        cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
-                      "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
-    # 2) docstring 首行(跨 click 装饰器): 装饰器+def+docstring
-    for m in re.finditer(
-        r'@(?:\w+_group|\w+)\.command\(\s*[\"\']([a-zA-Z][a-zA-Z0-9_-]*)[\"\']\)'
-        r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*\"\"\"([^\"]{0,300})',
-        src, re.M | re.S):
-        cmd, d = m.group(1), m.group(2).strip()[:300]
-        if cmd in cmds and d:
-            cmds[cmd]["help"] = d
-    # 3) auto_commands 手写 impl(N23/N26 后 msy/mirnatarget 等必须可发现)
     try:
-        ac_src = open(os.path.join(os.path.dirname(CLI), "auto_commands.py"), encoding="utf-8").read()
-        for m in re.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\"]{0,300})", ac_src, re.M | re.S):
-            name, docfirst = m.group(1), m.group(2).strip()
-            if name in cmds or name in ("simplehmmscan", "longestorf"):
-                continue
-            cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
-                          "xmx": "", "runner": "plot", "help": docfirst[:300], "src": "auto_manual"}
-    except Exception as _e85:
+        _scanned = _ast_scan(open(CLI, encoding="utf-8").read(),
+                             open(os.path.join(os.path.dirname(CLI), "auto_commands.py"),
+                                  encoding="utf-8").read())
+    except Exception as _e_scan:
         # gate P2-1: manual 扫描失败 → 该批命令静默消失(arch N6 同源), 可见化
-        print(f"⚠️ 告警: auto_commands 源码扫描失败, manual 命令可能缺失: {_e85}", file=sys.stderr)
-    for m in re.finditer(r"(\w+_group)\.add_command\((\w+),\s*name=[\"']([a-zA-Z][a-zA-Z0-9_]*)[\"']\)", src):
-        fn, alias = m.group(2), m.group(3)
-        if alias not in cmds:
-            cmds[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
-                           "xmx": "", "runner": "plot", "help": "", "src": "cli_manual"}
-        if not cmds[alias].get("help"):
-            # 函数名→命令名: 分组前缀去除 + 已知特例(seqlogo 函数 → logo 命令)
-            target = {"seqlogo": "logo"}.get(fn, fn)
-            for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
-                if target.startswith(_p):
-                    target = target[len(_p):]
-                    break
-            if target in cmds and cmds[target].get("help"):
-                cmds[alias]["help"] = f"(alias of {target}) " + cmds[target]["help"]
-            elif fn in cmds and cmds[fn].get("help"):
-                cmds[alias]["help"] = f"(alias of {fn}) " + cmds[fn]["help"]
+        print(f"⚠️ 告警: manual 源码扫描失败, manual 命令可能缺失: {_e_scan}", file=sys.stderr)
+        return {}
+    cmds = {}
+    for _n, _e in _scanned.items():
+        # 顶层 Agent/管理命令(非生信工具, 不进 metadata 模型; 含 09/23 新增 Agent 接口层)
+        if _n in _KNOWN_TOP_MANUAL:
+            continue
+        if _e["src"] == "auto_manual" and _n in ("simplehmmscan", "longestorf"):
+            continue  # 历史排除(与旧正则逻辑一致)
+        if _n in cmds:
+            continue
+        cmds[_n] = {"name": _n, "kind": "manual", "mode": "manual", "class": "",
+                    "xmx": "", "runner": "plot", "help": _e["doc"], "src": _e["src"]}
+    # add_command 别名 help 借用(函数名→命令名: 分组前缀去除 + 已知特例)
+    for _n, _e in _scanned.items():
+        if _e["src"] != "cli_manual" or not _e["fn"] or _n not in cmds:
+            continue
+        if cmds[_n].get("help"):
+            continue
+        target = {"seqlogo": "logo"}.get(_e["fn"], _e["fn"])
+        for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
+            if target.startswith(_p):
+                target = target[len(_p):]
+                break
+        if target in cmds and cmds[target].get("help"):
+            cmds[_n]["help"] = f"(alias of {target}) " + cmds[target]["help"]
+        elif _e["fn"] in cmds and cmds[_e["fn"]].get("help"):
+            cmds[_n]["help"] = f"(alias of {_e['fn']}) " + cmds[_e["fn"]]["help"]
     return cmds
 
 

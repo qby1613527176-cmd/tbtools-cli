@@ -5,7 +5,7 @@
  "group": "expr",
  "kind": "manual",
  "class": "",
- "description": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
+ "description": "层次聚类树（三列距离文件 GeneA      GeneB   dist）",
  "invoke": "tbtools expr hclust <args...>",
  "capabilities": [
   "clustering",

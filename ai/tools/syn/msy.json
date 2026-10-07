@@ -5,7 +5,7 @@
  "group": "syn",
  "kind": "manual",
  "class": "",
- "description": "格式: pos=Chr\\\\tGene\\\\tStart\\\\tEnd；links=GeneA\\\\t",
+ "description": "格式: pos=Chr\\tGene\\tStart\\tEnd；links=GeneA\\tGeneB\\t[r,g,b]；layout=Gen",
  "invoke": "tbtools syn msy <args...>",
  "capabilities": [
   "microsynteny",

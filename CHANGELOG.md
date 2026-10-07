@@ -2,6 +2,15 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.90] - 2026-10-07
+
+### arch N5 中期: 源码扫描 AST 化(正则脆弱性簇根因消灭)
+- **新模块 source_scan.py**: cli.py/auto_commands.py 命令扫描从三组脆弱正则 → AST(ast.parse 一次拿 decorator/FunctionDef/docstring/模块级 add_command Call)——装饰器强制 docstring / `[^)]*` 默认值含 `)` 断链 / 无 docstring 错配下一条 / 顶层 @cli.command 单侧漂移 / docstring 内双引号提前截断(如 tableMerge `--inFileArr "f1,f2"`)全部消灭
+- **doc 语义升级**: ast.get_docstring(cleandoc 去公共缩进 + Python 转义语义)——8 个命令 help 表示更干净(hclust 真 tab、fa2tab 转义、引号不再截断), 内容等价
+- **双侧共用同一扫描器**: command_spec.build_command_specs 与 gen_metadata.scan_manual_commands 同用 source_scan(禁止两侧复制扫描逻辑)——298=298 字段级零差异验证(kind/group/runner/help 全等)
+- **顺带**: cli_load._spec_groups 在 import 链中间态(部分初始化)的误告警修复——中间态静默(稍后完整调用重建模型分组), 运行时故障才 warn
+- **门禁**: pytest 627 passed + 52 skipped + 2 xfailed(含 conformance 全量 59) / --check 298 命令/505 surface 全绿 / ruff 0 / mypy 0
+
 ## [1.4.89] - 2026-10-07
 
 ### 自评 P2×7 收官——剩余 P2 全部闭环(自审战役终章)

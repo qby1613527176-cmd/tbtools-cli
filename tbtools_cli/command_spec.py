@@ -861,65 +861,43 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
     # 3. 手动命令: 从 CLI 源码 + auto_commands 手写 impl 扫描(自审红队 P1-1: 退掉
     #    metadata fallback——command_metadata.json 是 projection 不是 source, runtime
     #    不能回填它; 真源 = cli.py 装饰器命令 + _xxx_impl 手写实现, 与 gen_metadata 同逻辑)
+    # 自审 arch N5 中期: 扫描从脆弱正则换 AST(装饰器强制 docstring/[^)]* 默认值断链/
+    # 无 docstring 错配下一条/引号提前截断 全部消灭; source_scan 与 gen_metadata 共用)
     try:
-        import re as _re_man
-        cli_src = open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-                                    "tbtools_cli", "cli.py"), encoding="utf-8").read()
+        from tbtools_cli.source_scan import ast_scan_commands as _ast_scan
+        _ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        _scanned = _ast_scan(
+            open(os.path.join(_ROOT_DIR, "tbtools_cli", "cli.py"), encoding="utf-8").read(),
+            open(os.path.join(_ROOT_DIR, "tbtools_cli", "auto_commands.py"), encoding="utf-8").read(),
+        )
         # 自审红队 P1-1 修复: manual 分组从**装饰器前缀**推断(@expr_group.command → expr)——
         # CATEGORY_MAP 只覆盖 189 命令, manual 命令(logo/volcano/structure 等)不在其中,
-        # 用 CATEGORY_MAP 回退会错标 engine。group 推断与 gen_metadata._infer_group 同源。
-        for _m in _re_man.finditer(
-                r'@(\w+_group)\.command\(\s*[\'"]([a-zA-Z][a-zA-Z0-9_-]*)[\'"]'
-                r'[\s\S]*?^def [a-zA-Z_][a-zA-Z0-9_]*\([^)]*\):\s*"""([^"]{0,300})',
-                cli_src, _re_man.M | _re_man.S):
-            _grp, _n, _d = _m.group(1), _m.group(2), _m.group(3).strip()
-            if _n not in specs and _n not in KNOWN_TOP_MANUAL:
-                specs[_n] = CommandSpec(
-                    name=_n, group=_grp[:-6], kind="manual",  # expr_group → expr
-                    runner="plot", doc=_d or "",
-                )
-        # auto_commands 手写 impl(msy/mirnatarget/tableMerge 等必须可发现)
-        try:
-            ac_src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "auto_commands.py"),
-                          encoding="utf-8").read()
-            for _m in _re_man.finditer(r"^def _([a-zA-Z0-9]+)_impl\([^)]*\):\s*\"\"\"([^\"]{0,300})",
-                                       ac_src, _re_man.M | _re_man.S):
-                _n, _d = _m.group(1), _m.group(2).strip()
-                if _n not in specs and _n not in KNOWN_TOP_MANUAL:
-                    specs[_n] = CommandSpec(
-                        name=_n, group=CATEGORY_MAP.get(_n, "engine"), kind="manual",
-                        runner="plot", doc=_d or "",
-                    )
-        except Exception as _e881:
-            # 自审 arch N6: manual 装饰器扫描失败 → 该批命令静默消失(不可观测), 可见化
-            import warnings as _w881
-            _w881.warn(f"manual 装饰器扫描失败(cli.py), manual 命令可能缺失: {_e881}", RuntimeWarning, stacklevel=2)
-        # add_command 显式注册(seqlogo→logo? 实际 name=seqlogo; heatmap→heatmap2)
-        # ——装饰器正则抓不到, gen_metadata scan_manual_commands 第 4 步同源逻辑
-        # 注意: 此路径的 group 对齐 gen_metadata(_infer_group 对 add_command 无装饰器可推,
-        # 回退 CATEGORY_MAP/engine——metadata 投影同源, 不能自创 seq/expr)
-        for _m in _re_man.finditer(
-                r"(?:\w+_group)\.add_command\((\w+),\s*name=[\'\"]([a-zA-Z][a-zA-Z0-9_]*)[\'\"]\)",
-                cli_src):
-            _fn, _n = _m.group(1), _m.group(2)
-            if _n not in specs and _n not in KNOWN_TOP_MANUAL:
-                specs[_n] = CommandSpec(
-                    name=_n, group=CATEGORY_MAP.get(_n, "engine"), kind="manual",
-                    runner="plot", doc="",
-                )
-            # 自审 v1.4.82 arch N2: add_command 别名 help 借用上移真源——否则
-            # genestructure/seqlogo/treeRooting/heatmap2 的 doc 为空, 借用逻辑只活
-            # 在 gen_metadata 投影层, 破坏 P1-1 "specs 唯一真源"方向性承诺。
+        # 用 CATEGORY_MAP 回退会错标 engine。auto impl/add_command 无装饰器前缀可推 →
+        # CATEGORY_MAP/engine(与 gen_metadata._infer_group 同源, 不自创 seq/expr)。
+        for _n, _e in _scanned.items():
+            if _n in KNOWN_TOP_MANUAL or _n in specs:
+                continue
+            _grp = _e["group"] if _e["group"] is not None else CATEGORY_MAP.get(_n, "engine")
+            specs.setdefault(_n, CommandSpec(
+                name=_n, group=_grp, kind="manual",
+                runner="plot", doc=_e["doc"] or "",
+            ))
+        # 自审 v1.4.82 arch N2: add_command 别名 help 借用上移真源——否则
+        # genestructure/seqlogo/treeRooting/heatmap2 的 doc 为空, 借用逻辑只活
+        # 在 gen_metadata 投影层, 破坏 P1-1 "specs 唯一真源"方向性承诺。
+        for _n, _e in _scanned.items():
+            if _e["src"] != "cli_manual" or not _e["fn"]:
+                continue
             if _n in specs and not specs[_n].doc:
-                _target = {"seqlogo": "logo"}.get(_fn, _fn)
+                _target = {"seqlogo": "logo"}.get(_e["fn"], _e["fn"])
                 for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
                     if _target.startswith(_p):
                         _target = _target[len(_p):]
                         break
                 if _target in specs and specs[_target].doc:
                     specs[_n].doc = f"(alias of {_target}) " + specs[_target].doc
-                elif _fn in specs and specs[_fn].doc:
-                    specs[_n].doc = f"(alias of {_fn}) " + specs[_fn].doc
+                elif _e["fn"] in specs and specs[_e["fn"]].doc:
+                    specs[_n].doc = f"(alias of {_e['fn']}) " + specs[_e["fn"]].doc
     except Exception as _e920:
         # 自审 arch N6: 构建尾部异常 → 部分标注/挂接缺失, 可见化(不阻断, 但不再沉默)
         import warnings as _w920

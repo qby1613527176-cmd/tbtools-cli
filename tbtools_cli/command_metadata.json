@@ -7974,7 +7974,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "expr",
-  "help": "层次聚类树（三列距离文件 GeneA\\tGeneB\\tdist）",
+  "help": "层次聚类树（三列距离文件 GeneA      GeneB   dist）",
   "semantic_fingerprint": "54bd9c88444c5b183c5ea50aceba15c047448fce12fb0557d5a6fc717948cad8",
   "semantic_fingerprint_short": "54bd9c88444c5b18",
   "readiness": "FULL",
@@ -8321,6 +8321,204 @@
   "readiness": "LEGACY",
   "verification": "DECLARED"
  },
+ "genestructure": {
+  "name": "genestructure",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "2g",
+  "runner": "plot",
+  "group": "seq",
+  "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
+  "semantic_fingerprint": "36cea377e1a4660eb2f24494a950c12ce49918aee5839ae03292130a302c6f37",
+  "semantic_fingerprint_short": "36cea377e1a4660e",
+  "alias_of": "structure",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
+  "capabilities": [
+   "gene_structure",
+   "annotation",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "annotation.gene_structure",
+   "gene_structure",
+   "genomics",
+   "genomics.annotation",
+   "visualization"
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "GENE_STRUCTURE_PLOT"
+   ]
+  },
+  "parameters": [
+   {
+    "name": "w",
+    "type": "int",
+    "default": 1000,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "h",
+    "type": "int",
+    "default": 800,
+    "required": false,
+    "note": ""
+   },
+   {
+    "name": "genome",
+    "type": "string",
+    "default": null,
+    "required": false,
+    "note": "可选基因组 FASTA"
+   }
+  ],
+  "inputs": [
+   {
+    "name": "gff",
+    "role": "file",
+    "format": "gff3",
+    "required": true,
+    "note": "",
+    "content_type": "annotation"
+   },
+   {
+    "name": "ids",
+    "role": "file",
+    "format": "txt",
+    "required": true,
+    "note": "",
+    "content_type": "annotation"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ],
+  "output_slots": [
+   {
+    "name": "svg",
+    "format": "svg"
+   }
+  ]
+ },
+ "treeRooting": {
+  "name": "treeRooting",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "2g",
+  "runner": "plot",
+  "group": "tree",
+  "help": "(alias of rooting) MAD 系统发育定根",
+  "semantic_fingerprint": "d1974459d437882252b09b9a8dea53186396586cf95876513749f48cea183c31",
+  "semantic_fingerprint_short": "d1974459d4378822",
+  "alias_of": "rooting",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
+  "capabilities": [
+   "phylogeny",
+   "rooting"
+  ],
+  "capabilities_ontology": [
+   "phylogeny",
+   "phylogeny.rooting",
+   "rooting"
+  ],
+  "relations": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
+  "inputs": [
+   {
+    "name": "nwk",
+    "role": "file",
+    "format": "newick",
+    "required": true,
+    "note": "需枝长"
+   }
+  ],
+  "outputs": [
+   "nwk"
+  ],
+  "output_slots": [
+   {
+    "name": "nwk",
+    "format": "nwk"
+   }
+  ]
+ },
+ "seqlogo": {
+  "name": "seqlogo",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "2g",
+  "runner": "plot",
+  "group": "engine",
+  "help": "(alias of logo) 序列 LOGO 图",
+  "semantic_fingerprint": "ee628f7ad9f3adb6e3004099861257c18c875e25d5cf421281d7e7f27b15c034",
+  "semantic_fingerprint_short": "ee628f7ad9f3adb6",
+  "readiness": "FULL",
+  "verification": "EXECUTION_VERIFIED",
+  "capabilities": [
+   "motif",
+   "visualization"
+  ],
+  "capabilities_ontology": [
+   "motif",
+   "sequence",
+   "sequence.motif",
+   "visualization"
+  ],
+  "inputs": [
+   {
+    "name": "seqs",
+    "role": "file",
+    "format": "fasta",
+    "required": true,
+    "note": "",
+    "content_type": "alignment"
+   }
+  ],
+  "outputs": [
+   "svg"
+  ],
+  "output_slots": [
+   {
+    "name": "svg",
+    "format": "svg"
+   }
+  ]
+ },
+ "heatmap2": {
+  "name": "heatmap2",
+  "kind": "manual",
+  "mode": "manual",
+  "class": "",
+  "xmx": "2g",
+  "runner": "plot",
+  "group": "engine",
+  "help": "(alias of heatmap) 热图（表达矩阵）",
+  "semantic_fingerprint": "3437424ac5b5b7d21470dd7cd5b40ed3ff7595cf80e3e02476b8a4e2a4f2c6a9",
+  "semantic_fingerprint_short": "3437424ac5b5b7d2",
+  "readiness": "LEGACY",
+  "verification": "DECLARED"
+ },
  "make": {
   "name": "make",
   "kind": "manual",
@@ -8621,7 +8819,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "seq",
-  "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
+  "help": "fa2tab: fa2tab <in.fa> <out.tab>   # FASTA→表格 ID\\t序列（GUI 逆向 #26 FastaTable.fa2tab；与 tab2fa 往返一致）",
   "semantic_fingerprint": "a5a9475da11c1d7da718582dc9d89b096de2f59f08c4e7c35be0ba9e2c0c770a",
   "semantic_fingerprint_short": "a5a9475da11c1d7d",
   "readiness": "PARTIAL",
@@ -8858,7 +9056,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "tree",
-  "help": "notung: notung <gene.nwk> -s <species.nwk> --out <out.nwk> [--reconcile 原生参数...]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）\n    产物搬运: Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir → 复制到 out。\n    out 用显式 --out 传参(不解析位置参数——Notung 带值 flag 众多(--speciestag/\n    --treeoutput/--mapping.",
+  "help": "notung: notung <gene.nwk> -s <species.nwk> --out <out.nwk> [--reconcile 原生参数...]   # 基因树-物种树 reconcile（duplication/loss 推断，插件 P00651 CLI 化）\n产物搬运: Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir → 复制到 out。\nout 用显式 --out 传参(不解析位置参数——Notung 带值 flag 众多(--speciestag/\n--treeoutput/--mapping...), 黑名单解析脆弱",
   "semantic_fingerprint": "70098a6ad211c7f36e7ae320bc336f8da495762ddbf6303fbd5552bfe787e5c8",
   "semantic_fingerprint_short": "70098a6ad211c7f3",
   "readiness": "FULL",
@@ -8918,7 +9116,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "tree",
-  "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\\\tNewName）",
+  "help": "newickRename: newickRename --inNwk <tree.nwk> --renameMap <map.tsv> --outNwk <out.nwk>   # 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName）",
   "semantic_fingerprint": "c06c470c8dac7a9195702af7269a872fe513e4cfbe82c518902b1f5c51afabb7",
   "semantic_fingerprint_short": "c06c470c8dac7a91",
   "readiness": "FULL",
@@ -9365,7 +9563,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "mirna",
-  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]\n       # miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli\n       #   原表驱动误把本命令直通 TargetScoreCli（其输入是 ssearch36 的 m10，不是 FASTA），\n       #   导致第 2 参数被当输出清零、第 3 参被忽略、输出永不落盘——现恢复完整",
+  "help": "mirnatarget: mirnatarget <mirna.fa> <target.fa> <out.tsv> [--evalue X]\n# miRNA 靶标预测完整管线（N23 修复）：ssearch36 -w 100 -W 25 -E X -m 10 -T 1 -i -U <mirna> <target> → TargetScoreCli\n#   原表驱动误把本命令直通 TargetScoreCli（其输入是 ssearch36 的 m10，不是 FASTA），\n#   导致第 2 参数被当输出清零、第 3 参被忽略、输出永不落盘——现恢复完整管线并校验输出。\n# 依赖: ssearc",
   "semantic_fingerprint": "0dd732c4784caa3339a2cfd6ae61e8198e777e8e099227e15ca217666fc0b1cb",
   "semantic_fingerprint_short": "0dd732c4784caa33",
   "readiness": "LEGACY",
@@ -9379,7 +9577,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "syn",
-  "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n       # 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n       #   engineClass 导致 ClassNotFoundException——现按 tbplot.sh 已验证调用方式显式拼参数）\n       # 格式: pos=Chr\\\\tGene\\\\tStart\\\\tEnd；links=GeneA\\\\t",
+  "help": "msy: msy <simplifiedGff.pos> <links.txt> <chrLayout.txt> <out> [w] [h]\n# 多物种微共线性图 / microsynteny / collinearity plot（N26 修复：原表驱动把 msy 注册为裸 GenericCli 透传，用户参数被当\n#   engineClass 导致 ClassNotFoundException——现按 tbplot.sh 已验证调用方式显式拼参数）\n# 格式: pos=Chr\\tGene\\tStart\\tEnd；links=GeneA\\tGeneB\\t[r,g,b]；layout=Gen",
   "semantic_fingerprint": "c583df46cbb1e29dd9a39155f005d0052244d2cd0ea2cfe3d01fba252811de7e",
   "semantic_fingerprint_short": "c583df46cbb1e29d",
   "readiness": "FULL",
@@ -9452,7 +9650,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "gxf",
-  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n       # GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）",
+  "help": "gxfSplit: gxfSplit <in.gff3|gtf> <outPrefix> [--numOfFile N]\n# GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC 自动拉起）",
   "semantic_fingerprint": "ca18453f8093af3b91513300447e2a810098326b4e989b94fa1ab315f5f16562",
   "semantic_fingerprint_short": "ca18453f8093af3b",
   "readiness": "FULL",
@@ -9501,7 +9699,7 @@
   "xmx": "2g",
   "runner": "plot",
   "group": "gxf",
-  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
+  "help": "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n# GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）",
   "semantic_fingerprint": "9ac5aab96f248dcd220c6efe93219188afc7892a0f1504106b2def40ac84bc4e",
   "semantic_fingerprint_short": "9ac5aab96f248dcd",
   "readiness": "FULL",
@@ -9540,204 +9738,6 @@
     "format": "gff3"
    }
   ]
- },
- "genestructure": {
-  "name": "genestructure",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "2g",
-  "runner": "plot",
-  "group": "seq",
-  "help": "(alias of structure) 基因结构图（外显子/UTR 从 GFF）",
-  "semantic_fingerprint": "36cea377e1a4660eb2f24494a950c12ce49918aee5839ae03292130a302c6f37",
-  "semantic_fingerprint_short": "36cea377e1a4660e",
-  "alias_of": "structure",
-  "readiness": "FULL",
-  "verification": "EXECUTION_VERIFIED",
-  "capabilities": [
-   "gene_structure",
-   "annotation",
-   "visualization"
-  ],
-  "capabilities_ontology": [
-   "annotation",
-   "annotation.gene_structure",
-   "gene_structure",
-   "genomics",
-   "genomics.annotation",
-   "visualization"
-  ],
-  "relations": {
-   "accepts": [
-    "GFF3",
-    "GENE_ID_LIST"
-   ],
-   "produces": [
-    "GENE_STRUCTURE_PLOT"
-   ]
-  },
-  "parameters": [
-   {
-    "name": "w",
-    "type": "int",
-    "default": 1000,
-    "required": false,
-    "note": ""
-   },
-   {
-    "name": "h",
-    "type": "int",
-    "default": 800,
-    "required": false,
-    "note": ""
-   },
-   {
-    "name": "genome",
-    "type": "string",
-    "default": null,
-    "required": false,
-    "note": "可选基因组 FASTA"
-   }
-  ],
-  "inputs": [
-   {
-    "name": "gff",
-    "role": "file",
-    "format": "gff3",
-    "required": true,
-    "note": "",
-    "content_type": "annotation"
-   },
-   {
-    "name": "ids",
-    "role": "file",
-    "format": "txt",
-    "required": true,
-    "note": "",
-    "content_type": "annotation"
-   }
-  ],
-  "outputs": [
-   "svg"
-  ],
-  "output_slots": [
-   {
-    "name": "svg",
-    "format": "svg"
-   }
-  ]
- },
- "treeRooting": {
-  "name": "treeRooting",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "2g",
-  "runner": "plot",
-  "group": "tree",
-  "help": "(alias of rooting) MAD 系统发育定根",
-  "semantic_fingerprint": "d1974459d437882252b09b9a8dea53186396586cf95876513749f48cea183c31",
-  "semantic_fingerprint_short": "d1974459d4378822",
-  "alias_of": "rooting",
-  "readiness": "FULL",
-  "verification": "EXECUTION_VERIFIED",
-  "capabilities": [
-   "phylogeny",
-   "rooting"
-  ],
-  "capabilities_ontology": [
-   "phylogeny",
-   "phylogeny.rooting",
-   "rooting"
-  ],
-  "relations": {
-   "accepts": [
-    "ALIGNMENT",
-    "NEWICK"
-   ],
-   "produces": [
-    "PHYLOGENY_NWK"
-   ],
-   "next_step": [
-    "tree"
-   ]
-  },
-  "inputs": [
-   {
-    "name": "nwk",
-    "role": "file",
-    "format": "newick",
-    "required": true,
-    "note": "需枝长"
-   }
-  ],
-  "outputs": [
-   "nwk"
-  ],
-  "output_slots": [
-   {
-    "name": "nwk",
-    "format": "nwk"
-   }
-  ]
- },
- "seqlogo": {
-  "name": "seqlogo",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "2g",
-  "runner": "plot",
-  "group": "engine",
-  "help": "(alias of logo) 序列 LOGO 图",
-  "semantic_fingerprint": "ee628f7ad9f3adb6e3004099861257c18c875e25d5cf421281d7e7f27b15c034",
-  "semantic_fingerprint_short": "ee628f7ad9f3adb6",
-  "readiness": "FULL",
-  "verification": "EXECUTION_VERIFIED",
-  "capabilities": [
-   "motif",
-   "visualization"
-  ],
-  "capabilities_ontology": [
-   "motif",
-   "sequence",
-   "sequence.motif",
-   "visualization"
-  ],
-  "inputs": [
-   {
-    "name": "seqs",
-    "role": "file",
-    "format": "fasta",
-    "required": true,
-    "note": "",
-    "content_type": "alignment"
-   }
-  ],
-  "outputs": [
-   "svg"
-  ],
-  "output_slots": [
-   {
-    "name": "svg",
-    "format": "svg"
-   }
-  ]
- },
- "heatmap2": {
-  "name": "heatmap2",
-  "kind": "manual",
-  "mode": "manual",
-  "class": "",
-  "xmx": "2g",
-  "runner": "plot",
-  "group": "engine",
-  "help": "(alias of heatmap) 热图（表达矩阵）",
-  "semantic_fingerprint": "3437424ac5b5b7d21470dd7cd5b40ed3ff7595cf80e3e02476b8a4e2a4f2c6a9",
-  "semantic_fingerprint_short": "3437424ac5b5b7d2",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
  },
  "tree": {
   "name": "tree",

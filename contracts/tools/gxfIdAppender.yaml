@@ -5,8 +5,9 @@ class: ''
 xmx: 2g
 runner: plot
 group: gxf
-help: "gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>\n       # GXF\
-  \ ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）"
+help: 'gxfIdAppender: gxfIdAppender <in.gff3|gtf> <out.gff3> <prefix>
+
+  # GXF ID/染色体名前缀追加（§8.B N13 家族命令面缺口修复：RPC GxfIdAppender.process）'
 semantic_fingerprint: 9ac5aab96f248dcd220c6efe93219188afc7892a0f1504106b2def40ac84bc4e
 semantic_fingerprint_short: 9ac5aab96f248dcd
 readiness: FULL

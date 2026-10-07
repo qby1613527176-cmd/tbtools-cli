@@ -175,7 +175,7 @@
 | `gbar` | 桥 | 分组柱状图+显著性标注（GUI 逆向接口 buildPanel；数据=每行 group value） |
 | `groupCol` | 直连 | groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean| |
 | `groupedbar` | 桥 | 数据格式=每行 <group>	<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在… |
-| `hclust` | 手动 | 层次聚类树（三列距离文件 GeneA\tGeneB\tdist） |
+| `hclust` | 手动 | 层次聚类树（三列距离文件 GeneA      GeneB   dist） |
 | `kallisto` | 手动 | RNA-seq 定量（插件 P00740 CLI 化，直调 kallisto 二进制——插件 wrapper 的… |
 | `layoutheatmap` | 桥 | layoutheatmap <layout.tsv> <expr.tsv> <out> [--options] |
 | `mountain` | 桥 | mountain <fold.txt> <out.tsv> |
@@ -242,7 +242,7 @@
 |---|---|---|
 | `mirnaIdentify` | 桥 | 78 MirIdentifyCli；⚠️ 第 4 参 outChecklog 必需，docstring 原漏写 N29） |
 | `mirnaTarget2` | 直连 | mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true |
-| `mirnatarget` | 手动 | 导致第 2 参数被当输出清零、第 3 参被忽略、输出永不落盘——现恢复完整 |
+| `mirnatarget` | 手动 | ssearc |
 
 ## seq — 序列/结构/域（43 个）
 
@@ -319,7 +319,7 @@
 | `mcscanxd` | 手动 | OneStep MCScanX-SuperFast（插件 P00370 CLI 化，diamond 加速，二进制随包） |
 | `microgenome` | 直连 | microgenome <inGBK> <anno.tsv> <out> [micro|macro] |
 | `microsyn` | 桥 | microsyn <gxf1> <gxf2> <collinearity> <out> [--chr1 C --star |
-| `msy` | 手动 | pos=Chr\\tGene\\tStart\\tEnd；links=GeneA\\t |
+| `msy` | 手动 | pos=Chr\tGene\tStart\tEnd；links=GeneA\tGeneB\t[r,g,b]；layout… |
 | `multisyn` | 桥 | multisyn <gxf.lst> <collinear.lst> <out> [--genes idlist.txt |
 | `pafcomp` | 桥 | pafcomp --inPaf <paf> --outGraph <out> [--colorMode Target|Q |
 | `pafref` | 直连 | pafref --inPaf <paf> --outTab <out.tsv> |
@@ -367,7 +367,7 @@
 | `findpath` | 桥 | findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> -- |
 | `iqtree` | 桥 | 28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物… |
 | `kaks` | 直连 | 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带… |
-| `newickRename` | 手动 | 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\\tNewName） |
+| `newickRename` | 手动 | 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\tNewName） |
 | `notung` | 手动 | Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir → 复制到… |
 | `nwAlign` | 桥 | Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧… |
 | `onesteptree` | 手动 | 一步法 ML 树（muscle → trimal → IQ-TREE） |

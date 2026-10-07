@@ -1845,6 +1845,27 @@
     "tree"
    ]
   },
+  "genestructure": {
+   "accepts": [
+    "GFF3",
+    "GENE_ID_LIST"
+   ],
+   "produces": [
+    "GENE_STRUCTURE_PLOT"
+   ]
+  },
+  "treeRooting": {
+   "accepts": [
+    "ALIGNMENT",
+    "NEWICK"
+   ],
+   "produces": [
+    "PHYLOGENY_NWK"
+   ],
+   "next_step": [
+    "tree"
+   ]
+  },
   "hmmsearch": {
    "accepts": [
     "FASTA",
@@ -2117,27 +2138,6 @@
    ],
    "produces": [
     "ANNOTATION_OUT"
-   ]
-  },
-  "genestructure": {
-   "accepts": [
-    "GFF3",
-    "GENE_ID_LIST"
-   ],
-   "produces": [
-    "GENE_STRUCTURE_PLOT"
-   ]
-  },
-  "treeRooting": {
-   "accepts": [
-    "ALIGNMENT",
-    "NEWICK"
-   ],
-   "produces": [
-    "PHYLOGENY_NWK"
-   ],
-   "next_step": [
-    "tree"
    ]
   },
   "tree": {

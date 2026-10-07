@@ -5,7 +5,7 @@
  "group": "mirna",
  "kind": "manual",
  "class": "",
- "description": "导致第 2 参数被当输出清零、第 3 参被忽略、输出永不落盘——现恢复完整",
+ "description": "依赖: ssearc",
  "invoke": "tbtools mirna mirnatarget <args...>",
  "capabilities": [],
  "inputs": [],

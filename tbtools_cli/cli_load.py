@@ -27,8 +27,13 @@ def _spec_groups() -> dict:
         from tbtools_cli.command_spec import build_command_specs
         return {n: s.group for n, s in build_command_specs().items() if s.group}
     except Exception as _e:
-        # 自审 arch N6: CommandSpec 分组投影静默失效退回 CATEGORY_MAP → 可见化
-        # (分组推断错位会让 help 前缀/分组路由与模型不一致, 不再沉默)
+        # 自审 arch N6: CommandSpec 分组投影失败 → 可见化; 但**import 链中间态**
+        # (command_spec 部分初始化中——auto_commands 模块级 _make_impl 反向调 _grp_of)
+        # 不算故障: 此时 build_command_specs 尚未定义, 稍后完整调用会重建模型分组。
+        import sys as _sys
+        _cs = _sys.modules.get("tbtools_cli.command_spec")
+        if _cs is not None and getattr(_cs, "build_command_specs", None) is None:
+            return {}  # 中间态: 静默, CATEGORY_MAP 兑底即可(与历史行为一致)
         import warnings as _w
         _w.warn(f"CommandSpec 分组投影失败, 退回 CATEGORY_MAP: {_e}", RuntimeWarning, stacklevel=2)
         return {}
