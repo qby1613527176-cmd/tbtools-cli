@@ -75,7 +75,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [Plotting Engines (200+)](#plotting-engines-213)
 - [RPC Data Tools](#rpc-data-tools-188-methods)
 - [CLI Tools](#cli-tools-82)
-- [Engine Reflection](#engine-reflection通用兜底)
+- [Engine Reflection](#engine-reflection)
 - [Project Structure](#project-structure)
 - [兼容层退役计划](#兼容层退役计划)
 - [Naming Convention](#naming-convention)
@@ -397,7 +397,7 @@ tbtools tool extractFasta          # extract/filter FASTA by ID list
 
 > 全部工具见 [docs/COMMAND_REFERENCE.md](docs/COMMAND_REFERENCE.md) 或 `tbtools list tools`(数量见 counts.md)
 
-## 🔬 Engine Reflection(通用兜底)
+## 🔬 Engine Reflection
 
 两层入口(2026-10-07 修正: 旧示例引用的类名直调已退役, 现为注册制):
 
