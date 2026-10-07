@@ -75,6 +75,10 @@ EXEC_VERIFIED = {
     "hclust": ("expr", ["examples/data/exec/hclust3col.tsv", "{out}.svg"]),  # 三列距离文件
     "pep2codon": ("seq", ["examples/data/exec/pep_cds.fa", "examples/data/exec/pep_aln.fa", "{out}.fa"]),
     "multisyn": ("syn", ["examples/data/exec/gxf_lst.txt", "examples/data/exec/collinear.lst.txt", "{out}.svg"]),
+    "microsyn": ("syn", ["examples/data/synteny/multi/sp1.gff", "examples/data/synteny/multi/sp2.gff",
+                           "examples/data/synteny/multi/sp1_sp2.collinearity", "{out}.svg",
+                           "--chr1", "1", "--start1", "1000", "--end1", "30000",
+                           "--chr2", "1", "--start2", "1000", "--end2", "30000"]),  # 复攻成功(2026-10-07): 原"数据合成未攻克"归档——multi/ 合成数据形态恰好匹配 + 完整区间参数+数值染色体名, 引擎 0.55s 出 SVG
     "preparespecies": ("asm", ["--prefix", "SPEC", "--inGenomeFa", "examples/data/comparative/input.genome.fa",
                                 "--inGXF", "examples/data/comparative/input.gff",
                                 "--outGenomeFa", "{out}.genome.fa", "--outGXF", "{out}.gff"]),
@@ -220,6 +224,9 @@ SEMANTIC_CHECKS = {
         any(k in p for k in ("gsea_report_for_na", "GO_0008150", "enplot")) for p in ps)),
     "peakanno": ("3 peak 注释含基因-链向映射(gene1+/gene2-/gene3+)", lambda ps: any(
         _peakanno_map_ok(p) for p in ps if p.endswith(".tsv"))),
+    "microsyn": ("SVG 含双物种基因名文本(gene1_x/gene2_x, 微共线性内容级)", lambda ps: any(
+        _read_text(p).count("Gene1_") >= 2 and _read_text(p).count("Gene2_") >= 2
+        for p in ps if p.endswith(".svg"))),
     "efpHeat": ("SVG 含表达色块(≥100 rect, 内容级断言; 弃字节窗口防跨 JRE/字体假失败)", lambda ps: any(
         _read_text(p).count("<rect ") >= 100 and os.path.getsize(p) > 0
         for p in ps if p.endswith(".svg"))),

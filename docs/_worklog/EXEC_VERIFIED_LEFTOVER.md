@@ -1,6 +1,8 @@
 # 执行验证遗留状态（EXEC_VERIFIED_LEFTOVER.md）
 
 > 2026-10-04 归档 · 执行验证 54/60 = 90% 收官于 v1.4.57
+> **2026-10-07 更新**: memerun 已转正(v1.4.88 实测修复, EXEC_VERIFIED 55); microsyn 已收编(v1.4.91, multi/ 合成数据形态匹配+完整区间参数复攻成功, EXEC_VERIFIED 56);
+> pafref/tfbsShift 已建 xfail 活测试固定(v1.4.88 TestKnownDefectsXfail)。剩余 3 个: pafref/tfbsShift(引擎缺陷, JAR 升级自动翻红)/smart(服务端已变, 归档)。
 > 剩余 6 个工具为引擎级缺陷或外部依赖，**已定性、不再重复攻坚**（复攻条件见各条）。
 > 活 plan 见 `docs/_worklog/PLAN.md`（A 区已完结）；本文件是 A 区遗留的权威存证。
 
@@ -8,10 +10,10 @@
 
 | 工具 | 类别 | 根因 | 证据（波次） | 复攻条件 | 活监控（自审 verified F7） |
 |:--|:--|:--|:--|:--|:--|
-| pafref | 引擎缺陷 | PafRefBaseCoverCalc `--inPaf/--outTab` 后 `this.text` NPE | v1.4.45 | 需上游修 JAR | ⚠️ 无活测试（建议照 bin0 模式补 xfail 固定） |
-| tfbsShift | 引擎缺陷 | blastp 子进程误判成功为失败（子进程状态码逻辑反） | v1.4.44 | 需上游修 JAR | ⚠️ 无活测试（建议同上） |
-| microsyn | 数据合成未攻克 | MCScanX 精确格式（跨物种 GXF/共线性严格匹配）——专门造数据无法复现官方数据形态 | v1.4.44 / v1.4.32 | 真实 MCScanX 数据或工厂式数据生成 | ⚠️ 无测试/数据占位/生成器雏形——'同类'只停留定性表 |
-| memerun | 引擎缺陷 | JAR 缺 `QuickRunMEME` 类（NoClassDefFoundError） | v1.4.30 | JAR 升级带上该类 | ⚠️ 无活测试（建议补 xfail 固定） |
+| pafref | 引擎缺陷 | PafRefBaseCoverCalc `--inPaf/--outTab` 后 `this.text` NPE | v1.4.45 | 需上游修 JAR | ✅ v1.4.88 建 xfail 活测试(修复自动翻红) |
+| tfbsShift | 引擎缺陷 | blastp 子进程误判成功为失败（子进程状态码逻辑反） | v1.4.44 | 需上游修 JAR | ✅ v1.4.88 建 xfail 活测试 |
+| microsyn | ✅ 已收编 | 原"数据合成未攻克"——multi/ 合成数据(sp1/sp2.gff+sp1_sp2.collinearity)形态恰好匹配 | v1.4.44 → v1.4.91 | 完整区间参数(--chr1/start1/end1...) + 数值染色体名 | ✅ v1.4.91 收编(0.55s SVG 双物种基因名) |
+| memerun | ✅ 已转正 | JAR 缺类缺陷已随插件更新修复 | v1.4.30 → v1.4.88 | 实测 exit0+产物, 移入 EXEC_VERIFIED | ✅ v1.4.88 转正(0.96s) |
 | smart | 外部依赖 | SMART 数据库联网查询（域注释） | v1.4.33-34 多波 | 网络通道或本地 SMART DB | ✅ 联网即可人工复验（外部通道） |
 | gxfIdAppender | 外部依赖 | 走 RPC 8765（非独立引擎） | v1.4.30 | RPC 服务层暴露独立入口 | ⚠️ 无 issue/计划锚点——RPC 改造无限期挂起 |
 

@@ -89,6 +89,7 @@
   "mcscanxd",
   "memeViz",
   "memerun",
+  "microsyn",
   "motif",
   "msy",
   "multiEfp",
@@ -308,6 +309,13 @@
    "contract_fingerprint": "9c49b49ab9729891d549f0b1f21671f6a884efbdf2f59fa2e16c36219df3f913",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-07T12:10:37",
+   "corpus": "examples/data",
+   "domain_note": ""
+  },
+  "microsyn": {
+   "contract_fingerprint": "f944130a4646393cf9d48a08d0af565540c31b7d97e9e652d74cd75ad6438963",
+   "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
+   "verified_at": "2026-10-07T15:40:52",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -751,6 +759,15 @@
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
+  },
+  "microsyn": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "f944130a4646393cf9d48a08d0af565540c31b7d97e9e652d74cd75ad6438963",
+   "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
+   "verified_at": "2026-10-07T15:40:52",
+   "corpus": "examples/data",
+   "domain_note": "",
+   "semantic_checked": true
   },
   "motif": {
    "level": "EXECUTION_VERIFIED",

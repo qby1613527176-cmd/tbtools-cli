@@ -34,7 +34,7 @@
  "semantic_fingerprint": "91a75654ab879e912514f5453e2405fa06b40825f8d0f8f8a7b1757c621597e0",
  "semantic_fingerprint_short": "91a75654ab879e91",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "SIMPLIFIED_GFF",
@@ -56,5 +56,14 @@
    "name": "svg",
    "format": "svg"
   }
- ]
+ ],
+ "verification_details": {
+  "level": "EXECUTION_VERIFIED",
+  "contract_fingerprint": "f944130a4646393cf9d48a08d0af565540c31b7d97e9e652d74cd75ad6438963",
+  "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
+  "verified_at": "2026-10-07T15:40:52",
+  "corpus": "examples/data",
+  "semantic_checked": true,
+  "domain_note": ""
+ }
 }

@@ -10,6 +10,6 @@
 - agent_ready_full: 60
 - agent_ready_partial: 134
 - agent_ready_legacy: 104
-- execution_verified: 55
+- execution_verified: 56
 - conformance_verified: 1
-- semantic_checked: 10
+- semantic_checked: 11
