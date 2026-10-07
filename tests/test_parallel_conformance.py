@@ -145,13 +145,11 @@ class TestContractYamlLoader:
         from tbtools_cli.command_spec import verification_census
         from tbtools_cli.core import JAR
         c = verification_census()
-        if os.path.isfile(JAR):
-            # 有 JAR: env_fp 匹配 → EXECUTION_VERIFIED 证据保留
-            assert c["EXECUTION_VERIFIED"] >= 3
-        else:
-            # 无 JAR: env_fp 失配 → 验证降级为 0(防"标签指向不存在的引擎", 自审 arch F3)
-            assert c["EXECUTION_VERIFIED"] == 0, \
-                f"无 JAR 环境应降级验证证据(env_fp 机制), 实得 {c['EXECUTION_VERIFIED']}"
+        # v1.4.65 arch F3 对称语义: 读取端**有 JAR 才比对 env_fp**(失配→降级),
+        # 无 JAR **保守信任报告**(防交替全降级); report 在 git(发布时点证据)→ 55。
+        # 自审 v1.4.91 arch M1 修正: 旧断言"无 JAR → 0"与实现相反(CI 13 天没跑未暴露)
+        assert c["EXECUTION_VERIFIED"] >= 3, \
+            f"验证证据缺失: 有 JAR 应 >=3(实测), 无 JAR 信任 committed report(实测 {c['EXECUTION_VERIFIED']})"
         assert c["COMPILEABLE"] > 0
 
 
