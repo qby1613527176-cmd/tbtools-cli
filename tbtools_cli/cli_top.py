@@ -887,12 +887,33 @@ def register_top(cli, _LG):
             import json as _json2
             ok, probs = True, []
             _skip = 2 if len(args) >= 3 else 1  # 跳过 <group> <cmd>(和 <cmd>)
-            for a in args[_skip:]:
-                if a.endswith((".svg", ".png", ".pdf", ".tsv", ".nwk")):
-                    continue  # 输出参数
-                if not os.path.isfile(a):
-                    ok = False
-                    probs.append(f"missing input: {a}")
+            # product P1-1(v1.4.91 五视角): dry-run 输入检查复用 flag-aware helper——
+            # 旧循环对每个 token 做 isfile, flag 名/flag 值误报 missing input(v1.4.87
+            # 执行侧已修, dry-run 侧遗漏; 同文件两套预检规则分裂复发)。
+            # flag 输入缺失 → helper 报; positional 输入保留存在性检查(规划期信息),
+            # 输出后缀(_OUT_EXT_COMMON, 文本类不预判)跳过。
+            _missing = list(_precheck_input_flags(args))
+            _prev_f = False
+            for _a in args[_skip:]:
+                if isinstance(_a, str) and _a.startswith("-"):
+                    if _a in ("--json", "--dry-run", "--quiet"):
+                        _prev_f = False
+                    else:
+                        _prev_f = True
+                    continue
+                if _prev_f:
+                    _prev_f = False  # flag 的值(如 --pval-cutoff 0.01 的 0.01)——跳过
+                    continue
+                # 只查"像路径"的 positional(含分隔符/扩展名)——列名/数值(barplot 的
+                # Term/Pvalue)是参数不是文件, v1.4.87 三度误伤教训同源, 不再裸查
+                _looks_path = ("/" in _a or "\\" in _a
+                               or bool(os.path.splitext(_a)[1]) or os.path.isfile(_a))
+                if _looks_path and not _a.endswith(_OUT_EXT_COMMON) \
+                        and not os.path.isfile(_a):
+                    _missing.append(_a)
+            if _missing:
+                ok = False
+                probs = [f"missing input: {m}" for m in _missing]
             # P1-1 + v1.4.82 product P1-3: dry-run 产物预估——与执行预检共用同一
             # 输出槽判定(_OUT_EXT_COMMON, 文本类后缀不预判: .txt/.tsv 可能是输入)
             est = [a for a in args[_skip:] if a.endswith(_OUT_EXT_COMMON)]

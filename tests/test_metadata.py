@@ -232,3 +232,30 @@ class TestGeneratedSurfaceFreshness:
         for t, ev in vt.items():
             assert ev.get("contract_fingerprint"), f"{t}: verified_tools 缺 contract_fingerprint"
             assert ev.get("level") in ("EXECUTION_VERIFIED", "CONFORMANCE_VERIFIED")
+
+
+def test_dry_run_flag_aware_precheck():
+    """product P1-1(v1.4.91 五视角): dry-run 预检必须 flag-aware——
+    带 --pval-cutoff 0.01 的 volcano 不再误报 flag/flag 值缺失; barplot 列名
+    (Term/Pvalue)不误伤(v1.4.87 三度误伤教训); 真缺路径仍拦。"""
+    import subprocess
+    import json
+
+    def _dry(*args, expect_exit=0):
+        r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "tool-run",
+                            "--dry-run", "--json", *args],
+                           capture_output=True, text=True, timeout=60, cwd=ROOT)
+        assert r.returncode == expect_exit, f"exit {r.returncode} != {expect_exit}: {r.stderr}"
+        return json.loads(r.stdout)
+
+    # 带可选 flag: 不误报(--pval-cutoff 是 flag, 0.01 是它的值)
+    d = _dry("expr", "volcano", "--pval-cutoff", "0.01",
+             "examples/data/deg.txt", "/tmp/v.svg")
+    assert d["inputs_valid"] is True, f"flag 值被误报: {d.get('problems')}"
+    # barplot 列名参数: 不误伤
+    d2 = _dry("expr", "barplot", "examples/data/misc/enrich.tsv",
+              "/tmp/b.svg", "Term", "Pvalue")
+    assert d2["inputs_valid"] is True, f"列名被误报: {d2.get('problems')}"
+    # 真缺路径: 仍拦(dry-run 缺输入 exit 3, JSON 仍在 stdout)
+    d3 = _dry("expr", "volcano", "--inFile", "/no/way.tsv", expect_exit=3)
+    assert d3["inputs_valid"] is False and d3.get("problems")
