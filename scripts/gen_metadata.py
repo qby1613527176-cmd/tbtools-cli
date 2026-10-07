@@ -593,7 +593,14 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         # 评审 #112 P1: verification 证据对象投影——Agent 看到的不只是 level(EXECUTION_VERIFIED),
         # 还有绑定证据(验证时间/语料/契约指纹), 可判断证据新旧/是否匹配当前 contract
         _verif_details = _verif_details_map.get(name)
-        if _verif_details:
+        # 自审 v1.4.86 verified N2: 顶层 verification 与嵌套 details.level 分叉时**不投影**
+        # 过期证据——加载侧 _load_verification_report 有 contract_fp/env_fp 双比对(失配即
+        # 降级), 契约变更后重跑验证前的窗口期, metadata 的 verification 已是降级值而 report
+        # 仍是旧证据; 若此时仍无条件挂 details, 同一文件会并存 verification:COMPILEABLE +
+        # verification_details.level:EXECUTION_VERIFIED, 自相矛盾。对齐降级语义: level 失配
+        # 即视为证据失效不投影(消费者可经 contract_fingerprint 自行比对)。
+        _vd_level = (_verif_details or {}).get("level", "")
+        if _verif_details and _vd_level == v.get("verification", ""):
             # 自审红队 P1-3: 完整投影验证证据——Agent 需要区分"跑过" vs "跑过+内容级检查"
             # (semantic_checked) + 环境身份(env_fingerprint) + 验证域(domain_note)
             schema["verification_details"] = {

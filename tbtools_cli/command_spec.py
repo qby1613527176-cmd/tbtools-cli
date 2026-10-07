@@ -969,7 +969,11 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
 def clear_specs_cache() -> None:
     """SpecRegistry 失效(评审 #110 P1): KNOWN_* / 注册表变更后强制下次重建。
     自审 arch F7: 统一清三处缓存——specs(command_spec._SPECS_CACHE) + 分组(cli_load._SPEC_GROUPS)
-    + metadata(cli_load._META_JSON)——此前三套缓存各自为政且全部无失效入口。"""
+    + metadata(cli_load._META_JSON)——此前三套缓存各自为政且全部无失效入口。
+    自审 v1.4.86 arch N7-F7 说明(死钩子成因): KNOWN_ALIASES/KNOWN_STATUS/KNOWN_SCHEMAS 等
+    均为**模块级静态 dict**, 进程内无运行时 mutate 入口(改代码重启即生效)——因此常规 CLI
+    路径无自然调用点, 该函数服务于**测试热加载 / 未来动态注册 API / 插件在运行时改注册表**
+    三类事件源。若有动态注册需求, 注册 API 必须在写入后调用本函数。"""
     global _SPECS_CACHE
     _SPECS_CACHE = None
     try:

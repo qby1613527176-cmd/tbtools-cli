@@ -21,9 +21,13 @@
 2. **更新 CHANGELOG.md**：顶部插入 `## [1.4.XX] - 日期` 段，条目风格：
    - `### 变更类型` + 要点列表（用 git log 从上一 tag 概括，如 `git log v1.4.YY..HEAD --oneline`）
    - 门禁数字一行：`**门禁**: pytest N passed + M skipped / ruff 0 / mypy 0`
-3. **同步 README 硬数字**（如有）：version badge / 命令数 / execution_verified——
-   `python3 scripts/gen_metadata.py --check` 会拦版本不一致，但 README 其他手写数字按
-   `tbtools version --json` 为准人工核对
+3. **同步 agent-facing 数字**（自审 v1.4.86 docs F-NEW-9：不再靠人工核对，人工步骤结构性无效——上轮 v1.4.81 就是发版动作自己制造 294→298 漂移的）：
+   ```bash
+   python3 scripts/gen_metadata.py --render   # 刷新 counts.md / ai/ 全部生成式 surface
+   python3 scripts/gen_metadata.py --check    # 全绿 = 数字已同步（含版本门禁）
+   grep -n "Agent-facing tools" README.md     # 引用块数字应指向 counts.md（agent_ready_full/execution_verified/semantic_checked）
+   ```
+   README 里的具体数字必须**引用 counts.md 而非手写**；`--check` 全绿即视为数字核对完成。
 4. **跑门禁确认**：第「前置」节三条全绿
 5. **提交 + 打 tag**：
    ```bash

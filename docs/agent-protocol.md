@@ -95,6 +95,32 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 
 **Agent 只使用 contract 名(`pval_cutoff`);runtime 负责翻译为 CLI flag(`--pval-cutoff`)**。
 
+### 6.1 验证证据与 env_fingerprint 爆破半径(自审 verified N3)
+
+`verification_details`(tool-describe --json / ai/tools/*.json, 仅 EXECUTION_VERIFIED 工具存在):
+
+```json
+{
+  "level": "EXECUTION_VERIFIED",
+  "contract_fingerprint": "<64-hex>",
+  "env_fingerprint": "<64-hex>",
+  "verified_at": "ISO-8601",
+  "corpus": "examples/data",
+  "semantic_checked": true,
+  "domain_note": "verified for coords >= binSize(10000)..."
+}
+```
+
+**⚠️ env_fingerprint 是全局单值**(JAR + plugins/lib 全部 jar + KNOWN_DEPENDENCIES 派生的全部
+外部二进制哈希):**任何**一个外部二进制升级(如 muscle), 所有工具的验证都会降级——包括与该
+二进制无关的工具。因此 `execution_verified` 计数是"验证机上完全同构环境"的读数; 用户机器
+与验证机二进制版本不同时, `tbtools version --json` 的 execution_verified 会低于发布的 54。
+这不是 bug, 是全局环境身份的保守语义: 证据只在同构环境可迁移。验证机之外拿到的
+`EXECUTION_VERIFIED` 应视为"该版本在该环境跑过", 而非"当前环境可用"。
+
+`verification_details.level` 是**报告时快照**; 当前判定看顶层 `verification` 字段(加载侧有
+contract_fp/env_fp 双比对, 失配即降级)。两者分叉时 details 不投影(证据已失效)。
+
 ## 7. MCP 接口
 
 - **9 个编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / **workflow_plan** / job_submit / job_status / job_result / tool_provenance
