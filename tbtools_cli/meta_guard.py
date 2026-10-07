@@ -22,13 +22,13 @@ _SIDE = "command_metadata.fingerprint.json"
 _SIDE_REPO = os.path.join(os.path.dirname(os.path.abspath(__file__)), _SIDE)
 
 
-def sources_mtime_fingerprint(root: str | None = None) -> str:
-    """扫描源文件 mtime 聚合(tbtools_cli/*.py + bridges/*.java)。
+def sources_content_fingerprint(root: str | None = None) -> str:
+    """扫描源文件**内容** sha256 聚合(tbtools_cli/*.py + bridges/*.java).
 
-    - 只取 .py/.java: 投影由这些源码扫描生成; sidecar/command_metadata.json 自身
-      (.json) 不参与——防止"render 一次就自脏"。
-    - mtime_ns + size: 内容变更必改 mtime(或至少 size), touch 不改内容也触发
-      误报 warn(可容忍: warn 不阻断, 重跑 render 即消)。
+    arch N8 修正(gate P0-2, v1.4.91 五视角): 原 mtime 指纹**不可提交**——fresh clone 后
+    所有文件 mtime 相同, sidecar(提交时 mtime)与源码对比恒漂移, --check 在干净
+    checkout 上确定性红; 内容 sha256 才是内容寻址: 源码不变则指纹稳定(可提交),
+    源码变更(改代码未重跑 render)则指纹变 → 消费端告警。
     """
     r = root or ROOT
     _srcs: list[str] = []
@@ -41,11 +41,16 @@ def sources_mtime_fingerprint(root: str | None = None) -> str:
     _h = hashlib.sha256()
     for _f in _srcs:
         try:
-            _st = os.stat(_f)
-            _h.update(f"{os.path.basename(_f)}:{_st.st_mtime_ns}:{_st.st_size}".encode())
+            with open(_f, "rb") as _fh:
+                _h.update(os.path.basename(_f).encode())
+                _h.update(_fh.read())
         except OSError:
             pass
     return _h.hexdigest()
+
+
+# 兼容别名(mtime 版退役, 防外部引用断裂)
+sources_mtime_fingerprint = sources_content_fingerprint
 
 
 def sidecar_path(out_root: str | None = None) -> str:
@@ -65,7 +70,7 @@ def write_fingerprint(out_root: str | None = None) -> None:
         os.makedirs(_d, exist_ok=True)
     with open(_p, "w", encoding="utf-8") as _f:
         json.dump({"spec": "command_metadata",
-                   "sources_mtime": sources_mtime_fingerprint(None)},
+                   "sources_content": sources_content_fingerprint(None)},
                   _f, ensure_ascii=False, indent=1)
 
 
@@ -76,7 +81,7 @@ def staleness_ok() -> bool:
         if not os.path.isfile(_SIDE_REPO):
             return True
         with open(_SIDE_REPO, encoding="utf-8") as _f:
-            _stored = json.load(_f).get("sources_mtime")
-        return bool(_stored) and _stored == sources_mtime_fingerprint()
+            _stored = json.load(_f).get("sources_content")
+        return bool(_stored) and _stored == sources_content_fingerprint()
     except Exception:
         return True  # 守卫自身故障不阻断(保守静默, 数据仍可读)

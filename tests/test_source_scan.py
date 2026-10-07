@@ -137,7 +137,7 @@ class TestMetaGuard:
         side = tmp_path / "side" / meta_guard._SIDE
         side.parent.mkdir(parents=True)
         with open(side, "w", encoding="utf-8") as fh:
-            json.dump({"sources_mtime": meta_guard.sources_mtime_fingerprint(str(root))}, fh)
+            json.dump({"sources_content": meta_guard.sources_content_fingerprint(str(root))}, fh)
         # monkeypatch ROOT 到临时树 + sidecar 路径
         monkeypatch.setattr(meta_guard, "ROOT", str(root))
         monkeypatch.setattr(meta_guard, "_SIDE_REPO", str(side))

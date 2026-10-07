@@ -443,14 +443,20 @@ def main():
                                     _old_days.append((_t2, _age))
                             except Exception:
                                 pass  # 单条 verified_at 解析失败 → 该条 TTL 检查跳过(可容忍, 下轮再查)
-                        _msg = (f"❌ 验证超龄 {len(_old_days)} 个(>90 天, TTL 严格模式阻断): "
-                                + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
-                        if _ttl_strict:
+                    # 自审 verified 五视角 P0-1 修复(v1.4.91): 判定块曾在 for 循环内(v1.4.88
+                    # 可见化提交缩进回归)——strict 下 0 个超龄也无条件 exit 1, soft 下每轮刷伪告警
+                    _msg = (f"❌ 验证超龄 {len(_old_days)} 个(>90 天, TTL 严格模式阻断): "
+                            + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
+                    if _ttl_strict:
+                        if _old_days:
                             print(_msg)
                             print("   —— nightly 应已回写保鲜; 超龄说明保鲜失效, 需人工重验", file=sys.stderr)
                             return 1
-                        print(f"⚠️ 验证超龄({len(_old_days)} 个 >90 天, 软告警不阻断): "
-                              + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
+                        # strict 且 0 超龄: 正常通过(不阻断)
+                    else:
+                        if _old_days:
+                            print(f"⚠️ 验证超龄({len(_old_days)} 个 >90 天, 软告警不阻断): "
+                                  + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
             except Exception:
                 # 自审 gate P1-2: TTL 检查异常不再静默——strict 模式下显式报错
                 # (此前整块 try-except-pass 吞异常, TBTOOLS_TTL_STRICT 存在静默失效路径)
