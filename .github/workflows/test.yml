@@ -83,7 +83,7 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: '3.12'}
       - name: Install
-        run: pip install click pytest ruff pyyaml
+        run: pip install -r requirements-ci.txt pyyaml  # 自审 gate P2-3: 锁定版本对齐主 job(ruff 版本滚动不能只在 windows leg 单独制造红灯)
       - name: Lint (ruff 硬失败)
         run: ruff check .
       - name: Windows 无 jar CLI 冒烟(跨平台验证)

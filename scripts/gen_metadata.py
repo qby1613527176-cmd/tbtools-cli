@@ -285,8 +285,8 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
     n_auto = sum(1 for n in dir(_ac) if n.startswith("_") and n.endswith("_impl") and not n.startswith("__"))
     from tbtools_cli.command_spec import build_command_specs as _bcs_specs  # P2-1: 与 version --json 同源
     counts = {
-        "metadata_commands": len(meta),          # 276: 唯一数据源全量
-        "metadata_plot_commands": n_plot,        # 214: metadata 静态口径(非工具类 bridge/direct/manual)
+        "metadata_commands": len(meta),          # 298: 唯一数据源全量(动态, 勿硬编码)
+        "metadata_plot_commands": n_plot,        # 218: metadata 静态口径(非工具类 bridge/direct/manual, 动态)
         "auto_commands": n_auto,                 # 201: 引擎注册表驱动的命令数
         # 自审 v1.4.85 gate P2-2: rpc_methods 注明口径——188 是 TBtools JAR 内置
         # RPC 方法数(外部引擎能力, 本地无注册源可动态统计), 硬编码有正当理由;
@@ -297,7 +297,7 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
         # 用 specs kind=="tool"=80, 两个权威自动源互相矛盾; 191 是人读页脚残留口径。
         "tools": sum(1 for s in _bcs_specs().values() if s.kind == "tool"),  # 80: 与 version --json 同源
         "bridges": len([f for f in os.listdir(os.path.join(ROOT, "bridges")) if f.endswith(".java")]),  # 118
-        "pitfall_hints": len(_core.PITFALL_HINTS),  # 46
+        "pitfall_hints": len(_core.PITFALL_HINTS),  # 49: 动态
     }
     # 评审 #110 P1: counts.md 成为 agent-ready 权威口径(README 数字以此对齐, 防 59/60 漂移)
     try:
@@ -417,6 +417,10 @@ def main():
                 _verif_n = _vc.get("EXECUTION_VERIFIED", 0) + _vc.get("CONFORMANCE_VERIFIED", 0)
             except Exception:
                 _verif_n = "?"
+            # 自审 v1.4.87 gate P2-1: census 静默降级告警——verification 数变 "?" 时
+            # --check 不能报"全同步"(数字可信度是 EXECUTION_VERIFIED 叙事的一部分)
+            if _verif_n == "?":
+                print("⚠️ 警告: verification census 读取失败, execution_verified 数字不可信(降级为 '?')", file=sys.stderr)
             if _drifted:
                 print(f"❌ Generated Surface 漂移: {len(_drifted)} 个文件与最新 source 不一致(未 render/提交):")
                 for _line in _drifted[:15]:

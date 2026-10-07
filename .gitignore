@@ -55,6 +55,8 @@ __pycache__/
 
 # tool-run 对 -jar 引擎误写 jar 旁 provenance 的残留
 plugins/lib/*.tbtools.json
+# conformance 运行 provenance(每次跑刷新, 非版本内容)
+examples/data/**/*.tbtools.json
 nonexist.txt.tbtools.json
 
 # 引擎运行中间产物(自审 verified F4: 不入库, 测试 tmp 生成)

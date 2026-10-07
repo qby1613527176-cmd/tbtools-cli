@@ -330,15 +330,22 @@ class TestTier1CompileVerified:
                 "semantic_checked": _t in SEMANTIC_CHECKS,  # 自审 verified F2: 内容级断言分级
             }
         for _t in CONFORMANCE_VERIFIED:
+            # 自审 v1.4.87 product P2-8-⑥: 金链级(volcano)语义说明——金链=格式+sha256+
+            # provenance+artifact_id 六步全断言, 但**无内容级语义断言**(semantic_checked=false),
+            # 与"层级高=证据强度超集"的直觉相反; domain_note 明示, 防 Agent 按高层=更强误读
+            _conf_note = ("金链 conformance 六步断言(格式/sha256/provenance/artifact_id), "
+                          "无内容级语义断言(semantic_checked=false)——层级≠证据强度超集")
             if _t in _verified_tools:
                 _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
+                if not _verified_tools[_t].get("domain_note"):
+                    _verified_tools[_t]["domain_note"] = _conf_note
             else:
                 _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
                                        "contract_fingerprint": _exec_entries.get(_t, {}).get("contract_fingerprint", ""),
                                        "env_fingerprint": _exec_entries.get(_t, {}).get("env_fingerprint", ""),
                                        "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
                                        "corpus": _exec_entries.get(_t, {}).get("corpus", ""),
-                                       "domain_note": _exec_entries.get(_t, {}).get("domain_note", ""),
+                                       "domain_note": _exec_entries.get(_t, {}).get("domain_note", "") or _conf_note,
                                        "semantic_checked": _t in SEMANTIC_CHECKS}
         _report = {"compile_verified": sorted(verified),
                    "execution_verified": sorted(EXEC_VERIFIED.keys()),

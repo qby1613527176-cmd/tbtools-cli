@@ -4,6 +4,7 @@ version/doctor/setup/fetch_jar/help/examples/completion/list/presets/new/check�
 由 cli.py 以 register_top(cli, cli_load) 注册。
 """
 import os
+import re
 import subprocess
 import sys
 
@@ -62,7 +63,10 @@ def register_top(cli, _LG):
         plot_count = sum(len(g.commands) for g in _LG._groups.values())
         auto_count = sum(1 for n in dir(_ac) if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'))
         from tbtools_cli.core import BRIDGES_DIR, PITFALL_HINTS
-        bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 80
+        # 自审 v1.4.87 product P2-8-④: 目录缺失回退 0(此前回退 80 静默错数,
+        # 实际 118)——缺失就报缺失, 不假装有个数字,
+        # 并在人读行给出口径提示
+        bridge_count = len([f for f in os.listdir(BRIDGES_DIR) if f.endswith('.java')]) if os.path.isdir(BRIDGES_DIR) else 0
         from tbtools_cli import __version__ as _pkg_ver
         # 评审 #111 P0-3: verification 唯一口径(与 counts.md 同源, 统一 26——census 单源)
         def _vc_pair():
@@ -75,7 +79,7 @@ def register_top(cli, _LG):
                 "version": _pkg_ver,
                 "cli_commands": plot_count,
                 "auto_commands": auto_count,
-                "rpc_methods": 188,
+                "rpc_methods": 188,  # TBtools JAR 内置 RPC 方法数(外部能力), 同 counts.md 口径
                 "tools": sum(1 for s in build_command_specs().values() if s.kind == "tool"),
                 "bridges": bridge_count,
                 "pitfall_hints": len(PITFALL_HINTS),
@@ -891,37 +895,35 @@ def register_top(cli, _LG):
         # v1.4.82 修复: 预检从『仅 as_json』提前为全部路径——非 --json 下人类同样拿
         # TB002/exit 2/正确 group 前缀 help(旧: TB009 engine-level defect/exit 1/help 缺
         # 前缀, 与 quickstart 退出码承诺分裂)。
+        # 自审 v1.4.87 P1-5 再修正(conformance 全量实测 3 失败): 预检**只查 flag 形式
+        # 的输入**(--inX/-i 的值)——TBtools 引擎输入绝大多数以 flag 给出; positional
+        # 不预检(引擎层会报真实错误)。启发式猜 positional 输入输出已三度误伤
+        # (barplot 列名 Term/Pvalue、mcscanx/kallisto 非末位输出 o.txt/o.tsv):
+        # 输入输出靠扩展名/位置不可靠分离(.txt/.tsv 双角色 + 输出可居中), 与其误拦
+        # 真实命令不如交给引擎验证。仍能拦住最常见事故: 用户给了 --inFile 但路径不存在。
+        # v1.4.87 conformance 再实测(2 失败修正): 正则**只列输入型 flag**——
+        # -o/--out/--output/--outFile 等输出 flag 的值首次运行必然不存在,
+        # 查了就是 TB002 误报(notung --out/barplotter -o 实测被拦)。
         _pre_probs = []
         try:
-            # flag 状态机(对齐 snapshot_inputs): flag 及其值跳过, 只检裸输入槽
-            _prev_flag = False
-            _pos_only = [a for a in args if isinstance(a, str) and not a.startswith("-")]
-            _skip_pre = 2 if len(_pos_only) >= 3 else 1  # 跳过 <group> <cmd>
-            _OUT_EXT_PRE = _OUT_EXT_COMMON  # 共享常量: 仅图形/专用产物后缀; .txt/.tsv/.xls 等既可能是输入也可能是输出, 不预判
-            _pre_skip = 0
-            _prev_flag = False
+            _prev_flag = None
             for _a in args:
                 if not isinstance(_a, str) or not _a:
                     continue
                 if _a.startswith("-"):
-                    # flag: 下一参数是它的值(如 --chr1 1)——不吃值则残留; 显式处理
                     if _a in ("--json", "--dry-run", "--quiet"):
-                        _prev_flag = False  # 无值 flag
-                        continue
-                    _prev_flag = True
+                        _prev_flag = None  # 无值 flag
+                    else:
+                        _prev_flag = _a  # flag, 下一个是它的值
                     continue
+                # _a 是某个 flag 的值
                 if _prev_flag:
-                    _prev_flag = False  # flag 的值(如 --chr1 1)——不检
-                    continue
-                if _pre_skip > 0:
-                    _pre_skip -= 1
-                    continue
-                if _pos_only and _a in _pos_only[:_skip_pre]:
-                    continue  # <group> <cmd>
-                if _a.endswith(_OUT_EXT_PRE):
-                    continue  # 输出槽
-                if not os.path.isfile(_a):
-                    _pre_probs.append(_a)
+                    _fl = _prev_flag
+                    _prev_flag = None
+                    # 只查"输入型 flag"的值(输出 flag 如 -o/--out/--outFile 不查——首次运行不存在)
+                    if re.match(r"^--?([i]|in|input|inFile|inFa|inFasta|inGff|inGff3|inTxt|inNwk|inTab|query|subject|pep|cds|genome|reads|read|ref|reference|fasta|fq|fa)$", _fl, re.I):
+                        if not os.path.isfile(_a):
+                            _pre_probs.append(_a)
         except Exception:
             pass
         if _pre_probs:
