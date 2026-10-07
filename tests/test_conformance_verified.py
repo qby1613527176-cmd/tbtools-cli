@@ -220,11 +220,11 @@ SEMANTIC_CHECKS = {
         any(k in p for k in ("gsea_report_for_na", "GO_0008150", "enplot")) for p in ps)),
     "peakanno": ("3 peak 注释含基因-链向映射(gene1+/gene2-/gene3+)", lambda ps: any(
         _peakanno_map_ok(p) for p in ps if p.endswith(".tsv"))),
-    "efpHeat": ("SVG 含表达色块(≈200 rect)且尺寸 30-50KB", lambda ps: any(
-        _read_text(p).count("<rect ") >= 100 and 30000 < os.path.getsize(p) < 50000
+    "efpHeat": ("SVG 含表达色块(≥100 rect, 内容级断言; 弃字节窗口防跨 JRE/字体假失败)", lambda ps: any(
+        _read_text(p).count("<rect ") >= 100 and os.path.getsize(p) > 0
         for p in ps if p.endswith(".svg"))),
-    "multiEfp": ("SVG 含表达色块(≥100 rect)且尺寸 25-60KB", lambda ps: any(
-        _read_text(p).count("<rect ") >= 100 and 25000 < os.path.getsize(p) < 60000
+    "multiEfp": ("SVG 含表达色块(≥100 rect, 内容级断言; 弃字节窗口防跨 JRE/字体假失败)", lambda ps: any(
+        _read_text(p).count("<rect ") >= 100 and os.path.getsize(p) > 0
         for p in ps if p.endswith(".svg"))),
     "barplotter": ("PNG 魔数 + 真绘图(≥3 色)", lambda ps: any(
         open(p, "rb").read(8) == b"\x89PNG\r\n\x1a\n" and _png_colors(p) >= 3
@@ -537,5 +537,19 @@ class TestConformanceReport:
                    and os.path.isfile(os.path.join(ROOT, _p))]
         print(f"\nConformance Verified: compile {len(FULL_TOOLS)} / execution-data {len(exec_ok)}")
         assert len(FULL_TOOLS) >= 50, "FULL 池应 >= 50"
-        # 硬下限: 数据文件缺失(删了 examples/data 文件)必须红
-        assert len(exec_ok) >= 40, f"EXEC_VERIFIED 数据文件缺失严重: {len(exec_ok)}/54 可用"
+        # 自审 verified F5 残: 硬下限魔数 40 → 派生精确断言——EXEC_VERIFIED 每个工具
+        # 都必须有数据文件, 白名单外的缺失即红(新增工具无数据/静默删数据文件都显形);
+        # 白名单=已知无数据文件的合法形态(flag 输入 / 无参防挂起), 须注释说明
+        _NO_DATA_WHITELIST = {
+            "tableMerge": "flag 输入(多表参数无裸文件)",
+            "preparespecies": "flag 输入(种间准备无裸文件)",
+            "gel": "无参调用防挂起(_NOARG_HANG, 不预检不执行)",
+        }
+        _missing = sorted(t for t in EXEC_VERIFIED if t not in exec_ok)
+        _unexpected = [t for t in _missing if t not in _NO_DATA_WHITELIST]
+        assert not _unexpected, (
+            f"EXEC_VERIFIED 数据文件缺失(白名单外): {_unexpected} —— 补数据文件或加入"
+            f"_NO_DATA_WHITELIST(须注释合法形态)")
+        assert len(exec_ok) == len(EXEC_VERIFIED) - len(_NO_DATA_WHITELIST), (
+            f"EXEC_VERIFIED 数据可用 {len(exec_ok)}/{len(EXEC_VERIFIED)}"
+            f"(预期 {len(EXEC_VERIFIED) - len(_NO_DATA_WHITELIST)}, 白名单 {sorted(_NO_DATA_WHITELIST)})")

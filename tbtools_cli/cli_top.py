@@ -51,6 +51,24 @@ def _detect_java_ver():
     except FileNotFoundError:
         return None
 
+
+def _read_command_metadata(warn: bool = True) -> dict:
+    """读 command_metadata.json + 投影 staleness 守卫(自审 arch N8):
+    源码变更未重跑 gen_metadata --render → stderr warn(不阻断, Agent 面不再静默吃旧数据)。
+    所有 Agent 面消费端(version/describe/tool-run/search)统一走本函数。"""
+    import json as _jm
+    _p = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
+    _meta = _jm.load(open(_p, encoding="utf-8")) if os.path.isfile(_p) else {}
+    if warn:
+        try:
+            from tbtools_cli.meta_guard import staleness_ok as _stale_ok
+            if not _stale_ok():
+                click.echo("⚠️ 告警: command_metadata.json 投影过期(源码变更未重跑 "
+                           "gen_metadata --render)——Agent 面数据可能滞后", err=True)
+        except Exception:
+            pass  # 守卫自身故障不阻断
+    return _meta
+
 def register_top(cli, _LG):
     """注册顶层命令。cli=主 CLI group；_LG=cli_load 模块（提供 _groups/GROUPS/CATEGORY_MAP）。"""
     # ---- 通用命令 ----
@@ -83,7 +101,7 @@ def register_top(cli, _LG):
                 "tools": sum(1 for s in build_command_specs().values() if s.kind == "tool"),
                 "bridges": bridge_count,
                 "pitfall_hints": len(PITFALL_HINTS),
-                "metadata_commands": len(_json.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))) if os.path.isfile(os.path.join(ROOT, "tbtools_cli", "command_metadata.json")) else 0,
+                "metadata_commands": len(_read_command_metadata()),
                 # 评审 #111 P0-3: verification 唯一口径(与 counts.md 同源, 统一 26)
                 "execution_verified": _exec_n,
                 "conformance_verified": _conf_n,
@@ -618,8 +636,7 @@ def register_top(cli, _LG):
     def tool_describe(commands, as_json):
         """命令机器描述(schema): tbtools tool-describe <命令...> [--json](Agent 能力, 支持批量)"""
         import json as _json
-        meta_path = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
-        meta = _json.load(open(meta_path, encoding="utf-8")) if os.path.isfile(meta_path) else {}
+        meta = _read_command_metadata()
         # 自审 v1.4.82 verified N1: 证据对象投影同源数据——verification_report.json 的
         # verified_tools(单层 evidence map, canonical source)
         _verif_details_map: dict = {}
@@ -819,6 +836,38 @@ def register_top(cli, _LG):
         }
         click.echo(_json.dumps(summary, ensure_ascii=False, indent=1))
 
+    def _precheck_input_flags(_aargs) -> list:
+        """执行前输入预检(tool-run/tool-submit 共用, 自审 product P2-8-② 抽取):
+        只查 flag 形式输入(--inX/-i 值)的存在性——positional 不预检(引擎报真实错误),
+        输出 flag(-o/--out/--output/--outFile 等)值首次运行必不存在也不查。
+        返回缺失输入列表(空=无可提交)。
+        渊源: v1.4.82-F3 引入 → v1.4.87 P1-5 两轮修正(启发式误伤 barplot/mcscanx/kallisto
+        列名与非末位输出; 输出 flag 误拦 notung/barplotter)→ 结论: 输入输出靠扩展名/
+        位置不可靠分离, 只查 flag 输入, 其余交引擎验证。"""
+        _probs = []
+        try:
+            _prev_flag = None
+            for _a in _aargs:
+                if not isinstance(_a, str) or not _a:
+                    continue
+                if _a.startswith("-"):
+                    if _a in ("--json", "--dry-run", "--quiet"):
+                        _prev_flag = None  # 无值 flag
+                    else:
+                        _prev_flag = _a  # flag, 下一个是它的值
+                    continue
+                # _a 是某个 flag 的值
+                if _prev_flag:
+                    _fl = _prev_flag
+                    _prev_flag = None
+                    # 只查"输入型 flag"的值(输出 flag 如 -o/--out/--outFile 不查——首次运行不存在)
+                    if re.match(r"^--?([i]|in|input|inFile|inFa|inFasta|inGff|inGff3|inTxt|inNwk|inTab|query|subject|pep|cds|genome|reads|read|ref|reference|fasta|fq|fa)$", _fl, re.I):
+                        if not os.path.isfile(_a):
+                            _probs.append(_a)
+        except Exception:
+            pass  # 预检失败不阻断执行(保守: 交引擎验证)
+        return _probs
+
     @cli.command(name="tool-run", context_settings={"ignore_unknown_options": True})
     @click.argument("args", nargs=-1, required=True)
     @click.option("--json", "as_json", is_flag=True, help="结构化结果回显(Agent 能力4)")
@@ -852,8 +901,7 @@ def register_top(cli, _LG):
                 _cmd_name = args[1] if len(args) >= 2 else (args[0] if args else "")
                 _deps = [d["name"] for d in KNOWN_DEPENDENCIES_STRUCT.get(_cmd_name, [])]
                 _net = KNOWN_STATUS.get(_cmd_name) == "network-required"
-                import json as _jm
-                _meta = _jm.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
+                _meta = _read_command_metadata()
                 _mem = _meta.get(_cmd_name, {}).get("xmx")
             except Exception:
                 pass
@@ -904,28 +952,7 @@ def register_top(cli, _LG):
         # v1.4.87 conformance 再实测(2 失败修正): 正则**只列输入型 flag**——
         # -o/--out/--output/--outFile 等输出 flag 的值首次运行必然不存在,
         # 查了就是 TB002 误报(notung --out/barplotter -o 实测被拦)。
-        _pre_probs = []
-        try:
-            _prev_flag = None
-            for _a in args:
-                if not isinstance(_a, str) or not _a:
-                    continue
-                if _a.startswith("-"):
-                    if _a in ("--json", "--dry-run", "--quiet"):
-                        _prev_flag = None  # 无值 flag
-                    else:
-                        _prev_flag = _a  # flag, 下一个是它的值
-                    continue
-                # _a 是某个 flag 的值
-                if _prev_flag:
-                    _fl = _prev_flag
-                    _prev_flag = None
-                    # 只查"输入型 flag"的值(输出 flag 如 -o/--out/--outFile 不查——首次运行不存在)
-                    if re.match(r"^--?([i]|in|input|inFile|inFa|inFasta|inGff|inGff3|inTxt|inNwk|inTab|query|subject|pep|cds|genome|reads|read|ref|reference|fasta|fq|fa)$", _fl, re.I):
-                        if not os.path.isfile(_a):
-                            _pre_probs.append(_a)
-        except Exception:
-            pass
+        _pre_probs = _precheck_input_flags(args)
         if _pre_probs:
             from tbtools_cli.errors import ERROR_CODES as _EC2
             _meta2 = _EC2.get("TB002_FILE_NOT_FOUND", {})
@@ -1152,7 +1179,7 @@ except Exception:
                 break
         _job_save(job)
 
-    @cli.command(name="tool-submit")
+    @cli.command(name="tool-submit", context_settings={"ignore_unknown_options": True})
     @click.argument("args", nargs=-1, required=True)
     @click.option("--timeout", "timeout_s", type=int, default=0, help="超时秒数(0=不超时; 超时杀进程树并置 timed_out)")
     def tool_submit(args, timeout_s):
@@ -1162,6 +1189,13 @@ except Exception:
         import uuid as _uuid
         import subprocess as _sp
         import sys as _sys
+        # 自审 product P2-8-②: 异步路径同款输入预检(与 tool-run 共用 helper)——
+        # 缺失输入直接拒提交(TB002/exit 2), 不再异步白跑到晚期才失败
+        _pre_probs = _precheck_input_flags(args)
+        if _pre_probs:
+            click.echo(f"❌ 输入文件不存在: {_pre_probs[0]}", err=True)
+            click.echo("   修复: 检查路径或创建文件后重试 (TB002_FILE_NOT_FOUND, exit 2); 任务未提交", err=True)
+            sys.exit(2)
         jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
         # 独立监控进程(非线程): wait 任务 + 按退出码落盘终态(不依赖图形 provenance)
         job = {"id": jid, "status": "running", "pid": None, "args": list(args),
@@ -1581,8 +1615,7 @@ except Exception:
         # 全名精确命中次之, 部分词 name 命中轻加分; alias 降权保留
         def _ranked(hits):
             try:
-                import json as _jm
-                meta_c = _jm.load(open(os.path.join(ROOT, "tbtools_cli", "command_metadata.json"), encoding="utf-8"))
+                meta_c = _read_command_metadata()
             except Exception:
                 meta_c = {}
             kw_l = (keyword or "").lower()
@@ -1623,7 +1656,10 @@ except Exception:
         if not os.path.isfile(meta_path):
             click.echo(f"❌ 元数据缺失: {meta_path}", err=True)
             sys.exit(1)
-        meta = _json.load(open(meta_path, encoding="utf-8"))
+        meta = _read_command_metadata()
+        if not meta:
+            click.echo(f"❌ 元数据缺失: {meta_path}", err=True)
+            sys.exit(1)
         # 多词查询: 空格拆分, 全部词须命中(名/help/class)——Agent 自然语言("gene structure")
         # 评审 #109(语义 resolver): hay 加入 capabilities/relations 语义层——
         # 此前只搜 name+help+class, 浪费了 planner 已验证的语义数据(recipBlast caps

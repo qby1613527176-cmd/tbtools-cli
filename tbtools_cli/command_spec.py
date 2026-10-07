@@ -11,7 +11,6 @@ from dataclasses import dataclass, field
 
 from tbtools_cli import auto_commands as _ac
 from tbtools_cli.cli_tools_registry import CLI_TOOLS
-from tbtools_cli.cli_load import CATEGORY_MAP
 
 
 @dataclass
@@ -831,6 +830,11 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
       3. 手动命令(经 cli_load 分组注册的 manual 命令, 从分组命令集补)
     """
     global _SPECS_CACHE
+
+    # 函数内延迟 import(arch N6 顺带修复): 顶层 import cli_load 与 cli_load._spec_groups
+    # 的 from command_spec import build_command_specs 构成循环依赖——部分初始化时
+    # 分组投影静默失败(现 warn 可见); 函数内 import 后无循环(command_spec 先完整加载)
+    from tbtools_cli.cli_load import CATEGORY_MAP
     if not force and _SPECS_CACHE is not None:
         return _SPECS_CACHE
     specs: dict[str, CommandSpec] = {}
@@ -886,8 +890,10 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
                         name=_n, group=CATEGORY_MAP.get(_n, "engine"), kind="manual",
                         runner="plot", doc=_d or "",
                     )
-        except Exception:
-            pass
+        except Exception as _e881:
+            # 自审 arch N6: manual 装饰器扫描失败 → 该批命令静默消失(不可观测), 可见化
+            import warnings as _w881
+            _w881.warn(f"manual 装饰器扫描失败(cli.py), manual 命令可能缺失: {_e881}", RuntimeWarning, stacklevel=2)
         # add_command 显式注册(seqlogo→logo? 实际 name=seqlogo; heatmap→heatmap2)
         # ——装饰器正则抓不到, gen_metadata scan_manual_commands 第 4 步同源逻辑
         # 注意: 此路径的 group 对齐 gen_metadata(_infer_group 对 add_command 无装饰器可推,
@@ -914,8 +920,10 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
                     specs[_n].doc = f"(alias of {_target}) " + specs[_target].doc
                 elif _fn in specs and specs[_fn].doc:
                     specs[_n].doc = f"(alias of {_fn}) " + specs[_fn].doc
-    except Exception:
-        pass
+    except Exception as _e920:
+        # 自审 arch N6: 构建尾部异常 → 部分标注/挂接缺失, 可见化(不阻断, 但不再沉默)
+        import warnings as _w920
+        _w920.warn(f"CommandSpec 构建尾声异常(部分标注可能缺失): {_e920}", RuntimeWarning, stacklevel=2)
 
     # 别名/状态/schema 标注(统一模型增强; 在所有来源构建完成后)
     for name, spec in specs.items():
@@ -980,8 +988,10 @@ def clear_specs_cache() -> None:
         import tbtools_cli.cli_load as _cl
         _cl._SPEC_GROUPS.clear()
         _cl._META_JSON = None
-    except Exception:
-        pass
+    except Exception as _e989:
+        # 自审 arch N6: 清理 cli_load 缓存失败 → 热加载/动态注册后旧缓存残留, 可见化
+        import warnings as _w989
+        _w989.warn(f"cli_load 缓存清理失败(热加载后可能残留旧 spec): {_e989}", RuntimeWarning, stacklevel=2)
 
 
 def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:

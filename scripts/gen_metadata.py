@@ -172,22 +172,12 @@ def build():
                 _alias_spec.relations = meta[disp].get("relations") or {}
                 from tbtools_cli.command_spec import to_metadata_entry as _tme2
                 meta[alias] = _tme2(_alias_spec)
-            except Exception:
-                # 兜底: 手工 dict(原行为)
-                _d = meta[disp]
-                _dep: list = []
-                try:
-                    from tbtools_cli.command_spec import KNOWN_DEPENDENCIES as _kd2
-                    _dep = _kd2.get(alias) or _kd2.get(disp) or []
-                except Exception as _e180:
-                    # gate P2-1: 依赖表导入失败 → 依赖元数据缺失(产物仍生成), 可见化
-                    print(f"⚠️ 告警: KNOWN_DEPENDENCIES 不可用({alias}), 依赖元数据缺失: {_e180}", file=sys.stderr)
-                meta[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
-                               "xmx": "2g", "runner": "plot", "help": _d.get("help", ""),
-                               "alias_of": disp, "src": "cli_manual", "group": _d.get("group", "engine"),
-                               "readiness": _d.get("readiness", ""), "verification": _d.get("verification", ""),
-                               **({k: _d[k] for k in ("capabilities", "capabilities_ontology", "relations") if k in _d}),
-                               "dependencies": _dep}
+            except Exception as _e_alias:
+                # 自审 arch N6: 删除手工 dict 双轨兜底——import 失败就该 build 失败,
+                # 静默降级成结构不同产物(缺 semantic_fingerprint/schema 等模型展开)
+                # 会让别名工具 Agent 面不自洽(双轨残留根除)
+                raise RuntimeError(
+                    f"别名 {alias}→{disp} 模型投影失败, 拒绝静默降级: {_e_alias}") from _e_alias
 
     # 兜底: 旧 metadata 遗留条目统一补 kind（兼容历史数据）
     for _v in meta.values():
@@ -387,6 +377,7 @@ def main():
             _written |= render_ai_manifest(meta, out_root=_tmp)
             _json_dump(meta, out_root=_tmp)
             _written.add("tbtools_cli/command_metadata.json")
+            _written.add("tbtools_cli/command_metadata.fingerprint.json")  # arch N8: sidecar 同盘进对比
             # 注: tests/verification_report.json 是测试产物(pytest 生成), 非 gen_metadata
             # render 的 surface——它被 render 读作输入, 不入 _written
             # 2) 逐个对比: 临时目录生成的 vs 仓库现有 —— 内容不同/缺失 = 漂移
@@ -516,6 +507,14 @@ def _json_dump(meta, out_root: str | None = None):
         os.makedirs(_os_d, exist_ok=True)
     with open(_p, "w", encoding="utf-8") as _f:
         _j.dump(meta, _f, ensure_ascii=False, indent=1)
+    # 自审 arch N8: 投影 staleness 守卫 sidecar(与 command_metadata.json 同写盘点)——
+    # 消费端(tool-describe/tool-run 等)读投影前比对源码 mtime 指纹, 改源码未重跑
+    # render → warn, 不再静默吃旧数据(yaml 快照比对机制延伸到 JSON 投影)
+    try:
+        from tbtools_cli.meta_guard import write_fingerprint
+        write_fingerprint(out_root)
+    except Exception:
+        pass  # sidecar 不可写不阻断(守卫缺失=无对比基准, 不打扰)
 
 def _clip_words(text: str, limit: int) -> str:
     """词边界截断(自审 product P2-5): limit 处不断半词; 顺带清理 usage 噪音

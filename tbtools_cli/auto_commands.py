@@ -268,13 +268,26 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
         _GROUP = None
 
     def _out_hint(args):
-        """从 args 按输出槽位置索引提取 output_hint(越界/flag 值 → None)。"""
-        if _OUT_HINT_IDX is None or _OUT_HINT_IDX >= len(args):
-            return None
-        _v = args[_OUT_HINT_IDX]
-        if not isinstance(_v, str) or _v.startswith("-"):
-            return None
-        return _v
+        """从 args 尾部向前找第一个『非 flag 值且扩展名命中产物后缀』的 token 作为
+        output_hint(自审 arch N9: 旧版按 doc 占位符序号索引 args[_OUT_HINT_IDX],
+        用户把可选 flag 插在位置参数间(--threads 8 in.fa out.svg)时序号指向 flag
+        值——hint 错位: 要么把真输入排除出快照(失去保护), 要么没排除真输出。
+        尾部向前找不依赖位置序号, flag 交错下仍指向真正的产物 token;
+        与 runtime/java._is_product_path 同后缀表(arch N1 保守兜底合并)。"""
+        if _OUT_HINT_IDX is None:
+            return None  # 无输出槽命令(纯输入/无产物)——不猜
+        _px: tuple[str, ...]
+        try:
+            from tbtools_cli.runtime.java import _PRODUCT_EXT as _px
+        except Exception:
+            _px = (".svg", ".png", ".pdf", ".nwk", ".fa", ".fasta", ".gff",
+                   ".gff3", ".gtf", ".meme", ".tree", ".aln", ".collinearity")
+        for _t in reversed(args):
+            if not isinstance(_t, str) or not _t or _t.startswith("-"):
+                continue  # flag 或空, 跳过(flag 的值不单独成 token 对, 保守只认裸产物)
+            if _t.lower().endswith(_px):
+                return _t
+        return None
 
     if kind == "bridge":
         def impl(args, verbose=False, quiet=False):

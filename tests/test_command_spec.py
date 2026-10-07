@@ -16,12 +16,30 @@ def _meta():
 
 class TestCommandSpec:
     def test_specs_match_metadata(self):
-        """CommandSpec 集合 == metadata 集合(单一模型对齐, 防漂移)"""
+        """CommandSpec 集合 == metadata 集合(单一模型对齐, 防漂移) + 字段级比对
+        (自审 arch N5 短期: 名字集合相同只是"巧合"——装饰器正则单侧漏检/错配时
+        set 可能仍相等; 字段级比对把"两侧投影一致"变成保证)。"""
         specs = build_command_specs()
         meta = _meta()
         assert set(specs) == set(meta), \
             f"specs/metadata 不一致: 缺 {set(meta) - set(specs)}, 多 {set(specs) - set(meta)}"
         assert len(specs) >= 250
+        # N5 短期: 字段级比对(kind/group/runner/help 投影全等)——
+        # 任一命令单侧字段漂移(正则断链/无 docstring 错配下一条)即红
+        _field_diffs = []
+        for _n in sorted(specs):
+            _s, _m = specs[_n], meta[_n]
+            for _f, _sv, _mv in (("kind", _s.kind, _m.get("kind")),
+                                 ("group", _s.group, _m.get("group")),
+                                 ("runner", _s.runner, _m.get("runner")),
+                                 ("help", _s.doc, _m.get("help"))):
+                if _sv != _mv:
+                    _field_diffs.append(f"{_n}.{_f}: specs={_sv!r} meta={_mv!r}")
+        assert not _field_diffs, "specs/metadata 字段漂移(重跑 gen_metadata --render):\n" + "\n".join(_field_diffs[:10])
+        # N5 发现 4: 无 docstring 命令被正则错配下一条 doc——非 tool 命令 doc 必须非空
+        _empty_doc = [n for n, s in specs.items()
+                      if s.kind != "tool" and not (s.doc or "").strip()]
+        assert not _empty_doc, f"非 tool 命令 doc 空(可能被正则错配/漏扫): {_empty_doc[:10]}"
 
     def test_spec_dataclass(self):
         s = CommandSpec(name="x", group="expr", kind="direct")

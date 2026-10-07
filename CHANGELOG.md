@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.89] - 2026-10-07
+
+### 自评 P2×7 收官——剩余 P2 全部闭环(自审战役终章)
+- **product P2-8-②**: tool-submit 异步路径加输入预检(与 tool-run 共用 _precheck_input_flags helper)——缺失输入直接 TB002/exit 2 拒提交, 不再异步白跑到晚期失败; 顺带修复 tool-submit 缺 ignore_unknown_options 致 flag 参数(如 --inPaf)从未能透传的隐藏 bug
+- **arch N9**: _out_hint 改为从 args 尾部向前找第一个『非 flag 值且扩展名命中产物后缀』的 token(旧版按 doc 占位符序号索引 args, 用户把可选 flag 插在位置参数间时指向 flag 值——快照保护错位); 与 runtime/java._PRODUCT_EXT 同后缀表(arch N1 合并)
+- **verified F5 残**: test_report_counts 硬下限魔数 40 → 派生精确断言(exec_ok == len(EXEC_VERIFIED) - 白名单 3: tableMerge/preparespecies flag 输入, gel 无参防挂起)——新增工具无数据/静默删数据文件都显形
+- **verified N5 残**: efpHeat/multiEfp 绝对字节窗口(30-50KB/25-60KB)→ 内容级断言(rect 计数 ≥100 + 非空)——跨 JRE/字体不再假失败
+- **arch N6**: 静默降级簇三处可见化——command_spec manual 扫描 except+warn / clear_specs_cache except+warn / cli_load._spec_groups except 退回 CATEGORY_MAP 时 warn; gen_metadata 别名**双轨兜底删除**(import 失败即 raise, 不再静默降级成结构不同的产物)。**顺带抓到并修复真实循环 import**(command_spec 顶层 import cli_load ↔ cli_load._spec_groups 反向 import——分组投影曾静默失败, 现函数内延迟导入无循环)
+- **arch N8**: command_metadata.json 投影 staleness 守卫——新模块 meta_guard.py(生成端/消费端共用源码 mtime 聚合指纹), --render 写 sidecar command_metadata.fingerprint.json, 5 处 Agent 面消费端(version/describe/tool-run/search)读投影前比对, 源码变更未重跑 render → stderr warn(yaml 快照比对机制延伸到 JSON 投影; sidecar 纳入 --check 对比, 505 surface)
+- **arch N5 短期**: test_specs_match_metadata 升级字段级比对(kind/group/runner/help 投影全等)+ 非 tool 命令 doc 非空断言(名字集合相同只是"巧合", 字段级才是"保证"——正则单侧漏检/错配即红)
+- **门禁**: pytest 627 passed + 52 skipped + 2 xfailed(含 conformance 全量 59) / --check 298 命令/505 surface 全绿(verification=55) / ruff 0 / mypy 0
+- **自评战役终章**: P0×1 + P1×14 + P2×27 全部闭环(红队冻结建议: level+证据属性不加层级保持)
+
 ## [1.4.88] - 2026-10-07
 
 ### 自评 P2 三连(静默降级可见化 + describe 形状定案 + 缺陷活测试)

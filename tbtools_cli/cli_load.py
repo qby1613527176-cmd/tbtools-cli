@@ -26,7 +26,11 @@ def _spec_groups() -> dict:
     try:
         from tbtools_cli.command_spec import build_command_specs
         return {n: s.group for n, s in build_command_specs().items() if s.group}
-    except Exception:
+    except Exception as _e:
+        # 自审 arch N6: CommandSpec 分组投影静默失效退回 CATEGORY_MAP → 可见化
+        # (分组推断错位会让 help 前缀/分组路由与模型不一致, 不再沉默)
+        import warnings as _w
+        _w.warn(f"CommandSpec 分组投影失败, 退回 CATEGORY_MAP: {_e}", RuntimeWarning, stacklevel=2)
         return {}
 
 
