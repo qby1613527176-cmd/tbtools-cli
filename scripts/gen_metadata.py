@@ -82,9 +82,9 @@ def scan_manual_commands():
                 continue
             cmds[name] = {"name": name, "kind": "manual", "mode": "manual", "class": "",
                           "xmx": "", "runner": "plot", "help": docfirst[:300], "src": "auto_manual"}
-    except Exception:
-        pass
-    # 4) add_command 别名(help 借用须在 1-3 之后, 目标 help 已填)
+    except Exception as _e85:
+        # gate P2-1: manual 扫描失败 → 该批命令静默消失(arch N6 同源), 可见化
+        print(f"⚠️ 告警: auto_commands 源码扫描失败, manual 命令可能缺失: {_e85}", file=sys.stderr)
     for m in re.finditer(r"(\w+_group)\.add_command\((\w+),\s*name=[\"']([a-zA-Z][a-zA-Z0-9_]*)[\"']\)", src):
         fn, alias = m.group(2), m.group(3)
         if alias not in cmds:
@@ -115,8 +115,9 @@ def _infer_group(name, kind, src=""):
         from tbtools_cli.cli_load import CATEGORY_MAP as _CM
         if name in _CM:
             return _CM[name]
-    except Exception:
-        pass
+    except Exception as _e118:
+        # gate P2-1: CATEGORY_MAP 不可用 → 分组推断降级到 kind/src 兑底, 可见化
+        print(f"⚠️ 告警: CATEGORY_MAP 导入失败, 分组推断降级: {_e118}", file=sys.stderr)
     if kind == "tool":
         return "tool"
     if kind == "manual":
@@ -127,8 +128,9 @@ def _infer_group(name, kind, src=""):
             if m:
                 grp = m.group(1)[:-6]  # expr_group → expr
                 return grp
-        except Exception:
-            pass
+        except Exception as _e130:
+            # gate P2-1: 源码正则分组推断失败 → 回退 engine 分组, 可见化
+            print(f"⚠️ 告警: 分组源码扫描失败({name}), 回退 engine: {_e130}", file=sys.stderr)
     return "engine"
 
 
@@ -177,8 +179,9 @@ def build():
                 try:
                     from tbtools_cli.command_spec import KNOWN_DEPENDENCIES as _kd2
                     _dep = _kd2.get(alias) or _kd2.get(disp) or []
-                except Exception:
-                    pass
+                except Exception as _e180:
+                    # gate P2-1: 依赖表导入失败 → 依赖元数据缺失(产物仍生成), 可见化
+                    print(f"⚠️ 告警: KNOWN_DEPENDENCIES 不可用({alias}), 依赖元数据缺失: {_e180}", file=sys.stderr)
                 meta[alias] = {"name": alias, "kind": "manual", "mode": "manual", "class": "",
                                "xmx": "2g", "runner": "plot", "help": _d.get("help", ""),
                                "alias_of": disp, "src": "cli_manual", "group": _d.get("group", "engine"),
@@ -320,10 +323,13 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
                 counts["semantic_checked"] = sum(1 for e in _vt2.values() if e.get("semantic_checked"))
             else:
                 counts["semantic_checked"] = 0
-        except Exception:
+        except Exception as _e325:
             counts["semantic_checked"] = 0
-    except Exception:
-        pass
+            # gate P2-1: semantic_checked census 读取失败 → 静默报 0(与 _verif_n="?" 同源), 可见化
+            print(f"⚠️ 告警: semantic_checked census 读取失败, 报 0: {_e325}", file=sys.stderr)
+    except Exception as _e325b:
+        # gate P2-1: verified_tools census 整体读取失败 → 静默降级, 可见化
+        print(f"⚠️ 告警: verification census 读取失败(counts 降级): {_e325b}", file=sys.stderr)
     # 注(评审 #112): 两个绘图命令口径都合法勿互改——
     #   metadata_plot_commands(本文件): metadata 静态注册口径
     #   runtime 分组命令数: `tbtools version --json` 的 cli_commands(运行时全部分组,含 engine)
@@ -357,8 +363,9 @@ def _surface_hash(rel: str, path: str) -> str:
 
             _s = _j.dumps(_strip(_o), sort_keys=True, ensure_ascii=False)
             return _hl.sha256(_s.encode("utf-8")).hexdigest()
-        except Exception:
-            pass
+        except Exception as _e360:
+            # gate P2-1: JSON 结构化哈希失败 → 回退整字节(不再忽略 verified_at, 漂移检测变保守), 可见化
+            print(f"⚠️ 告警: surface JSON 解析失败({rel}), 回退整字节哈希: {_e360}", file=sys.stderr)
     return _hl.sha256(open(path, "rb").read()).hexdigest()
 
 
@@ -448,8 +455,7 @@ def main():
                                 if _age > 90:
                                     _old_days.append((_t2, _age))
                             except Exception:
-                                pass
-                    if _old_days:
+                                pass  # 单条 verified_at 解析失败 → 该条 TTL 检查跳过(可容忍, 下轮再查)
                         _msg = (f"❌ 验证超龄 {len(_old_days)} 个(>90 天, TTL 严格模式阻断): "
                                 + ", ".join(f"{t}({d}d)" for t, d in sorted(_old_days, key=lambda x: -x[1])[:8]))
                         if _ttl_strict:
@@ -544,8 +550,9 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         if _os.path.isfile(_vp):
             _vd = _json.load(open(_vp, encoding="utf-8"))
             _verif_details_map = _vd.get("verified_tools") or _vd.get("execution_verified_details") or {}  # 评审 #114: verified_tools canonical
-    except Exception:
-        pass
+    except Exception as _e547:
+        # gate P2-1: verification report 读取失败 → ai/tools 投影丢 evidence(静默), 可见化
+        print(f"⚠️ 告警: verification_report.json 读取失败, ai/tools 无 verification_details: {_e547}", file=sys.stderr)
     _os.makedirs(_os.path.join(ai_dir, "tools"), exist_ok=True)
     import shutil as _sh
     for _sub in _os.listdir(_os.path.join(ai_dir, "tools")):
@@ -656,8 +663,9 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         _json.dump({"schema_version": "1.0", "relations": _rels_all},
                    open(_os.path.join(ai_dir, "relations.json"), "w", encoding="utf-8"),
                    ensure_ascii=False, indent=1)
-    except Exception:
-        pass
+    except Exception as _e659:
+        # gate P2-1: relations.json 导出失败 → Agent 关系面缺失(静默), 可见化
+        print(f"⚠️ 告警: relations.json 导出失败, Agent 关系面缺失: {_e659}", file=sys.stderr)
     _json.dump({"schema_version": "1.0", "workflows": workflows},
                open(_os.path.join(ai_dir, "workflows.json"), "w", encoding="utf-8"),
                ensure_ascii=False, indent=1)

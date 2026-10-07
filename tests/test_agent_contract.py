@@ -68,6 +68,8 @@ class TestAgentContractDescribe:
         ec, out, _ = run_cli("tool-describe", tool, "--json")
         assert ec == 0
         d = json.loads(out)
+        assert isinstance(d, list) and len(d) == 1, "P2-8-①: --json 恒返回数组(单命令也数组)"
+        d = d[0]
         assert d.get("inputs"), f"{tool} 缺 inputs"
         assert d.get("outputs"), f"{tool} 缺 outputs"
         assert d.get("capabilities"), f"{tool} 缺 capabilities"

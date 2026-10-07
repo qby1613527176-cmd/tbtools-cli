@@ -715,9 +715,9 @@ def register_top(cli, _LG):
                 desc["outputs"] = v["outputs"]
             _all_desc.append(desc)
         if as_json:
-            # 自审 product F8: 批量 --json → 数组(单命令兼容: 仍返回单对象? 统一数组, 文档注明)
-            click.echo(_json.dumps(_all_desc if len(_all_desc) > 1 else _all_desc[0],
-                                   ensure_ascii=False, indent=1))
+            # 自审 product P2-8-①(定案): --json **恒返回数组**——单命令也返回数组,
+            # 与多命令一致(形状可预测, 消费者免判 len; 旧版单命令返单对象的形状多态已废弃)。
+            click.echo(_json.dumps(_all_desc, ensure_ascii=False, indent=1))
         else:
             for desc in _all_desc:
                 click.echo(f"  {desc['id']}")

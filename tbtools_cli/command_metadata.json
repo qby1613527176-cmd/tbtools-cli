@@ -2838,7 +2838,7 @@
   "semantic_fingerprint": "71a9b415e2ec52efd2f35a11cc30187d8f587241121a518386c55370dd4066fc",
   "semantic_fingerprint_short": "71a9b415e2ec52ef",
   "readiness": "FULL",
-  "verification": "COMPILEABLE",
+  "verification": "EXECUTION_VERIFIED",
   "capabilities": [
    "motif",
    "discovery"

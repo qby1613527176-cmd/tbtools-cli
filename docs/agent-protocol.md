@@ -70,7 +70,7 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 
 ## 6. Tool Contract(CommandSpec)
 
-`tool-describe <cmd> --json` 输出(稳定字段):
+`tool-describe <cmd> --json` 输出(**恒返回数组**, 单命令/多命令形状一致——自审 product P2-8-① 定案; 单命令取 `[0]`):
 
 ```json
 {

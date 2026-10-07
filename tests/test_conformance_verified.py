@@ -100,6 +100,7 @@ EXEC_VERIFIED = {
                        "{out}.svg"]),  # ids 用序列名(非 motif id)
     "mastrun": ("seq", ["examples/data/exec/meme/meme.xml", "examples/data/exec/meme/meme_in.fa",
                          "{out}"]),  # workingDir 模式, MAST 产物
+    "memerun": ("seq", ["examples/data/exec/meme/meme_in.fa", "{out}"]),  # workingDir 模式, MEME 产物(2026-10-07 转正: 原"JAR 缺类"缺陷已修复, 实测 0.96s exit0+真实产物)
     "hmmerSearch": ("hmm", ["examples/data/fasta/extract.in.fa", "examples/data/exec/hmm/test.hmm",
                              "{out}.tsv"]),  # target.fa 在前 hmmDb 在后, .raw 产物
     "pafviz": ("syn", ["examples/data/exec/test.paf", "{out}.svg"]),  # minimap2 造 PAF
@@ -472,6 +473,48 @@ class TestTier2ExecutionVerified:
         if not real:
             pytest.xfail(reason=f"GxFOverlapIndexer bin0 边界缺陷(v1.4.57): {tool} 低坐标无命中")
         assert real, f"{tool} 应有真实产物——若 JAR 已修复, 请移除本 xfail 分支并纳入 EXEC_VERIFIED" 
+
+
+class TestKnownDefectsXfail:
+    """已归档 JAR 缺陷的活测试固定(verified F7 残)——缺陷不隐身: 未修则 xfail,
+    JAR 升级修复后 xpass 翻红提示移除本分支并纳入 EXEC_VERIFIED 复测。
+    模板同 bin0(TestTier2ExecutionVerified.test_bin0_defect_xfail)。
+    来源: docs/REVIEW_PACKAGE_115.md 引擎缺陷 4 条(2026-10-06 归档判定)。"""
+
+    @pytest.mark.integration
+    @pytest.mark.parametrize("group,tool,args_tpl,reason", [
+        ("syn", "pafref",
+         ["--inPaf", "examples/data/exec/test.paf", "--outTab", "{out}.tsv"],
+         "PafRefBaseCoverCalc 引擎 NPE(this.text is null)"),
+        ("seq", "tfbsShift",
+         ["examples/data/exec/pep_cds.fa", "{out}"],
+         "MotifShiftCli InvocationTargetException(IOException)"),
+        # memerun 已于 2026-10-07 实测修复(exit 0 + 真实产物 0.96s)→ 移入 EXEC_VERIFIED 复测
+    ])
+    def test_known_defect_xfail(self, group, tool, args_tpl, reason, tmp_path):
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR")
+        out_base = str(tmp_path / "o")
+        args = [a.replace("{out}", out_base) for a in args_tpl]
+        os.makedirs(out_base, exist_ok=True)
+        env = dict(os.environ, TBTOOLS_JAR=jar)
+        try:
+            r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "tool-run",
+                                group, tool, *args, "--json"],
+                               capture_output=True, text=True, cwd=ROOT, env=env, timeout=240)
+        except subprocess.TimeoutExpired:
+            pytest.xfail(f"{tool} 引擎超时(>240s)——缺陷未修")
+        try:
+            d = json.loads(r.stdout)
+        except Exception:
+            pytest.xfail(f"{tool} 输出非 JSON(引擎异常崩溃)——缺陷未修: {r.stdout[:120]}")
+        arts = d.get("artifacts") or []
+        real = [a for a in arts if a.get("size", 0) > 0]
+        if d.get("exit_code") != 0 or not real:
+            pytest.xfail(f"{tool} 引擎缺陷未修: exit={d.get('exit_code')}, 无真实产物 — {reason}")
+        assert real, (f"{tool} 应有真实产物——若 JAR 已修复, 请移除本 xfail 分支"
+                      "并纳入 EXEC_VERIFIED 复测")
 
 
 class TestConformanceReport:

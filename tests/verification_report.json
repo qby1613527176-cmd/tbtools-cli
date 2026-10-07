@@ -88,6 +88,7 @@
   "mcscanx",
   "mcscanxd",
   "memeViz",
+  "memerun",
   "motif",
   "msy",
   "multiEfp",
@@ -300,6 +301,13 @@
    "contract_fingerprint": "dd1b351f32ecf23b35b1a19c8b7e82337b379d8ac73db1872955a1c691f03302",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
+   "corpus": "examples/data",
+   "domain_note": ""
+  },
+  "memerun": {
+   "contract_fingerprint": "9c49b49ab9729891d549f0b1f21671f6a884efbdf2f59fa2e16c36219df3f913",
+   "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
+   "verified_at": "2026-10-07T12:10:37",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -735,6 +743,15 @@
    "domain_note": "",
    "semantic_checked": false
   },
+  "memerun": {
+   "level": "EXECUTION_VERIFIED",
+   "contract_fingerprint": "9c49b49ab9729891d549f0b1f21671f6a884efbdf2f59fa2e16c36219df3f913",
+   "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
+   "verified_at": "2026-10-07T12:10:37",
+   "corpus": "examples/data",
+   "domain_note": "",
+   "semantic_checked": false
+  },
   "motif": {
    "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "23b42e6d6143e92ed5532e221b727162235ac2f51e5b482ef34238ddd5c6ddbe",
@@ -984,7 +1001,7 @@
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
    "corpus": "examples/data",
-   "domain_note": "",
+   "domain_note": "\u91d1\u94fe conformance \u516d\u6b65\u65ad\u8a00(\u683c\u5f0f/sha256/provenance/artifact_id), \u65e0\u5185\u5bb9\u7ea7\u8bed\u4e49\u65ad\u8a00(semantic_checked=false)\u2014\u2014\u5c42\u7ea7\u2260\u8bc1\u636e\u5f3a\u5ea6\u8d85\u96c6",
    "semantic_checked": false
   }
  },

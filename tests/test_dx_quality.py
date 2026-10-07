@@ -56,6 +56,8 @@ def test_agent_workflow_chain():
     assert "volcano" in [h["name"] for h in (d.get("hits") or [])], "search 应发现 volcano"
     r2 = _cli("tool-describe", "volcano", "--json")
     d2 = json.loads(r2.stdout)
+    assert isinstance(d2, list) and len(d2) == 1, "P2-8-①: --json 恒返回数组"
+    d2 = d2[0]
     assert d2.get("inputs"), "describe 应含 inputs 契约"
     assert d2["inputs"][0]["format"] == "tsv"
     # validate 需真实文件, 此处只验证命令可调用(格式错误输入也应返回结构化结果而非崩)

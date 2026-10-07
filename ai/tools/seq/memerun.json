@@ -27,7 +27,7 @@
  "semantic_fingerprint": "71a9b415e2ec52efd2f35a11cc30187d8f587241121a518386c55370dd4066fc",
  "semantic_fingerprint_short": "71a9b415e2ec52ef",
  "readiness": "FULL",
- "verification": "COMPILEABLE",
+ "verification": "EXECUTION_VERIFIED",
  "relations": {
   "accepts": [
    "PROTEIN_FASTA"
@@ -44,5 +44,14 @@
    "name": "meme",
    "format": "meme"
   }
- ]
+ ],
+ "verification_details": {
+  "level": "EXECUTION_VERIFIED",
+  "contract_fingerprint": "9c49b49ab9729891d549f0b1f21671f6a884efbdf2f59fa2e16c36219df3f913",
+  "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
+  "verified_at": "2026-10-07T12:10:37",
+  "corpus": "examples/data",
+  "semantic_checked": false,
+  "domain_note": ""
+ }
 }

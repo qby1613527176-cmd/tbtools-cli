@@ -2,6 +2,14 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.88] - 2026-10-07
+
+### 自评 P2 三连(静默降级可见化 + describe 形状定案 + 缺陷活测试)
+- **gate P2-1 残**: gen_metadata.py 9 处裸 `except pass` → stderr 告警——manual 源码扫描失败/CATEGORY_MAP 导入失败/分组正则回退/依赖表不可用/semantic_checked census 读取失败(报 0)/surface JSON 哈希回退/report 读取失败(ai/tools 丢 evidence)/relations.json 导出失败; 单条 verified_at 解析失败保留静默(可容忍降级)
+- **product P2-8-①**: tool-describe --json **恒返回数组**(单命令/多命令形状一致, 消费者免判 len)——旧版单命令返单对象的形状多态已废弃; agent-protocol 注明, 3 处测试同步断言
+- **verified F7 残**: 新增 TestKnownDefectsXfail 缺陷活测试固定(照 bin0 模板)——pafref(NPE this.text)/tfbsShift(InvocationTargetException) xfail 固定, JAR 修复后 xpass 翻红提示移除; **memerun 实测转正**(原"JAR 缺类"缺陷已修复, 0.96s exit0+真实产物)→ 移入 EXEC_VERIFIED(54→55), conformance 全量 59
+- **门禁**: pytest 627 passed + 52 skipped + 2 xfailed(含 conformance 全量) / --check 298 命令/504 surface 全绿(verification=55) / ruff 0 / mypy 0
+
 ## [1.4.87] - 2026-10-07
 
 ### P1-5 执行前预检再修正 + 自评 P2 四连(conformance 全量实测驱动)

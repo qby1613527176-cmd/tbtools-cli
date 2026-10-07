@@ -96,6 +96,6 @@
   "verified_at": "2026-10-06T03:59:46",
   "corpus": "examples/data",
   "semantic_checked": false,
-  "domain_note": ""
+  "domain_note": "金链 conformance 六步断言(格式/sha256/provenance/artifact_id), 无内容级语义断言(semantic_checked=false)——层级≠证据强度超集"
  }
 }

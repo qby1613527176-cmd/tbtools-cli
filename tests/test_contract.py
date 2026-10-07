@@ -88,6 +88,8 @@ def test_contract_describe_schema_fields():
     )
     assert r.returncode == 0, r.stderr
     d = json.loads(r.stdout)
+    assert isinstance(d, list) and len(d) == 1, "P2-8-①: --json 恒返回数组"
+    d = d[0]
     for k in ("schema_version", "id", "name", "group", "kind", "help"):
         assert k in d, f"describe 缺 {k}"
 
