@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.87] - 2026-10-07
+
+### P1-5 执行前预检再修正 + 自评 P2 四连(conformance 全量实测驱动)
+- **P1-5 再修正(两轮, conformance 全量 58 实测)**: 执行前输入预检只查 flag 形式输入(--inX/-i 值), positional 不预检(引擎层报真实错误)——启发式猜 positional 输入输出已三度误伤(barplot 列名 Term/Pvalue、mcscanx/kallisto 非末位输出); 预检正则只列输入型 flag, -o/--out/--output/--outFile 等输出 flag 值首次运行必然不存在, 查了即 TB002 误报(notung/barplotter 实测被拦)
+- **修复预检静默失效**: cli_top.py 补模块级 import re(此前 re.match NameError 被 except 吞, 预检等于没跑)
+- **product P2-8-④**: bridge_count 目录缺失回退 80→0(不假装数字, 实际 118)
+- **product P2-8-⑥**: 金链级 conformance(volcano)domain_note 语义说明——六步格式断言无内容级语义断言, 层级≠证据强度超集
+- **gate P2-1**: verification census 读取失败时 --check 打印告警(防 '?' 被报全同步)
+- **gate P2-3**: CI windows leg 改 pip install -r requirements-ci.txt(ruff 版本锁定对齐主 job)
+- **顺带**: .gitignore 忽略 examples/data/**/*.tbtools.json(conformance provenance 运行痕迹, 每次跑刷新不入库)
+- **门禁**: pytest 626 passed + 52 skipped(含 conformance 全量 58) / --check 298 命令/504 surface 全绿 / ruff 0 / mypy 0
+
 ## [1.4.86] - 2026-10-07
 
 ### 自评 P2 四连(验证语义 + 发布流程)
