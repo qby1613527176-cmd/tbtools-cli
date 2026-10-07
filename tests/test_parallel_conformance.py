@@ -143,7 +143,6 @@ class TestContractYamlLoader:
 
     def test_verification_tiers(self):
         from tbtools_cli.command_spec import verification_census
-        from tbtools_cli.core import JAR
         c = verification_census()
         # v1.4.65 arch F3 对称语义: 读取端**有 JAR 才比对 env_fp**(失配→降级),
         # 无 JAR **保守信任报告**(防交替全降级); report 在 git(发布时点证据)→ 55。
