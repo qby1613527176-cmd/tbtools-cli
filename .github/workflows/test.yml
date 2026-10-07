@@ -92,6 +92,8 @@ jobs:
         run: ruff check .
       - name: Windows 无 jar CLI 冒烟(跨平台验证)
         shell: bash
+        env:
+          PYTHONIOENCODING: utf-8  # Windows cp1252 无法解码中文 stdout(UnicodeDecodeError, 五视角自审 CI 首跑实测)
         run: |
           python -m tbtools_cli.cli version | grep -q "tbtools-cli" && echo "✅ version"
           python -m tbtools_cli.cli list plots | grep -cE '^    ' | awk '$1>100 {print "✅ list plots:", $1}'

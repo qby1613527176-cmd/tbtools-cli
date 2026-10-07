@@ -3,7 +3,7 @@
 # 断言: 退出码 0 + 输出文件存在且非 0 字节
 # 用例选已实测稳定的命令(数据匹配); 扩展新用例需先本地验证
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/.." || exit 1  # SC2164: cd 失败即退出(CI shellcheck 硬失败)
 DATA=examples/data
 OUT=$(mktemp -d)
 PASS=0; FAIL=0; FAILED_LIST=()
