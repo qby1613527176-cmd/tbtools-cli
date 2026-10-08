@@ -885,8 +885,24 @@ def register_top(cli, _LG):
     @click.option("--quiet", "quiet", is_flag=True, help="静默: stdout 只出结构化结果(日志进 stderr)")
     def tool_run(args, as_json, timeout_s, dry, quiet):
         """统一执行接口: 转发任意 tbtools 命令 + 结构化结果(退出码/时长/产物)"""
+        _usage_err = None
         import json as _json
         import time as _time
+        # 五视角自审 P1-5: 命令存在性前置校验(tool-run/tool-submit 对称)——
+        # 命令名打错不再等 click 报错后落到 TB002 文件缺失误导
+        if len(args) >= 2 and not dry:
+            _g0, _c0 = args[0], args[1]
+            _gset = set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {}))
+            _cset = set(_read_command_metadata())
+            if _g0 not in _gset or _c0 not in _cset:
+                _ue_err = {"code": "TB401_UNKNOWN_COMMAND", "category": "input",
+                           "retryable": False,
+                           "suggested_action": "unknown command/group — see tbtools list / search"}
+                click.echo(_json.dumps({"$schema": "https://json-schema.org/draft/2020-12/schema",
+                                        "schema_version": "1.0", "exit_code": 2,
+                                        "duration_s": 0.0, "artifacts": [], "timed_out": False,
+                                        "error": _ue_err}, ensure_ascii=False))
+                sys.exit(2)
         # --json 时: stdout 是协议(纯 JSON)——执行期 stdout → /dev/null(日志丢弃, Java 详情在 err 文件)
         _saved_fd = None
         if dry:
@@ -1028,6 +1044,11 @@ def register_top(cli, _LG):
                     ec = cli.main(list(args), standalone_mode=False) if cli is not None else 1
                 except SystemExit as _e:
                     ec = int(_e.code or 0)  # 命令内部 sys.exit(0/2) 在嵌套调用下逃逸——捕获
+                except click.UsageError as _ue:
+                    # 五视角自审 P1-5: 命令名打错 → click UsageError("No such command 'x'"),
+                    # 此前落到 TB002 文件缺失误导; 捕获文本供错误归因(TB401_UNKNOWN_COMMAND)
+                    ec = 2
+                    _usage_err = str(_ue)
                 ec = ec or 0
         finally:
             if _saved_fd is not None:
@@ -1108,6 +1129,13 @@ def register_top(cli, _LG):
             from tbtools_cli.errors import ERROR_CODES
             _ec_map = {v["exit"]: k for k, v in ERROR_CODES.items()}
             _code = _ec_map.get(ec, "TB001_INVALID_ARGUMENT")
+            # 五视角自审 P1-5: 命令名打错被报成文件缺失(suggested_action 误导)。
+            # click 对未知子命令报 "No such command 'x'" → 归因 TB401_UNKNOWN_COMMAND
+            if ec == 2 and (_usage_err or "").lower().find("no such command") >= 0 \
+                    or (ec == 2 and (_usage_err or "").lower().find("not a command") >= 0):
+                _code = "TB401_UNKNOWN_COMMAND"
+                error = {"code": _code, "retryable": False,
+                         "suggested_action": "command name is wrong — see tbtools list / search / tbtools <group> --help"}
             _meta = ERROR_CODES.get(_code, {})
             error = {"code": _code, "retryable": _meta.get("retryable", False),
                      "suggested_action": _meta.get("action", "")}

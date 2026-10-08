@@ -11,6 +11,9 @@ ERROR_CODES: dict[str, dict[str, object]] = {
     "TB003_INPUT_FORMAT_ERROR": {"exit": 3, "retryable": False, "action": "check input format/columns/separator"},
     "TB004_INPUT_SCHEMA_ERROR": {"exit": 3, "retryable": False, "action": "input does not match required schema"},
     "TB005_DEPENDENCY_MISSING": {"exit": 1, "retryable": False, "action": "install missing dependency (see doctor)"},
+    # 五视角自审 P1-5: exit 5/6 此前未注册——_ec_map 反查落到默认 TB101 误导(桥编译失败被报成参数错误)
+    "TB006_POLICY_DENIED":      {"exit": 5, "retryable": False, "action": "operation rejected by policy"},
+    "TB007_BRIDGE_COMPILE_FAILED": {"exit": 6, "retryable": False, "action": "bridge compile failed — check JDK/javac and JAR (see doctor)"},
     "TB007_TOOL_TIMEOUT":       {"exit": 1, "retryable": True,  "action": "retry with more time or smaller input"},
     "TB008_OUT_OF_MEMORY":      {"exit": 4, "retryable": True,  "action": "increase memory in config.toml [defaults]"},
     "TB009_ENGINE_CRASH":       {"exit": 1, "retryable": False, "action": "engine-level defect; see PITFALL/docs"},
