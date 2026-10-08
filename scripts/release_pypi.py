@@ -17,6 +17,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -44,17 +45,36 @@ def version() -> str:
     return m.group(1)
 
 
+_TMP_DIRS: list = []
+
+
+def _cleanup_tmp() -> None:
+    """gate P2-2: 清理脚本创建的临时 venv 目录(防 /tmp 泄漏)。"""
+    import shutil as _sh
+    for _d in _TMP_DIRS:
+        _sh.rmtree(_d, ignore_errors=True)
+    _TMP_DIRS.clear()
+
+
 def main():
     ap = argparse.ArgumentParser(description='tbtools-cli PyPI 一键发布')
     ap.add_argument('--dry-run', action='store_true', help='只 build+check+冒烟, 不上传')
     a = ap.parse_args()
     ver = version()
     print(f'== tbtools-cli {ver} → PyPI ==')
+    # gate P2-2: tag 一致性断言——tag != HEAD 或 tag != pyproject 都拒绝(防忘打 tag 直接发);
+    # dry-run 跳过(只校验打包质量, 不发)
+    if not a.dry_run:
+        _tag = subprocess.run(['git', 'describe', '--tags', '--exact-match', 'HEAD'],
+                              cwd=ROOT, capture_output=True, text=True, timeout=30)
+        if _tag.returncode != 0 or _tag.stdout.strip() != f'v{ver}':
+            raise SystemExit(f'[发布中止] git tag 与 pyproject 不一致: tag={_tag.stdout.strip()!r} pyproject=v{ver} —— 先打 tag 再发')
 
     # 0) 门禁预检(发布前必须绿)
     sh(['python3', 'scripts/gen_metadata.py', '--check'])
     sh(['ruff', 'check', '.'])
-    sh(['/home/elysia/.venvs/mypy_tbtools/bin/mypy', 'tbtools_cli/', 'scripts/gen_metadata.py'])
+    _mypy = shutil.which('mypy') or '/home/elysia/.venvs/mypy_tbtools/bin/mypy'  # gate P2-2: 换机器可运行
+    sh([_mypy, 'tbtools_cli/', 'scripts/gen_metadata.py'])
 
     # 1) 包内验证证据快照(安装态 census/describe 可见; 真源 tests/)
     sh(['cp', 'tests/verification_report.json', 'tbtools_cli/verification_report.json'])
@@ -73,6 +93,7 @@ def main():
 
     # 3) twine check(临时 venv 装 twine, 不依赖系统 pip)
     tv = tempfile.mkdtemp(prefix='twine_venv_')
+    _TMP_DIRS.append(tv)
     sh([sys.executable, '-m', 'venv', tv], check=False)
     sh([os.path.join(tv, 'bin', 'pip'), 'install', '-q', 'twine'], timeout=300)
     tw = os.path.join(tv, 'bin', 'twine')
@@ -80,6 +101,7 @@ def main():
 
     # 4) 干净 venv 冒烟(wheel 安装 + 核心功能 + 安装态验证证据)
     pv = tempfile.mkdtemp(prefix='pypi_venv_')
+    _TMP_DIRS.append(pv)
     sh([sys.executable, '-m', 'venv', pv])
     sh([os.path.join(pv, 'bin', 'pip'), 'install', '-q', whl], timeout=300)
     r = sh([os.path.join(pv, 'bin', 'tbtools'), 'version', '--json'])
@@ -90,6 +112,7 @@ def main():
 
     if a.dry_run:
         print('--dry-run: build+check+冒烟 全过, 未上传。')
+        _cleanup_tmp()
         return
 
     # 5) upload(~/.pypirc token, 不打印)
@@ -100,6 +123,7 @@ def main():
     for i in range(8):
         time.sleep(15)
         pv2 = tempfile.mkdtemp(prefix='pypi_pull_')
+        _TMP_DIRS.append(pv2)
         sh([sys.executable, '-m', 'venv', pv2], check=False)
         r = subprocess.run([os.path.join(pv2, 'bin', 'pip'), 'install', '-q', '--no-cache-dir',
                             f'tbtools-cli=={ver}'], capture_output=True, text=True, timeout=180)
@@ -116,6 +140,7 @@ def main():
             return
         except Exception:
             last_err = 'version 校验失败'
+    _cleanup_tmp()
     raise SystemExit(f'[发布中止] PyPI 拉取验证超时(索引传播慢): {last_err}')
 
 
