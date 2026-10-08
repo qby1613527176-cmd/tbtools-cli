@@ -39,6 +39,15 @@ jobs:
           python3 -m tbtools_cli.cli fetch-jar --yes 2>&1 | tail -3
           python3 -m tbtools_cli.cli doctor 2>&1 | grep -E "✅ JAR|sha256" | head -2
 
+      # 2026-10-08: create-pull-request 权限失败时会留下 nightly/verification-refresh
+      # 残留分支 → 后续 run 的 create-pull-request 因分支已存在而失败(连红串因)。
+      # 每次开跑先清, 防残留累计。
+      - name: Clean stale writeback branch
+        run: |
+          gh api -X DELETE "repos/${{ github.repository }}/git/refs/heads/nightly/verification-refresh" || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Nightly E2E (real engine plots)
         run: |
           xvfb-run -a bash scripts/e2e_nightly.sh
@@ -65,7 +74,13 @@ jobs:
           export TBTOOLS_TTL_STRICT=1
           python3 scripts/gen_metadata.py --check 2>&1 | tail -6
 
+      # 2026-10-08: create-pull-request 在仓库未开"Allow GitHub Actions to create and
+      # approve pull requests"时创建 PR 必 403("Resource not accessible by integration"——
+      # workflow 内 permissions 无法覆盖该仓库级开关)。nightly 验证使命(fetch-jar+e2e+
+      # report 写回+TTL)已在前置步骤完成, 本步仅提交流程: continue-on-error 容忍失败
+      # 不红全流程; 用户开启该开关后删除 continue-on-error 即恢复严格。
       - name: Report writeback PR (evidence freshness)
+        continue-on-error: true
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "chore: verification_report 夜间保鲜(真实引擎执行)"
