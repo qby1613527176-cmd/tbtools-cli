@@ -289,7 +289,7 @@ class TestTier1CompileVerified:
         # (报告绑定"最后跑测试的环境" → 本地/CI 交替全降级)。JAR 缺席时沿用旧值。
         from tbtools_cli.core import JAR as _JAR
         _env_fp = _envfp() if os.path.isfile(_JAR) else None
-        # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新——契约未变则保留
+        # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新(verified N8 修正: 实际代码为 contract+env_fp 双条件——契约变**或** env_fp 变(有 JAR 时)都刷新; 单条件注释与代码漂移, 按 #115 注释为准)——契约与 env 均未变则保留
         # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
         # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
         # → render 后 ai/tools 漂移 → --check 恒定假阳性(2026-10-04 实测 19:22→19:26)
