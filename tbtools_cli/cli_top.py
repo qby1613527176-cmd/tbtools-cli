@@ -1226,6 +1226,20 @@ except Exception:
             click.echo(f"❌ 输入文件不存在: {_pre_probs[0]}", err=True)
             click.echo("   修复: 检查路径或创建文件后重试 (TB002_FILE_NOT_FOUND, exit 2); 任务未提交", err=True)
             sys.exit(2)
+        # 五视角自审 P1-4: 命令存在性校验(submit 是 Agent 长任务入口, "提交即成功"
+        # 的假信号比同步失败更难处理——tool-run 立即报错, submit 曾照单全收晚期 failed)
+        if len(args) >= 2:
+            _g, _c = args[0], args[1]
+            _known_groups = set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {}))
+            _known_cmds = set(_read_command_metadata())
+            if _g not in _known_groups:
+                click.echo(f"❌ 未知分组: {_g}(见 tbtools list)", err=True)
+                click.echo("   修复: 检查分组名后重试 (exit 2); 任务未提交", err=True)
+                sys.exit(2)
+            if _c not in _known_cmds:
+                click.echo(f"❌ 未知命令: {_c}(见 tbtools list / search)", err=True)
+                click.echo("   修复: 检查命令名后重试 (exit 2); 任务未提交", err=True)
+                sys.exit(2)
         jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
         # 独立监控进程(非线程): wait 任务 + 按退出码落盘终态(不依赖图形 provenance)
         job = {"id": jid, "status": "running", "pid": None, "args": list(args),
