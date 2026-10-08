@@ -58,7 +58,10 @@ _SIDE_EFFECT_RE = re.compile(
     re.IGNORECASE)
 # 参数名含 out/output/prefix/graph/dir/report → 值是输出路径，不纳入输入快照
 _OUT_FLAG_RE = re.compile(
-    r'^(--?)?(out|output|prefix|graph|dir|report)(file|path|fa|fq|tab|table|gff|gff3|gtf|txt|xml|xls|svg|png|pdf|nwk|pre|dir|put)*$',
+    # arch M6(五视角自审): 输出 flag 识别——out/output 系 + dir 系 + 复合前缀
+    # (outFilePrefix/outBase/outDirAndPrefix/outPutFile 等)。不匹配的后果: 输出 flag
+    # 的值被当输入快照/回滚(输出槽识别白名单泄漏)。
+    r'^(--?)?(out|output|prefix|graph|dir|report|result|o)(file|path|fa|fq|tab|table|gff|gff3|gtf|txt|xml|xls|svg|png|pdf|nwk|pre|dir|put|base|prefix|name|list|dir|dirandprefix)*$',
     re.IGNORECASE)
 _MAX_SNAPSHOT_COPY = 50 * 1024 * 1024  # >50MB 只记 (size, mtime)，不复制（无法恢复，只报警）
 

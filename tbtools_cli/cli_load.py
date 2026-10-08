@@ -251,6 +251,15 @@ def _load_meta_json():
             import json as _json
             _p = os.path.join(ROOT, "tbtools_cli", "command_metadata.json")
             _META_JSON = _json.load(open(_p, encoding="utf-8")) if os.path.isfile(_p) else {}
+            # arch M10(五视角自审): 人类 help 面绕过了 staleness 守卫(meta_guard)——
+            # 源码变更未 render 时 help 显示旧数据无提示; 与 cli_top._read_command_metadata 对齐
+            try:
+                from tbtools_cli.meta_guard import staleness_ok as _stale2
+                if not _stale2() and _META_JSON:
+                    import click as _click2
+                    _click2.echo("⚠️ 告警: command_metadata.json 投影过期(源码变更未重跑 gen_metadata --render)——help 数据可能滞后", err=True)
+            except Exception:
+                pass
         except Exception:
             _META_JSON = {}
     return _META_JSON
