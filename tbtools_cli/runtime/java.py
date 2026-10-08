@@ -574,7 +574,15 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
             if pitfall:
                 print(f"   ⚠️ 已知坑位: {pitfall}", file=sys.stderr)
         
-        # 自审 product F3: help 提示补 group 前缀(否则照做撞未知命令)
+        # 自审 product F3 + P2-4: help 提示补 group 前缀(否则照做撞未知命令)——
+        # 调用方未传 group(手动命令如 volcano 调 run_plot 不带)时, 从 command_name
+        # 反推(runtime 懒查, 避免 import 期循环); 反推失败则回退裸命令提示
+        if group is None and command_name:
+            try:
+                from tbtools_cli.cli_load import _group_of as _gof_r
+                group = _gof_r(command_name)
+            except Exception:
+                group = None
         _help_prefix = f"tbtools {group} {command_name}" if group else f"tbtools {command_name}"
         print(f"   📖 查看帮助: {_help_prefix} --help" if command_name else "   📖 查看帮助: tbtools --help", file=sys.stderr)
         
