@@ -49,11 +49,11 @@ ERROR_TIERS = {
     "TB003_INPUT_FORMAT_ERROR": ("TB103", "input"),
     "TB004_INPUT_SCHEMA_ERROR": ("TB104", "input"),
     "TB005_DEPENDENCY_MISSING": ("TB201", "dependency"),
-    "TB007_TOOL_TIMEOUT": ("TB002", "core"),
+    "TB007_TOOL_TIMEOUT": ("TB099", "core"),  # P2-6: 分层码避撞遗留码名(TB002=文件缺失, 同号不同义误导 Agent)
     "TB008_OUT_OF_MEMORY": ("TB301", "engine"),
     "TB009_ENGINE_CRASH": ("TB302", "engine"),
     "TB010_OUTPUT_MISSING": ("TB303", "engine"),
-    "TB012_INTERNAL_ERROR": ("TB001", "core"),
+    "TB012_INTERNAL_ERROR": ("TB098", "core"),  # P2-6: 同上避撞(TB001=参数错误)
 }
 
 

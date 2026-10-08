@@ -17,10 +17,16 @@ JAR = os.environ.get("TBTOOLS_JAR", "")
 HAS_JAR = bool(JAR and os.path.isfile(JAR))
 
 def run_cli(*args):
-    """运行 tbtools CLI 命令，返回 (exit_code, stdout, stderr)"""
+    """运行 tbtools CLI 命令，返回 (exit_code, stdout, stderr)
+    本机存在默认 JAR 时注入 TBTOOLS_JAR(P1-5③ JAR 前置检查需 env——
+    core.JAR 从 config 读, 无 env/config 时子进程报"JAR 未配置"拦截真实执行)。"""
+    _env = dict(os.environ)
+    _jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+    if os.path.isfile(_jar):
+        _env.setdefault("TBTOOLS_JAR", _jar)
     result = subprocess.run(
         [sys.executable, "-m", "tbtools_cli.cli"] + list(args),
-        capture_output=True, text=True, timeout=30
+        capture_output=True, text=True, timeout=30, env=_env
     )
     return result.returncode, result.stdout, result.stderr
 
