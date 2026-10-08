@@ -85,3 +85,19 @@ class TestDoctorUx:
         src = inspect.getsource(cli_top)
         assert "winget" in src or "Temurin" in src, \
             "P07: Java 安装提示应含 Windows/macOS 方案(不只 apt)"
+
+
+class _PkgReportAppend:
+
+    def test_pkg_report_matches_tests_source(self):
+        """gate P2-4(五视角自审): 包内 verification_report 快照(进 wheel 证据)必须与
+        tests/ 真源一致——绕过 release_pypi.py 的手工 pip wheel 会带旧快照/无快照,
+        无此断言则旁路无感。两侧都存在才比(与 dist skip 风格一致)。"""
+        import json
+        pkg = ROOT / "tbtools_cli" / "verification_report.json"
+        src = ROOT / "tests" / "verification_report.json"
+        if not (pkg.exists() and src.exists()):
+            pytest.skip("无包内快照(仅发布流程生成)")
+        a = json.loads(pkg.read_text(encoding="utf-8"))
+        b = json.loads(src.read_text(encoding="utf-8"))
+        assert a == b, "包内 verification_report 快照与 tests/ 真源不一致——手工 wheel 带旧证据"
