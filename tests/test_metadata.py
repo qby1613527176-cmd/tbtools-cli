@@ -72,6 +72,9 @@ def test_metadata_covers_runtime_commands():
     """发现层防丢(二期教训): 运行时分组命令必须可被 metadata 发现。
 
     背景: N23/N26 删除注册表条目导致 26 个手写 impl 命令从 metadata 消失(可用但 search/help 找不到)。
+    v1.4.92 加固: 提取改用 `list --json` 结构化数据源(弃正则刮人读文本——v1.4.82 P1-4
+    同款精神; 人读输出含 help wrap/缩进差异, CI(无 JAR)与本地输出不同致刮取误捕
+    notung help 片段(五视角自审 CI 首跑暴露)。
     """
     import json
     import os as _os
@@ -80,11 +83,11 @@ def test_metadata_covers_runtime_commands():
     cli_names = set()
     import tbtools_cli.cli as _c
     from click.testing import CliRunner
-    r = CliRunner().invoke(_c.cli, ["list", "plots"])
-    import re as _re
-    cli_names |= set(_re.findall(r"^    (\S+)", r.output, _re.M))
-    r2 = CliRunner().invoke(_c.cli, ["list", "tools"])
-    cli_names |= set(_re.findall(r"^    (\S+)", r2.output, _re.M))
+    for _cat in ("plots", "tools"):
+        r = CliRunner().invoke(_c.cli, ["list", _cat, "--json"])
+        assert r.exit_code == 0, r.output
+        d = json.loads(r.output)
+        cli_names |= {rec["name"] for rec in d.get("commands", [])}
     hidden = cli_names - set(meta)
     # 顶层管理命令不在 metadata 属预期;分组绘图/工具命令必须可发现
     expected_hidden = {"version", "doctor", "setup", "fetch_jar", "help", "examples", "list", "new",
