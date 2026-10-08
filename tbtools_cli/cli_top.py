@@ -892,7 +892,8 @@ def register_top(cli, _LG):
         # 命令名打错不再等 click 报错后落到 TB002 文件缺失误导
         if len(args) >= 2 and not dry:
             _g0, _c0 = args[0], args[1]
-            _gset = set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {}))
+            # tool/rpc 是特殊 CLI 组(不在 GROUPS dict, 但合法)——纳入已知集合防误拦
+            _gset = set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {})) | {"tool", "rpc"}
             _cset = set(_read_command_metadata())
             if _g0 not in _gset or _c0 not in _cset:
                 _ue_err = {"code": "TB401_UNKNOWN_COMMAND", "category": "input",
@@ -1093,15 +1094,19 @@ def register_top(cli, _LG):
                         _prov = _json.load(open(_po, encoding="utf-8"))
                         error = _prov.get("error")
                         for _o in _prov.get("outputs", []):
-                            _art = _afrom(_o) or _abuild(_o)
-                            artifacts.append(_art.to_dict())
-                            _found_any = True
-                            # 0B 占位产物 → prefix 发现真产物(longestorf: out.fa 0B + NoORF/Pep.fa)
-                            if (not os.path.isfile(_o)) or os.path.getsize(_o) == 0:
-                                for _x in discover_outputs(_o, created_after=t0):
-                                    if os.path.getsize(_x) > 0 and _x != _o:
-                                        artifacts.append(_abuild(_x).to_dict())
-                                        _found_any = True
+                            # 五视角自审 P1-2: 失败运行(provenance 仍写 outputs)时,
+                            # 产物文件不存在/0 字节 → 幻影子产物——不 append(Agent 会
+                            # 把幻影传下游或误判"部分成功"); 真实文件才进 artifacts。
+                            # 0B 占位依然要 prefix 发现真产物(longestorf: out.fa 0B +
+                            # NoORF/Pep.fa)——只跳过幻影 append, 不跳过真产物发现
+                            if os.path.isfile(_o) and os.path.getsize(_o) > 0:
+                                _art = _afrom(_o) or _abuild(_o)
+                                artifacts.append(_art.to_dict())
+                                _found_any = True
+                            for _x in discover_outputs(_o, created_after=t0):
+                                if os.path.getsize(_x) > 0 and _x != _o:
+                                    artifacts.append(_abuild(_x).to_dict())
+                                    _found_any = True
                     except Exception:
                         pass
                 # 兜底: provenance 缺失但产物真实(手动/桥类引擎)——直接 build + prefix 发现
@@ -1258,7 +1263,8 @@ except Exception:
         # 的假信号比同步失败更难处理——tool-run 立即报错, submit 曾照单全收晚期 failed)
         if len(args) >= 2:
             _g, _c = args[0], args[1]
-            _known_groups = set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {}))
+            _known_groups = (set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {}))
+                             | {"tool", "rpc"})  # tool/rpc 特殊 CLI 组
             _known_cmds = set(_read_command_metadata())
             if _g not in _known_groups:
                 click.echo(f"❌ 未知分组: {_g}(见 tbtools list)", err=True)
