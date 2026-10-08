@@ -407,6 +407,19 @@ class TestTier2ExecutionVerified:
         jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
         if not os.path.isfile(jar):
             pytest.skip("无 JAR")
+        # RPC 8765 依赖命令(gxfSplit/gxfIdAppender 走 JSON-RPC 非独立引擎): 无 RPC server 时
+        # skip(与 JAR 守卫同款)——此前无守卫致无 RPC 环境 conformance 确定性红
+        # (五视角自审 CI 后全量实测暴露: RPC server 未起时 tool-run 崩溃 stdout 空)
+        _RPC_TOOLS = {"gxfSplit", "gxfIdAppender"}
+        if tool in _RPC_TOOLS:
+            import socket as _sock
+            _probe = _sock.socket(_sock.AF_INET, _sock.SOCK_STREAM)
+            _probe.settimeout(0.5)
+            try:
+                _probe.connect(("127.0.0.1", 8765))
+                _probe.close()
+            except OSError:
+                pytest.skip("无 RPC server(port 8765)——RPC 依赖命令")
         group, args_tpl = EXEC_VERIFIED[tool]
         out_base = str(tmp_path / "o")
         args = [a.replace("{out}", out_base) for a in args_tpl]
@@ -475,10 +488,21 @@ class TestTier2ExecutionVerified:
         d = json.loads(r.stdout)
         arts = d.get("artifacts") or []
         real = [a for a in arts if a.get("size", 0) > 0]
-        # 预期: 引擎缺陷 → 无真实产物(静默空跑)。JAR 修复后 real 非空 →
-        # 断言真跑并转 PASS（-rfs 下可见），提示移除本 xfail 分支并纳入 EXEC_VERIFIED 复测
-        if not real:
-            pytest.xfail(reason=f"GxFOverlapIndexer bin0 边界缺陷(v1.4.57): {tool} 低坐标无命中")
+        # verified N2(五视角自审): 判据从"产物非空"升级为**内容级**——引擎行为已从
+        # "静默空跑"变"部分命中"(低坐标 3 peak 只注释 1 个, 产物非空但缺陷实质仍在),
+        # 旧判据 real 非空即 PASS(恒绿无信号)。
+        # 期望: 3/3 低坐标 peak 全注释(gene1/+/gene2/-/gene3+)——合成数据结果确定。
+        # 部分命中/全漏 → xfail(缺陷未修); 3/3 全过 → PASS 提示摘除并纳入 EXEC_VERIFIED。
+        def _defect_still_present() -> bool:
+            if not real:
+                return True  # 静默空跑(原始缺陷形态)
+            for a in real:
+                if a.get("path", "").endswith(".tsv"):
+                    return not _peakanno_map_ok(a["path"])
+            return True  # 无 tsv 产物(非预期形态也视为缺陷未修)
+
+        if _defect_still_present():
+            pytest.xfail(reason=f"GxFOverlapIndexer bin0 边界缺陷(v1.4.57): {tool} 低坐标未全注释")
         assert real, f"{tool} 应有真实产物——若 JAR 已修复, 请移除本 xfail 分支并纳入 EXEC_VERIFIED" 
 
 
@@ -518,8 +542,24 @@ class TestKnownDefectsXfail:
             pytest.xfail(f"{tool} 输出非 JSON(引擎异常崩溃)——缺陷未修: {r.stdout[:120]}")
         arts = d.get("artifacts") or []
         real = [a for a in arts if a.get("size", 0) > 0]
-        if d.get("exit_code") != 0 or not real:
-            pytest.xfail(f"{tool} 引擎缺陷未修: exit={d.get('exit_code')}, 无真实产物 — {reason}")
+        # verified N2(五视角自审): 判据收紧到"缺陷特征消失"才算修复——exit0+非空
+        # 不足以证明(部分命中/部分修复也会静默 PASS)。各缺陷的"已修复"特征:
+        # pafref: tsv 产物含覆盖度数值行(非 NPE 崩溃); tfbsShift: 产物非空(不再
+        # InvocationTargetException); memerun 已转正不入此表。
+        def _defect_still_present() -> bool:
+            if d.get("exit_code") != 0 or not real:
+                return True
+            if tool == "pafref":
+                for a in real:
+                    if a.get("path", "").endswith(".tsv"):
+                        txt = _read_text(a["path"])
+                        # 修复特征: 含覆盖度列(如位置/碱基数)而非空壳/NPE
+                        return not any(ln.strip() and len(ln.split("\t")) >= 4
+                                       for ln in txt.splitlines()[:20])
+            return False
+
+        if _defect_still_present():
+            pytest.xfail(f"{tool} 引擎缺陷未修: exit={d.get('exit_code')} — {reason}")
         assert real, (f"{tool} 应有真实产物——若 JAR 已修复, 请移除本 xfail 分支"
                       "并纳入 EXEC_VERIFIED 复测")
 
