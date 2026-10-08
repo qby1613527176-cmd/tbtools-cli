@@ -16,7 +16,7 @@
 - [一、快速导航](#一快速导航)
 - [二、绘图引擎 tbplot.sh 命令（140）](#二绘图引擎-tbplotsh-命令140)
 - [三、CLI 工具 tbtools tool（82）](#三cli-工具-tbtools-tool82)
-- [四、桥文档 bridges/*.java（80）](#四桥文档-bridgesjava80)
+- [四、桥文档 bridges/*.java（118）](#四桥文档-bridgesjava118)
 - [五、已知坑（实测）](#五已知坑实测)
 - [六、engine 通用反射](#六engine-通用反射)
 - [七、RPC 188 方法](#七rpc-188-方法)
@@ -1200,7 +1200,7 @@ tbtools tool list                 # 列出全部
 | `tpmCalc` | `biocjava.bioDoer.ExpressionLevelCalculator.TPMcalculator` |
 
 
-## 四、桥文档 bridges/*.java（80）
+## 四、桥文档 bridges/*.java（118）
 
 桥是 tbplot.sh 与 TBtools 引擎之间的 Java 适配层（tbplot.sh 内部自动编译调用）。每个桥的 Javadoc 含**完整的输入格式说明**，是最权威的参考——当某命令输出异常时，先读对应桥的 Javadoc。
 

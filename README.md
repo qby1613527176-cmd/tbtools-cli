@@ -14,9 +14,9 @@
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **298 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 63**(有 inputs 契约) | Registered 298(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 180+ RPC + 80+ CLI 工具 + 110+ Java 桥 + 引擎反射(逃生舱)。
+> **298 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 64**(有 inputs 契约) | Registered 298(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 188 RPC + 80 CLI 工具 + 118 Java 桥 + 引擎反射(逃生舱)。
 > 分级定义: FULL=契约完整(inputs+outputs+capabilities+stable; parameters 恒声明, 无参数工具视为"已声明无参数");PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
-> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(54)/semantic_checked(内容级断言工具数), 单工具证据详见 `tool-describe <命令> --json` verification_details(level/env_fingerprint/semantic_checked/domain_note)。
+> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(56)/semantic_checked(内容级断言工具数), 单工具证据详见 `tool-describe <命令> --json` verification_details(level/env_fingerprint/semantic_checked/domain_note)。
 
 <div align="center">
 
@@ -402,7 +402,7 @@ tbtools tool extractFasta          # extract/filter FASTA by ID list
 两层入口(2026-10-07 修正: 旧示例引用的类名直调已退役, 现为注册制):
 
 ```bash
-# ① 注册反射命令(常用引擎一键, 170 个): tbtools engine <命令>  →  tbtools engine list 全览
+# ① 注册反射命令(ENGINE_REGISTRY 170 个): tbtools engine <命令>  →  tbtools engine list 看 engine 组命令
 # ② 任意引擎类 setter 反射(Advanced):
 #    tbtools engine generic <engineClass> <method[+method2]> <out> --set field=value
 # 示例(离线纯计算, 秒回):

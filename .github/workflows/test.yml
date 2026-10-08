@@ -48,6 +48,7 @@ jobs:
 
       - name: "Coverage report (硬门槛: fail_under 35%, 自审 gate P1-1 升级为门禁成员)"
         run: |
+          set -o pipefail  # gate P1-2(五视角自审): tail 吞退出码→fail_under 永不生效, pipefail 保真
           python3 -m pytest --cov=tbtools_cli --cov-report=term-missing tests/ -q 2>&1 | tail -6  # pytest-cov 已在 requirements-ci.txt
 
       - name: "Run full pytest suite (评审 #115 E4: skip 口径显式报告; 自审 gate P1-4: 不硬编码 skip 数)"

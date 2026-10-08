@@ -364,8 +364,28 @@ def build_and_load(cli):
     """组装: 建 groups → 动态注册 auto_commands + tbplot.sh 遗留 → 返回 groups dict"""
     _ensure_groups(cli)
     _load_auto_commands()
+    _register_engine_list()
     _load_dynamic_commands()
     return _groups
+
+
+def _register_engine_list():
+    """engine list: 列出 engine 组全部反射命令(F-NEW-5 五视角自审: README 与
+    `tbtools list plots` 运行时均引用 `tbtools engine list`, 但命令不存在——
+    用户可复制即失败的指引)。
+    """
+    _eng = _groups.get('engine')
+    if _eng is None or 'list' in getattr(_eng, 'commands', {}):
+        return
+
+    @click.command('list', help='列出 engine 组全部反射命令(引擎反射兜底入口一览)')
+    def _engine_list():
+        _names = sorted(getattr(_eng, 'commands', {}))
+        click.echo(f"Engine 反射命令({len(_names)}):")
+        for _n in _names:
+            click.echo(f"  {_n}")
+
+    _eng.add_command(_engine_list)
 
 
 def _ensure_groups(cli):
