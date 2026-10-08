@@ -3,6 +3,10 @@ name: nightly-e2e
 # 真实引擎 nightly 回归(GPT 评审 #5): 5+ 代表命令 × 真实 JAR × 真实 examples 数据
 # 每日 01:00 UTC 自动跑; fetch-jar 静默下载真实 JAR → 每个命令断言出图/产物非空
 
+permissions:
+  contents: write   # Report writeback PR(peter-evans/create-pull-request)需要建分支+PR——
+                    # 默认 GITHUB_TOKEN read-only 时该步骤 403(2026-10-08 实测红)
+
 on:
   workflow_dispatch:
   schedule:
