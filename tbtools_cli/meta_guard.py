@@ -76,8 +76,13 @@ def write_fingerprint(out_root: str | None = None) -> None:
 
 def staleness_ok() -> bool:
     """消费端调用: 仓库 sidecar 指纹 vs 当前源码——一致=True(新鲜)。
-    sidecar 缺失(老仓库/首跑) → True(无对比基准不打扰)。"""
+    sidecar 缺失(老仓库/首跑) → True(无对比基准不打扰)。
+    安装态(PyPI wheel, product P1-7 五视角自审): ROOT 无 bridges/ 目录时跳过比对——
+    sidecar 是构建期固化的源码快照, 运行时(用户 site-packages)无需也不该再比
+    (wheel 重设 mtime/路径布局与仓库不同, 比对必然假告警——警告疲劳比没有更糟)。"""
     try:
+        if not os.path.isdir(os.path.join(ROOT, "bridges")):
+            return True  # 安装态: 构建期快照, 不做运行时比对
         if not os.path.isfile(_SIDE_REPO):
             return True
         with open(_SIDE_REPO, encoding="utf-8") as _f:
