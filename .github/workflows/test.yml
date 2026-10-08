@@ -65,7 +65,7 @@ jobs:
           python3 -m tbtools_cli.cli list tools | grep -q "命令行工具" && echo "✅ list tools"
           python3 -m tbtools_cli.cli sets ven 2>&1 | grep -q "venn" && echo "✅ 拼写纠错"
           python3 -m tbtools_cli.cli new --list | grep -q "场景" && echo "✅ new 向导"
-          python3 -m tbtools_cli.cli check /no/such/file 2>/dev/null; [ $? -ne 0 ] && echo "✅ check 失败退出码"
+          python3 -m tbtools_cli.cli check /no/such/file 2>/dev/null && echo "❌ check 应失败" && exit 1 || echo "✅ check 失败退出码"  # set -e 下 ';' 不保护, 用 &&/|| 链
           python3 -m tbtools_cli.cli --help | grep -q "TBtools-II" && echo "✅ help"
 
       - name: Verify metadata (唯一数据源一致性)
