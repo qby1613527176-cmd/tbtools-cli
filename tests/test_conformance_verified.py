@@ -395,6 +395,19 @@ def _build_report_and_persist() -> None:
             _cur_conf = set(_cur.get("conformance_verified", []))
             _want_exec = set(EXEC_VERIFIED.keys())
             _reported = _cur_exec == _want_exec and _cur_conf == set(CONFORMANCE_VERIFIED)
+            # verified N7 ②: 只读校验不只比名单, 还比证据内容——verified_at 被手改
+            # 或 contract_fp 缺失不会被名单比对检出; 每工具证据需有可解析的
+            # verified_at(ISO) 与非空 contract_fingerprint(忽略 verified_at 值本身)
+            if _reported:
+                import datetime as _dt2
+                _vt = _cur.get("verified_tools") or {}
+                for _t2 in sorted(EXEC_VERIFIED):
+                    _ev = _vt.get(_t2) or {}
+                    assert _ev.get("contract_fingerprint"), f"{_t2} 证据缺 contract_fingerprint"
+                    try:
+                        _dt2.datetime.fromisoformat(_ev.get("verified_at", ""))
+                    except ValueError:
+                        raise AssertionError(f"{_t2} verified_at 非 ISO 格式: {_ev.get('verified_at')!r}")
             if not _reported:
                 _missing = _want_exec - _cur_exec
                 _extra = _cur_exec - _want_exec

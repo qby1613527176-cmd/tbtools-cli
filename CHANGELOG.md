@@ -8,7 +8,7 @@
 - **microsyn 复攻成功(原"数据合成未攻克"归档)**: multi/ 合成数据(sp1.gff/sp2.gff/sp1_sp2.collinearity——v1.4.41 收编 multisyn 时造的)形态恰好匹配 MCScanX 格式 + 完整区间参数(--chr1/--start1/--end1/--chr2/--start2/--end2, 染色体名须数值) → 引擎 0.55s 出 SVG(双物种基因名文本, 内容级语义断言); 移入 EXEC_VERIFIED(55→56)
 - **smart 复攻评估(归档确认)**: 网络可达但服务端拒绝引擎旧式提交协议(redirect header e=4)——外部通道已变, 不硬攻
 - **EXEC_VERIFIED_LEFTOVER.md 状态同步**: memerun 已转正(v1.4.88)/microsyn 已收编/pafref+tfbsShift 已建 xfail 活测试——剩余 3 个(2 引擎缺陷有活测试盯梢 + 1 外部依赖归档)
-- **门禁**: pytest 628 passed + 52 skipped + 2 xfailed(含 conformance 全量 60) / --check 298 命令/505 surface 全绿(verification=56) / ruff 0 / mypy 0
+- **门禁**(P2-6 注明: 为 bump 时点快照, bump 后合入的 commit 数字不追溯, 以 HEAD 实跑为准): pytest 628 passed + 52 skipped + 2 xfailed(含 conformance 全量 60) / --check 298 命令/505 surface 全绿(verification=56) / ruff 0 / mypy 0
 
 ## [1.4.90] - 2026-10-07
 
