@@ -253,6 +253,165 @@ CONFORMANCE_VERIFIED = {"volcano"}
 PROV_COVERAGE: dict[str, bool] = {}
 
 
+# ── verified N7 ①(五视角自审): 报告写入者=验证者时序修复 ──
+# 旧结构: Tier1(纯编译, 不执行引擎)为全部 56 工具写 EXECUTION_VERIFIED 证据——
+# 包括同进程中尚未运行/刚失败的 Tier2 工具(引擎回归时报告照写通过证据);
+# 唯一防护是 workflow 步骤序(incidental), 本机 TBTOOLS_WRITE_REPORT=1 无保护。
+# 修复: ① hook 收集 Tier2 每工具真实执行结果; ② 报告构建+写盘/校验移到
+# TestConformanceReport(在 Tier2 之后); ③ 本次失败的工具不刷新证据(保留旧证据)。
+_TIER2_RESULTS: dict = {}
+_COMPILE_VERIFIED: list = []
+
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    if (rep.when == "call" and item.cls is not None
+            and item.cls.__name__ == "TestTier2ExecutionVerified"):
+        _tool = getattr(item, "callspec", None)
+        if _tool and "tool" in _tool.params:
+            # skip(无 JAR/RPC)≠ fail: 均不刷新证据(没真跑过), 语义分开便于审计
+            _TIER2_RESULTS[_tool.params["tool"]] = ("pass" if rep.passed
+                                                    else ("skip" if rep.skipped else "fail"))
+
+
+def _build_report_and_persist() -> None:
+    """构建 verification_report.json 并写盘(TBTOOLS_WRITE_REPORT=1)/只读校验。
+    verified N7 ① 时序修复: 原在 Tier1(纯编译)构建写盘——为未跑/失败的 Tier2 工具
+    写通过证据; 现移到 TestConformanceReport(全部 Tier2 之后)调用, 且本次失败工具
+    不刷新证据(继承旧证据)。"""
+    # verification_report.json(评审 #86 P1-6 + #110 P1): 测试产物驱动 verification_level
+    # #110: execution_verified 绑定 contract_fingerprint——contract 修改后旧验证自动失效
+    # (加载端比对当前 fp, 不匹配降级; 防"contract 变了但清单仍标 EXECUTION_VERIFIED")
+    import datetime as _dt
+    import json as _jr
+    from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
+    from tbtools_cli.identity import engine_env_fingerprint as _envfp
+    # 评审 #115 预审 P1-2(D2) 响应: verified_at 刷新双条件——contract_fp 变 OR
+    # 引擎环境指纹(env_fp) 变; 换 JAR/二进制契约不变时不再保留旧验证时间(防
+    # verified_at 指向不存在的引擎)。env_fp 与 contract_fp 并列, 不并入(语义分离)。
+    # 自审 arch F3 后修正: JAR 缺失(CI/无引擎环境)时 **不刷新 env_fp**——
+    # Tier1 编译验证不依赖 JAR, 无 JAR 重写会把有 JAR 环境的验证证据洗掉
+    # (报告绑定"最后跑测试的环境" → 本地/CI 交替全降级)。JAR 缺席时沿用旧值。
+    from tbtools_cli.core import JAR as _JAR
+    _env_fp = _envfp() if os.path.isfile(_JAR) else None
+    # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新(verified N8 修正: 实际代码为 contract+env_fp 双条件——契约变**或** env_fp 变(有 JAR 时)都刷新; 单条件注释与代码漂移, 按 #115 注释为准)——契约与 env 均未变则保留
+    # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
+    # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
+    # → render 后 ai/tools 漂移 → --check 恒定假阳性(2026-10-04 实测 19:22→19:26)
+    _old_verified: dict = {}
+    _old_vp = os.path.join(ROOT, "tests", "verification_report.json")
+    if os.path.isfile(_old_vp):
+        try:
+            _old_verified = (_jr.load(open(_old_vp, encoding="utf-8")).get("verified_tools")
+                             or {})
+        except Exception:
+            _old_verified = {}
+    _exec_entries = {}
+    for _t in sorted(EXEC_VERIFIED.keys()):
+        _fp = _fpfn(SPECS[_t])
+        _old = _old_verified.get(_t, {})
+        if _TIER2_RESULTS.get(_t) in ("fail", "skip"):
+            # verified N7 ①: 本次 Tier2 未通过(失败=引擎回归 / skip=环境缺 JAR·RPC)——
+            # 都不刷新证据(没真跑过不写"通过"记录), 继承旧证据
+            if _t in _old_verified:
+                _exec_entries[_t] = _old_verified[_t]
+                continue
+        _env_w = _env_fp if _env_fp is not None else _old.get("env_fingerprint")  # 无 JAR: 保留旧证据
+        # verified_at 保留: 有 JAR 时需 contract+env 双匹配; 无 JAR 时只看 contract(env 沿用旧值不刷新)
+        _keep_va = _old.get("contract_fingerprint") == _fp and (
+            _env_fp is None or _old.get("env_fingerprint") == _env_fp)
+        _exec_entries[_t] = {
+            "contract_fingerprint": _fp,
+            "env_fingerprint": _env_w,
+            "verified_at": (_old.get("verified_at") if _keep_va
+                            else _dt.datetime.now().isoformat(timespec="seconds")),
+            "corpus": "examples/data",
+            # 评审 #115 预审 P1-4/D1 响应: 输入域标注——bin0(<10000) 引擎缺陷
+            # 已固定(xfail 测试); 验证仅覆盖坐标 >=10000 域, 避免标签误导
+            "domain_note": ("verified for coords >= binSize(10000); "
+                             "bin0 engine defect documented (v1.4.57 xfail)"
+                             if _t in ("peakanno", "peaktss") else ""),
+        }
+    # 评审 #113 P1-1: verified_tools 单层 evidence map(tool → evidence object)——
+    # 不再"名单一份+details 一份"两段式(防 execution_verified 有 44 但 details 只有 33);
+    # 保留旧 list 字段兼容既有读取器(_load_verification_report)
+    _verified_tools = {}
+    # 自审 verified F2: semantic_checked 分级(标签诚实性)——有内容级语义断言的工具
+    # 与"只验过跑过"(非空+sha256 格式)的工具在机器可读层可区分
+    for _t in sorted(EXEC_VERIFIED.keys()):
+        _verified_tools[_t] = {
+            "level": "EXECUTION_VERIFIED",
+            "contract_fingerprint": _exec_entries[_t]["contract_fingerprint"],
+            "env_fingerprint": _exec_entries[_t]["env_fingerprint"],  # 评审 #115 预审 P1-2
+            "verified_at": _exec_entries[_t]["verified_at"],
+            "corpus": _exec_entries[_t]["corpus"],
+            "domain_note": _exec_entries[_t].get("domain_note", ""),  # 评审 #115 预审 P1-4
+            "semantic_checked": _t in SEMANTIC_CHECKS,  # 自审 verified F2: 内容级断言分级
+        }
+    for _t in CONFORMANCE_VERIFIED:
+        # 自审 v1.4.87 product P2-8-⑥: 金链级(volcano)语义说明——金链=格式+sha256+
+        # provenance+artifact_id 六步全断言, 但**无内容级语义断言**(semantic_checked=false),
+        # 与"层级高=证据强度超集"的直觉相反; domain_note 明示, 防 Agent 按高层=更强误读
+        _conf_note = ("金链 conformance 六步断言(格式/sha256/provenance/artifact_id), "
+                      "无内容级语义断言(semantic_checked=false)——层级≠证据强度超集")
+        if _t in _verified_tools:
+            _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
+            if not _verified_tools[_t].get("domain_note"):
+                _verified_tools[_t]["domain_note"] = _conf_note
+        else:
+            _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
+                                   "contract_fingerprint": _exec_entries.get(_t, {}).get("contract_fingerprint", ""),
+                                   "env_fingerprint": _exec_entries.get(_t, {}).get("env_fingerprint", ""),
+                                   "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
+                                   "corpus": _exec_entries.get(_t, {}).get("corpus", ""),
+                                   "domain_note": _exec_entries.get(_t, {}).get("domain_note", "") or _conf_note,
+                                   "semantic_checked": _t in SEMANTIC_CHECKS}
+    _report = {"compile_verified": sorted(_COMPILE_VERIFIED),
+               "execution_verified": sorted(EXEC_VERIFIED.keys()),
+               "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
+               "execution_verified_details": _exec_entries,
+               "verified_tools": _verified_tools,
+               # 自审 verified F8: 三层体系明示——CONFORMANCE_VERIFIED 是试验层(n=1, volcano 标杆),
+               # 金链升级路线暂无第二批推广计划; 防"三层叙事"超卖(实际两层+展品)
+               "verification_tiers_note": "CONFORMANCE_VERIFIED = 试验层(n=1, volcano 金链标杆): "
+                                         "compile→execute→artifact→sha256→provenance→id 全断言通过; "
+                                         "舱批工具升级候选与时间表未定——读取方勿按'三层全满'解读。"}
+    # 自审 gate P1-3: 报告写入改显式 opt-in——pytest 默认只读校验(证据文件不被"跑了
+    # pytest"而非"完成了验证"的环境污染); 显式刷新用 TBTOOLS_WRITE_REPORT=1
+    # (本机验证/nightly 回写时设)。证据可复现性 = 写入者=验证者。
+    if os.environ.get("TBTOOLS_WRITE_REPORT") == "1":
+        # 自审 verified F9: with 块确保句柄关闭(裸 open 句柄泄漏)
+        with open(os.path.join(ROOT, "tests", "verification_report.json"), "w",
+                  encoding="utf-8") as _fout:
+            _jr.dump(_report, _fout, indent=1)
+    else:
+        # 只读校验(默认): 报告名单与当前 EXEC/CONF 名单漂移 → 红(提醒显式刷新),
+        # 防"验证名单改了但报告没同步"静默漂移。
+        try:
+            _cur = _jr.load(open(os.path.join(ROOT, "tests", "verification_report.json"), encoding="utf-8"))
+            _cur_exec = set(_cur.get("execution_verified", []))
+            _cur_conf = set(_cur.get("conformance_verified", []))
+            _want_exec = set(EXEC_VERIFIED.keys())
+            _reported = _cur_exec == _want_exec and _cur_conf == set(CONFORMANCE_VERIFIED)
+            if not _reported:
+                _missing = _want_exec - _cur_exec
+                _extra = _cur_exec - _want_exec
+                print(f"⚠️ verification_report.json 与当前名单不同步: 缺 {sorted(_missing)} 多 {sorted(_extra)}"
+                      f"——验证名单变更后需 TBTOOLS_WRITE_REPORT=1 显式刷新", file=sys.stderr)
+                raise AssertionError(
+                    f"verification_report.json 漂移: 缺 {sorted(_missing)} 多 {sorted(_extra)}。")
+        except FileNotFoundError:
+            print("⚠️ 无 verification_report.json——需 TBTOOLS_WRITE_REPORT=1 首刷", file=sys.stderr)
+            raise
+        except AssertionError:
+            raise
+        except Exception as _e5:
+            print(f"⚠️ 报告只读校验异常: {_e5}", file=sys.stderr)
+
+
+
 class TestTier1CompileVerified:
     """59 FULL 全部 compile-verified(契约编译行为一致)"""
 
@@ -274,129 +433,8 @@ class TestTier1CompileVerified:
                 spec.invocation.build_argv(inputs=fake, parameters={"__nope__": "1"}, output="o.out")
             verified.append(tool)
         assert len(verified) == len(FULL_TOOLS),             f"compile-verified {len(verified)}/{len(FULL_TOOLS)}: 缺 {set(FULL_TOOLS) - set(verified)}"
-        # verification_report.json(评审 #86 P1-6 + #110 P1): 测试产物驱动 verification_level
-        # #110: execution_verified 绑定 contract_fingerprint——contract 修改后旧验证自动失效
-        # (加载端比对当前 fp, 不匹配降级; 防"contract 变了但清单仍标 EXECUTION_VERIFIED")
-        import datetime as _dt
-        import json as _jr
-        from tbtools_cli.identity import execution_contract_fingerprint as _fpfn
-        from tbtools_cli.identity import engine_env_fingerprint as _envfp
-        # 评审 #115 预审 P1-2(D2) 响应: verified_at 刷新双条件——contract_fp 变 OR
-        # 引擎环境指纹(env_fp) 变; 换 JAR/二进制契约不变时不再保留旧验证时间(防
-        # verified_at 指向不存在的引擎)。env_fp 与 contract_fp 并列, 不并入(语义分离)。
-        # 自审 arch F3 后修正: JAR 缺失(CI/无引擎环境)时 **不刷新 env_fp**——
-        # Tier1 编译验证不依赖 JAR, 无 JAR 重写会把有 JAR 环境的验证证据洗掉
-        # (报告绑定"最后跑测试的环境" → 本地/CI 交替全降级)。JAR 缺席时沿用旧值。
-        from tbtools_cli.core import JAR as _JAR
-        _env_fp = _envfp() if os.path.isfile(_JAR) else None
-        # 评审 #114 fix: verified_at 只在 contract_fp 变化时刷新(verified N8 修正: 实际代码为 contract+env_fp 双条件——契约变**或** env_fp 变(有 JAR 时)都刷新; 单条件注释与代码漂移, 按 #115 注释为准)——契约与 env 均未变则保留
-        # 既有验证时间(证据语义: "该契约版本何时通过验证", 而非"测试何时跑");
-        # 否则每次 conformance 运行都刷时间戳 → verification_report.json 恒 dirty
-        # → render 后 ai/tools 漂移 → --check 恒定假阳性(2026-10-04 实测 19:22→19:26)
-        _old_verified: dict = {}
-        _old_vp = os.path.join(ROOT, "tests", "verification_report.json")
-        if os.path.isfile(_old_vp):
-            try:
-                _old_verified = (_jr.load(open(_old_vp, encoding="utf-8")).get("verified_tools")
-                                 or {})
-            except Exception:
-                _old_verified = {}
-        _exec_entries = {}
-        for _t in sorted(EXEC_VERIFIED.keys()):
-            _fp = _fpfn(SPECS[_t])
-            _old = _old_verified.get(_t, {})
-            _env_w = _env_fp if _env_fp is not None else _old.get("env_fingerprint")  # 无 JAR: 保留旧证据
-            # verified_at 保留: 有 JAR 时需 contract+env 双匹配; 无 JAR 时只看 contract(env 沿用旧值不刷新)
-            _keep_va = _old.get("contract_fingerprint") == _fp and (
-                _env_fp is None or _old.get("env_fingerprint") == _env_fp)
-            _exec_entries[_t] = {
-                "contract_fingerprint": _fp,
-                "env_fingerprint": _env_w,
-                "verified_at": (_old.get("verified_at") if _keep_va
-                                else _dt.datetime.now().isoformat(timespec="seconds")),
-                "corpus": "examples/data",
-                # 评审 #115 预审 P1-4/D1 响应: 输入域标注——bin0(<10000) 引擎缺陷
-                # 已固定(xfail 测试); 验证仅覆盖坐标 >=10000 域, 避免标签误导
-                "domain_note": ("verified for coords >= binSize(10000); "
-                                 "bin0 engine defect documented (v1.4.57 xfail)"
-                                 if _t in ("peakanno", "peaktss") else ""),
-            }
-        # 评审 #113 P1-1: verified_tools 单层 evidence map(tool → evidence object)——
-        # 不再"名单一份+details 一份"两段式(防 execution_verified 有 44 但 details 只有 33);
-        # 保留旧 list 字段兼容既有读取器(_load_verification_report)
-        _verified_tools = {}
-        # 自审 verified F2: semantic_checked 分级(标签诚实性)——有内容级语义断言的工具
-        # 与"只验过跑过"(非空+sha256 格式)的工具在机器可读层可区分
-        for _t in sorted(EXEC_VERIFIED.keys()):
-            _verified_tools[_t] = {
-                "level": "EXECUTION_VERIFIED",
-                "contract_fingerprint": _exec_entries[_t]["contract_fingerprint"],
-                "env_fingerprint": _exec_entries[_t]["env_fingerprint"],  # 评审 #115 预审 P1-2
-                "verified_at": _exec_entries[_t]["verified_at"],
-                "corpus": _exec_entries[_t]["corpus"],
-                "domain_note": _exec_entries[_t].get("domain_note", ""),  # 评审 #115 预审 P1-4
-                "semantic_checked": _t in SEMANTIC_CHECKS,  # 自审 verified F2: 内容级断言分级
-            }
-        for _t in CONFORMANCE_VERIFIED:
-            # 自审 v1.4.87 product P2-8-⑥: 金链级(volcano)语义说明——金链=格式+sha256+
-            # provenance+artifact_id 六步全断言, 但**无内容级语义断言**(semantic_checked=false),
-            # 与"层级高=证据强度超集"的直觉相反; domain_note 明示, 防 Agent 按高层=更强误读
-            _conf_note = ("金链 conformance 六步断言(格式/sha256/provenance/artifact_id), "
-                          "无内容级语义断言(semantic_checked=false)——层级≠证据强度超集")
-            if _t in _verified_tools:
-                _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
-                if not _verified_tools[_t].get("domain_note"):
-                    _verified_tools[_t]["domain_note"] = _conf_note
-            else:
-                _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
-                                       "contract_fingerprint": _exec_entries.get(_t, {}).get("contract_fingerprint", ""),
-                                       "env_fingerprint": _exec_entries.get(_t, {}).get("env_fingerprint", ""),
-                                       "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
-                                       "corpus": _exec_entries.get(_t, {}).get("corpus", ""),
-                                       "domain_note": _exec_entries.get(_t, {}).get("domain_note", "") or _conf_note,
-                                       "semantic_checked": _t in SEMANTIC_CHECKS}
-        _report = {"compile_verified": sorted(verified),
-                   "execution_verified": sorted(EXEC_VERIFIED.keys()),
-                   "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
-                   "execution_verified_details": _exec_entries,
-                   "verified_tools": _verified_tools,
-                   # 自审 verified F8: 三层体系明示——CONFORMANCE_VERIFIED 是试验层(n=1, volcano 标杆),
-                   # 金链升级路线暂无第二批推广计划; 防"三层叙事"超卖(实际两层+展品)
-                   "verification_tiers_note": "CONFORMANCE_VERIFIED = 试验层(n=1, volcano 金链标杆): "
-                                             "compile→execute→artifact→sha256→provenance→id 全断言通过; "
-                                             "舱批工具升级候选与时间表未定——读取方勿按'三层全满'解读。"}
-        # 自审 gate P1-3: 报告写入改显式 opt-in——pytest 默认只读校验(证据文件不被"跑了
-        # pytest"而非"完成了验证"的环境污染); 显式刷新用 TBTOOLS_WRITE_REPORT=1
-        # (本机验证/nightly 回写时设)。证据可复现性 = 写入者=验证者。
-        if os.environ.get("TBTOOLS_WRITE_REPORT") == "1":
-            # 自审 verified F9: with 块确保句柄关闭(裸 open 句柄泄漏)
-            with open(os.path.join(ROOT, "tests", "verification_report.json"), "w",
-                      encoding="utf-8") as _fout:
-                _jr.dump(_report, _fout, indent=1)
-        else:
-            # 只读校验(默认): 报告名单与当前 EXEC/CONF 名单漂移 → 红(提醒显式刷新),
-            # 防"验证名单改了但报告没同步"静默漂移。
-            try:
-                _cur = _jr.load(open(os.path.join(ROOT, "tests", "verification_report.json"), encoding="utf-8"))
-                _cur_exec = set(_cur.get("execution_verified", []))
-                _cur_conf = set(_cur.get("conformance_verified", []))
-                _want_exec = set(EXEC_VERIFIED.keys())
-                _reported = _cur_exec == _want_exec and _cur_conf == set(CONFORMANCE_VERIFIED)
-                if not _reported:
-                    _missing = _want_exec - _cur_exec
-                    _extra = _cur_exec - _want_exec
-                    print(f"⚠️ verification_report.json 与当前名单不同步: 缺 {sorted(_missing)} 多 {sorted(_extra)}"
-                          f"——验证名单变更后需 TBTOOLS_WRITE_REPORT=1 显式刷新", file=sys.stderr)
-                    raise AssertionError(
-                        f"verification_report.json 漂移: 缺 {sorted(_missing)} 多 {sorted(_extra)}。")
-            except FileNotFoundError:
-                print("⚠️ 无 verification_report.json——需 TBTOOLS_WRITE_REPORT=1 首刷", file=sys.stderr)
-                raise
-            except AssertionError:
-                raise
-            except Exception as _e5:
-                print(f"⚠️ 报告只读校验异常: {_e5}", file=sys.stderr)
-
+        global _COMPILE_VERIFIED
+        _COMPILE_VERIFIED = list(verified)  # N7 ①: 编译名单交收尾构建报告
 
 @pytest.mark.integration
 class TestTier2ExecutionVerified:
@@ -600,3 +638,6 @@ class TestConformanceReport:
         assert len(exec_ok) == len(EXEC_VERIFIED) - len(_NO_DATA_WHITELIST), (
             f"EXEC_VERIFIED 数据可用 {len(exec_ok)}/{len(EXEC_VERIFIED)}"
             f"(预期 {len(EXEC_VERIFIED) - len(_NO_DATA_WHITELIST)}, 白名单 {sorted(_NO_DATA_WHITELIST)})")
+        # verified N7 ①: 报告构建+写盘/只读校验收尾(全部 Tier2 之后执行——时序修复,
+        # 此前在 Tier1 纯编译阶段构建, 为未跑/失败的 Tier2 工具写通过证据)
+        _build_report_and_persist()
