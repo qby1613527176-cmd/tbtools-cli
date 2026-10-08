@@ -58,5 +58,75 @@
   "exit": 1,
   "retryable": false,
   "action": "wrapper bug; report with --verbose"
+ },
+ "TB101": {
+  "exit": 1,
+  "retryable": false,
+  "action": "check argument names/values, see --help",
+  "category": "input",
+  "legacy_code": "TB001_INVALID_ARGUMENT"
+ },
+ "TB102": {
+  "exit": 2,
+  "retryable": false,
+  "action": "check the input file path exists",
+  "category": "input",
+  "legacy_code": "TB002_FILE_NOT_FOUND"
+ },
+ "TB103": {
+  "exit": 3,
+  "retryable": false,
+  "action": "check input format/columns/separator",
+  "category": "input",
+  "legacy_code": "TB003_INPUT_FORMAT_ERROR"
+ },
+ "TB104": {
+  "exit": 3,
+  "retryable": false,
+  "action": "input does not match required schema",
+  "category": "input",
+  "legacy_code": "TB004_INPUT_SCHEMA_ERROR"
+ },
+ "TB201": {
+  "exit": 1,
+  "retryable": false,
+  "action": "install missing dependency (see doctor)",
+  "category": "dependency",
+  "legacy_code": "TB005_DEPENDENCY_MISSING"
+ },
+ "TB099": {
+  "exit": 1,
+  "retryable": true,
+  "action": "retry with more time or smaller input",
+  "category": "core",
+  "legacy_code": "TB007_TOOL_TIMEOUT"
+ },
+ "TB301": {
+  "exit": 4,
+  "retryable": true,
+  "action": "increase memory in config.toml [defaults]",
+  "category": "engine",
+  "legacy_code": "TB008_OUT_OF_MEMORY"
+ },
+ "TB302": {
+  "exit": 1,
+  "retryable": false,
+  "action": "engine-level defect; see PITFALL/docs",
+  "category": "engine",
+  "legacy_code": "TB009_ENGINE_CRASH"
+ },
+ "TB303": {
+  "exit": 1,
+  "retryable": false,
+  "action": "output not produced; check engine",
+  "category": "engine",
+  "legacy_code": "TB010_OUTPUT_MISSING"
+ },
+ "TB098": {
+  "exit": 1,
+  "retryable": false,
+  "action": "wrapper bug; report with --verbose",
+  "category": "core",
+  "legacy_code": "TB012_INTERNAL_ERROR"
  }
 }

@@ -623,8 +623,20 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
             }
         _json.dump(schema, open(_os.path.join(d, f"{name}.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     try:
-        from tbtools_cli.core import ERROR_CODES
-        _json.dump(ERROR_CODES, open(_os.path.join(ai_dir, "error-codes.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        # product P2-2(五视角自审): error-codes.json 从 errors.py 单一数据源生成——
+        # 旧版只投遗留码(TB001-TB012), 缺分层码(TB101/TB102/TB302…)与 exit 5/6 语义,
+        # Agent 读注册表无法解析实际载荷; 现合并 ERROR_CODES + ERROR_TIERS 双表
+        from tbtools_cli.errors import ERROR_CODES, ERROR_TIERS
+        _reg = dict(ERROR_CODES)  # 解除对内部 dict 引用(projection 副本)
+        for _legacy, (_tier, _cat) in ERROR_TIERS.items():
+            _reg[_tier] = {
+                "exit": _reg.get(_legacy, {}).get("exit", 1),
+                "retryable": _reg.get(_legacy, {}).get("retryable", False),
+                "action": _reg.get(_legacy, {}).get("action", "see --help / tool-describe"),
+                "category": _cat,
+                "legacy_code": _legacy,
+            }
+        _json.dump(_reg, open(_os.path.join(ai_dir, "error-codes.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     except Exception as _e1:
         print(f"⚠️ gen_metadata: error-codes.json 写盘失败: {_e1}", file=sys.stderr)  # 自审 gate P0-2: 静默 except 可见化
     workflows = [
