@@ -49,7 +49,8 @@ class TestDocConsistency:
 
     def test_execution_verified_consistent(self):
         """README 权威源行 execution_verified == version --json"""
-        import sys, json
+        import json
+        import sys
         sys.path.insert(0, str(ROOT))
         import subprocess
         r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "version", "--json"],
