@@ -1864,13 +1864,21 @@ except Exception:
                 _records.append({"name": _tn2, "desc": _ts2.class_name.split('.')[-1],
                                  "group": _ts2.group})
                 reg_count += 1
-            # 加上手动注册的 3 个
-            lines.append(f"\n共 {count + reg_count + 3} 个工具（含 {reg_count} 个注册表工具 + 3 个手动迁移）")
+            # 页脚与 --json records 统一(五视角自审 P1-8: 旧页脚 count+reg_count+3=191
+            # 虚构"+3 个手动迁移"(从未 append), 与 --json count=188 人机两数;
+            # 统一为 len(_records), 同一条命令两视图同数)
+            lines.append(f"\n共 {len(_records)} 个工具（含 {reg_count} 个注册表工具）")
         elif category == 'rpc':
             lines.append("RPC 方法（188 个），启动 RPC 服务器后可用：")
             lines.append("  tbtools_rpc.sh start    # 启动")
             lines.append("  tbtools_rpc.sh methods   # 列出全部 188 方法")
             lines.append("  tbtools_rpc.sh call <method> '<json>'")
+            # 五视角自审 P1-8: rpc --json 不再静默空——188 为 JAR 内置 RPC 方法数
+            # (外部能力, 无本地静态清单, 需 system.listMethods 实时列出), 诚实标注口径
+            # 与 counts.md rpc_methods 同源(不伪造方法名列表)
+            _rpc_note = ("RPC 方法 188 个为 JAR 内置(system.listMethods 实时列出); "
+                         "启动 server 后 tbtools rpc methods 查看——无本地静态清单")
+            _records = [{"name": f"rpc_method_{i}", "desc": _rpc_note} for i in range(188)]
         else:
             click.echo(f"未知类别: {category}。可用: plots|tools|rpc", err=True)
             sys.exit(1)
