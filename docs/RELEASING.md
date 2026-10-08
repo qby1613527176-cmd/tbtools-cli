@@ -27,7 +27,10 @@
    python3 scripts/gen_metadata.py --check    # 全绿 = 数字已同步（含版本门禁）
    grep -n "Agent-facing tools" README.md     # 引用块数字应指向 counts.md（agent_ready_full/execution_verified/semantic_checked）
    ```
-   README 里的具体数字必须**引用 counts.md 而非手写**；`--check` 全绿即视为数字核对完成。
+   README 里的具体数字必须**引用 counts.md 而非手写**；`--check` 全绿即视为生成式 surface 同步完成。
+   **门面手写数字(README/README_EN/agent.md 的 schema-capable/execution_verified/命令总数)
+   由 tests/test_doc_consistency.py 守卫**(F-NEW-7 五视角自审: --check 只扫生成物, 门面数字
+   曾无机器核对 → 每次发版再生漂移; 全量 pytest 必须绿含此守卫)。
 4. **跑门禁确认**：第「前置」节三条全绿
 5. **提交 + 打 tag**：
    ```bash
