@@ -38,6 +38,15 @@ def sources_content_fingerprint(root: str | None = None) -> str:
     _br = os.path.join(r, "bridges")
     if os.path.isdir(_br):
         _srcs += [os.path.join(_br, f) for f in sorted(os.listdir(_br)) if f.endswith(".java")]
+    # arch M9(五视角自审): 投影的真实输入——gen_metadata.py 自身(词边界/别名特判/ai 模板)
+    # 与 tests/verification_report.json(verification/readiness 直进 metadata/ai/*);
+    # 改它们投影变而指纹不变 → 新增这两个输入, 消费端改任一即告警
+    _gm = os.path.join(r, "scripts", "gen_metadata.py")
+    if os.path.isfile(_gm):
+        _srcs.append(_gm)
+    _vr = os.path.join(r, "tests", "verification_report.json")
+    if os.path.isfile(_vr):
+        _srcs.append(_vr)
     _h = hashlib.sha256()
     for _f in _srcs:
         try:
