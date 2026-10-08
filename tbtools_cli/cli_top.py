@@ -691,15 +691,22 @@ def register_top(cli, _LG):
             # 否则 Agent/用户照 README 查证会扑空(标签分层只活在静态投影层)。
             _vd = _verif_details_map.get(command)
             if _vd:
-                desc["verification_details"] = {
-                    "level": _vd.get("level", ""),
-                    "contract_fingerprint": _vd.get("contract_fingerprint", ""),
-                    "env_fingerprint": _vd.get("env_fingerprint", ""),
-                    "verified_at": _vd.get("verified_at", ""),
-                    "corpus": _vd.get("corpus", ""),
-                    "semantic_checked": bool(_vd.get("semantic_checked", False)),
-                    "domain_note": _vd.get("domain_note", ""),
-                }
+                # verified N3(五视角自审): 与 ai/tools 通道同构的分叉守卫——顶层
+                # verification 与嵌套 details.level 失配(契约/env 漂移后重跑验证前
+                # 窗口期)即视为证据失效不投影; 否则 tool-describe 会在漂移窗口期
+                # 并存 'verification: COMPILEABLE' + 'details.level: EXECUTION_VERIFIED'
+                # 的自相矛盾面(agent-protocol §6.1 声称全局成立, 实只在一半通道)。
+                _vd_level = _vd.get("level", "")
+                if _vd_level == v.get("verification"):
+                    desc["verification_details"] = {
+                        "level": _vd_level,
+                        "contract_fingerprint": _vd.get("contract_fingerprint", ""),
+                        "env_fingerprint": _vd.get("env_fingerprint", ""),
+                        "verified_at": _vd.get("verified_at", ""),
+                        "corpus": _vd.get("corpus", ""),
+                        "semantic_checked": bool(_vd.get("semantic_checked", False)),
+                        "domain_note": _vd.get("domain_note", ""),
+                    }
             if v.get("alias_of"):
                 desc["alias_of"] = v["alias_of"]
             if v.get("relations"):
