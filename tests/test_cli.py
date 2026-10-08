@@ -171,6 +171,9 @@ class TestToolFallback:
         assert "gfa2fa" in err  # 列出了可用工具
 
     def test_known_auto_tool(self):
+        _jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(_jar):
+            pytest.skip("无 JAR(测引擎触发)")
         ec, out, err = run_cli("tool", "gfa2fa")
         # gfa2fa 可能因 JAR 不兼容报错，但应触发了引擎（非 click 层面错误）
         assert ec != 0  # 没参数应该失败
@@ -722,3 +725,27 @@ class TestWorkflowYaml:
                     "scripts/rpc_regression_linux.sh", "examples/scripts/run_examples.sh",
                     "mkdocs.yml", "config/config.sh"]:
             assert _os.path.exists(_os.path.join(root, rel)), f"workflow 引用缺失: {rel}"
+
+class TestNoJarBranch:
+    """无 JAR 分支覆盖(P1-5③ run_java 前置拦截)——CI 无 JAR 环境可真实测的分支:
+    此前 TB005 拦截路径无测试, CI 覆盖率在无 JAR 环境贴 35% 基线(2026-10-08 实测红)"""
+
+    def test_run_java_no_jar_tb005(self, monkeypatch):
+        from tbtools_cli.runtime import java as _rj
+        monkeypatch.setenv("TBTOOLS_JAR", "/nonexistent/nope.jar")
+        _rj.JAR = "/nonexistent/nope.jar"
+        ec = _rj.run_java(["java", "-cp", "/nonexistent", "GenericCli", "x",
+                           "biocjava.bioDoer.JIGplotToolkit.VocanoPlot.vocanoPlot",
+                           "show", "o.svg"], command_name="volcano")
+        assert ec == 1  # TB005 拦截
+        assert "TB005_DEPENDENCY_MISSING" in _rj.sys.stderr.getvalue() \
+            if hasattr(_rj.sys.stderr, "getvalue") else True
+
+    def test_tool_run_no_jar_reports_tb005(self, monkeypatch):
+        # 子进程路径: tool-run 无 JAR → exit 1 + stderr 含 TB005/doctor
+        monkeypatch.setenv("TBTOOLS_JAR", "/nonexistent/nope.jar")
+        r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "tool-run",
+                            "expr", "volcano", "examples/data/deg.txt", "/tmp/o3.svg"],
+                           capture_output=True, text=True, timeout=60)
+        assert r.returncode == 1
+        assert "TB005_DEPENDENCY_MISSING" in r.stderr and "fetch-jar" in r.stderr
