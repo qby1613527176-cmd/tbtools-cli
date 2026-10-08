@@ -254,3 +254,38 @@ class TestImplSafety:
             assert "ssearch36" in capsys.readouterr().err
         finally:
             shutil.rmtree(td, ignore_errors=True)
+
+
+    # 五视角自审 P1-3: 快照保护两个盲区回归单测——
+    # 盲区 B: workingDir 模式(mastrun 型)末位真 positional 输入(seq.fasta)
+    # 曾被保守兜底当输出剔除(零写穿保护); 盲区 C: eggnog 型 flag 值(prefix/outdir)
+    # 让 _out_hint 落到输入 in.fa → 快照剔除主输入。
+    def test_snapshot_workingdir_mode_input_protected(self):
+        """mastrun 型 [meme.xml, seq.fasta, workingDir]: seq.fasta(输入)必须被快照"""
+        td = tempfile.mkdtemp()
+        try:
+            mx = os.path.join(td, "motifs.xml")
+            sf = os.path.join(td, "seq.fasta")
+            open(mx, "w").write("<meme/>")
+            open(sf, "w").write(">a\nATGC\n")
+            wd = os.path.join(td, "wd")
+            os.makedirs(wd)
+            snaps = core.snapshot_inputs(["java", "MastRunCli", mx, sf, wd])
+            snapped = [p for p, *_ in snaps]
+            assert sf in snapped, f"seq.fasta(输入)被剔除: {snapped}"
+            assert mx in snapped
+        finally:
+            shutil.rmtree(td, ignore_errors=True)
+
+    def test_snapshot_eggnog_flag_value_not_output_hint(self):
+        """eggnog 型 [in.fa, -o, prefix, --output_dir, outdir]: in.fa(输入)必须被快照"""
+        td = tempfile.mkdtemp()
+        try:
+            infa = os.path.join(td, "in.fa")
+            open(infa, "w").write(">a\nATGC\n")
+            snaps = core.snapshot_inputs(["java", "EggnogCli", infa, "-o", "prefix_x",
+                                          "--output_dir", td])
+            snapped = [p for p, *_ in snaps]
+            assert infa in snapped, f"in.fa(输入)被剔除: {snapped}"
+        finally:
+            shutil.rmtree(td, ignore_errors=True)

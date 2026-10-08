@@ -164,10 +164,15 @@ def snapshot_inputs(java_args: list, output_hint: str | None = None) -> list:
             continue
         if _a.endswith((".jar", ".class")):
             continue
-        # 保守兜底(arch N1 P0): 真 positional ≥2 且当前为最后一个真 positional
-        # 且产物后缀 → 视为输出槽(重跑时旧输出不被快照/回滚)。单输入(≥1)不启用,
-        # 避免 .fa/.tsv 双角色误伤——v1.4.67 教训。
-        if len(_pos_files) >= 2 and _i == _pos_files[-1] and _is_product_path(_a):
+        # 保守兜底(arch N1 P0; 五视角自审 P1-3 盲区 B 修正): 仅当同时满足
+        # ①真 positional 文件 ≥2(保证前面确有输入, v1.4.67 单输入不启——
+        # .fa/.tsv 双角色误伤教训) ②当前是最后一个真 positional ③它就是
+        # **java_args 真实末位 token**(mastrun 型 [meme.xml, seq.fasta, wd]
+        # 的 seq.fasta 不是 args 末位——真实输出 wd 是目录不在 positional 集,
+        # 旧条件把它当输出剔除 = 主输入零写穿保护) ④扩展名属产物后缀
+        # → 视为输出槽剔除。
+        if (len(_pos_files) >= 2 and _i == _pos_files[-1]
+                and _i == len(java_args) - 1 and _is_product_path(_a)):
             continue
         try:
             size = os.path.getsize(_a)

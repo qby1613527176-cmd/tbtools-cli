@@ -282,9 +282,24 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
         except Exception:
             _px = (".svg", ".png", ".pdf", ".nwk", ".fa", ".fasta", ".gff",
                    ".gff3", ".gtf", ".meme", ".tree", ".aln", ".collinearity")
-        for _t in reversed(args):
-            if not isinstance(_t, str) or not _t or _t.startswith("-"):
-                continue  # flag 或空, 跳过(flag 的值不单独成 token 对, 保守只认裸产物)
+        # 五视角自审 P1-3 盲区 C 修正: 先正向扫出 flag 值位置集合, 反向遍历时排除——
+        # eggnog 型 [in.fa, -o, prefix, --output_dir, outdir] 的 prefix/outdir 是
+        # flag 值, 旧逻辑不排除时落到输入 in.fa(带产物后缀)→ hint=输入 → 快照把
+        # 主输入剔除, 零保护。hint=None 反而正确(输入受快照保护)。
+        _flag_val_idx = set()
+        _prev_f = False
+        for _i2, _a2 in enumerate(args):
+            if isinstance(_a2, str) and _a2.startswith("-"):
+                _prev_f = _a2 not in ("--json", "--dry-run", "--quiet")  # 无值 flag
+            elif _prev_f:
+                _flag_val_idx.add(_i2)
+                _prev_f = False
+        for _i3 in range(len(args) - 1, -1, -1):
+            _t = args[_i3]
+            if not isinstance(_t, str) or not _t or _i3 in _flag_val_idx:
+                continue
+            if _t.startswith("-"):
+                continue
             if _t.lower().endswith(_px):
                 return _t
         return None
