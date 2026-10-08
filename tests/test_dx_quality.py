@@ -8,6 +8,8 @@ import os
 import subprocess
 import sys
 
+import pytest
+
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -40,6 +42,7 @@ def test_group_internal_typo_suggest():
 
 def test_mcp_search_empty_guidance():
     """MCP search 空输入: 返回用法引导(非裸 {})"""
+    pytest.importorskip("mcp", reason="MCP 依赖(optional extra)未装")
     from tbtools_cli.mcp_server import search
     import warnings
     with warnings.catch_warnings():

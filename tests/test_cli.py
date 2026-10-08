@@ -206,6 +206,11 @@ class TestExitCodes:
         assert ec == 0
 
     def test_missing_file(self):
+        # 真实引擎行为(分类与退出码因 JAR 在不在而异)——无 JAR 环境跳过
+        # (与 artifact_provenance 同款守卫; 五视角自审 CI 首跑暴露无 JAR ec=6)
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR(真实引擎集成)")
         ec, out, err = run_cli("expr", "volcano", "/nonexistent", "/tmp/out.svg")
         # Java 引擎报 FileNotFoundException → 退出码 1 或 2
         assert ec in (1, 2)
@@ -273,6 +278,10 @@ class TestRootNavigation:
 
     def test_error_shows_command_name(self):
         """报错时帮助提示带命令名 + 坑位提示"""
+        # hclust 真实引擎错误路径——无 JAR 环境桥编译失败文案不同, skip
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR(真实引擎错误路径)")
         ec, out, err = run_cli("expr", "hclust", "/no_file.txt", "/tmp/tb_x.svg")
         assert "tbtools hclust --help" in err
         assert "已知坑位" in err  # hclust 有坑位提示
