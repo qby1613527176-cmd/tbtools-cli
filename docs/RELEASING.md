@@ -12,7 +12,7 @@
   pytest tests/ -q && ruff check . && python3 -m mypy tbtools_cli/ scripts/gen_metadata.py
   python3 scripts/gen_metadata.py --check   # 含版本一致性门禁（vX.Y.Z 与 tag/README 对齐）
   ```
-- ⚠️ pytest 全量按默认 deselect 跳过真实执行（无 JAR 环境 52 skipped）；有 JAR 时 Tier-2 真实执行应跑
+- ⚠️ pytest 全量按默认 deselect 跳过真实执行（无 JAR 环境 skipped 数随套件变化, 以实际输出为准）；有 JAR 时 Tier-2 真实执行应跑
 
 ## 发版步骤（逐项打勾）
 
