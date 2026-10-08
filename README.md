@@ -74,7 +74,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [Example Outputs](#example-outputs)
 - [Plotting Engines (200+)](#plotting-engines-213)
 - [RPC Data Tools](#rpc-data-tools-188-methods)
-- [CLI Tools](#cli-tools-82)
+- [CLI Tools](#cli-tools-80)
 - [Engine Reflection](#engine-reflection)
 - [Project Structure](#project-structure)
 - [兼容层退役计划](#兼容层退役计划)
@@ -231,7 +231,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 | 文档 | 内容 |
 |:-----|:-----|
 | [`docs/README.md`](docs/README.md) | **维护者导航**（自审 F9）：活 plan / 编年史 / 评审流向 / 生成物 vs 手写物——接续会话入口 |
-| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80+ 个 CLI 工具（18 类功能分组）+ 110+ 个桥 Javadoc（输入格式权威来源）+ 49 条实测坑位 + engine 反射 + RPC 指引 |
+| [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80 个 CLI 工具（18 类功能分组）+ 118 个桥 Javadoc（输入格式权威来源）+ 49 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 180+ 方法参考（参数/返回值,自动生成） |
 
 ```bash
@@ -385,7 +385,7 @@ tbtools rpc OneStepBuildATree.process '{"inputPath":"seqs.fa","outputPath":"outd
 
 > 全部 188 方法见 [docs/rpc_methods_reference.md](docs/rpc_methods_reference.md) 或 `tbtools list rpc`
 
-## 🛠️ CLI Tools (82)
+## 🛠️ CLI Tools (80)
 
 ```bash
 tbtools tool <name> [args...]      # run any CLI tool; full help: tbtools list tools

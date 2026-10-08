@@ -2,7 +2,7 @@
 
 Run TBtools-II bioinformatics functions headlessly — from CLI, scripts, or AI agents.
 
-**200+ plotting/analysis commands + 180+ RPC data tools + 80+ CLI tools + 110+ Java bridges + arbitrary engine reflection**, all verified to produce real output.
+**200+ plotting/analysis commands + 180+ RPC data tools + 80 CLI tools + 118 Java bridges + arbitrary engine reflection**, all verified to produce real output.
 
 > **Numbers are machine-generated.** Run `tbtools version --json` (runtime) or see [docs/_generated/counts.md](docs/_generated/counts.md) (static registry, auto-generated to prevent drift).
 
@@ -72,7 +72,7 @@ Agent / CLI / Script
 
 - `core.py` split: `errors.py` (error codes) + `runtime/java.py` (execution/input-protection/provenance)
 - Input protection: engine side-effects on user files are snapshotted & restored
-- 46+ documented pitfalls; bilingual hints (Chinese default, `--lang en`)
+- 49 documented pitfalls; bilingual hints (Chinese default, `--lang en`)
 - Supply chain: `fetch-jar` records SHA256; `doctor` verifies it
 
 ## Command Groups
