@@ -17,6 +17,7 @@ import click
 
 from tbtools_cli.core import (
     BUILD_DIR,
+    JAR,
     _,
     get_default,   # heap 可配置
     get_java,
@@ -421,7 +422,17 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
     err_text = ""  # 自审 arch F2: 函数开头初始化——成功分支 N30 置 ec_out=1 后走自动修复不再 NameError
     import time as _time
     _t0 = _time.perf_counter()
-    
+
+    # 五视角自审 P1-5③: JAR 缺失前置归因——
+    # 否则报"引擎缺陷(ClassNotFound)"/"参数错误(TB101)" 而永远到不了 doctor;
+    # 首跑用户/Agent 需要的是 "JAR 未配置 → run tbtools doctor / fetch-jar"
+    # JAR 来源: env(TBTOOLS_JAR, conformance/用户注入) 优先, core 配置兜底
+    _jar = os.environ.get("TBTOOLS_JAR") or JAR
+    if not _jar or not os.path.isfile(_jar):
+        click.echo("❌ TBtools JAR 未配置: 引擎依赖缺失", err=True)
+        click.echo("   修复: 运行 `tbtools doctor` 诊断, 或 `tbtools fetch-jar` 获取 JAR (TB005_DEPENDENCY_MISSING, exit 1)", err=True)
+        return 1
+
     # 确保桥编译产物存在
     os.makedirs(BUILD_DIR, exist_ok=True)
     
