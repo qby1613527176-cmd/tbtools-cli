@@ -289,7 +289,7 @@ class TestRootNavigation:
         if not os.path.isfile(jar):
             pytest.skip("无 JAR(真实引擎错误路径)")
         ec, out, err = run_cli("expr", "hclust", "/no_file.txt", "/tmp/tb_x.svg")
-        assert "tbtools hclust --help" in err
+        assert "tbtools expr hclust --help" in err  # P2-4: group 前缀 help(此前缺 expr 撞未知命令)
         assert "已知坑位" in err  # hclust 有坑位提示
 
     def test_group_unknown_subcommand_suggests(self):
