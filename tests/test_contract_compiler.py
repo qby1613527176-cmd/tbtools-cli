@@ -142,7 +142,7 @@ class TestMcpEnvelope:
     """⑥ MCP 错误 envelope 统一"""
 
     def test_error_envelope(self):
-        ms = pytest.importorskip("mcp", reason="MCP 依赖(optional extra)未装——CI 无 mcp 环境")
+        pytest.importorskip("mcp", reason="MCP 依赖(optional extra)未装——CI 无 mcp 环境")
         from tbtools_cli import mcp_server as ms_srv
         r = ms_srv._cli("tool-describe", "nosuchtool_xyz", "--json")
         d = json.loads(r)
