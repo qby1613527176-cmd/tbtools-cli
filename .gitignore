@@ -68,3 +68,7 @@ examples/data/exec/**/*.fai
 
 # PyPI 发布构建产物(发布时点验证证据快照; 真源= tests/verification_report.json)
 tbtools_cli/verification_report.json
+
+# P2-5(五视角自审): 根级运行痕迹——notung 测试副产物/provenance 写回
+*.reconciled
+*.tbtools.json
