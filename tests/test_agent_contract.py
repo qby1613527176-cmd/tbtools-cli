@@ -101,6 +101,11 @@ class TestAgentContractExecute:
 
     @pytest.mark.parametrize("tool", ["volcano", "dehist", "hclust", "dualsyn"])
     def test_run_artifact_provenance(self, tool, tmp_path):
+        # 真实 JAR 集成(类头注释), 无 JAR 环境跳过——CI 13 天未跑致无守卫硬挂
+        # (五视角自审 CI 首跑暴露; 与 conformance 同款 TBTOOLS_JAR 检查)
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR(真实集成测试)")
         group, args_tpl = RUN_CASES[tool]
         out_base = str(tmp_path / "o")  # 不带扩展名(模板自带 .svg 等;防 o.svg.svg 双扩展)
         args = []

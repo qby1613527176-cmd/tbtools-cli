@@ -43,6 +43,10 @@ class TestWorkflow:
     @pytest.mark.integration
     def test_run_chain(self):
         """链式 workflow: $s1.output 引用解析 + artifacts + provenance"""
+        # tableCollapse 是 Java 引擎——无 JAR 环境跳过(五视角自审 CI 首跑暴露)
+        jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
+        if not os.path.isfile(jar):
+            pytest.skip("无 JAR(tableCollapse Java 引擎)")
         import tempfile
         yaml_content = """id: chain.test
 steps:
