@@ -30,7 +30,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb
-          pip install click pytest
+          pip install -r requirements-ci.txt  # gate P2-3: 依赖 pin 纪律统一(test.yml/nightly/onboarding 三处一致)
 
       # ── ① Agent 第一步：doctor（此时无 jar，应给出可执行指引）──
       - name: Step 1 — doctor shows guidance when JAR missing

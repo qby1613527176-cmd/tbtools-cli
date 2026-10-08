@@ -26,7 +26,8 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb
-          pip install click
+          pip install -r requirements-ci.txt  # gate P2-3: 依赖 pin 纪律统一
+          python3 -m pip show click >/dev/null 2>&1 || pip install click
 
       - name: Fetch real JAR (silent)
         run: |
@@ -49,7 +50,7 @@ jobs:
       # 的 EXECUTION_VERIFIED 证据持续保鲜(不再依赖"有人记得本机跑")。
       - name: Execution verification refresh (real JAR → report writeback)
         run: |
-          pip install pytest-cov
+          pip install -r requirements-ci.txt  # gate P2-3: 统一 pin
           export TBTOOLS_WRITE_REPORT=1
           python3 -m pytest tests/test_conformance_verified.py -q --tb=short 2>&1 | tail -12
 
