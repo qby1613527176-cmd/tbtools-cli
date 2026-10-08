@@ -1,9 +1,8 @@
 name: docs
 on:
-  push:
-    branches: [main]
-    paths: ['docs/**', 'mkdocs.yml', 'README.md', 'tbtools_cli/command_metadata.json']
   workflow_dispatch:
+# gate P2-5(五视角自审): GitHub Pages 未启用致 deploy 永久红——push 触发改为仅手动,
+# 消除每次 push 的红噪音; Pages 启用后可恢复 push 触发
 
 permissions:
   contents: read

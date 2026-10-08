@@ -280,8 +280,12 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
         try:
             from tbtools_cli.runtime.java import _PRODUCT_EXT as _px
         except Exception:
-            _px = (".svg", ".png", ".pdf", ".nwk", ".fa", ".fasta", ".gff",
-                   ".gff3", ".gtf", ".meme", ".tree", ".aln", ".collinearity")
+            # arch M7(五视角自审): 兜底后缀表与 runtime.java._PRODUCT_EXT 全等——
+            # 旧 13 项兜底与 31 项全集双源不一致(import 失败时 hint 识别变窄)
+            _px = (".svg", ".png", ".pdf", ".tsv", ".csv", ".xls", ".txt", ".json",
+                   ".fa", ".fasta", ".fq", ".fastq", ".gff", ".gff3", ".gtf", ".nwk",
+                   ".tree", ".aln", ".meme", ".collinearity", ".out", ".tab", ".bam",
+                   ".sam", ".sorted", ".stats", ".matrix", ".clu", ".xml", ".html", ".gbk")
         # 五视角自审 P1-3 盲区 C 修正: 先正向扫出 flag 值位置集合, 反向遍历时排除——
         # eggnog 型 [in.fa, -o, prefix, --output_dir, outdir] 的 prefix/outdir 是
         # flag 值, 旧逻辑不排除时落到输入 in.fa(带产物后缀)→ hint=输入 → 快照把

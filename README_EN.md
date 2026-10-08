@@ -2,7 +2,7 @@
 
 Run TBtools-II bioinformatics functions headlessly — from CLI, scripts, or AI agents.
 
-**200+ plotting/analysis commands + 180+ RPC data tools + 80 CLI tools + 118 Java bridges + arbitrary engine reflection**, all verified to produce real output.
+**200+ plotting/analysis commands + 180+ RPC data tools + 80 CLI tools + 118 Java bridges + arbitrary engine reflection**, 56/60 execution-verified with real outputs (verified N5: 4 remaining are archived engine defects/external deps — see EXEC_VERIFIED_LEFTOVER).
 
 > **Numbers are machine-generated.** Run `tbtools version --json` (runtime) or see [docs/_generated/counts.md](docs/_generated/counts.md) (static registry, auto-generated to prevent drift).
 
