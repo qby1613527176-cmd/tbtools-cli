@@ -889,11 +889,8 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
             if _e["src"] != "cli_manual" or not _e["fn"]:
                 continue
             if _n in specs and not specs[_n].doc:
-                _target = {"seqlogo": "logo"}.get(_e["fn"], _e["fn"])
-                for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
-                    if _target.startswith(_p):
-                        _target = _target[len(_p):]
-                        break
+                from tbtools_cli.source_scan import alias_help_target as _aht  # M8: 单一真源
+                _target = _aht(_e["fn"])
                 if _target in specs and specs[_target].doc:
                     specs[_n].doc = f"(alias of {_target}) " + specs[_target].doc
                 elif _e["fn"] in specs and specs[_e["fn"]].doc:

@@ -88,11 +88,8 @@ def scan_manual_commands():
             continue
         if cmds[_n].get("help"):
             continue
-        target = {"seqlogo": "logo"}.get(_e["fn"], _e["fn"])
-        for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
-            if target.startswith(_p):
-                target = target[len(_p):]
-                break
+        from tbtools_cli.source_scan import alias_help_target as _aht3  # M8: 单一真源
+        target = _aht3(_e["fn"])
         if target in cmds and cmds[target].get("help"):
             cmds[_n]["help"] = f"(alias of {target}) " + cmds[target]["help"]
         elif _e["fn"] in cmds and cmds[_e["fn"]].get("help"):

@@ -260,12 +260,15 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             _OUT_HINT_IDX = _i2
             break
     # 自审 product F3: group 前缀(help 提示用)——_group_of 优先 CommandSpec 模型,
-    # CATEGORY_MAP 兜底; 缺失时 None(run_java 输出裸 `tbtools <cmd> --help`)
-    try:
-        from tbtools_cli.cli_load import _group_of as _grp_of
-        _GROUP = _grp_of(cmd)
-    except Exception:
-        _GROUP = None
+    # CATEGORY_MAP 兜底; 缺失时 None(run_java 输出裸 `tbtools <cmd> --help`)。
+    # arch M4(五视角自审): 不在 import 期绑定——模块级循环内 cli_load 可能未加载完
+    # (部分初始化) → _GROUP=None 静默降级, help 前缀丢失; 改运行时 lazy 首次解析
+    def _lazy_group():
+        try:
+            from tbtools_cli.cli_load import _group_of as _grp_of2
+            return _grp_of2(cmd)
+        except Exception:
+            return None
 
     def _out_hint(args):
         """从 args 尾部向前找第一个『非 flag 值且扩展名命中产物后缀』的 token 作为
@@ -319,9 +322,9 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
                 return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                                output_hint=_out_hint(args), group=_GROUP)
+                                output_hint=_out_hint(args), group=_lazy_group())
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                            output_hint=_out_hint(args), group=_GROUP)
+                            output_hint=_out_hint(args), group=_lazy_group())
     else:  # direct
         def impl(args, verbose=False, quiet=False):
             if cmd in _NOARG_HANG and not args:
@@ -333,9 +336,9 @@ def _make_impl(cmd, kind, cls, xmx, runner, doc):
             java_args = ["java", f"-Xmx{xmx}", "-cp", cp(BUILD_DIR, JAR), cls] + args
             if runner == "plot":
                 return run_plot(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                                output_hint=_out_hint(args), group=_GROUP)
+                                output_hint=_out_hint(args), group=_lazy_group())
             return run_java(java_args, verbose=verbose, quiet=quiet, command_name=cmd,
-                            output_hint=_out_hint(args), group=_GROUP)
+                            output_hint=_out_hint(args), group=_lazy_group())
     impl.__doc__ = doc
     impl.__name__ = f"_{cmd}_impl"
     return impl

@@ -22,6 +22,18 @@ import ast
 from typing import Dict, Optional
 
 
+def alias_help_target(fn: str) -> str:
+    """add_command 别名 help 借用目标(M8 五视角自审: command_spec/gen_metadata 双份
+    字面拷贝统一为单一真源)——函数名→命令名: 分组前缀去除 + 已知特例(seqlogo 函数 → logo)。
+    """
+    target = {"seqlogo": "logo"}.get(fn, fn)
+    for _p in ("seq_", "expr_", "tree_", "tool_", "gene_"):
+        if target.startswith(_p):
+            target = target[len(_p):]
+            break
+    return target
+
+
 def ast_scan_commands(cli_src: str, ac_src: str) -> Dict[str, Dict]:
     """AST 扫描 cli.py + auto_commands.py → {name: {group, doc, src, fn}}.
 
