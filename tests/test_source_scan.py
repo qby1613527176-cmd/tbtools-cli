@@ -131,6 +131,7 @@ class TestMetaGuard:
         from tbtools_cli import meta_guard
         root = tmp_path / "root"
         (root / "tbtools_cli").mkdir(parents=True)
+        (root / "bridges").mkdir()  # 仓库布局(有 bridges)——安装态跳过(P1-7)不触发
         f = root / "tbtools_cli" / "a.py"
         f.write_text("x = 1")
         # 写 sidecar(指纹 = 当前源码)
