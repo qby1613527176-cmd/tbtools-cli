@@ -3,6 +3,7 @@
 version/doctor/setup/fetch_jar/help/examples/completion/list/presets/new/check。
 由 cli.py 以 register_top(cli, cli_load) 注册。
 """
+import functools
 import os
 import re
 import subprocess
@@ -68,6 +69,23 @@ def _read_command_metadata(warn: bool = True) -> dict:
         except Exception:
             pass  # 守卫自身故障不阻断
     return _meta
+
+
+@functools.lru_cache(maxsize=1)
+def _contract_input_flags() -> frozenset:
+    """从 command_metadata inputs 契约反推输入 flag(cli_name)——product P1-4②
+    (五视角自审): 预检兜底正则覆盖窄(--inSeq/--queryFasta/--inPaf 等真实输入 flag
+    漏检), 契约声明的输入 flag 动态并入, 只扩大不误伤。"""
+    try:
+        _f = set()
+        for _e in _read_command_metadata(warn=False).values():
+            for _inp in (_e.get("inputs") or []):
+                _cn = _inp.get("cli_name") or ""
+                if _cn.startswith("-"):
+                    _f.add(_cn)
+        return frozenset(_f)
+    except Exception:
+        return frozenset()
 
 def register_top(cli, _LG):
     """注册顶层命令。cli=主 CLI group；_LG=cli_load 模块（提供 _groups/GROUPS/CATEGORY_MAP）。"""
@@ -855,6 +873,8 @@ def register_top(cli, _LG):
         位置不可靠分离, 只查 flag 输入, 其余交引擎验证。"""
         _probs = []
         try:
+            # product P1-4②: 输入 flag 集合 = 兜底正则 ∪ metadata inputs 契约反推
+            _contract_flags = _contract_input_flags()
             _prev_flag = None
             for _a in _aargs:
                 if not isinstance(_a, str) or not _a:
@@ -869,8 +889,10 @@ def register_top(cli, _LG):
                 if _prev_flag:
                     _fl = _prev_flag
                     _prev_flag = None
-                    # 只查"输入型 flag"的值(输出 flag 如 -o/--out/--outFile 不查——首次运行不存在)
-                    if re.match(r"^--?([i]|in|input|inFile|inFa|inFasta|inGff|inGff3|inTxt|inNwk|inTab|query|subject|pep|cds|genome|reads|read|ref|reference|fasta|fq|fa)$", _fl, re.I):
+                    # 只查"输入型 flag"的值(输出 flag 如 -o/--out/--outFile 不查——首次运行不存在);
+                    # 契约反推的输入 flag 直接命中(--inGXF/--countsTable 等), 正则作兜底
+                    if _fl in _contract_flags or re.match(
+                            r"^--?([i]|in|input|inFile|inFa|inFasta|inGff|inGff3|inTxt|inNwk|inTab|query|subject|pep|cds|genome|reads|read|ref|reference|fasta|fq|fa)$", _fl, re.I):
                         if not os.path.isfile(_a):
                             _probs.append(_a)
         except Exception:
