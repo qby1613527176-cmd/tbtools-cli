@@ -65,9 +65,16 @@ jobs:
           ls examples/output/*.svg | wc -l | grep -q "8" && echo "✅ 8 张图全部生成"
 
       # ── ⑤ pytest 回归（全量）──
+      # 2026-10-09 onboarding 失败修复: Step 4 fetch-jar 下载 JAR 后, core.JAR(config.toml)
+      # 判定"有 JAR" → verification_census 比对 env_fp(committed report 的写回环境 vs
+      # fetch-jar 下载的最新 JAR)→ 不匹配全降级 → EXEC_VERIFIED=0 → test_verification_tiers 红。
+      # 修: Step 5 显式 export TBTOOLS_JAR(TestTier2 真实执行) + TBTOOLS_WRITE_REPORT=1
+      # (重写 report 刷新 env_fp——全新机器环境真实重验证, 正是 onboarding 的语义)
       - name: Step 5 — full pytest suite
         run: |
           set -o pipefail
+          export TBTOOLS_JAR="$HOME/tbtools-cli/lib/TBtools_JRE1.6.jar"
+          export TBTOOLS_WRITE_REPORT=1
           python3 -m pytest tests/ -q 2>&1 | tail -3
 
       # ── ⑥ 真实 jar 代表命令出图断言（架构重构批次 C：CI 不再空转）──
