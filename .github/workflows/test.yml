@@ -86,7 +86,10 @@ jobs:
         with:
           fetch-depth: 0   # 自审 gate P1-1: 同上, tag 腿需要全量历史
       - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
+        with: {python-version: '3.14'}
+      # 2026-10-09: CI python 3.12 → 3.14 对齐本地开发环境——coverage 在 3.12 vs 3.14
+      # 的执行路径/分支覆盖差异致 CI 覆盖率贴 35% 基线红(本地 3.14 无注入全量 37.02%);
+      # 3.12 与本地差异无法本地复现, 改 CI 版本对齐本地(版本一致性 > 版本覆盖面)
       - name: Install
         run: pip install -r requirements-ci.txt pyyaml  # 自审 gate P2-3: 锁定版本对齐主 job(ruff 版本滚动不能只在 windows leg 单独制造红灯)
       - name: Lint (ruff 硬失败)
