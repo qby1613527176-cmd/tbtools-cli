@@ -16,14 +16,14 @@ import tbtools_cli.auto_commands as auto_commands
 JAR = os.environ.get("TBTOOLS_JAR", "")
 HAS_JAR = bool(JAR and os.path.isfile(JAR))
 
-def run_cli(*args):
-    """运行 tbtools CLI 命令，返回 (exit_code, stdout, stderr)
-    本机存在默认 JAR 时注入 TBTOOLS_JAR(P1-5③ JAR 前置检查需 env——
-    core.JAR 从 config 读, 无 env/config 时子进程报"JAR 未配置"拦截真实执行)。"""
+def run_cli(*args, extra_env=None):
+    """运行 tbtools CLI 命令，返回 (exit_code, stdout, stderr)。
+    不自动注入 JAR(2026-10-09 回退: 自动注入造成本地/CI 行为不一致——本地有
+    /mnt/d 时 JAR 用例真跑、CI 全 skip, 覆盖率贴 35% 基线时 CI 红)。
+    需要真实引擎的测试显式传 extra_env={"TBTOOLS_JAR": jar} + skip 守卫。"""
     _env = dict(os.environ)
-    _jar = os.environ.get("TBTOOLS_JAR", "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar")
-    if os.path.isfile(_jar):
-        _env.setdefault("TBTOOLS_JAR", _jar)
+    if extra_env:
+        _env.update(extra_env)
     result = subprocess.run(
         [sys.executable, "-m", "tbtools_cli.cli"] + list(args),
         capture_output=True, text=True, timeout=30, env=_env
@@ -749,3 +749,25 @@ class TestNoJarBranch:
                            capture_output=True, text=True, timeout=60)
         assert r.returncode == 1
         assert "TB005_DEPENDENCY_MISSING" in r.stderr and "fetch-jar" in r.stderr
+
+    def test_doctor_no_jar_shows_diagnosis(self, monkeypatch):
+        """无 JAR 分支: doctor 显示 JAR 缺失诊断(CI 无 JAR 环境可覆盖)"""
+        monkeypatch.setenv("TBTOOLS_JAR", "/nonexistent/nope.jar")
+        r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "doctor"],
+                           capture_output=True, text=True, timeout=60)
+        assert "JAR" in (r.stdout + r.stderr)
+
+    def test_fetch_jar_api_failure_guidance(self, monkeypatch):
+        """无 JAR 分支: fetch-jar 查询 GitHub API 失败 → 查询失败提示 + exit 1
+        (CI 无网络/无 JAR 环境可覆盖; 2026-10-09 coverage 贴基线补测)。
+        fetch_jar 是 register_top 闭包命令——用 CliRunner 进程内调用(monkeypatch 生效)。"""
+        from click.testing import CliRunner
+        from tbtools_cli.cli import cli as _cli
+
+        def _boom(*a, **k):
+            raise OSError("network down")
+        # fetch_jar 函数内 import urllib.request: monkeypatch stdlib 全局(进程内生效)
+        monkeypatch.setattr("urllib.request.urlopen", _boom)
+        r = CliRunner().invoke(_cli, ["fetch-jar"])
+        assert r.exit_code == 1
+        assert "查询失败" in r.output
