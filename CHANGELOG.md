@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.92] - 2026-10-09
+
+### 五视角自审 P1×23 全闭环 + CI 全绿(4 workflow)
+
+- **P0×3**(10/07): CI 头部 13 天空白(47336c0 误删 name/on)/ meta_guard mtime→内容指纹(--check 克隆红)/ gen_metadata TTL 缩进回归(0 超龄误告警 56 行)
+- **P1×23 全闭环**(10/08): gate P1-2 coverage pipefail / P1-4 ci_status_watch 巡检自动化; docs F-NEW-1~6 数字漂移 7 项 + `engine list` 命令; verified N2 bin0 xfail 内容级 / N3 describe 分叉守卫; product P1-1 dry-run flag-aware / P1-2 幻影产物过滤 / P1-3 快照两盲区 / P1-4 预检白名单契约反推(--inGXF 拦截) / P1-5 三处错误归因(TB401/exit5·6/JAR→doctor) / P1-7 安装态假告警 / P1-8 rpc --json 诚实标注; verified N7 报告写入者=验证者时序重构(hook 收集 Tier2 结果, 失败/skip 不刷新证据)
+- **P2 批 ~24 个**: arch M4/M6/M7/M8/M9/M10/M11 + verified N5/N6/N8 + gate P2-1~6 + product P2-2(error-codes 生成化 22 码)/P2-4(help group 前缀)/P2-5(仓库卫生)/P2-6(分层码避撞 TB007→TB099/TB012→TB098)
+- **CI 战役(10/09)**: nightly-e2e 连红 3 天根因 = gxfSplit(RPC 8765)无守卫 → e2e_nightly.sh RPC 探测 skip; writeback PR 权限链(contents+pull-requests:write + 清残留分支 + continue-on-error); test.yml coverage 36.33% 达标(TB_BRIDGE→TB007 码名统一 + 无 JAR 分支测试×4 + run_cli 回退注入); onboarding-e2e 根因 = env_fp 比对判定 core.JAR(config) vs TestTier2 env 不一致 → 改仅 env; docs.yml push 触发移除(Pages 红噪音)
+- **门禁**: pytest 644 passed + 53 skipped + 4 xfailed(带 JAR) / --check 298 命令/505 surface 全绿(verification=56) / ruff 0 / mypy 0 / **CI: test.yml+nightly-e2e+onboarding-e2e 全 SUCCESS**
+
 ## [1.4.91] - 2026-10-07
 
 ### LEFTOVER 复攻: microsyn 收编(执行验证 55→56/60) + PyPI 发布钳制
