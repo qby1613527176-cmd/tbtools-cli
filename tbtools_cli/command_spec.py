@@ -1187,9 +1187,14 @@ def _load_verification_report() -> tuple[set, set, set]:
                     if _old_env:
                         try:
                             # 有 JAR 才比对 env_fp(引擎本体可算); 无 JAR 环境无法验证 →
-                            # 保守信任报告(与写入端对称: 无 JAR 不刷新不降级, 防 CI--check 漂移)
-                            from tbtools_cli.core import JAR as _JAR2
-                            if os.path.isfile(_JAR2):
+                            # 保守信任报告(与写入端对称: 无 JAR 不刷新不降级, 防 CI--check 漂移)。
+                            # 2026-10-09 onboarding 修复: 判定源从 core.JAR(config.toml)改为
+                            # **仅 env TBTOOLS_JAR**(与 TestTier2 执行判定统一)——onboarding 的
+                            # fetch-jar 必写 config.toml → core.JAR 恒非空 → 判定"有 JAR" →
+                            # 与 fetch-jar 下载的最新 JAR env_fp 不匹配 → 全降级 EXEC_VERIFIED=0
+                            # → test_verification_tiers 红。仅 env 判定: 无 env → 保守信任 committed
+                            _jar2 = os.environ.get("TBTOOLS_JAR", "")
+                            if _jar2 and os.path.isfile(_jar2):
                                 if _env_now is None:
                                     _env_now = _envfp()
                                 if _env_now != _old_env:
