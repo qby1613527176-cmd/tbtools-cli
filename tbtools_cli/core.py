@@ -174,8 +174,9 @@ def ensure_bridge(bridge_name: str) -> None:
         # 桥编译失败即中断(评审 #15): 不继续启动 Java(否则 ClassNotFound 掩盖真实错误归因)
         if _r.returncode != 0:
             _err = _r.stderr.decode("utf-8", "replace") if _r.stderr else ""
-            print(f"❌ 桥编译失败 {bridge_name}(TB_BRIDGE_COMPILE_FAILED):\n{_err[-800:]}", file=sys.stderr)
-            sys.exit(6)  # TB_BRIDGE_COMPILE_FAILED(统一所有调用点: 表驱动/手动 impl 均受益)
+            print(f"❌ 桥编译失败 {bridge_name}(TB007_BRIDGE_COMPILE_FAILED):\n{_err[-800:]}", file=sys.stderr)
+            sys.exit(6)  # TB007_BRIDGE_COMPILE_FAILED(errors.py 注册码名统一——曾输出
+            # TB_BRIDGE_COMPILE_FAILED(缺 007 前缀), Agent 按注册表查不到该码)
 
     # N27: fake jaxb DatatypeConverter（JDK9+ 无 javax.xml.bind）随仓库分发源码，
     # 有需要即编译到 build/javax/xml/bind/（全新 checkout 也能重建，修复 NoClassDefFoundError）

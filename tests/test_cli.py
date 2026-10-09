@@ -751,8 +751,9 @@ class TestNoJarBranch:
                            capture_output=True, text=True, timeout=60,
                            env=dict(os.environ, TBTOOLS_JAR="/nonexistent/nope.jar"))
         assert r.returncode != 0
-        assert ("TB005_DEPENDENCY_MISSING" in r.stderr or "TB007_BRIDGE_COMPILE_FAILED" in r.stderr
-                or "fetch-jar" in r.stderr)
+        # tool-run 无 JAR 真实路径: core.ensure_bridge 桥编译失败 → exit 6 + TB007
+        # (run_java 的 TB005 前置检查不覆盖 tool-run 执行器路径)
+        assert "TB007_BRIDGE_COMPILE_FAILED" in r.stderr or "TB005_DEPENDENCY_MISSING" in r.stderr
 
     def test_doctor_no_jar_shows_diagnosis(self, monkeypatch):
         """无 JAR 分支: doctor 显示 JAR 缺失诊断(CI 无 JAR 环境可覆盖)"""
