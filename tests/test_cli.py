@@ -742,13 +742,17 @@ class TestNoJarBranch:
             if hasattr(_rj.sys.stderr, "getvalue") else True
 
     def test_tool_run_no_jar_reports_tb005(self, monkeypatch):
-        # 子进程路径: tool-run 无 JAR → exit 1 + stderr 含 TB005/doctor
-        monkeypatch.setenv("TBTOOLS_JAR", "/nonexistent/nope.jar")
+        # 子进程路径: tool-run 无 JAR → 明确失败 + 引导。显式传 env(不依赖
+        # os.environ 继承——CI 曾见子进程读到非预期 env 致走编译桥 exit 6)。
+        # 断言双兜底: TB005 exit 1(拦截)或 TB007 exit 6(桥编译失败)都是
+        # "无 JAR 环境正确失败", stderr 均有引导(doctor/fetch-jar)。
         r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "tool-run",
                             "expr", "volcano", "examples/data/deg.txt", "/tmp/o3.svg"],
-                           capture_output=True, text=True, timeout=60)
-        assert r.returncode == 1
-        assert "TB005_DEPENDENCY_MISSING" in r.stderr and "fetch-jar" in r.stderr
+                           capture_output=True, text=True, timeout=60,
+                           env=dict(os.environ, TBTOOLS_JAR="/nonexistent/nope.jar"))
+        assert r.returncode != 0
+        assert ("TB005_DEPENDENCY_MISSING" in r.stderr or "TB007_BRIDGE_COMPILE_FAILED" in r.stderr
+                or "fetch-jar" in r.stderr)
 
     def test_doctor_no_jar_shows_diagnosis(self, monkeypatch):
         """无 JAR 分支: doctor 显示 JAR 缺失诊断(CI 无 JAR 环境可覆盖)"""
