@@ -14,8 +14,8 @@
 ## 目录
 
 - [一、快速导航](#一快速导航)
-- [二、绘图引擎 tbplot.sh 命令（140）](#二绘图引擎-tbplotsh-命令140)
-- [三、CLI 工具 tbtools tool（82）](#三cli-工具-tbtools-tool82)
+- [二、绘图引擎 tbplot.sh 命令（218）](#二绘图引擎-tbplotsh-命令218)
+- [三、CLI 工具 tbtools tool（80）](#三cli-工具-tbtools-tool80)
 - [四、桥文档 bridges/*.java（118）](#四桥文档-bridgesjava118)
 - [五、已知坑（实测）](#五已知坑实测)
 - [六、engine 通用反射](#六engine-通用反射)
@@ -25,9 +25,9 @@
 
 | 层 | 入口 | 用途 | 数量 |
 |:---|:-----|:-----|:----:|
-| **click 分组入口** | `tbtools <group> <command>` | 结构化 CLI（推荐，带 --preset/校验/坑位提示） | 143 命令 |
-| 绘图/分析引擎 | `tbplot.sh <命令>` | 旧入口（等价，无校验） | 140 命令 / 123 引擎 |
-| 命令行工具 | `tbtools tool <名称>` | 数据处理类工具（自带 ArgsParser） | 66+3 |
+| **click 分组入口** | `tbtools <group> <command>` | 结构化 CLI（推荐，带 --preset/校验/坑位提示） | 298 命令 |
+| 绘图/分析引擎 | `tbplot.sh <命令>` | 旧入口（等价，无校验） | 218 命令 |
+| 命令行工具 | `tbtools tool <名称>` | 数据处理类工具（自带 ArgsParser） | 80 工具 |
 | 通用反射 | `tbtools engine <类> key=value` | 任意 TBtools 引擎万能兜底 | 任意 |
 | RPC | `tbtools rpc start\|methods\|call` | 188 个数据方法 | 188 |
 
@@ -56,7 +56,7 @@ tbtools presets             # 7 种期刊预设
 tbplot.sh help              # 绘图命令 + 用法一屏
 ```
 
-## 二、tbplot.sh 命令（140，绘图引擎+数据工具封装）
+## 二、tbplot.sh 命令（218，绘图引擎+数据工具封装）
 
 统一格式：`tbplot.sh <命令> [参数...]`。输出以 `.svg/.png/.pdf` 后缀指定，自动走 xvfb（headless）。`tbplot.sh help <命令>` 可在终端直接查任意命令详细用法。
 
