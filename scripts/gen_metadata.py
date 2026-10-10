@@ -338,8 +338,11 @@ def _surface_hash(rel: str, path: str) -> str:
                 _o = _j.load(_f)
 
             def _strip(_x):
+                # 红队 P1-3: last_passed_at 同样忽略(每次 pass 都刷的元数据,
+                # 与 verified_at 同语义——防 render 后 surface 恒变假阳性)
                 if isinstance(_x, dict):
-                    return {_k: _strip(_v) for _k, _v in _x.items() if _k != "verified_at"}
+                    return {_k: _strip(_v) for _k, _v in _x.items()
+                            if _k not in ("verified_at", "last_passed_at")}
                 if isinstance(_x, list):
                     return [_strip(_i) for _i in _x]
                 return _x
@@ -432,7 +435,10 @@ def main():
                     _old_days = []
                     _now2 = _dt2.datetime.now()
                     for _t2, _v2 in _vt.items():
-                        _va = _v2.get("verified_at", "")
+                        # 红队 P1-3(2026-10-11): TTL 查 last_passed_at(最近成功验证时间),
+                        # 回退 verified_at 兼容旧报告——verified_at 是"首次验证时间"(冻结),
+                        # 用它做 TTL 会把"每晚 pass 但契约/环境未变"的工具误判超龄
+                        _va = _v2.get("last_passed_at") or _v2.get("verified_at", "")
                         if _va:
                             try:
                                 _age = (_now2 - _dt2.datetime.fromisoformat(_va)).days

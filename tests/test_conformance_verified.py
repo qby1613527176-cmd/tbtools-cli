@@ -326,14 +326,20 @@ def _build_report_and_persist() -> None:
             continue
         _fp = _fpfn(SPECS[_t])
         _env_w = _env_fp if _env_fp is not None else _old.get("env_fingerprint")  # 无 JAR: 保留旧证据
-        # verified_at 保留: 有 JAR 时需 contract+env 双匹配; 无 JAR 时只看 contract(env 沿用旧值不刷新)
+        # 红队 P1-3(2026-10-11): 拆分两个时间语义——
+        # · verified_at 保留为**首次验证时间**(contract+env 组合首次成功), 冻结不刷——
+        #   历史追溯: "该契约版本何时首次通过验证"
+        # · last_passed_at 每次 pass 都刷新——TTL 保鲜检查用它(每夜 pass 即保鲜,
+        #   解决"每晚验证成功但 90 天 TTL 仍判过期"的矛盾)
         _keep_va = _old.get("contract_fingerprint") == _fp and (
             _env_fp is None or _old.get("env_fingerprint") == _env_fp)
+        _now_iso = _dt.datetime.now().isoformat(timespec="seconds")
         _exec_entries[_t] = {
             "contract_fingerprint": _fp,
             "env_fingerprint": _env_w,
-            "verified_at": (_old.get("verified_at") if _keep_va
-                            else _dt.datetime.now().isoformat(timespec="seconds")),
+            "verified_at": (_old.get("verified_at") if _keep_va and _old.get("verified_at")
+                            else _now_iso),
+            "last_passed_at": _now_iso,
             "corpus": "examples/data",
             # 评审 #115 预审 P1-4/D1 响应: 输入域标注——bin0(<10000) 引擎缺陷
             # 已固定(xfail 测试); 验证仅覆盖坐标 >=10000 域, 避免标签误导
@@ -355,6 +361,7 @@ def _build_report_and_persist() -> None:
             "contract_fingerprint": _exec_entries[_t]["contract_fingerprint"],
             "env_fingerprint": _exec_entries[_t]["env_fingerprint"],  # 评审 #115 预审 P1-2
             "verified_at": _exec_entries[_t]["verified_at"],
+            "last_passed_at": _exec_entries[_t].get("last_passed_at", _exec_entries[_t]["verified_at"]),  # 红队 P1-3
             "corpus": _exec_entries[_t]["corpus"],
             "domain_note": _exec_entries[_t].get("domain_note", ""),  # 评审 #115 预审 P1-4
             "semantic_checked": _t in SEMANTIC_CHECKS,  # 自审 verified F2: 内容级断言分级
