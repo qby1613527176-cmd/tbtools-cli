@@ -1,5 +1,5 @@
 """Conformance Verified 体系(评审 #76 P0-3):
-Tier 1 Compile-Verified: 59 FULL 工具全部契约编译验证(本文件参数化)
+Tier 1 Compile-Verified: 60 FULL 工具全部契约编译验证(本文件参数化)
 Tier 2 Execution-Verified: 有示例数据的工具真实执行+产物+溯源验证
 """
 import json
@@ -442,7 +442,7 @@ def _build_report_and_persist() -> None:
 
 
 class TestTier1CompileVerified:
-    """59 FULL 全部 compile-verified(契约编译行为一致)"""
+    """60 FULL 全部 compile-verified(契约编译行为一致)"""
 
     def test_all_full_compile_verified(self):
         """汇总断言: FULL 工具全部通过编译验证(产出 verified 名单)"""

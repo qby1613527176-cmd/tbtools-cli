@@ -898,8 +898,9 @@ def register_top(cli, _LG):
                             r"^--?([i]|in|input|inFile|inFa|inFasta|inGff|inGff3|inTxt|inNwk|inTab|query|subject|pep|cds|genome|reads|read|ref|reference|fasta|fq|fa)$", _fl, re.I):
                         if not os.path.isfile(_a):
                             _probs.append(_a)
-        except Exception:
-            pass  # 预检失败不阻断执行(保守: 交引擎验证)
+        except Exception as _e6:
+            # 红队清理点(2026-10-11): 预检失败可见化(区分"检查通过"与"检查未能运行")
+            click.echo(f"⚠️ 输入预检异常({_e6})——继续执行, 引擎将自行验证", err=True)
         return _probs
 
     @cli.command(name="tool-run", context_settings={"ignore_unknown_options": True})
