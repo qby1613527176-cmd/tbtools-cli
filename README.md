@@ -102,7 +102,7 @@ tbtools tool-provenance out.svg               # 溯源验证
   ┌────────┬─────────┬─────────┐
   ↓        ↓         ↓         ↓
  Bridge   Direct    Tool     Engine
-(118)   Engine    (82)     Reflection
+(118)   Engine    (80)     Reflection
                  ↓
          TBtools-II / 系统工具
                  ↓
@@ -426,7 +426,7 @@ tbtools-cli/
 │   ├── auto_commands.py   # ENGINE_REGISTRY 表驱动命令工厂(命令数以 `tbtools version` 为准)
 │   ├── cli_tools_registry.py  # CLI 工具共享注册表
 │   ├── command_metadata.json  # 命令元数据（gen_metadata 从 CommandSpec 生成的唯一投影,非源）
-│   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(46)
+│   ├── core.py            # run_java 包装 + 输入保护 + PITFALL_HINTS(49)
 │   ├── presets.py / scenarios.py / config.py
 ├── pyproject.toml         # ✅ pip 安装（tbtools console_script）
 ├── bridges/               # 118 Java bridge sources
@@ -437,7 +437,7 @@ tbtools-cli/
 ├── scripts/               # rpc_regression_linux.sh 等工具脚本
 ├── tests/                 # pytest（619 passed+52 skipped+2 xfailed：框架/命令/防漂移/输入保护）
 ├── docs/                  # detailed documentation
-│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（213 命令+80 工具+118 桥+49 坑位）
+│   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（218 命令+80 工具+118 桥+49 坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
 ├── install.sh             # one-command installer
 └── README.md

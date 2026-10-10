@@ -48,7 +48,7 @@
 # 快速自检
 tbtools list                # 全部分组概览
 tbtools list plots          # 绘图命令
-tbtools list tools          # 纯工具（66 个，过滤绘图类）
+tbtools list tools          # 工具清单（188 个，含注册表工具；`list plots` 过滤绘图类）
 tbtools list rpc            # RPC 方法
 tbtools help <命令>          # 快捷帮助（自动定位分组）
 tbtools presets             # 7 种期刊预设
@@ -1019,7 +1019,7 @@ tbplot.sh help              # 绘图命令 + 用法一屏
 - --genes: 高亮基因 ID 列表（可选，缺省自动从第一个 GXF 提取）
 - 引擎: SeveralSpeciesMicroSyntenicAnalysisAdvance（多物种微共线性，需真实数据验证输出）
 
-## 三、CLI 工具 tbtools tool（82）
+## 三、CLI 工具 tbtools tool（80）
 
 ```bash
 tbtools tool <工具名> [参数...]   # 工具名 = 引擎类名（大小写敏感）
@@ -2566,7 +2566,7 @@ tbtools heatmap <matrix> <out.png> [group]   # 热图快捷
 | 命令 | 用途 |
 |:-----|:-----|
 | `tbtools help <命令名>` | 快捷帮助，自动定位分组（不用记 volcano 在 expr） |
-| `tbtools list plots\\|tools\\|rpc` | 命令清单（tools 已过滤绘图类，66 纯工具） |
+| `tbtools list plots\\|tools\\|rpc` | 命令清单（tools 含注册表工具; list plots 过滤绘图类） |
 | `tbtools presets [名称]` | 7 种期刊预设（nature 89×89 / cell / presentation / poster / slide / twitter / a4） |
 | `tbtools rpc start [--port] [--mem] [--force]` | 启动 RPC 服务器（pid 文件+健康检查，幂等） |
 | `tbtools rpc stop [--port]` | 停止 RPC 服务器 |
@@ -2589,7 +2589,7 @@ tbtools heatmap <matrix> <out.png> [group]   # 热图快捷
 - venn5/venn6 `--help` 截断
 - PITFALL_HINTS 双 ⚠️ emoji
 - `tool` 未知命令退出码 1→2
-- `list tools` 过滤绘图类（130→66）
+- `list tools` 含注册表工具(输出约 188 个); `list plots` 过滤绘图类(218)
 - version 数字改为动态统计
 
 ### 配置文件

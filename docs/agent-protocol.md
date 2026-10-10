@@ -114,7 +114,7 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 **⚠️ env_fingerprint 是全局单值**(JAR + plugins/lib 全部 jar + KNOWN_DEPENDENCIES 派生的全部
 外部二进制哈希):**任何**一个外部二进制升级(如 muscle), 所有工具的验证都会降级——包括与该
 二进制无关的工具。因此 `execution_verified` 计数是"验证机上完全同构环境"的读数; 用户机器
-与验证机二进制版本不同时, `tbtools version --json` 的 execution_verified 会低于发布的 54。
+与验证机二进制版本不同时, `tbtools version --json` 的 execution_verified 会低于发布的 56。
 这不是 bug, 是全局环境身份的保守语义: 证据只在同构环境可迁移。验证机之外拿到的
 `EXECUTION_VERIFIED` 应视为"该版本在该环境跑过", 而非"当前环境可用"。
 
