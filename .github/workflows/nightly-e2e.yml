@@ -74,13 +74,10 @@ jobs:
           export TBTOOLS_TTL_STRICT=1
           python3 scripts/gen_metadata.py --check 2>&1 | tail -6
 
-      # 2026-10-08: create-pull-request 在仓库未开"Allow GitHub Actions to create and
-      # approve pull requests"时创建 PR 必 403("Resource not accessible by integration"——
-      # workflow 内 permissions 无法覆盖该仓库级开关)。nightly 验证使命(fetch-jar+e2e+
-      # report 写回+TTL)已在前置步骤完成, 本步仅提交流程: continue-on-error 容忍失败
-      # 不红全流程; 用户开启该开关后删除 continue-on-error 即恢复严格。
+      # 2026-10-11: 仓库级开关已通过 API 开启(actions/permissions/workflow →
+      # can_approve_pull_request_reviews=true)——create-pull-request 恢复严格,
+      # continue-on-error 移除(2026-10-08 曾容忍: 开关未开时 PR 创建必 403)。
       - name: Report writeback PR (evidence freshness)
-        continue-on-error: true
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "chore: verification_report 夜间保鲜(真实引擎执行)"
