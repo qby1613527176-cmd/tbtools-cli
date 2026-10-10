@@ -54,6 +54,7 @@ jobs:
 
       - name: Gate — pytest (wrapper layer)
         run: |
+          set -euo pipefail  # 红队 P1-2(2026-10-11): pytest/ruff 失败必须传到退出码
           pip install -r requirements-ci.txt  # 自审 gate P1-2: 锁定与本地对齐
           python3 -m pytest tests/ -q 2>&1 | tail -1
           ruff check . 2>&1 | tail -1
@@ -64,6 +65,7 @@ jobs:
       # 的 EXECUTION_VERIFIED 证据持续保鲜(不再依赖"有人记得本机跑")。
       - name: Execution verification refresh (real JAR → report writeback)
         run: |
+          set -euo pipefail  # 红队 P1-2: conformance 失败必须传到退出码
           pip install -r requirements-ci.txt  # gate P2-3: 统一 pin
           export TBTOOLS_WRITE_REPORT=1
           python3 -m pytest tests/test_conformance_verified.py -q --tb=short 2>&1 | tail -12
@@ -71,6 +73,7 @@ jobs:
       # 自审 gate P1-5: TTL 严格检查——身份/报告保鲜确认(>90 天未刷新 → 红)
       - name: Verification TTL gate (strict)
         run: |
+          set -euo pipefail  # 红队 P1-2: TTL 严格检查失败必须传到退出码
           export TBTOOLS_TTL_STRICT=1
           python3 scripts/gen_metadata.py --check 2>&1 | tail -6
 
