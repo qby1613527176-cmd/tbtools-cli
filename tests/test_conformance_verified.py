@@ -376,13 +376,18 @@ def _build_report_and_persist() -> None:
             _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
             if not _verified_tools[_t].get("domain_note"):
                 _verified_tools[_t]["domain_note"] = _conf_note
-        else:
+        elif _t in _exec_entries:
+            # P1-1 同源守卫(arch/verified 第五轮自审 P2-1): CONFORMANCE 工具本次 pass
+            # 但未在前述 EXECUTION_VERIFIED 循环登记的, 用已有证据升金链级;
+            # 仅当 _exec_entries 有该工具(本次 pass 或继承)时才允许——
+            # 否则 fail/skip/缺失(无 _exec_entries 条目)不得凭空写空证据条目
             _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
-                                   "contract_fingerprint": _exec_entries.get(_t, {}).get("contract_fingerprint", ""),
-                                   "env_fingerprint": _exec_entries.get(_t, {}).get("env_fingerprint", ""),
-                                   "verified_at": _exec_entries.get(_t, {}).get("verified_at", ""),
-                                   "corpus": _exec_entries.get(_t, {}).get("corpus", ""),
-                                   "domain_note": _exec_entries.get(_t, {}).get("domain_note", "") or _conf_note,
+                                   "contract_fingerprint": _exec_entries[_t].get("contract_fingerprint", ""),
+                                   "env_fingerprint": _exec_entries[_t].get("env_fingerprint", ""),
+                                   "verified_at": _exec_entries[_t].get("verified_at", ""),
+                                   "last_passed_at": _exec_entries[_t].get("last_passed_at", ""),
+                                   "corpus": _exec_entries[_t].get("corpus", ""),
+                                   "domain_note": _exec_entries[_t].get("domain_note", "") or _conf_note,
                                    "semantic_checked": _t in SEMANTIC_CHECKS}
     _report = {"compile_verified": sorted(_COMPILE_VERIFIED),
                "execution_verified": sorted(_exec_entries.keys()),
