@@ -278,6 +278,7 @@ def pytest_runtest_makereport(item, call):
 
 def _build_report_and_persist() -> None:
     """构建 verification_report.json 并写盘(TBTOOLS_WRITE_REPORT=1)/只读校验。
+
     verified N7 ① 时序修复: 原在 Tier1(纯编译)构建写盘——为未跑/失败的 Tier2 工具
     写通过证据; 现移到 TestConformanceReport(全部 Tier2 之后)调用, 且本次失败工具
     不刷新证据(继承旧证据)。"""
@@ -310,14 +311,20 @@ def _build_report_and_persist() -> None:
             _old_verified = {}
     _exec_entries = {}
     for _t in sorted(EXEC_VERIFIED.keys()):
-        _fp = _fpfn(SPECS[_t])
         _old = _old_verified.get(_t, {})
-        if _TIER2_RESULTS.get(_t) in ("fail", "skip"):
-            # verified N7 ①: 本次 Tier2 未通过(失败=引擎回归 / skip=环境缺 JAR·RPC)——
-            # 都不刷新证据(没真跑过不写"通过"记录), 继承旧证据
+        _res = _TIER2_RESULTS.get(_t)
+        # 红队 P1-1(2026-10-11): 只有明确的 pass 才能产生本次成功证据。
+        # fail/skip/结果缺失(未观测到 pass)一律不得创建新证据条目——
+        # 否则新工具首次加入就失败/被跳过/未跑时, 会被落穿到下方创建逻辑,
+        # 凭空白写一条 "verified_at=now" 的成功证据(错误授予 EXECUTION_VERIFIED)。
+        # 有旧证据 → 继承(不代表本次通过); 无旧证据 → 本工具不出现在新报告。
+        # 注: 必须先查 _res 再算 fingerprint——虚构/新加工具不在 SPECS,
+        # 过早 _fpfn(SPECS[_t]) 会 KeyError
+        if _res != "pass":
             if _t in _old_verified:
                 _exec_entries[_t] = _old_verified[_t]
-                continue
+            continue
+        _fp = _fpfn(SPECS[_t])
         _env_w = _env_fp if _env_fp is not None else _old.get("env_fingerprint")  # 无 JAR: 保留旧证据
         # verified_at 保留: 有 JAR 时需 contract+env 双匹配; 无 JAR 时只看 contract(env 沿用旧值不刷新)
         _keep_va = _old.get("contract_fingerprint") == _fp and (
@@ -340,7 +347,9 @@ def _build_report_and_persist() -> None:
     _verified_tools = {}
     # 自审 verified F2: semantic_checked 分级(标签诚实性)——有内容级语义断言的工具
     # 与"只验过跑过"(非空+sha256 格式)的工具在机器可读层可区分
-    for _t in sorted(EXEC_VERIFIED.keys()):
+    # 红队 P1-1: 遍历源改为 _exec_entries(只有本次 pass 或继承旧证据的工具)——
+    # 失败/跳过/缺失的工具不生成 verified_tools 条目, 杜绝错误授予等级
+    for _t in sorted(_exec_entries.keys()):
         _verified_tools[_t] = {
             "level": "EXECUTION_VERIFIED",
             "contract_fingerprint": _exec_entries[_t]["contract_fingerprint"],
@@ -369,7 +378,7 @@ def _build_report_and_persist() -> None:
                                    "domain_note": _exec_entries.get(_t, {}).get("domain_note", "") or _conf_note,
                                    "semantic_checked": _t in SEMANTIC_CHECKS}
     _report = {"compile_verified": sorted(_COMPILE_VERIFIED),
-               "execution_verified": sorted(EXEC_VERIFIED.keys()),
+               "execution_verified": sorted(_exec_entries.keys()),
                "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
                "execution_verified_details": _exec_entries,
                "verified_tools": _verified_tools,
@@ -654,3 +663,65 @@ class TestConformanceReport:
         # verified N7 ①: 报告构建+写盘/只读校验收尾(全部 Tier2 之后执行——时序修复,
         # 此前在 Tier1 纯编译阶段构建, 为未跑/失败的 Tier2 工具写通过证据)
         _build_report_and_persist()
+
+
+class TestEvidenceWriteGuard:
+    """红队 P1-1(2026-10-11): 只有明确 pass 才能产生成功验证证据。
+    新工具首次加入就失败/跳过/结果缺失时, 不得在 verified_tools / execution_verified
+    凭空获得一条成功证据(此前漏洞: 无旧证据的 fail/skip 落穿到创建逻辑, 白写 verified_at=now)。"""
+
+    def _build_with_results(self, tmp_path, monkeypatch, results):
+        """在隔离 report 路径上调用 _build_report_and_persist, 注入指定的 Tier2 结果。"""
+        import json as _jr
+        monkeypatch.setattr("tbtools_cli.identity.execution_contract_fingerprint",
+                            lambda spec: "fp_fake_123")
+        monkeypatch.setattr("tbtools_cli.identity.engine_env_fingerprint",
+                            lambda: "env_fake_123")
+        # 隔离 report 文件(不污染真报告)——_build 写 ROOT/tests/verification_report.json,
+        # 需预建 tests/ 子目录(否则 FileNotFoundError 吞掉真实构建路径)
+        (tmp_path / "tests").mkdir(exist_ok=True)
+        _fake = tmp_path / "tests" / "verification_report.json"
+        _fake.write_text("{}", encoding="utf-8")
+        monkeypatch.setattr("test_conformance_verified.ROOT", str(tmp_path))
+        monkeypatch.setattr("test_conformance_verified._TIER2_RESULTS", dict(results))
+        monkeypatch.setattr("test_conformance_verified.CONFORMANCE_VERIFIED", set())
+        monkeypatch.setattr("test_conformance_verified.SEMANTIC_CHECKS", set())
+        # 旧证据文件在隔离 tmp_path 下不存在 → 自然空旧证据
+        monkeypatch.setenv("TBTOOLS_WRITE_REPORT", "1")
+        _build_report_and_persist()
+        return _jr.loads(_fake.read_text(encoding="utf-8"))
+
+    def test_new_tool_fail_no_spurious_evidence(self, tmp_path, monkeypatch):
+        """新工具本次失败 → 不得出现在 verified_tools / execution_verified"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"toolA": ("expr", ["x.in", "{out}.svg"])})
+        r = self._build_with_results(tmp_path, monkeypatch, {"toolA": "fail"})
+        assert "toolA" not in r.get("verified_tools", {}), \
+            f"失败工具被写入成功证据: {r.get('verified_tools')}"
+        assert "toolA" not in r.get("execution_verified", []), \
+            f"失败工具被列入执行验证名单: {r.get('execution_verified')}"
+
+    def test_new_tool_skip_no_spurious_evidence(self, tmp_path, monkeypatch):
+        """新工具本次跳过(无 JAR/RPC) → 不得生成成功证据"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"toolB": ("expr", ["x.in", "{out}.svg"])})
+        r = self._build_with_results(tmp_path, monkeypatch, {"toolB": "skip"})
+        assert "toolB" not in r.get("verified_tools", {})
+        assert "toolB" not in r.get("execution_verified", [])
+
+    def test_new_tool_no_result_no_spurious_evidence(self, tmp_path, monkeypatch):
+        """新工具结果缺失(hook 未捕获/未跑) → 不得生成成功证据(缺失≠pass)"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"toolC": ("expr", ["x.in", "{out}.svg"])})
+        r = self._build_with_results(tmp_path, monkeypatch, {})  # 无该工具结果
+        assert "toolC" not in r.get("verified_tools", {})
+        assert "toolC" not in r.get("execution_verified", [])
+
+    def test_passed_tool_still_writes_evidence(self, tmp_path, monkeypatch):
+        """对照: pass 工具正常生成证据(防误伤)——用真实工具名(SPECS 必须含它)"""
+        _real = next(iter(EXEC_VERIFIED))  # 真实 EXEC_VERIFIED 首工具
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {_real: EXEC_VERIFIED[_real]})
+        r = self._build_with_results(tmp_path, monkeypatch, {_real: "pass"})
+        assert _real in r.get("verified_tools", {})
+        assert _real in r.get("execution_verified", [])
