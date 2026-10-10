@@ -76,11 +76,14 @@ def _contract_input_flags() -> frozenset:
     """从 command_metadata inputs 契约反推输入 flag(cli_name)——product P1-4②
     (五视角自审): 预检兜底正则覆盖窄(--inSeq/--queryFasta/--inPaf 等真实输入 flag
     漏检), 契约声明的输入 flag 动态并入, 只扩大不误伤。"""
+    # 红队 P2(2026-10-11): 输入 flag 白名单改从 CommandSpec/InputSpec 反推
+    # (单一源)——metadata 是投影, 源码新加命令的输入 flag 未刷新 metadata 时漏检;
+    # specs 是在线构建真源
     try:
         _f = set()
-        for _e in _read_command_metadata(warn=False).values():
-            for _inp in (_e.get("inputs") or []):
-                _cn = _inp.get("cli_name") or ""
+        for _sp in build_command_specs().values():
+            for _inp in (_sp.inputs or []):
+                _cn = getattr(_inp, "cli_name", "") or ""
                 if _cn.startswith("-"):
                     _f.add(_cn)
         return frozenset(_f)
@@ -916,7 +919,9 @@ def register_top(cli, _LG):
             _g0, _c0 = args[0], args[1]
             # tool/rpc 是特殊 CLI 组(不在 GROUPS dict, 但合法)——纳入已知集合防误拦
             _gset = set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {})) | {"tool", "rpc"}
-            _cset = set(_read_command_metadata())
+            # 红队 P2(2026-10-11): 命令存在性判定改 CommandSpec 单一源——metadata 是投影,
+            # 源码加新命令未刷新 metadata 时会误判未知命令; specs 才是在线构建的真源
+            _cset = set(build_command_specs().keys())
             if _g0 not in _gset or _c0 not in _cset:
                 _ue_err = {"code": "TB401_UNKNOWN_COMMAND", "category": "input",
                            "retryable": False,
@@ -1287,7 +1292,7 @@ except Exception:
             _g, _c = args[0], args[1]
             _known_groups = (set(getattr(_LG, "_groups", {})) | set(getattr(_LG, "GROUPS", {}))
                              | {"tool", "rpc"})  # tool/rpc 特殊 CLI 组
-            _known_cmds = set(_read_command_metadata())
+            _known_cmds = set(build_command_specs().keys())  # 红队 P2: 单一源
             if _g not in _known_groups:
                 click.echo(f"❌ 未知分组: {_g}(见 tbtools list)", err=True)
                 click.echo("   修复: 检查分组名后重试 (exit 2); 任务未提交", err=True)
