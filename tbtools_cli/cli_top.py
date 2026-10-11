@@ -724,6 +724,7 @@ def register_top(cli, _LG):
                         "contract_fingerprint": _vd.get("contract_fingerprint", ""),
                         "env_fingerprint": _vd.get("env_fingerprint", ""),
                         "verified_at": _vd.get("verified_at", ""),
+                        "last_passed_at": _vd.get("last_passed_at", _vd.get("verified_at", "")),  # 第五轮自审 P2-2: 保鲜时间
                         "corpus": _vd.get("corpus", ""),
                         "semantic_checked": bool(_vd.get("semantic_checked", False)),
                         "domain_note": _vd.get("domain_note", ""),
