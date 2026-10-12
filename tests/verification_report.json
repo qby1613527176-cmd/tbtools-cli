@@ -127,7 +127,7 @@
    "contract_fingerprint": "36256f97b412e2c4b6e62b86787e559786df7c967cc4531a90dffa1d1dea67a8",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -135,7 +135,7 @@
    "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -143,7 +143,7 @@
    "contract_fingerprint": "efa01206faa1f21b19c7d2b474eb54dcae94ec7e94e128cac97801a3304dfd05",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -151,7 +151,7 @@
    "contract_fingerprint": "6eba67158a4a423abd683687bdc7e32e279924afb6258315b67bbc78ebb987e1",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -159,7 +159,7 @@
    "contract_fingerprint": "a522dbfd7421f2c4c001fc7c030be7690fac47d8e2b0a691b5fc7ee250a83184",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -167,7 +167,7 @@
    "contract_fingerprint": "fdedfd71714d7e3e7812955b64c95bf8747368bcdf3e94ec5fc8bb9796801720",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -175,7 +175,7 @@
    "contract_fingerprint": "23582ebd5f2da3491f3b48f4486dab7e60d516d1796db42533e4cc0f0181bea9",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -183,7 +183,7 @@
    "contract_fingerprint": "eadde4c12652ac9635e30c46a8fe851486aa6ac2f9900b1122245a2bea87a17d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -191,7 +191,7 @@
    "contract_fingerprint": "0174e6906ae5bb2d7015d1ebbd8ca234e195cd82a753844ffe7d4382ff6d19d3",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -199,7 +199,7 @@
    "contract_fingerprint": "7195b724db79b80fbd0774ca811b45ee1d2ff244560badb1b524845bf9e9f064",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -207,7 +207,7 @@
    "contract_fingerprint": "db8bc1df4d42394a736d92963d34a5f4f6597d7d7d542f334f78e9fd4c010117",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -215,7 +215,7 @@
    "contract_fingerprint": "be1f78a0fe653378085ea341266866ffb32c204f9b712f516aeefdf3420de28f",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -223,25 +223,23 @@
    "contract_fingerprint": "72e39a185ad1e4086b517e86c72e9eb80ae2a4eb45ebb6d2b9ed0c9b1c5bb6bd",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
   "gxfSplit": {
-   "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "07255e22ebbf3590415fc668c3605d5ab83d4bc07cbe0ca78c029eacd3af4317",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
    "last_passed_at": "2026-10-06T03:59:46",
    "corpus": "examples/data",
-   "domain_note": "",
-   "semantic_checked": false
+   "domain_note": ""
   },
   "hclust": {
    "contract_fingerprint": "9784bc9315033219d1b493898d557ef2267aa8975192592a8fb067014ba8e058",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -249,7 +247,7 @@
    "contract_fingerprint": "e4f09c24bb4dbf646f01d4f469573758044fb901c5376f4289e187dee00bfcf1",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -257,7 +255,7 @@
    "contract_fingerprint": "501739b43bbc78002eeea6e3771c23ec937f497d7b0b24a696983e2922205a1e",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -265,7 +263,7 @@
    "contract_fingerprint": "bc32dbb2ebd701afdb9806edb94fe4cccf6e740cde1a17e8b99325d4cfee65db",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -273,7 +271,7 @@
    "contract_fingerprint": "d57b6c5578e24435eb59649cc5e1b1d9384a179f357496dad7f6ae0dfd614ded",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -281,7 +279,7 @@
    "contract_fingerprint": "132016708241042f0a7772270e4b9a6b776de45d97344f37bb11d7e658fb8a1f",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -289,7 +287,7 @@
    "contract_fingerprint": "c4be317e6ffc742eecfbcc87646d76ffb149017659aaf6417541cacd246c9d7d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -297,7 +295,7 @@
    "contract_fingerprint": "2f3e13a93f2e2674b9de6334c28134c74c8730e59dbf1dbea39fa384cc3c8420",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -305,7 +303,7 @@
    "contract_fingerprint": "feaa02ac0613e4b4a849ada04cd182575db49b61de7ab00ca24fd5f59e9d21ad",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -313,7 +311,7 @@
    "contract_fingerprint": "a9810438f8eb22a3bc61d04b01f05dd41fb60fc3119c99b650cc1d9c91e11e7d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -321,7 +319,7 @@
    "contract_fingerprint": "152935d981edc39c048b263ce571f7f55d95cff9544b316e14b6185bb89e4b67",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -329,7 +327,7 @@
    "contract_fingerprint": "dd1b351f32ecf23b35b1a19c8b7e82337b379d8ac73db1872955a1c691f03302",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -337,7 +335,7 @@
    "contract_fingerprint": "9c49b49ab9729891d549f0b1f21671f6a884efbdf2f59fa2e16c36219df3f913",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-07T12:10:37",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -345,7 +343,7 @@
    "contract_fingerprint": "f944130a4646393cf9d48a08d0af565540c31b7d97e9e652d74cd75ad6438963",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-07T15:40:52",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -353,7 +351,7 @@
    "contract_fingerprint": "23b42e6d6143e92ed5532e221b727162235ac2f51e5b482ef34238ddd5c6ddbe",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -361,7 +359,7 @@
    "contract_fingerprint": "48eb519b97bf9b547a1eb6623b96c22ed4cef62cb984004e7eab537faaa30140",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -369,7 +367,7 @@
    "contract_fingerprint": "d21d7a9a7a272ac9f1b5aeb2c09afdc2ade91babdc31ac5b3a81ab1f409a8d0d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -377,7 +375,7 @@
    "contract_fingerprint": "c44d3fe4c990ef3e174ad1af2e7016ee70233bde64f11d972b0a612932821b3c",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -385,7 +383,7 @@
    "contract_fingerprint": "f807ea935d9ff529007d4b7c6f06cf8ba3abfc7acb27d2bbabb16bcbcab551ce",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -393,7 +391,7 @@
    "contract_fingerprint": "fb4d87bcf45a24a3a1efb6e4922a4568a8b2cf94f209d898bfa830cf3a8e9211",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -401,7 +399,7 @@
    "contract_fingerprint": "f0833d2b95138b02488511fb6b8fa19746d62e6f52b53e9af75b56b41fa0745f",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -409,7 +407,7 @@
    "contract_fingerprint": "47954d0910a9fcb9f0baf778208287e383f45730d193580104b21ed06323e975",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -417,35 +415,31 @@
    "contract_fingerprint": "7b83f1d4a44ab8e6692c4d6574d3dbfd3678cccb8b91fe77d3573a0a616f7920",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
   "peakanno": {
-   "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "414f58aff2e08b60f16e2c77b1270ef664d83f9e0a84c0615948a518b21602ff",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
    "last_passed_at": "2026-10-06T03:59:46",
    "corpus": "examples/data",
-   "domain_note": "verified for coords >= binSize(10000); bin0 engine defect documented (v1.4.57 xfail)",
-   "semantic_checked": true
+   "domain_note": "verified for coords >= binSize(10000); bin0 engine defect documented (v1.4.57 xfail)"
   },
   "peaktss": {
-   "level": "EXECUTION_VERIFIED",
    "contract_fingerprint": "1c033777f443420c5af9170dd034ffa77469bed88bbc68b2421ccf05f5203d70",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
    "last_passed_at": "2026-10-06T03:59:46",
    "corpus": "examples/data",
-   "domain_note": "verified for coords >= binSize(10000); bin0 engine defect documented (v1.4.57 xfail)",
-   "semantic_checked": true
+   "domain_note": "verified for coords >= binSize(10000); bin0 engine defect documented (v1.4.57 xfail)"
   },
   "pep2codon": {
    "contract_fingerprint": "175c3675f66a923b2b0b4e0503e34341109f52b6707e23dbc078bd6022006b03",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -453,7 +447,7 @@
    "contract_fingerprint": "a6ef8c68b48d855740fed74a0f31031bf5b9c82bdb16583bfb909845fea07d1d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -461,7 +455,7 @@
    "contract_fingerprint": "5aa40b64a74185b55d94a464ce55506edee49108a21f4bf38edf7bdfb229a545",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -469,7 +463,7 @@
    "contract_fingerprint": "b1c35537449a344fa8a3abfba5597ffcc95b88769e381a705834ba7d82fd8f96",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -477,7 +471,7 @@
    "contract_fingerprint": "37b70ab10c857c36d0ae8292d98b03a0f67840b49bbf28b28067937b39c1dcfe",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -485,7 +479,7 @@
    "contract_fingerprint": "6af44163e3b50152200b5e7eefd796d7f372e7368af1be28c43dcbdd37ff130c",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -493,7 +487,7 @@
    "contract_fingerprint": "e85651d21e62e8848a9daa666eed104dba8b7ca2a8af9927c7001b24fe257f13",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -501,7 +495,7 @@
    "contract_fingerprint": "09c4dd4f80ea490834e5c6b2cef4b0274b00df12a097df27f72ba7b752f079db",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -509,7 +503,7 @@
    "contract_fingerprint": "bd660faf0bb5ba004e5a0535435acbc8a8c39b333d19a40281499c18ec74837c",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -517,7 +511,7 @@
    "contract_fingerprint": "9d49354c48da20e8611fa05ced566ac80d0ad49929778b6a49208b4d024d95f6",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -525,7 +519,7 @@
    "contract_fingerprint": "f8ee47fc87354f1f48895d86f83c38171ef85b3337ed3665463bc1ff6bb5ebd8",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -533,7 +527,7 @@
    "contract_fingerprint": "fac1d62a20a98c5c659e723c3812a4a398c287cc8f0de2ef303126de3e48d45e",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -541,7 +535,7 @@
    "contract_fingerprint": "76bb010f8636eee18689de38319c0e81e02ee64d4530a054f646932fb95dae61",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -549,7 +543,7 @@
    "contract_fingerprint": "6301f255bac40fee6543fe8b4664e66773267813fb3d3dc76df10d229e14e902",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -557,7 +551,7 @@
    "contract_fingerprint": "478fa2b00f7d768705c27d47f16e933dcd128f74623dcd7ee3817f7d2eb5780d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -565,7 +559,7 @@
    "contract_fingerprint": "eed0cf2c9bd18c96be0c76c94a2dd9f2bf52babea2b1aee15614b8a7970974a3",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   },
@@ -573,7 +567,7 @@
    "contract_fingerprint": "4a8f8c80438d3f41ddb7e2b8339faa8e20fb4f1b8f6db4d601149e13f20db9f9",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": ""
   }
@@ -584,7 +578,7 @@
    "contract_fingerprint": "36256f97b412e2c4b6e62b86787e559786df7c967cc4531a90dffa1d1dea67a8",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -594,7 +588,7 @@
    "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -604,7 +598,7 @@
    "contract_fingerprint": "efa01206faa1f21b19c7d2b474eb54dcae94ec7e94e128cac97801a3304dfd05",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -614,7 +608,7 @@
    "contract_fingerprint": "6eba67158a4a423abd683687bdc7e32e279924afb6258315b67bbc78ebb987e1",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -624,7 +618,7 @@
    "contract_fingerprint": "a522dbfd7421f2c4c001fc7c030be7690fac47d8e2b0a691b5fc7ee250a83184",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -634,7 +628,7 @@
    "contract_fingerprint": "fdedfd71714d7e3e7812955b64c95bf8747368bcdf3e94ec5fc8bb9796801720",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -644,7 +638,7 @@
    "contract_fingerprint": "23582ebd5f2da3491f3b48f4486dab7e60d516d1796db42533e4cc0f0181bea9",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -654,7 +648,7 @@
    "contract_fingerprint": "eadde4c12652ac9635e30c46a8fe851486aa6ac2f9900b1122245a2bea87a17d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -664,7 +658,7 @@
    "contract_fingerprint": "0174e6906ae5bb2d7015d1ebbd8ca234e195cd82a753844ffe7d4382ff6d19d3",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -674,7 +668,7 @@
    "contract_fingerprint": "7195b724db79b80fbd0774ca811b45ee1d2ff244560badb1b524845bf9e9f064",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -684,7 +678,7 @@
    "contract_fingerprint": "db8bc1df4d42394a736d92963d34a5f4f6597d7d7d542f334f78e9fd4c010117",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -694,7 +688,7 @@
    "contract_fingerprint": "be1f78a0fe653378085ea341266866ffb32c204f9b712f516aeefdf3420de28f",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -704,7 +698,7 @@
    "contract_fingerprint": "72e39a185ad1e4086b517e86c72e9eb80ae2a4eb45ebb6d2b9ed0c9b1c5bb6bd",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -724,7 +718,7 @@
    "contract_fingerprint": "9784bc9315033219d1b493898d557ef2267aa8975192592a8fb067014ba8e058",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -734,7 +728,7 @@
    "contract_fingerprint": "e4f09c24bb4dbf646f01d4f469573758044fb901c5376f4289e187dee00bfcf1",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -744,7 +738,7 @@
    "contract_fingerprint": "501739b43bbc78002eeea6e3771c23ec937f497d7b0b24a696983e2922205a1e",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -754,7 +748,7 @@
    "contract_fingerprint": "bc32dbb2ebd701afdb9806edb94fe4cccf6e740cde1a17e8b99325d4cfee65db",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -764,7 +758,7 @@
    "contract_fingerprint": "d57b6c5578e24435eb59649cc5e1b1d9384a179f357496dad7f6ae0dfd614ded",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -774,7 +768,7 @@
    "contract_fingerprint": "132016708241042f0a7772270e4b9a6b776de45d97344f37bb11d7e658fb8a1f",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -784,7 +778,7 @@
    "contract_fingerprint": "c4be317e6ffc742eecfbcc87646d76ffb149017659aaf6417541cacd246c9d7d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -794,7 +788,7 @@
    "contract_fingerprint": "2f3e13a93f2e2674b9de6334c28134c74c8730e59dbf1dbea39fa384cc3c8420",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -804,7 +798,7 @@
    "contract_fingerprint": "feaa02ac0613e4b4a849ada04cd182575db49b61de7ab00ca24fd5f59e9d21ad",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -814,7 +808,7 @@
    "contract_fingerprint": "a9810438f8eb22a3bc61d04b01f05dd41fb60fc3119c99b650cc1d9c91e11e7d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -824,7 +818,7 @@
    "contract_fingerprint": "152935d981edc39c048b263ce571f7f55d95cff9544b316e14b6185bb89e4b67",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -834,7 +828,7 @@
    "contract_fingerprint": "dd1b351f32ecf23b35b1a19c8b7e82337b379d8ac73db1872955a1c691f03302",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -844,7 +838,7 @@
    "contract_fingerprint": "9c49b49ab9729891d549f0b1f21671f6a884efbdf2f59fa2e16c36219df3f913",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-07T12:10:37",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -854,7 +848,7 @@
    "contract_fingerprint": "f944130a4646393cf9d48a08d0af565540c31b7d97e9e652d74cd75ad6438963",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-07T15:40:52",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -864,7 +858,7 @@
    "contract_fingerprint": "23b42e6d6143e92ed5532e221b727162235ac2f51e5b482ef34238ddd5c6ddbe",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -874,7 +868,7 @@
    "contract_fingerprint": "48eb519b97bf9b547a1eb6623b96c22ed4cef62cb984004e7eab537faaa30140",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -884,7 +878,7 @@
    "contract_fingerprint": "d21d7a9a7a272ac9f1b5aeb2c09afdc2ade91babdc31ac5b3a81ab1f409a8d0d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -894,7 +888,7 @@
    "contract_fingerprint": "c44d3fe4c990ef3e174ad1af2e7016ee70233bde64f11d972b0a612932821b3c",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -904,7 +898,7 @@
    "contract_fingerprint": "f807ea935d9ff529007d4b7c6f06cf8ba3abfc7acb27d2bbabb16bcbcab551ce",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -914,7 +908,7 @@
    "contract_fingerprint": "fb4d87bcf45a24a3a1efb6e4922a4568a8b2cf94f209d898bfa830cf3a8e9211",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -924,7 +918,7 @@
    "contract_fingerprint": "f0833d2b95138b02488511fb6b8fa19746d62e6f52b53e9af75b56b41fa0745f",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -934,7 +928,7 @@
    "contract_fingerprint": "47954d0910a9fcb9f0baf778208287e383f45730d193580104b21ed06323e975",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -944,7 +938,7 @@
    "contract_fingerprint": "7b83f1d4a44ab8e6692c4d6574d3dbfd3678cccb8b91fe77d3573a0a616f7920",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -974,7 +968,7 @@
    "contract_fingerprint": "175c3675f66a923b2b0b4e0503e34341109f52b6707e23dbc078bd6022006b03",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -984,7 +978,7 @@
    "contract_fingerprint": "a6ef8c68b48d855740fed74a0f31031bf5b9c82bdb16583bfb909845fea07d1d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": true
@@ -994,7 +988,7 @@
    "contract_fingerprint": "5aa40b64a74185b55d94a464ce55506edee49108a21f4bf38edf7bdfb229a545",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1004,7 +998,7 @@
    "contract_fingerprint": "b1c35537449a344fa8a3abfba5597ffcc95b88769e381a705834ba7d82fd8f96",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1014,7 +1008,7 @@
    "contract_fingerprint": "37b70ab10c857c36d0ae8292d98b03a0f67840b49bbf28b28067937b39c1dcfe",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1024,7 +1018,7 @@
    "contract_fingerprint": "6af44163e3b50152200b5e7eefd796d7f372e7368af1be28c43dcbdd37ff130c",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1034,7 +1028,7 @@
    "contract_fingerprint": "e85651d21e62e8848a9daa666eed104dba8b7ca2a8af9927c7001b24fe257f13",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1044,7 +1038,7 @@
    "contract_fingerprint": "09c4dd4f80ea490834e5c6b2cef4b0274b00df12a097df27f72ba7b752f079db",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1054,7 +1048,7 @@
    "contract_fingerprint": "bd660faf0bb5ba004e5a0535435acbc8a8c39b333d19a40281499c18ec74837c",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1064,7 +1058,7 @@
    "contract_fingerprint": "9d49354c48da20e8611fa05ced566ac80d0ad49929778b6a49208b4d024d95f6",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1074,7 +1068,7 @@
    "contract_fingerprint": "f8ee47fc87354f1f48895d86f83c38171ef85b3337ed3665463bc1ff6bb5ebd8",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1084,7 +1078,7 @@
    "contract_fingerprint": "fac1d62a20a98c5c659e723c3812a4a398c287cc8f0de2ef303126de3e48d45e",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1094,7 +1088,7 @@
    "contract_fingerprint": "76bb010f8636eee18689de38319c0e81e02ee64d4530a054f646932fb95dae61",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1104,7 +1098,7 @@
    "contract_fingerprint": "6301f255bac40fee6543fe8b4664e66773267813fb3d3dc76df10d229e14e902",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1114,7 +1108,7 @@
    "contract_fingerprint": "478fa2b00f7d768705c27d47f16e933dcd128f74623dcd7ee3817f7d2eb5780d",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1124,7 +1118,7 @@
    "contract_fingerprint": "eed0cf2c9bd18c96be0c76c94a2dd9f2bf52babea2b1aee15614b8a7970974a3",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "",
    "semantic_checked": false
@@ -1134,7 +1128,7 @@
    "contract_fingerprint": "4a8f8c80438d3f41ddb7e2b8339faa8e20fb4f1b8f6db4d601149e13f20db9f9",
    "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
    "verified_at": "2026-10-06T03:59:46",
-   "last_passed_at": "2026-10-12T14:32:27",
+   "last_passed_at": "2026-10-12T14:54:29",
    "corpus": "examples/data",
    "domain_note": "\u91d1\u94fe conformance \u516d\u6b65\u65ad\u8a00(\u683c\u5f0f/sha256/provenance/artifact_id), \u65e0\u5185\u5bb9\u7ea7\u8bed\u4e49\u65ad\u8a00(semantic_checked=false)\u2014\u2014\u5c42\u7ea7\u2260\u8bc1\u636e\u5f3a\u5ea6\u8d85\u96c6",
    "semantic_checked": false

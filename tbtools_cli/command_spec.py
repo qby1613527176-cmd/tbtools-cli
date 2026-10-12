@@ -959,6 +959,13 @@ def clear_specs_cache() -> None:
     三类事件源。若有动态注册需求, 注册 API 必须在写入后调用本函数。"""
     global _SPECS_CACHE
     _SPECS_CACHE = None
+    # 自审 arch F3 衍生(第五轮): cli_top._contract_input_flags 的 lru_cache 也依赖
+    # SPECS——若未来有动态注册调用 clear_specs_cache, flag 白名单会 stale, 一并清。
+    try:
+        import tbtools_cli.cli_top as _ct
+        _ct._contract_input_flags.cache_clear()
+    except Exception:
+        pass  # cli_top 未加载/无该函数时无需清
     try:
         import tbtools_cli.cli_load as _cl
         _cl._SPEC_GROUPS.clear()

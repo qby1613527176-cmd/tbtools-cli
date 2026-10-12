@@ -12,6 +12,8 @@
   pytest tests/ -q && ruff check . && python3 -m mypy tbtools_cli/ scripts/gen_metadata.py
   python3 scripts/gen_metadata.py --check   # 含版本一致性门禁（vX.Y.Z 与 tag/README 对齐）
   ```
+- ⚠️ 发版前信号（自审 docs 第五轮 P2 建议）：**nightly-e2e 最近一次全绿**（含 writeback 严格
+  + TTL `--check`；nightly 回写 verification_report 后 `last_passed_at` 刷新 = 保鲜链路活着）。
 - ⚠️ pytest 全量按默认 deselect 跳过真实执行（无 JAR 环境 skipped 数随套件变化, 以实际输出为准）；有 JAR 时 Tier-2 真实执行应跑
 
 ## 发版步骤（逐项打勾）

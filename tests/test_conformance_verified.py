@@ -311,7 +311,20 @@ def _build_report_and_persist() -> None:
         # 过早 _fpfn(SPECS[_t]) 会 KeyError
         if _res != "pass":
             if _t in _old_verified:
-                _exec_entries[_t] = _old_verified[_t]
+                # 自审 arch F2②(第五轮): 继承条目规整为 details schema——旧报告
+                # 条目原样带入会带 level/semantic_checked(那是 verified_tools 层语义),
+                # 与新 pass 条目字段集不一致; 规整后 execution_verified_details map
+                # 新旧条目统一(contract/env/verified_at/last_passed_at/corpus/domain_note)。
+                _o = _old_verified[_t]
+                _exec_entries[_t] = {
+                    "contract_fingerprint": _o.get("contract_fingerprint", ""),
+                    "env_fingerprint": _o.get("env_fingerprint", ""),
+                    "verified_at": _o.get("verified_at", ""),
+                    # 旧报告(763e55c 前)无 last_passed_at → 回退 verified_at 兼容
+                    "last_passed_at": _o.get("last_passed_at", _o.get("verified_at", "")),
+                    "corpus": _o.get("corpus", "examples/data"),
+                    "domain_note": _o.get("domain_note", ""),
+                }
             continue
         _fp = _fpfn(SPECS[_t])
         _env_w = _env_fp if _env_fp is not None else _old.get("env_fingerprint")  # 无 JAR: 保留旧证据
