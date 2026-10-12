@@ -441,6 +441,14 @@ def main():
                     _old_days = []
                     _bad_ts = []  # 自审 gate/verified 六轮 P1-1: 时间戳解析失败不得静默跳过
                     _now2 = _dt2.datetime.now()
+                    def _parse_naive(_ts: str):
+                        """解析为 naive datetime(gate 七轮 P2-1: 合法 RFC3339 aware 时间戳
+                        tz 归一化后判龄——此前 naive-now 减 aware-ts 的 TypeError 被 broad
+                        except 误报为"解析失败", 合法带时区时间戳会误红)。"""
+                        _d = _dt2.datetime.fromisoformat(_ts)
+                        if _d.tzinfo is not None:
+                            _d = _d.astimezone(_dt2.timezone.utc).replace(tzinfo=None)
+                        return _d
                     for _t2, _v2 in _vt.items():
                         # 红队 P1-3(2026-10-11): TTL 查 last_passed_at(最近成功验证时间),
                         # 回退 verified_at 兼容旧报告——verified_at 是"首次验证时间"(冻结),
@@ -449,7 +457,7 @@ def main():
                         _va2 = None  # 最终用于判龄的时间戳
                         if _va:
                             try:
-                                _age = (_now2 - _dt2.datetime.fromisoformat(_va)).days
+                                _age = (_now2 - _parse_naive(_va)).days
                                 _va2 = _va
                             except Exception:
                                 # 六轮 P1-1: last_passed_at 解析失败 → 记 bad + 回退 verified_at(p2-1)
@@ -457,10 +465,15 @@ def main():
                                 _fb = _v2.get("verified_at", "")
                                 if _fb and _fb != _va:
                                     try:
-                                        _age = (_now2 - _dt2.datetime.fromisoformat(_fb)).days
+                                        _age = (_now2 - _parse_naive(_fb)).days
                                         _va2 = _fb
                                     except Exception:
                                         _bad_ts.append((_t2, _fb, "verified_at"))
+                        else:
+                            # 七轮 gate P1-1: 两个时间戳都缺失/为空 → 同样进 bad(strict fail /
+                            # 普通 warning)——此前 `if _va:` 直接把双缺失记录排除在判龄外,
+                            # strict 模式静默放行(exit 0 零告警, 探针实证)。
+                            _bad_ts.append((_t2, "(缺失)", "both_timestamps_missing"))
                         if _va2 is not None and _age > 90:
                             _old_days.append((_t2, _age))
                     # 六轮 P1-1: 解析失败的工具必须显式报出——strict 模式 fail, 普通模式 warning

@@ -112,8 +112,9 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 }
 ```
 
-> 六轮 product P3: 上例 `semantic_checked: true` 是**理想化示意**——当前全库 56 条
-> 验证证据均 `semantic_checked: false`(金链 conformance 六步断言无内容级语义断言)。
+> 六轮 product P3(七轮 docs P1 修正): 上例 `semantic_checked: true` 是**理想化示意**——
+> 当前全库 56 条验证证据中 **11 条为 true**(有内容级语义断言, 见 SEMANTIC_CHECKS),
+> 其余 45 条为 false(仅执行验证/金链 conformance 六步断言无内容级语义断言)。
 > 读方以实际报告为准, 勿把示例当 schema 参照(层级≠证据强度超集)。
 
 **时间语义(红队 P1-3, 2026-10-11 拆分为两个字段)**:

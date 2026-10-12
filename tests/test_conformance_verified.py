@@ -262,6 +262,7 @@ PROV_COVERAGE: dict[str, bool] = {}
 # ② 报告构建+写盘/校验移到 TestConformanceReport(在 Tier2 之后);
 # ③ 本次失败的工具不刷新证据(保留旧证据)。
 from conftest import TIER2_RESULTS as _TIER2_RESULTS  # noqa: E402  (pytest hook 收集结果)
+from conftest import CONFORMANCE_RESULTS as _CONFORMANCE_RESULTS  # noqa: E402  (七轮 P1-B: 金链结果)
 _COMPILE_VERIFIED: list = []
 
 
@@ -324,6 +325,10 @@ def _build_report_and_persist() -> None:
                     "last_passed_at": _o.get("last_passed_at", _o.get("verified_at", "")),
                     "corpus": _o.get("corpus", "examples/data"),
                     "domain_note": _o.get("domain_note", ""),
+                    # 七轮 verified/arch/product P1-A: 继承保留**旧观测值**的 semantic_checked——
+                    # 不得用当前 SEMANTIC_CHECKS 静态集合回溯升级(工具加入集合前生成的证据,
+                    # 从未证明新增语义断言通过; 静态推导会把"代码现状"误述为"当时观测")。
+                    "semantic_checked": bool(_o.get("semantic_checked", False)),
                 }
             continue
         _fp = _fpfn(SPECS[_t])
@@ -348,6 +353,9 @@ def _build_report_and_persist() -> None:
             "domain_note": ("verified for coords >= binSize(10000); "
                              "bin0 engine defect documented (v1.4.57 xfail)"
                              if _t in ("peakanno", "peaktss") else ""),
+            # 七轮 P1-A: pass 路径用**当前集合**(本次真跑过, 静态推导=观测);
+            # 与继承路径(旧观测值)同写 semantic_checked, 保证 details 字段集统一
+            "semantic_checked": _t in SEMANTIC_CHECKS,
         }
     # 评审 #113 P1-1: verified_tools 单层 evidence map(tool → evidence object)——
     # 不再"名单一份+details 一份"两段式(防 execution_verified 有 44 但 details 只有 33);
@@ -366,7 +374,9 @@ def _build_report_and_persist() -> None:
             "last_passed_at": _exec_entries[_t].get("last_passed_at", _exec_entries[_t]["verified_at"]),  # 红队 P1-3
             "corpus": _exec_entries[_t]["corpus"],
             "domain_note": _exec_entries[_t].get("domain_note", ""),  # 评审 #115 预审 P1-4
-            "semantic_checked": _t in SEMANTIC_CHECKS,  # 自审 verified F2: 内容级断言分级
+            # 七轮 P1-A: 直接用 _exec_entries 的 semantic_checked(继承=旧观测值 / pass=本次
+            # 集合)——不再当前静态集合推导, 防继承证据回溯升级
+            "semantic_checked": _exec_entries[_t].get("semantic_checked", _t in SEMANTIC_CHECKS),
         }
     for _t in CONFORMANCE_VERIFIED:
         # 自审 v1.4.87 product P2-8-⑥: 金链级(volcano)语义说明——金链=格式+sha256+
@@ -374,26 +384,38 @@ def _build_report_and_persist() -> None:
         # 与"层级高=证据强度超集"的直觉相反; domain_note 明示, 防 Agent 按高层=更强误读
         _conf_note = ("金链 conformance 六步断言(格式/sha256/provenance/artifact_id), "
                       "无内容级语义断言(semantic_checked=false)——层级≠证据强度超集")
-        if _t in _verified_tools:
-            _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
-            if not _verified_tools[_t].get("domain_note"):
-                _verified_tools[_t]["domain_note"] = _conf_note
-        elif _t in _exec_entries:
-            # P1-1 同源守卫(arch/verified 第五轮自审 P2-1): CONFORMANCE 工具本次 pass
-            # 但未在前述 EXECUTION_VERIFIED 循环登记的, 用已有证据升金链级;
-            # 仅当 _exec_entries 有该工具(本次 pass 或继承)时才允许——
-            # 否则 fail/skip/缺失(无 _exec_entries 条目)不得凭空写空证据条目
-            _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
-                                   "contract_fingerprint": _exec_entries[_t].get("contract_fingerprint", ""),
-                                   "env_fingerprint": _exec_entries[_t].get("env_fingerprint", ""),
-                                   "verified_at": _exec_entries[_t].get("verified_at", ""),
-                                   "last_passed_at": _exec_entries[_t].get("last_passed_at", ""),
-                                   "corpus": _exec_entries[_t].get("corpus", ""),
-                                   "domain_note": _exec_entries[_t].get("domain_note", "") or _conf_note,
-                                   "semantic_checked": _t in SEMANTIC_CHECKS}
+        # 七轮 verified/arch/product P1-B: 金链等级必须绑定**金链观测**——
+        # 本次金链测试 pass 或旧报告该工具已是 CONFORMANCE_VERIFIED(继承) 才允许升级;
+        # 只凭 Tier2 执行证据(在 _exec_entries)不得升金链: 那只能证明"跑过",
+        # 不能证明金链六步断言通过(修掉"静态名单 CONFORMANCE_VERIFIED 不依赖金链结果"
+        # 的架构不对称——否则写入器单独调用时 volcano 只是 Tier2 pass 也会被展声为金链)。
+        _gold = _CONFORMANCE_RESULTS.get(_t)  # 本次金链测试结果(pass/skip/fail/None)
+        _old_conf = (_t in _verified_tools and _verified_tools[_t].get("level") == "CONFORMANCE_VERIFIED")
+        _allow_conf = (_gold == "pass") or _old_conf
+        if _allow_conf:
+            if _t in _verified_tools:
+                _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
+                if not _verified_tools[_t].get("domain_note"):
+                    _verified_tools[_t]["domain_note"] = _conf_note
+            elif _t in _exec_entries:
+                # P1-1 同源守卫(arch/verified 第五轮自审 P2-1): CONFORMANCE 工具本次 pass
+                # 但未在前述 EXECUTION_VERIFIED 循环登记的, 用已有证据升金链级;
+                # 仅当 _exec_entries 有该工具(本次 pass 或继承)时才允许——
+                # 否则 fail/skip/缺失(无 _exec_entries 条目)不得凭空写空证据条目
+                _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
+                                       "contract_fingerprint": _exec_entries[_t].get("contract_fingerprint", ""),
+                                       "env_fingerprint": _exec_entries[_t].get("env_fingerprint", ""),
+                                       "verified_at": _exec_entries[_t].get("verified_at", ""),
+                                       "last_passed_at": _exec_entries[_t].get("last_passed_at", ""),
+                                       "corpus": _exec_entries[_t].get("corpus", ""),
+                                       "domain_note": _exec_entries[_t].get("domain_note", "") or _conf_note,
+                                       "semantic_checked": _t in SEMANTIC_CHECKS}
     _report = {"compile_verified": sorted(_COMPILE_VERIFIED),
                "execution_verified": sorted(_exec_entries.keys()),
-               "conformance_verified": sorted(CONFORMANCE_VERIFIED),  # 评审 #110 建议①: 金链级(volcano)
+               # 七轮 P1-B: 名单=**实际升级为金链**的工具(从 verified_tools level 推导),
+               # 不再用静态 CONFORMANCE_VERIFIED——金链等级必须绑定金链观测(_CONFORMANCE_RESULTS)
+               "conformance_verified": sorted(_t for _t in _verified_tools
+                                                if _verified_tools[_t].get("level") == "CONFORMANCE_VERIFIED"),
                "execution_verified_details": _exec_entries,
                "verified_tools": _verified_tools,
                # 自审 verified F8: 三层体系明示——CONFORMANCE_VERIFIED 是试验层(n=1, volcano 标杆),
@@ -417,7 +439,9 @@ def _build_report_and_persist() -> None:
             _cur_exec = set(_cur.get("execution_verified", []))
             _cur_conf = set(_cur.get("conformance_verified", []))
             _want_exec = set(EXEC_VERIFIED.keys())
-            _reported = _cur_exec == _want_exec and _cur_conf == set(CONFORMANCE_VERIFIED)
+            _want_conf = set(_t for _t in _verified_tools
+                             if _verified_tools[_t].get("level") == "CONFORMANCE_VERIFIED")
+            _reported = _cur_exec == _want_exec and _cur_conf == _want_conf
             # verified N7 ②: 只读校验不只比名单, 还比证据内容——verified_at 被手改
             # 或 contract_fp 缺失不会被名单比对检出; 每工具证据需有可解析的
             # verified_at(ISO) 与非空 contract_fingerprint(忽略 verified_at 值本身)
@@ -684,11 +708,15 @@ class TestEvidenceWriteGuard:
     新工具首次加入就失败/跳过/结果缺失时, 不得在 verified_tools / execution_verified
     凭空获得一条成功证据(此前漏洞: 无旧证据的 fail/skip 落穿到创建逻辑, 白写 verified_at=now)。"""
 
-    def _build_with_results(self, tmp_path, monkeypatch, results, old_verified=None):
+    def _build_with_results(self, tmp_path, monkeypatch, results, old_verified=None,
+                            semantic_checks=None, conformance_verified=None):
         """在隔离 report 路径上调用 _build_report_and_persist, 注入指定的 Tier2 结果。
 
         old_verified: 预置旧证据 dict(六轮 verified P3-1)——测继承路径时传给
         _old_verified 旧报告; 缺省 None 时隔离 tmp_path 下无旧文件 → 自然空旧证据。
+        semantic_checks: 七轮 verified P2-1 补(此前恒 patch 空 set, 语义标签路径零覆盖)——
+        传入指定集合以测 semantic_checked 授予逻辑。
+        conformance_verified: 七轮 verified P1-B 补——测 conformance 升级逻辑。
         """
         import json as _jr
         monkeypatch.setattr("tbtools_cli.identity.execution_contract_fingerprint",
@@ -705,8 +733,10 @@ class TestEvidenceWriteGuard:
             _fake.write_text("{}", encoding="utf-8")
         monkeypatch.setattr("test_conformance_verified.ROOT", str(tmp_path))
         monkeypatch.setattr("test_conformance_verified._TIER2_RESULTS", dict(results))
-        monkeypatch.setattr("test_conformance_verified.CONFORMANCE_VERIFIED", set())
-        monkeypatch.setattr("test_conformance_verified.SEMANTIC_CHECKS", set())
+        monkeypatch.setattr("test_conformance_verified.CONFORMANCE_VERIFIED",
+                            set(conformance_verified or ()))
+        monkeypatch.setattr("test_conformance_verified.SEMANTIC_CHECKS",
+                            set(semantic_checks or ()))
         # 旧证据文件在隔离 tmp_path 下不存在 → 自然空旧证据
         monkeypatch.setenv("TBTOOLS_WRITE_REPORT", "1")
         _build_report_and_persist()
@@ -775,7 +805,85 @@ class TestEvidenceWriteGuard:
             f"fail 后 verified_at 不得被改写: {vt[_real].get('verified_at')}"
         assert vt[_real]["last_passed_at"] == "2026-01-02T00:00:00", \
             f"fail 后 last_passed_at 不得被刷新: {vt[_real].get('last_passed_at')}"
-        # 规整后 details 字段集统一(52f8b78): 继承条目不带 level/semantic_checked
+        # 规整后 details 字段集统一(52f8b78 + 七轮 P1-A): 继承条目带 semantic_checked(旧观测值)
+        # 但不带 level(那是 verified_tools 层语义)
         det = r.get("execution_verified_details", {}).get(_real, {})
-        assert "level" not in det and "semantic_checked" not in det, \
-            f"继承条目 details 应规整去层字段: {sorted(det.keys())}"
+        assert "level" not in det, f"继承条目 details 应规整去层字段: {sorted(det.keys())}"
+        assert "semantic_checked" in det, f"继承条目 details 应保留 semantic_checked: {sorted(det.keys())}"
+
+    def test_inherit_keeps_old_semantic_checked(self, tmp_path, monkeypatch):
+        """七轮 verified/arch/product P1-A: 旧证据 semantic_checked=false + 本次 fail
+        + 当前 SEMANTIC_CHECKS 含该工具 → 最终证据必须仍为 false(不得回溯升级)。
+
+        回归防线: 工具在加入语义断言集合**之前**生成的证据, 从未证明新增断言通过;
+        fail 继承时用当前静态集合贴标签 = 把"代码现状"误述为"当时观测"。
+        """
+        _real = next(iter(EXEC_VERIFIED))  # 真实工具(SPECS 必须含它)
+        old = {
+            _real: {
+                "level": "EXECUTION_VERIFIED",
+                "contract_fingerprint": "fp_old_abc",
+                "env_fingerprint": "env_old_abc",
+                "verified_at": "2026-01-01T00:00:00",
+                "last_passed_at": "2026-01-02T00:00:00",
+                "corpus": "examples/data",
+                "semantic_checked": False,  # 旧证据: 未做过内容级断言
+            }
+        }
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {_real: EXEC_VERIFIED[_real]})
+        # 当前集合已含该工具(模拟后来加入 SEMANTIC_CHECKS), 但本次 fail
+        r = self._build_with_results(tmp_path, monkeypatch, {_real: "fail"},
+                                     old_verified=old, semantic_checks={_real})
+        vt = r.get("verified_tools", {})
+        assert _real in vt, "旧证据工具本次 fail 应继承保留"
+        assert vt[_real]["semantic_checked"] is False, \
+            f"继承证据 semantic_checked 被回溯升级: {vt[_real].get('semantic_checked')}"
+
+    def test_pass_uses_current_semantic_checked(self, tmp_path, monkeypatch):
+        """七轮 P1-A 对照: 本次真 pass + 当前集合含该工具 → semantic_checked=true"""
+        _real = next(iter(EXEC_VERIFIED))
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {_real: EXEC_VERIFIED[_real]})
+        r = self._build_with_results(tmp_path, monkeypatch, {_real: "pass"},
+                                     semantic_checks={_real})
+        vt = r.get("verified_tools", {})
+        assert _real in vt
+        assert vt[_real]["semantic_checked"] is True, \
+            f"pass 路径 semantic_checked 应=当前集合判断: {vt[_real].get('semantic_checked')}"
+
+    def test_conformance_no_upgrade_without_golden_chain(self, tmp_path, monkeypatch):
+        """七轮 verified/arch/product P1-B: 金链测试从未运行(fail) + Tier2 pass →
+        volcano 不得升 CONFORMANCE_VERIFIED(只证明跑过, 不证明金链六步通过)。"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        # 金链结果: 未运行/失败; 只注入 Tier2 pass
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                     conformance_verified={"volcano"})
+        vt = r.get("verified_tools", {})
+        assert "volcano" in vt, "Tier2 pass 应保留 EXECUTION_VERIFIED 证据"
+        assert vt["volcano"].get("level") == "EXECUTION_VERIFIED", \
+            f"无金链观测不得升 CONFORMANCE_VERIFIED: {vt['volcano'].get('level')}"
+        assert "volcano" not in r.get("conformance_verified", []), \
+            "无金链观测不得进 conformance 名单"
+
+    def test_conformance_upgrade_with_golden_chain_pass(self, tmp_path, monkeypatch):
+        """七轮 P1-B 对照: 金链 pass + Tier2 pass → 升 CONFORMANCE_VERIFIED"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        # 模拟金链容器有 volcano: pass(hook 收集或测试注入)
+        import conftest as _cf
+        _old = dict(_cf.CONFORMANCE_RESULTS)
+        try:
+            _cf.CONFORMANCE_RESULTS["volcano"] = "pass"
+            monkeypatch.setattr("test_conformance_verified._CONFORMANCE_RESULTS",
+                                _cf.CONFORMANCE_RESULTS)
+            r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                         conformance_verified={"volcano"})
+            vt = r.get("verified_tools", {})
+            assert vt["volcano"].get("level") == "CONFORMANCE_VERIFIED", \
+                f"金链 pass 应升 CONFORMANCE_VERIFIED: {vt['volcano'].get('level')}"
+            assert "volcano" in r.get("conformance_verified", [])
+        finally:
+            _cf.CONFORMANCE_RESULTS.clear()
+            _cf.CONFORMANCE_RESULTS.update(_old)

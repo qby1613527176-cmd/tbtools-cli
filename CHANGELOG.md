@@ -13,7 +13,7 @@
 - **docs 漂移再清**: COMMAND_REFERENCE "82 个工具"→80(GWAS 段移除 mimicVqsr/vcfAddID 两个 direct 混入, 含分类错误)/ faq 110+→118 / 守卫扫描面从 5 门面扩到全量现状文档
 - **结构根因统一**: census tools 口径 82→80——CLI_TOOLS 注册 82 但 mimicVqsr/vcfAddID 在 CommandSpec 归一化为 direct, counts.md/version --json/gen_metadata 三源合一
 - **CI 稳健性**: onboarding tee 管道×3 补 pipefail(共 5 处) / nightly TTL 步 tail -6→-20 防诊断截断 / §6.1 semantic_checked 理想化注记
-- **门禁**: pytest 20 关键 passed(守卫 5+doc 10+metadata 5) / ruff 0 / mypy 0 / --check 505 surface 全同步 / YAML 语法 OK
+- **门禁**(本轮针对性子集, 非全量): pytest 34 passed(守卫 7 + doc 10 + metadata 15 + cli 2/ruff 0 / mypy 0 / --check 505 surface 全同步 / YAML 语法 OK
 
 ## [1.4.93] - 2026-10-12
 
