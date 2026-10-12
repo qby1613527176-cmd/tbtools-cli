@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.93] - 2026-10-12
+
+### 第五轮自审全闭环(P1×6 + P2×10 + P3×1) + 隐藏 hook bug 修复
+
+- **验证证据链(本轮核心)**: 红队 P1-3 配套 hook 失效修复——pytest_runtest_makereport 从测试模块移至 tests/conftest.py(pytest 只注册 conftest/插件 hookimpl, 写在测试模块内不生效, 探针实证) → _TIER2_RESULTS 首次真正收集, **last_passed_at 保鲜语义生效**(53/56 条目刷新为当日, 3 条 skip/xfail 正确继承); verification_report.json 落盘刷新
+- **docs 漂移全对齐**: P1×6 数字修复(exec_verified 54→56 / pitfalls 46→49 / plot 213→218 / tools 82→80 / list tools 66→188 口径)+ P2#7~9(counts.md 权威: 110+→118 / 180+→188 / 54 capabilities→54 分组·253)+ P2#10 agent-protocol 补 last_passed_at 时间语义 + README 标题/锚点/index/quickstart 残留 213→218
+- **守卫缺口堵漏**: 新增 TestCountsSurfaceGuard(counts.md 全字段 vs 门面手写数字句式比对 + 旧漂移值 213/110+/180+/54 capabilities 禁回再生); 移除从未生效的 _counts JSON 残件
+- **verified P2-1 + arch 收尾**: CONFORMANCE else 分支空证据守卫(_t in _exec_entries 前置) / F2② 继承条目规整为 details schema(details map 字段集统一) / F3 衍生 clear_specs_cache 补清 _contract_input_flags lru_cache / F4 docstring 数据源更正(CommandSpec/InputSpec)
+- **CI 稳健性**: gate P2-a/b fetch-jar·run_examples 步补 pipefail 对齐; RELEASING 前置补 nightly 全绿发版信号
+- **门禁**: pytest 61 passed + 1 skipped + 4 xfailed(conformance 全量带 JAR) / doc_consistency 守卫 10 passed / ruff 0 / mypy 0 / --check 全绿
+
 ## [1.4.92] - 2026-10-09
 
 ### 五视角自审 P1×23 全闭环 + CI 全绿(4 workflow)

@@ -473,7 +473,7 @@ KNOWN_PARAMS = {
 
 # 命令外部依赖结构化(评审 #29: 类型/必需性/平台; env 工具级解析)
 # 格式: command -> [{"name": str, "type": binary|capability, "required": bool, "platforms": [str]}]
-KNOWN_DEPENDENCIES_STRUCT = {
+KNOWN_DEPENDENCIES_STRUCT: dict = {
     "hmmsearch": [{"name": "hmmer", "type": "binary", "required": True, "platforms": ["linux", "macos"],
                     "executable": "hmmsearch", "version_args": ["-h"]}],
     "simplehmmscan": [{"name": "hmmer", "type": "binary", "required": True, "platforms": ["linux", "macos"],

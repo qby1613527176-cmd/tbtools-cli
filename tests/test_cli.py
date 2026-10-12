@@ -516,17 +516,23 @@ class TestReadmeCounts:
         assert ec == 0
 
     def test_readme_plot_count(self):
-        """README 数字机器化(GPT #7): 不手写精确计数; 权威源 counts.md 与运行时一致。
+        """README 数字机器化(GPT #7) + 第五轮自审(2026-10-12)演进:
 
         2026-09-23 改造: 精确数字全部移除(218/188/82/118/276), 改为范围口径 +
         docs/_generated/counts.md(gen_metadata 自动生成)作为唯一权威。
+        2026-10-12 修订: 第五轮自审 P1 实测"范围口径"放任漂移(110+/180+→118/188
+        漂移无感), 门面精确数字改为**必须出现且 == counts.md 权威**, 由
+        tests/test_doc_consistency.py::TestCountsSurfaceGuard 机器守卫
+        (plot=218/rpc=188/tools=80/bridges=118/pitfalls=49 句式比对 + 旧漂移值
+        213/110+/180+/54 capabilities 禁回再生)。本测试此处仅保留
+        (a) 更古老废弃值(276/196/268/82)禁回 + (b) 权威源一致性 + (c) 指向声明。
         """
         import os
         import json
         from tbtools_cli.core import ROOT
         readme = open(os.path.join(ROOT, "README.md"), encoding="utf-8").read()
-        # 1) README 不应含已废弃精确数字(范围口径时代)
-        for bad in ["218 个", "188 个", "82 个", "118 个", "276 命令", "196 绘图", "268 命令"]:
+        # 1) README 不应含更古老废弃精确数字(范围口径时代退版值)
+        for bad in ["276 命令", "196 绘图", "268 命令", "82 个"]:
             assert bad not in readme, f"README 含已废弃精确数字 {bad!r}"
         # 2) 权威源: counts.md(机器生成)必须与 command_metadata.json 实际一致
         counts_path = os.path.join(ROOT, "docs", "_generated", "counts.md")
