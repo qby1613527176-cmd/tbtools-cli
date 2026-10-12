@@ -94,7 +94,7 @@
   "contract_fingerprint": "4a8f8c80438d3f41ddb7e2b8339faa8e20fb4f1b8f6db4d601149e13f20db9f9",
   "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
   "verified_at": "2026-10-06T03:59:46",
-  "last_passed_at": "2026-10-12T14:54:29",
+  "last_passed_at": "2026-10-12T17:20:28+00:00",
   "corpus": "examples/data",
   "semantic_checked": false,
   "domain_note": "金链 conformance 六步断言(格式/sha256/provenance/artifact_id), 无内容级语义断言(semantic_checked=false)——层级≠证据强度超集"

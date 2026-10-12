@@ -340,7 +340,11 @@ def _build_report_and_persist() -> None:
         #   解决"每晚验证成功但 90 天 TTL 仍判过期"的矛盾)
         _keep_va = _old.get("contract_fingerprint") == _fp and (
             _env_fp is None or _old.get("env_fingerprint") == _env_fp)
-        _now_iso = _dt.datetime.now().isoformat(timespec="seconds")
+        # 八轮 gate P2(时区对称性): 写入端改 **UTC-aware**——此前 naive 本地时间与
+        # 读取端 UTC 归一化不对称(UTC 外机器判龄偏数小时, 90 天边界附近可能误红)。
+        # isoformat 带 +00:00 后缀; surface 哈希忽略时间戳、tool-describe 透传字符串,
+        # TTL 读取端 _parse_naive 会 tz 归一化——均兼容。
+        _now_iso = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
         _exec_entries[_t] = {
             "contract_fingerprint": _fp,
             "env_fingerprint": _env_w,
@@ -390,8 +394,19 @@ def _build_report_and_persist() -> None:
         # 不能证明金链六步断言通过(修掉"静态名单 CONFORMANCE_VERIFIED 不依赖金链结果"
         # 的架构不对称——否则写入器单独调用时 volcano 只是 Tier2 pass 也会被展声为金链)。
         _gold = _CONFORMANCE_RESULTS.get(_t)  # 本次金链测试结果(pass/skip/fail/None)
-        _old_conf = (_t in _verified_tools and _verified_tools[_t].get("level") == "CONFORMANCE_VERIFIED")
-        _allow_conf = (_gold == "pass") or _old_conf
+        # 八轮 verified P1(GPT 确认): 继承等级必须从**旧报告**读——此前读刚重建的
+        # _verified_tools(每条目 level 硬编码 EXECUTION_VERIFIED), _old_conf 恒 False,
+        # 继承支路不可达: 已有金链证据 + 金链 skip/未运行 → 被静默降级 EXECUTION_VERIFIED。
+        # 政策: fail=明确反观测→降级; skip/None=无观测→允许继承(若 fp 同源)。
+        # 同源守卫: contract/env 指纹与旧证据一致才可继承——金链观测绑定"该契约+环境",
+        # 契约变了旧金链结论不得贴到新证据上。
+        _old_entry = _old_verified.get(_t, {})
+        _old_conf = _old_entry.get("level") == "CONFORMANCE_VERIFIED"
+        _fp_same = (_exec_entries.get(_t, {}).get("contract_fingerprint")
+                    == _old_entry.get("contract_fingerprint")
+                    and _exec_entries.get(_t, {}).get("env_fingerprint")
+                    == _old_entry.get("env_fingerprint"))
+        _allow_conf = (_gold == "pass") or (_old_conf and _gold != "fail" and _fp_same)
         if _allow_conf:
             if _t in _verified_tools:
                 _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
@@ -709,7 +724,8 @@ class TestEvidenceWriteGuard:
     凭空获得一条成功证据(此前漏洞: 无旧证据的 fail/skip 落穿到创建逻辑, 白写 verified_at=now)。"""
 
     def _build_with_results(self, tmp_path, monkeypatch, results, old_verified=None,
-                            semantic_checks=None, conformance_verified=None):
+                            semantic_checks=None, conformance_verified=None,
+                            conformance_results=None):
         """在隔离 report 路径上调用 _build_report_and_persist, 注入指定的 Tier2 结果。
 
         old_verified: 预置旧证据 dict(六轮 verified P3-1)——测继承路径时传给
@@ -717,6 +733,9 @@ class TestEvidenceWriteGuard:
         semantic_checks: 七轮 verified P2-1 补(此前恒 patch 空 set, 语义标签路径零覆盖)——
         传入指定集合以测 semantic_checked 授予逻辑。
         conformance_verified: 七轮 verified P1-B 补——测 conformance 升级逻辑。
+        conformance_results: 八轮 verified P2(GPT)——测试必须注入自有金链观测, 否则
+        前序金链测试残留的 CONFORMANCE_RESULTS 进程级状态会污染(顺序依赖)。缺省 None
+        时注空 dict(隔离), 避免读到上下文残留。
         """
         import json as _jr
         monkeypatch.setattr("tbtools_cli.identity.execution_contract_fingerprint",
@@ -735,6 +754,8 @@ class TestEvidenceWriteGuard:
         monkeypatch.setattr("test_conformance_verified._TIER2_RESULTS", dict(results))
         monkeypatch.setattr("test_conformance_verified.CONFORMANCE_VERIFIED",
                             set(conformance_verified or ()))
+        monkeypatch.setattr("test_conformance_verified._CONFORMANCE_RESULTS",
+                            dict(conformance_results or {}))
         monkeypatch.setattr("test_conformance_verified.SEMANTIC_CHECKS",
                             set(semantic_checks or ()))
         # 旧证据文件在隔离 tmp_path 下不存在 → 自然空旧证据
@@ -871,19 +892,67 @@ class TestEvidenceWriteGuard:
         """七轮 P1-B 对照: 金链 pass + Tier2 pass → 升 CONFORMANCE_VERIFIED"""
         monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
                             {"volcano": EXEC_VERIFIED["volcano"]})
-        # 模拟金链容器有 volcano: pass(hook 收集或测试注入)
-        import conftest as _cf
-        _old = dict(_cf.CONFORMANCE_RESULTS)
-        try:
-            _cf.CONFORMANCE_RESULTS["volcano"] = "pass"
-            monkeypatch.setattr("test_conformance_verified._CONFORMANCE_RESULTS",
-                                _cf.CONFORMANCE_RESULTS)
-            r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
-                                         conformance_verified={"volcano"})
-            vt = r.get("verified_tools", {})
-            assert vt["volcano"].get("level") == "CONFORMANCE_VERIFIED", \
-                f"金链 pass 应升 CONFORMANCE_VERIFIED: {vt['volcano'].get('level')}"
-            assert "volcano" in r.get("conformance_verified", [])
-        finally:
-            _cf.CONFORMANCE_RESULTS.clear()
-            _cf.CONFORMANCE_RESULTS.update(_old)
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                     conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "pass"})
+        vt = r.get("verified_tools", {})
+        assert vt["volcano"].get("level") == "CONFORMANCE_VERIFIED", \
+            f"金链 pass 应升 CONFORMANCE_VERIFIED: {vt['volcano'].get('level')}"
+        assert "volcano" in r.get("conformance_verified", [])
+
+    def _conf_old_evidence(self, real):
+        """八轮 P1: 预置 volcano CONFORMANCE_VERIFIED 旧证据——contract/env 指纹用
+        helper 注入的 fake 值(fp_fake_123/env_fake_123), 保证同源判定成立(测试意图:
+        fp 一致时应继承; fp 不一致的拒绝场景由 test_conformance_no_inherit_on_fp_change 覆盖)。"""
+        return {real: {
+            "level": "CONFORMANCE_VERIFIED",
+            "contract_fingerprint": "fp_fake_123",
+            "env_fingerprint": "env_fake_123",
+            "verified_at": "2026-01-01T00:00:00",
+            "last_passed_at": "2026-01-02T00:00:00",
+            "corpus": "examples/data",
+            "semantic_checked": False,
+        }}
+
+    def test_conformance_inherit_on_golden_skip(self, tmp_path, monkeypatch):
+        """八轮 verified P1: 旧 CONFORMANCE_VERIFIED(fp/env 一致) + Tier2 pass +
+        金链 skip → 保留 CONFORMANCE_VERIFIED 且在名单(修复前的死代码路径)"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        old = self._conf_old_evidence("volcano")
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                     old_verified=old, conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "skip"})
+        vt = r.get("verified_tools", {})
+        assert vt.get("volcano", {}).get("level") == "CONFORMANCE_VERIFIED", \
+            f"金链 skip 应继承旧金链级: {vt.get('volcano', {}).get('level')}"
+        assert "volcano" in r.get("conformance_verified", []), "金链 skip 继承应留在名单"
+
+    def test_conformance_downgrade_on_golden_fail(self, tmp_path, monkeypatch):
+        """八轮 P1 对照: 旧 CONFORMANCE_VERIFIED + 金链 fail → 降级 EXECUTION_VERIFIED 出名单"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        old = self._conf_old_evidence("volcano")
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                     old_verified=old, conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "fail"})
+        vt = r.get("verified_tools", {})
+        assert vt.get("volcano", {}).get("level") == "EXECUTION_VERIFIED", \
+            f"金链 fail 应降级: {vt.get('volcano', {}).get('level')}"
+        assert "volcano" not in r.get("conformance_verified", []), "金链 fail 应出名单"
+
+    def test_conformance_no_inherit_on_fp_change(self, tmp_path, monkeypatch):
+        """八轮 P1 同源守卫: 旧 CONFORMANCE_VERIFIED + 金链 skip + contract_fp 已变 → 不继承"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        # 旧证据 fp 与 helper 注入的 fake(fp_fake_123)不同——模拟契约变更
+        old = self._conf_old_evidence("volcano")
+        old["volcano"]["contract_fingerprint"] = "fp_old_different_9"
+        old["volcano"]["env_fingerprint"] = "env_old_different_9"
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                     old_verified=old, conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "skip"})
+        # 指纹同源判定: _exec_entries 的 fp(fake="fp_fake_123") vs 旧证据 fp_old_different_9 → 不同
+        vt = r.get("verified_tools", {})
+        assert vt.get("volcano", {}).get("level") == "EXECUTION_VERIFIED", \
+            f"fp 变更不得继承旧金链级: {vt.get('volcano', {}).get('level')}"

@@ -62,7 +62,7 @@
   "contract_fingerprint": "f944130a4646393cf9d48a08d0af565540c31b7d97e9e652d74cd75ad6438963",
   "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
   "verified_at": "2026-10-07T15:40:52",
-  "last_passed_at": "2026-10-12T14:54:29",
+  "last_passed_at": "2026-10-12T17:20:28+00:00",
   "corpus": "examples/data",
   "semantic_checked": true,
   "domain_note": ""

@@ -11,7 +11,7 @@
 - **TTL 双时间戳缺失拒绝**(gate P1): verified_tools 条目两时间戳都缺失/为空时进 bad(strict fail / 普通 warning)——不再被 `if _va:` 排除在判龄外静默放行; aware tz 归一化(_parse_naive)防合法 RFC3339 误红
 - **docs §6.1 注记修正**(docs P1): 「全库 56 条均 semantic_checked: false」→「11 true + 45 false」(与 counts.md 互洽)
 - **架构清洁**: _TIER2_STAGES 终判弹键(防 repeat 残留) / CHANGELOG 门禁口径限定「本轮针对性子集 34=守卫7+doc10+metadata15+cli2」
-- **门禁**: pytest 守卫 9/9 + doc 10 + metadata 19 / ruff 0 / mypy 0 / --check 505 surface 全同步
+- **门禁**(本轮针对性子集, 非全量): pytest 守卫 12/12 + doc 10 + metadata 19 / ruff 0 / mypy 0 / --check 505 surface 全同步
 
 ## [1.4.94] - 2026-10-12
 

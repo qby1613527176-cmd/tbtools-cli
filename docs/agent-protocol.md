@@ -135,6 +135,14 @@ Agent 判定"验证是否新鲜"应读 `last_passed_at`(每夜 render 即保鲜)
 `verification_details.level` 是**报告时快照**; 当前判定看顶层 `verification` 字段(加载侧有
 contract_fp/env_fp 双比对, 失配即降级)。两者分叉时 details 不投影(证据已失效)。
 
+**CONFORMANCE_VERIFIED 继承语义(八轮自审 docs P1 补)**: 金链级(volcano)证据的保留规则——
+- 本次金链测试 **pass** → 新证据(升级/刷新);
+- 本次金链 **skip / 未运行**(如无 JAR 环境) → 若旧证据仍是 CONFORMANCE_VERIFIED 且
+  contract_fp/env_fp 与旧证据一致 → **继承保留**; 指纹已变则降级(金链观测绑定旧契约);
+- 本次金链 **fail** → **降级 EXECUTION_VERIFIED**(明确反观测, 不得保留)。
+无 JAR 环境下读到的 CONFORMANCE_VERIFIED 表示"该契约+环境曾有金链通过证据且未被反证",
+而非"本次运行金链通过"。
+
 ## 7. MCP 接口
 
 - **9 个编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / **workflow_plan** / job_submit / job_status / job_result / tool_provenance

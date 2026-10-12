@@ -440,14 +440,18 @@ def main():
                     _vt = json.load(open(_vp2, encoding="utf-8")).get("verified_tools") or {}
                     _old_days = []
                     _bad_ts = []  # 自审 gate/verified 六轮 P1-1: 时间戳解析失败不得静默跳过
-                    _now2 = _dt2.datetime.now()
+                    # 八轮 gate P2: 读取端当前时间改 UTC-aware, 与写入端/归一化对称——
+                    # 此前 naive 本地时间 vs _parse_naive 的 UTC 归一化不对称, UTC 外机器
+                    # 判龄偏差数小时(90 天边界附近误红)。
+                    _now2 = _dt2.datetime.now(_dt2.timezone.utc)
                     def _parse_naive(_ts: str):
-                        """解析为 naive datetime(gate 七轮 P2-1: 合法 RFC3339 aware 时间戳
-                        tz 归一化后判龄——此前 naive-now 减 aware-ts 的 TypeError 被 broad
-                        except 误报为"解析失败", 合法带时区时间戳会误红)。"""
+                        """解析为 aware UTC datetime(写入端已是 UTC-aware; 旧报告 naive 值
+                        按 UTC 解释兼容——非 UTC 时区旧值会有历史偏移, 但新写入全 UTC)。"""
                         _d = _dt2.datetime.fromisoformat(_ts)
-                        if _d.tzinfo is not None:
-                            _d = _d.astimezone(_dt2.timezone.utc).replace(tzinfo=None)
+                        if _d.tzinfo is None:
+                            _d = _d.replace(tzinfo=_dt2.timezone.utc)
+                        else:
+                            _d = _d.astimezone(_dt2.timezone.utc)
                         return _d
                     for _t2, _v2 in _vt.items():
                         # 红队 P1-3(2026-10-11): TTL 查 last_passed_at(最近成功验证时间),
