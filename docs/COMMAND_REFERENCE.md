@@ -1030,7 +1030,7 @@ tbtools tool list                 # 列出全部
 
 > 参数名查法：`java -cp $TBTOOLS_JAR <完整类名>` 无参数运行会打印 `[Usage]` 参数表（含默认值），或参考下方桥 Javadoc。
 
-共 82 个工具，按功能分类：
+共 80 个工具，按功能分类：
 
 ### BLAST（5）
 
@@ -1083,13 +1083,13 @@ tbtools tool list                 # 列出全部
 | `goEnrichMerge` | `biocjava.bioDoer.JIGplotToolkit.EnrichmentAnalysisGraph.GOEnrichmentMergeBubble` |
 | `keggEnrichment` | `biocjava.bioDoer.Kegg.AdvancedForEnrichment.KeggEnrichment` |
 
-### GWAS/VCF（3）
+### GWAS/VCF（1）
 
 | 工具名 | 引擎类 |
 |:-------|:-------|
-| `mimicVqsr` | `biocjava.bioDoer.GWAS.MimicVqsrCutoffFind` |
-| `vcfAddID` | `biocjava.bioDoer.GWAS.VCFAddID` |
 | `vcfBinCount` | `biocjava.bioIO.HTSData.VCF.VCFBINCount` |
+
+> `mimicVqsr` / `vcfAddID` 是 **direct 引擎反射**（`tbtools engine <类名>` 通道，非 `tbtools tool` 参数管线），故不列于此——见「引擎反射」章。
 
 ### GXF/GFF 注释（7）
 

@@ -206,6 +206,12 @@ def build():
         "agent_ready_partial": _census.get("PARTIAL", 0),
         "agent_ready_legacy": _census.get("LEGACY", 0),
         "contract_coverage": _cov}
+    # 自审 docs 六轮 P1-1 衍生: 诊断 census 的 tools 口径统一为 kind=="tool"(与 counts.md/
+    # version --json 同源)——CLI_TOOLS 注册 82 但 mimicVqsr/vcfAddID 在 CommandSpec 归一化为
+    # direct(引擎反射层), 三处(注册表/诊断/counts.md)数字分裂正是 COMMAND_REFERENCE "82 个工具"
+    # 漂移的结构根因。
+    from tbtools_cli.command_spec import build_command_specs as _bcs_for_census
+    counts["tools"] = sum(1 for _s in _bcs_for_census().values() if _s.kind == "tool")
     return meta, counts
 
 
@@ -433,19 +439,40 @@ def main():
                     import datetime as _dt2
                     _vt = json.load(open(_vp2, encoding="utf-8")).get("verified_tools") or {}
                     _old_days = []
+                    _bad_ts = []  # 自审 gate/verified 六轮 P1-1: 时间戳解析失败不得静默跳过
                     _now2 = _dt2.datetime.now()
                     for _t2, _v2 in _vt.items():
                         # 红队 P1-3(2026-10-11): TTL 查 last_passed_at(最近成功验证时间),
                         # 回退 verified_at 兼容旧报告——verified_at 是"首次验证时间"(冻结),
                         # 用它做 TTL 会把"每晚 pass 但契约/环境未变"的工具误判超龄
                         _va = _v2.get("last_passed_at") or _v2.get("verified_at", "")
+                        _va2 = None  # 最终用于判龄的时间戳
                         if _va:
                             try:
                                 _age = (_now2 - _dt2.datetime.fromisoformat(_va)).days
-                                if _age > 90:
-                                    _old_days.append((_t2, _age))
+                                _va2 = _va
                             except Exception:
-                                pass  # 单条 verified_at 解析失败 → 该条 TTL 检查跳过(可容忍, 下轮再查)
+                                # 六轮 P1-1: last_passed_at 解析失败 → 记 bad + 回退 verified_at(p2-1)
+                                _bad_ts.append((_t2, _va, "last_passed_at"))
+                                _fb = _v2.get("verified_at", "")
+                                if _fb and _fb != _va:
+                                    try:
+                                        _age = (_now2 - _dt2.datetime.fromisoformat(_fb)).days
+                                        _va2 = _fb
+                                    except Exception:
+                                        _bad_ts.append((_t2, _fb, "verified_at"))
+                        if _va2 is not None and _age > 90:
+                            _old_days.append((_t2, _age))
+                    # 六轮 P1-1: 解析失败的工具必须显式报出——strict 模式 fail, 普通模式 warning
+                    # (此前 except: pass 静默跳过, nightly TTL_STRICT 对畸形时间戳永久失效无告警)
+                    if _bad_ts:
+                        _bm = "⚠️ 时间戳解析失败(" + ", ".join(
+                            f"{t}·{fld}={val!r}" for t, val, fld in _bad_ts[:6]) + (
+                            f" 等 {len(_bad_ts)} 条" if len(_bad_ts) > 6 else "") + ")"
+                        if _ttl_strict:
+                            print(f"❌ {_bm}(TBTOOLS_TTL_STRICT=1 下视为失败)", file=sys.stderr)
+                            return 1
+                        print(_bm)
                     # 自审 verified 五视角 P0-1 修复(v1.4.91): 判定块曾在 for 循环内(v1.4.88
                     # 可见化提交缩进回归)——strict 下 0 个超龄也无条件 exit 1, soft 下每轮刷伪告警
                     _msg = (f"❌ 验证超龄 {len(_old_days)} 个(>90 天, TTL 严格模式阻断): "
@@ -618,11 +645,16 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         if _verif_details and _vd_level == v.get("verification", ""):
             # 自审红队 P1-3: 完整投影验证证据——Agent 需要区分"跑过" vs "跑过+内容级检查"
             # (semantic_checked) + 环境身份(env_fingerprint) + 验证域(domain_note)
+            # 六轮 product P1-1: 补 last_passed_at 投影——TTL 判新鲜读的是它(verified_at
+            # 是冻结的首次时间), 不投影则 Agent 静态面只能看到旧首次时间、无法判断最近通过。
+            # 回退 verified_at 兼容旧报告(与 surface 哈希忽略两字段的规则协调, 时间戳不含
+            # 在哈希内故不会引发全仓漂移)。
             schema["verification_details"] = {
                 "level": _verif_details.get("level", ""),
                 "contract_fingerprint": _verif_details.get("contract_fingerprint", ""),
                 "env_fingerprint": _verif_details.get("env_fingerprint", ""),
                 "verified_at": _verif_details.get("verified_at", ""),
+                "last_passed_at": _verif_details.get("last_passed_at", _verif_details.get("verified_at", "")),
                 "corpus": _verif_details.get("corpus", ""),
                 "semantic_checked": bool(_verif_details.get("semantic_checked", False)),
                 "domain_note": _verif_details.get("domain_note", ""),

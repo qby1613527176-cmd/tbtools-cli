@@ -107,10 +107,14 @@ class TestCountsSurfaceGuard:
         t, b = c["tools"], c["bridges"]
         zh = (ROOT / "README.md").read_text(encoding="utf-8")
         en = (ROOT / "README_EN.md").read_text(encoding="utf-8")
+        cref = (ROOT / "docs" / "COMMAND_REFERENCE.md").read_text(encoding="utf-8")
+        faq = (ROOT / "docs" / "faq.md").read_text(encoding="utf-8")
         assert (f"{t} CLI 工具" in zh or f"{t} 个 CLI 工具" in zh), f"README tools != {t}"
         assert f"{t} CLI tools" in en, f"README_EN tools != {t}"
+        assert re.search(rf"共 {t} 个工具", cref), f"COMMAND_REFERENCE 工具总数 != {t}"
         assert (f"{b} Java 桥" in zh or f"{b} 个 Java bridge" in zh), f"README bridges != {b}"
         assert f"{b} Java bridges" in en, f"README_EN bridges != {b}"
+        assert f"{b} 个 Java bridge" in faq, f"docs/faq.md bridges != {b}"
 
     def test_pitfalls_surface(self):
         n = self._counts()["pitfall_hints"]
@@ -120,11 +124,16 @@ class TestCountsSurfaceGuard:
         assert f"{n} documented pitfalls" in en, f"README_EN pitfalls != {n}"
 
     def test_legacy_drift_values_banned(self):
-        """已修旧漂移值不得回再生(213 plot / 110+ bridges / 180+ rpc / 54 capabilities)"""
-        text = "\n".join(p.read_text(encoding="utf-8") for p in [
-            ROOT / "README.md", ROOT / "README_EN.md",
-            ROOT / "docs" / "index.md", ROOT / "docs" / "quickstart.md",
-            ROOT / "docs" / "agent.md"])
+        """已修旧漂移值不得回再生——扫描面=全量现状文档(docs/*.md + README 双语),
+        排除历史记录(_worklog/self_review/CHANGELOG 的旧数字是审计历史非现状漂移)。
+        六轮 docs P1-2: 第五轮只盖 5 门面, 82(COMMAND_REFERENCE)/110+(faq)恰在
+        覆盖外——改全量扫描堵死"漂移无感再生结构外移"。"""
+        files = [ROOT / "README.md", ROOT / "README_EN.md"]
+        files += [p for p in (ROOT / "docs").rglob("*.md")
+                  if "_worklog" not in str(p) and "self_review" not in str(p)
+                  and p.name != "CHANGELOG.md"]
+        text = "\n".join(p.read_text(encoding="utf-8") for p in files)
         for legacy, hint in [("213", "plot 旧值"), ("110+", "bridges 旧值"),
-                             ("180+", "rpc 旧值"), ("54 capabilities", "capabilities 旧表述")]:
-            assert legacy not in text, f"门面出现已修漂移值 {legacy!r}({hint})"
+                             ("180+", "rpc 旧值"), ("54 capabilities", "capabilities 旧表述"),
+                             ("共 82 个工具", "tools 旧数")]:
+            assert legacy not in text, f"文档出现已修漂移值 {legacy!r}({hint})"
