@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.94] - 2026-10-12
+
+### 第六轮五视角自审(GPT 先行+5 子代理)全闭环——验证证据链端到端真实工作
+
+- **TTL 严格门禁修复**(gate/verified 同根因 P1): 时间戳解析失败不再静默跳过——畸形值进 bad 列表, TBTOOLS_TTL_STRICT=1 下工具名显式报错 return 1, 普通模式 warning; 解析失败回退 verified_at 再判龄(堵"畸形 last_passed_at 遮蔽超龄 verified_at")
+- **AI manifest 补 last_passed_at**(product P1 两阶段): render_ai_manifest 投影补字段(回退 verified_at 兼容)+ **nightly writeback 补 Render 步 + add-paths 含 ai/**——夜间保鲜 PR 含 report + 56 manifest, 静态 Agent 面不再滞留旧时间戳
+- **hook 三阶段终判**(verified P2-1): pytest_runtest_makereport 从 call-only 升级为 setup/call/teardown 累积状态机——任一阶段 fail/skip 不刷新成功证据(堵 call-pass + teardown-fail 残留)
+- **全新守卫**: 第 5 守卫「旧证据 + fail → 继承且不刷新时间戳 + details 规整去层字段」(防 52f8b78 规整路径回归); 守卫 5/5
+- **docs 漂移再清**: COMMAND_REFERENCE "82 个工具"→80(GWAS 段移除 mimicVqsr/vcfAddID 两个 direct 混入, 含分类错误)/ faq 110+→118 / 守卫扫描面从 5 门面扩到全量现状文档
+- **结构根因统一**: census tools 口径 82→80——CLI_TOOLS 注册 82 但 mimicVqsr/vcfAddID 在 CommandSpec 归一化为 direct, counts.md/version --json/gen_metadata 三源合一
+- **CI 稳健性**: onboarding tee 管道×3 补 pipefail(共 5 处) / nightly TTL 步 tail -6→-20 防诊断截断 / §6.1 semantic_checked 理想化注记
+- **门禁**: pytest 20 关键 passed(守卫 5+doc 10+metadata 5) / ruff 0 / mypy 0 / --check 505 surface 全同步 / YAML 语法 OK
+
 ## [1.4.93] - 2026-10-12
 
 ### 第五轮自审全闭环(P1×6 + P2×10 + P3×1) + 隐藏 hook bug 修复
