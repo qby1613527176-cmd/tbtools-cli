@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.96] - 2026-10-13
+
+### 第八轮五视角自审(GPT 四连审)全闭环——conformance 继承/测试隔离/时区对称
+
+- **CONFORMANCE 继承修复**(verified 4 场景探针 + docs 实测报告漂移红): 升级循环此前检查刚重建的 _verified_tools(level 硬编码 EXECUTION_VERIFIED), 旧等级从未从 _old_verified 读 → 继承支路死代码; 无 JAR 环境金链 skip 会静默洗掉 volcano 金链级并致报告漂移误红。修复: 继承等级从 _old_verified 读 + contract/env fp 同源守卫——金链 fail 降级 / skip·未运行继承 / fp 变更不继承(金链观测绑定旧契约)
+- **conformance 测试隔离**(GPT P2): helper 增 conformance_results 参数(缺省注空), 各测试显式注入自有金链观测——不再读进程级容器残留(防顺序依赖)
+- **时区对称**(gate 实证比 GPT 所述更宽): 报告写入端 now(timezone.utc) + TTL 读取端 _now2 对称 + _parse_naive 统一转 UTC——UTC 外机器判龄不再偏数小时(90 天边界误红消除); 落盘 53/56 last_passed_at 带 +00:00, 3 条 skip/xfail 继承旧 naive 兼容
+- **docs**: §6.1 补 CONFORMANCE_VERIFIED 继承语义注记(pass 升级/skip 继承/fail 降级/fp 变不继承) / CHANGELOG 门禁行补「本轮针对性子集, 非全量」
+- **门禁**(本轮针对性子集, 非全量): pytest 守卫 12/12 + doc 10 + metadata 19 / ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.4.95] - 2026-10-12
 
 ### 第七轮五视角自审(GPT 三连审)全闭环——验证证据三类标签绑定独立观测
