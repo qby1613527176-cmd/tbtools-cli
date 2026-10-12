@@ -73,9 +73,12 @@ def _read_command_metadata(warn: bool = True) -> dict:
 
 @functools.lru_cache(maxsize=1)
 def _contract_input_flags() -> frozenset:
-    """从 command_metadata inputs 契约反推输入 flag(cli_name)——product P1-4②
-    (五视角自审): 预检兜底正则覆盖窄(--inSeq/--queryFasta/--inPaf 等真实输入 flag
-    漏检), 契约声明的输入 flag 动态并入, 只扩大不误伤。"""
+    """从 CommandSpec/InputSpec 反推输入 flag(cli_name)——product P1-4②
+    (五视角自审)+ 红队 P2(2026-10-11): 白名单单一源改为在线构建的
+    CommandSpec/InputSpec(metadata 是投影, 源码新加命令的输入 flag 未刷新
+    metadata 时漏检; specs 是在线构建真源); 预检兜底正则覆盖窄
+    (--inSeq/--queryFasta/--inPaf 等真实输入 flag 漏检), 契约声明的输入
+    flag 动态并入, 只扩大不误伤。"""
     # 红队 P2(2026-10-11): 输入 flag 白名单改从 CommandSpec/InputSpec 反推
     # (单一源)——metadata 是投影, 源码新加命令的输入 flag 未刷新 metadata 时漏检;
     # specs 是在线构建真源

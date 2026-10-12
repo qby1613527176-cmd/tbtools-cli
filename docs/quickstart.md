@@ -28,7 +28,7 @@ tbtools expr volcano examples/data/deg.txt volcano.svg --pval-cutoff 0.05
 ## 3. 探索
 
 ```bash
-tbtools list plots             # 213 个绘图命令(权威数: tbtools version --json)
+tbtools list plots             # 218 个绘图命令(权威数: tbtools version --json)
 tbtools search volcano         # 模糊搜索（分组标签与元数据同源: [expr/manual]）
 tbtools help volcano           # 命令详情(含坑位提示)
 tbtools tool-describe volcano bamsort --json   # 批量机器描述(Agent 能力)

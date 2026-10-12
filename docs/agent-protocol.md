@@ -105,11 +105,20 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
   "contract_fingerprint": "<64-hex>",
   "env_fingerprint": "<64-hex>",
   "verified_at": "ISO-8601",
+  "last_passed_at": "ISO-8601",
   "corpus": "examples/data",
   "semantic_checked": true,
   "domain_note": "verified for coords >= binSize(10000)..."
 }
 ```
+
+**时间语义(红队 P1-3, 2026-10-11 拆分为两个字段)**:
+
+- `verified_at` = **首次验证时间**(该 contract+env 组合首次通过), 冻结不刷新——历史追溯用。
+- `last_passed_at` = **最近一次通过时间**, 每次 pass 无条件刷新——TTL 保鲜检查(90 天)查它,
+  解决"每晚验证成功仍被 90 天 TTL 判过期"的矛盾。旧报告(763e55c 前)无此字段时回退 `verified_at` 兼容。
+
+Agent 判定"验证是否新鲜"应读 `last_passed_at`(每夜 render 即保鲜), 而非 `verified_at`(可能冻结在首次)。
 
 **⚠️ env_fingerprint 是全局单值**(JAR + plugins/lib 全部 jar + KNOWN_DEPENDENCIES 派生的全部
 外部二进制哈希):**任何**一个外部二进制升级(如 muscle), 所有工具的验证都会降级——包括与该

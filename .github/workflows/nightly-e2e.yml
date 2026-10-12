@@ -36,6 +36,7 @@ jobs:
 
       - name: Fetch real JAR (silent)
         run: |
+          set -euo pipefail
           python3 -m tbtools_cli.cli fetch-jar --yes 2>&1 | tail -3
           python3 -m tbtools_cli.cli doctor 2>&1 | grep -E "✅ JAR|sha256" | head -2
 

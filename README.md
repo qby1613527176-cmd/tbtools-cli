@@ -72,7 +72,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [Documentation](#documentation)
 - [Installation](#installation)
 - [Example Outputs](#example-outputs)
-- [Plotting Engines (200+)](#plotting-engines-213)
+- [Plotting Engines (200+)](#plotting-engines-218)
 - [RPC Data Tools](#rpc-data-tools-188-methods)
 - [CLI Tools](#cli-tools-80)
 - [Engine Reflection](#engine-reflection)
@@ -206,7 +206,7 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 | 能力 | 状态 | 说明 |
 |:---|:---:|:---|
 | 绘图引擎 CLI | ✅ | 200+ 个（无头 SVG/PNG 输出,Linux 需 xvfb） |
-| RPC 数据工具 | ✅ | 180+ 方法,自愈服务器（pid+健康检查+自动重启） |
+| RPC 数据工具 | ✅ | 188 方法,自愈服务器（pid+健康检查+自动重启） |
 | 管道（stdin/stdout） | ⚠️ | 仅部分 tool 层命令;绘图命令需真实文件路径 |
 | Windows 绘图 | ⚠️ | 基本可用;无 xvfb 时部分绘图受限 |
 | 联网命令（NCBI/API） | ⚠️ | srr2ena/pubmed/seqfetch 等需外网,被墙环境请配代理 |
@@ -217,7 +217,7 @@ sudo cp scripts/tbtools.1 /usr/local/share/man/man1/
 | Layer | Capability | Entry |
 |:------|:-----------|:------|
 | 🎨 **绘图引擎** | 200+ 个（基因结构/Motif/热图/树/共线性/韦恩/ChIP-seq/柱图/环形图/标记设计/eFP 等） | `tbtools <plotName>` |
-| 📊 **RPC 数据工具** | 180+ 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
+| 📊 **RPC 数据工具** | 188 个（FASTA/GFF/表达/Blast/富集/建树/引物等） | `tbtools rpc <method> '<json>'` |
 | 🛠️ **命令行工具** | 80+ 个（extractFasta/statFasta/rpkmCal/tpmCalc/mimicVqsr 等） | `tbtools tool <name>` |
 | 🔬 **任意引擎反射** | 万能兜底（任意 TBtools 引擎类） | `tbtools engine <class> key=value` |
 | 🧩 **插件命令** | 12 个 CLI 化插件（GSEA/Notung reconcile/植物 TF motif 偏移/MEME 可视化/kallisto 定量/HMMer 全库扫描/MCScanX 加速/Newick 重命名/基因组 dot plot/diamond 蛋白注释/SMART 域注释/FIMO motif 扫描） | `tbtools table gsea` / `tbtools tree notung` 等 |
@@ -232,7 +232,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 |:-----|:-----|
 | [`docs/README.md`](docs/README.md) | **维护者导航**（自审 F9）：活 plan / 编年史 / 评审流向 / 生成物 vs 手写物——接续会话入口 |
 | [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80 个 CLI 工具（18 类功能分组）+ Java 桥 Javadoc(数见 counts.md)（输入格式权威来源）+ 49 条实测坑位 + engine 反射 + RPC 指引 |
-| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 180+ 方法参考（参数/返回值,自动生成） |
+| [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值,自动生成） |
 
 ```bash
 # 快速查用法（不用翻手册）：
@@ -261,7 +261,7 @@ pip install .            # 或 pipx install . / pip install git+https://github.c
 ### Requirements
 - **Linux / WSL2 / macOS**（绘图需要 `xvfb-run`，可用 `sudo apt install xvfb`）
 - **Windows**：支持工具类/RPC/表格类命令（Git Bash + TBtools-II/bin 加入 PATH）；绘图类命令受 xvfb 限制（部分可用）
-- **JDK 11+**(推荐 17;`java` 运行 + `javac` 编译 110+ 个 Java bridge——**JRE 不够,必须 JDK**)
+- **JDK 11+**(推荐 17;`java` 运行 + `javac` 编译 118 个 Java bridge——**JRE 不够,必须 JDK**)
 - **TBtools_JRE1.6.jar**（TBtools-II 主 jar，~55MB）
 
 ### 1. Install（自动接入本机 TBtools）
@@ -324,7 +324,7 @@ bash examples/scripts/run_examples.sh   # 运行 8 个代表性引擎 → exampl
 > 全部由本仓库 `examples/fulltest` 合成数据实测生成（`docs/images/`，SVG 可放大无损）。
 > 复现: `bash examples/scripts/run_examples.sh`。
 
-## 🎨 Plotting Engines (213)
+## 🎨 Plotting Engines (218)
 
 ### Gene structure / Motif / Sequence logo
 ```bash
