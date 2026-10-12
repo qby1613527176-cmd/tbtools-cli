@@ -257,23 +257,12 @@ PROV_COVERAGE: dict[str, bool] = {}
 # 旧结构: Tier1(纯编译, 不执行引擎)为全部 56 工具写 EXECUTION_VERIFIED 证据——
 # 包括同进程中尚未运行/刚失败的 Tier2 工具(引擎回归时报告照写通过证据);
 # 唯一防护是 workflow 步骤序(incidental), 本机 TBTOOLS_WRITE_REPORT=1 无保护。
-# 修复: ① hook 收集 Tier2 每工具真实执行结果; ② 报告构建+写盘/校验移到
-# TestConformanceReport(在 Tier2 之后); ③ 本次失败的工具不刷新证据(保留旧证据)。
-_TIER2_RESULTS: dict = {}
+# 修复: ① hook 收集 Tier2 每工具真实执行结果(conftest.py——pytest 只注册
+# conftest/插件的 hookimpl, 写在测试模块内不生效, 2026-10-12 探针实证);
+# ② 报告构建+写盘/校验移到 TestConformanceReport(在 Tier2 之后);
+# ③ 本次失败的工具不刷新证据(保留旧证据)。
+from conftest import TIER2_RESULTS as _TIER2_RESULTS  # noqa: E402  (pytest hook 收集结果)
 _COMPILE_VERIFIED: list = []
-
-
-@pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    outcome = yield
-    rep = outcome.get_result()
-    if (rep.when == "call" and item.cls is not None
-            and item.cls.__name__ == "TestTier2ExecutionVerified"):
-        _tool = getattr(item, "callspec", None)
-        if _tool and "tool" in _tool.params:
-            # skip(无 JAR/RPC)≠ fail: 均不刷新证据(没真跑过), 语义分开便于审计
-            _TIER2_RESULTS[_tool.params["tool"]] = ("pass" if rep.passed
-                                                    else ("skip" if rep.skipped else "fail"))
 
 
 def _build_report_and_persist() -> None:
