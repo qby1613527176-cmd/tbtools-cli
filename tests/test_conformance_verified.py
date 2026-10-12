@@ -684,8 +684,12 @@ class TestEvidenceWriteGuard:
     新工具首次加入就失败/跳过/结果缺失时, 不得在 verified_tools / execution_verified
     凭空获得一条成功证据(此前漏洞: 无旧证据的 fail/skip 落穿到创建逻辑, 白写 verified_at=now)。"""
 
-    def _build_with_results(self, tmp_path, monkeypatch, results):
-        """在隔离 report 路径上调用 _build_report_and_persist, 注入指定的 Tier2 结果。"""
+    def _build_with_results(self, tmp_path, monkeypatch, results, old_verified=None):
+        """在隔离 report 路径上调用 _build_report_and_persist, 注入指定的 Tier2 结果。
+
+        old_verified: 预置旧证据 dict(六轮 verified P3-1)——测继承路径时传给
+        _old_verified 旧报告; 缺省 None 时隔离 tmp_path 下无旧文件 → 自然空旧证据。
+        """
         import json as _jr
         monkeypatch.setattr("tbtools_cli.identity.execution_contract_fingerprint",
                             lambda spec: "fp_fake_123")
@@ -695,7 +699,10 @@ class TestEvidenceWriteGuard:
         # 需预建 tests/ 子目录(否则 FileNotFoundError 吞掉真实构建路径)
         (tmp_path / "tests").mkdir(exist_ok=True)
         _fake = tmp_path / "tests" / "verification_report.json"
-        _fake.write_text("{}", encoding="utf-8")
+        if old_verified is not None:
+            _fake.write_text(_jr.dumps({"verified_tools": old_verified}), encoding="utf-8")
+        else:
+            _fake.write_text("{}", encoding="utf-8")
         monkeypatch.setattr("test_conformance_verified.ROOT", str(tmp_path))
         monkeypatch.setattr("test_conformance_verified._TIER2_RESULTS", dict(results))
         monkeypatch.setattr("test_conformance_verified.CONFORMANCE_VERIFIED", set())
@@ -739,3 +746,36 @@ class TestEvidenceWriteGuard:
         r = self._build_with_results(tmp_path, monkeypatch, {_real: "pass"})
         assert _real in r.get("verified_tools", {})
         assert _real in r.get("execution_verified", [])
+
+    def test_old_evidence_fail_inherits_no_refresh(self, tmp_path, monkeypatch):
+        """六轮 verified P3-1: 旧证据 + 本次 fail → 继承旧证据且不刷新时间戳。
+
+        覆盖 52f8b78(继承条目规整 details schema)与红队 P1-1"fail 不刷新"的交叉路径:
+        有旧证据的工具本次失败, 必须保留原 verified_at/last_passed_at(继承),
+        不得因 fail 走 else 分支丢失证据或改写时间。
+        """
+        _real = next(iter(EXEC_VERIFIED))  # 真实工具(SPECS 必须含它)
+        old = {
+            _real: {
+                "level": "EXECUTION_VERIFIED",
+                "contract_fingerprint": "fp_old_abc",
+                "env_fingerprint": "env_old_abc",
+                "verified_at": "2026-01-01T00:00:00",
+                "last_passed_at": "2026-01-02T00:00:00",
+                "corpus": "examples/data",
+                "semantic_checked": False,
+            }
+        }
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {_real: EXEC_VERIFIED[_real]})
+        r = self._build_with_results(tmp_path, monkeypatch, {_real: "fail"}, old_verified=old)
+        vt = r.get("verified_tools", {})
+        assert _real in vt, "旧证据工具本次 fail 应继承保留(不得消失)"
+        assert vt[_real]["verified_at"] == "2026-01-01T00:00:00", \
+            f"fail 后 verified_at 不得被改写: {vt[_real].get('verified_at')}"
+        assert vt[_real]["last_passed_at"] == "2026-01-02T00:00:00", \
+            f"fail 后 last_passed_at 不得被刷新: {vt[_real].get('last_passed_at')}"
+        # 规整后 details 字段集统一(52f8b78): 继承条目不带 level/semantic_checked
+        det = r.get("execution_verified_details", {}).get(_real, {})
+        assert "level" not in det and "semantic_checked" not in det, \
+            f"继承条目 details 应规整去层字段: {sorted(det.keys())}"

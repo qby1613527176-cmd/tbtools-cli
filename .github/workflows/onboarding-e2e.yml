@@ -35,6 +35,7 @@ jobs:
       # ── ① Agent 第一步：doctor（此时无 jar，应给出可执行指引）──
       - name: Step 1 — doctor shows guidance when JAR missing
         run: |
+          set -o pipefail  # gate P2-2(六轮): tee 管道对齐——前段失败不得被 tee 吞码
           ./bin/tbtools doctor 2>&1 | tee /tmp/doctor_before.txt
           grep -q "setup --auto" /tmp/doctor_before.txt && echo "✅ 指引包含 setup --auto"
           grep -q "fetch-jar" /tmp/doctor_before.txt && echo "✅ 指引包含 fetch-jar"
@@ -42,6 +43,7 @@ jobs:
       # ── ② Agent 第二步：fetch-jar 自动下载官方包并提取 jar ──
       - name: Step 2 — fetch-jar auto-download + extract
         run: |
+          set -o pipefail  # gate P2-2(六轮): tee 管道对齐——前段失败不得被 tee 吞码
           ./bin/tbtools fetch-jar --yes 2>&1 | tee /tmp/fetch_jar.txt
           grep -q "已提取" /tmp/fetch_jar.txt && echo "✅ jar 提取成功"
           ls -la ~/tbtools-cli/lib/TBtools_JRE1.6.jar
@@ -49,6 +51,7 @@ jobs:
       # ── ③ 验证 doctor 全绿 ──
       - name: Step 3 — doctor all green after setup
         run: |
+          set -o pipefail  # gate P2-2(六轮): tee 管道对齐——前段失败不得被 tee 吞码
           ./bin/tbtools doctor 2>&1 | tee /tmp/doctor_after.txt
           grep -q "JAR:.*MB" /tmp/doctor_after.txt && echo "✅ JAR 已找到"
           # ❌ 0（零错误计数）合法；只有 ❌ 且非零计数才算失败
