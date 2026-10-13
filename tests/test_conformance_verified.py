@@ -402,10 +402,17 @@ def _build_report_and_persist() -> None:
         # 契约变了旧金链结论不得贴到新证据上。
         _old_entry = _old_verified.get(_t, {})
         _old_conf = _old_entry.get("level") == "CONFORMANCE_VERIFIED"
-        _fp_same = (_exec_entries.get(_t, {}).get("contract_fingerprint")
-                    == _old_entry.get("contract_fingerprint")
-                    and _exec_entries.get(_t, {}).get("env_fingerprint")
-                    == _old_entry.get("env_fingerprint"))
+        # 十轮 verified/arch/docs P1(GPT 增量审查): 空指纹会被当成"同源"——Python
+        # "" == "" 为 True, 损坏/旧格式/迁移缺字段的旧证据(fingerprint 为空)会绕过
+        # 同源判定无身份证明继承金链级。要求**双侧四字段非空且相等**才允许继承——
+        # 与加载端"缺 fp 即 discard"不变量对齐(证据身份必须可证明)。
+        _cur_cfp = _exec_entries.get(_t, {}).get("contract_fingerprint")
+        _old_cfp = _old_entry.get("contract_fingerprint")
+        _cur_efp = _exec_entries.get(_t, {}).get("env_fingerprint")
+        _old_efp = _old_entry.get("env_fingerprint")
+        _fp_same = bool(
+            _cur_cfp and _old_cfp and _cur_efp and _old_efp
+            and _cur_cfp == _old_cfp and _cur_efp == _old_efp)
         _allow_conf = (_gold == "pass") or (_old_conf and _gold != "fail" and _fp_same)
         if _allow_conf:
             if _t in _verified_tools:
@@ -966,3 +973,32 @@ class TestEvidenceWriteGuard:
         vt = r.get("verified_tools", {})
         assert vt.get("volcano", {}).get("level") == "EXECUTION_VERIFIED", \
             f"fp 变更不得继承旧金链级: {vt.get('volcano', {}).get('level')}"
+
+    def test_conformance_no_inherit_on_empty_fp(self, tmp_path, monkeypatch):
+        """十轮 verified/arch/docs P1(GPT): 旧 CONFORMANCE_VERIFIED + 指纹字段为空 +
+        金链 skip → 不得继承(空指纹无身份证明, 与加载端 discard 不变量对齐)。
+
+        防回归: Python "" == "" 为 True, 相等比较会被空指纹绕过——必须双侧四字段
+        非空且相等才允许继承金链级。
+        """
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        # 旧证据指纹为空(损坏/旧格式/迁移缺字段)
+        old = {
+            "volcano": {
+                "level": "CONFORMANCE_VERIFIED",
+                "contract_fingerprint": "",
+                "env_fingerprint": "",
+                "verified_at": "2026-01-01T00:00:00",
+                "last_passed_at": "2026-01-02T00:00:00",
+                "corpus": "examples/data",
+                "semantic_checked": False,
+            }
+        }
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "pass"},
+                                     old_verified=old, conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "skip"})
+        vt = r.get("verified_tools", {})
+        assert vt.get("volcano", {}).get("level") == "EXECUTION_VERIFIED", \
+            f"空指纹不得继承金链级: {vt.get('volcano', {}).get('level')}"
+        assert "volcano" not in r.get("conformance_verified", []), "空指纹不得进 conformance 名单"

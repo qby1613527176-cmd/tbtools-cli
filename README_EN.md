@@ -14,7 +14,7 @@ discovery → describe → validate → execute → result → provenance, with 
 ## Install
 
 ```bash
-pip install tbtools-cli          # PyPI (v1.3.0 live)
+pip install tbtools-cli          # PyPI latest (see badge / `tbtools version --json`)
 # or from source
 git clone https://github.com/qby1613527176-cmd/tbtools-cli
 cd tbtools-cli && pip install -e .
@@ -22,7 +22,7 @@ tbtools setup --auto             # locate or fetch the TBtools JAR
 tbtools doctor                   # verify environment
 ```
 
-> Requires Java (JRE 1.6 jar), Python 3.10+. On Linux, xvfb is needed for plotting.
+> Requires **JDK 11+** (JRE is NOT enough: `javac` compiles 118 Java bridges), Python 3.10+. On Linux, xvfb is needed for plotting.
 
 ## Quick Start
 
@@ -36,17 +36,18 @@ tbtools tool-provenance out.svg                  # audit the run
 
 Try with bundled examples: `examples/data/` (official data, reproducible).
 
-## 🤖 Agent Interface (7 capabilities, all explicit)
+## 🤖 Agent Interface (8 capabilities, all explicit)
 
 | Capability | Command |
 |---|---|
 | 1 Discover | `tbtools search <task> --json` (multi-word / reverse `--input`/`--output` / capability) |
-| 2 Describe | `tbtools tool-describe <cmd> --json` (schema: inputs/outputs/capabilities/dependencies/relations) |
-| 3 Preflight | `tbtools tool-validate <cmd> <inputs...> --json` (existence/format/columns, `--force`) |
-| 4 Execute | `tbtools tool-run <args...> --json` (pure-JSON stdout protocol, `--timeout`) |
-| 5 Result | `tbtools tool-result <job_id>` / `job-status` (state machine) |
-| 6 Status | `tbtools rpc status` / exit codes + TB error codes |
-| 7 Provenance | `tbtools tool-provenance <output>` + `env --lock` |
+| 2 Describe | `tbtools tool-describe <cmd> --json` (schema: inputs/outputs/capabilities/dependencies/relations; **always an array**, take `[0]`) |
+| 3 Plan | `tbtools workflow-plan <goal> --json` (planning layer: goal → tool chain) |
+| 4 Validate | `tbtools tool-validate <cmd> <inputs...> --json` (existence/format/columns, `--force`) |
+| 5 Execute | `tbtools tool-run <args...> --json` / `tool-submit` (sync / async job state machine) |
+| 6 Observe | `tbtools job-status/result <job_id>` (running→succeeded/failed/cancelled/timed_out) |
+| 7 Artifact | `tbtools artifact inspect <output> --json` (type/format/sha256/validation) |
+| 8 Provenance | `tbtools tool-provenance <output>` / `provenance-graph` |
 
 **Async jobs**: `tool-submit` (background, `--timeout`) → `job-status` (`running → succeeded/failed/cancelled/timed_out`) → `job-log` → `job-result` → `job-cancel`.
 

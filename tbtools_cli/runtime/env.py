@@ -61,6 +61,19 @@ def get_jar():
         "/Applications/TBtools/TBtools_JRE1.6.jar",
         os.path.expanduser("~/Applications/TBtools/TBtools_JRE1.6.jar"),
     ]:
+        # 十轮 gate P2-1(GPT): 含 `*` 的候选是字面路径, os.path.isfile 不展开——
+        # 普通 Windows 用户 Downloads/Desktop 下的 JAR 永不命中。仅对含 `*` 候选
+        # 做 glob 展开(无匹配不降级), 保持 get_jar 冷启动性能(glob 只对通配候选跑)。
+        if "*" in cand:
+            import glob as _glob
+            try:
+                _hits = sorted(_glob.glob(cand))
+            except Exception:
+                _hits = []
+            for _h in _hits:
+                if os.path.isfile(_h):
+                    return _h
+            continue
         if os.path.isfile(cand):
             return cand
     return jar  # 返回空或原始值（让下游报错）

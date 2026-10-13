@@ -156,6 +156,12 @@ def execution_contract_fingerprint(spec) -> str:
                                 sort_keys=True, default=str).encode()).hexdigest()
 
 
+# 十轮 gate/arch P2-2(GPT): 环境指纹缓存提为模块级——此前 _fp_cache 定义在函数内,
+# 每次调用重建(数百 MB JAR 重复哈希), 与 docstring"进程内只 hash 一次"不符。
+# 键 = (path, mtime_ns, size) 内建失效(文件变化自动重算); GIL 下无锁安全(最坏重复 hash)。
+_ENV_FP_CACHE: dict[tuple, str] = {}
+
+
 def engine_env_fingerprint() -> str:
     """引擎环境指纹(评审 #115 预审 P1-2/D2 响应 + v1.4.65 覆盖补全): JAR + 外部二进制
     sha256——引擎本体变化触发 verified_at 刷新。
@@ -170,8 +176,8 @@ def engine_env_fingerprint() -> str:
     import shutil as _sh
     from tbtools_cli.core import JAR, ROOT
     h = _hc.sha256()
-    # 自审 arch F8: 身份缓存——(path, mtime, size) → 该文件 hash(进程内只 hash 一次)
-    _fp_cache: dict[tuple, str] = {}
+    # 十轮 gate/arch P2-2: 引用模块级缓存(不再函数内新建)
+    _fp_cache = _ENV_FP_CACHE
 
     def _hash_file(p: str) -> str:
         try:

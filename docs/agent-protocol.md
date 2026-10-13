@@ -73,25 +73,30 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 `tool-describe <cmd> --json` 输出(**恒返回数组**, 单命令/多命令形状一致——自审 product P2-8-① 定案; 单命令取 `[0]`):
 
 ```json
-{
-  "schema_version": "1.0",
-  "id": "tbtools.expr.volcano",
-  "uri": "tbtools://expr/volcano",
-  "name": "volcano",
-  "group": "expr",
-  "kind": "manual|bridge|direct|tool",
-  "help": "...",
-  "capabilities": ["differential_expression", "visualization"],
-  "capabilities_ontology": ["expression", "expression.differential", ...],
-  "inputs": [{"name": "deg", "format": "tsv", "columns": ["GeneID","Log2FC","pvalue"], "required": true}],
-  "outputs": ["svg"],
-  "parameters": [{"name": "pval_cutoff", "type": "float", "default": 0.05, "cli_name": "--pval-cutoff"}],
-  "dependency_manifest": [{"name": "iqtree2", "type": "binary", "required": true, "platforms": ["linux"]}],
-  "relations": {"accepts": ["DEG_TABLE"], "produces": ["VOLCANO_PLOT"], "next_step": ["goEnrich"]},
-  "status": "stable|beta|platform-limited|network-required",
-  "alias_of": null
-}
+[
+  {
+    "schema_version": "1.0",
+    "id": "tbtools.expr.volcano",
+    "uri": "tbtools://expr/volcano",
+    "name": "volcano",
+    "group": "expr",
+    "kind": "manual|bridge|direct|tool",
+    "help": "...",
+    "capabilities": ["differential_expression", "visualization"],
+    "capabilities_ontology": ["expression", "expression.differential", ...],
+    "inputs": [{"name": "deg", "format": "tsv", "columns": ["GeneID","Log2FC","pvalue"], "required": true}],
+    "outputs": ["svg"],
+    "parameters": [{"name": "pval_cutoff", "type": "float", "default": 0.05, "cli_name": "--pval-cutoff"}],
+    "dependency_manifest": [{"name": "iqtree2", "type": "binary", "required": true, "platforms": ["linux"]}],
+    "relations": {"accepts": ["DEG_TABLE"], "produces": ["VOLCANO_PLOT"], "next_step": ["goEnrich"]},
+    "status": "stable|beta|platform-limited|network-required",
+    "alias_of": null
+  }
+]
 ```
+
+> 十轮 docs/product P1(GPT): 上例为**实际输出形状**——即使单命令也恒为长度 1 的数组, 取 `[0]` 后才是对象。
+> 此前示例误展示裸对象, 照抄示例的 Agent 解析器会踩类型错误。
 
 **Agent 只使用 contract 名(`pval_cutoff`);runtime 负责翻译为 CLI flag(`--pval-cutoff`)**。
 
