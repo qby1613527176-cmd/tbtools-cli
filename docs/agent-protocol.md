@@ -70,7 +70,7 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 
 ## 6. Tool Contract(CommandSpec)
 
-`tool-describe <cmd> --json` 输出(**恒返回数组**, 单命令/多命令形状一致——自审 product P2-8-① 定案; 单命令取 `[0]`):
+`tool-describe <cmd> --json` 输出(**恒返回数组**, 单命令/多命令形状一致; 单命令取 `[0]`):
 
 ```json
 [
@@ -95,7 +95,7 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 ]
 ```
 
-> 十轮 docs/product P1(GPT): 上例为**实际输出形状**——即使单命令也恒为长度 1 的数组, 取 `[0]` 后才是对象。
+> **注意**: 上例为**实际输出形状**——即使单命令也恒为长度 1 的数组, 取 `[0]` 后才是对象。
 > 此前示例误展示裸对象, 照抄示例的 Agent 解析器会踩类型错误。
 
 **Agent 只使用 contract 名(`pval_cutoff`);runtime 负责翻译为 CLI flag(`--pval-cutoff`)**。
@@ -117,17 +117,17 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 }
 ```
 
-> 六轮 product P3(七轮 docs P1 修正): 上例 `semantic_checked: true` 是**理想化示意**——
+> **注意**: 上例 `semantic_checked: true` 是**理想化示意**——
 > 当前全库 56 条验证证据中 **11 条为 true**(有内容级语义断言, 见 SEMANTIC_CHECKS),
 > 其余 45 条为 false(仅执行验证/金链 conformance 六步断言无内容级语义断言)。
 > 读方以实际报告为准, 勿把示例当 schema 参照(层级≠证据强度超集)。
 
-**时间语义(红队 P1-3, 2026-10-11 拆分为两个字段)**:
+**时间语义(两个字段, 2026-10-11 拆分)**:
 
 - `verified_at` = **首次验证时间**(该 contract+env 组合首次通过), 冻结不刷新——历史追溯用。
 - `last_passed_at` = **最近一次通过时间**, 每次 pass 无条件刷新——TTL 保鲜检查(90 天)查它,
   解决"每晚验证成功仍被 90 天 TTL 判过期"的矛盾。旧报告(763e55c 前)无此字段时回退 `verified_at` 兼容。
-- **时间戳格式(九轮 docs P2 补)**: v1.4.96 起写入端为 **UTC-aware ISO-8601**(如 `2026-10-12T17:20:28+00:00`);
+- **时间戳格式**: v1.4.96 起写入端为 **UTC-aware ISO-8601**(如 `2026-10-12T17:20:28+00:00`);
   旧报告(py)的 naive 时间戳按 UTC 解释兼容(读取端 `_parse_naive` 统一归一)。同一报告中可能混存
   新旧格式(如 3 条 skip/xfail 继承的旧 naive 值), 判龄/对比一律按 UTC 语义处理, 勿按本地时区解读。
 
@@ -143,7 +143,7 @@ Agent 判定"验证是否新鲜"应读 `last_passed_at`(每夜 render 即保鲜)
 `verification_details.level` 是**报告时快照**; 当前判定看顶层 `verification` 字段(加载侧有
 contract_fp/env_fp 双比对, 失配即降级)。两者分叉时 details 不投影(证据已失效)。
 
-**CONFORMANCE_VERIFIED 继承语义(八轮自审 docs P1 补)**: 金链级(volcano)证据的保留规则——
+**CONFORMANCE_VERIFIED 继承语义**: 金链级(volcano)证据的保留规则——
 - 本次金链测试 **pass** → 新证据(升级/刷新);
 - 本次金链 **skip / 未运行**(如无 JAR 环境) → 若旧证据仍是 CONFORMANCE_VERIFIED 且
   contract_fp/env_fp 与旧证据一致 → **继承保留**; 指纹已变则降级(金链观测绑定旧契约);

@@ -82,7 +82,7 @@ Agent / CLI / Script
 
 ## Quality Gates
 
-pytest (115) · ruff 0 · mypy strict 0 · shellcheck 0 · nightly-e2e (real JAR, daily) · onboarding-e2e · Windows smoke. CI: test.yml / nightly-e2e.yml / docs.yml.
+pytest (run `pytest tests/ -q`; count grows with commits) · ruff 0 · mypy strict 0 · shellcheck 0 · nightly-e2e (real JAR, daily) · onboarding-e2e · Windows smoke. CI: test.yml / nightly-e2e.yml / docs.yml.
 
 ## Docs
 

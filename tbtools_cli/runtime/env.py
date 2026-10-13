@@ -60,6 +60,11 @@ def get_jar():
         # 九轮 verified P3-1: 补 shengwu 子目录(本机实际 JAR 位置, 测试默认路径)——
         # 此前 get_jar 候选漏此, 该机写入走"沿用旧 env_fp"分支, 换引擎不失效证据
         "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar",
+        # 十一轮 gate P2-3(GPT): WSL 下多用户目录恒选字典序靠前——通配候选前插当前
+        # 用户精确候选(USERNAME/USER 映射, 缺省 __none__ 不命中落到通配兜底), 优先
+        # 匹配本人 JAR, 避免选到其他用户字典序靠前的副本。
+        "/mnt/c/Users/%s/Downloads/TBtools_JRE1.6.jar" % (os.environ.get("USERNAME") or os.environ.get("USER") or "__none__"),
+        "/mnt/c/Users/%s/Desktop/TBtools_JRE1.6.jar" % (os.environ.get("USERNAME") or os.environ.get("USER") or "__none__"),
         "/mnt/c/Users/*/Downloads/TBtools_JRE1.6.jar",
         "/mnt/c/Users/*/Desktop/TBtools_JRE1.6.jar",
         # macOS

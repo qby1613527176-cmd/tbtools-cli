@@ -13,7 +13,7 @@
 - **tool-describe 示例改数组**(docs+product P1): agent-protocol.md §6 示例从裸对象改为 `[{...}]`(实际输出形状)——修复"文字承诺恒数组 vs 示例画对象"自相矛盾, 防下游 Agent 解析器踩类型错误
 - **README_EN 同步**(P1): 版本改生成式(移除手硬编码 v1.3.0)、能力表 7→8(补 Plan/Artifact)、Java 表述改"JDK 11+, JRE 不够"(对齐中文面)
 - **记档**(不实施): last_conformance_passed_at(金链 n=1 无 Agent 消费方) / env_fp 多层拆分(待可信依赖映射)
-- **门禁**(本轮针对性子集, 非全量): pytest 24 passed / ruff 0 / mypy 0 / --check 505 surface 全同步
+- **门禁**(本轮针对性子集, 非全量): pytest 24 passed(守卫 13 + doc 10 + metadata 15 子集实跑为 24 落盘值——Release 页 39 为含 cli 面具的另一次运行, 口径以 CHANGELOG 为准) / ruff 0 / mypy 0 / --check 505 surface 全同步
 
 ## [1.4.97] - 2026-10-13
 

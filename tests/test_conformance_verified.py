@@ -419,6 +419,22 @@ def _build_report_and_persist() -> None:
                 _verified_tools[_t]["level"] = "CONFORMANCE_VERIFIED"
                 if not _verified_tools[_t].get("domain_note"):
                     _verified_tools[_t]["domain_note"] = _conf_note
+                # 十一轮 verified/arch P1(GPT): 金链 pass 必须绑定**本次身份**——
+                # 若 Tier2 走了继承路径, _verified_tools 条目携带旧指纹, 直接升级会把
+                # 本次金链观测记到旧身份上。金链 pass = 当前代码+环境六步通过, 用当前
+                # contract/env 指纹重绑, 刷新 last_passed_at(金链通过也是新近观测)。
+                if _gold == "pass":
+                    _fp_now = _fpfn(SPECS[_t])
+                    _env_now = _env_fp if _env_fp is not None else \
+                        _verified_tools[_t].get("env_fingerprint", "")
+                    _keep_va_conf = (_verified_tools[_t].get("contract_fingerprint") == _fp_now
+                                     and (not _env_now or _verified_tools[_t].get("env_fingerprint") == _env_now))
+                    _now_conf = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
+                    _verified_tools[_t]["contract_fingerprint"] = _fp_now
+                    _verified_tools[_t]["env_fingerprint"] = _env_now
+                    if not (_keep_va_conf and _verified_tools[_t].get("verified_at")):
+                        _verified_tools[_t]["verified_at"] = _now_conf
+                    _verified_tools[_t]["last_passed_at"] = _now_conf
             elif _t in _exec_entries:
                 # P1-1 同源守卫(arch/verified 第五轮自审 P2-1): CONFORMANCE 工具本次 pass
                 # 但未在前述 EXECUTION_VERIFIED 循环登记的, 用已有证据升金链级;
@@ -1002,3 +1018,37 @@ class TestEvidenceWriteGuard:
         assert vt.get("volcano", {}).get("level") == "EXECUTION_VERIFIED", \
             f"空指纹不得继承金链级: {vt.get('volcano', {}).get('level')}"
         assert "volcano" not in r.get("conformance_verified", []), "空指纹不得进 conformance 名单"
+
+    def test_conformance_pass_rebinds_current_fp(self, tmp_path, monkeypatch):
+        """十一轮 verified/arch P1(GPT): 金链 pass + Tier2 fail(继承旧证据) →
+        升级的 CONFORMANCE_VERIFIED 必须绑定**当前** contract/env 指纹并刷新时间戳,
+        不得把本次金链观测记到旧身份上。"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        # 旧证据: EXEC_VERIFIED + 旧指纹(与当前 fake 指纹不同)
+        old = {
+            "volcano": {
+                "level": "EXECUTION_VERIFIED",
+                "contract_fingerprint": "fp_old_A",
+                "env_fingerprint": "env_old_X",
+                "verified_at": "2026-01-01T00:00:00",
+                "last_passed_at": "2026-01-02T00:00:00",
+                "corpus": "examples/data",
+                "semantic_checked": False,
+            }
+        }
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "fail"},
+                                     old_verified=old, conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "pass"})
+        vt = r.get("verified_tools", {})
+        assert vt.get("volcano", {}).get("level") == "CONFORMANCE_VERIFIED", \
+            f"金链 pass 应升级: {vt.get('volcano', {}).get('level')}"
+        # 身份必须重绑到当前(fake)指纹, 而非继承旧 A/X
+        assert vt["volcano"]["contract_fingerprint"] == "fp_fake_123", \
+            f"金链 pass 应绑定当前 contract_fp: {vt['volcano'].get('contract_fingerprint')}"
+        assert vt["volcano"]["env_fingerprint"] == "env_fake_123", \
+            f"金链 pass 应绑定当前 env_fp: {vt['volcano'].get('env_fingerprint')}"
+        # last_passed_at 应刷新为本次观测(非旧 2026-01-02)
+        assert vt["volcano"]["last_passed_at"] != "2026-01-02T00:00:00", \
+            "金链 pass 应刷新 last_passed_at"
+        assert "volcano" in r.get("conformance_verified", []), "金链 pass 应进名单"

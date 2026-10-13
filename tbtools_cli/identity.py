@@ -180,9 +180,23 @@ def engine_env_fingerprint() -> str:
     _fp_cache = _ENV_FP_CACHE
 
     def _hash_file(p: str) -> str:
+        # 十一轮 gate/arch P2-2(GPT): NOCACHE 逃生门——严格验证场景可强制重算
+        # (绕过缓存, 重新读文件内容; 配合增强键仍非数学证明, 供人工审计用)。
+        if _os.environ.get("TBTOOLS_ENV_FP_NOCACHE") == "1":
+            try:
+                _hh = _hc.sha256()
+                with open(p, "rb") as _f:
+                    for _chunk in iter(lambda: _f.read(65536), b""):
+                        _hh.update(_chunk)
+                return _hh.hexdigest()
+            except OSError:
+                return ""
         try:
             _st = _os.stat(p)
-            _key = (p, _st.st_mtime_ns, _st.st_size)
+            # 十一轮 gate/arch P2(GPT): 缓存键加 st_ctime_ns——(mtime,size) 对"替换
+            # 文件恰好同大小同 mtime"(cp -p 式部署保留时间戳)会复用旧 SHA-256, 旧环境
+            # 身份静默续用。ctime 在内容替换时必然变化(目录项变更), 降低误命中。
+            _key = (p, _st.st_mtime_ns, _st.st_ctime_ns, _st.st_size)
             if _key in _fp_cache:
                 return _fp_cache[_key]
             _hh = _hc.sha256()
@@ -208,9 +222,11 @@ def engine_env_fingerprint() -> str:
               _os.path.join(ROOT, "plugins", "lib", "Notung-2.9.1.5.jar"),
               _os.path.join(ROOT, "plugins", "lib", "Plugin_GSEAWrapper.jar")]
     # 自审 arch F4: 插件 JAR(引擎反射依赖)入指纹——手写清单此前漏 7 个
+    # 十一轮 verified/arch P2(GPT): listdir 顺序不保证 → env_fp 非确定(同插件集不同
+    # 枚举顺序 → 指纹不同, 相同环境被误判不同)。sorted() 固定顺序。
     _plugins_dir = _os.path.join(ROOT, "plugins", "lib")
     if _os.path.isdir(_plugins_dir):
-        for _jar in _os.listdir(_plugins_dir):
+        for _jar in sorted(_os.listdir(_plugins_dir)):
             if _jar.endswith(".jar"):
                 _p = _os.path.join(_plugins_dir, _jar)
                 if _p not in _paths:

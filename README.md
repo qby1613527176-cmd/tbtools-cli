@@ -13,6 +13,13 @@
 [![engines](https://img.shields.io/badge/engines-200+-orange.svg)](docs/_generated/commands.md)
 [![Release](https://img.shields.io/github/v/release/qby1613527176-cmd/tbtools-cli?color=blue&label=release)](https://github.com/qby1613527176-cmd/tbtools-cli/releases)
 
+
+**按角色进入**：
+- 🧬 **生物信息用户** → [🚀 Quick Start](#quick-start) / [🧭 按任务找命令](#-按任务找命令what-do-you-want-to-do)
+- 🤖 **AI Agent 开发者** → [docs/agent-protocol.md](docs/agent-protocol.md) · [🤖 MCP Server](#-mcp-server) · [🤖 Agent 接口](#-agent-接口)
+- 🔬 **生信工作流** → [wf 基因家族](#) / [wf RNA-seq](#) / [wf 系统发育](#) / [wf 比较/共线性](#)
+- 🛠 **维护者** → [docs/README.md](docs/README.md)(活 plan) · [docs/_worklog/](docs/_worklog/)(审计历史)
+
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
 > **298 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 64**(有 inputs 契约) | Registered 298(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 188 RPC + 80 CLI 工具 + 118 Java 桥 + 引擎反射(逃生舱)。
 > 分级定义: FULL=契约完整(inputs+outputs+capabilities+stable; parameters 恒声明, 无参数工具视为"已声明无参数");PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
@@ -435,7 +442,7 @@ tbtools-cli/
 ├── scripts/               # tbtools-completion.bash + tbtools.1 + 工具脚本
 ├── examples/              # example data + scripts
 ├── scripts/               # rpc_regression_linux.sh 等工具脚本
-├── tests/                 # pytest（619 passed+52 skipped+2 xfailed：框架/命令/防漂移/输入保护）
+├── tests/                 # pytest（full suite: run `pytest tests/ -q`；框架/命令/防漂移/输入保护）
 ├── docs/                  # detailed documentation
 │   ├── COMMAND_REFERENCE.md  # 📖 命令参考手册（218 命令+80 工具+118 桥+49 坑位）
 │   └── rpc_methods_reference.md  # RPC 188 方法参考
