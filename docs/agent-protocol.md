@@ -122,6 +122,9 @@ tool-run / tool-result / artifact inspect / workflow **共用同一模型**:
 - `verified_at` = **首次验证时间**(该 contract+env 组合首次通过), 冻结不刷新——历史追溯用。
 - `last_passed_at` = **最近一次通过时间**, 每次 pass 无条件刷新——TTL 保鲜检查(90 天)查它,
   解决"每晚验证成功仍被 90 天 TTL 判过期"的矛盾。旧报告(763e55c 前)无此字段时回退 `verified_at` 兼容。
+- **时间戳格式(九轮 docs P2 补)**: v1.4.96 起写入端为 **UTC-aware ISO-8601**(如 `2026-10-12T17:20:28+00:00`);
+  旧报告(py)的 naive 时间戳按 UTC 解释兼容(读取端 `_parse_naive` 统一归一)。同一报告中可能混存
+  新旧格式(如 3 条 skip/xfail 继承的旧 naive 值), 判龄/对比一律按 UTC 语义处理, 勿按本地时区解读。
 
 Agent 判定"验证是否新鲜"应读 `last_passed_at`(每夜 render 即保鲜), 而非 `verified_at`(可能冻结在首次)。
 

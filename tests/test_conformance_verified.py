@@ -417,6 +417,10 @@ def _build_report_and_persist() -> None:
                 # 但未在前述 EXECUTION_VERIFIED 循环登记的, 用已有证据升金链级;
                 # 仅当 _exec_entries 有该工具(本次 pass 或继承)时才允许——
                 # 否则 fail/skip/缺失(无 _exec_entries 条目)不得凭空写空证据条目
+                # 九轮 verified P3-2: semantic_checked 改从 _exec_entries 读(与上分支一致),
+                # 不再用当前静态集合推导——该分支当前不可达(_verified_tools 与
+                # _exec_entries 键集恒等), 但若未来可达, 静态推导将违反七轮 P1-A(继承
+                # 回溯升级); 统一源防隐患。
                 _verified_tools[_t] = {"level": "CONFORMANCE_VERIFIED",
                                        "contract_fingerprint": _exec_entries[_t].get("contract_fingerprint", ""),
                                        "env_fingerprint": _exec_entries[_t].get("env_fingerprint", ""),
@@ -424,7 +428,7 @@ def _build_report_and_persist() -> None:
                                        "last_passed_at": _exec_entries[_t].get("last_passed_at", ""),
                                        "corpus": _exec_entries[_t].get("corpus", ""),
                                        "domain_note": _exec_entries[_t].get("domain_note", "") or _conf_note,
-                                       "semantic_checked": _t in SEMANTIC_CHECKS}
+                                       "semantic_checked": _exec_entries[_t].get("semantic_checked", _t in SEMANTIC_CHECKS)}
     _report = {"compile_verified": sorted(_COMPILE_VERIFIED),
                "execution_verified": sorted(_exec_entries.keys()),
                # 七轮 P1-B: 名单=**实际升级为金链**的工具(从 verified_tools level 推导),
