@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.98] - 2026-10-13
+
+### 第十轮五视角自审(GPT 五连审)全闭环——历史证据兼容边界 + 文档契约自洽
+
+- **空指纹同源守卫**(verified/arch/docs 三方 P1): `_fp_same` 要求双侧四字段非空且相等——此前 Python `"" == ""` 为 True, 损坏/旧格式/迁移缺字段的旧证据可无身份证明继承金链级; 与加载端"缺 fp 即 discard"不变量对齐。守卫 13/13(新增空指纹不继承)
+- **get_jar 通配符 glob 展开**(gate P2): 含 `*` 候选此前是字面路径(os.path.isfile 不展开), 普通 Windows 用户 Downloads/Desktop 下的 JAR 永不命中——现仅对通配候选 glob 展开(无匹配不降级, 冷启动性能不受影响)
+- **env_fp 缓存提模块级**(identity P2): `_fp_cache` 从函数内提为 `_ENV_FP_CACHE`(path,mtime_ns,size 键内建失效)——修复"每次调用重复 hash 数百 MB JAR"与 docstring 不符
+- **get_jar 测试隔离开关**(gate P2-3): `TBTOOLS_NO_JAR_CANDIDATES=1` 跳过候选路径扫描(环境变量/配置仍尊重)——无 JAR 场景测试不再环境依赖(有 JAR 机器红)
+- **tool-describe 示例改数组**(docs+product P1): agent-protocol.md §6 示例从裸对象改为 `[{...}]`(实际输出形状)——修复"文字承诺恒数组 vs 示例画对象"自相矛盾, 防下游 Agent 解析器踩类型错误
+- **README_EN 同步**(P1): 版本改生成式(移除手硬编码 v1.3.0)、能力表 7→8(补 Plan/Artifact)、Java 表述改"JDK 11+, JRE 不够"(对齐中文面)
+- **记档**(不实施): last_conformance_passed_at(金链 n=1 无 Agent 消费方) / env_fp 多层拆分(待可信依赖映射)
+- **门禁**(本轮针对性子集, 非全量): pytest 24 passed / ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.4.97] - 2026-10-13
 
 ### 第九轮五视角自审全闭环(5 视角全绿, P0=0) + 证据链边界收尾
