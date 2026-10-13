@@ -2,6 +2,16 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.97] - 2026-10-13
+
+### 第九轮五视角自审全闭环(5 视角全绿, P0=0) + 证据链边界收尾
+
+- **§6.1 补 UTC-aware 时间戳语义**(docs P2): 明确 v1.4.96 起写入端 UTC ISO-8601(+00:00), 旧 naive 按 UTC 兼容解释, 同一报告可能混存新旧格式——判龄/对比一律 UTC 语义, 勿按本地时区解读
+- **get_jar 候选补 shengwu 路径**(verified P3-1): 本机实际 JAR 位置此前漏候选, 写入走"沿用旧 env_fp"分支→换引擎不失效证据; 修复后 env_fp 正常计算
+- **死分支 semantic_checked 统一源**(verified P3-2): elif 分支改从 _exec_entries 读(与主分支一致), 防未来可达时静态推导回溯升级(七轮 P1-A 同构)
+- **九轮验证**: 守卫 12/12 + doc 10 + metadata 15 全绿; 全量 conformance 69 passed/1 skipped/4 xfailed; 探针 4 场景(naive 判龄/单缺失告警/双缺失/畸形)全过; 四位一体 1.4.96 确认无发布面漂移
+- **门禁**(本轮针对性子集, 非全量): pytest 37 passed / ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.4.96] - 2026-10-13
 
 ### 第八轮五视角自审(GPT 四连审)全闭环——conformance 继承/测试隔离/时区对称
