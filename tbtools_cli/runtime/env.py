@@ -52,6 +52,9 @@ def get_jar():
         "/mnt/c/TBtools/TBtools_JRE1.6.jar",
         "/mnt/c/Program Files/TBtools/TBtools_JRE1.6.jar",
         "/mnt/d/TBtools/TBtools_JRE1.6.jar",
+        # 九轮 verified P3-1: 补 shengwu 子目录(本机实际 JAR 位置, 测试默认路径)——
+        # 此前 get_jar 候选漏此, 该机写入走"沿用旧 env_fp"分支, 换引擎不失效证据
+        "/mnt/d/shengwu/TBtools/TBtools_JRE1.6.jar",
         "/mnt/c/Users/*/Downloads/TBtools_JRE1.6.jar",
         "/mnt/c/Users/*/Desktop/TBtools_JRE1.6.jar",
         # macOS
