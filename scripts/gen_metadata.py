@@ -460,6 +460,12 @@ def main():
                         _va = _v2.get("last_passed_at") or _v2.get("verified_at", "")
                         _va2 = None  # 最终用于判龄的时间戳
                         if _va:
+                            # 八轮 gate P3-1: last_passed_at **单独缺失**(回退 verified_at)时
+                            # 显式告警——旧报告兼容窗口已过(763e55c 后全部 UTC-aware 落盘),
+                            # 静默回退会掩盖"写入端漏刷新 last_passed_at"的问题
+                            if not _v2.get("last_passed_at") and _v2.get("verified_at"):
+                                print(f"⚠️ {_t2} 缺 last_passed_at, 回退 verified_at 判龄"
+                                      f"({_v2.get('verified_at')!r})", file=sys.stderr)
                             try:
                                 _age = (_now2 - _parse_naive(_va)).days
                                 _va2 = _va

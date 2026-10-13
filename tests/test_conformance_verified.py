@@ -473,10 +473,16 @@ def _build_report_and_persist() -> None:
             if not _reported:
                 _missing = _want_exec - _cur_exec
                 _extra = _cur_exec - _want_exec
-                print(f"⚠️ verification_report.json 与当前名单不同步: 缺 {sorted(_missing)} 多 {sorted(_extra)}"
+                _missing_conf = _want_conf - _cur_conf
+                _extra_conf = _cur_conf - _want_conf
+                # 八轮 docs P3: 差集打印含 conf 侧——此前只打 exec 差集, conf 漂移时
+                # 显示"缺 [] 多 []"无法定位(实漂移在 conf 集)
+                print(f"⚠️ verification_report.json 与当前名单不同步: exec 缺 {sorted(_missing)} "
+                      f"多 {sorted(_extra)} | conf 缺 {sorted(_missing_conf)} 多 {sorted(_extra_conf)}"
                       f"——验证名单变更后需 TBTOOLS_WRITE_REPORT=1 显式刷新", file=sys.stderr)
                 raise AssertionError(
-                    f"verification_report.json 漂移: 缺 {sorted(_missing)} 多 {sorted(_extra)}。")
+                    f"verification_report.json 漂移: exec 缺 {sorted(_missing)} 多 {sorted(_extra)} "
+                    f"| conf 缺 {sorted(_missing_conf)} 多 {sorted(_extra_conf)}。")
         except FileNotFoundError:
             print("⚠️ 无 verification_report.json——需 TBTOOLS_WRITE_REPORT=1 首刷", file=sys.stderr)
             raise
