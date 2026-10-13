@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.4.99] - 2026-10-13
+
+### 第十一轮五视角自审(GPT 两份评价)全闭环——金链身份绑定 + env_fp 确定性 + 文档契约收敛
+
+- **金链 pass 重绑当前身份**(verified/arch P1): `_allow_conf` 金链 pass 分支此前不要求 fp 同源——Tier2 fail 走继承路径后金链 pass 会把旧指纹贴进新 conformance 证据(本次观测记到旧身份, 加载端 discard 误伤/静默掩盖)。修复: 金链 pass 时用当前 contract/env 指纹重绑 + 刷 last_passed_at(verified_at 沿用 keep_va 政策)。守卫 14/14(新增 pass×Tier2 fail 身份重绑)
+- **env_fp 确定性**(verified/arch P2): 插件 JAR 枚举 `sorted(listdir)` 固定顺序(此前 os.listdir 不保证 → 同插件集不同枚举序 → 指纹不同 → 相同环境误判不同); 缓存键加 `st_ctime_ns`(堵"替换文件恰好同大小同 mtime"复用旧 SHA-256) + `TBTOOLS_ENV_FP_NOCACHE=1` 逃生门
+- **get_jar 多用户候选**(gate P2): 通配候选前插当前用户精确候选(USERNAME/USER, 缺省 __none__ 不命中落通配)——WSL 多用户目录不再恒选字典序靠前 JAR
+- **门禁口径统一**(docs/gate P2): README_EN `pytest (115)` / README.md `619 passed` 去死数字改动态描述; CHANGELOG 门禁行补构成说明(24 vs Release 39 口径差异)
+- **文档契约收敛**(product P2): README 加 4 角色受众导航锚点块; agent-protocol.md 剥离 7 处"N轮 P#"过程标签(保留实质警告); README 加成熟度四维显式映射(readiness/verification/semantic_checked/env_fp + FULL≠已验证)
+- **P3 清仓**: verified TTL 双缺失核实为误报(检查已存在于 gen_metadata L441-488); arch P3-1/3-2 已闭环确认; 根目录测试残留(5 个)清理
+- **门禁**(本轮针对性子集, 非全量): pytest 25 passed(守卫 14 + doc 10 + onboarding 1) / ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.4.98] - 2026-10-13
 
 ### 第十轮五视角自审(GPT 五连审)全闭环——历史证据兼容边界 + 文档契约自洽
