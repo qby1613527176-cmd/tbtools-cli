@@ -34,6 +34,11 @@ def get_jar():
             return cj
     except Exception:
         pass
+    # 十轮 gate P2-3: 测试隔离开关——TBTOOLS_NO_JAR_CANDIDATES=1 跳过候选路径扫描,
+    # 供"无 JAR 场景"测试显式模拟(否则硬编码候选在本机真实命中, 测试环境依赖)。
+    # 置于配置读取之后: 环境变量/配置仍尊重, 仅候选路径扫描被跳过。
+    if os.environ.get("TBTOOLS_NO_JAR_CANDIDATES") == "1":
+        return ""
     # 常见路径 + Windows/WSL/macOS 路径
     for cand in [
         os.path.expanduser("~/tbtools-cli/lib/TBtools_JRE1.6.jar"),

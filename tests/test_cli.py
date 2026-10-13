@@ -474,12 +474,17 @@ class TestAgentOnboarding:
         assert "TBtools_JRE1.6.jar" in cfg.read_text()
 
     def test_doctor_guidance_when_no_jar(self, tmp_path):
-        """jar 缺失时 doctor 应给出 setup/fetch-jar 指引（子进程+干净 HOME，绕开模块级 JAR 缓存）"""
+        """jar 缺失时 doctor 应给出 setup/fetch-jar 指引（子进程+干净 HOME，绕开模块级 JAR 缓存）。
+
+        十轮 gate P2-3: 加 TBTOOLS_NO_JAR_CANDIDATES=1 跳过硬编码候选路径扫描——
+        否则本机(/mnt/d/shengwu/...)真实命中 JAR, 测试环境依赖(有 JAR 机器红)。
+        """
         fake_home = tmp_path / "home"
         fake_home.mkdir(parents=True)
         env = dict(os.environ)
         env["HOME"] = str(fake_home)
         env.pop("TBTOOLS_JAR", None)
+        env["TBTOOLS_NO_JAR_CANDIDATES"] = "1"
         import subprocess as sp
         p = sp.run([sys.executable, "-m", "tbtools_cli.cli", "doctor"],
                    capture_output=True, text=True, timeout=30, env=env)
