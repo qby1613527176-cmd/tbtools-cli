@@ -22,7 +22,9 @@
    （`tbtools version` / `__init__.py` 自 pyproject 单一源读取，无需改别处）
 2. **更新 CHANGELOG.md**：顶部插入 `## [1.4.XX] - 日期` 段，条目风格：
    - `### 变更类型` + 要点列表（用 git log 从上一 tag 概括，如 `git log v1.4.YY..HEAD --oneline`）
-   - 门禁数字一行：`**门禁**: pytest N passed + M skipped / ruff 0 / mypy 0`
+   - 门禁数字一行（十二轮 gate/docs P2 强制构成式——此前 24/39/40/25 多口径无解释, 读者无法重建）:
+     `**门禁**: [Focused gate] pytest N passed(守卫 X + doc Y + metadata Z) / ruff 0 / mypy 0 / --check 505 surface 全同步（本轮针对性子集, 非全量）`
+     ——必须给出**构成式**(每个加数都能从命令重建), 发布页 Release notes 用同一构成; 若发布页另跑含 cli 面具的更大集, 注明命令与范围差异。
 3. **同步 agent-facing 数字**（自审 v1.4.86 docs F-NEW-9：不再靠人工核对，人工步骤结构性无效——上轮 v1.4.81 就是发版动作自己制造 294→298 漂移的）：
    ```bash
    python3 scripts/gen_metadata.py --render   # 刷新 counts.md / ai/ 全部生成式 surface

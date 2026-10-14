@@ -138,6 +138,12 @@ Agent 判定"验证是否新鲜"应读 `last_passed_at`(每夜 render 即保鲜)
 二进制无关的工具。因此 `execution_verified` 计数是"验证机上完全同构环境"的读数; 用户机器
 与验证机二进制版本不同时, `tbtools version --json` 的 execution_verified 会低于发布的 56。
 这不是 bug, 是全局环境身份的保守语义: 证据只在同构环境可迁移。验证机之外拿到的
+**env_fingerprint 定义(十二轮 docs/arch P2 补)**: 它是**二进制内容集合身份**——由每个
+文件的 SHA-256(经 (path,mtime,ctime,size) 缓存)按稳定顺序(sorted 枚举)级联哈希;
+**不含文件名/路径名**。因此同内容不同文件名 = 同指纹(插件重命名不改变环境身份);
+插件按名加载失败会有显式报错兜底, 不依赖指纹区分。若未来按名加载的插件语义需要
+区分文件名, 再评估将规范化相对路径纳入哈希(当前不推——路径入哈希会致 fetch-jar
+移动/重装布局变化误伤全部证据)。
 `EXECUTION_VERIFIED` 应视为"该版本在该环境跑过", 而非"当前环境可用"。
 
 `verification_details.level` 是**报告时快照**; 当前判定看顶层 `verification` 字段(加载侧有
