@@ -10,6 +10,12 @@ import os
 import time
 from dataclasses import asdict, dataclass, field
 
+
+def _utc_now_iso() -> str:
+    """UTC-aware ISO 时间戳(十二轮 product P3): 与报告 last_passed_at 同源。"""
+    import datetime as _dt
+    return _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+
 # 扩展名 → (artifact type, format) 语义映射(Agent 理解"这是什么",不只是"这是个文件")
 TYPE_BY_EXT = {
     ".svg": ("plot", "svg"), ".png": ("plot", "png"), ".pdf": ("report", "pdf"),
@@ -93,7 +99,7 @@ def build(path: str, producer: str = "", metadata: dict | None = None) -> Artifa
         size=size,
         sha256=_sha,
         producer=producer,
-        created_at=time.strftime("%Y-%m-%dT%H:%M:%S"),
+        created_at=_utc_now_iso(),  # 十二轮 P3: UTC 统一(原 naive 本地)
         metadata=metadata or {},
     )
 

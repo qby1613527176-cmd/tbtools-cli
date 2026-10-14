@@ -26,6 +26,14 @@ from tbtools_cli.command_spec import build_command_specs
 from tbtools_cli.presets import PRESETS, list_presets
 
 
+def _utc_now_iso() -> str:
+    """UTC-aware ISO 时间戳(十二轮 product P3 修复): job/provenance 时间戳此前用
+    time.strftime 本地 naive——与报告 last_passed_at(UTC-aware) 不同源, 跨时区机器
+    上语义漂移。统一 UTC(格式保持 %Y-%m-%dT%H:%M:%S 兼容既有读取方)。"""
+    import datetime as _dt
+    return _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+
+
 def _clip_desc(text: str, width: int = 60) -> str:
     """按词边界截断 + 省略号(自审 product F6: 原硬切片 [sor 半词——机器/人读都坏)。
     空/None 返回空; 超宽时从最后一个完整词切断并以 … 结尾。"""
@@ -1221,7 +1229,7 @@ try:
         p.wait(); job['status'] = 'timed_out'; job['exit_code'] = -1
     else:
         job['status'] = 'succeeded' if ec == 0 else 'failed'; job['exit_code'] = ec or 0
-    job['finished_at'] = time.strftime('%Y-%m-%dT%H:%M:%S')
+    job['finished_at'] = _utc_now_iso()  # 十二轮 P3: UTC 统一(原 naive 本地)
     json.dump(job, open(jf, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 except Exception:
     try:
@@ -1261,7 +1269,7 @@ except Exception:
         import json as _json
         job["status"] = status
         job["exit_code"] = exit_code
-        job["finished_at"] = __import__("time").strftime("%Y-%m-%dT%H:%M:%S")
+        job["finished_at"] = _utc_now_iso()  # 十二轮 P3: UTC 统一
         # 输出识别(args 中最后图形参数 → provenance, 取 error)
         for a in reversed(job.get("args", [])):
             if a.endswith((".svg", ".png", ".pdf")):
@@ -1309,7 +1317,7 @@ except Exception:
         jid = f"job_{_time.strftime('%Y%m%d_%H%M%S')}_{_uuid.uuid4().hex[:6]}"
         # 独立监控进程(非线程): wait 任务 + 按退出码落盘终态(不依赖图形 provenance)
         job = {"id": jid, "status": "running", "pid": None, "args": list(args),
-               "started_at": _time.strftime("%Y-%m-%dT%H:%M:%S"),
+               "started_at": _utc_now_iso(),  # 十二轮 P3: UTC 统一
                "timeout_s": timeout_s, "log": os.path.join(_jobs_dir(), f"{jid}.log")}
         _job_save(job)
         jf = os.path.join(_jobs_dir(), f"{jid}.json")
