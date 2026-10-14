@@ -15,7 +15,7 @@
 - **env_fp 定义文档化**(docs/arch P2): §6.1 补「内容集合身份, 不含文件名」语义 + 边界化说明
 - **GitHub 元数据补全**(docs P2): description + 7 topics(bioinformatics/TBtools/CLI/MCP/AI-agents/genomics/reproducible-research)
 - **时间戳 UTC 统一**(product P3): job/provenance/artifact 4 处 naive 本地时间 → `_utc_now_iso()`(与报告 last_passed_at 同源)
-- **门禁**(本轮针对性子集, 非全量): pytest 48 passed(守卫 15 + doc 10 + metadata 15 + README 结构/计数 + 并行 conformance)/ ruff 0 / mypy 0 / --check 505 surface 全同步
+- **门禁**(本轮针对性子集, 非全量): pytest 58 passed(守卫 15 + doc 10 + metadata 15 + parallel 12 + README 结构 3 + README 计数 4 = 59 collected, 含 1 个已知顺序依赖失败 test_report_counts) / ruff 0 / mypy 0 / --check 505 surface 全同步
 
 ## [1.4.99] - 2026-10-13
 

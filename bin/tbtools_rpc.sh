@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# ⚠️ DEPRECATION (v1.5.0): 兼容层，推荐 `tbtools tool rpc-server`（v2.0.0 起移除）
 # ============================================================
 # tbtools_rpc.sh — TBtools-II 2.535 RPC CLI 封装
 # 08/28 实测打通：TBtools RPC 服务 → jsonrpc 2.0 → 绘图/分析
@@ -6,6 +7,8 @@
 # 端点: GET /health  POST /rpc  {"jsonrpc":"2.0","method":"...","params":{...}}
 # ============================================================
 set -euo pipefail
+
+echo "[tbtools_rpc] ⚠️ 旧入口兼容层，推荐改用: tbtools tool rpc-server（v2.0.0 起移除）" >&2
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$SCRIPT_DIR")"

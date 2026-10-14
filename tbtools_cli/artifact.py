@@ -11,9 +11,9 @@ from dataclasses import asdict, dataclass, field
 
 
 def _utc_now_iso() -> str:
-    """UTC-aware ISO 时间戳(十二轮 product P3): 与报告 last_passed_at 同源。"""
+    """UTC-aware ISO 时间戳(十二轮 product P3): 与报告 last_passed_at 同源。含 +00:00 后缀。"""
     import datetime as _dt
-    return _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    return _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S") + "+00:00"
 
 # 扩展名 → (artifact type, format) 语义映射(Agent 理解"这是什么",不只是"这是个文件")
 TYPE_BY_EXT = {
@@ -224,7 +224,7 @@ def discover_outputs(base_path: str, max_extra: int = 10, created_after: float |
                     found.append(fp)
     except OSError:
         return []
-    found.sort(key=lambda p: os.path.getmtime(p))
+    found.sort(key=lambda p: (os.path.getmtime(p), os.path.basename(p)))  # 十三轮 arch P3: 同秒多产物时按名称二次排序, 防截断不确定
     return [os.path.abspath(f) for f in found[:max_extra]]
 
 

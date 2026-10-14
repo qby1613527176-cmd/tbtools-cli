@@ -29,9 +29,9 @@ from tbtools_cli.presets import PRESETS, list_presets
 def _utc_now_iso() -> str:
     """UTC-aware ISO 时间戳(十二轮 product P3 修复): job/provenance 时间戳此前用
     time.strftime 本地 naive——与报告 last_passed_at(UTC-aware) 不同源, 跨时区机器
-    上语义漂移。统一 UTC(格式保持 %Y-%m-%dT%H:%M:%S 兼容既有读取方)。"""
+    上语义漂移。统一 UTC(含 +00:00 后缀, 与 naive-本地值外形区分)。"""
     import datetime as _dt
-    return _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+    return _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S") + "+00:00"
 
 
 def _clip_desc(text: str, width: int = 60) -> str:

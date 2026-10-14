@@ -118,7 +118,7 @@ CATEGORY_MAP = {
     "gxfRegion": "gxf", "gxfFix": "gxf", "gxfOverlap": "gxf", "gxfRepIDs": "gxf",
     "gxfRepGXF": "gxf", "gxfMatch": "gxf", "gxfRecall": "gxf",
     "regionAnno": "gxf", "annocompare": "gxf", "genedensity": "gxf",
-    "genelocation": "gxf", "genelocgff": "gxf", "gxfSort": "gxf",
+    "genelocation": "gxf", "genelocgff": "gxf",
     # miRNA
     "mirnatarget": "mirna", "mirnaTarget2": "mirna", "mirnaIdentify": "mirna",
     # GO/表格
