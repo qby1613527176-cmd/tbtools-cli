@@ -330,6 +330,11 @@ def _make_passthrough(name, group=None):
             args.append(str(width))
         if height:
             args.append(str(height))
+        # 十二轮 product/arch P1(GPT): --threads/-t 此前被 click option 消费后丢弃——
+        # _cmd_impl 签名收到但函数体未用, 引擎静默降级默认线程数(无警告)。现在显式
+        # 以引擎参数形式透传("--threads N"), 保证 Agent 传的线程数真正到达引擎。
+        if threads is not None:
+            args.extend(["--threads", str(threads)])
         
         # 调用 impl 或回退到 bash tbplot.sh
         if impl:
@@ -339,6 +344,8 @@ def _make_passthrough(name, group=None):
             bash_bin = shutil.which("bash")
             if bash_bin:
                 bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
+                if threads is not None:
+                    bash_args.extend(["--threads", str(threads)])  # 十二轮 P1: 引擎线程透传(对称)
                 ec = subprocess.run(bash_args).returncode
             else:
                 print(f"❌ {name} 需要 bash 兜底（tbplot.sh），但未找到 bash（Windows 请装 Git Bash）", file=sys.stderr)

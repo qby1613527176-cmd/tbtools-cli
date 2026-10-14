@@ -425,13 +425,26 @@ def _build_report_and_persist() -> None:
                 # contract/env 指纹重绑, 刷新 last_passed_at(金链通过也是新近观测)。
                 if _gold == "pass":
                     _fp_now = _fpfn(SPECS[_t])
-                    _env_now = _env_fp if _env_fp is not None else \
-                        _verified_tools[_t].get("env_fingerprint", "")
+                    # 十二轮 verified/arch P1(GPT 增量): env 不可确认(无 JAR)时不得把
+                    # 旧 env_fp 宣称为本次身份——金链 pass 证明当前代码+环境行为, 若环境
+                    # 不可观测, 该次 conformance 观测就不绑定任何 env 身份。置空 +
+                    # prev_env_fingerprint 留档审计; 置空后 _fp_same 四字段非空要求自动
+                    # 保守降级(与加载端"缺 fp 即 discard"不变量对齐)。
+                    _old_env_val = _verified_tools[_t].get("env_fingerprint", "")
+                    if _env_fp is not None:
+                        _env_now = _env_fp
+                    else:
+                        _env_now = ""
                     _keep_va_conf = (_verified_tools[_t].get("contract_fingerprint") == _fp_now
-                                     and (not _env_now or _verified_tools[_t].get("env_fingerprint") == _env_now))
+                                     and _env_now
+                                     and _verified_tools[_t].get("env_fingerprint") == _env_now)
                     _now_conf = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
                     _verified_tools[_t]["contract_fingerprint"] = _fp_now
                     _verified_tools[_t]["env_fingerprint"] = _env_now
+                    if _env_now:
+                        _verified_tools[_t].pop("prev_env_fingerprint", None)
+                    else:
+                        _verified_tools[_t]["prev_env_fingerprint"] = _old_env_val
                     if not (_keep_va_conf and _verified_tools[_t].get("verified_at")):
                         _verified_tools[_t]["verified_at"] = _now_conf
                     _verified_tools[_t]["last_passed_at"] = _now_conf
@@ -758,7 +771,7 @@ class TestEvidenceWriteGuard:
 
     def _build_with_results(self, tmp_path, monkeypatch, results, old_verified=None,
                             semantic_checks=None, conformance_verified=None,
-                            conformance_results=None):
+                            conformance_results=None, jar_available=True):
         """在隔离 report 路径上调用 _build_report_and_persist, 注入指定的 Tier2 结果。
 
         old_verified: 预置旧证据 dict(六轮 verified P3-1)——测继承路径时传给
@@ -769,12 +782,20 @@ class TestEvidenceWriteGuard:
         conformance_results: 八轮 verified P2(GPT)——测试必须注入自有金链观测, 否则
         前序金链测试残留的 CONFORMANCE_RESULTS 进程级状态会污染(顺序依赖)。缺省 None
         时注空 dict(隔离), 避免读到上下文残留。
+        jar_available: 十二轮 verified P2(GPT)——显式控制 core.JAR 存在性(写入器只在
+        os.path.isfile(_JAR) 为真时调用 _envfp)。缺省 True 消除宿主 JAR 依赖: 有 JAR 的
+        机器和无 JAR 的 CI 走同一路径。False 时 env 不可确认 → 金链 pass 置空 env。
         """
         import json as _jr
         monkeypatch.setattr("tbtools_cli.identity.execution_contract_fingerprint",
                             lambda spec: "fp_fake_123")
         monkeypatch.setattr("tbtools_cli.identity.engine_env_fingerprint",
                             lambda: "env_fake_123")
+        # 十二轮 P2: 显式控制 JAR 存在性(而非依赖宿主真实 JAR)
+        _fake_jar = str(tmp_path / "fake_jar_for_test.jar")
+        if jar_available:
+            open(_fake_jar, "wb").write(b"PK\x05\x06" + b"\x00" * 18)
+        monkeypatch.setattr("tbtools_cli.core.JAR", _fake_jar)
         # 隔离 report 文件(不污染真报告)——_build 写 ROOT/tests/verification_report.json,
         # 需预建 tests/ 子目录(否则 FileNotFoundError 吞掉真实构建路径)
         (tmp_path / "tests").mkdir(exist_ok=True)
@@ -1052,3 +1073,32 @@ class TestEvidenceWriteGuard:
         assert vt["volcano"]["last_passed_at"] != "2026-01-02T00:00:00", \
             "金链 pass 应刷新 last_passed_at"
         assert "volcano" in r.get("conformance_verified", []), "金链 pass 应进名单"
+
+    def test_conformance_pass_env_unconfirmed_no_old_env(self, tmp_path, monkeypatch):
+        """十二轮 verified/arch P1(GPT 增量): 金链 pass + env 不可确认(无 JAR, _env_fp=None)
+        → 不得把旧 env_fp 宣称为本次身份——env_fingerprint 置空 + prev_env_fingerprint 留档。"""
+        monkeypatch.setattr("test_conformance_verified.EXEC_VERIFIED",
+                            {"volcano": EXEC_VERIFIED["volcano"]})
+        # 旧证据: EXEC_VERIFIED + 旧 env(X)
+        old = {
+            "volcano": {
+                "level": "EXECUTION_VERIFIED",
+                "contract_fingerprint": "fp_old_A",
+                "env_fingerprint": "env_old_X",
+                "verified_at": "2026-01-01T00:00:00",
+                "last_passed_at": "2026-01-02T00:00:00",
+                "corpus": "examples/data",
+                "semantic_checked": False,
+            }
+        }
+        # 十二轮 P2: 用 helper 的 jar_available=False 显式模拟无 JAR(env 不可确认)
+        r = self._build_with_results(tmp_path, monkeypatch, {"volcano": "fail"},
+                                     old_verified=old, conformance_verified={"volcano"},
+                                     conformance_results={"volcano": "pass"},
+                                     jar_available=False)
+        vt = r.get("verified_tools", {})
+        assert vt.get("volcano", {}).get("level") == "CONFORMANCE_VERIFIED", "金链 pass 应升级"
+        assert vt["volcano"].get("env_fingerprint") == "", \
+            f"env 不可确认不得沿用旧值: {vt['volcano'].get('env_fingerprint')!r}"
+        assert vt["volcano"].get("prev_env_fingerprint") == "env_old_X", \
+            "旧 env 应留档 prev_env_fingerprint"

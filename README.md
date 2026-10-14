@@ -16,8 +16,8 @@
 
 **按角色进入**：
 - 🧬 **生物信息用户** → [🚀 Quick Start](#quick-start) / [🧭 按任务找命令](#-按任务找命令what-do-you-want-to-do)
-- 🤖 **AI Agent 开发者** → [docs/agent-protocol.md](docs/agent-protocol.md) · [🤖 MCP Server](#-mcp-server) · [🤖 Agent 接口](#-agent-接口)
-- 🔬 **生信工作流** → [wf 基因家族](#) / [wf RNA-seq](#) / [wf 系统发育](#) / [wf 比较/共线性](#)
+- 🤖 **AI Agent 开发者** → [docs/agent-protocol.md](docs/agent-protocol.md) · [🤖 MCP Server](#-mcp-serverclaudecursor-即插即用) · [🤖 Agent 接口](#-agent-接口结构化调用-ai-可用)
+- 🔬 **生信工作流** → [#-典型工作流common-workflows 典型工作流](#-典型工作流common-workflows)（基因家族 / RNA-seq / 比较基因组学 / 系统发育）
 - 🛠 **维护者** → [docs/README.md](docs/README.md)(活 plan) · [docs/_worklog/](docs/_worklog/)(审计历史)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
@@ -85,7 +85,7 @@ tbtools tool-provenance out.svg               # 溯源验证
 - [CLI Tools](#cli-tools-80)
 - [Engine Reflection](#engine-reflection)
 - [Project Structure](#project-structure)
-- [兼容层退役计划](#兼容层退役计划)
+- [兼容层退役计划](#-兼容层退役计划)
 - [Naming Convention](#naming-convention)
 - [Known Limitations](#known-limitations)
 - [FAQ](#faq)
@@ -117,7 +117,7 @@ tbtools tool-provenance out.svg               # 溯源验证
            产物 SVG/TSV/图
 ```
 
-### 典型工作流(Common Workflows)
+## 典型工作流(Common Workflows)
 
 - **基因家族分析(GRAS 实测)**: FASTA → `muscle`/`trimal` → `iqtree` → `motif` → `genestructure`(DEG 表 ± `volcano`)
 - **RNA-seq**: counts → `tpmCalc` → `pca` → `heatmap` → `volcano`(DEG)

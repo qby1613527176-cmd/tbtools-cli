@@ -672,15 +672,21 @@ class TestReadmeStructure:
             # GitHub GFM 锚点近似: 去 emoji/标点(非 \w), 小写, 空格→-
             t = re.sub(r'[^\w\s-]', '', title, flags=re.UNICODE).lower().replace(' ', '-')
             t = t.strip('-')
-            # 纯 ASCII 标题(GitHub 规则确定), 中文标题保留
-            return (t or title.lower()) if t.isascii() else title.lower()
+            # 十二轮 gate P1 修复: 统一 slug 化——此前对含 emoji 的中英混排标题
+            # (如 "🧭 按任务找命令(What do you want to do?)")返回 title.lower() 保留
+            # emoji, 与 GFM 实际锚点(去 emoji 后 "-按任务找命令what-do-you-want-to-do")
+            # 不匹配 → 真死链检测漏网/误报。无论 ASCII 与否都走同一 slug 规则。
+            # GFM 实测: 非 ASCII slug 会以 "-" 开头(emoji 移除后), 此处补前导连字符。
+            if not t.isascii():
+                return "-" + t if t else title.lower()
+            return t or title.lower()
 
+        _all_anchors = {gh_anchor(h) for h in headers}
         for m in re.finditer(r'\[[^\]]*\]\(#([^)]+)\)', r):
             anchor = m.group(1)
-            if anchor.isascii():
-                assert anchor in {gh_anchor(h) for h in headers}, f"TOC 死锚点: #{anchor}"
-            else:
-                assert any(anchor in h or anchor == h for h in headers), f"TOC 中文锚点无对应标题: #{anchor}"
+            # 十二轮 gate P1 修复: 中文锚点也走 slug 集合比对(此前用子串匹配,
+            # slug 永不出现于原文标题 → 真死链漏网/误报)。ASCII/中文统一。
+            assert anchor in _all_anchors, f"TOC 死锚点: #{anchor}"
 
     def test_license_single(self):
         """License 只出现一次(英文完整说明, 不重复中文节)"""
