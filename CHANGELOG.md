@@ -2,6 +2,21 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.0] - 2026-10-14
+
+### 第十二轮五视角自审全闭环——全量套件修复 + threads 透传 + 证据身份绑定
+
+- **全量套件修复**(gate P1 新发现, GPT 没抓到): README 锚点守卫中英混排 slug 漏检导致 v1.4.99 全量 pytest 红(661 passed/1 FAILED)——守卫重写为统一 slug 集合比对 + 5 处锚点修正; 发布门禁「改的面/跑的面」盲区实证
+- **--threads 透传**(product/arch P1): `_cmd_impl` threads 参数此前被 click option 消费后丢弃(静态/动态/click 三通道全断), `muscle --threads 8` 静默走默认——现 impl+bash 双路径显式透传 `--threads N` 到引擎
+- **金链 pass env 回退置空**(verified/arch P1): env 不可确认(无 JAR)时不再把旧 env_fp 宣称为当前身份——置空 + `prev_env_fingerprint` 留档, 与加载端 discard 不变量对齐
+- **守卫宿主隔离**(verified P2): helper 加 `jar_available` 参数显式控制 core.JAR 存在性——无 JAR CI 与有 JAR 本机同路径, 守卫 15/15
+- **门禁口径根因消除**(gate/docs P2): RELEASING 模板强制「构成式」门禁行(守卫X+docY+metadataZ + targeted/full 区分)——24/39/40/25 多口径断档不再复现
+- **MCP 嵌入锁**(product P2): 模块级 `_EMBEDDED_LOCK` 串行化 chdir/stdout 进程级状态(默认子进程模式本就隔离)
+- **env_fp 定义文档化**(docs/arch P2): §6.1 补「内容集合身份, 不含文件名」语义 + 边界化说明
+- **GitHub 元数据补全**(docs P2): description + 7 topics(bioinformatics/TBtools/CLI/MCP/AI-agents/genomics/reproducible-research)
+- **时间戳 UTC 统一**(product P3): job/provenance/artifact 4 处 naive 本地时间 → `_utc_now_iso()`(与报告 last_passed_at 同源)
+- **门禁**(本轮针对性子集, 非全量): pytest 48 passed(守卫 15 + doc 10 + metadata 15 + README 结构/计数 + 并行 conformance)/ ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.4.99] - 2026-10-13
 
 ### 第十一轮五视角自审(GPT 两份评价)全闭环——金链身份绑定 + env_fp 确定性 + 文档契约收敛
