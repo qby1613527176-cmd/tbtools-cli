@@ -1212,7 +1212,12 @@ def register_top(cli, _LG):
 
     # ── Job 模型(GLM P1 + 状态机完善 2026-09-23)──
     # 状态机: running → succeeded(exit 0) / failed(exit≠0) / cancelled / timed_out
-    _JOB_MONITOR = """import subprocess, sys, json, os, signal, time, traceback
+    _JOB_MONITOR = """import subprocess, sys, json, os, signal, time, traceback, datetime
+# 十三轮 gate P0-1(hotfix): 模板在独立子进程执行, 命名空间只有上方 import ——
+# 十二轮 UTC 统一把 time.strftime 换成 _utc_now_iso()(父进程函数)导致 NameError,
+# monitor 永不落终态, tool-submit 任务恒 failed。子进程必须自包含: 内联 UTC 表达式。
+def _utc_now_iso():
+    return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
 jf = sys.argv[1]
 try:
     job = json.load(open(jf, encoding='utf-8'))

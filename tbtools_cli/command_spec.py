@@ -195,6 +195,9 @@ class CommandSpec:
     relations: dict = field(default_factory=dict)          # 语义关系(能力图衔接, GLM #24)
     parameters: list = field(default_factory=list)         # ParamSpec 参数契约(Tool Contract)
     output_slots: list = field(default_factory=list)       # OutputSpec 输出槽位(评审 #86 P1-5)
+    thread_style: str = "named_flag"  # 十三轮 P1(GPT): 线程参数形态——named_flag(--threads N) /
+                                      # positional(位置参数槽, 如 parallelMD5Check [threads]) /
+                                      # unsupported(引擎不支持线程, 透传应警告而非注入)
 
     @property
     def output_formats(self) -> list:
@@ -333,6 +336,12 @@ KNOWN_OUTPUT_SLOTS = {
     "recipBlast": [OutputSpec("result", format="tsv", content_type="table")],
     "volcano": [OutputSpec("plot", format="svg", content_type="plot")],  # 评审 #98: 输出是 plot 不是 table
 }
+
+# 十三轮 P1(GPT): 位置线程参数工具(threads 是位置参数槽, 非 --threads flag)。
+# 透传(cli_load)按 CommandSpec.thread_style 三态分派, 本集合驱动标注。
+_POSITIONAL_THREAD_TOOLS = frozenset({
+    "parallelMD5Check", "tfbsShift", "mcscanxd", "quickAnno",
+})
 
 
 # 核心命令输入输出 schema 样例(证明模型模式; 全量标注为二期)
@@ -903,6 +912,11 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
     # 别名/状态/schema 标注(统一模型增强; 在所有来源构建完成后)
     for name, spec in specs.items():
         spec.aliases = [a for a, target in KNOWN_ALIASES.items() if target == name]
+        # thread_style 挂接(十三轮 P1): 位置线程参数工具——透传 --threads N 字面会落入
+        # Java 位置槽 → 错解/拒跑。named_flag 默认(十二轮透传对 muscle 等正确);
+        # unsupported(引擎不支持线程)待扫描标注。
+        if name in _POSITIONAL_THREAD_TOOLS:
+            spec.thread_style = "positional"
         spec.alias_of = KNOWN_ALIASES.get(name, "")
         spec.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
@@ -996,6 +1010,9 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         specs.setdefault(name, CommandSpec(name, grp, "manual", runner="plot", doc=e.get("help", "")))
     for name, s in specs.items():
         s.aliases = [a for a, t in KNOWN_ALIASES.items() if t == name]
+        # thread_style 挂接(模块级 _POSITIONAL_THREAD_TOOLS; 与 build_command_specs 同源)
+        if name in _POSITIONAL_THREAD_TOOLS:
+            s.thread_style = "positional"
         s.alias_of = KNOWN_ALIASES.get(name, "")
         s.status = KNOWN_STATUS.get(name, "stable")
         if name in KNOWN_SCHEMAS:
@@ -1003,6 +1020,11 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
         # output_slots 挂接(specs_from_scans 路径;评审 #88 P1-2)
         if name in KNOWN_OUTPUT_SLOTS:
             s.output_slots = KNOWN_OUTPUT_SLOTS[name]
+        # thread_style 挂接(十三轮 P1): 位置线程参数工具(透传 --threads N 会字面落入
+        # Java 位置槽 → 错解/拒跑)。named_flag 为默认(十二轮透传对 muscle 等正确);
+        # 引擎不支持线程的 unsupported 待扫描标注。
+        if name in _POSITIONAL_THREAD_TOOLS:
+            s.thread_style = "positional"
         # content_type 挂接: slot 级优先,工具级兜底(评审 #80 P0-4)
         # ⚠️ 必须在 KNOWN_OUTPUT_SLOTS 之外(缩进 bug: 否则只 8 个工具有 content_type)
         _slot_ct = KNOWN_INPUT_CONTENT_TYPES.get(name, {})
@@ -1191,6 +1213,9 @@ def _load_verification_report() -> tuple[set, set, set]:
                     elif not _old_fp:
                         _exec.discard(_t)
                         _conf.discard(_t)
+                    # 十三轮 verified/arch P1(GPT): 加载端判定源提前——env 可观测性
+                    # 与 _old_env 分支共用, 供空 env 证据走"可证必证"。
+                    _jar2 = os.environ.get("TBTOOLS_JAR", "")
                     if _old_env:
                         try:
                             # 有 JAR 才比对 env_fp(引擎本体可算); 无 JAR 环境无法验证 →
@@ -1200,7 +1225,6 @@ def _load_verification_report() -> tuple[set, set, set]:
                             # fetch-jar 必写 config.toml → core.JAR 恒非空 → 判定"有 JAR" →
                             # 与 fetch-jar 下载的最新 JAR env_fp 不匹配 → 全降级 EXEC_VERIFIED=0
                             # → test_verification_tiers 红。仅 env 判定: 无 env → 保守信任 committed
-                            _jar2 = os.environ.get("TBTOOLS_JAR", "")
                             if _jar2 and os.path.isfile(_jar2):
                                 if _env_now is None:
                                     _env_now = _envfp()
@@ -1209,6 +1233,15 @@ def _load_verification_report() -> tuple[set, set, set]:
                                     _conf.discard(_t)  # 引擎本体变 → 验证失效
                         except Exception:
                             pass
+                    elif _jar2 and os.path.isfile(_jar2):
+                        # 十三轮 P1: 证据 env_fp 空(写入端"身份不可确认"置空,
+                        # 十二轮 verified/arch)且当前 env 可观测 → **可证必证**: discard。
+                        # 与十二轮写入端置空对称闭合——空 env 证据不再在任意环境被
+                        # 当作已验证(gate 探针: 有 JAR 时空 env 金链条目 reload 仍保留,
+                        # 十二轮注释自称"对齐"实为假断言)。无 JAR(env 不可观测)保持
+                        # 信任, 与写入端"无 JAR 不刷新不降级"对称, CI 路径不受伤。
+                        _exec.discard(_t)
+                        _conf.discard(_t)
             return _conf, _exec, set(d.get("compile_verified", []))
         except Exception:
             pass

@@ -331,10 +331,29 @@ def _make_passthrough(name, group=None):
         if height:
             args.append(str(height))
         # 十二轮 product/arch P1(GPT): --threads/-t 此前被 click option 消费后丢弃——
-        # _cmd_impl 签名收到但函数体未用, 引擎静默降级默认线程数(无警告)。现在显式
-        # 以引擎参数形式透传("--threads N"), 保证 Agent 传的线程数真正到达引擎。
+        # _cmd_impl 签名收到但函数体未用, 引擎静默降级默认线程数(无警告)。十二轮起显式
+        # 以引擎参数形式透传("--threads N")。十三轮 P1 修正: 按契约 thread_style 分派——
+        #   named_flag(默认): --threads N(十二轮行为, muscle 等正确)
+        #   positional(parallelMD5Check/tfbsShift/mcscanxd/quickAnno): threads 是位置参数
+        #     槽, 注入 "--threads N" 字面会落入 Java 位置槽 → 错解/拒跑 → 追加位置值
+        #   unsupported: 引擎无线程概念, 警告 + 不注入(防方向性错误)
+        # 缺省 spec(查询失败)按 named_flag 兜底(大多数引擎形态)。
         if threads is not None:
-            args.extend(["--threads", str(threads)])
+            _ts_spec = None
+            try:
+                from tbtools_cli.command_spec import build_command_specs as _bcs
+                # _SPECS_CACHE 缓存(评审 #110 P1): 一次性构建 ~105ms, 高频链不重建
+                _ts_spec = _bcs().get(name)
+            except Exception:
+                _ts_spec = None
+            _tstyle = getattr(_ts_spec, "thread_style", "named_flag") if _ts_spec else "named_flag"
+            if _tstyle == "unsupported":
+                print(f"⚠️ 警告: {name} 引擎不支持 --threads 参数, 已忽略(thread_style=unsupported)",
+                      file=sys.stderr)
+            elif _tstyle == "positional":
+                args.append(str(threads))  # 位置线程槽(parallelMD5Check 等)
+            else:
+                args.extend(["--threads", str(threads)])
         
         # 调用 impl 或回退到 bash tbplot.sh
         if impl:

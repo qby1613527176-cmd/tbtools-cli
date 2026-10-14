@@ -793,3 +793,45 @@ class TestNoJarBranch:
         r = CliRunner().invoke(_cli, ["fetch-jar"])
         assert r.exit_code == 1
         assert "查询失败" in r.output
+
+
+class TestThreadStylePassthrough:
+    """十三轮 verified/arch/product P1(GPT): --threads 透传按契约 thread_style 三态分派。
+    named_flag(默认) → "--threads N" / positional(parallelMD5Check 等) → 位置值 /
+    unsupported → 警告不注入。缺 spec 兜底 named_flag。"""
+
+    def _capture(self, monkeypatch, name, threads):
+        """复刻 _cmd_impl 的线程分派段(闭包不可直接注入, 用模块级函数等价逻辑)"""
+        from tbtools_cli.command_spec import build_command_specs
+        spec = build_command_specs().get(name)
+        tstyle = getattr(spec, "thread_style", "named_flag") if spec else "named_flag"
+        args = ["in.txt", "out.tsv"]
+        warned = []
+        if threads is not None:
+            if tstyle == "unsupported":
+                warned.append(f"{name} unsupported")
+            elif tstyle == "positional":
+                args.append(str(threads))
+            else:
+                args.extend(["--threads", str(threads)])
+        return args, warned
+
+    def test_named_flag_default_muscle(self, monkeypatch):
+        args, w = self._capture(monkeypatch, "muscle", 8)
+        assert args[-2:] == ["--threads", "8"] and not w, "named_flag → --threads N"
+
+    def test_positional_parallelmd5check(self, monkeypatch):
+        args, w = self._capture(monkeypatch, "parallelMD5Check", 8)
+        assert args[-1] == "8" and "--threads" not in args and not w, \
+            "positional → 位置值, 不得注入 --threads 字面"
+
+    def test_positional_family(self, monkeypatch):
+        from tbtools_cli.command_spec import build_command_specs
+        specs = build_command_specs()
+        for n in ("tfbsShift", "mcscanxd", "quickAnno"):
+            assert specs.get(n) is not None, f"{n} 应在 spec"
+            assert specs[n].thread_style == "positional", f"{n} thread_style=positional"
+
+    def test_missing_spec_fallback_named_flag(self, monkeypatch):
+        args, w = self._capture(monkeypatch, "nonexistent_cmd_xyz", 4)
+        assert args[-2:] == ["--threads", "4"], "缺 spec 兜底 named_flag"

@@ -151,6 +151,46 @@ class TestContractYamlLoader:
             f"验证证据缺失: 有 JAR 应 >=3(实测), 无 JAR 信任 committed report(实测 {c['EXECUTION_VERIFIED']})"
         assert c["COMPILEABLE"] > 0
 
+    def test_loader_discards_empty_env_evidence_when_jar_observable(self, monkeypatch, tmp_path):
+        """十三轮 verified/arch P1(GPT): 加载端「可证必证」——证据 env_fp 空(写入端
+        "身份不可确认"置空)且当前 env 可观测 → discard, 空 env 证据不再在任意环境
+        被当作已验证。无 JAR(env 不可观测)保持信任, 与写入端对称不受伤。"""
+        from tbtools_cli import command_spec as cs
+        # 隔离报告: 空 env_fp 的 CONFORMANCE 证据 + 匹配 contract_fp。
+        # _load_verification_report 按模块 __file__ 推导路径 → patch __file__ 到 tmp
+        import json
+        _fake = tmp_path / "tests"
+        _fake.mkdir(exist_ok=True)
+        _fp = "fp_for_test_only_abc"
+        rep = {"verified_tools": {"volcano": {
+            "level": "CONFORMANCE_VERIFIED", "contract_fingerprint": _fp,
+            "env_fingerprint": "", "verified_at": "2026-01-01T00:00:00",
+            "last_passed_at": "2026-01-02T00:00:00", "corpus": "x",
+            "semantic_checked": False}}}
+        (tmp_path / "tests" / "verification_report.json").write_text(
+            json.dumps(rep), encoding="utf-8")
+        monkeypatch.setattr(cs, "__file__",
+                            str(tmp_path / "tbtools_cli" / "command_spec.py"))
+        # 场景 A: env 可观测(设 TBTOOLS_JAR 指向假 JAR + envfp 可算) → 应 discard
+        _jar = tmp_path / "fake.jar"
+        _jar.write_bytes(b"PK\x05\x06" + b"\x00" * 18)
+        monkeypatch.setenv("TBTOOLS_JAR", str(_jar))
+        # _envfp 是函数内 `from tbtools_cli.identity import engine_env_fingerprint` 动态取——
+        # 补丁打在 identity 模块(判定源)
+        monkeypatch.setattr("tbtools_cli.identity.engine_env_fingerprint",
+                            lambda: "env_observable_now")
+        # _fpfn 同函数内 `from tbtools_cli.identity import execution_contract_fingerprint`
+        monkeypatch.setattr("tbtools_cli.identity.execution_contract_fingerprint",
+                            lambda spec: _fp)  # contract 匹配, 隔离其他因子
+        _conf, _exec, _compile = cs._load_verification_report()
+        assert "volcano" not in _conf, \
+            "env 可观测 + 证据 env 空 → 应 discard(可证必证)"
+        assert "volcano" not in _exec
+        # 场景 B: env 不可观测(清 TBTOOLS_JAR) → 保守信任(对称不降级)
+        monkeypatch.delenv("TBTOOLS_JAR", raising=False)
+        _conf2, _exec2, _ = cs._load_verification_report()
+        assert "volcano" in _conf2, "无 JAR 保持信任(与写入端对称)"
+
 
 class TestFailurePropagation:
     """失败传播(评审 #82 P0-4): A→B→C 链,B 失败则 C 不启动"""
