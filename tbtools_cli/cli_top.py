@@ -1824,6 +1824,8 @@ except Exception:
                 cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")  # 自审 product F9: 与 describe/元数据同源(此前 engine 是 runner 概念混入)
                 kind = v.get("kind", "?")
                 desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
+                # 十三轮 product P1(GPT): hits 携带验证等级——Agent 决策支持
+                # (readiness=契约完整度 / verification=执行证据等级, 两维正交)
                 hits.append((name, cat, kind, desc))
         if not hits and len(kws) > 1:
             # AND 无果回退 OR(Agent 宽松匹配优于无结果)
@@ -1873,15 +1875,23 @@ except Exception:
                        else f"❌ 没有匹配 '{keyword}' 的命令。试试: tbtools list")
             sys.exit(1)
         if as_json:
+            # 十三轮 product P1(GPT): search 结果暴露 verification/readiness——Agent
+            # 决策层可直接按验证强度筛选工具(CONFORMANCE > EXECUTION > COMPILEABLE >
+            # DECLARED), 不再需要逐个 describe 往返。从 meta(describe 同源)读。
             click.echo(_json.dumps({"schema_version": "1.0", "query": keyword,
                                     "count": len(hits), "hits": [
-                {"name": n, "group": g, "kind": k, "description": d} for n, g, k, d in _ranked(hits)
+                {"name": n, "group": g, "kind": k, "description": d,
+                 "verification": (meta.get(n, {}) or {}).get("verification", ""),
+                 "readiness": (meta.get(n, {}) or {}).get("readiness", "")}
+                for n, g, k, d in _ranked(hits)
             ]}, ensure_ascii=False, indent=1))
             return
         kw_disp = keyword or ""
         click.echo(f"🔍 匹配 '{kw_disp}' 的命令（{len(hits)} 个）:")
         for name, cat, kind, desc in _ranked(hits):
-            click.echo(f"  {name:24s} [{cat}/{kind}] {desc}")
+            _ver = (meta.get(name, {}) or {}).get("verification", "")
+            _vtag = f" [{_ver}]" if _ver else ""
+            click.echo(f"  {name:24s} [{cat}/{kind}]{_vtag} {desc}")
         click.echo("\n查看详情: tbtools help <命令> | 全量: tbtools list")
 
     # 自审 v1.4.82 product P1-3: 输出槽扩展名单一权威(此前 dry-run _OUT_EXTS 与执行
