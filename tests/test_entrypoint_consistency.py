@@ -69,7 +69,7 @@ def test_resolve_group_no_cmap_fallback():
     import sys
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from tbtools_cli.command_spec import (build_command_specs, clear_specs_cache,
-                                          KNOWN_GROUPS, _resolve_group)
+                                          KNOWN_GROUPS)
     clear_specs_cache()
     specs = build_command_specs()
     # KNOWN_GROUPS 应有具体分组值(不能是 engine 兜底)
