@@ -62,9 +62,9 @@
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "132016708241042f0a7772270e4b9a6b776de45d97344f37bb11d7e658fb8a1f",
-  "env_fingerprint": "8cf1fb9928a49bb13dc0ecddced0e60f91bccc476fc2ae924d8fa7f1f81bf571",
-  "verified_at": "2026-10-06T03:59:46",
-  "last_passed_at": "2026-10-12T17:20:28+00:00",
+  "env_fingerprint": "c53b53e2f087fb763dbd5ca743cef57b2f99111ab230326b14c5f04ecc0f74fe",
+  "verified_at": "2026-10-15T00:35:42+00:00",
+  "last_passed_at": "2026-10-15T00:35:42+00:00",
   "corpus": "examples/data",
   "semantic_checked": true,
   "domain_note": ""
