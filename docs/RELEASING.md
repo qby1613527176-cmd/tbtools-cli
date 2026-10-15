@@ -7,6 +7,7 @@
 ## 前置：完成一项可发布的变更
 
 - 代码/文档改动已提交（`git add -A && git commit`）
+- ⚠️ **新增工具必须走 CommandSpec**（arch P2 方案②，2026-10-15）：发版前确认无新命令只塞进 legacy 来源（`CATEGORY_MAP`/`tbplot.sh`/`ENGINE_REGISTRY` 手写分支）——`python3 -m pytest tests/test_entrypoint_consistency.py` 必须过（入口一致性守卫，防幽灵工具回归，gxfSort 教训）
 - 质量门禁全绿：
   ```bash
   pytest tests/ -q && ruff check . && python3 -m mypy tbtools_cli/ scripts/gen_metadata.py

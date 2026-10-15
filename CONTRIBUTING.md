@@ -37,12 +37,15 @@ python3 scripts/gen_metadata.py --check   # metadata 与运行时一致（防漂
 | `tbtools_cli/core.py` | run_java 包装 + 输入保护 + PITFALL_HINTS |
 | `bridges/*.java` | 引擎反射桥（setter+process → 保存图形） |
 
-## 新增命令的推荐路径
+## 新增命令的推荐路径（单一权威：CommandSpec 优先）
 
-1. 首选：往 `ENGINE_REGISTRY` 加条目（表驱动自动注册 + help 从 doc 取）
+> **明文化（arch P2 方案②，2026-10-15）**：`CommandSpec`（`tbtools_cli/command_spec.py`）是**唯一正式契约入口**。新增工具**必须**走 CommandSpec，禁止只往 legacy 来源（`CATEGORY_MAP`/`tbplot.sh`/`ENGINE_REGISTRY` 手写分支）塞——否则就是幽灵工具（gxfSort 教训：只在 CATEGORY_MAP、其余 5 源零命中，现存守卫无一能发现）。
+
+1. 首选：在 `CommandSpec` 体系注册（`build_command_specs`/YAML 契约），分组/能力/参数/验证全走模型
 2. 桥类命令：`bridges/<Name>Cli.java`（参照同级桥;setter+process+save2Graph 模式）
-3. 工具类：`cli_tools_registry.py` 加映射
+3. 兼容层（`tbplot.sh`/`ENGINE_REGISTRY`）命令**如已存在可保留**，但新命令不新增到那里；兼容层计划 v2.0.0 移除
 4. 新命令要有 examples 数据 + PITFALL 提示（有坑就写，别让下一个用户踩）
+5. 提交前跑 `python3 -m pytest tests/test_entrypoint_consistency.py`——该守卫断言所有来源 ⊆ CommandSpec，防幽灵工具回归
 5. 跑 `python3 scripts/gen_metadata.py`(写 metadata)+ `--check`(验证)
 
 ## 基准（不要破坏）
