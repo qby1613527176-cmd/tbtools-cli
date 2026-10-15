@@ -787,7 +787,7 @@ Rename-Item "GCF_000512975.1_S_indicum_v1.0_genomic.gff" "[Species].gff3"
 # 先放一起：
 Get-Content athaliana_[family].fa, sesamum_[family].fa, csinensis_[family].fa | Set-Content D:\[family]_sesame\data\refs\[family]_refs_raw.fa
 # 或者用 tbtools 的合并工具（RPC FastaMerge.process）：
-# tbtools rpc FastaMerge.process '{"inputPaths":["a.fa","b.fa","c.fa"],"outputPath":"[family]_refs_raw.fa"}'
+# tbtools rpc call FastaMerge.process '{"inputPaths":["a.fa","b.fa","c.fa"],"outputPath":"[family]_refs_raw.fa"}'
 ```
 
 ## 3.5 下载两个结构域模型（Pfam/InterPro，全物种通用，只下一次）
@@ -1181,7 +1181,7 @@ tbtools tool extractFasta --inFa D:\[family]_sesame\data\genome\[Species].protei
 ```powershell
 cd D:\[family]_sesame\results\02b_blast
 # ① gene → 代表性 mRNA ID（GxfRepresentativeIds；方法名以 tbtools methods | Select-String Gxf 实测为准）
-tbtools rpc GxfRepresentativeIds.process '{"inputPath":"D:/[family]_sesame/data/genome/[Species].gff3","outputPath":"D:/[family]_sesame/results/02b_blast/mrna_ids.txt"}'
+tbtools rpc call GxfRepresentativeIds.process '{"inputPath":"D:/[family]_sesame/data/genome/[Species].gff3","outputPath":"D:/[family]_sesame/results/02b_blast/mrna_ids.txt"}'
 # ② 再拿 mRNA ID 列表从 GFF 提取对应 protein ID（见 4.5 的 gxffilter / Gtf/Gff3 Sequences Extractor）
 # ③ protein / transcript / gene 三列拼进 Excel → candidate_id_map.tsv
 ```
@@ -1210,7 +1210,7 @@ tbtools rpc GxfRepresentativeIds.process '{"inputPath":"D:/[family]_sesame/data/
 
 ## 4.3 Step 3：核心结构域验证（判定核心）
 > 🎯 **这一关解决什么**：候选逐个查"身份证"——核心结构域齐不齐，把"长得像但缺关键域"的排除。
-> 🔑 **ID 提醒**：本步候选是 **protein ID**（XP_…）；4.5 genestructure 要 **mRNA ID**、4.12 冻结用 **gene ID**——三层关系见 3.0 身份证图；protein→mRNA→gene 的转换：从 GFF 的 CDS 行 `Parent=` 取 mRNA、从 mRNA 行 `Parent=` 取 gene，或 `tbtools rpc GxfRepresentativeIds.process`（4.5 示例）。
+> 🔑 **ID 提醒**：本步候选是 **protein ID**（XP_…）；4.5 genestructure 要 **mRNA ID**、4.12 冻结用 **gene ID**——三层关系见 3.0 身份证图；protein→mRNA→gene 的转换：从 GFF 的 CDS 行 `Parent=` 取 mRNA、从 mRNA 行 `Parent=` 取 gene，或 `tbtools rpc call GxfRepresentativeIds.process`（4.5 示例）。
 > 🧠 **只理解一个概念**：家族成员 = 核心域齐全；只有共享域 = 近邻家族（不是本家族）；都没有 = 噪声。
 > 📥 **输入**：并集候选序列 + `[域1].hmm` + `[域2].hmm`
 > 🟢 **成功后你会看到**："核心域齐全"名单（芝麻 18 个；数量不设固定预期，0 或异常多才回查）
@@ -1377,7 +1377,7 @@ Select-String -Path 04_integrity\[family]_members.fa -Pattern '*' -SimpleMatch |
 
 ## 4.5 Step 5：注释一致性核对（Windows 版）
 > 🎯 **这一关解决什么**：核对注释靠不靠谱——GFF 里的 CDS 能不能翻译出和注释蛋白一致的序列（发现版本错位/提前终止）。
-> 🔑 **ID 转换三步走（新手 70% 卡在这，先读）**：protein ID（XP_…）→ 从 GFF 的 CDS 行 `Parent=` 取 **mRNA ID**（rna-XM_…）→ 从 mRNA 行 `Parent=` 取 **gene ID**。**genestructure 的 idList 只认 mRNA ID**（不是蛋白 ID）；或直接 `tbtools rpc GxfRepresentativeIds.process` 一步映射（见下 CLI）。
+> 🔑 **ID 转换三步走（新手 70% 卡在这，先读）**：protein ID（XP_…）→ 从 GFF 的 CDS 行 `Parent=` 取 **mRNA ID**（rna-XM_…）→ 从 mRNA 行 `Parent=` 取 **gene ID**。**genestructure 的 idList 只认 mRNA ID**（不是蛋白 ID）；或直接 `tbtools rpc call GxfRepresentativeIds.process` 一步映射（见下 CLI）。
 > 🧠 **只理解一个概念**：这是**数据质量控制**，不是"基因座真实存在"的证据（Windows 无 Exonerate，本步 ≠ Exonerate，论文如实写）。
 > 📥 **输入**：`[Species].gff3` + 成员名单
 > 🟢 **成功后你会看到**：全部成员 4 项通过（identity/coverage/无内部终止/结构正常）
@@ -1416,7 +1416,7 @@ tbtools gxffilter D:\[family]_sesame\data\genome\[Species].gff3 05_structure\[fa
 
 # ① 基因结构图——注意：genestructure 的 idList 要求 **mRNA/转录本 ID**（RefSeq 里是 rna-XM_...），不是蛋白 ID
 #    先建 gene → 代表性 mRNA 映射（或在 4.2c 桥表里已有 transcript_id 列直接取用）：
-#    tbtools rpc GxfRepresentativeIds.process '{"inputPath":"D:/[family]_sesame/data/genome/[Species].gff3","outputPath":"D:/[family]_sesame/results/05_structure/[family]_mrna_ids.txt"}'
+#    tbtools rpc call GxfRepresentativeIds.process '{"inputPath":"D:/[family]_sesame/data/genome/[Species].gff3","outputPath":"D:/[family]_sesame/results/05_structure/[family]_mrna_ids.txt"}'
 #    然后拿【子集 GFF】画图（不要拿全量！）：
 # 参数风格以本机为准：先 `tbtools tool-describe genestructure --json` 确认是位置参数还是 --key value
 # （本教程按位置参数写：<gff> <ids> <out>）
@@ -1427,7 +1427,7 @@ tbtools genestructure D:\[family]_sesame\results\05_structure\[family]_subset.gf
 #    ⚠️ 不要在这步就取"最长转录本"——那是 4.12 交付阶段的事，验证阶段必须用命中的那个转录本
 
 # ③ 翻译（当前仓库契约：RPC CdsToProtein.process；'cds2protein' 不是顶层 CLI 命令）
-tbtools rpc CdsToProtein.process '{"inputPath":"D:/[family]_sesame/results/05_structure/[family]_members.cds.fa","outputPath":"D:/[family]_sesame/results/05_structure/[family]_members.cds.pep.fa"}'
+tbtools rpc call CdsToProtein.process '{"inputPath":"D:/[family]_sesame/results/05_structure/[family]_members.cds.fa","outputPath":"D:/[family]_sesame/results/05_structure/[family]_members.cds.pep.fa"}'
 
 # ④ 与注释蛋白逐条双向比对，记 4 个指标（identity/coverage/内部终止/长度差）
 tbtools twoSeqBlast 05_structure\[family]_members.cds.pep.fa 04_integrity\[family]_members.fa 05_structure\cds_vs_anno.tsv --prog blastp
@@ -1758,7 +1758,7 @@ Get-Content 04_integrity\[family]_members.fa, 10_tree\at_[family].fa | Set-Conte
 #    卡死时：先 Ctrl+C，再清残留进程 `Get-Process iqtree -ErrorAction SilentlyContinue | Stop-Process`，
 #    然后改用分步直链（muscle→trimal→iqtree）重试，或切 TBtools GUI 建树（两种都行）。
 # JSON 的 options 字段名以 `tbtools methods | Select-String OneStep` 实际输出为准（可能叫 ultrafast/ufboot）
-tbtools rpc OneStepBuildATree.process '{"inputPath":"D:/[family]_sesame/results/10_tree/[family]_tree_input.fa","outputPath":"D:/[family]_sesame/results/10_tree","options":{"ultraFastBS":true,"threads":4}}'
+tbtools rpc call OneStepBuildATree.process '{"inputPath":"D:/[family]_sesame/results/10_tree/[family]_tree_input.fa","outputPath":"D:/[family]_sesame/results/10_tree","options":{"ultraFastBS":true,"threads":4}}'
 
 # 若上面方法参数名不符，用分步直链：
 # tbtools muscle [family]_tree_input.fa 10_tree\aln.fa          （比对）
@@ -1851,7 +1851,7 @@ mkdir 12_final
 
 # ① 从 GFF 提取所有基因的坐标（染色体/起/止/链向）→ 用 tbtools 的 GXF 工具
 # ⚠️ 该 RPC 默认 featurePattern=cds；要 gene 位置必须显式指定 gene；方法名以 `tbtools methods | Select-String Gxf` 实测为准：
-tbtools rpc GxfToGenePos.process '{"inputPath":"D:/[family]_sesame/data/genome/[Species].gff3","outputPath":"D:/[family]_sesame/results/12_final/all_genes_pos.tsv","chrLenPath":"D:/[family]_sesame/results/12_final/chrlen.tsv","featurePattern":"gene"}'
+tbtools rpc call GxfToGenePos.process '{"inputPath":"D:/[family]_sesame/data/genome/[Species].gff3","outputPath":"D:/[family]_sesame/results/12_final/all_genes_pos.tsv","chrLenPath":"D:/[family]_sesame/results/12_final/chrlen.tsv","featurePattern":"gene"}'
 # ② Excel：把成员名单 join 坐标表（VLOOKUP）→ preliminary/final_gene_set.tsv
 #    具体：新表放基因坐标（①的输出）→ 加一列 VLOOKUP 按 gene_id 匹配成员名单的判定列（standard/boundary）
 #    → 再补 source 列（从 4.11 证据矩阵的来源列，或 hmm_dual_domain 之类标注）
@@ -2119,7 +2119,7 @@ HMM 扫出全是奇怪蛋白           → 1.2（家族编号对不对）
 | 热图 | Graphics → **Amazing Heatmap → The Amazing Simple Heatmap** ✅ | `tbtools heatmap` |
 | Venn | Graphics → Venn and Upset Plot → **Wonderful Venn** ✅ | `tbtools venn2/venn3` |
 | GO/KEGG 富集 | **GO and KEGG → GO/KEGG Enrichment** ✅ | `tbtools goEnrich/keggEnrich` |
-| 一键建树 | **Tree → One Step Build a ML Tree** ⚠️ | `tbtools rpc OneStepBuildATree.process` |
+| 一键建树 | **Tree → One Step Build a ML Tree** ⚠️ | `tbtools rpc call OneStepBuildATree.process` |
 | Ka/Ks | Sequence Toolkits → **Simple Ka/Ks Calculator** ⚠️ | `tbtools dnDsCalculate` |
 
 ## 7.3 油茶真实结果对照表（[目标物种]结果跟它对）
@@ -2219,7 +2219,7 @@ hmmsearch ... 2>&1 | Tee-Object -FilePath logs\step.log
 
 ```powershell
 tbtools methods                     # 列出全部方法（JSON）
-tbtools rpc <Method.process> '<json>'   # 调用
+tbtools rpc call <Method.process> '<json>'   # 调用
 ```
 
 | 方法 | 功能 |
