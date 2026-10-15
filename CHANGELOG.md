@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.1] - 2026-10-15
+
+### 十三轮五视角自审全闭环(GPT 两份评价)——tool-submit 修复 + 证据身份闭环
+
+- **P0 修复**: `tool-submit` 异步任务链路修复——v1.5.0 的 UTC 统一误伤子进程监控模板(独立子进程无 `_utc_now_iso` → NameError → 任务恒 failed), 模板内联 UTC 自包含; test_jobs 5 passed(此前全量 3 FAILED)
+- **P1**: env 空指纹加载端「可证必证」——证据 env 空 + 当前环境可观测 → discard(与写入端置空对称闭合, 空 env 金链不再被当已验证) + 回归守卫
+- **P1**: `--threads` 按契约 `thread_style` 三态分派——named_flag(默认透传) / positional(parallelMD5Check 等 4 工具位置线程槽) / unsupported(plot 引擎警告不注入); 静态命令 run_plot 同步契约化
+- **P1**: `search --json` 暴露 verification/readiness 两维(Agent 决策支持)
+- **P2**: gxfSort 幽灵工具移除 / tbtools_rpc.sh deprecation 警告补齐 / 门禁构成式 + Release notes 用户化 / env_fp 定义文档化 / 入口一致性守卫(CATEGORY_MAP ⊆ specs, tbplot.sh ⊆ specs)
+- **P3**: UTC 时间戳 `+00:00` 后缀 / artifact 排序双键
+- **环境指纹刷新**: identity 排序/缓存键改动后 env_fp 重算 → 重跑验证刷新报告(56 exec + volcano conf 新指纹)
+- **门禁**: pytest 121+ passed(守卫 15 + 入口一致性 3 + jobs 5 + cli/metadata/doc 全量子集) / ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.5.0] - 2026-10-14
 
 ### 第十二轮五视角自审全闭环——全量套件修复 + threads 透传 + 证据身份绑定
