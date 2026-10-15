@@ -691,7 +691,7 @@ def register_top(cli, _LG):
             v = meta[command]
             # 分组: metadata group 字段优先(gen_metadata 注入), 运行时 _groups 兜底
             group = v.get("group") or next((g for g, grp in _LG._groups.items() if command in grp.commands),
-                                           _LG.CATEGORY_MAP.get(command, "engine"))
+                                           _LG._group_of(command) or "engine")
             # help: metadata 优先, 回退点击命令对象(手动命令)
             help_txt = (v.get("help", "") or "").split("#")[-1].strip()
             if not help_txt:
@@ -1821,7 +1821,7 @@ except Exception:
                             (v.get("class", "") or "").lower(),
                             _caps, _rels, _rela])
             if all(_kw_in_hay(w, hay) for w in kws):
-                cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")  # 自审 product F9: 与 describe/元数据同源(此前 engine 是 runner 概念混入)
+                cat = v.get("group") or _LG._group_of(name) or "engine"  # 单一权威(评审 #62)
                 kind = v.get("kind", "?")
                 desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                 # 十三轮 product P1(GPT): hits 携带验证等级——Agent 决策支持
@@ -1839,7 +1839,7 @@ except Exception:
                                 (v.get("class", "") or "").lower(),
                                 _caps, _rels, _rela])
                 if any(_kw_in_hay(w, hay) for w in kws):
-                    cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
+                    cat = v.get("group") or _LG._group_of(name) or "engine"  # 单一权威(评审 #62)
                     kind = v.get("kind", "?")
                     desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                     hits.append((name, cat, kind, desc))
@@ -1861,7 +1861,7 @@ except Exception:
                     _onto = v.get("capabilities_ontology", []) or []
                     if cap not in caps and cap not in _onto:
                         continue
-                cat = v.get("group") or _LG.CATEGORY_MAP.get(name, "engine")
+                cat = v.get("group") or _LG._group_of(name) or "engine"  # 单一权威(评审 #62)
                 desc = _clip_desc((v.get("help", "") or "").split("#")[-1])
                 filtered.append((name, cat, v.get("kind", "?"), desc))
             hits = filtered
@@ -1950,7 +1950,7 @@ except Exception:
             for n in sorted(dir(_ac)):
                 if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
                     cmd = n[1:-5]
-                    cat = _LG.CATEGORY_MAP.get(cmd, 'engine')
+                    cat = _LG._group_of(cmd) or 'engine'  # 单一权威(评审 #62)
                     if cat in plot_groups and cmd not in plugin_tools:
                         continue  # 跳过绘图类（插件工具除外）
                     doc = getattr(_ac, n).__doc__ or ''

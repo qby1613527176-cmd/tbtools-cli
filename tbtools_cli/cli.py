@@ -39,7 +39,7 @@ except ImportError:
         _CLI_VERSION = "0.0.0.dev"
 
 from tbtools_cli.cli_load import (  # 批次 B: 动态注册拆分
-    CATEGORY_MAP,
+    _group_of,
     _groups,
     _load_auto_commands,
     _load_dynamic_commands,
@@ -467,7 +467,7 @@ class ToolGroup(click.Group):
         for n in sorted(dir(_ac)):
             if n.startswith('_') and n.endswith('_impl') and not n.startswith('__'):
                 cmd = n[1:-5]
-                cat = CATEGORY_MAP.get(cmd, 'engine')
+                cat = _group_of(cmd) or 'engine'  # 单一权威: CommandSpec 优先(评审 #62)
                 if cat in plot_groups:
                     continue
                 doc = getattr(_ac, n).__doc__ or ''
