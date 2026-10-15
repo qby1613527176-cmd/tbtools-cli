@@ -106,18 +106,27 @@ def plan(wf: dict, workdir: str, runtime_resolve: bool = False) -> list[dict]:
         if s.get("binding"):
             s = dict(s)
             _raw_binding = dict(s["binding"])  # P0-1(评审 #100): raw symbolic binding(替换前)
-            _bj = json.dumps(s["binding"])
-            for k, v in inputs.items():
-                _bj = _bj.replace("{input." + k + "}", str(v))
-            # {input} 裸占位(planner 生成)→ 首个/唯一 input(评审 #74)
-            if "{input}" in _bj:
-                if inputs:
-                    _first = str(next(iter(inputs.values())))
-                    _bj = _bj.replace("{input}", _first)
-                else:
-                    raise WorkflowError(f"step {s.get('id')} 引用 {{input}} 但 workflow 无 inputs 声明")
-            _bj = _bj.replace("{workdir}", workdir)
-            s["binding"] = json.loads(_bj)
+            # 十四轮 product P1(GPT): 路径插值不得走 JSON 序列化往返——Windows 路径
+            # (C:\tmp\new.fa) 的 \t \n 会在 dumps→replace→loads 链里被吃成转义/崩溃/静默损坏
+            # (provenance 记假路径)。改为递归遍历 binding 只替换 str 叶子(不做 JSON 中转)。
+            def _subst(obj):
+                if isinstance(obj, str):
+                    _v = obj
+                    for k, v in inputs.items():
+                        _v = _v.replace("{input." + k + "}", str(v))
+                    if "{input}" in _v:
+                        if inputs:
+                            _v = _v.replace("{input}", str(next(iter(inputs.values()))))
+                        else:
+                            raise WorkflowError(
+                                f"step {s.get('id')} 引用 {{input}} 但 workflow 无 inputs 声明")
+                    return _v.replace("{workdir}", workdir)
+                if isinstance(obj, dict):
+                    return {k: _subst(v) for k, v in obj.items()}
+                if isinstance(obj, list):
+                    return [_subst(x) for x in obj]
+                return obj
+            s["binding"] = _subst(s["binding"])
             _ci = compile_step_full(s, workdir, outputs, symbolic_override=_raw_binding,
                                     runtime_resolve=runtime_resolve)  # 评审 #110 P0-2: 由 plan 参数决定
             args = _ci.argv

@@ -106,3 +106,61 @@ steps:
             assert d["status"] == "succeeded", f"run{run_n} 失败"
             assert len(d["steps"]) == 4, f"run{run_n} 步骤丢失(竞态): {len(d['steps'])}"
             assert all(s["status"] == "succeeded" for s in d["steps"])
+
+
+class TestPathInterpolation:
+    """十四轮 product P1(GPT): workflow plan() 路径插值不得走 JSON 序列化往返——
+    Windows 反斜杠(C:\tmp\new.fa) 的 \t \n 在 dumps→replace→loads 链被吃成转义/
+    崩溃/静默损坏(provenance 记假路径)。已改递归 str 叶子替换。"""
+
+    def _plan(self, inputs, binding, workdir="C:/work"):
+        import tbtools_cli.workflow as wf
+        return wf.plan({"id": "t", "inputs": inputs,
+                        "steps": [{"id": "s1", "tool": "muscle", "binding": binding}]},
+                       workdir=workdir)
+
+    def test_windows_backslash_path(self):
+        """C:\tmp\new.fa——\t 转义地狱核心场景(此前崩溃/静默损坏)"""
+        steps = self._plan({"fa": r"C:\tmp\new.fa"},
+                           {"inputs": ["{input.fa}"], "parameters": {}, "output": "{workdir}/o.aln"})
+        argstr = " ".join(str(x) for x in steps[0]["args"])
+        assert r"C:\tmp\new.fa" in argstr, f"反斜杠路径损坏: {argstr!r}"
+
+    def test_linux_path(self):
+        steps = self._plan({"fa": "/data/sample.fa"},
+                           {"inputs": ["{input.fa}"], "parameters": {}, "output": "{workdir}/o.aln"})
+        assert "/data/sample.fa" in " ".join(str(x) for x in steps[0]["args"])
+
+    def test_path_with_spaces_cjk(self):
+        """含空格+中文字符路径"""
+        steps = self._plan({"fa": "D:/data dir/样本.fa"},
+                           {"inputs": ["{input.fa}"], "parameters": {}, "output": "{workdir}/o.aln"})
+        assert "D:/data dir/样本.fa" in " ".join(str(x) for x in steps[0]["args"])
+
+    def test_path_with_double_quote_backslash(self):
+        """含双引号反斜杠——JSON 转义最坏场景"""
+        steps = self._plan({"fa": r'C:\q"dir\x.fa'},
+                           {"inputs": ["{input.fa}"], "parameters": {}, "output": "{workdir}/o.aln"})
+        assert r'C:\q"dir\x.fa' in " ".join(str(x) for x in steps[0]["args"])
+
+    def test_multiple_input_placeholders(self):
+        """多输入占位符 + workdir"""
+        steps = self._plan({"a": r"C:\a.fa", "b": r"D:\b.fa"},
+                           {"inputs": ["{input.a}", "{input.b}"],
+                            "parameters": {}, "output": "{workdir}/o.aln"})
+        argstr = " ".join(str(x) for x in steps[0]["args"])
+        assert r"C:\a.fa" in argstr and r"D:\b.fa" in argstr
+
+    def test_undefined_placeholder_kept_raw(self):
+        """未定义占位符保持原样(不崩不吞)"""
+        steps = self._plan({"fa": "x.fa"},
+                           {"inputs": ["{input.fa}", "{input.missing}"],
+                            "parameters": {}, "output": "{workdir}/o.aln"})
+        argstr = " ".join(str(x) for x in steps[0]["args"])
+        assert "{input.missing}" in argstr, "未定义占位符应保留原样"
+
+    def test_input_bare_placeholder(self):
+        """{input} 裸占位 → 首个/唯一 input"""
+        steps = self._plan({"fa": r"C:\bare.fa"},
+                           {"inputs": ["{input}"], "parameters": {}, "output": "{workdir}/o.aln"})
+        assert r"C:\bare.fa" in " ".join(str(x) for x in steps[0]["args"])
