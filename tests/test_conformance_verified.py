@@ -154,6 +154,21 @@ EXEC_VERIFIED = {
 # 合成数据 seed 固定理应产出确定性结果(SVG/PDF 时间戳字段除外), 可做内容断言。
 # 语义断言函数: fn(真实产物路径列表) -> bool; 失败信息用 desc。
 # 样板: keggEnrich 富集表 p 值核对(预审点名推广为必须项)。
+def _kallisto_counts_positive(p: str) -> bool:
+    """kallisto abundance.tsv est_counts 列数值为正(十四轮 P2 数值区间断言模板:
+    计数型输出应验证数值语义, 不只是'文件里出现过')。"""
+    for ln in _read_text(p).splitlines()[1:]:  # 跳过表头
+        parts = ln.split("\t")
+        # abundance.tsv 列序: target_id, length, eff_length, est_counts(第4列), tpm
+        if len(parts) >= 4 and parts[0].startswith("TX"):
+            try:
+                if float(parts[3]) <= 0:
+                    return False
+            except ValueError:
+                return False
+    return True
+
+
 def _read_text(p: str) -> str:
     try:
         with open(p, encoding="utf-8", errors="ignore") as f:
@@ -214,9 +229,10 @@ SEMANTIC_CHECKS = {
     # (描述, 断言函数)
     "keggEnrich": ("富集表同行含糖酵解通路且 p 值<E-3(BH 校正)", lambda ps: any(
         _kegg_row_ok(p) for p in ps if p.endswith((".xls", ".tsv")))),
-    "kallisto": ("abundance.tsv 5 转录本行且含 TX1 定量", lambda ps: any(
+    "kallisto": ("abundance.tsv 5 转录本行且含 TX1 定量 + est_counts 数值为正(十四轮 verified P2 数值区间维度)", lambda ps: any(
         sum(1 for ln in _read_text(p).splitlines() if ln.startswith("TX")) == 5
         and "TX1" in _read_text(p) and "est_counts" in _read_text(p)
+        and any(_kallisto_counts_positive(p) for p in ps if p.endswith(".tsv"))
         for p in ps if p.endswith(".tsv"))),
     "notung": ("reconciled 树含内部节点标记(n2/n8)", lambda ps: any(
         "n2" in _read_text(p) and "n8" in _read_text(p) for p in ps if p.endswith(".nwk"))),
