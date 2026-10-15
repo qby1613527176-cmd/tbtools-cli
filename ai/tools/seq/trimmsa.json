@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.trimmsa",
+ "name": "trimmsa",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "TrimMSACli",
+ "description": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]",
+ "invoke": "tbtools seq trimmsa <args...>",
+ "capabilities": [
+  "sequence"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "a4d1af55324ffb0400e96f35c9eefcb10d1d5b4ae4584aaaeeb004823a646593",
+ "semantic_fingerprint_short": "a4d1af55324ffb04",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ }
+}

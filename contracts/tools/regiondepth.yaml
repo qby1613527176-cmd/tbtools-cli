@@ -1,0 +1,24 @@
+name: regiondepth
+kind: bridge
+mode: bridge
+class: RegionDepthCli
+xmx: 3g
+runner: plot
+group: asm
+help: 'regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]'
+semantic_fingerprint: f84578c833255e1d8a7378146b4fc9ac3cbb31c279cb02fbb00d9f4554c5951c
+semantic_fingerprint_short: f84578c833255e1d
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT

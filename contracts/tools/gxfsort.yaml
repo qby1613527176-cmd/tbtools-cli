@@ -1,0 +1,23 @@
+name: gxfsort
+kind: bridge
+mode: bridge
+class: GxfSortCli
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxfsort: gxfsort <in.gff3|gtf> <out.sorted>'
+semantic_fingerprint: 4f087805c5a271b48c7c105033aa64853166ae0e2ad76aa4e8fa7782e2f8cbe5
+semantic_fingerprint_short: 4f087805c5a271b4
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

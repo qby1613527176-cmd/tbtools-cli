@@ -1,0 +1,24 @@
+name: sambamcov
+kind: bridge
+mode: bridge
+class: SamBamCovCli
+xmx: 3g
+runner: plot
+group: asm
+help: 'sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]'
+semantic_fingerprint: 2210821fed37b0f7d256f2b987211a4ca8f47be7f7a363d20941fff9c8f3564e
+semantic_fingerprint_short: 2210821fed37b0f7
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
+relations:
+  accepts:
+  - GENOME
+  - GFF
+  produces:
+  - ASSEMBLY_OUT

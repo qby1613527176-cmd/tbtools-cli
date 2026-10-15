@@ -1,0 +1,28 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxfsort",
+ "name": "gxfsort",
+ "group": "gxf",
+ "kind": "bridge",
+ "class": "GxfSortCli",
+ "description": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>",
+ "invoke": "tbtools gxf gxfsort <args...>",
+ "capabilities": [
+  "annotation"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "4f087805c5a271b48c7c105033aa64853166ae0e2ad76aa4e8fa7782e2f8cbe5",
+ "semantic_fingerprint_short": "4f087805c5a271b4",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GFF3"
+  ],
+  "produces": [
+   "ANNOTATION_OUT"
+  ]
+ }
+}

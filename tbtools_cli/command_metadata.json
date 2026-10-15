@@ -6,7 +6,7 @@
   "class": "AdmixtureCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gwas",
   "help": "admixture: admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor",
   "semantic_fingerprint": "72802aaef6864d7ddbb1b4db91400ce168dfa4b10d48bf1dfa0b0288c28509c9",
   "semantic_fingerprint_short": "72802aaef6864d7d",
@@ -20,7 +20,7 @@
   "class": "AdmixtureCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gwas",
   "help": "admixtureViz: admixtureViz <q1.txt> <q2.txt> [<q3.txt>...] <out.svg> [--id samples.txt] [--group group.txt] [--sort Qraito|Lexical|None]   # ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id）",
   "semantic_fingerprint": "5c16ece73ca1f6146db7cfc52d1f50c8cb88e17665c26961c7d76d478c33c53f",
   "semantic_fingerprint_short": "5c16ece73ca1f614",
@@ -369,12 +369,20 @@
   "class": "CalcRepeatCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "asm",
   "help": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
-  "semantic_fingerprint": "6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca",
-  "semantic_fingerprint_short": "6fcdc59ed0ece961",
+  "semantic_fingerprint": "53747378ce7efab78d33bd9f718dab7e7054e8b1c3dacf3c3188e8e3f5b71b0a",
+  "semantic_fingerprint_short": "53747378ce7efab7",
   "readiness": "PARTIAL",
   "verification": "COMPILEABLE",
+  "capabilities": [
+   "assembly"
+  ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
   "dependencies": [
    "jellyfish"
   ],
@@ -1005,12 +1013,27 @@
   "class": "EggnogCli",
   "xmx": "4g",
   "runner": "java",
-  "group": "engine",
+  "group": "table",
   "help": "eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb> [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库）",
-  "semantic_fingerprint": "b6fd91f6e9cb34b80c5a723c1975476f583691f568b89a5f1221f6221599fe10",
-  "semantic_fingerprint_short": "b6fd91f6e9cb34b8",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "5084b0cdbcea2844f166859e9c05faa451e8bb6c1a78c13f265273d7d62c6653",
+  "semantic_fingerprint_short": "5084b0cdbcea2844",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "exprCorr": {
   "name": "exprCorr",
@@ -1121,12 +1144,31 @@
   "class": "FileSplitCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "seq",
   "help": "filesplit: filesplit <inFile> <numParts>",
-  "semantic_fingerprint": "0b6a6da33d2d25d17775196b6c291deca67319c442e9f5484ce537b552184a26",
-  "semantic_fingerprint_short": "0b6a6da33d2d25d1",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "8ee605d814260307ce1e48219bf66729828af39a181710e1a4a75807c223f5a0",
+  "semantic_fingerprint_short": "8ee605d814260307",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "filterCScore": {
   "name": "filterCScore",
@@ -1852,7 +1894,7 @@
   "class": "GsaDiagCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gwas",
   "help": "gsadiag: gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax",
   "semantic_fingerprint": "3902479a90942f6154efd972ea2002fbd65a2d91ea2f6f8866616066f0aaabbe",
   "semantic_fingerprint_short": "3902479a90942f61",
@@ -2199,12 +2241,28 @@
   "class": "GxfFilterCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gxf",
   "help": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>",
-  "semantic_fingerprint": "fbbcec66938b1068df4e25fec3911c4ae517a83763b0eed5ad10ebcb423e32d7",
-  "semantic_fingerprint_short": "fbbcec66938b1068",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "1b7591b21d75ba251e4b916d02d1ab5207ee63f1ab824e41734b0fad7238e99c",
+  "semantic_fingerprint_short": "1b7591b21d75ba25",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "gxfsort": {
   "name": "gxfsort",
@@ -2213,12 +2271,28 @@
   "class": "GxfSortCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gxf",
   "help": "gxfsort: gxfsort <in.gff3|gtf> <out.sorted>",
-  "semantic_fingerprint": "fbe8c5b55cf2d0f88ab25a7e706c2caa632a2e7d8dd6639cba252072e2324beb",
-  "semantic_fingerprint_short": "fbe8c5b55cf2d0f8",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "4f087805c5a271b48c7c105033aa64853166ae0e2ad76aa4e8fa7782e2f8cbe5",
+  "semantic_fingerprint_short": "4f087805c5a271b4",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "hicEnzyme": {
   "name": "hicEnzyme",
@@ -2492,7 +2566,7 @@
   "class": "biocjava.bioDoer.markerDesign.BigMarkerRandomDesign",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gwas",
   "help": "marker: marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe",
   "semantic_fingerprint": "fb232631d8d264a8ccf0a92fba437ae47f0b8eefa0606b796861570336af9a13",
   "semantic_fingerprint_short": "fb232631d8d264a8",
@@ -2506,7 +2580,7 @@
   "class": "MarkerToolsCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gwas",
   "help": "markertools: markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi",
   "semantic_fingerprint": "5861af8281a54ce91908826542c4b4144e50019378b4f40e02736b8137770bca",
   "semantic_fingerprint_short": "5861af8281a54ce9",
@@ -2887,12 +2961,28 @@
   "class": "MgGxfCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "gxf",
   "help": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked",
-  "semantic_fingerprint": "fbfac92ded9b039bcb829bd828f8c7f4b082cd75c154608d30b785508f297cb7",
-  "semantic_fingerprint_short": "fbfac92ded9b039b",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "351a70b58352412f9b19a00f367dd1adc3c222fcdc98193fabaf57942333d63e",
+  "semantic_fingerprint_short": "351a70b58352412f",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "annotation"
+  ],
+  "capabilities_ontology": [
+   "annotation",
+   "genomics",
+   "genomics.annotation"
+  ],
+  "relations": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  }
  },
  "microgenome": {
   "name": "microgenome",
@@ -3995,12 +4085,27 @@
   "class": "QpcrProcCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "table",
   "help": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>",
-  "semantic_fingerprint": "d4e4064e216b252c43ba03aa0d6f0e8409d01d3d9e2be70fab178ef608d01b37",
-  "semantic_fingerprint_short": "d4e4064e216b252c",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "0f5d67aac54188d776e8a5bd8165d69bda9fef95c083cfb2a65fdd31cfc0efed",
+  "semantic_fingerprint_short": "0f5d67aac54188d7",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "table_operations"
+  ],
+  "capabilities_ontology": [
+   "table",
+   "table_operations"
+  ],
+  "relations": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  }
  },
  "quickFamily": {
   "name": "quickFamily",
@@ -4149,12 +4254,29 @@
   "class": "RegionDepthCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "asm",
   "help": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]",
-  "semantic_fingerprint": "594bdd4242a99d0b54ec6b5d8640a7f62d4915dfb9b50a1b651888a3a793b553",
-  "semantic_fingerprint_short": "594bdd4242a99d0b",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "f84578c833255e1d8a7378146b4fc9ac3cbb31c279cb02fbb00d9f4554c5951c",
+  "semantic_fingerprint_short": "f84578c833255e1d",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "assembly"
+  ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "rnaplot": {
   "name": "rnaplot",
@@ -4232,12 +4354,29 @@
   "class": "SamBamCovCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "asm",
   "help": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]",
-  "semantic_fingerprint": "9842a84de9c13bb809ba55dbd07e014d56e20ade820228544d7bbf4f4d0407a7",
-  "semantic_fingerprint_short": "9842a84de9c13bb8",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "2210821fed37b0f7d256f2b987211a4ca8f47be7f7a363d20941fff9c8f3564e",
+  "semantic_fingerprint_short": "2210821fed37b0f7",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "assembly"
+  ],
+  "capabilities_ontology": [
+   "assembly",
+   "genomics",
+   "genomics.assembly"
+  ],
+  "relations": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  }
  },
  "sepChr": {
   "name": "sepChr",
@@ -4277,12 +4416,31 @@
   "class": "SeqConverterCli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "seq",
   "help": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>",
-  "semantic_fingerprint": "efc997897fcfa93eed2c96d8c0b8597969c201569d58beeb5ba96301140dac16",
-  "semantic_fingerprint_short": "efc997897fcfa93e",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "2a0f1b488f564a1c7c69ada569077605e3a59c7b17e72e8b0aac0cd73069f9b6",
+  "semantic_fingerprint_short": "2a0f1b488f564a1c",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "seqlentrack": {
   "name": "seqlentrack",
@@ -4804,12 +4962,31 @@
   "class": "TrimMSACli",
   "xmx": "3g",
   "runner": "plot",
-  "group": "engine",
+  "group": "seq",
   "help": "trimmsa: trimmsa <in.aln.fa> <out.aln.fa> [ratio]",
-  "semantic_fingerprint": "4704692cc2605073e1f2177c150acdb9e9d48e2b3d9b6a7679de53832c545971",
-  "semantic_fingerprint_short": "4704692cc2605073",
-  "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "semantic_fingerprint": "a4d1af55324ffb0400e96f35c9eefcb10d1d5b4ae4584aaaeeb004823a646593",
+  "semantic_fingerprint_short": "a4d1af55324ffb04",
+  "readiness": "PARTIAL",
+  "verification": "DECLARED",
+  "capabilities": [
+   "sequence"
+  ],
+  "capabilities_ontology": [
+   "sequence"
+  ],
+  "relations": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
+   ]
+  }
  },
  "twoSeqBlast": {
   "name": "twoSeqBlast",

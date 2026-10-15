@@ -47,7 +47,7 @@
 | `blastXmlSummaryTable` | — | — | — | — | — | 0/5 |
 | `blastXmlToTable` | — | — | — | — | — | 0/5 |
 | `blat` | — | — | ✅ | — | ✅ | 2/5 |
-| `calcRepeat` | ✅ | — | — | ✅ | ✅ | 3/5 |
+| `calcRepeat` | ✅ | — | ✅ | ✅ | ✅ | 4/5 |
 | `careclassify` | — | — | ✅ | — | ✅ | 2/5 |
 | `cddmotif` | — | — | ✅ | — | ✅ | 2/5 |
 | `cds2protein` | — | — | — | — | — | 0/5 |
@@ -71,7 +71,7 @@
 | `dualsyn` | ✅ | ✅ | ✅ | — | ✅ | 4/5 |
 | `efpHeat` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `eggNogMapperResult` | — | — | — | — | — | 0/5 |
-| `eggnog` | — | — | — | — | — | 0/5 |
+| `eggnog` | — | — | ✅ | — | ✅ | 2/5 |
 | `emblToFasta` | — | — | — | — | — | 0/5 |
 | `exprCorr` | — | — | ✅ | — | ✅ | 2/5 |
 | `extractFasta` | — | — | ✅ | — | ✅ | 2/5 |
@@ -89,7 +89,7 @@
 | `fastqAndFasta` | — | — | — | — | — | 0/5 |
 | `fastqParallelSubBest` | — | — | — | — | — | 0/5 |
 | `fastqParallelTrimmer` | — | — | — | — | — | 0/5 |
-| `filesplit` | — | — | — | — | — | 0/5 |
+| `filesplit` | — | — | ✅ | — | ✅ | 2/5 |
 | `filterCScore` | — | — | ✅ | — | ✅ | 2/5 |
 | `fimo` | — | — | ✅ | — | ✅ | 2/5 |
 | `findBestForkerRootTree` | — | — | — | — | — | 0/5 |
@@ -146,8 +146,8 @@
 | `gxfRepIDs` | — | — | ✅ | — | ✅ | 2/5 |
 | `gxfSplit` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `gxfStat` | — | — | ✅ | — | ✅ | 2/5 |
-| `gxffilter` | — | — | — | — | — | 0/5 |
-| `gxfsort` | — | — | — | — | — | 0/5 |
+| `gxffilter` | — | — | ✅ | — | ✅ | 2/5 |
+| `gxfsort` | — | — | ✅ | — | ✅ | 2/5 |
 | `hclust` | ✅ | ✅ | ✅ | — | ✅ | 4/5 |
 | `heatmap` | ✅ | ✅ | ✅ | — | ✅ | 4/5 |
 | `heatmap2` | — | — | — | — | — | 0/5 |
@@ -180,7 +180,7 @@
 | `meme2tab` | — | — | ✅ | — | ✅ | 2/5 |
 | `memeViz` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `memerun` | ✅ | — | ✅ | — | ✅ | 3/5 |
-| `mggxf` | — | — | — | — | — | 0/5 |
+| `mggxf` | — | — | ✅ | — | ✅ | 2/5 |
 | `microgenome` | — | — | ✅ | — | ✅ | 2/5 |
 | `microsyn` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `mimicVqsr` | — | — | — | — | — | 0/5 |
@@ -226,7 +226,7 @@
 | `qdot` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `qpcr` | — | — | ✅ | — | ✅ | 2/5 |
 | `qpcrExp` | — | — | ✅ | — | ✅ | 2/5 |
-| `qpcrproc` | — | — | — | — | — | 0/5 |
+| `qpcrproc` | — | — | ✅ | — | ✅ | 2/5 |
 | `quickAnno` | — | — | ✅ | — | ✅ | 2/5 |
 | `quickFamily` | — | — | ✅ | — | ✅ | 2/5 |
 | `quickGeneFamilyIdentification` | — | — | — | — | — | 0/5 |
@@ -235,7 +235,7 @@
 | `recipBlast` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `regionAnno` | — | — | ✅ | — | ✅ | 2/5 |
 | `regionBlast` | — | — | — | — | — | 0/5 |
-| `regiondepth` | — | — | — | — | — | 0/5 |
+| `regiondepth` | — | — | ✅ | — | ✅ | 2/5 |
 | `rnaplot` | ✅ | — | ✅ | ✅ | ✅ | 4/5 |
 | `rooting` | — | — | ✅ | — | ✅ | 2/5 |
 | `rpkmCal` | — | — | — | — | — | 0/5 |
@@ -244,9 +244,9 @@
 | `sRNAseqCollasper` | — | — | — | — | — | 0/5 |
 | `sRNAseqDeCollasper` | — | — | — | — | — | 0/5 |
 | `sRNAseqReadLenStat` | — | — | — | — | — | 0/5 |
-| `sambamcov` | — | — | — | — | — | 0/5 |
+| `sambamcov` | — | — | ✅ | — | ✅ | 2/5 |
 | `sepChr` | — | — | ✅ | — | ✅ | 2/5 |
-| `seqconvert` | — | — | — | — | — | 0/5 |
+| `seqconvert` | — | — | ✅ | — | ✅ | 2/5 |
 | `seqfetch` | — | — | ✅ | — | ✅ | 2/5 |
 | `seqlentrack` | — | — | ✅ | — | ✅ | 2/5 |
 | `seqlogo` | ✅ | — | ✅ | — | — | 2/5 |
@@ -289,7 +289,7 @@
 | `tree` | — | — | ✅ | — | ✅ | 2/5 |
 | `treeRooting` | ✅ | — | ✅ | — | ✅ | 3/5 |
 | `trimal` | ✅ | — | ✅ | ✅ | ✅ | 4/5 |
-| `trimmsa` | — | — | — | — | — | 0/5 |
+| `trimmsa` | — | — | ✅ | — | ✅ | 2/5 |
 | `twoSeqBlast` | — | — | ✅ | — | ✅ | 2/5 |
 | `unrooted` | — | — | ✅ | — | ✅ | 2/5 |
 | `upset` | ✅ | — | ✅ | — | ✅ | 3/5 |

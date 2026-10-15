@@ -1,0 +1,25 @@
+name: filesplit
+kind: bridge
+mode: bridge
+class: FileSplitCli
+xmx: 3g
+runner: plot
+group: seq
+help: 'filesplit: filesplit <inFile> <numParts>'
+semantic_fingerprint: 8ee605d814260307ce1e48219bf66729828af39a181710e1a4a75807c223f5a0
+semantic_fingerprint_short: 8ee605d814260307
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- sequence
+capabilities_ontology:
+- sequence
+relations:
+  accepts:
+  - FASTA
+  - GFF3
+  produces:
+  - SEQUENCE_ARTIFACT
+  related_to:
+  - muscle
+  - trimal

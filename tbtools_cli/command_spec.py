@@ -824,6 +824,30 @@ KNOWN_STATUS = {
 # 每次都重建 298 spec(~105ms)纯浪费; KNOWN_* / 注册表变更调 clear_specs_cache()(统一失效)
 _SPECS_CACHE: dict | None = None
 
+# 十四轮 arch P1: 分组解析单一函数——收敛三处各自读 CATEGORY_MAP(854/889/999)。
+# 第一步(零行为变化): 先消"三处各自读表", 再谈迁表。KNOWN_GROUPS 为正式契约分组
+# (迁表后旧表缩小); CATEGORY_MAP 仅对未迁移命令提供兼容兜底(arch 路线第二步起逐步清空)。
+# 十四轮 arch P1 第三步: 16 个 ENGINE_REGISTRY 命令此前静默落硬编码 "engine"(CATEGORY_MAP
+# 无映射)——按语义域显式分组, 消灭字符串字面量兜底。类别判断依据 class_name 语义域:
+#   gxffilter/gxfsort/mggxf → gxf(GFF/GTF 处理) / admixture·gsadiag·marker → gwas(群体遗传)
+#   calcRepeat·regiondepth·sambamcov → asm(基因组/覆盖) / eggnog·qpcrproc → table(注释/表达)
+#   filesplit·seqconvert·trimmsa → seq(序列处理)
+KNOWN_GROUPS: dict[str, str] = {
+    "gxffilter": "gxf", "gxfsort": "gxf", "mggxf": "gxf",
+    "admixture": "gwas", "admixtureViz": "gwas", "gsadiag": "gwas",
+    "marker": "gwas", "markertools": "gwas",
+    "calcRepeat": "asm", "regiondepth": "asm", "sambamcov": "asm",
+    "eggnog": "table", "qpcrproc": "table",
+    "filesplit": "seq", "seqconvert": "seq", "trimmsa": "seq",
+}
+
+
+def _resolve_group(name: str, fallback: str = "engine") -> str:
+    """分组解析单一真源: KNOWN_GROUPS(正式契约) → CATEGORY_MAP(兼容兜底) → fallback。
+    与消费端 cli_load._group_of 语义一致(CommandSpec 优先)——生产端/消费端同源防分裂。"""
+    from tbtools_cli.cli_load import CATEGORY_MAP as _CM
+    return KNOWN_GROUPS.get(name) or _CM.get(name) or fallback
+
 
 def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dict[str, CommandSpec]:
     """构建统一命令模型(单一源, 兼容层: 不改变现运行行为)。
@@ -843,7 +867,6 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
     # 函数内延迟 import(arch N6 顺带修复): 顶层 import cli_load 与 cli_load._spec_groups
     # 的 from command_spec import build_command_specs 构成循环依赖——部分初始化时
     # 分组投影静默失败(现 warn 可见); 函数内 import 后无循环(command_spec 先完整加载)
-    from tbtools_cli.cli_load import CATEGORY_MAP
     if not force and _SPECS_CACHE is not None:
         return _SPECS_CACHE
     specs: dict[str, CommandSpec] = {}
@@ -851,7 +874,7 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
     # 1. 表驱动引擎命令
     for name, kind, cls, xmx, runner, doc in _ac.ENGINE_REGISTRY:
         specs[name] = CommandSpec(
-            name=name, group=CATEGORY_MAP.get(name, "engine"),
+            name=name, group=_resolve_group(name),  # 十四轮: 单一解析函数
             kind=kind, class_name=cls, runner=runner, xmx=xmx, doc=doc,
         )
 
@@ -886,7 +909,7 @@ def build_command_specs(force: bool = False, _skip_overlay: bool = False) -> dic
         for _n, _e in _scanned.items():
             if _n in KNOWN_TOP_MANUAL or _n in specs:
                 continue
-            _grp = _e["group"] if _e["group"] is not None else CATEGORY_MAP.get(_n, "engine")
+            _grp = _e["group"] if _e["group"] is not None else _resolve_group(_n)
             specs.setdefault(_n, CommandSpec(
                 name=_n, group=_grp, kind="manual",
                 runner="plot", doc=_e["doc"] or "",
@@ -999,7 +1022,7 @@ def specs_from_scans(reg, tools, manual, infer_group=None) -> dict[str, dict]:
     from tbtools_cli.cli_load import CATEGORY_MAP as _CM
     specs = {}
     for name, e in reg.items():
-        specs[name] = CommandSpec(name, _CM.get(name, "engine"), e.get("kind", "direct"),
+        specs[name] = CommandSpec(name, _resolve_group(name), e.get("kind", "direct"),
                                   e.get("class", ""), e.get("runner") or "plot",
                                   e.get("xmx") or "2g", e.get("help", ""))
     for name, e in tools.items():

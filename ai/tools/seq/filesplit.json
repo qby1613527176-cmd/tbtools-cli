@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.filesplit",
+ "name": "filesplit",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "FileSplitCli",
+ "description": "filesplit: filesplit <inFile> <numParts>",
+ "invoke": "tbtools seq filesplit <args...>",
+ "capabilities": [
+  "sequence"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "8ee605d814260307ce1e48219bf66729828af39a181710e1a4a75807c223f5a0",
+ "semantic_fingerprint_short": "8ee605d814260307",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ }
+}

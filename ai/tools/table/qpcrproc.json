@@ -1,0 +1,28 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.table.qpcrproc",
+ "name": "qpcrproc",
+ "group": "table",
+ "kind": "bridge",
+ "class": "QpcrProcCli",
+ "description": "qpcrproc: qpcrproc <in.qpcr.tab> <out.xls>",
+ "invoke": "tbtools table qpcrproc <args...>",
+ "capabilities": [
+  "table_operations"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "0f5d67aac54188d776e8a5bd8165d69bda9fef95c083cfb2a65fdd31cfc0efed",
+ "semantic_fingerprint_short": "0f5d67aac54188d7",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "TABLE"
+  ],
+  "produces": [
+   "TABLE_OUT"
+  ]
+ }
+}

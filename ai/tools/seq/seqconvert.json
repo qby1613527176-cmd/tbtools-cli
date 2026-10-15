@@ -1,0 +1,33 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.seq.seqconvert",
+ "name": "seqconvert",
+ "group": "seq",
+ "kind": "bridge",
+ "class": "SeqConverterCli",
+ "description": "seqconvert: seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt>",
+ "invoke": "tbtools seq seqconvert <args...>",
+ "capabilities": [
+  "sequence"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "2a0f1b488f564a1c7c69ada569077605e3a59c7b17e72e8b0aac0cd73069f9b6",
+ "semantic_fingerprint_short": "2a0f1b488f564a1c",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "FASTA",
+   "GFF3"
+  ],
+  "produces": [
+   "SEQUENCE_ARTIFACT"
+  ],
+  "related_to": [
+   "muscle",
+   "trimal"
+  ]
+ }
+}

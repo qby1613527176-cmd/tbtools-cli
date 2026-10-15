@@ -1,0 +1,29 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.regiondepth",
+ "name": "regiondepth",
+ "group": "asm",
+ "kind": "bridge",
+ "class": "RegionDepthCli",
+ "description": "regiondepth: regiondepth <in.sam> <region> <out.depth> [scaleFactor]",
+ "invoke": "tbtools asm regiondepth <args...>",
+ "capabilities": [
+  "assembly"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "f84578c833255e1d8a7378146b4fc9ac3cbb31c279cb02fbb00d9f4554c5951c",
+ "semantic_fingerprint_short": "f84578c833255e1d",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GENOME",
+   "GFF"
+  ],
+  "produces": [
+   "ASSEMBLY_OUT"
+  ]
+ }
+}

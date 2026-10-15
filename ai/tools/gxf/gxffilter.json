@@ -1,0 +1,28 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.gxffilter",
+ "name": "gxffilter",
+ "group": "gxf",
+ "kind": "bridge",
+ "class": "GxfFilterCli",
+ "description": "gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>",
+ "invoke": "tbtools gxf gxffilter <args...>",
+ "capabilities": [
+  "annotation"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "1b7591b21d75ba251e4b916d02d1ab5207ee63f1ab824e41734b0fad7238e99c",
+ "semantic_fingerprint_short": "1b7591b21d75ba25",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GFF3"
+  ],
+  "produces": [
+   "ANNOTATION_OUT"
+  ]
+ }
+}

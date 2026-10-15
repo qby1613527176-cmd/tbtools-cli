@@ -1,0 +1,23 @@
+name: gxffilter
+kind: bridge
+mode: bridge
+class: GxfFilterCli
+xmx: 3g
+runner: plot
+group: gxf
+help: 'gxffilter: gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf>'
+semantic_fingerprint: 1b7591b21d75ba251e4b916d02d1ab5207ee63f1ab824e41734b0fad7238e99c
+semantic_fingerprint_short: 1b7591b21d75ba25
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

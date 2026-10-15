@@ -1,0 +1,24 @@
+name: eggnog
+kind: bridge
+mode: bridge
+class: EggnogCli
+xmx: 4g
+runner: java
+group: table
+help: 'eggnog: eggnog <in.fa> -o <prefix> --output_dir <outDir> --data_dir <eggNOGdb>
+  [--cpu N] [--evalue 0.001]   # eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG
+  数据库）'
+semantic_fingerprint: 5084b0cdbcea2844f166859e9c05faa451e8bb6c1a78c13f265273d7d62c6653
+semantic_fingerprint_short: 5084b0cdbcea2844
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- table_operations
+capabilities_ontology:
+- table
+- table_operations
+relations:
+  accepts:
+  - TABLE
+  produces:
+  - TABLE_OUT

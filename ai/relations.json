@@ -265,6 +265,14 @@
     "heatmap"
    ]
   },
+  "eggnog": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "exprCorr": {
    "accepts": [
     "EXPRESSION_TABLE"
@@ -299,6 +307,19 @@
    "next_step": [
     "kallisto",
     "tpmCalc"
+   ]
+  },
+  "filesplit": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
    ]
   },
   "filterCScore": {
@@ -599,6 +620,22 @@
     "ANNOTATION_OUT"
    ]
   },
+  "gxffilter": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
+  "gxfsort": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
+   ]
+  },
   "hicEnzyme": {
    "accepts": [
     "GENOME",
@@ -757,6 +794,14 @@
    ],
    "next_step": [
     "motif"
+   ]
+  },
+  "mggxf": {
+   "accepts": [
+    "GFF3"
+   ],
+   "produces": [
+    "ANNOTATION_OUT"
    ]
   },
   "microgenome": {
@@ -1042,6 +1087,14 @@
     "heatmap"
    ]
   },
+  "qpcrproc": {
+   "accepts": [
+    "TABLE"
+   ],
+   "produces": [
+    "TABLE_OUT"
+   ]
+  },
   "quickFamily": {
    "accepts": [
     "FASTA"
@@ -1076,6 +1129,15 @@
     "ANNOTATION_OUT"
    ]
   },
+  "regiondepth": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
   "rnaplot": {
    "accepts": [
     "FASTA",
@@ -1089,6 +1151,15 @@
     "trimal"
    ]
   },
+  "sambamcov": {
+   "accepts": [
+    "GENOME",
+    "GFF"
+   ],
+   "produces": [
+    "ASSEMBLY_OUT"
+   ]
+  },
   "sepChr": {
    "accepts": [
     "GENOME",
@@ -1096,6 +1167,19 @@
    ],
    "produces": [
     "ASSEMBLY_OUT"
+   ]
+  },
+  "seqconvert": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
    ]
   },
   "seqlentrack": {
@@ -1238,6 +1322,19 @@
    "related_to": [
     "volcano",
     "heatmap"
+   ]
+  },
+  "trimmsa": {
+   "accepts": [
+    "FASTA",
+    "GFF3"
+   ],
+   "produces": [
+    "SEQUENCE_ARTIFACT"
+   ],
+   "related_to": [
+    "muscle",
+    "trimal"
    ]
   },
   "twoSeqBlast": {

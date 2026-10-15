@@ -1,0 +1,29 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.asm.sambamcov",
+ "name": "sambamcov",
+ "group": "asm",
+ "kind": "bridge",
+ "class": "SamBamCovCli",
+ "description": "sambamcov: sambamcov <in.bam> <out.tsv> [binSize] [countMode]",
+ "invoke": "tbtools asm sambamcov <args...>",
+ "capabilities": [
+  "assembly"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "2210821fed37b0f7d256f2b987211a4ca8f47be7f7a363d20941fff9c8f3564e",
+ "semantic_fingerprint_short": "2210821fed37b0f7",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GENOME",
+   "GFF"
+  ],
+  "produces": [
+   "ASSEMBLY_OUT"
+  ]
+ }
+}

@@ -1,0 +1,23 @@
+name: mggxf
+kind: bridge
+mode: bridge
+class: MgGxfCli
+xmx: 3g
+runner: plot
+group: gxf
+help: 'mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked'
+semantic_fingerprint: 351a70b58352412f9b19a00f367dd1adc3c222fcdc98193fabaf57942333d63e
+semantic_fingerprint_short: 351a70b58352412f
+readiness: PARTIAL
+verification: DECLARED
+capabilities:
+- annotation
+capabilities_ontology:
+- annotation
+- genomics
+- genomics.annotation
+relations:
+  accepts:
+  - GFF3
+  produces:
+  - ANNOTATION_OUT

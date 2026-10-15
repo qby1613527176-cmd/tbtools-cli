@@ -4,12 +4,18 @@ mode: bridge
 class: CalcRepeatCli
 xmx: 3g
 runner: plot
-group: engine
+group: asm
 help: 'calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min'
-semantic_fingerprint: 6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca
-semantic_fingerprint_short: 6fcdc59ed0ece961
+semantic_fingerprint: 53747378ce7efab78d33bd9f718dab7e7054e8b1c3dacf3c3188e8e3f5b71b0a
+semantic_fingerprint_short: 53747378ce7efab7
 readiness: PARTIAL
 verification: COMPILEABLE
+capabilities:
+- assembly
+capabilities_ontology:
+- assembly
+- genomics
+- genomics.assembly
 dependencies:
 - jellyfish
 dependency_manifest:

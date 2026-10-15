@@ -9,8 +9,8 @@
 - bridges: 118
 - pitfall_hints: 49
 - agent_ready_full: 60
-- agent_ready_partial: 134
-- agent_ready_legacy: 104
+- agent_ready_partial: 144
+- agent_ready_legacy: 94
 - execution_verified: 56
 - conformance_verified: 1
 - semantic_checked: 11

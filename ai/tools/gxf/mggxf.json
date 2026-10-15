@@ -1,0 +1,28 @@
+{
+ "schema_version": "1.0",
+ "id": "tbtools.gxf.mggxf",
+ "name": "mggxf",
+ "group": "gxf",
+ "kind": "bridge",
+ "class": "MgGxfCli",
+ "description": "mggxf: mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked",
+ "invoke": "tbtools gxf mggxf <args...>",
+ "capabilities": [
+  "annotation"
+ ],
+ "inputs": [],
+ "outputs": [],
+ "status": "stable",
+ "semantic_fingerprint": "351a70b58352412f9b19a00f367dd1adc3c222fcdc98193fabaf57942333d63e",
+ "semantic_fingerprint_short": "351a70b58352412f",
+ "readiness": "PARTIAL",
+ "verification": "DECLARED",
+ "relations": {
+  "accepts": [
+   "GFF3"
+  ],
+  "produces": [
+   "ANNOTATION_OUT"
+  ]
+ }
+}

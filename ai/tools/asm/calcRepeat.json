@@ -1,13 +1,15 @@
 {
  "schema_version": "1.0",
- "id": "tbtools.engine.calcRepeat",
+ "id": "tbtools.asm.calcRepeat",
  "name": "calcRepeat",
- "group": "engine",
+ "group": "asm",
  "kind": "bridge",
  "class": "CalcRepeatCli",
  "description": "calcRepeat: calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min",
- "invoke": "tbtools engine CalcRepeatCli key=value",
- "capabilities": [],
+ "invoke": "tbtools asm calcRepeat <args...>",
+ "capabilities": [
+  "assembly"
+ ],
  "inputs": [
   {
    "name": "fasta",
@@ -21,8 +23,8 @@
   "tsv"
  ],
  "status": "platform-limited",
- "semantic_fingerprint": "6fcdc59ed0ece961c3845d6d77c5f85a22897dbf28194e85d734247239cad4ca",
- "semantic_fingerprint_short": "6fcdc59ed0ece961",
+ "semantic_fingerprint": "53747378ce7efab78d33bd9f718dab7e7054e8b1c3dacf3c3188e8e3f5b71b0a",
+ "semantic_fingerprint_short": "53747378ce7efab7",
  "readiness": "PARTIAL",
  "verification": "COMPILEABLE",
  "relations": {
