@@ -22,3 +22,4 @@ relations:
   - GFF
   produces:
   - ASSEMBLY_OUT
+params_status: unknown

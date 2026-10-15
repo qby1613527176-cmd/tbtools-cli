@@ -42,3 +42,4 @@ outputs:
 output_slots:
 - name: fasta
   format: fasta
+params_status: unknown

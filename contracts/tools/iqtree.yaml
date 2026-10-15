@@ -59,3 +59,4 @@ output_slots:
 - name: tree
   format: nwk
   content_type: tree
+params_status: complete

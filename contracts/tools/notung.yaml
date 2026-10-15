@@ -48,3 +48,4 @@ outputs:
 output_slots:
 - name: nwk
   format: nwk
+params_status: unknown

@@ -43,3 +43,4 @@ outputs:
 output_slots:
 - name: png
   format: png
+params_status: unknown

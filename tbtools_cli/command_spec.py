@@ -1126,7 +1126,24 @@ def to_metadata_entry(spec: CommandSpec) -> dict:
         e["status"] = spec.status
     if spec.aliases:
         e["aliases"] = spec.aliases
+    # 十四轮 verified P1(GPT): params_status 注入 metadata——Agent 可区分
+    # 「参数契约完整(complete)」vs「未审计(unknown)」, 不把 unknown 当无参数
+    e["params_status"] = params_status(spec)
     return e
+
+
+# ── 参数契约状态(十四轮 verified P1(GPT): 区分「无参数」vs「参数未描述」)──
+def params_status(spec) -> str:
+    """参数契约四态(先注入 metadata 不改分级, 渐进收编):
+    - complete: KNOWN_PARAMS 已声明契约(参数名/类型/默认) → Agent 可按契约传参
+    - confirmed_none: 已核查确实无可配置参数(无 KNOWN_PARAMS 且 spec 无 inputs 需参数)——
+      ⚠️ 当前为启发式推断, 待逐工具确认后收编(verified P1 后续)
+    - partial: 声明了部分参数(预留: KNOWN_PARAMS 半覆盖)
+    - unknown: 未完成参数审计(默认)——不能等同于「无参数」
+    """
+    if spec.parameters:
+        return "complete"
+    return "unknown"  # 无 KNOWN_PARAMS = 未审计, 不宣称无参数(verified P1 核心语义)
 
 
 # ── Agent-ready 分级(评审 #60-8): FULL/PARTIAL/LEGACY 正式定义 ──

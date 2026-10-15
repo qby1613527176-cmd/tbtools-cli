@@ -62,3 +62,4 @@ outputs:
 output_slots:
 - name: svg
   format: svg
+params_status: complete

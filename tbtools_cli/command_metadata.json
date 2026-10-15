@@ -11,7 +11,8 @@
   "semantic_fingerprint": "72802aaef6864d7ddbb1b4db91400ce168dfa4b10d48bf1dfa0b0288c28509c9",
   "semantic_fingerprint_short": "72802aaef6864d7d",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "admixtureViz": {
   "name": "admixtureViz",
@@ -25,7 +26,8 @@
   "semantic_fingerprint": "5c16ece73ca1f6146db7cfc52d1f50c8cb88e17665c26961c7d76d478c33c53f",
   "semantic_fingerprint_short": "5c16ece73ca1f614",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "amazingmeta": {
   "name": "amazingmeta",
@@ -58,7 +60,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "annocompare": {
   "name": "annocompare",
@@ -88,7 +91,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "bamMerge": {
   "name": "bamMerge",
@@ -119,7 +123,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "bamindex": {
   "name": "bamindex",
@@ -150,7 +155,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "bamsort": {
   "name": "bamsort",
@@ -181,7 +187,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "bamstate": {
   "name": "bamstate",
@@ -212,7 +219,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "barplot": {
   "name": "barplot",
@@ -267,7 +275,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "barplotter": {
   "name": "barplotter",
@@ -331,7 +340,8 @@
     "name": "png",
     "format": "png"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "batchReplace": {
   "name": "batchReplace",
@@ -360,7 +370,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "calcRepeat": {
   "name": "calcRepeat",
@@ -430,7 +441,8 @@
     "format": "tsv"
    }
   ],
-  "status": "platform-limited"
+  "status": "platform-limited",
+  "params_status": "unknown"
  },
  "cddmotif": {
   "name": "cddmotif",
@@ -463,7 +475,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "circlegene": {
   "name": "circlegene",
@@ -501,7 +514,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "circos": {
   "name": "circos",
@@ -573,7 +587,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "collinearRegion": {
   "name": "collinearRegion",
@@ -613,7 +628,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "colorscheme": {
   "name": "colorscheme",
@@ -645,7 +661,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "conflictpaf": {
   "name": "conflictpaf",
@@ -683,7 +700,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "ctgGroup": {
   "name": "ctgGroup",
@@ -714,7 +732,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "cubeheatmap": {
   "name": "cubeheatmap",
@@ -747,7 +766,8 @@
     "heatmap"
    ]
   },
-  "status": "beta"
+  "status": "beta",
+  "params_status": "unknown"
  },
  "degramdom": {
   "name": "degramdom",
@@ -779,7 +799,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "distance": {
   "name": "distance",
@@ -811,7 +832,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "dotplot": {
   "name": "dotplot",
@@ -869,7 +891,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "dualsyn": {
   "name": "dualsyn",
@@ -945,7 +968,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "efpHeat": {
   "name": "efpHeat",
@@ -1004,7 +1028,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "eggnog": {
   "name": "eggnog",
@@ -1033,7 +1058,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "exprCorr": {
   "name": "exprCorr",
@@ -1065,7 +1091,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "fastaExtract": {
   "name": "fastaExtract",
@@ -1100,7 +1127,8 @@
     "kallisto",
     "tpmCalc"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "fastaSubseq": {
   "name": "fastaSubseq",
@@ -1135,7 +1163,8 @@
     "kallisto",
     "tpmCalc"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "filesplit": {
   "name": "filesplit",
@@ -1168,7 +1197,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "filterCScore": {
   "name": "filterCScore",
@@ -1204,7 +1234,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "findblockdual": {
   "name": "findblockdual",
@@ -1242,7 +1273,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "findblockmultiple": {
   "name": "findblockmultiple",
@@ -1280,7 +1312,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "findpath": {
   "name": "findpath",
@@ -1312,7 +1345,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "fqTrim": {
   "name": "fqTrim",
@@ -1349,7 +1383,8 @@
     "kallisto",
     "tpmCalc"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "fqfaConv": {
   "name": "fqfaConv",
@@ -1384,7 +1419,8 @@
     "kallisto",
     "tpmCalc"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gbar": {
   "name": "gbar",
@@ -1417,7 +1453,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gdensity": {
   "name": "gdensity",
@@ -1448,7 +1485,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gel": {
   "name": "gel",
@@ -1499,7 +1537,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "genedensity": {
   "name": "genedensity",
@@ -1532,7 +1571,8 @@
   },
   "aliases": [
    "gdensity"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "genelocation": {
   "name": "genelocation",
@@ -1564,7 +1604,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "genelocgff": {
   "name": "genelocgff",
@@ -1619,7 +1660,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "generic": {
   "name": "generic",
@@ -1633,7 +1675,8 @@
   "semantic_fingerprint": "6dbc9f444a64a2d52725eef5369a0990457d22b9d450b4d5de1df57c81f521b2",
   "semantic_fingerprint_short": "6dbc9f444a64a2d5",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "gfa": {
   "name": "gfa",
@@ -1666,7 +1709,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gfa2fa": {
   "name": "gfa2fa",
@@ -1699,7 +1743,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "goEnrich": {
   "name": "goEnrich",
@@ -1759,7 +1804,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "goParse": {
   "name": "goParse",
@@ -1788,7 +1834,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "golevel": {
   "name": "golevel",
@@ -1817,7 +1864,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "groupCol": {
   "name": "groupCol",
@@ -1849,7 +1897,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "groupedbar": {
   "name": "groupedbar",
@@ -1885,7 +1934,8 @@
   "status": "beta",
   "aliases": [
    "gbar"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "gsadiag": {
   "name": "gsadiag",
@@ -1899,7 +1949,8 @@
   "semantic_fingerprint": "3902479a90942f6154efd972ea2002fbd65a2d91ea2f6f8866616066f0aaabbe",
   "semantic_fingerprint_short": "3902479a90942f61",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "gxfAppend": {
   "name": "gxfAppend",
@@ -1932,7 +1983,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfFix": {
   "name": "gxfFix",
@@ -1962,7 +2014,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfGenepos": {
   "name": "gxfGenepos",
@@ -1992,7 +2045,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfMatch": {
   "name": "gxfMatch",
@@ -2022,7 +2076,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfOverlap": {
   "name": "gxfOverlap",
@@ -2052,7 +2107,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfRecall": {
   "name": "gxfRecall",
@@ -2082,7 +2138,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfRegion": {
   "name": "gxfRegion",
@@ -2112,7 +2169,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfRename": {
   "name": "gxfRename",
@@ -2142,7 +2200,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfRepGXF": {
   "name": "gxfRepGXF",
@@ -2172,7 +2231,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfRepIDs": {
   "name": "gxfRepIDs",
@@ -2202,7 +2262,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfStat": {
   "name": "gxfStat",
@@ -2232,7 +2293,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxffilter": {
   "name": "gxffilter",
@@ -2262,7 +2324,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gxfsort": {
   "name": "gxfsort",
@@ -2292,7 +2355,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "hicEnzyme": {
   "name": "hicEnzyme",
@@ -2323,7 +2387,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "hmmExtract": {
   "name": "hmmExtract",
@@ -2337,7 +2402,8 @@
   "semantic_fingerprint": "74d3527ec82debc48b07bf87e44e3cec8af7887712aac5daa1fe2ef9f86f3007",
   "semantic_fingerprint_short": "74d3527ec82debc4",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "homoPhase": {
   "name": "homoPhase",
@@ -2368,7 +2434,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "keggEnrich": {
   "name": "keggEnrich",
@@ -2436,7 +2503,8 @@
     "name": "xls",
     "format": "xls"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "layoutheatmap": {
   "name": "layoutheatmap",
@@ -2495,7 +2563,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "levelGo": {
   "name": "levelGo",
@@ -2524,7 +2593,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "makemotif": {
   "name": "makemotif",
@@ -2557,7 +2627,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "marker": {
   "name": "marker",
@@ -2571,7 +2642,8 @@
   "semantic_fingerprint": "fb232631d8d264a8ccf0a92fba437ae47f0b8eefa0606b796861570336af9a13",
   "semantic_fingerprint_short": "fb232631d8d264a8",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "markertools": {
   "name": "markertools",
@@ -2585,7 +2657,8 @@
   "semantic_fingerprint": "5861af8281a54ce91908826542c4b4144e50019378b4f40e02736b8137770bca",
   "semantic_fingerprint_short": "5861af8281a54ce9",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "mast": {
   "name": "mast",
@@ -2618,7 +2691,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "mast2tab": {
   "name": "mast2tab",
@@ -2651,7 +2725,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "mastExtract": {
   "name": "mastExtract",
@@ -2687,7 +2762,8 @@
    "related_to": [
     "memerun"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "mastrun": {
   "name": "mastrun",
@@ -2743,7 +2819,8 @@
     "name": "xml",
     "format": "xml"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "mcscanx": {
   "name": "mcscanx",
@@ -2832,7 +2909,8 @@
     "format": "tsv",
     "content_type": "table"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "meme": {
   "name": "meme",
@@ -2865,7 +2943,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "meme2tab": {
   "name": "meme2tab",
@@ -2898,7 +2977,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "memerun": {
   "name": "memerun",
@@ -2952,7 +3032,8 @@
     "name": "meme",
     "format": "meme"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "mggxf": {
   "name": "mggxf",
@@ -2982,7 +3063,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "microgenome": {
   "name": "microgenome",
@@ -3020,7 +3102,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "microsyn": {
   "name": "microsyn",
@@ -3085,7 +3168,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "mirnaIdentify": {
   "name": "mirnaIdentify",
@@ -3099,7 +3183,8 @@
   "semantic_fingerprint": "316d97b879ea11157ac315c1100b12fb1dd15f4058ca5a9c8c36161da28977f1",
   "semantic_fingerprint_short": "316d97b879ea1115",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "mirnaTarget2": {
   "name": "mirnaTarget2",
@@ -3113,7 +3198,8 @@
   "semantic_fingerprint": "286da21b8268adf3799a6251eea4c04754ba023163b41ef581b03582fc6e6d77",
   "semantic_fingerprint_short": "286da21b8268adf3",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "mountain": {
   "name": "mountain",
@@ -3145,7 +3231,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "mpattern": {
   "name": "mpattern",
@@ -3178,7 +3265,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "multiEfp": {
   "name": "multiEfp",
@@ -3237,7 +3325,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "multisyn": {
   "name": "multisyn",
@@ -3302,7 +3391,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "nwAlign": {
   "name": "nwAlign",
@@ -3335,7 +3425,8 @@
     "tree"
    ]
   },
-  "status": "beta"
+  "status": "beta",
+  "params_status": "unknown"
  },
  "pafcomp": {
   "name": "pafcomp",
@@ -3373,7 +3464,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "pafref": {
   "name": "pafref",
@@ -3423,7 +3515,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "pafviz": {
   "name": "pafviz",
@@ -3477,7 +3570,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "partitionconflict": {
   "name": "partitionconflict",
@@ -3515,7 +3609,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "peakanno": {
   "name": "peakanno",
@@ -3573,7 +3668,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "peakdist": {
   "name": "peakdist",
@@ -3603,7 +3699,8 @@
    "produces": [
     "PEAK_ANNOTATION"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "peaktss": {
   "name": "peaktss",
@@ -3661,7 +3758,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "pep2codon": {
   "name": "pep2codon",
@@ -3724,7 +3822,8 @@
     "format": "fasta",
     "content_type": "dna"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "pfammotif": {
   "name": "pfammotif",
@@ -3757,7 +3856,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "phylotree": {
   "name": "phylotree",
@@ -3789,7 +3889,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "pileup": {
   "name": "pileup",
@@ -3819,7 +3920,8 @@
    "produces": [
     "PEAK_ANNOTATION"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "plotrna": {
   "name": "plotrna",
@@ -3894,7 +3996,8 @@
     "name": "pdf",
     "format": "pdf"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "preparespecies": {
   "name": "preparespecies",
@@ -3954,7 +4057,8 @@
     "name": "fasta",
     "format": "fasta"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "qdot": {
   "name": "qdot",
@@ -4012,7 +4116,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "qpcr": {
   "name": "qpcr",
@@ -4044,7 +4149,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "qpcrExp": {
   "name": "qpcrExp",
@@ -4076,7 +4182,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "qpcrproc": {
   "name": "qpcrproc",
@@ -4105,7 +4212,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "quickFamily": {
   "name": "quickFamily",
@@ -4138,7 +4246,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "recipBlast": {
   "name": "recipBlast",
@@ -4215,7 +4324,8 @@
     "subject": "--subjectSeqFile"
    },
    "output": "--outDirAndPrefix"
-  }
+  },
+  "params_status": "unknown"
  },
  "regionAnno": {
   "name": "regionAnno",
@@ -4245,7 +4355,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "regiondepth": {
   "name": "regiondepth",
@@ -4276,7 +4387,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "rnaplot": {
   "name": "rnaplot",
@@ -4345,7 +4457,8 @@
     "format": "svg"
    }
   ],
-  "status": "platform-limited"
+  "status": "platform-limited",
+  "params_status": "unknown"
  },
  "sambamcov": {
   "name": "sambamcov",
@@ -4376,7 +4489,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "sepChr": {
   "name": "sepChr",
@@ -4407,7 +4521,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "seqconvert": {
   "name": "seqconvert",
@@ -4440,7 +4555,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "seqlentrack": {
   "name": "seqlentrack",
@@ -4473,7 +4589,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "simplehmmscan": {
   "name": "simplehmmscan",
@@ -4525,7 +4642,8 @@
     "trimal"
    ]
   },
-  "status": "platform-limited"
+  "status": "platform-limited",
+  "params_status": "unknown"
  },
  "sricher": {
   "name": "sricher",
@@ -4554,7 +4672,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "supercircos": {
   "name": "supercircos",
@@ -4610,7 +4729,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "tableAppend": {
   "name": "tableAppend",
@@ -4639,7 +4759,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableCast": {
   "name": "tableCast",
@@ -4671,7 +4792,8 @@
   },
   "aliases": [
    "TableCast"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "tableColSel": {
   "name": "tableColSel",
@@ -4700,7 +4822,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableColSelect": {
   "name": "tableColSelect",
@@ -4729,7 +4852,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableCollapse": {
   "name": "tableCollapse",
@@ -4758,7 +4882,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableMelt": {
   "name": "tableMelt",
@@ -4787,7 +4912,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableMerge": {
   "name": "tableMerge",
@@ -4834,7 +4960,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "tableSplit": {
   "name": "tableSplit",
@@ -4863,7 +4990,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableTranspose": {
   "name": "tableTranspose",
@@ -4892,7 +5020,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tableUniq": {
   "name": "tableUniq",
@@ -4921,7 +5050,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tauIndex": {
   "name": "tauIndex",
@@ -4953,7 +5083,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "trimmsa": {
   "name": "trimmsa",
@@ -4986,7 +5117,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "twoSeqBlast": {
   "name": "twoSeqBlast",
@@ -5019,7 +5151,8 @@
    "related_to": [
     "recipBlast"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "upset": {
   "name": "upset",
@@ -5071,7 +5204,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "venn2": {
   "name": "venn2",
@@ -5137,7 +5271,8 @@
     "list2": "--List2"
    },
    "output": "--graph"
-  }
+  },
+  "params_status": "unknown"
  },
  "venn3": {
   "name": "venn3",
@@ -5211,7 +5346,8 @@
     "list3": "--List3"
    },
    "output": "--graph"
-  }
+  },
+  "params_status": "unknown"
  },
  "venn4": {
   "name": "venn4",
@@ -5284,7 +5420,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "venn5": {
   "name": "venn5",
@@ -5318,7 +5455,8 @@
     "venn3",
     "upset"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "venn6": {
   "name": "venn6",
@@ -5352,7 +5490,8 @@
     "venn3",
     "upset"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "violin": {
   "name": "violin",
@@ -5384,7 +5523,8 @@
     "volcano",
     "heatmap"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "virusRecomb": {
   "name": "virusRecomb",
@@ -5415,7 +5555,8 @@
    "produces": [
     "ASSEMBLY_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "visualizeblock": {
   "name": "visualizeblock",
@@ -5453,7 +5594,8 @@
    "related_to": [
     "mcscanx"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "kaks": {
   "name": "kaks",
@@ -5485,7 +5627,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "sixframe": {
   "name": "sixframe",
@@ -5539,7 +5682,8 @@
     "format": "fasta",
     "content_type": "protein"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "longestorf": {
   "name": "longestorf",
@@ -5595,7 +5739,8 @@
   ],
   "aliases": [
    "getLongestCompleteORF"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "protparam": {
   "name": "protparam",
@@ -5628,7 +5773,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "seqpattern": {
   "name": "seqpattern",
@@ -5661,7 +5807,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "bed2gff3": {
   "name": "bed2gff3",
@@ -5691,7 +5838,8 @@
    "produces": [
     "ANNOTATION_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "careclassify": {
   "name": "careclassify",
@@ -5724,7 +5872,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "subtree": {
   "name": "subtree",
@@ -5756,7 +5905,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "protsim": {
   "name": "protsim",
@@ -5789,7 +5939,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "iqtree": {
   "name": "iqtree",
@@ -5874,7 +6025,8 @@
     "format": "nwk",
     "content_type": "tree"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "trimal": {
   "name": "trimal",
@@ -5949,7 +6101,8 @@
     "format": "fasta",
     "content_type": "alignment"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "gblocks": {
   "name": "gblocks",
@@ -5982,7 +6135,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "goAnno": {
   "name": "goAnno",
@@ -6011,7 +6165,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "fasplit": {
   "name": "fasplit",
@@ -6044,7 +6199,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "famerge": {
   "name": "famerge",
@@ -6077,7 +6233,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "clearchar": {
   "name": "clearchar",
@@ -6106,7 +6263,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "gb2fa": {
   "name": "gb2fa",
@@ -6139,7 +6297,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "findhomolog": {
   "name": "findhomolog",
@@ -6172,7 +6331,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "taxparse": {
   "name": "taxparse",
@@ -6216,7 +6376,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "srr2ena": {
   "name": "srr2ena",
@@ -6246,7 +6407,8 @@
     "TABLE_OUT"
    ]
   },
-  "status": "network-required"
+  "status": "network-required",
+  "params_status": "unknown"
  },
  "sraxml2tab": {
   "name": "sraxml2tab",
@@ -6290,7 +6452,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "sranum2info": {
   "name": "sranum2info",
@@ -6319,7 +6482,8 @@
    "produces": [
     "TABLE_OUT"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "blat": {
   "name": "blat",
@@ -6352,7 +6516,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "seqrecommend": {
   "name": "seqrecommend",
@@ -6366,7 +6531,8 @@
   "semantic_fingerprint": "ad910d3e98e04087cec2e34c090a2a1f0219121229f3eee6a6af9afb2ae9b192",
   "semantic_fingerprint_short": "ad910d3e98e04087",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "seqfetch": {
   "name": "seqfetch",
@@ -6400,7 +6566,8 @@
     "trimal"
    ]
   },
-  "status": "network-required"
+  "status": "network-required",
+  "params_status": "unknown"
  },
  "pubmed": {
   "name": "pubmed",
@@ -6430,7 +6597,8 @@
     "TABLE_OUT"
    ]
   },
-  "status": "network-required"
+  "status": "network-required",
+  "params_status": "unknown"
  },
  "vcfAddID": {
   "name": "vcfAddID",
@@ -6444,7 +6612,8 @@
   "semantic_fingerprint": "4ebffe73b2954a81aa115991e771e6ed9b7d229ec6c5435edccf75e566d9699e",
   "semantic_fingerprint_short": "4ebffe73b2954a81",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "mimicVqsr": {
   "name": "mimicVqsr",
@@ -6458,7 +6627,8 @@
   "semantic_fingerprint": "d475e1699cea22882eb0b45b376cd97bbb1278e1650920c4420bb143b51ab2d7",
   "semantic_fingerprint_short": "d475e1699cea2288",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "DecodeIlluminaFqPool": {
   "name": "DecodeIlluminaFqPool",
@@ -6472,7 +6642,8 @@
   "semantic_fingerprint": "e1810695e50fbc8ac2b9f96799b2f6002535ec3d73f5596cb408aac9187b52af",
   "semantic_fingerprint_short": "e1810695e50fbc8a",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fastaIDAppender": {
   "name": "fastaIDAppender",
@@ -6486,7 +6657,8 @@
   "semantic_fingerprint": "fe928e5b150febce370dc44f5d9d32fc118fe10e194b56bb2ed25f2d4c22d953",
   "semantic_fingerprint_short": "fe928e5b150febce",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "rpkmCal": {
   "name": "rpkmCal",
@@ -6500,7 +6672,8 @@
   "semantic_fingerprint": "f39007fa473e1af57fc297b55f5fedad04373a2e19e539371df1b60448590eb1",
   "semantic_fingerprint_short": "f39007fa473e1af5",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fpkmToTpm": {
   "name": "fpkmToTpm",
@@ -6514,7 +6687,8 @@
   "semantic_fingerprint": "b7ecb9e6ff528e05621ffe98d4ce02f2e8f810552df5efe7c9c6a53e92511969",
   "semantic_fingerprint_short": "b7ecb9e6ff528e05",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "tpmCalc": {
   "name": "tpmCalc",
@@ -6591,7 +6765,8 @@
     "lenInfo": "--lenInfo"
    },
    "output": "--outTable"
-  }
+  },
+  "params_status": "unknown"
  },
  "autoMakeBlastDb": {
   "name": "autoMakeBlastDb",
@@ -6630,7 +6805,8 @@
     "fasta": "--inFasta"
    },
    "output": "--outBase"
-  }
+  },
+  "params_status": "unknown"
  },
  "autoRemoteBlast": {
   "name": "autoRemoteBlast",
@@ -6644,7 +6820,8 @@
   "semantic_fingerprint": "5ac70c62c830a14cbf7351d4cb6ecb38ca13e000dfd0813c5defb78ad9e8cdc0",
   "semantic_fingerprint_short": "5ac70c62c830a14c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "GoCompareBar": {
   "name": "GoCompareBar",
@@ -6658,7 +6835,8 @@
   "semantic_fingerprint": "b36eb65dfd09a3f71926b592e89aff73c01949b9e70415de749ef1525ec50254",
   "semantic_fingerprint_short": "b36eb65dfd09a3f7",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "plotRNAfoldloci": {
   "name": "plotRNAfoldloci",
@@ -6672,7 +6850,8 @@
   "semantic_fingerprint": "076c9c43bd68827c392a3f5a0667fc041bfd961b9e12c2c6d7f75ebef4d224ab",
   "semantic_fingerprint_short": "076c9c43bd68827c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "getLongestCompleteORF": {
   "name": "getLongestCompleteORF",
@@ -6687,7 +6866,8 @@
   "semantic_fingerprint_short": "d740418a6691a6c0",
   "alias_of": "longestorf",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "ExtractFeaturefromGFF3andGenome": {
   "name": "ExtractFeaturefromGFF3andGenome",
@@ -6701,7 +6881,8 @@
   "semantic_fingerprint": "90dd271331d1826f4f71d5d83fd39c2ae12b0351701ccfb5ec0efd0a55bf819c",
   "semantic_fingerprint_short": "90dd271331d1826f",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "Fasta36m10toTable": {
   "name": "Fasta36m10toTable",
@@ -6715,7 +6896,8 @@
   "semantic_fingerprint": "da03aa05578e504f2402adf76d1c00e4caf153d8e485bdf19356893149f4ae7a",
   "semantic_fingerprint_short": "da03aa05578e504f",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "FastaIDRenamer": {
   "name": "FastaIDRenamer",
@@ -6729,7 +6911,8 @@
   "semantic_fingerprint": "99982eb42db624fb0743d2c260eb40ebe1a3028da5d7ee849b7c02a44c75ed08",
   "semantic_fingerprint_short": "99982eb42db624fb",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "FastaIDSimplifier": {
   "name": "FastaIDSimplifier",
@@ -6743,7 +6926,8 @@
   "semantic_fingerprint": "9366211ed70eec6a9a5d4725022f2270aacec299bf0a4e3fc8a741e3afa0dd5b",
   "semantic_fingerprint_short": "9366211ed70eec6a",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "FastaLongestRepresentater": {
   "name": "FastaLongestRepresentater",
@@ -6757,7 +6941,8 @@
   "semantic_fingerprint": "b3979d128daa0c0b80e78449275d6d7720b8a798cb3b70aa0cf167ac0e6f64de",
   "semantic_fingerprint_short": "b3979d128daa0c0b",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "FoldStructureStater": {
   "name": "FoldStructureStater",
@@ -6771,7 +6956,8 @@
   "semantic_fingerprint": "f0af9ee6369f056adcbecef52257d98b91610731f188be8e9826e39d5f09c3ae",
   "semantic_fingerprint_short": "f0af9ee6369f056a",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "GXFOverlaper": {
   "name": "GXFOverlaper",
@@ -6785,7 +6971,8 @@
   "semantic_fingerprint": "6cfc21e4784b0b9908bdc02fb8fbc03fc5ce4ed51f5046351cda8e3b73813612",
   "semantic_fingerprint_short": "6cfc21e4784b0b99",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "NCBITaxonomy": {
   "name": "NCBITaxonomy",
@@ -6799,7 +6986,8 @@
   "semantic_fingerprint": "60b5401d6eea6be794bb7f934bfe393c7a8e713c2b669d976bb6aaeba2bba0d8",
   "semantic_fingerprint_short": "60b5401d6eea6be7",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "OneStepMirGraph": {
   "name": "OneStepMirGraph",
@@ -6813,7 +7001,8 @@
   "semantic_fingerprint": "eb25679a0c1efcf8a730ad575147e93a4583604e03b935583da34825b5a6197e",
   "semantic_fingerprint_short": "eb25679a0c1efcf8",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "OverlapGeneModels": {
   "name": "OverlapGeneModels",
@@ -6827,7 +7016,8 @@
   "semantic_fingerprint": "1fc024a1c4b1e4825967678c7148023b61b4d530e369a4f8ca97c8cc7b794ec2",
   "semantic_fingerprint_short": "1fc024a1c4b1e482",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "PredictMirSTAR": {
   "name": "PredictMirSTAR",
@@ -6841,7 +7031,8 @@
   "semantic_fingerprint": "e03c321474e8bbbbcf73e1383fb09f3aad3ddab121d4456b41b2ba55ea96ce4d",
   "semantic_fingerprint_short": "e03c321474e8bbbb",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "RNAplotAdvance": {
   "name": "RNAplotAdvance",
@@ -6855,7 +7046,8 @@
   "semantic_fingerprint": "90bd7319bd6f576cac0107dd3f478e4306b04e280acc1e1904d20fdbb63fa39a",
   "semantic_fingerprint_short": "90bd7319bd6f576c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "MIRPrediionResultStat": {
   "name": "MIRPrediionResultStat",
@@ -6869,7 +7061,8 @@
   "semantic_fingerprint": "bc3d23ffda9f3f5141202329e2bc201ab85d5c693054ab521814003dfff5eb77",
   "semantic_fingerprint_short": "bc3d23ffda9f3f51",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "ReciprocalBlast": {
   "name": "ReciprocalBlast",
@@ -6883,7 +7076,8 @@
   "semantic_fingerprint": "c82d253fd32301bb093dad74375c7c010c3788ea1d8d06368ffb41f7a1975797",
   "semantic_fingerprint_short": "c82d253fd32301bb",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "RegionGXFOverlapAnnotation": {
   "name": "RegionGXFOverlapAnnotation",
@@ -6897,7 +7091,8 @@
   "semantic_fingerprint": "cd9e4b460c127a9d362028180bf7855131a93603e01fcddf57dce9b3d7f32247",
   "semantic_fingerprint_short": "cd9e4b460c127a9d",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "TableCast": {
   "name": "TableCast",
@@ -6912,7 +7107,8 @@
   "semantic_fingerprint_short": "a24b17a93760c1e4",
   "alias_of": "tableCast",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "TableColSelector": {
   "name": "TableColSelector",
@@ -6926,7 +7122,8 @@
   "semantic_fingerprint": "ff0647862c906e6d001dfcd33ae5da527e7d2a6a22405f1783c8a889170791b0",
   "semantic_fingerprint_short": "ff0647862c906e6d",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "TableMelt": {
   "name": "TableMelt",
@@ -6940,7 +7137,8 @@
   "semantic_fingerprint": "c0ce11883d4783191a8b9b244316e807d4fdcdaaea21ef872923d487b6366408",
   "semantic_fingerprint_short": "c0ce11883d478319",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "downLoadNCBIFasta": {
   "name": "downLoadNCBIFasta",
@@ -6954,7 +7152,8 @@
   "semantic_fingerprint": "09c6dad4873e674d9ebe086caa4b168ccb0b003ec09c6c51e0f72140e1bedaf6",
   "semantic_fingerprint_short": "09c6dad4873e674d",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "extractFasta": {
   "name": "extractFasta",
@@ -6990,7 +7189,8 @@
    "related_to": [
     "extractFastaSub"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "extractFastaSub": {
   "name": "extractFastaSub",
@@ -7004,7 +7204,8 @@
   "semantic_fingerprint": "88c4123f6a2968421c8e1eb7c4f51ea67a13fbbf73f80eda6d1f9cc2d33a5b28",
   "semantic_fingerprint_short": "88c4123f6a296842",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "keggEnrichment": {
   "name": "keggEnrichment",
@@ -7018,7 +7219,8 @@
   "semantic_fingerprint": "ba94cf5563c2779ce12203669e3fa830256f7c6fdfcdad294e44adf72a1cca6a",
   "semantic_fingerprint_short": "ba94cf5563c2779c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "goAnnoPipe": {
   "name": "goAnnoPipe",
@@ -7032,7 +7234,8 @@
   "semantic_fingerprint": "e7068dd795389aee48783822eef23d012e2b38e87c97b64fd937e25ec05d6780",
   "semantic_fingerprint_short": "e7068dd795389aee",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "dnDsCalculate": {
   "name": "dnDsCalculate",
@@ -7065,7 +7268,8 @@
    "related_to": [
     "muscle"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "ssrMiner": {
   "name": "ssrMiner",
@@ -7079,7 +7283,8 @@
   "semantic_fingerprint": "85966aa2c38610f4d76e9f500afd634c9cb322ca292bc9a842086b8538d44be6",
   "semantic_fingerprint_short": "85966aa2c38610f4",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "checkPrimer": {
   "name": "checkPrimer",
@@ -7093,7 +7298,8 @@
   "semantic_fingerprint": "989da609819d223749c4f674edf63627b191a433877e08206ed692bffc0558f2",
   "semantic_fingerprint_short": "989da609819d2237",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "quickLocateSeqPattern": {
   "name": "quickLocateSeqPattern",
@@ -7107,7 +7313,8 @@
   "semantic_fingerprint": "86b9a27bf28b112c8c2662f1768387221aab588ecf645fd51f3f2644bbf25d6f",
   "semantic_fingerprint_short": "86b9a27bf28b112c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "blastXmlSummaryTable": {
   "name": "blastXmlSummaryTable",
@@ -7121,7 +7328,8 @@
   "semantic_fingerprint": "ec6d6f48e5af47c94a8e26f55085b5459b71576efc5be3c2fc6e0ebec62fce9d",
   "semantic_fingerprint_short": "ec6d6f48e5af47c9",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "emblToFasta": {
   "name": "emblToFasta",
@@ -7135,7 +7343,8 @@
   "semantic_fingerprint": "fd832fbaf66b7c348b03b7f0f8fa579576185b9be1b3ea48c5a556c8368490a1",
   "semantic_fingerprint_short": "fd832fbaf66b7c34",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "gbff2gff": {
   "name": "gbff2gff",
@@ -7149,7 +7358,8 @@
   "semantic_fingerprint": "5c4ee0c202bf45d86c3f5f3c5219be107ef7fd80ad8d43c882bc9d5e0e4bc1b4",
   "semantic_fingerprint_short": "5c4ee0c202bf45d8",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "extractGff3Region": {
   "name": "extractGff3Region",
@@ -7163,7 +7373,8 @@
   "semantic_fingerprint": "a86b0d1c82be367f9deaae101f0684d8f6da55264f6ced4d2a4a37c5d3e3736d",
   "semantic_fingerprint_short": "a86b0d1c82be367f",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "vcfBinCount": {
   "name": "vcfBinCount",
@@ -7177,7 +7388,8 @@
   "semantic_fingerprint": "3392af1cf7191b98a954eeed6e030d0b3169cdbcc8ab8ff48e8b6c268d6595b0",
   "semantic_fingerprint_short": "3392af1cf7191b98",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "getLongestORF": {
   "name": "getLongestORF",
@@ -7191,7 +7403,8 @@
   "semantic_fingerprint": "e00a1a61993f57f6f83b5ce4a5e70f354c8a38036f5f2d254f6fcb137c300e03",
   "semantic_fingerprint_short": "e00a1a61993f57f6",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "translater": {
   "name": "translater",
@@ -7205,7 +7418,8 @@
   "semantic_fingerprint": "17adff1cfd49588283bb08046e3c12b095bb06f2d8f0084e5b43b25fdf0cc051",
   "semantic_fingerprint_short": "17adff1cfd495882",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "makeFastaIndex": {
   "name": "makeFastaIndex",
@@ -7219,7 +7433,8 @@
   "semantic_fingerprint": "767fcefe2ab14a8f1e45f90363c8aaf90b8fea1d44d50e27f93b31fb3876bd39",
   "semantic_fingerprint_short": "767fcefe2ab14a8f",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "quickSplitFasta": {
   "name": "quickSplitFasta",
@@ -7233,7 +7448,8 @@
   "semantic_fingerprint": "47ea447b4b67dc2c7222d72b43e9f1eac7352e70ec23a8403b1b9bdfb2e7878c",
   "semantic_fingerprint_short": "47ea447b4b67dc2c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fastaFragmenter": {
   "name": "fastaFragmenter",
@@ -7247,7 +7463,8 @@
   "semantic_fingerprint": "18ff363572466d59c312ff0a1abe146c997cb27c9459aac51a48813ff74b9021",
   "semantic_fingerprint_short": "18ff363572466d59",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "eggNogMapperResult": {
   "name": "eggNogMapperResult",
@@ -7261,7 +7478,8 @@
   "semantic_fingerprint": "ae69dbcfe0e68ae918210d704dfc74a4078f526c709f1e037239e1d4647ffff2",
   "semantic_fingerprint_short": "ae69dbcfe0e68ae9",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "tandemDupFinder": {
   "name": "tandemDupFinder",
@@ -7275,7 +7493,8 @@
   "semantic_fingerprint": "a8c76550f63070116dfc4ff64134336246c815ce5a4ea62393e6541a0f7196c2",
   "semantic_fingerprint_short": "a8c76550f6307011",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "genePairExpCorr": {
   "name": "genePairExpCorr",
@@ -7289,7 +7508,8 @@
   "semantic_fingerprint": "740dad3593fdd094ccf33461fb50f0761a0b9344fe7aa61e515b0986a604b4f6",
   "semantic_fingerprint_short": "740dad3593fdd094",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "slurmScriptPrepare": {
   "name": "slurmScriptPrepare",
@@ -7303,7 +7523,8 @@
   "semantic_fingerprint": "de762ddeef55208c78f5726e051acc0bbc0c1b068d88a75d2a0bdedd12733f93",
   "semantic_fingerprint_short": "de762ddeef55208c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "geneExpFilter": {
   "name": "geneExpFilter",
@@ -7317,7 +7538,8 @@
   "semantic_fingerprint": "97ddf1eaf101393b82c0b2d86925eaab924f8f2326a27454602c535d21b81657",
   "semantic_fingerprint_short": "97ddf1eaf101393b",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "prepareFileFromMCScanXtoTBtools": {
   "name": "prepareFileFromMCScanXtoTBtools",
@@ -7331,7 +7553,8 @@
   "semantic_fingerprint": "06945b64aa4bc34679c78aa226f9666ee268688855031778a94e09953e851238",
   "semantic_fingerprint_short": "06945b64aa4bc346",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "blastXmlToTable": {
   "name": "blastXmlToTable",
@@ -7345,7 +7568,8 @@
   "semantic_fingerprint": "6ad2e77e064fe4b05b256128367322762431b0aa792c4e668955ad64c1be62f7",
   "semantic_fingerprint_short": "6ad2e77e064fe4b0",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "targetSoPipe": {
   "name": "targetSoPipe",
@@ -7359,7 +7583,8 @@
   "semantic_fingerprint": "16a94ca00c609e2bfca37da1661bb80beb39f301cc10b5d911929fa7d3a5e8c0",
   "semantic_fingerprint_short": "16a94ca00c609e2b",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "target2TablePipe": {
   "name": "target2TablePipe",
@@ -7373,7 +7598,8 @@
   "semantic_fingerprint": "6f23f1857ba68514ef32cf4c8196b2252896a702b9a47351a6052004ae240354",
   "semantic_fingerprint_short": "6f23f1857ba68514",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "mirIdentifierBasedOnTargetSo": {
   "name": "mirIdentifierBasedOnTargetSo",
@@ -7387,7 +7613,8 @@
   "semantic_fingerprint": "c957853682f11cb72d5455a9f858fac070a8268d2afdd857112e2247eefde28f",
   "semantic_fingerprint_short": "c957853682f11cb7",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "regionBlast": {
   "name": "regionBlast",
@@ -7401,7 +7628,8 @@
   "semantic_fingerprint": "8354d0c15a2fb5a5067b08f34fd219d555b8bc3d4dd6bdb230c8ac529798438d",
   "semantic_fingerprint_short": "8354d0c15a2fb5a5",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "findBestHomologyBatch": {
   "name": "findBestHomologyBatch",
@@ -7415,7 +7643,8 @@
   "semantic_fingerprint": "11a004bb0f7bbf9cf1208b9dc3c7893e3963f814af0fd5da098eecca7f5d6278",
   "semantic_fingerprint_short": "11a004bb0f7bbf9c",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "collinearityToRegion": {
   "name": "collinearityToRegion",
@@ -7429,7 +7658,8 @@
   "semantic_fingerprint": "632aa5428a826949d70fe612b96c367c01dc5a645116e71897a3b5452c7bf897",
   "semantic_fingerprint_short": "632aa5428a826949",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "pairWiseKaKsCalculator": {
   "name": "pairWiseKaKsCalculator",
@@ -7443,7 +7673,8 @@
   "semantic_fingerprint": "ccd1837376ce622bcf534fb81c6b4e1032fdb722a7e0b12ecbf4a358938aa3a2",
   "semantic_fingerprint_short": "ccd1837376ce622b",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "simpleBatchProcess": {
   "name": "simpleBatchProcess",
@@ -7457,7 +7688,8 @@
   "semantic_fingerprint": "9f15b22d902b7fcfef0294ad66fed1eeb73d53ebeedd729c45d92b3488ca70df",
   "semantic_fingerprint_short": "9f15b22d902b7fcf",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "quickGeneFamilyIdentification": {
   "name": "quickGeneFamilyIdentification",
@@ -7471,7 +7703,8 @@
   "semantic_fingerprint": "f14a2894f5fa146eefe7d5d288f64b1b867fd1c20edaf638b4cc9a8f05b07b14",
   "semantic_fingerprint_short": "f14a2894f5fa146e",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "gffCdsPhaseCorrector": {
   "name": "gffCdsPhaseCorrector",
@@ -7485,7 +7718,8 @@
   "semantic_fingerprint": "250060bf1b3a922d96b7e6d30cbb9538434f14537b2ef09a69f961654334775b",
   "semantic_fingerprint_short": "250060bf1b3a922d",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "parallelMD5Check": {
   "name": "parallelMD5Check",
@@ -7499,7 +7733,8 @@
   "semantic_fingerprint": "b34aa1f06e3d4497c7a31ac4e6196821cf96a89d81b796aeaa11cfc486ddc40a",
   "semantic_fingerprint_short": "b34aa1f06e3d4497",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "pafRefBaseCoverCalc": {
   "name": "pafRefBaseCoverCalc",
@@ -7513,7 +7748,8 @@
   "semantic_fingerprint": "0a9ad37ec36594e841121478072f523324a13caf0b0d4c33f727eb1d638bdba1",
   "semantic_fingerprint_short": "0a9ad37ec36594e8",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "sRNAseqReadLenStat": {
   "name": "sRNAseqReadLenStat",
@@ -7527,7 +7763,8 @@
   "semantic_fingerprint": "9576b1bb5f4351bf5bd8328d26dc4a06611e70f6a0a450af0cb13df1c8a1dc91",
   "semantic_fingerprint_short": "9576b1bb5f4351bf",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "sRNAReadTrimmer": {
   "name": "sRNAReadTrimmer",
@@ -7541,7 +7778,8 @@
   "semantic_fingerprint": "02c4ce79517811f31029123ff4794970a7451e8e9f2280b64886da9ca875ae16",
   "semantic_fingerprint_short": "02c4ce79517811f3",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "sRNAseqAdaperRemover": {
   "name": "sRNAseqAdaperRemover",
@@ -7555,7 +7793,8 @@
   "semantic_fingerprint": "15d184b680cc335f3039a3eceafad688fc283a5496d271471af9d15ccae8b0f2",
   "semantic_fingerprint_short": "15d184b680cc335f",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fastqParallelTrimmer": {
   "name": "fastqParallelTrimmer",
@@ -7569,7 +7808,8 @@
   "semantic_fingerprint": "50d2243045b2648987f3b4bdcf0ed011acb33cfe61299db8e948e0c88805e955",
   "semantic_fingerprint_short": "50d2243045b26489",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fastqParallelSubBest": {
   "name": "fastqParallelSubBest",
@@ -7583,7 +7823,8 @@
   "semantic_fingerprint": "737d38ad97c76db1125046e0993fbaed0fa9402d8c22251fec315c2436f5bb6b",
   "semantic_fingerprint_short": "737d38ad97c76db1",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fastqAndFasta": {
   "name": "fastqAndFasta",
@@ -7597,7 +7838,8 @@
   "semantic_fingerprint": "4978c0cca86b67e9b0c98e56bef31b9b887675daffcf43d1710c307ac81921a0",
   "semantic_fingerprint_short": "4978c0cca86b67e9",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "extractFeatureFromGTF": {
   "name": "extractFeatureFromGTF",
@@ -7611,7 +7853,8 @@
   "semantic_fingerprint": "91ce14a213d458e580b2e96b567b151b0c49d92b9042c2466df9284b10dc4abe",
   "semantic_fingerprint_short": "91ce14a213d458e5",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "sRNAseqCollasper": {
   "name": "sRNAseqCollasper",
@@ -7625,7 +7868,8 @@
   "semantic_fingerprint": "01ad8d3f8e155414181fc40a26f4d13d0faf8e36aab20980b4123179963400dc",
   "semantic_fingerprint_short": "01ad8d3f8e155414",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "generateMotifFromSequences": {
   "name": "generateMotifFromSequences",
@@ -7639,7 +7883,8 @@
   "semantic_fingerprint": "f5a26c753d1dccf4e22ccbad57ab91577be0f82c7f8624f7959f8c1da5d3995f",
   "semantic_fingerprint_short": "f5a26c753d1dccf4",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "sRNAseqDeCollasper": {
   "name": "sRNAseqDeCollasper",
@@ -7653,7 +7898,8 @@
   "semantic_fingerprint": "f744a9799aa12f0783947af23c399070d2f4fd57cee65d0cb0133c8ab76b0fc5",
   "semantic_fingerprint_short": "f744a9799aa12f07",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "findBestForkerRootTree": {
   "name": "findBestForkerRootTree",
@@ -7667,7 +7913,8 @@
   "semantic_fingerprint": "58e99e6ccb1203bdefe5cf711c75f57345b08dbde42dee4579565cf34f595046",
   "semantic_fingerprint_short": "58e99e6ccb1203bd",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "statFasta": {
   "name": "statFasta",
@@ -7703,7 +7950,8 @@
    "related_to": [
     "fastaExtract"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "goEnrichMerge": {
   "name": "goEnrichMerge",
@@ -7717,7 +7965,8 @@
   "semantic_fingerprint": "f5f21f73000b6e7073e6f40a88dab5f1a02499c8febcd768a4c7fe18dc3c53be",
   "semantic_fingerprint_short": "f5f21f73000b6e70",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "bigMarkerRandomDesign": {
   "name": "bigMarkerRandomDesign",
@@ -7731,7 +7980,8 @@
   "semantic_fingerprint": "3c5458a929f3db736c296ac270050f68f824ba0f4ad10d6e4140172f106c98de",
   "semantic_fingerprint_short": "3c5458a929f3db73",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "logo": {
   "name": "logo",
@@ -7764,7 +8014,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "msa": {
   "name": "msa",
@@ -7801,7 +8052,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "structure": {
   "name": "structure",
@@ -7835,7 +8087,8 @@
   },
   "aliases": [
    "genestructure"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "motif": {
   "name": "motif",
@@ -7897,7 +8150,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "volcano": {
   "name": "volcano",
@@ -7994,7 +8248,8 @@
     "format": "svg",
     "content_type": "plot"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "heatmap": {
   "name": "heatmap",
@@ -8087,7 +8342,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "pca": {
   "name": "pca",
@@ -8141,7 +8397,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "hclust": {
   "name": "hclust",
@@ -8224,7 +8481,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "dehist": {
   "name": "dehist",
@@ -8299,7 +8557,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "draw": {
   "name": "draw",
@@ -8334,7 +8593,8 @@
   },
   "aliases": [
    "tree"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "unrooted": {
   "name": "unrooted",
@@ -8366,7 +8626,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "rooting": {
   "name": "rooting",
@@ -8401,7 +8662,8 @@
   },
   "aliases": [
    "treeRooting"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "one-step": {
   "name": "one-step",
@@ -8436,7 +8698,8 @@
   },
   "aliases": [
    "onesteptree"
-  ]
+  ],
+  "params_status": "unknown"
  },
  "stat-fasta": {
   "name": "stat-fasta",
@@ -8468,7 +8731,8 @@
     "name": "xls",
     "format": "xls"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "cds2protein": {
   "name": "cds2protein",
@@ -8482,7 +8746,8 @@
   "semantic_fingerprint": "c757b07cd3beca9d55c1535f0dcdc2b9a6b4d27b9c6b73cf5ba34ca7cfff55b0",
   "semantic_fingerprint_short": "c757b07cd3beca9d",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "fasta-extract": {
   "name": "fasta-extract",
@@ -8496,7 +8761,8 @@
   "semantic_fingerprint": "6d5501b88ab80e70ed0c5039c1c08bee7694e7b50f42f4933056643db55d75ed",
   "semantic_fingerprint_short": "6d5501b88ab80e70",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "genestructure": {
   "name": "genestructure",
@@ -8583,7 +8849,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "complete"
  },
  "treeRooting": {
   "name": "treeRooting",
@@ -8637,7 +8904,8 @@
     "name": "nwk",
     "format": "nwk"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "seqlogo": {
   "name": "seqlogo",
@@ -8680,7 +8948,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "heatmap2": {
   "name": "heatmap2",
@@ -8694,7 +8963,8 @@
   "semantic_fingerprint": "3437424ac5b5b7d21470dd7cd5b40ed3ff7595cf80e3e02476b8a4e2a4f2c6a9",
   "semantic_fingerprint_short": "3437424ac5b5b7d2",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "make": {
   "name": "make",
@@ -8708,7 +8978,8 @@
   "semantic_fingerprint": "5e22a14a5cb3582580fe2c54c227f2c8465bee1811d0d490aa85232f3bf7b342",
   "semantic_fingerprint_short": "5e22a14a5cb35825",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "hmmsearch": {
   "name": "hmmsearch",
@@ -8762,7 +9033,8 @@
     "TSV"
    ]
   },
-  "status": "platform-limited"
+  "status": "platform-limited",
+  "params_status": "unknown"
  },
  "gxfAttr": {
   "name": "gxfAttr",
@@ -8810,7 +9082,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "kallisto": {
   "name": "kallisto",
@@ -8882,7 +9155,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "fimo": {
   "name": "fimo",
@@ -8920,7 +9194,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "xml2blasttab": {
   "name": "xml2blasttab",
@@ -8953,7 +9228,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "xml2pairwise": {
   "name": "xml2pairwise",
@@ -8986,7 +9262,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "fa2tab": {
   "name": "fa2tab",
@@ -9019,7 +9296,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "tab2fa": {
   "name": "tab2fa",
@@ -9052,7 +9330,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "muscle": {
   "name": "muscle",
@@ -9124,7 +9403,8 @@
     "format": "fasta",
     "content_type": "alignment"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "bestid": {
   "name": "bestid",
@@ -9157,7 +9437,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "getseqdb": {
   "name": "getseqdb",
@@ -9190,7 +9471,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "genomefilter": {
   "name": "genomefilter",
@@ -9223,7 +9505,8 @@
     "muscle",
     "trimal"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "notung": {
   "name": "notung",
@@ -9283,7 +9566,8 @@
     "name": "nwk",
     "format": "nwk"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "newickRename": {
   "name": "newickRename",
@@ -9336,7 +9620,8 @@
     "name": "nwk",
     "format": "nwk"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "hmmerSearch": {
   "name": "hmmerSearch",
@@ -9398,7 +9683,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "memeViz": {
   "name": "memeViz",
@@ -9451,7 +9737,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "gsea": {
   "name": "gsea",
@@ -9509,7 +9796,8 @@
     "name": "xls",
     "format": "xls"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "tfbsShift": {
   "name": "tfbsShift",
@@ -9563,7 +9851,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "mcscanxd": {
   "name": "mcscanxd",
@@ -9642,7 +9931,8 @@
     "name": "collinearity",
     "format": "collinearity"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "quickAnno": {
   "name": "quickAnno",
@@ -9675,7 +9965,8 @@
    "next_step": [
     "filterCScore"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "smart": {
   "name": "smart",
@@ -9730,7 +10021,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "mirnatarget": {
   "name": "mirnatarget",
@@ -9744,7 +10036,8 @@
   "semantic_fingerprint": "0dd732c4784caa3339a2cfd6ae61e8198e777e8e099227e15ca217666fc0b1cb",
   "semantic_fingerprint_short": "0dd732c4784caa33",
   "readiness": "LEGACY",
-  "verification": "DECLARED"
+  "verification": "DECLARED",
+  "params_status": "unknown"
  },
  "msy": {
   "name": "msy",
@@ -9817,7 +10110,8 @@
     "name": "svg",
     "format": "svg"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "gxfSplit": {
   "name": "gxfSplit",
@@ -9866,7 +10160,8 @@
     "name": "tsv",
     "format": "tsv"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "gxfIdAppender": {
   "name": "gxfIdAppender",
@@ -9914,7 +10209,8 @@
     "name": "gff3",
     "format": "gff3"
    }
-  ]
+  ],
+  "params_status": "unknown"
  },
  "tree": {
   "name": "tree",
@@ -9947,7 +10243,8 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  },
  "onesteptree": {
   "name": "onesteptree",
@@ -9998,6 +10295,7 @@
    "next_step": [
     "tree"
    ]
-  }
+  },
+  "params_status": "unknown"
  }
 }

@@ -35,3 +35,4 @@ relations:
   - PHYLOGENY_NWK
   next_step:
   - tree
+params_status: unknown

@@ -27,3 +27,4 @@ relations:
   next_step:
   - kallisto
   - tpmCalc
+params_status: unknown

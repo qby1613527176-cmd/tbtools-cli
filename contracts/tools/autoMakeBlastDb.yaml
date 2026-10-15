@@ -26,3 +26,4 @@ named_flags:
   inputs:
     fasta: --inFasta
   output: --outBase
+params_status: unknown

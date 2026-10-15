@@ -39,3 +39,4 @@ outputs:
 output_slots:
 - name: xml
   format: xml
+params_status: unknown

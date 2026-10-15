@@ -38,3 +38,4 @@ output_slots:
 - name: pep
   format: fasta
   content_type: protein
+params_status: unknown

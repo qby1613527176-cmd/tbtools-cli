@@ -57,3 +57,4 @@ named_flags:
     query: --querySeqFile
     subject: --subjectSeqFile
   output: --outDirAndPrefix
+params_status: unknown

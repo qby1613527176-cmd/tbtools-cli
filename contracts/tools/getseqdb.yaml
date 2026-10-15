@@ -25,3 +25,4 @@ relations:
   - BLAST_HITS
   next_step:
   - filterCScore
+params_status: unknown

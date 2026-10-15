@@ -63,3 +63,4 @@ output_slots:
 - name: collinearity
   format: tsv
   content_type: table
+params_status: complete

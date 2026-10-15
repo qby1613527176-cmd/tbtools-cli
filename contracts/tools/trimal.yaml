@@ -54,3 +54,4 @@ output_slots:
 - name: aln
   format: fasta
   content_type: alignment
+params_status: unknown
