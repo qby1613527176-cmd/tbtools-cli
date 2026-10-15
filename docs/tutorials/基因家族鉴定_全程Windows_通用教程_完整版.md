@@ -1653,11 +1653,12 @@ mkdir 08_rbh
 cd D:\[family]_sesame\results\08_rbh
 # 注意：recipBlast 输出由命令在当前目录生成（先建目录再 cd）
 
-# ① 先确认本机契约（v1.4.23 为位置参数 <query.fa> <subject.fa> <outPrefix>；参数形态一律以本机为准）：
+# ① 先确认本机契约（十四轮 docs P2: recipBlast 为 named-flag 形态
+#    --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix；参数形态一律以本机为准）：
 tbtools tool-describe recipBlast --json
 
 # ② 双向都在【完整蛋白组】上跑：query = [目标物种]全蛋白组，subject = 拟南芥全蛋白组
-tbtools recipBlast D:\[family]_sesame\data\genome\[Species].protein.fa D:\[family]_sesame\data\control\athaliana.protein.fa rbh
+tbtools recipBlast --querySeqFile D:\[family]_sesame\data\genome\[Species].protein.fa --subjectSeqFile D:\[family]_sesame\data\control\athaliana.protein.fa --outDirAndPrefix rbh
 
 # ③ 看结果（正反向 blast 表 + 互指对都在当前目录，先 dir 看实际文件名）
 dir
@@ -1669,7 +1670,7 @@ dir
 # ⑤ 逐成员记录：best hit 是否 AtLOG？是否互指？→ 填 4.11 证据矩阵的 F_RBH 列（Y/N/?，见 4.11 每列来源表）
 ```
 
-⚠️ **命令契约以当前版本为准**：recipBlast 在 v1.4.23 为**位置参数**形态（`<query.fa> <subject.fa> <outPrefix>`），不同版本可能不同——**一律先 `tbtools tool-describe recipBlast --json` 确认本机接口**，输出文件名/位置以 tool-describe 为准，不要照抄固定参数名。reciprocal best hits 对是核心结果（正反向各一份 blast 表 + 互指对）。
+⚠️ **命令契约以当前版本为准**：recipBlast 为 **named-flag** 形态（`--querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix`，ArgsParser 风格）——**一律先 `tbtools tool-describe recipBlast --json` 确认本机接口**，输出文件名/位置以 tool-describe 为准，不要照抄固定参数名。reciprocal best hits 对是核心结果（正反向各一份 blast 表 + 互指对）。
 > 🔧 **若 recipBlast 静默空跑（0 输出 0 报错）**：先 `tbtools tool-describe recipBlast --json` 确认参数签名；再 `tbtools tool-validate recipBlast <query> <subject> --json` 预检（会提示缺参）；输出文件名不是预期时先 `dir` 看实际文件名；仍异常则见 **13.10 历史记录**（v1.3.0 位置参数未绑定缺陷的 BLAST+ 手动退路，1.4.x 已修，仅作参考）。
 
 **GUI▶ 路径：走 10.10（推荐，一步双向）**：TBtools **Blast → Reciprocal Blast**：A = [目标物种]**全蛋白组**、B = 拟南芥**全蛋白组** → Start（内部自动建库）→ 结果含双向表 + 互指对，再按成员名单筛选（步骤见 **10.10**）。
@@ -2189,7 +2190,7 @@ hmmsearch ... 2>&1 | Tee-Object -FilePath logs\step.log
 
 | 命令 | 作用 | 用法要点 |
 |:--|:--|:--|
-| `recipBlast` | **双向最优比对（RBH），一步出互指对** | `recipBlast <query.fa> <subject.fa> <outPrefix> [--thread N]`（v1.4.23 为位置参数形态；不同版本可能不同，**一律以 `tbtools tool-describe recipBlast --json` 为准**；两个方向都应在完整蛋白组上跑，成员只作结果筛选） |
+| `recipBlast` | **双向最优比对（RBH），一步出互指对** | `recipBlast --querySeqFile q.fa --subjectSeqFile s.fa --outDirAndPrefix outPrefix`（named-flag 形态；不同版本可能不同，**一律以 `tbtools tool-describe recipBlast --json` 为准**；两个方向都应在完整蛋白组上跑，成员只作结果筛选） |
 | `twoSeqBlast` | 两条序列/两组序列比对 | `twoSeqBlast <query> <subject> <out> [--prog blastp]` |
 | `quickFamily` | 基因家族快速同源鉴定 | `quickFamily <refPep.fa> <familyIds.txt> <queryPep.fa> <outPrefix>` |
 | `findhomolog` | 找最优同源 | 37 FindBestHomology 引擎 |
