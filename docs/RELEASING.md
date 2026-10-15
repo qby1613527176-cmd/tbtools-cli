@@ -16,6 +16,16 @@
 - ⚠️ 发版前信号（自审 docs 第五轮 P2 建议）：**nightly-e2e 最近一次全绿**（含 writeback 严格
   + TTL `--check`；nightly 回写 verification_report 后 `last_passed_at` 刷新 = 保鲜链路活着）。
 - ⚠️ pytest 全量按默认 deselect 跳过真实执行（无 JAR 环境 skipped 数随套件变化, 以实际输出为准）；有 JAR 时 Tier-2 真实执行应跑
+- ⚠️ **验证四态 Go/No-Go 表**（十四轮 gate P2, GPT 审查二建议——发版前逐项确认, 不许把「本地过」当「引擎验证过」）:
+
+  | 验证态 | 含义 | Go 判据 |
+  |:--|:--|:--|
+  | 本地测试 | 机器上 run 的效果 | 全量子集绿（守卫/入口/文档/metadata） |
+  | CI(Actions) | 云端跑的效果 | main 或对应 tag 最近一次 Actions 绿 |
+  | 真实引擎 | Tier-2 真 JAR 执行 | 56 exec 证据刷新过（本地有 JAR 时跑 `TBTOOLS_WRITE_REPORT=1` 子集） |
+  | 跳过说明 | 环境缺失未跑 | 注明哪项/为何（无 JAR / Node 版本 / xvfb） |
+
+  发版 notes 声明验证时按此四态写明细, 别只写「pytest passed」。
 
 ## 发版步骤（逐项打勾）
 

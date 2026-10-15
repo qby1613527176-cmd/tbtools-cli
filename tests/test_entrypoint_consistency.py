@@ -75,3 +75,22 @@ def test_resolve_group_no_cmap_fallback():
     # KNOWN_GROUPS 应有具体分组值(不能是 engine 兜底)
     bad = [n for n, g in KNOWN_GROUPS.items() if g == "engine"]
     assert not bad, f"KNOWN_GROUPS 不允许 engine 兜底值: {bad}"
+
+
+def test_no_cmap_direct_read_in_consumer_modules():
+    """十四轮 arch/gate P2(GPT): cli.py/cli_top.py 不得新增 CATEGORY_MAP 直读——
+    AST 级检查(属性式访问 .CATEGORY_MAP 也能抓到, 比 import 正则强; registry discipline
+    白名单已把两文件出列但未防属性访问回流)。单一权威退役防回归锁定。"""
+    import ast
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    bad = []
+    for rel in ("tbtools_cli/cli.py", "tbtools_cli/cli_top.py"):
+        src = open(os.path.join(root, rel), encoding="utf-8").read()
+        tree = ast.parse(src)
+        for node in ast.walk(tree):
+            # 属性访问: _LG.CATEGORY_MAP / CATEGORY_MAP.get —— AST 抓所有形态
+            if isinstance(node, ast.Attribute) and node.attr == "CATEGORY_MAP":
+                bad.append(f"{rel}:{node.lineno} 直读 CATEGORY_MAP")
+    assert not bad, (
+        f"消费端模块新增 CATEGORY_MAP 直读(单一权威回流): {bad} —— 用 "
+        f"cli_load._group_of()(CommandSpec 优先)替代")
