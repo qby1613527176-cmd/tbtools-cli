@@ -68,7 +68,7 @@ def test_resolve_group_no_cmap_fallback():
     守卫: specs 中非 engine 命令若经 _resolve_group 解析仍回 engine → 违规。"""
     import sys
     sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from tbtools_cli.command_spec import (build_command_specs, clear_specs_cache,
+    from tbtools_cli.command_spec import (clear_specs_cache,
                                           KNOWN_GROUPS)
     clear_specs_cache()
     # KNOWN_GROUPS 应有具体分组值(不能是 engine 兜底)
