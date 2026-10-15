@@ -347,6 +347,11 @@ def _make_passthrough(name, group=None):
             except Exception:
                 _ts_spec = None
             _tstyle = getattr(_ts_spec, "thread_style", "named_flag") if _ts_spec else "named_flag"
+            # 十三轮 arch P1-2 余项: plot 引擎(runner=plot, xvfb 渲染)不支持线程——
+            # 与 run_plot 层警告一致(动态命令也能识别, 不靠 specs 逐条标注)
+            if _ts_spec is not None and getattr(_ts_spec, "runner", "") == "plot" \
+                    and _tstyle == "named_flag":
+                _tstyle = "unsupported"
             if _tstyle == "unsupported":
                 print(f"⚠️ 警告: {name} 引擎不支持 --threads 参数, 已忽略(thread_style=unsupported)",
                       file=sys.stderr)

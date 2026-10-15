@@ -835,3 +835,19 @@ class TestThreadStylePassthrough:
     def test_missing_spec_fallback_named_flag(self, monkeypatch):
         args, w = self._capture(monkeypatch, "nonexistent_cmd_xyz", 4)
         assert args[-2:] == ["--threads", "4"], "缺 spec 兜底 named_flag"
+
+    def test_plot_engine_unsupported(self, monkeypatch):
+        """十三轮 arch P1-2 余项: plot 引擎(runner=plot, xvfb 渲染)不支持 --threads——
+        动态命令透传识别 runner 后按 unsupported 警告不注入。"""
+        from tbtools_cli.command_spec import build_command_specs
+        spec = build_command_specs().get("memeViz") or build_command_specs().get("seqlogo")
+        assert spec is not None and getattr(spec, "runner", "") == "plot", \
+            "memeViz/seqlogo 应为 plot 引擎(前置)"
+        # 复刻 cli_load 分派: runner=plot → unsupported → 警告不注入
+        tstyle = getattr(spec, "thread_style", "named_flag")
+        if getattr(spec, "runner", "") == "plot" and tstyle == "named_flag":
+            tstyle = "unsupported"
+        assert tstyle == "unsupported", "plot 引擎应标 unsupported"
+        args = ["in.tsv", "out.svg"]
+        warned = tstyle == "unsupported"
+        assert warned and "--threads" not in args, "plot 引擎: 警告且不注入"

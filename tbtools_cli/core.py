@@ -191,8 +191,15 @@ def ensure_bridge(bridge_name: str) -> None:
 # ---- xvfb-run 包装 ----
 def run_plot(java_args: list, verbose: bool = False, quiet: bool = False, use_xvfb: bool = True,
              command_name: str | None = None, output_hint: str | None = None,
-             group: str | None = None) -> int:
-    """执行绘图引擎（需要 xvfb-run）"""
+             group: str | None = None, threads: int | None = None) -> int:
+    """执行绘图引擎（需要 xvfb-run）
+
+    threads: 十三轮 arch P1-2 余项——plot 引擎不支持 --threads, 收到非 None 时
+    警告并忽略(防静默吞参: 此前静态命令签名收 threads 但函数体从不消费)。
+    """
+    if threads is not None:
+        print(f"⚠️ 警告: {command_name or 'plot'} 引擎不支持 --threads 参数, 已忽略"
+              f"(绘图渲染单线程, thread_style=unsupported)", file=sys.stderr)
     if use_xvfb and shutil.which("xvfb-run"):
         full_args = ["xvfb-run", "-a"] + java_args
     else:
