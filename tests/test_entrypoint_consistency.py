@@ -42,3 +42,36 @@ def test_specs_census_stable():
     的 registry/manual 来源)——正向守卫(来源 ⊆ specs)才是防幽灵的正确方向。"""
     specs = _specs_set()
     assert 280 <= len(specs) <= 320, f"specs 总量异常: {len(specs)}(权威 298±22)"
+
+
+def test_group_consistency():
+    """十四轮 arch P1 配套守卫: 生产端(CommandSpec 构建的 spec.group) 与消费端
+    (cli_load._group_of 运行时解析) 分组必须一致——迁移期若只迁一端立即分裂,
+    现有守卫不覆盖该方向(守卫只测 KEY ⊆ specs, 不测构建期 vs 消费期分组一致)。"""
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from tbtools_cli.command_spec import build_command_specs, clear_specs_cache
+    from tbtools_cli.cli_load import _group_of
+    clear_specs_cache()
+    specs = build_command_specs()
+    mismatch = [(n, spec.group, _group_of(n))
+                for n, spec in specs.items()
+                if (_group_of(n) or "engine") != spec.group]
+    assert not mismatch, (
+        f"生产/消费分组分裂({len(mismatch)}): 命令[(name, spec.group, _group_of)]——"
+        f"生产端(command_spec._resolve_group)与消费端(cli_load._group_of)必须同批迁移")
+
+
+def test_resolve_group_no_cmap_fallback():
+    """十四轮 arch 第四步: 16 个 ENGINE_REGISTRY 命令已从硬编码 engine 兜底迁到
+    KNOWN_GROUPS 显式分组——任何命令不得再静默落 engine 字面量(除非真属 engine 组内核)。
+    守卫: specs 中非 engine 命令若经 _resolve_group 解析仍回 engine → 违规。"""
+    import sys
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from tbtools_cli.command_spec import (build_command_specs, clear_specs_cache,
+                                          KNOWN_GROUPS, _resolve_group)
+    clear_specs_cache()
+    specs = build_command_specs()
+    # KNOWN_GROUPS 应有具体分组值(不能是 engine 兜底)
+    bad = [n for n, g in KNOWN_GROUPS.items() if g == "engine"]
+    assert not bad, f"KNOWN_GROUPS 不允许 engine 兜底值: {bad}"
