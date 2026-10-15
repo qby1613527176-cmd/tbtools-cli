@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.2] - 2026-10-15
+
+### 单一权威退役渐进增量 + 入口纪律明文化
+
+- **单一权威退役**(arch P2-1 渐进增量): `cli.py`/`cli_top.py` 的 CATEGORY_MAP 运行时直读 5 处清零——枚举/分组兜底改 `_group_of()`(CommandSpec 优先, 评审 #62 模式); cli.py 移除失效 CATEGORY_MAP import; 运行时直读仅剩 cli_load 本体 + command_spec 构建源
+- **入口一致性守卫**(docs P2): `CATEGORY_MAP ⊆ specs` / `tbplot.sh ⊆ specs` / 总量稳定——gxfSort 幽灵教训固化; 守卫加入 registry discipline 白名单(审计读取是正当目的)
+- **「新增工具必须走 CommandSpec」明文化**(arch P2 方案②): CONTRIBUTING/RELEASING 新增命令路径重构——CommandSpec 唯一正式契约入口, 禁止只塞 legacy 来源, 入口一致性守卫为提交前必跑
+- **schema_capable 权威化**(十轮 P3-1): README「64 schema-capable」此前无守卫手写面——gen_metadata counts 加 `schema_capable` 权威数字(与 version --json 同源, 64 实测为真实契约数)
+- **文档修正**(十轮 P3): agent-protocol §10 示例版本 1.3.0 → 1.5.1; RELEASING 补「全量数必须带 collect 基线」纪律(worklog 计数漂移误判教训)
+- **门禁**: pytest 121+ passed(守卫 15 + 入口一致性 3 + docs 10 + metadata 15 + cli 全量) / ruff 0 / mypy 0 / --check 505 surface 全同步
+
 ## [1.5.1] - 2026-10-15
 
 ### 十三轮五视角自审全闭环(GPT 两份评价)——tool-submit 修复 + 证据身份闭环
