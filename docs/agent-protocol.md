@@ -203,7 +203,7 @@ steps:
 {
   "command": "volcano",
   "invocation": "...",
-  "tbtools_cli": "1.3.0",
+  "tbtools_cli": "1.5.1",
   "exit_code": 0,
   "parameters": {...},
   "outputs": ["/abs/out.svg"],

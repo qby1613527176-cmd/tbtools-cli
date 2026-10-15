@@ -288,6 +288,10 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
         # (与 version --json 一致)——此前 counts.md 用 len(CLI_TOOLS)=82, version --json
         # 用 specs kind=="tool"=80, 两个权威自动源互相矛盾; 191 是人读页脚残留口径。
         "tools": sum(1 for s in _bcs_specs().values() if s.kind == "tool"),  # 80: 与 version --json 同源
+        # 十三轮 P3-1 修复: schema_capable 进权威数字(README "64" 此前无守卫手写面;
+        # 与 version --json / readiness 同源——有 schema 契约(inputs/outputs/parameters/slots)的工具数)
+        "schema_capable": sum(1 for _s in _bcs_specs().values()
+                              if _s.inputs or _s.outputs or _s.output_slots or _s.parameters),
         "bridges": len([f for f in os.listdir(os.path.join(ROOT, "bridges")) if f.endswith(".java")]),  # 118
         "pitfall_hints": len(_core.PITFALL_HINTS),  # 49: 动态
     }
