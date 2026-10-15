@@ -241,6 +241,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 | [`docs/README.md`](docs/README.md) | **维护者导航**（自审 F9）：活 plan / 编年史 / 评审流向 / 生成物 vs 手写物——接续会话入口 |
 | [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80 个 CLI 工具（18 类功能分组）+ Java 桥 Javadoc(数见 counts.md)（输入格式权威来源）+ 49 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值,自动生成） |
+| [`docs/tutorials/基因家族鉴定_全程Windows_通用教程_完整版.md`](docs/tutorials/基因家族鉴定_全程Windows_通用教程_完整版.md) | **生信实战教程**（十四轮 docs）：植物基因家族鉴定全程 Windows 通用教程（TBtools GUI + tbtools-cli 双轨, 任意物种/家族, v3.3-Win 封版） |
 
 ```bash
 # 快速查用法（不用翻手册）：
