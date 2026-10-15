@@ -71,7 +71,6 @@ def test_resolve_group_no_cmap_fallback():
     from tbtools_cli.command_spec import (build_command_specs, clear_specs_cache,
                                           KNOWN_GROUPS)
     clear_specs_cache()
-    specs = build_command_specs()
     # KNOWN_GROUPS 应有具体分组值(不能是 engine 兜底)
     bad = [n for n, g in KNOWN_GROUPS.items() if g == "engine"]
     assert not bad, f"KNOWN_GROUPS 不允许 engine 兜底值: {bad}"
