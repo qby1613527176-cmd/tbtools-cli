@@ -18,6 +18,9 @@ WHITELIST = {
     "tests/test_cli.py",
     "tests/test_contract.py",
     "tests/test_command_spec.py",
+    # 十三轮 docs P2: 入口一致性守卫——审计 CATEGORY_MAP ⊆ specs / tbplot.sh ⊆ specs,
+    # 读取 legacy 是审计目的(防幽灵工具), 非功能依赖
+    "tests/test_entrypoint_consistency.py",
     # Phase 3 完成(2026-09-26): cli.py/cli_top.py/test_metadata.py 已全部迁移到 CommandSpec
     # ——grandfather 清单清零,仅剩定义本体+构建源+扫描器
 }
