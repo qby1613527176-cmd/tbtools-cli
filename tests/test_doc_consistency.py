@@ -43,6 +43,23 @@ class TestDocConsistency:
         assert m, "README 缺 Schema-capable 数"
         assert int(m.group(1)) == schema, f"README Schema-capable({m.group(1)}) != 实际({schema})"
 
+    def test_schema_capable_version_json(self):
+        """十四轮 gate/arch P1(GPT): version --json schema_capable == README == counts.md
+        三方同源——此前 counts.md 有、JSON 无, Agent 消费面不完整。"""
+        import json
+        import sys
+        sys.path.insert(0, str(ROOT))
+        import subprocess
+        r = subprocess.run([sys.executable, "-m", "tbtools_cli.cli", "version", "--json"],
+                           capture_output=True, text=True, cwd=ROOT, timeout=60)
+        d = json.loads(r.stdout)
+        assert "schema_capable" in d, "version --json 缺 schema_capable 字段"
+        counts = (ROOT / "docs" / "_generated" / "counts.md").read_text(encoding="utf-8")
+        m = re.search(r"schema_capable: (\d+)", counts)
+        assert m, "counts.md 缺 schema_capable"
+        assert d["schema_capable"] == int(m.group(1)), \
+            f"version --json({d['schema_capable']}) != counts.md({m.group(1)})"
+
     def test_execution_verified_consistent(self):
         """README 权威源行 execution_verified == version --json"""
         import json

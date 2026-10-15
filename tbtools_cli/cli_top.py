@@ -131,6 +131,12 @@ def register_top(cli, _LG):
                 "auto_commands": auto_count,
                 "rpc_methods": 188,  # TBtools JAR 内置 RPC 方法数(外部能力), 同 counts.md 口径
                 "tools": sum(1 for s in build_command_specs().values() if s.kind == "tool"),
+                # 十四轮 gate/arch P1(GPT): version --json 暴露 schema_capable——
+                # 与 gen_metadata counts.md 同谓词(inputs/outputs/slots/parameters),
+                # Agent 消费面完整(此前 counts.md 有、JSON 无, 三方权威不同值)
+                "schema_capable": sum(
+                    1 for _s in build_command_specs().values()
+                    if _s.inputs or _s.outputs or _s.output_slots or _s.parameters),
                 "bridges": bridge_count,
                 "pitfall_hints": len(PITFALL_HINTS),
                 "metadata_commands": len(_read_command_metadata()),
