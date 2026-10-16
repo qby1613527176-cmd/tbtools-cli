@@ -28,7 +28,7 @@ python3 scripts/gen_metadata.py --check   # metadata 与运行时一致（防漂
 | 文件 | 职责 |
 |---|---|
 | `tbtools_cli/auto_commands.py` | `ENGINE_REGISTRY` 表驱动命令定义（name/kind/class/xmx/runner/doc）+ 特殊手写 impl |
-| `tbtools_cli/cli_tools_registry.py` | 82 个 CLI 工具共享注册表（`tool <name>` 兜底转发） |
+| `tbtools_cli/cli_tools_registry.py` | CLI 工具共享注册表（`tool <name>` 兜底转发；注册表条数与权威 `kind==tool` 计数 80 口径不同——含 2 条归一化为 direct 的条目, 以 `tbtools version --json` 的 tools 字段为准） |
 | `tbtools_cli/command_metadata.json` | **唯一数据源**(由 `scripts/gen_metadata.py` 生成/校验; 当前数量见 `docs/_generated/counts.md`) |
 | `tbtools_cli/cli.py` | 入口 + 分组手动命令（~530 行;拆分后瘦身） |
 | `tbtools_cli/cli_load.py` | 动态注册（分组映射/加载/纠错） |

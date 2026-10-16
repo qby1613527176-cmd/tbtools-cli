@@ -21,10 +21,10 @@
 - 🛠 **维护者** → [docs/README.md](docs/README.md)(活 plan) · [docs/_worklog/](docs/_worklog/)(审计历史)
 
 > 把 [TBtools-II](https://github.com/CJ-Chen/TBtools)（2.535+）的全部功能封装成命令行，Linux/WSL 下免 GUI 直接使用。
-> **298 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 64**(有 inputs 契约) | Registered 298(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 188 RPC + 80 CLI 工具 + 118 Java 桥 + 引擎反射(逃生舱)。
+> **298 Agent-facing tools**(注册): **Fully Agent-ready 60** | **Schema-capable 64**(至少声明 inputs/outputs/output_slots/parameters 之一的工具) | Registered 298(`version --json` 实时统计)——底层能力: 200+ 绘图/分析 + 188 RPC + 80 CLI 工具 + 118 Java 桥 + 引擎反射(逃生舱)。
 > 分级定义: FULL=契约完整(inputs+outputs+capabilities+stable; parameters 恒声明, 无参数工具视为"已声明无参数");PARTIAL=部分契约;LEGACY=仅注册。**核心竞争力不是包装数量,而是把传统生信工具转换成机器可理解/可验证/可组合的工具契约**。
 > **成熟度四维显式映射**(product 十一轮 P3): `readiness`=契约完整度(FULL/PARTIAL/LEGACY) · `verification`=执行验证层级(EXECUTION_VERIFIED 56) · `semantic_checked`=内容级语义断言(11) · `env_fingerprint`=环境适用性(同构环境可迁移)。**FULL 契约 ≠ 已验证执行**——三词各司其职, 勿混读。
-> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(56)/semantic_checked(内容级断言工具数), 单工具证据详见 `tool-describe <命令> --json` verification_details(level/env_fingerprint/semantic_checked/domain_note)。
+> 数字权威源: `tbtools version --json` / [docs/_generated/counts.md](docs/_generated/counts.md) / [docs/_generated/tool-readiness.md](docs/_generated/tool-readiness.md)(自动生成防漂移)——含 agent_ready_full(60)/execution_verified(56)/semantic_checked(内容级断言工具数), 单工具证据详见 `tool-describe <命令> --json` verification_details(level/env_fingerprint/semantic_checked/domain_note)。⚠️ execution_verified 绑定**验证环境**(env_fingerprint=JAR+插件+外部二进制集合哈希)——本机经 config.sh 注入不同 JAR 时可能低于发布数 56(环境指纹失配→降级), 属预期保守语义, 见 agent-protocol §6.1。
 
 <div align="center">
 

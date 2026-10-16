@@ -34,10 +34,13 @@ class TestDocConsistency:
     # (--check 只扫生成式 surface, 门面文档手写数字无机器核对 → 漂移无感再生)。
 
     def test_schema_capable_consistent(self):
-        """README hero/正文 Schema-capable 64 == 有 inputs 契约的命令数(command_metadata)"""
+        """README hero/正文 Schema-capable 64 == 权威谓词(十五轮 docs F1: 统一 OR 谓词——
+        inputs/outputs/output_slots/parameters 任一存在, 与 gen_metadata/version --json 同源;
+        此前本守卫用 inputs-only 与权威 OR 谓词不一致, 数值一致是巧合)"""
         import json
         meta = json.loads((ROOT / "tbtools_cli" / "command_metadata.json").read_text(encoding="utf-8"))
-        schema = sum(1 for e in meta.values() if e.get("inputs"))
+        schema = sum(1 for e in meta.values()
+                     if e.get("inputs") or e.get("outputs") or e.get("output_slots") or e.get("parameters"))
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         m = re.search(r"Schema-capable (\d+)", readme)
         assert m, "README 缺 Schema-capable 数"

@@ -84,7 +84,8 @@ PITFALL_HINTS = {
 }
 
 
-# PITFALL 英文版(Top10 高频命令;其余 en 模式回退中文——完整翻译见 backlog)
+# PITFALL 英文版(十五轮 docs P3: 实测 EN 51 条全覆盖 ZH 49 + 2 独有——此前注释误标 Top10;
+# en 模式全部命令都有英文提示, 无需回退中文)
 PITFALL_HINTS_EN = {
     "hclust": "hclust requires a THREE-column distance file: GeneA\tGeneB\tdistance (not an expression matrix!)",
     "msy": "Microsynteny: simplified GFF must use NUMERIC chromosome names; gene name in column 2; coordinates in one column",

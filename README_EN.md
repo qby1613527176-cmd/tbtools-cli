@@ -73,7 +73,7 @@ Agent / CLI / Script
 
 - `core.py` split: `errors.py` (error codes) + `runtime/java.py` (execution/input-protection/provenance)
 - Input protection: engine side-effects on user files are snapshotted & restored
-- 49 documented pitfalls; bilingual hints (Chinese default, `--lang en`)
+- 49 documented pitfalls; bilingual hints (Chinese default, `--lang en` → 51 条英文全覆盖, 十五轮实测)
 - Supply chain: `fetch-jar` records SHA256; `doctor` verifies it
 
 ## Command Groups
