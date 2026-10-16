@@ -474,6 +474,7 @@ tbtools-cli/
 | MCP | ✅ | ✅ | ✅ | ✅ |
 | Workflow/Job | ✅ | ✅ | ✅ | ⚠️ 进程组操作受限 |
 | 外部二进制依赖 | ✅ | ✅ | 部分 | 部分 |
+| JDK(运行 tbtools-cli 本体) | ✅ Java 11+ | ✅ Java 11+ | ✅ Java 11+ | ✅ Java 11+(JRE 不够, 需 JDK——java/runtme 需 javac 编译桥) |
 
 ## ⚠️ Known Limitations
 
