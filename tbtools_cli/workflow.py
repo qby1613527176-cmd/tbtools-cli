@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import os
 import sys
+import json  # 十五轮: _workflow_recipes 读 ai/workflows.json 用(此前模块无 import json, NameError 被 except 吞掉返回 [])
 
 # Identity 层(评审 #108 P1-4 拆分): canonical/fingerprint 常量与函数统一从 identity.py 引入——
 # workflow 不再自行定义第二份(消除双源); command_spec 也只向下依赖 identity。
@@ -272,6 +273,22 @@ def graph(wf: dict) -> str:
     return "\n".join(lines)
 
 # ── 输出语义验证器(评审 #52 P1-11)──
+_WF_RECIPES_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ai", "workflows.json")
+
+
+def _workflow_recipes() -> list:
+    """读 ai/workflows.json 参考型配方(十五轮: 让孤儿文件进入规划器路径)。
+    不存在/损坏 → 空列表(规划器正常回落契约图 DFS)。"""
+    try:
+        # 模块级常量(函数内 __file__ 在 python -c / 部分调用上下文可能解析异常,
+        # 此前被 except 吞掉返回 []——用模块级显式路径消除歧义)
+        _d = json.load(open(_WF_RECIPES_PATH, encoding="utf-8"))
+        return _d.get("workflows", []) if isinstance(_d, dict) else []
+    except Exception:
+        return []
+
+
 def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                    max_steps: int = 4) -> dict:
     """目标驱动规划: 输入类型 + 目标/输出类型 → relations/capability 推导工具链。
@@ -455,6 +472,20 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
 
     # DFS 契约图搜索(深度≤max_steps; 有向无环: 不回访链内节点)
     plans = []  # [(chain, edge_fmts)]
+    # 十五轮 product P1(GPT): ai/workflows.json 曾为孤儿文件(代码零读取, docs 宣称
+    # plan-able 名不副实)——作为「参考型配方」种子打进规划器: goal 匹配 workflow
+    # id/标题时, 其 steps 工具链作为高置信候选(仍走契约图校验), 共享同一认知入口。
+    # ⚠️ 必须在 plans=[] 之后 append(此前放在重置前被清空, rna-seq 仍返回空 plan)。
+    for _wf in _workflow_recipes():
+        _id = (_wf.get("id") or "").lower()
+        _title = (_wf.get("title") or "").lower()
+        if goal_l in _id or goal_l in _title or _id in goal_l:
+            _chain = [st.get("tool", "").strip() for st in (_wf.get("steps") or [])]
+            _chain = [c for c in _chain if c in specs]
+            if _chain:
+                # 配方命中: 边格式 None(未知)会让 score 扣成负分, 但配方是高置信信号——
+                # 用 ("recipe", None) 边格式标记, score 见 recipe 边给基础分
+                plans.append((_chain, [("recipe", None)] * len(_chain)))
     def _dfs(chain: list, fmts: list):
         cur = chain[-1]
         if _goal_match(cur) and chain:
@@ -507,6 +538,11 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if not chain:
             return 0.0, []
         reasons, score = [], 0.0
+        # 十五轮 product P1: 配方种子链(edge 标记 ('recipe', None))——已公开配方命中的
+        # 链是高置信信号, 给基础分而非因边未知扣成负分(此前 confidence=-0.5 误导)
+        if fmts and isinstance(fmts[0], tuple) and fmts[0] and fmts[0][0] == "recipe":
+            reasons.append("recipe_seed")
+            score += 0.4
         if input_format and _accepts(specs[chain[0]], input_format):
             reasons.append("input_format_exact"); score += 0.3
         if output_format and output_format.lower() in _produces(specs[chain[-1]]):
