@@ -40,5 +40,6 @@
    "name": "gff3",
    "format": "gff3"
   }
- ]
+ ],
+ "params_status": "unknown"
 }

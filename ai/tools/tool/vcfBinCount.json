@@ -14,5 +14,6 @@
  "semantic_fingerprint": "3392af1cf7191b98a954eeed6e030d0b3169cdbcc8ab8ff48e8b6c268d6595b0",
  "semantic_fingerprint_short": "3392af1cf7191b98",
  "readiness": "LEGACY",
- "verification": "DECLARED"
+ "verification": "DECLARED",
+ "params_status": "unknown"
 }

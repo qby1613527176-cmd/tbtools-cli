@@ -70,6 +70,7 @@
    ]
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "a6ef8c68b48d855740fed74a0f31031bf5b9c82bdb16583bfb909845fea07d1d",

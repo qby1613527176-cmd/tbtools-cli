@@ -42,6 +42,7 @@
    "format": "tsv"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "07255e22ebbf3590415fc668c3605d5ab83d4bc07cbe0ca78c029eacd3af4317",

@@ -59,6 +59,7 @@
    "format": "png"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "577e1936778b6ce4eb15a2a119a748478a3ea22df89512b2fd5723ff760fb3ce",

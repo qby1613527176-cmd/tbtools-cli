@@ -46,6 +46,7 @@
    "format": "svg"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "76bb010f8636eee18689de38319c0e81e02ee64d4530a054f646932fb95dae61",

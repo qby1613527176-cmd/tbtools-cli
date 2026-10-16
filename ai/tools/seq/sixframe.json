@@ -47,6 +47,7 @@
    "content_type": "protein"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "e85651d21e62e8848a9daa666eed104dba8b7ca2a8af9927c7001b24fe257f13",

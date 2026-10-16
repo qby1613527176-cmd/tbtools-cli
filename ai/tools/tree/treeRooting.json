@@ -46,6 +46,7 @@
    "format": "nwk"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "f8ee47fc87354f1f48895d86f83c38171ef85b3337ed3665463bc1ff6bb5ebd8",

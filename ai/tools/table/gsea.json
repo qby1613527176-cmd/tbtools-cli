@@ -51,6 +51,7 @@
    "format": "xls"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "be1f78a0fe653378085ea341266866ffb32c204f9b712f516aeefdf3420de28f",

@@ -89,6 +89,7 @@
    "note": ""
   }
  ],
+ "params_status": "complete",
  "verification_details": {
   "level": "CONFORMANCE_VERIFIED",
   "contract_fingerprint": "4a8f8c80438d3f41ddb7e2b8339faa8e20fb4f1b8f6db4d601149e13f20db9f9",

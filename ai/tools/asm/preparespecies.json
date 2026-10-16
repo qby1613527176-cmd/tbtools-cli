@@ -52,6 +52,7 @@
    "format": "fasta"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "5aa40b64a74185b55d94a464ce55506edee49108a21f4bf38edf7bdfb229a545",

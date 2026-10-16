@@ -658,7 +658,8 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
         # 防"tool-describe 信息完整 / ai/*.json 被削薄"双世界分裂
         for _k in ("semantic_fingerprint", "semantic_fingerprint_short", "readiness", "verification",
                    "relations", "output_slots", "parameters", "dependencies", "dependency_manifest",
-                   "aliases"):
+                   "aliases", "params_status"):  # 十五轮 verified P1: params_status 投影——此前白名单 10 项
+            # 不含它, ai/tools/*.json 看不到参数契约状态(双世界分裂复发), Agent 无法区分 complete/unknown
             if v.get(_k):
                 schema[_k] = v[_k]
         # 评审 #112 P1: verification 证据对象投影——Agent 看到的不只是 level(EXECUTION_VERIFIED),

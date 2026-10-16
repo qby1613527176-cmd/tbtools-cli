@@ -60,6 +60,7 @@
    "content_type": "table"
   }
  ],
+ "params_status": "unknown",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "37b70ab10c857c36d0ae8292d98b03a0f67840b49bbf28b28067937b39c1dcfe",

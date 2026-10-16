@@ -80,6 +80,7 @@
    "note": ""
   }
  ],
+ "params_status": "complete",
  "verification_details": {
   "level": "EXECUTION_VERIFIED",
   "contract_fingerprint": "a9810438f8eb22a3bc61d04b01f05dd41fb60fc3119c99b650cc1d9c91e11e7d",
