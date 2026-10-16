@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.4] - 2026-10-16
+
+### 十五轮五视角自审全闭环(GPT 两份评价)
+
+- **P1 commands.md 分组分裂修复**: 生成文档重新消费 CommandSpec 分组(此前直读 CATEGORY_MAP 绕过 KNOWN_GROUPS, 16 个显式分组命令在文档错落 engine 段, 照文档敲 `tbtools engine gxffilter` 必失败)——107 条命令分裂消除 + 内容级一致性守卫
+- **P1 workflow-plan 名实相符**: ai/workflows.json 曾为孤儿文件(代码零读取), 修复 读取根因(ROOT 未定义 + import json 缺失) + 配方种子注入——`workflow-plan rna-seq/基因家族/phylogeny` 现全部返回完整链
+- **P1 ai/tools 投影补 params_status**: manifest 现在暴露参数契约状态(complete/unknown), Agent 可区分「有参数契约」vs「未审计」
+- **P2 thread_args 统一适配器**: impl/bash fallback 共用三态规则(此前 fallback 无条件追加 --threads 绕过), + muscle manual 修正
+- **P2/P3**: schema-capable 守卫口径统一(OR 谓词) / README 定义+环境依赖注记 / CONTRIBUTING 口径澄清 / EN Pitfall 覆盖注记 / 平台矩阵 JDK 行 / 三类门禁映射
+- **门禁**: pytest 209+ passed(守卫 15 + 入口 6 + 文档 12 + workflow 20)/ ruff 0 / mypy 0 / --check 515 surface 全同步
+
 ## [1.5.3] - 2026-10-15
 
 ### 十四轮五视角自审全闭环(GPT 两份评价 + 教程入项目)
