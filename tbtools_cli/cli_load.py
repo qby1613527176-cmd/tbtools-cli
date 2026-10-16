@@ -49,6 +49,38 @@ def _group_of(name: str) -> str | None:
     return _SPEC_GROUPS.get(name) or CATEGORY_MAP.get(name)
 
 
+# 十五轮 arch/gate P1(GPT): 线程参数单一适配器——impl / bash fallback / 静态命令共用,
+# 不重复实现三态规则(bash fallback 曾无条件追加 --threads 绕过 thread_style)。
+def _thread_style_of(name: str):
+    """解析命令线程参数形态: named_flag(默认) / positional / unsupported。
+    runner=plot 且非 manual(_make_impl 生成的动态绘图命令, 走 run_plot 不传线程) →
+    unsupported; manual 命令有手写 impl(muscle 走系统二进制) 由 impl 自己处理线程,
+    保持 named_flag。十五轮修正: 此前误伤 muscle(kind=manual runner=plot)。"""
+    from tbtools_cli.command_spec import build_command_specs as _bcs
+    try:
+        _ts = _bcs().get(name)
+    except Exception:
+        _ts = None
+    _st = getattr(_ts, "thread_style", "named_flag") if _ts else "named_flag"
+    if _ts is not None and getattr(_ts, "runner", "") == "plot"             and getattr(_ts, "kind", "") != "manual" and _st == "named_flag":
+        _st = "unsupported"
+    return _st
+
+
+def thread_args(name: str, threads: int | None):
+    """按 thread_style 编译线程参数 → (注入参数列表, 警告字符串|None)。
+    三态: named_flag → ['--threads', N] / positional → [str(N)] 位置槽 /
+    unsupported → [] + 警告。threads=None 返回 ([], None)。"""
+    if threads is None:
+        return [], None
+    _st = _thread_style_of(name)
+    if _st == "unsupported":
+        return [], f"⚠️ 警告: {name} 引擎不支持 --threads 参数, 已忽略(thread_style=unsupported)"
+    if _st == "positional":
+        return [str(threads)], None  # 位置线程槽(parallelMD5Check 等; 槽位由工具 impl 解析)
+    return ["--threads", str(threads)], None
+
+
 # ⚠️ DEPRECATED(Phase 2, 评审 #62): 新代码禁止直接读 CATEGORY_MAP——用 _group_of()(CommandSpec 优先)
 CATEGORY_MAP = {
     "sixframe": "seq",  # GUI 逆向：六框翻译
@@ -339,26 +371,10 @@ def _make_passthrough(name, group=None):
         #   unsupported: 引擎无线程概念, 警告 + 不注入(防方向性错误)
         # 缺省 spec(查询失败)按 named_flag 兜底(大多数引擎形态)。
         if threads is not None:
-            _ts_spec = None
-            try:
-                from tbtools_cli.command_spec import build_command_specs as _bcs
-                # _SPECS_CACHE 缓存(评审 #110 P1): 一次性构建 ~105ms, 高频链不重建
-                _ts_spec = _bcs().get(name)
-            except Exception:
-                _ts_spec = None
-            _tstyle = getattr(_ts_spec, "thread_style", "named_flag") if _ts_spec else "named_flag"
-            # 十三轮 arch P1-2 余项: plot 引擎(runner=plot, xvfb 渲染)不支持线程——
-            # 与 run_plot 层警告一致(动态命令也能识别, 不靠 specs 逐条标注)
-            if _ts_spec is not None and getattr(_ts_spec, "runner", "") == "plot" \
-                    and _tstyle == "named_flag":
-                _tstyle = "unsupported"
-            if _tstyle == "unsupported":
-                print(f"⚠️ 警告: {name} 引擎不支持 --threads 参数, 已忽略(thread_style=unsupported)",
-                      file=sys.stderr)
-            elif _tstyle == "positional":
-                args.append(str(threads))  # 位置线程槽(parallelMD5Check 等)
-            else:
-                args.extend(["--threads", str(threads)])
+            _t_args, _t_warn = thread_args(name, threads)
+            if _t_warn:
+                print(_t_warn, file=sys.stderr)
+            args.extend(_t_args)
         
         # 调用 impl 或回退到 bash tbplot.sh
         if impl:
@@ -369,7 +385,10 @@ def _make_passthrough(name, group=None):
             if bash_bin:
                 bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
                 if threads is not None:
-                    bash_args.extend(["--threads", str(threads)])  # 十二轮 P1: 引擎线程透传(对称)
+                    _t_args, _t_warn = thread_args(name, threads)
+                    if _t_warn:
+                        print(_t_warn, file=sys.stderr)
+                    bash_args.extend(_t_args)  # 十五轮 P1: 统一适配器(此前无条件 --threads)
                 ec = subprocess.run(bash_args).returncode
             else:
                 print(f"❌ {name} 需要 bash 兜底（tbplot.sh），但未找到 bash（Windows 请装 Git Bash）", file=sys.stderr)
