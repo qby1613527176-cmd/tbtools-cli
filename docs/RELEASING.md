@@ -25,6 +25,8 @@
   | 真实引擎 | Tier-2 真 JAR 执行 | 56 exec 证据刷新过（本地有 JAR 时跑 `TBTOOLS_WRITE_REPORT=1` 子集） |
   | 跳过说明 | 环境缺失未跑 | 注明哪项/为何（无 JAR / Node 版本 / xvfb） |
 
+  > 三类门禁映射（十五轮 gate P2, GPT 审查二）: **A=基础自动化**（本地测试, 无 JAR 可跑, test.yml）· **B=真实引擎集成**（CI/真实引擎, nightly/onboarding, JAR+真数据）· **C=科学语义验证**（语义断言层, conformance/semantic_checked）——四态表的「本地测试+CI」覆盖 A,「真实引擎」覆盖 B,「语义检查」覆盖 C。发版 notes 明示三类的实际执行与跳过项。
+
   发版 notes 声明验证时按此四态写明细, 别只写「pytest passed」。
 
 ## 发版步骤（逐项打勾）
