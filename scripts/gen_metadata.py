@@ -231,12 +231,14 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
     lines = ["# 命令全量清单（自动生成,勿手改）",
              "",
              "> 由 `python3 scripts/gen_metadata.py --render` 生成,来源 command_metadata.json。",
-             "> 分组归类参考 cli_load.CATEGORY_MAP;数字防漂移由 gen_metadata.py --check 与 pytest 保证。",
-             ""]
+             "> 分组归类 = metadata 的 `group` 字段(CommandSpec._resolve_group 权威, 含 KNOWN_GROUPS 显式分组);",
+             "> 十五轮 gate/arch P1: 此前直读 CATEGORY_MAP 致 107 条命令分裂(gxffilter 文档落 engine 实体在 gxf)。"]
     # 分组 → 命令
     grouped: dict[str, list] = {}
     for name, v in meta.items():
-        cat = CATEGORY_MAP.get(name, "engine")
+        # 十五轮 gate/arch P1: 消费 metadata 的 group(CommandSpec._resolve_group 权威)——
+        # 此前直读 CATEGORY_MAP 绕过 KNOWN_GROUPS, 16 显式分组命令全错落 engine 段(107 条分裂)
+        cat = v.get("group") or CATEGORY_MAP.get(name, "engine")
         grouped.setdefault(cat, []).append((name, v))
     for cat in sorted(GROUPS.keys()):
         if cat not in grouped:

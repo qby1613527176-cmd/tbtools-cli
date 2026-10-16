@@ -1,9 +1,9 @@
 # 命令全量清单（自动生成,勿手改）
 
 > 由 `python3 scripts/gen_metadata.py --render` 生成,来源 command_metadata.json。
-> 分组归类参考 cli_load.CATEGORY_MAP;数字防漂移由 gen_metadata.py --check 与 pytest 保证。
-
-## asm — 组装/注释（10 个）
+> 分组归类 = metadata 的 `group` 字段(CommandSpec._resolve_group 权威, 含 KNOWN_GROUPS 显式分组);
+> 十五轮 gate/arch P1: 此前直读 CATEGORY_MAP 致 107 条命令分裂(gxffilter 文档落 engine 实体在 gxf)。
+## asm — 组装/注释（13 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
@@ -11,10 +11,13 @@
 | `bamindex` | 桥 | bamindex <in.sorted.bam> [out.bai] |
 | `bamsort` | 桥 | bamsort <in.bam> <out.bam> [sortOrder] [tmpDir] |
 | `bamstate` | 桥 | bamstate <out.tsv> <gff3> <bam1> [<bam2> ...] |
+| `calcRepeat` | 桥 | calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min |
 | `ctgGroup` | 桥 | ctgGroup <in.miniprot.gff> <polyPoid> <outContigGrpMap> |
 | `hicEnzyme` | 直连 | HiC 限制酶预测（第76引擎） |
 | `homoPhase` | 直连 | homoPhase <inContigGrpMap> <outPhasedMap> |
 | `preparespecies` | 直连 | preparespecies <prefix> <inGenome.fa> <inGFF> <outGenome.fa> |
+| `regiondepth` | 桥 | regiondepth <in.sam> <region> <out.depth> [scaleFactor] |
+| `sambamcov` | 桥 | sambamcov <in.bam> <out.tsv> [binSize] [countMode] |
 | `sepChr` | 直连 | sepChr <gene2chr.tsv> <in.miniprot.gff> <outMap> |
 | `virusRecomb` | 直连 | 病毒重组分析（第77引 |
 
@@ -43,124 +46,17 @@
 | `peaktss` | 直连 | peaktss <gxf> <macs2_peak.xls> <out.svg/png> [--dist N] [--b |
 | `pileup` | 桥 | pileup <blast.xml> <out.svg> [--query NAME] |
 
-## engine — 通用（112 个）
+## engine — 通用（5 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
-| `DecodeIlluminaFqPool` | 工具 | DecodeIlluminaFqPool (tool, DecodeIlluminaFqPool) — Decode… |
-| `ExtractFeaturefromGFF3andGenome` | 工具 | ExtractFeaturefromGFF3andGenome (tool,… |
-| `Fasta36m10toTable` | 工具 | Fasta36m10toTable (tool, Fasta36m10toTable) — Fasta36m10to… |
-| `FastaIDRenamer` | 工具 | FastaIDRenamer (tool, FastaIDRenamer) — Fasta I D Renamer |
-| `FastaIDSimplifier` | 工具 | FastaIDSimplifier (tool, FastaIDSimplifier) — Fasta I D… |
-| `FastaLongestRepresentater` | 工具 | FastaLongestRepresentater (tool, FastaLongestRepresentater)… |
-| `FoldStructureStater` | 工具 | FoldStructureStater (tool, FoldStructureStater) — Fold… |
-| `GXFOverlaper` | 工具 | GXFOverlaper (tool, GXFOverlaper) — G X F Overlaper |
-| `GoCompareBar` | 工具 | GoCompareBar (tool, GoCompare) — Go Compare |
-| `MIRPrediionResultStat` | 工具 | MIRPrediionResultStat (tool, MIRPrediionResultStat) — M I R… |
-| `NCBITaxonomy` | 工具 | NCBITaxonomy (tool, NCBITaxonomy) — N C B I Taxonomy |
-| `OneStepMirGraph` | 工具 | OneStepMirGraph (tool, OneStepMirGraph) — One Step Mir Graph |
-| `OverlapGeneModels` | 工具 | OverlapGeneModels (tool, OverlapGeneModels) — Overlap Gene… |
-| `PredictMirSTAR` | 工具 | PredictMirSTAR (tool, PredictMirSTAR) — Predict Mir S T A R |
-| `RNAplotAdvance` | 工具 | RNAplotAdvance (tool, RNAplotAdvance) — R N Aplot Advance |
-| `ReciprocalBlast` | 工具 | ReciprocalBlast (tool, ReciprocalBlast) — Reciprocal Blast |
-| `RegionGXFOverlapAnnotation` | 工具 | RegionGXFOverlapAnnotation (tool,… |
-| `TableCast` | 工具 | TableCast (tool, TableCast) — Table Cast |
-| `TableColSelector` | 工具 | TableColSelector (tool, TableColSelector) — Table Col… |
-| `TableMelt` | 工具 | TableMelt (tool, TableMelt) — Table Melt |
-| `admixture` | 桥 | admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor |
-| `admixtureViz` | 桥 | ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id） |
-| `autoMakeBlastDb` | 工具 | autoMakeBlastDb (tool, makeblastdb) — makeblastdb |
-| `autoRemoteBlast` | 工具 | autoRemoteBlast (tool, remoteblast) — remoteblast |
-| `bigMarkerRandomDesign` | 工具 | bigMarkerRandomDesign (tool, BigMarkerRandomDesign) — Big… |
-| `blastXmlSummaryTable` | 工具 | blastXmlSummaryTable (tool, BlastXMLSummaryTable) — Blast X… |
-| `blastXmlToTable` | 工具 | blastXmlToTable (tool, BlastXmlToSelfDefinedTable) — Blast… |
-| `calcRepeat` | 桥 | calcRepeat <genome.fa> <outRepeat.txt> [--kmerSize N] [--min |
-| `cds2protein` | 手动 | CDS → 蛋白质翻译 |
-| `checkPrimer` | 工具 | checkPrimer (tool, CheckPrimer) — Check Primer |
-| `collinearityToRegion` | 工具 | collinearityToRegion (tool, CollinearityToRegion) —… |
-| `dnDsCalculate` | 工具 | dnDsCalculate (tool, DnDsCalculate) — Dn Ds Calculate |
-| `downLoadNCBIFasta` | 工具 | downLoadNCBIFasta (tool, DownLoadNCBIFasta) — Down Load N C… |
-| `draw` | 手动 | 树+注释图（TreeTreeTree 多轨道） |
-| `eggNogMapperResult` | 工具 | eggNogMapperResult (tool, eggNogMapperResult) — egg Nog… |
-| `eggnog` | 桥 | eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库） |
-| `emblToFasta` | 工具 | emblToFasta (tool, emblToFasta) — embl To Fasta |
-| `extractFasta` | 工具 | extractFasta (tool, ExtractFasta) — Extract Fasta |
-| `extractFastaSub` | 工具 | extractFastaSub (tool, ExtractFastaSubseq) — Extract Fasta… |
-| `extractFeatureFromGTF` | 工具 | extractFeatureFromGTF (tool, ExtractFeaturefromGTFandGenome)… |
-| `extractGff3Region` | 工具 | extractGff3Region (tool, ExtractGff3Region) — Extract Gff3… |
-| `fasta-extract` | 手动 | 一行一个 ID,不带 > 号;与原始 header 精确匹配） |
-| `fastaFragmenter` | 工具 | fastaFragmenter (tool, FastaFragmenter) — Fasta Fragmenter |
-| `fastaIDAppender` | 工具 | fastaIDAppender (tool, FastaIDAppender) — Fasta I D Appender |
-| `fastqAndFasta` | 工具 | fastqAndFasta (tool, FastqAndFasta) — Fastq And Fasta |
-| `fastqParallelSubBest` | 工具 | fastqParallelSubBest (tool, FastqParallelSubBest) — Fastq… |
-| `fastqParallelTrimmer` | 工具 | fastqParallelTrimmer (tool, FastqParallelTrimmer) — Fastq… |
-| `filesplit` | 桥 | filesplit <inFile> <numParts> |
-| `findBestForkerRootTree` | 工具 | findBestForkerRootTree (tool, FindBestForkerRootTree) — Find… |
-| `findBestHomologyBatch` | 工具 | findBestHomologyBatch (tool, FindBestHomologyBatch) — Find… |
-| `fpkmToTpm` | 工具 | fpkmToTpm (tool, FPKMtoTPM) — F P K Mto T P M |
-| `gbff2gff` | 工具 | gbff2gff (tool, gbff2gff) — gbff2gff |
-| `geneExpFilter` | 工具 | geneExpFilter (tool, GeneExpFilter) — Gene Exp Filter |
-| `genePairExpCorr` | 工具 | genePairExpCorr (tool, GenePairExpCorr) — Gene Pair Exp Corr |
-| `generateMotifFromSequences` | 工具 | generateMotifFromSequences (tool,… |
 | `generic` | 桥 | generic <engineClass> <method[+method2]> <out> [--set field |
-| `getLongestCompleteORF` | 工具 | getLongestCompleteORF (tool, ORF) — O R F |
-| `getLongestORF` | 工具 | getLongestORF (tool, GetLongestORF) — Get Longest O R F |
-| `gffCdsPhaseCorrector` | 工具 | gffCdsPhaseCorrector (tool, GffCdsPhaseCorrector) — Gff Cds… |
-| `goAnnoPipe` | 工具 | goAnnoPipe (tool, GoAnnoPipe) — Go Anno Pipe |
-| `goEnrichMerge` | 工具 | goEnrichMerge (tool, GOEnrichmentMergeBubble) — G O… |
-| `gsadiag` | 桥 | gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax |
-| `gxffilter` | 桥 | gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf> |
-| `gxfsort` | 桥 | gxfsort <in.gff3|gtf> <out.sorted> |
-| `heatmap` | 手动 | 热图（表达矩阵） |
 | `heatmap2` | 手动 | (alias of heatmap) 热图（表达矩阵） |
-| `keggEnrichment` | 工具 | keggEnrichment (tool, KeggEnrichment) — Kegg Enrichment |
-| `logo` | 手动 | 序列 LOGO 图 |
 | `make` | 手动 | 工厂：按注册表条目生成 _xxx_impl 闭包（保持 (args, verbose, quiet) 签名） |
-| `makeFastaIndex` | 工具 | makeFastaIndex (tool, MakeFastaIndex) — Make Fasta Index |
-| `marker` | 直连 | marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe |
-| `markertools` | 桥 | markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi |
-| `mggxf` | 桥 | mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked |
-| `mirIdentifierBasedOnTargetSo` | 工具 | mirIdentifierBasedOnTargetSo (tool,… |
-| `one-step` | 手动 | 一步法 ML 树（muscle → trimal → IQ-TREE） |
-| `pafRefBaseCoverCalc` | 工具 | pafRefBaseCoverCalc (tool, PafRefBaseCoverCalc) — Paf Ref… |
-| `pairWiseKaKsCalculator` | 工具 | pairWiseKaKsCalculator (tool, PairWiseKaKsCalculator) — Pair… |
-| `parallelMD5Check` | 工具 | parallelMD5Check (tool, ParallelMD5Check) — Parallel M D5… |
-| `plotRNAfoldloci` | 工具 | plotRNAfoldloci (tool, PlotRNAfold) — Plot R N Afold |
-| `prepareFileFromMCScanXtoTBtools` | 工具 | prepareFileFromMCScanXtoTBtools (tool,… |
-| `qpcrproc` | 桥 | qpcrproc <in.qpcr.tab> <out.xls> |
-| `quickGeneFamilyIdentification` | 工具 | quickGeneFamilyIdentification (tool,… |
-| `quickLocateSeqPattern` | 工具 | quickLocateSeqPattern (tool, QuickLocateSeqPattern) — Quick… |
-| `quickSplitFasta` | 工具 | quickSplitFasta (tool, QuickSpiltFasta) — Quick Spilt Fasta |
-| `regionBlast` | 工具 | regionBlast (tool, regionBlast) — region Blast |
-| `regiondepth` | 桥 | regiondepth <in.sam> <region> <out.depth> [scaleFactor] |
-| `rooting` | 手动 | MAD 系统发育定根 |
-| `rpkmCal` | 工具 | rpkmCal (tool, RPKMcalculator) — R P K Mcalculator |
-| `sRNAReadTrimmer` | 工具 | sRNAReadTrimmer (tool, sRNAReadTrimmer) — s R N A Read… |
-| `sRNAseqAdaperRemover` | 工具 | sRNAseqAdaperRemover (tool, sRNAseqAdaperRemover) — s R N… |
-| `sRNAseqCollasper` | 工具 | sRNAseqCollasper (tool, sRNAseqCollasper) — s R N Aseq… |
-| `sRNAseqDeCollasper` | 工具 | sRNAseqDeCollasper (tool, sRNAseqDeCollasper) — s R N Aseq… |
-| `sRNAseqReadLenStat` | 工具 | sRNAseqReadLenStat (tool, sRNAseqReadLenStat) — s R N Aseq… |
-| `sambamcov` | 桥 | sambamcov <in.bam> <out.tsv> [binSize] [countMode] |
-| `seqconvert` | 桥 | seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt> |
 | `seqlogo` | 手动 | (alias of logo) 序列 LOGO 图 |
 | `seqrecommend` | 桥 | 43 AssemblyGenomeDataSizeRecommand；纯计算离线；Hifi/HiC 深度+数据量） |
-| `simpleBatchProcess` | 工具 | simpleBatchProcess (tool, SimpleBatchProcess) — Simple Batch… |
-| `slurmScriptPrepare` | 工具 | slurmScriptPrepare (tool, SlurmScriptPrepare) — Slurm Script… |
-| `ssrMiner` | 工具 | ssrMiner (tool, SSRminer) — S S Rminer |
-| `stat-fasta` | 手动 | FASTA 序列统计 |
-| `statFasta` | 工具 | statFasta (tool, QuickStatFasta) — Quick Stat Fasta |
-| `structure` | 手动 | 基因结构图（外显子/UTR 从 GFF） |
-| `tandemDupFinder` | 工具 | tandemDupFinder (tool, TandemDupFinder) — Tandem Dup Finder |
-| `target2TablePipe` | 工具 | target2TablePipe (tool, Target2TablePipe) — Target2 Table… |
-| `targetSoPipe` | 工具 | targetSoPipe (tool, TargetSoPipe) — Target So Pipe |
-| `tpmCalc` | 工具 | tpmCalc (tool, TPMcalculator) — T P Mcalculator |
-| `translater` | 工具 | translater (tool, Translater) — Translater |
-| `tree` | 手动 | 树+注释图（TreeTreeTree 多轨道） |
-| `trimmsa` | 桥 | trimmsa <in.aln.fa> <out.aln.fa> [ratio] |
-| `vcfBinCount` | 工具 | vcfBinCount (tool, VCFBINCount) — V C F B I N Count |
-| `volcano` | 手动 | GeneID Log2FC pvalue） |
 
-## expr — 表达/统计（21 个）
+## expr — 表达/统计（23 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
@@ -176,6 +72,7 @@
 | `groupCol` | 直连 | groupCol <inTable.tsv> <inGrpInfo.tsv> <outTable> [Sum|Mean| |
 | `groupedbar` | 桥 | 数据格式=每行 <group>	<value>（重复行成组），非常规基因×样本矩阵；矩阵输入会在… |
 | `hclust` | 手动 | 层次聚类树（三列距离文件 GeneA      GeneB   dist） |
+| `heatmap` | 手动 | 热图（表达矩阵） |
 | `kallisto` | 手动 | RNA-seq 定量（插件 P00740 CLI 化，直调 kallisto 二进制——插件 wrapper 的… |
 | `layoutheatmap` | 桥 | layoutheatmap <layout.tsv> <expr.tsv> <out> [--options] |
 | `mountain` | 桥 | mountain <fold.txt> <out.tsv> |
@@ -185,6 +82,7 @@
 | `qpcrExp` | 桥 | qpcrExp <in.qpcr.tab> <out.xls> |
 | `tauIndex` | 桥 | tauIndex <inExpTab> <outTAU> |
 | `violin` | 桥 | violin <in.tsv> <out> [width] [height] |
+| `volcano` | 手动 | GeneID Log2FC pvalue） |
 
 ## fastq — FASTQ/FASTA（4 个）
 
@@ -195,14 +93,19 @@
 | `fqTrim` | 直连 | fqTrim <in.fq> <out.fq> [--b5 N] [--b3 N] [--threads N] |
 | `fqfaConv` | 直连 | FASTQ/FASTA 互转（第 |
 
-## gwas — GWAS（2 个）
+## gwas — GWAS（7 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
+| `admixture` | 桥 | admixture <qFiles.lst> <out> [sampleIDFile] [groupFile] [sor |
+| `admixtureViz` | 桥 | ADMIXTURE Q 矩阵可视化（GUI 逆向接口；Q 文件纯数值矩阵，样本 ID 单独 --id） |
+| `gsadiag` | 桥 | gsadiag <in.fixed.gff3> <out.stat.xls> [genome.fasta] [relax |
+| `marker` | 直连 | marker <MarkerDist|MarkerFilter|SampleDist|BigMarkerRandomDe |
+| `markertools` | 桥 | markertools <filter|dist|sampledist> <in.marker.tab> [maxPoi |
 | `mimicVqsr` | 直连 | VCF 质量指标（QD/MQ/FS/SOR；GWAS） |
 | `vcfAddID` | 直连 | VCF 加 ID 列（GWAS；ArgsParser --inFile/--outFile，支持 .gz） |
 
-## gxf — GXF/表格（21 个）
+## gxf — GXF/表格（24 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
@@ -226,6 +129,9 @@
 | `gxfRepIDs` | 直连 | gxfRepIDs <in.gff3> <out.txt> |
 | `gxfSplit` | 手动 | GXF 按记录数拆分（§8.B N13 家族命令面缺口修复：RPC GxfSplit.process，走 RPC… |
 | `gxfStat` | 直连 | GFF 统计（基因/mRNA/外显子/内含子/C |
+| `gxffilter` | 桥 | gxffilter <in.gff3|gtf> <idList.txt> <out.gff3|gtf> |
+| `gxfsort` | 桥 | gxfsort <in.gff3|gtf> <out.sorted> |
+| `mggxf` | 桥 | mggxf <inGenePair|blastTab6> <in.simplified.gff> <out.Linked |
 | `regionAnno` | 直连 | regionAnno <in.gff3> <region.txt> <outTab> [--flankLen N] [- |
 
 ## hmm — HMM（3 个）
@@ -244,7 +150,7 @@
 | `mirnaTarget2` | 直连 | mirnaTarget2 <mirna.fa> <target.fa> <out.txt> [--revCom true |
 | `mirnatarget` | 手动 | ssearc |
 
-## seq — 序列/结构/域（43 个）
+## seq — 序列/结构/域（48 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
@@ -254,6 +160,7 @@
 | `fa2tab` | 手动 | 26 FastaTable.fa2tab；与 tab2fa 往返一致） |
 | `famerge` | 桥 | 33 FastaMergerAndSpliter.Merge） |
 | `fasplit` | 直连 | 33 QuickSpiltFasta；⚠️ 与 filesplit 不同：按记录不切行，产物… |
+| `filesplit` | 桥 | filesplit <inFile> <numParts> |
 | `fimo` | 手动 | MEME FIMO motif 扫描（插件 P00552 等价，直调系统 fimo；meme-suite） |
 | `gb2fa` | 桥 | 36 genBank2Fasta；头含 locus/accession/organism/definition） |
 | `gblocks` | 桥 | 30 Jgblocks 纯 Java 实现；main 仅 in/out 全参数须 setter；⚠️ 高歧异比对可能… |
@@ -262,6 +169,7 @@
 | `genomefilter` | 手动 | 19 GenomeLengthFilterGUIPanel：QuickStatFasta 统计 → 按 minLen… |
 | `gfa` | 桥 | gfa <in.gfa> <out> [width] [height] |
 | `gfa2fa` | 直连 | GFA 组装图 → FASTA（第91引擎，GFAtoFast |
+| `logo` | 手动 | 序列 LOGO 图 |
 | `longestorf` | 直连 | 17 GetLongestORF：setFastaFile/setOutFile/startPredict；自带… |
 | `makemotif` | 桥 | 等长序列→MEME motif 文件（GUI 逆向接口；产物可直接喂 fimo/mast） |
 | `mast` | 桥 | MAST motif 搜索（GUI 逆向接口 QuickRunMAST，需系统 mast；产物… |
@@ -282,15 +190,18 @@
 | `protparam` | 直连 | 18 ProtParamWrapper.batchCalc；⚠️ 联网 POST… |
 | `protsim` | 桥 | 24… |
 | `rnaplot` | 桥 | rnaplot <seq.fa|rawSeq> <out> [--colorMap "seq1=R,G,B;seq2=R |
+| `seqconvert` | 桥 | seqconvert -i <in> -o <out> -iF <fmt> -oF <fmt> |
 | `seqfetch` | 直连 | 44 NcbiSmartSeqFetchEntrezUtils；⚠️ 联网 Entrez+限速；ID… |
 | `seqlentrack` | 桥 | seqlentrack <seqlen.txt> <out.svg|png|pdf> [newick.treefile] |
 | `seqpattern` | 直连 | 20 QuickLocateSeqPattern：正则找模式→GFF3；--key value 空格分隔） |
 | `simplehmmscan` | 桥 | simplehmmscan <pfamA.hmm> <target.pep> <idList.txt> <out.txt |
 | `sixframe` | 桥 | 16 SixFrameTranlater：setInFile/setOutFile/process；输出每条序列 6 框… |
 | `smart` | 手动 | SMART 域注释（插件 P00060 CLI 化；⚠️ 联网 POST EMBL ismart.embl.de，约… |
+| `structure` | 手动 | 基因结构图（外显子/UTR 从 GFF） |
 | `tab2fa` | 手动 | 26 FastaTable.tab2fa） |
 | `tfbsShift` | 手动 | 植物 TF 结合 motif 偏移分析（插件 P00551 CLI 化，参考数据内置… |
 | `trimal` | 桥 | 29 QuickTrimAL；默认 automated1；依赖系统… |
+| `trimmsa` | 桥 | trimmsa <in.aln.fa> <out.aln.fa> [ratio] |
 
 ## sets — 集合/韦恩（6 个）
 
@@ -329,12 +240,13 @@
 | `supercircos` | 桥 | supercircos <config.cfg> <out> [width] [height] |
 | `visualizeblock` | 桥 | visualizeblock <inBlockOut> <out.pdf> [--labels "Genome1,Gen |
 
-## table — GO/表格（25 个）
+## table — GO/表格（27 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
 | `batchReplace` | 直连 | batchReplace <inFile> <outFile> <patternMap.tsv> [--partial] |
 | `clearchar` | 桥 | 34 FileCleaner.simplifyFile；非可打印 ASCII/非 tab→_，空白行跳过，逐行报告） |
+| `eggnog` | 桥 | eggNOG 直系同源注释（GUI 逆向接口 EmapperPipeline；⚠️ 需先就位 eggNOG 数据库） |
 | `goAnno` | 直连 | num; GO:num」；产物 outDir/<输入名>.xls） |
 | `goEnrich` | 桥 | GO 富集分析（MF/CC/BP，P+BH 校正，G4 补齐） |
 | `goParse` | 直连 | GO 词典解析（第103 |
@@ -343,6 +255,7 @@
 | `keggEnrich` | 桥 | KEGG 富集分析（G4 补齐，需真实 .keg 参考文件） |
 | `levelGo` | 直连 | levelGo <gene2Go.txt> <outTable> <oboFile> [--level N] |
 | `pubmed` | 桥 | 45 PubmedSearch.process；⚠️ 联网 eutils；输出期刊/标题/年份/IF/DOI 表） |
+| `qpcrproc` | 桥 | qpcrproc <in.qpcr.tab> <out.xls> |
 | `sranum2info` | 直连 | 41 BatchGetSRARecordInfo；⚠️ 联网 NCBI Entrez+限速；自带… |
 | `sraxml2tab` | 直连 | 40 ParseSRAXml2Table；自带 ArgsParser；离线 JDOM 解析；XML 从 efetch… |
 | `sricher` | 桥 | 简单富集（GUI 逆向接口 SimpleEnricher，超几何+BH；goEnrich 轻量版无需 OBO） |
@@ -359,20 +272,24 @@
 | `tableUniq` | 直连 | tableUniq <inTab> <outFile> [--colIndex N] [--showFreq true| |
 | `taxparse` | 桥 | 38 TaxonomyParserGUIPanel→NCBITaxonomy；⚠️ 联网 NCBI eutils；输出… |
 
-## tree — 树/进化（12 个）
+## tree — 树/进化（16 个）
 
 | 命令 | 类型 | 说明 |
 |---|---|---|
 | `degramdom` | 桥 | degramdom <in.tsv> [out.nwk] |
+| `draw` | 手动 | 树+注释图（TreeTreeTree 多轨道） |
 | `findpath` | 桥 | findpath --inGffArr <gff1,gff2,...> --inGenePairs <pairs> -- |
 | `iqtree` | 桥 | 28 QuickRunIQtree；⚠️ UFBoot 须 ≥1000 否则引擎静默失败；产物… |
 | `kaks` | 直连 | 成对 Ka/Ks 计算（GUI 逆向 PairWiseKaKsCalculator；自带… |
 | `newickRename` | 手动 | 树叶批量重命名（插件 P00690 CLI 化，map 为 OldName\tNewName） |
 | `notung` | 手动 | Notung 输出 <gene>.reconciled(基因树派生名) 到 --outputdir → 复制到… |
 | `nwAlign` | 桥 | Needleman-Wunsch 全局比对（GUI 逆向接口 NeedleManWunschAlign；旧… |
+| `one-step` | 手动 | 一步法 ML 树（muscle → trimal → IQ-TREE） |
 | `onesteptree` | 手动 | 一步法 ML 树（muscle → trimal → IQ-TREE） |
 | `phylotree` | 桥 | phylotree <in.nwk> <out> [vertical] [width] [height] |
+| `rooting` | 手动 | MAD 系统发育定根 |
 | `subtree` | 桥 | 23… |
+| `tree` | 手动 | 树+注释图（TreeTreeTree 多轨道） |
 | `treeRooting` | 手动 | (alias of rooting) MAD 系统发育定根 |
 | `unrooted` | 手动 | 无根树可视化 |
 

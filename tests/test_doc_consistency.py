@@ -154,3 +154,28 @@ class TestCountsSurfaceGuard:
                              ("180+", "rpc 旧值"), ("54 capabilities", "capabilities 旧表述"),
                              ("共 82 个工具", "tools 旧数")]:
             assert legacy not in text, f"文档出现已修漂移值 {legacy!r}({hint})"
+
+    def test_commands_md_groups_match_metadata(self):
+        """十五轮 gate/arch P1(GPT): commands.md 分组必须与 command_metadata.json 的
+        group(CommandSpec._resolve_group 权威)一致——此前 render 直读 CATEGORY_MAP 绕过
+        KNOWN_GROUPS 致 107 条命令分裂(gxffilter 文档落 engine 实体在 gxf); --check 是
+        确定性重渲染比对, 结构性抓不住内容错误(自我渲染自我一致), 需内容级守卫。"""
+        import json
+        import re as _re
+        cmds = (ROOT / "docs" / "_generated" / "commands.md").read_text(encoding="utf-8")
+        meta = json.loads((ROOT / "tbtools_cli" / "command_metadata.json").read_text(encoding="utf-8"))
+        mapping = {}
+        for seg in cmds.split("\n## ")[1:]:
+            m = _re.match(r"(\S+) — ", seg.split("\n", 1)[0])
+            if not m:
+                continue
+            segname = m.group(1)
+            for row in _re.finditer(r"\| \`([^\`]+)\` \|", seg):
+                mapping[row.group(1)] = segname
+        mismatch = [(n, s, meta[n].get("group"))
+                    for n, s in mapping.items()
+                    if n in meta and meta[n].get("group") and s != meta[n]["group"]]
+        assert not mismatch, (
+            f"commands.md 分组与 metadata 分裂({len(mismatch)}): "
+            f"(命令, 文档段, metadata.group) 示例 {mismatch[:5]} —— render 必须消费 "
+            f"meta['group'](CommandSpec._resolve_group), 不得直读 CATEGORY_MAP")
