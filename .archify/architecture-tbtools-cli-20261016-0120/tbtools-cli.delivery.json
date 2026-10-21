@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "6178eb3f-6d9b-4378-b8d8-8904a9347df3",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "/home/elysia/tbtools-cli/.archify/architecture-tbtools-cli-20261016-0120/candidate.json",
+  "output": "/home/elysia/tbtools-cli/.archify/architecture-tbtools-cli-20261016-0120/tbtools-cli.html",
+  "specification": {
+    "sha256": "1c987410a9197adf3b8c7ab533abad42cfaf1ef98b56e497358d7db767b75eab",
+    "bytes": 6428
+  },
+  "artifact": {
+    "sha256": "4611d38c22ecf27590e0d549f2f05a4849db5e1d7d9ea5983f8b8db3a81d5e71",
+    "bytes": 773769
+  }
+}

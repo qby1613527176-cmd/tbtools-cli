@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "tbtools-cli — Agent 生信执行平台四层架构",
+    "subtitle": "CommandSpec 单一契约 · 结构化 JSON · 证据链自洽",
+    "output": ".archify/architecture-tbtools-cli-20261016-0120/tbtools-cli.html",
+    "visual_preset": "blueprint",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "agent",
+      "type": "external",
+      "label": "AI Agent",
+      "sublabel": "Claude / Cursor / MCP",
+      "pos": [
+        60,
+        100
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "user",
+      "type": "external",
+      "label": "用户",
+      "sublabel": "CLI 终端",
+      "pos": [
+        60,
+        280
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "cli",
+      "type": "frontend",
+      "label": "CLI 接口层",
+      "sublabel": "298 命令 · 结构化输出",
+      "pos": [
+        330,
+        100
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "mcp",
+      "type": "frontend",
+      "label": "MCP Server",
+      "sublabel": "9 编排原语 · JSON 协议",
+      "pos": [
+        330,
+        280
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "spec",
+      "type": "backend",
+      "label": "CommandSpec",
+      "sublabel": "单一工具契约(298 工具)",
+      "pos": [
+        600,
+        60
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "identity",
+      "type": "security",
+      "label": "identity",
+      "sublabel": "契约/环境指纹",
+      "pos": [
+        600,
+        200
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "compiler",
+      "type": "backend",
+      "label": "compiler",
+      "sublabel": "参数编译 · 输入保护",
+      "pos": [
+        600,
+        340
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "executor",
+      "type": "backend",
+      "label": "executor",
+      "sublabel": "run_java/run_plot",
+      "pos": [
+        600,
+        480
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "jar",
+      "type": "cloud",
+      "label": "TBtools-II JAR",
+      "sublabel": "298 命令引擎",
+      "pos": [
+        860,
+        140
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "bins",
+      "type": "cloud",
+      "label": "外部二进制",
+      "sublabel": "blast+ / muscle / kallisto",
+      "pos": [
+        860,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "xvfb",
+      "type": "security",
+      "label": "xvfb-run",
+      "sublabel": "绘图无头渲染",
+      "pos": [
+        860,
+        460
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "evidence",
+      "type": "database",
+      "label": "验证证据",
+      "sublabel": "56 exec + 金链 volcano",
+      "pos": [
+        1120,
+        140
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    },
+    {
+      "id": "artifacts",
+      "type": "database",
+      "label": "产物模型",
+      "sublabel": "Artifact + provenance",
+      "pos": [
+        1120,
+        300
+      ],
+      "size": [
+        150,
+        62
+      ],
+      "tag": ""
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "tbtools-cli(Python)",
+      "wraps": [
+        "cli",
+        "mcp",
+        "spec",
+        "identity",
+        "compiler",
+        "executor",
+        "evidence",
+        "artifacts"
+      ],
+      "pad": 20
+    },
+    {
+      "kind": "security-group",
+      "label": "引擎与依赖(本地)",
+      "wraps": [
+        "jar",
+        "bins",
+        "xvfb"
+      ],
+      "pad": 20
+    }
+  ],
+  "connections": [
+    {
+      "from": "agent",
+      "to": "mcp",
+      "label": "MCP 调用",
+      "variant": "emphasis"
+    },
+    {
+      "from": "agent",
+      "to": "cli",
+      "label": "JSON 直连",
+      "variant": "dashed"
+    },
+    {
+      "from": "user",
+      "to": "cli",
+      "label": "命令输入",
+      "variant": "emphasis"
+    },
+    {
+      "from": "mcp",
+      "to": "spec",
+      "label": "search/describe",
+      "variant": "emphasis"
+    },
+    {
+      "from": "cli",
+      "to": "spec",
+      "label": "读契约",
+      "variant": "emphasis"
+    },
+    {
+      "from": "spec",
+      "to": "identity",
+      "label": "指纹计算"
+    },
+    {
+      "from": "spec",
+      "to": "compiler",
+      "label": "参数编译"
+    },
+    {
+      "from": "compiler",
+      "to": "executor",
+      "label": "argv 交付",
+      "variant": "emphasis"
+    },
+    {
+      "from": "executor",
+      "to": "jar",
+      "label": "java -cp",
+      "variant": "emphasis"
+    },
+    {
+      "from": "executor",
+      "to": "bins",
+      "label": "子进程调用",
+      "variant": "dashed"
+    },
+    {
+      "from": "executor",
+      "to": "xvfb",
+      "label": "绘图包装",
+      "variant": "dashed"
+    },
+    {
+      "from": "executor",
+      "to": "artifacts",
+      "label": "产物+证据",
+      "variant": "emphasis"
+    },
+    {
+      "from": "jar",
+      "to": "evidence",
+      "label": "执行验证",
+      "variant": "dashed"
+    },
+    {
+      "from": "evidence",
+      "to": "artifacts",
+      "label": "记录",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "单一权威",
+      "items": [
+        "CommandSpec 是 298 工具的唯一契约入口",
+        "CLI/MCP/文档/元数据全部由统一模型生成",
+        "旧注册表(CATEGORY_MAP)渐进退役中"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "验证分层",
+      "items": [
+        "EXECUTION_VERIFIED(56) = 真跑过",
+        "semantic_checked(11) = 内容级断言",
+        "CONFORMANCE_VERIFIED(1) = 金链六步"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "证据绑定环境",
+      "items": [
+        "env_fingerprint = JAR + 插件 + 外部二进制",
+        "环境变则证据降级(保守语义)",
+        "evidence 只在同构环境可迁移"
+      ]
+    }
+  ]
+}

@@ -242,6 +242,7 @@ All engines are driven **headlessly** (via xvfb on Linux/WSL), no GUI needed. Ve
 | [`docs/COMMAND_REFERENCE.md`](docs/COMMAND_REFERENCE.md) | **命令参考手册**：200+ 个命令（用法表+详细注释）+ 80 个 CLI 工具（18 类功能分组）+ Java 桥 Javadoc(数见 counts.md)（输入格式权威来源）+ 49 条实测坑位 + engine 反射 + RPC 指引 |
 | [`docs/rpc_methods_reference.md`](docs/rpc_methods_reference.md) | RPC 188 方法参考（参数/返回值,自动生成） |
 | [`docs/tutorials/基因家族鉴定_全程Windows_通用教程_完整版.md`](docs/tutorials/基因家族鉴定_全程Windows_通用教程_完整版.md) | **生信实战教程**（十四轮 docs）：植物基因家族鉴定全程 Windows 通用教程（TBtools GUI + tbtools-cli 双轨, 任意物种/家族, v3.3-Win 封版） |
+| [`docs/architecture/tbtools-cli-architecture.html`](docs/architecture/tbtools-cli-architecture.html) | **四层架构图**（交互 HTML, 自包含可下载浏览）：消费者(Agent/用户)→接口层(CLI/MCP)→模型层(CommandSpec/identity/compiler/executor)→引擎依赖(JAR/外部二进制/xvfb)→产物证据；源文件 [tbtools-cli.architecture.json](docs/architecture/tbtools-cli.architecture.json)(archify, 可复编辑) |
 
 ```bash
 # 快速查用法（不用翻手册）：
