@@ -480,12 +480,28 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         _id = (_wf.get("id") or "").lower()
         _title = (_wf.get("title") or "").lower()
         if goal_l in _id or goal_l in _title or _id in goal_l:
-            _chain = [st.get("tool", "").strip() for st in (_wf.get("steps") or [])]
-            _chain = [c for c in _chain if c in specs]
+            # 十六轮 verified/arch P1: 种子链修复四缺口——
+            # (a) 相邻工具必须过契约边校验(_edge_info), 不兼容不静默绕过;
+            # (b) ("recipe", None) 哨兵不得进 fmts(会当真实边评分且泄漏到 reason);
+            # (c) fmts 长度 = len(chain)-1(边数), 非 len(chain);
+            # (d) 未知工具显式警告(非静默过滤)。
+            _raw = [st.get("tool", "").strip() for st in (_wf.get("steps") or [])]
+            _chain = []
+            for _t in _raw:
+                if _t in specs:
+                    _chain.append(_t)
+                elif _t:
+                    print(f"⚠️ 配方 {_id or _title} 引用未知工具 {_t}, 已跳过", file=sys.stderr)
             if _chain:
-                # 配方命中: 边格式 None(未知)会让 score 扣成负分, 但配方是高置信信号——
-                # 用 ("recipe", None) 边格式标记, score 见 recipe 边给基础分
-                plans.append((_chain, [("recipe", None)] * len(_chain)))
+                _edge_fmts = []
+                for _i in range(len(_chain) - 1):
+                    _ei = _edge_info(_chain[_i], _chain[_i + 1])
+                    if _ei["type"] == "none":
+                        # 不兼容边: 标 unvalidated(降级)而非伪契约边——Agent 可见
+                        _edge_fmts.append("recipe_unvalidated")
+                    else:
+                        _edge_fmts.append(_ei.get("format") or "recipe_validated")
+                plans.append((_chain, _edge_fmts))
     def _dfs(chain: list, fmts: list):
         cur = chain[-1]
         if _goal_match(cur) and chain:
@@ -538,9 +554,11 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         if not chain:
             return 0.0, []
         reasons, score = [], 0.0
-        # 十五轮 product P1: 配方种子链(edge 标记 ('recipe', None))——已公开配方命中的
-        # 链是高置信信号, 给基础分而非因边未知扣成负分(此前 confidence=-0.5 误导)
-        if fmts and isinstance(fmts[0], tuple) and fmts[0] and fmts[0][0] == "recipe":
+        # 十六轮 verified/arch P1: 配方种子链边格式改为字符串标记("recipe_validated" /
+        # "recipe_unvalidated")——此前用 tuple ('recipe', None) 会泄漏进 Agent 可见的
+        # reason 字符串(contract graph(('recipe', None))), 且 tuple 恒 truthy 被计入
+        # contract_edges。现 recipe 命中给基础分, 边标记纯字符串。
+        if fmts and isinstance(fmts[0], str) and fmts[0].startswith("recipe_"):
             reasons.append("recipe_seed")
             score += 0.4
         if input_format and _accepts(specs[chain[0]], input_format):
@@ -649,16 +667,21 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
     best_score, best_reasons = _score(*best) if best[0] else (0.0, [])
     chain_tools = best[0]
     _fmts_padded = [None] + list(best[1])  # fmts 是边(比 chain 少 1),首步补 None 防 zip 截断
-    wf_spec = _plan_to_spec(goal, [(t, f"contract graph({fm})" if fm else "start") for t, fm in zip(chain_tools, _fmts_padded)],
+    def _reason_for(t, fm):
+        if not fm:
+            return "start"
+        if isinstance(fm, str) and fm.startswith("recipe_"):
+            return "recipe(配方链)" if fm == "recipe_validated" else "recipe(配方链·边未过契约校验)"
+        return f"contract graph({fm})"
+    wf_spec = _plan_to_spec(goal, [(t, _reason_for(t, fm)) for t, fm in zip(chain_tools, _fmts_padded)],
                             input_format, output_format) if chain_tools else None
     return {
         "schema_version": WORKFLOW_SCHEMA_CURRENT,  # P0-2(评审 #86): 统一不再硬编码
         "goal": goal,
         "input_format": input_format or None,
         "output_format": output_format or None,
-        "plan": [{"step": i + 1, "tool": t, "reason": r} for i, (t, r) in
-                 enumerate([(t, f"contract graph({fm})" if fm else "start")
-                            for t, fm in zip(chain_tools, _fmts_padded)])],
+        "plan": [{"step": i + 1, "tool": t, "reason": _reason_for(t, fm)}
+                 for i, (t, fm) in enumerate(zip(chain_tools, _fmts_padded))],
         "workflow": wf_spec,  # 可执行 WorkflowSpec(评审 #64 P0-2: plan → 对象)
         "confidence": min(best_score, 0.99),  # reasons-based 数值(向后兼容)
         "confidence_reasons": best_reasons,

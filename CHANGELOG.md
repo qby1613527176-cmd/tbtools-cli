@@ -20,6 +20,7 @@
 - **P1 workflow 跨平台修复**: plan() 路径插值弃 JSON 序列化往返(Windows 反斜杠 \t\n 被吃成转义/崩溃/静默损坏 provenance), 改递归 str 叶子替换 + 7 条回归守卫
 - **P1 schema-capable 权威闭环**: version --json 暴露 schema_capable(与 counts.md 同谓词) + 三方同测守卫(version json == counts.md == README)
 - **P1 params_status 四态**: metadata 注入 complete/partial/confirmed_none/unknown——区分「参数契约完整」vs「未审计」, 不把 unknown 当无参数(FULL 分级维持现逐步收编)
+  （十六轮 docs P2 勘误：本条目宣称「四态」过度——实际代码路径只产出 complete/unknown 两态，partial/confirmed_none 是 docstring 预留无实现；confirmed_none 需逐工具审计后启用）
 - **P1 CATEGORY_MAP 收敛**: _resolve_group() 单一解析函数(3 处读表收敛) + KNOWN_GROUPS 显式分组 16 个静默 engine 兜底命令(gxffilter→gxf / admixture→gwas / calcRepeat→asm 等) + group 一致性守卫 + AST 直读禁令(防单一权威回流)
 - **P1 教程入项目**: docs/tutorials/基因家族鉴定_全程Windows_通用教程_完整版.md(v3.3-Win, 2979 行) + README/docs/index 入口
 - **P2**: rpc call 形态修正(教程 10 处+docs/rpc.md) / recipBlast named-flag 契约修正(教程 4 处) / kallisto est_counts 数值区间断言(计数型输出验证数值语义) / RELEASING 四态 Go/No-Go 判定表

@@ -637,6 +637,9 @@ def render_ai_manifest(meta, out_root: str | None = None) -> set:
                      # 评审 #112 P1: 低体积高价值筛选字段——Agent 搜索后可直接按证据强度过滤,
                      # 不必逐个 describe
                      "readiness": v.get('readiness', ''), "verification": v.get('verification', ''),
+                     # 十六轮 docs P3: tool-index.jsonl 补 params_status——此前只修了
+                     # ai/tools/*.json 逐工具 schema, 索引面双世界分裂残留
+                     "params_status": v.get('params_status', ''),
                      "semantic_fingerprint": v.get('semantic_fingerprint', '')}
             f.write(_json.dumps(entry, ensure_ascii=False) + '\n')
     cap_idx: dict[str, list] = {}

@@ -383,12 +383,10 @@ def _make_passthrough(name, group=None):
             # 兜底走 bash tbplot.sh（Windows 需 Git Bash；无 bash 时报清晰错误）
             bash_bin = shutil.which("bash")
             if bash_bin:
-                bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(ctx.args)
-                if threads is not None:
-                    _t_args, _t_warn = thread_args(name, threads)
-                    if _t_warn:
-                        print(_t_warn, file=sys.stderr)
-                    bash_args.extend(_t_args)  # 十五轮 P1: 统一适配器(此前无条件 --threads)
+                # 十六轮 arch/product P1(GPT): fallback 必须用处理后的 args(fmt/preset/width/height
+                # 等前置处理已写入 args), 而非 ctx.args 重建——此前 fmt/preset/threads 在
+                # fallback 路径全部丢失, 恰是绘图命令主力(volcano/heatmap2/pca...)受影响。
+                bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(args)
                 ec = subprocess.run(bash_args).returncode
             else:
                 print(f"❌ {name} 需要 bash 兜底（tbplot.sh），但未找到 bash（Windows 请装 Git Bash）", file=sys.stderr)
@@ -405,7 +403,7 @@ def _make_passthrough(name, group=None):
         (("--preset", "-p"), {"default": None, "help": "出版预设: nature|cell|plant_journal|wide|poster"}),
         (("--height", "-H"), {"type": int, "default": None, "help": "画布高度"}),
         (("--width", "-W"), {"type": int, "default": None, "help": "画布宽度"}),
-        (("--threads", "-t"), {"type": int, "default": None, "help": "线程数"}),
+        (("--threads", "-t"), {"type": click.IntRange(min=1), "default": None, "help": "线程数(≥1)"}),
     ]:
         _cmd_impl = click.option(*opt_args, **opt_kwargs)(_cmd_impl)  # type: ignore[arg-type]
     
