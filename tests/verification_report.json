@@ -624,7 +624,7 @@
    "verified_at": "2026-10-15T00:35:42+00:00",
    "last_passed_at": "2026-10-15T00:35:42+00:00",
    "corpus": "examples/data",
-   "domain_note": "",
+   "domain_note": "\u91d1\u94fe conformance \u516d\u6b65\u65ad\u8a00(\u683c\u5f0f/sha256/provenance/artifact_id), \u65e0\u5185\u5bb9\u7ea7\u8bed\u4e49\u65ad\u8a00(semantic_checked=false)\u2014\u2014\u5c42\u7ea7\u2260\u8bc1\u636e\u5f3a\u5ea6\u8d85\u96c6",
    "semantic_checked": false
   }
  },
