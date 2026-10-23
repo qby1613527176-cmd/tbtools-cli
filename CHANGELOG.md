@@ -2,6 +2,18 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.6] - 2026-10-24
+
+### 十七轮五视角自审全闭环(GPT 两份评价)
+
+- **P1 配方评分洞修复**: recipe_unvalidated 边不再计入 contract_edges 统计、不触发 all_contract_edges、不拿全额 recipe_seed 奖励(降级 +0.15)——此前「边未过契约校验」与 all_contract_edges(+0.2) 可在同一输出出现
+- **P1 MCP 错误响应协议补齐**: search(空查询) 与 tool_run(参数类型错误) 返回补 schema_version/status——Agent 首撞的两条路径此前违 agent-protocol 统一响应结构
+- **P1 FULL 分级消歧**: readiness_census 拆 FULL_params_verified(8)/FULL_params_unknown(52) 子计数——60 FULL 中 52 个参数契约未审计的缺口显式化(保守方案, 不改分级)
+- **P2 未知工具拓扑篡改修复**: 配方含未知工具时在未知处切段注入(段长≥2), 不再删除后重连前后邻(A→Unknown→C 曾被篡改为 A→C)
+- **P2 bash fallback verbose/quiet 透传**: tbplot.sh 原生支持两 flag, fallback 不再丢弃
+- **教程勘误**: 基因家族教程 8.2 节 engine 组 → tool 组(与 CommandSpec 归组同步)
+- **门禁**: pytest 138+ passed / ruff 0 / mypy 0 / --check 515 surface 全同步
+
 ## [1.5.5] - 2026-10-24
 
 ### 十六轮五视角自审全闭环(GPT 两份评价)

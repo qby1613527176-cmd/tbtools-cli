@@ -2197,7 +2197,9 @@ hmmsearch ... 2>&1 | Tee-Object -FilePath logs\step.log
 | `filterCScore` | 过滤 blast tab6 结果 | `filterCScore <in.tab6> <out.tab6> [--cscore 0.5]` |
 | `blat` | BLAT 比对（Java 内嵌） | `blat ...`（42 BlatExecutor） |
 
-## 8.2 序列/表格工具（engine 组高频）
+## 8.2 序列/表格工具（tool 组高频）
+
+> 📌 分组勘误（v1.5.4+）：本节工具经 CommandSpec 单一权威归组后均属 **tool 组**（此前文档/元数据曾错落 engine 组——照旧分组敲 `tbtools engine extractFasta` 会失败；正确形态是 `tbtools tool extractFasta` 或直接 `tbtools extractFasta`）。分组一律以 `tbtools tool-describe <命令> --json` 的 group 字段为准。
 
 | 命令 | 作用 |
 |:--|:--|
