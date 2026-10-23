@@ -2,6 +2,17 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.5] - 2026-10-24
+
+### 十六轮五视角自审全闭环(GPT 两份评价)
+
+- **P1 配方种子链契约校验**: workflow-plan 注入的配方链逐边过 `_edge_info` 校验——不兼容边标 `recipe_unvalidated` 降级而非绕过; fmts 长度 off-by-one 修正(len-1); 哨兵 tuple 不再泄漏进 Agent 可见 reason; 未知工具显式警告非静默过滤
+- **P1 bash fallback 丢参修复**: 无 impl 命令回退 tbplot.sh 时改消费处理后的 args(此前 fmt 格式覆盖/preset 宽高/threads 分派在 fallback 路径全部丢失)
+- **P2 --threads 校验**: 双入口(静态+动态)改 `click.IntRange(min=1)`——0/负数不再直透引擎
+- **P2 params_status 勘误**: CHANGELOG v1.5.3 条目补勘误(实际两态 complete/unknown, partial/confirmed_none 为预留); tool-index.jsonl 补投影(索引面双世界分裂修复)
+- **P3 README 嵌套关系**: 明写 execution_verified(56) ⊆ FULL(60) ⊆ schema-capable(64) 及 4 个例外工具
+- **门禁**: pytest 138+ passed / ruff 0 / mypy 0 / --check 515 surface 全同步
+
 ## [1.5.4] - 2026-10-16
 
 ### 十五轮五视角自审全闭环(GPT 两份评价)
