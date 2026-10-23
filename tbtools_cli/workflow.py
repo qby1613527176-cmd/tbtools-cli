@@ -486,13 +486,22 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             # (c) fmts 长度 = len(chain)-1(边数), 非 len(chain);
             # (d) 未知工具显式警告(非静默过滤)。
             _raw = [st.get("tool", "").strip() for st in (_wf.get("steps") or [])]
-            _chain = []
+            # 十七轮 arch P2: 未知工具不得删除后重连前后邻(A→Unknown→C 变 A→C 是
+            # 拓扑篡改——JSON 输出与原始两步配方不可区分)。改为在未知处切分片段,
+            # 只注入长度≥2 的连续已知片段(单步片段无配方链价值, 契约图 DFS 本来会找到)。
+            _segments, _cur = [], []
             for _t in _raw:
                 if _t in specs:
-                    _chain.append(_t)
-                elif _t:
-                    print(f"⚠️ 配方 {_id or _title} 引用未知工具 {_t}, 已跳过", file=sys.stderr)
-            if _chain:
+                    _cur.append(_t)
+                else:
+                    if _t:
+                        print(f"⚠️ 配方 {_id or _title} 引用未知工具 {_t}, 链在此切段", file=sys.stderr)
+                    if len(_cur) >= 2:
+                        _segments.append(_cur)
+                    _cur = []
+            if len(_cur) >= 2:
+                _segments.append(_cur)
+            for _chain in _segments:
                 _edge_fmts = []
                 for _i in range(len(_chain) - 1):
                     _ei = _edge_info(_chain[_i], _chain[_i + 1])
@@ -560,7 +569,14 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         # contract_edges。现 recipe 命中给基础分, 边标记纯字符串。
         if fmts and isinstance(fmts[0], str) and fmts[0].startswith("recipe_"):
             reasons.append("recipe_seed")
-            score += 0.4
+            # 十七轮 verified/arch P1: recipe_unvalidated 边不拿高置信奖励——
+            # 全部边过契约校验才 +0.4; 有未验证边降级为 +0.15(仍是配方命中信号,
+            # 但不得压过真实契约链)
+            if all(f != "recipe_unvalidated" for f in fmts):
+                score += 0.4
+            else:
+                reasons.append("recipe_partial_unvalidated")
+                score += 0.15
         if input_format and _accepts(specs[chain[0]], input_format):
             reasons.append("input_format_exact"); score += 0.3
         if output_format and output_format.lower() in _produces(specs[chain[-1]]):
@@ -599,7 +615,11 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 if _cap in _goal_ngrams and _mid_ != chain[-1]:
                     score += 0.10
                     break
-        contract_edges = sum(1 for f in fmts if f and f != "relation")
+        # 十七轮 arch P1: recipe_* 标记不是契约边——recipe_unvalidated(未过校验)与
+        # recipe_validated(配方声明的边, 非契约图推导)都不计入契约边统计,
+        # 否则 all_contract_edges(+0.2) 与 reason"边未过契约校验"可同时出现(实证 bug)
+        contract_edges = sum(1 for f in fmts
+                             if f and f != "relation" and not (isinstance(f, str) and f.startswith("recipe_")))
         if contract_edges == len(chain) - 1 and len(chain) > 1:
             reasons.append("all_contract_edges"); score += 0.2
         # 深管线加分(每契约边 +0.05;评审 #70: muscle→trimal→iqtree 应胜过 preparespecies→iqtree)

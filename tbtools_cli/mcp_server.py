@@ -84,7 +84,10 @@ def search(query: str = "") -> str:
     q = query.strip()
     if not q:
         # 评审 #109(DX): 空查询返回用法引导而非裸 {}——Agent 首次调用即知可用姿势
+        # 十七轮 product P1-1(GPT): 空查询返回缺 schema_version/status, 违反 agent-protocol
+        # §L14 统一响应结构——补齐协议字段(Agent 首撞路径, 不能是例外)
         return json.dumps({
+            "schema_version": "1.0", "status": "failed",
             "query": "", "hits": [], "error": "query 为空",
             "usage": {"examples": ["search(query='volcano')", "search(query='phylogenetic tree')",
                                        "search(query='') 配合 input_format/output_format 反向搜索"],
@@ -157,7 +160,10 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
                 except (ValueError, TypeError):
                     _ok = False
                 if not _ok:
+                    # 十七轮 product P1-1(GPT): 参数类型错误返回缺 schema_version/status——
+                    # 补齐协议字段(Agent 首次传错参即撞此分支)
                     return json.dumps({
+                        "schema_version": "1.0", "status": "failed",
                         "error": {"code": "INVALID_PARAMETER_TYPE",
                                   "parameter": k, "expected": _t, "received": str(v),
                                   "retryable": False}}, ensure_ascii=False, indent=1)

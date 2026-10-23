@@ -1169,10 +1169,19 @@ def agent_readiness(spec) -> str:
 
 
 def readiness_census() -> dict:
-    """全量工具 Agent-ready 统计(readiness matrix 的数值口径)。"""
+    """全量工具 Agent-ready 统计(readiness matrix 的数值口径)。
+    十七轮 product P1-2(GPT): FULL 分级不检查 params_status(params_declared 恒真)——
+    60 FULL 中 52 个 params_status=unknown, 「完整契约」承诺与参数审计状态脱节。
+    方案 A(保守): census 拆子计数消歧, 不改分级(避免发布面 60→8 冲击)。"""
     out = {"FULL": 0, "PARTIAL": 0, "LEGACY": 0}
+    full_params = {"verified": 0, "unknown": 0}
     for s in build_command_specs().values():
-        out[agent_readiness(s)] += 1
+        r = agent_readiness(s)
+        out[r] += 1
+        if r == "FULL":
+            full_params["verified" if params_status(s) == "complete" else "unknown"] += 1
+    out["FULL_params_verified"] = full_params["verified"]
+    out["FULL_params_unknown"] = full_params["unknown"]
     return out
 
 def contract_coverage() -> dict:

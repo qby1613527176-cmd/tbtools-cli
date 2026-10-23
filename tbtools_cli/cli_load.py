@@ -387,6 +387,13 @@ def _make_passthrough(name, group=None):
                 # 等前置处理已写入 args), 而非 ctx.args 重建——此前 fmt/preset/threads 在
                 # fallback 路径全部丢失, 恰是绘图命令主力(volcano/heatmap2/pca...)受影响。
                 bash_args = [bash_bin, os.path.join(ROOT, "bin", "tbplot.sh"), name] + list(args)
+                # 十七轮 product P2(GPT): verbose/quiet 在 fallback 路径被 Click 消费后消失——
+                # tbplot.sh L13-19 原生支持 --verbose/-V、--quiet/-q(且 L107 剥离防污染引擎),
+                # 与十六轮 threads 丢失同构: 显式透传。
+                if verbose:
+                    bash_args.append("--verbose")
+                if quiet:
+                    bash_args.append("--quiet")
                 ec = subprocess.run(bash_args).returncode
             else:
                 print(f"❌ {name} 需要 bash 兜底（tbplot.sh），但未找到 bash（Windows 请装 Git Bash）", file=sys.stderr)
