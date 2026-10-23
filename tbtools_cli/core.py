@@ -187,7 +187,16 @@ def ensure_bridge(bridge_name: str) -> None:
         if (not os.path.isfile(fake_cls)
                 or os.path.getmtime(fake_src) > os.path.getmtime(fake_cls)):
             os.makedirs(os.path.dirname(fake_cls), exist_ok=True)
-            subprocess.run(["javac", "-encoding", "UTF-8", "-d", BUILD_DIR, fake_src], capture_output=True)
+            # 十八轮 verified P2(GPT): 备用编译分支缺返回码检查——裸 subprocess.run 丢返回码,
+            # 编译失败延后到 Java 启动才暴露(ClassNotFound 掩盖真实归因)。复用主桥 TB007
+            # 错误码语义(L171-180 对照), 编译失败即中断。
+            _fr = subprocess.run(["javac", "-encoding", "UTF-8", "-d", BUILD_DIR, fake_src],
+                                 capture_output=True)
+            if _fr.returncode != 0:
+                _ferr = _fr.stderr.decode("utf-8", "replace") if _fr.stderr else ""
+                print(f"❌ 备用桥编译失败 DatatypeConverter(TB007_BRIDGE_COMPILE_FAILED):\n{_ferr[-800:]}",
+                      file=sys.stderr)
+                sys.exit(6)
 
 # ---- xvfb-run 包装 ----
 def run_plot(java_args: list, verbose: bool = False, quiet: bool = False, use_xvfb: bool = True,

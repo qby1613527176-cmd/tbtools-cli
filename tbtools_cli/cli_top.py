@@ -125,6 +125,9 @@ def register_top(cli, _LG):
             return _c.get("EXECUTION_VERIFIED", 0) + _c.get("CONFORMANCE_VERIFIED", 0), _c.get("CONFORMANCE_VERIFIED", 0)
         _exec_n, _conf_n = _vc_pair()
         if as_json:
+            # 十八轮: version --json 路径独立导入 readiness_census(与 doctor --json 分离)
+            from tbtools_cli.command_spec import readiness_census as _rc_fn
+            _census = _rc_fn()
             click.echo(_json.dumps({
                 "version": _pkg_ver,
                 "cli_commands": plot_count,
@@ -143,6 +146,14 @@ def register_top(cli, _LG):
                 # 评审 #111 P0-3: verification 唯一口径(与 counts.md 同源, 统一 26)
                 "execution_verified": _exec_n,
                 "conformance_verified": _conf_n,
+                # 十八轮 product P3(GPT): FULL 分级 params 子计数投影到 version --json——
+                # 此前只在 readiness_census()/doctor --json, Agent 最高频入口看不到
+                # 「60 FULL 中 52 个参数未审计」的消歧信息
+                # ⚠️ readiness_census 需在本路径独立导入(此前只在 doctor --json 导入,
+                # 直接引用触发 NameError——version 与 doctor 是两个独立代码路径)
+                "agent_ready_full": _census.get("FULL", 0),
+                "full_params_verified": _census.get("FULL_params_verified", 0),
+                "full_params_unknown": _census.get("FULL_params_unknown", 0),
             }, ensure_ascii=False, indent=1))
             return
         click.echo(f"tbtools-cli v{_pkg_ver}")

@@ -625,8 +625,18 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         # 深管线加分(每契约边 +0.05;评审 #70: muscle→trimal→iqtree 应胜过 preparespecies→iqtree)
         score += 0.05 * contract_edges
         # 模糊边小罚(子串匹配不如精确匹配可信)
-        fuzzy = sum(1 for f in fmts if f and f != "relation" and f not in
-                    [i.format.lower() for i in (specs[chain[fmts.index(f) + 1]].inputs or [])])
+        # 十八轮 verified/arch P2: ①fmts.index(f) 对重复格式恒返回首次位置, 后边拿前边的
+        # 下游节点比较 → 错位罚分(双向实证: 漏罚/重罚均可达 ±0.05/边)——改 enumerate 索引绑定
+        # (两条构造路径均保证 len(fmts)==len(chain)-1 的位置语义); ②recipe_* 标记边此前未排除
+        # 出 fuzzy 罚分(配方链白吃 -0.05/边, rna-seq 链 confidence 被打到 -0.25)——一并排除。
+        fuzzy = 0
+        for _fi, _f in enumerate(fmts):
+            if not _f or _f == "relation" or (isinstance(_f, str) and _f.startswith("recipe_")):
+                continue
+            if _fi + 1 < len(chain):
+                _downstream_fmts = [i.format.lower() for i in (specs[chain[_fi + 1]].inputs or [])]
+                if _f not in _downstream_fmts:
+                    fuzzy += 1
         score -= 0.05 * fuzzy
         # content_type 冲突边罚(评审 semantic type: protein 链误入 dna 工具→降级)
         for i in range(len(chain) - 1):

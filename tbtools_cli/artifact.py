@@ -50,9 +50,24 @@ class Artifact:
 
 
 def classify(path: str) -> tuple[str, str]:
-    """路径 → (type, format)。"""
+    """路径 → (type, format)。
+    十八轮 arch P1(GPT): 压缩扩展名误分类——sample.fa.gz 此前被 splitext 分类为
+    archive/gzip(而非 FASTA), 导致下游契约校验/格式识别全部失真。修复: 剥离压缩层
+    (.gz/.bgz/.bz2) 取逻辑格式; compression 由 _compression_of() 单独查询。
+    纯压缩文件(无内层已知扩展, 如 backup.tar.gz)仍归 archive。"""
     ext = os.path.splitext(path)[1].lower()
+    if ext in (".gz", ".bgz", ".bz2"):
+        inner = os.path.splitext(os.path.splitext(path)[0])[1].lower()
+        if inner in TYPE_BY_EXT:
+            return TYPE_BY_EXT[inner]
+        # 内层扩展未知 → 保持压缩物语义
     return TYPE_BY_EXT.get(ext, ("file", ext.lstrip(".") or "unknown"))
+
+
+def compression_of(path: str) -> str:
+    """物理封装查询: 'gzip' | 'bzip2' | ''(未压缩)。与 classify 的逻辑格式分离。"""
+    ext = os.path.splitext(path)[1].lower()
+    return {".gz": "gzip", ".bgz": "gzip", ".bz2": "bzip2"}.get(ext, "")
 
 
 def _sha256_file(path: str) -> str:

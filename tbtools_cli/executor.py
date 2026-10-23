@@ -444,10 +444,26 @@ def validate_artifact(path: str) -> tuple[bool, str]:
     """
     if not os.path.isfile(path):
         return False, "file missing"
+    # 十八轮 arch P1(GPT): 压缩产物整体绕过格式校验——bad.fa 被正确拒收而 bad.fa.gz
+    # 以 exists(.gz, no parser) 放行。修复: 剥离压缩层取逻辑扩展名分发 + gzip/bzip2
+    # 解压读头校验(与 artifact.classify 的压缩剥离原则一致)。
     ext = os.path.splitext(path)[1].lower()
+    _compressed = ext in (".gz", ".bgz", ".bz2")
+    if _compressed:
+        ext = os.path.splitext(os.path.splitext(path)[0])[1].lower()
     try:
-        with open(path, encoding="utf-8", errors="replace") as f:
-            head = f.read(8192)
+        if _compressed:
+            if path.lower().endswith(".bz2"):
+                import bz2
+                with bz2.open(path, "rt", encoding="utf-8", errors="replace") as f:
+                    head = f.read(8192)
+            else:
+                import gzip
+                with gzip.open(path, "rt", encoding="utf-8", errors="replace") as f:
+                    head = f.read(8192)
+        else:
+            with open(path, encoding="utf-8", errors="replace") as f:
+                head = f.read(8192)
         if ext in (".fa", ".fasta", ".aln", ".faa", ".fna"):
             if head.startswith(">") and head.count(">") >= 1:
                 return True, f"fasta seqs={head.count('>')}"

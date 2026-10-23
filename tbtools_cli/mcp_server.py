@@ -144,8 +144,23 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
                 _spec_map = {p.name: p for p in _sp.parameters}
         except Exception:
             pass
+        # 十八轮 product P2(GPT): 未知参数边界不拒绝——有契约工具传未声明参数(evil_param)
+        # 被静默拼成 --evil-param 直透 CLI, 错误在下游才暴露(实证 dualsyn)。修复: 有契约
+        # 工具默认严格拒绝(UNKNOWN_PARAMETER + valid_parameters + retryable); 无契约工具
+        # 保留逃生舱(kebab-case 回退)但响应加 warnings 字段。
+        _unknown_params_warnings = []
         for k, v in arguments.get("parameters", {}).items():
             _ps = _spec_map.get(k)
+            if _spec_map and _ps is None and k not in _cli_map:
+                return json.dumps({
+                    "schema_version": "1.0", "status": "failed",
+                    "error": {"code": "UNKNOWN_PARAMETER",
+                              "parameter": k, "tool": _cmd_name,
+                              "valid_parameters": sorted(_spec_map.keys()),
+                              "retryable": True}}, ensure_ascii=False, indent=1)
+            if not _spec_map and _ps is None and k not in _cli_map:
+                _unknown_params_warnings.append(
+                    f"参数 {k} 不在已知契约中, 按 kebab-case 直透(--{k.replace('_', '-')}), 引擎将自行判定")
             _t = _ps.type if _ps else None
             if _t:
                 _ok = True
@@ -183,16 +198,32 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
         parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
     # command 含空格(如 "expr volcano")拆分为分组+命令(评审: CLI 需要独立 token)
     cmd_parts = command.split() if " " in command else [command]
-    return _cli("tool-run", *cmd_parts, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
+    out = _cli("tool-run", *cmd_parts, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
+    # 十八轮 product P2: 无契约工具的未知参数逃生舱——warnings 显式注入响应(非静默直透)
+    if _unknown_params_warnings:
+        try:
+            _d = json.loads(out)
+            _d.setdefault("warnings", []).extend(_unknown_params_warnings)
+            out = json.dumps(_d, ensure_ascii=False, indent=1)
+        except Exception:
+            pass
+    return out
 
 
 @mcp.tool()
 def workflow_plan(goal: str, input_format: str = "", output_format: str = "") -> str:
-    """目标 → 自动推导工具链计划(Workflow Planner; relations/capability 链推导)。"""
+    """目标 → 自动推导工具链计划(Workflow Planner; relations/capability 链推导)。
+    响应包装: plan 为领域文档(协议 §3 显式例外——goal/plan/workflow/confidence 顶层字段
+    保持原样, 向后兼容), 但十八轮 arch P2 起增量补顶层 status 字段, 通用解析器可先判
+    status 再读领域字段。"""
     import json as _json
     from tbtools_cli.workflow import plan_from_goal
-    return _json.dumps(plan_from_goal(goal, input_format=input_format,
-                                      output_format=output_format), ensure_ascii=False, indent=1)
+    _plan = plan_from_goal(goal, input_format=input_format, output_format=output_format)
+    # 十八轮 arch P2(GPT): 裸出违反协议 §3 统一包装, 但全包装是破坏性变更——
+    # 走 1.x 兼容路径: 增量加 status 顶层字段(不移动现有字段)
+    _plan.setdefault("status", "success")
+    _plan.setdefault("schema_version", "1.0")
+    return _json.dumps(_plan, ensure_ascii=False, indent=1)
 
 
 @mcp.tool()

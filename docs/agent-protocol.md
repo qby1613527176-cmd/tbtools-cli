@@ -157,6 +157,28 @@ contract_fp/env_fp 双比对, 失配即降级)。两者分叉时 details 不投�
 无 JAR 环境下读到的 CONFORMANCE_VERIFIED 表示"该契约+环境曾有金链通过证据且未被反证",
 而非"本次运行金链通过"。
 
+### 6.2 验证层级边界(能证明什么 / 不能证明什么)
+
+| 指标 | 能证明 | 不能证明 |
+|:--|:--|:--|
+| `execution_verified`(56) | 该工具在真实引擎上执行成功且产物存在 | ❌ 产物内容科学正确 / 参数选择合理 |
+| `semantic_checked`(11) | 产物通过内容级断言(如 est_counts 为正数) | ❌ 生物学结论正确(仅是数值合理性) |
+| `conformance_verified`(1) | 金链六步全过(执行+产物+内容) | ❌ 推广到其他工具(n=1 试验层) |
+| `readiness FULL`(60) | 输入/输出/能力/依赖契约声明完整 | ❌ 参数已审计(见 params_status) |
+| `params_status complete`(8) | 参数契约经人工审计确认 | ❌ unknown(52) 表示未审计, 非「无参数」 |
+
+⚠️ 验证层级**不构成科学正确性背书**——执行验证只证明「跑通了」，不证明「跑对了」。
+
+### 6.3 params_status(参数契约审计状态)
+
+每个工具的 `params_status` 字段(tool-describe --json / ai/tools/*.json / version --json 均可见):
+
+- `complete`: 参数契约经人工审计(当前 8 个, 见 KNOWN_PARAMS)
+- `unknown`: 参数契约未审计(当前 290 个)——**不代表无参数**, 只代表「未逐个核对」
+- 预留(未启用): `partial`(部分审计) / `confirmed_none`(审计确认无参数)
+
+`version --json` 的 `full_params_verified`/`full_params_unknown` 是 FULL 级工具的 params_status 拆分(如 8/52)。
+
 ## 7. MCP 接口
 
 - **9 个编排原语**(不是 200+ 工具): search / tool_describe / tool_validate / tool_run / **workflow_plan** / job_submit / job_status / job_result / tool_provenance
@@ -203,7 +225,7 @@ steps:
 {
   "command": "volcano",
   "invocation": "...",
-  "tbtools_cli": "1.5.1",
+  "tbtools_cli": "<当前版本号, 见 tbtools version --json>",
   "exit_code": 0,
   "parameters": {...},
   "outputs": ["/abs/out.svg"],
