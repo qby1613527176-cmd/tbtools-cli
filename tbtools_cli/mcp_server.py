@@ -181,7 +181,7 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
                         "schema_version": "1.0", "status": "failed",
                         "error": {"code": "INVALID_PARAMETER_TYPE",
                                   "parameter": k, "expected": _t, "received": str(v),
-                                  "retryable": False}}, ensure_ascii=False, indent=1)
+                                  "retryable": True}}, ensure_ascii=False, indent=1)
             flag = (_ps.cli_name if _ps and _ps.cli_name else None) or _cli_map.get(k) or ("--" + k.replace("_", "-"))
             # bool 参数: true→flag 无值, false→省略(评审 #68 P1-6)
             if _t == "bool":

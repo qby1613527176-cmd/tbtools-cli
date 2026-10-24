@@ -205,6 +205,10 @@ def build():
         "agent_ready_full": _census.get("FULL", 0),
         "agent_ready_partial": _census.get("PARTIAL", 0),
         "agent_ready_legacy": _census.get("LEGACY", 0),
+        # 十九轮 docs P3: full_params 子计数进 counts.md(此前只在 version --json/
+        # doctor --json, counts.md 缺位 = 三方守卫盲区)
+        "full_params_verified": _census.get("FULL_params_verified", 0),
+        "full_params_unknown": _census.get("FULL_params_unknown", 0),
         "contract_coverage": _cov}
     # 自审 docs 六轮 P1-1 衍生: 诊断 census 的 tools 口径统一为 kind=="tool"(与 counts.md/
     # version --json 同源)——CLI_TOOLS 注册 82 但 mimicVqsr/vcfAddID 在 CommandSpec 归一化为

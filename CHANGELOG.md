@@ -6,7 +6,7 @@
 
 ### 十八轮五视角自审全闭环(GPT 全面审查)
 
-- **P1 validate_artifact 解析级校验**: FASTA(逐记录格式)/Newick(括号平衡+分号)/GFF(≥3 行 9 列)/TSV(≥2 行等宽)/SVG(svg+xml) 真实解析——此前 5 类损坏文件探针全部误判通过
+- **P1 validate_artifact 校验强化**: FASTA(头部 `>` 计数)/Newick(括号存在性+分号结尾)/GFF(版本标记或特性关键词)/TSV(≥1 非空行)/SVG(svg/xml 标记)——从纯存在性检查升级为头部启发式校验, 且校验失败会阻断工作流下游步骤（十九轮 docs P2 勘误: 本条目此前描述「逐记录/括号平衡/≥3行9列」超配实际实现）
 - **P1 压缩扩展名修复**: classify 剥离 .gz/.bgz/.bz2 取逻辑格式(sample.fa.gz → fasta 而非 archive) + validate_artifact gzip 读解压头校验——此前压缩产物整体绕过格式校验(bad.fa 拒收而 bad.fa.gz 放行)
 - **P2 规划器评分修正**: fmts.index 重复格式错位修(enumerate 索引绑定) + recipe_* 标记排除出 fuzzy 罚分(此前配方链白吃 -0.05/边)
 - **P2 未知参数严格拒绝**: 有契约工具传未声明参数 → UNKNOWN_PARAMETER + valid_parameters + retryable(此前静默拼 --evil-param 直透); 无契约工具保留逃生舱但响应加 warnings

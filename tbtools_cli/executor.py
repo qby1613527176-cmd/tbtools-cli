@@ -208,7 +208,17 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             pass
     if not out and not _is_binding_path:
         out = st["args"][-1] if st["args"] else ""  # legacy args 末参回退(binding 路径禁猜)
-    # Artifact ID 登记
+    # 产物语义验证(十九轮 verified/arch P1: 必须先验证后登记——此前先 register 后 validate,
+    # 无效产物进全局索引且可 resolve 回坏文件路径, 与合格品不可区分)
+    _vwarn = None
+    _validation_msg = ""
+    if step_ok and out and os.path.isfile(out):
+        _vok, _vmsg = validate_artifact(out)
+        _validation_msg = _vmsg
+        if not _vok:
+            _vwarn = f"output validation failed: {_vmsg}"
+            step_ok = False
+    # Artifact ID 登记(只有验证通过的产物才进索引)
     _art_id = None
     _out_sha = None
     _reg_warn = None
@@ -216,6 +226,8 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
         try:
             from tbtools_cli.artifact import build as _ab, register as _areg
             _a = _ab(out, producer=st["tool"])
+            # 十九轮 arch P2: Artifact 带验证结论(默认 unchecked 语义, 验证过的带层级标注)
+            _a.metadata["validation"] = _validation_msg or "unchecked"
             _reg_err = _areg(_a)
             if _reg_err:
                 _reg_warn = f"artifact register warning: {_reg_err}"
@@ -225,13 +237,6 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
         except Exception as _re:
             _reg_warn = f"artifact register exception: {_re}"
             print(f"⚠️ {_reg_warn}", file=sys.stderr)
-    # 产物语义验证
-    _vwarn = None
-    if step_ok and out and os.path.isfile(out):
-        _vok, _vmsg = validate_artifact(out)
-        if not _vok:
-            _vwarn = f"output validation failed: {_vmsg}"
-            step_ok = False
     # P1-4(评审 #106): provenance 补三层 fingerprint——子进程 cli 写盘时不知 workflow 层指纹,
     # 由 workflow 执行者补写(幂等: 已存在则不覆盖; Agent 搜索/规划可读 execution 身份)
     _fp_prov_path = (out + ".tbtools.json") if step_ok and out and os.path.isfile(out + ".tbtools.json") else None
@@ -485,7 +490,9 @@ def validate_artifact(path: str) -> tuple[bool, str]:
             if "<svg" in head or "<?xml" in head:
                 return True, "svg xml valid"
             return False, "svg invalid"
-        return True, f"exists({ext or 'no-ext'}, no parser)"
+        # 十九轮 gate P2: 无解析器的格式不得谎报为「通过」——标注 unchecked 语义,
+        # Agent 看到 detail 可知这是「未校验」而非「已验证」
+        return True, f"unchecked({ext or 'no-ext'}, no parser)"
     except Exception as e:
         return False, f"parse error: {e}"
 

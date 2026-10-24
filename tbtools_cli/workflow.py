@@ -406,7 +406,17 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                             return True
                         if "table" in (_os.content_type, _is.content_type):
                             return True
-                        if {_os.content_type, _is.content_type} <= {"alignment", "protein", "dna"}:
+                        # 十九轮 arch P1(GPT): 集合条件 {alignment,protein,dna} 过宽——
+                        # protein↔dna 被误兼容(sixframe→longestorf 实证), 与兜底路径
+                        # (L424+ 只允许 alignment 桥)自相矛盾。收窄矩阵:
+                        #   alignment↔protein/dna 允许桥(比对结果可喂序列分析);
+                        #   sequence 泛标注作通配(sixframe 输出 sequence → muscle 输入 sequence);
+                        #   protein↔dna 硬拒(生物学语义冲突, 需显式转换工具 pep2codon/cds2protein)
+                        if "sequence" in (_os.content_type, _is.content_type):
+                            return True
+                        if _os.content_type == "alignment" and _is.content_type in ("protein", "dna"):
+                            return True
+                        if _is.content_type == "alignment" and _os.content_type in ("protein", "dna"):
                             return True
             if any(o.content_type != "generic" for o in _a_spec2.output_slots) and \
                     any(i.content_type != "generic" for i in _b_spec2.inputs):
@@ -723,11 +733,15 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
             "evidence": best_reasons,
         },
         "alternatives": len(plans) - 1,
+        # 十九轮 arch P2: rejected 过滤条件原用 "UNEXECUTABLE"——评审 #82 三态重构后
+        # _bindability 只返回 EXECUTABLE/PARTIALLY_BINDABLE/MULTI_INPUT, 永不返回
+        # UNEXECUTABLE, rejected 恒为 []——改为 MULTI_INPUT(多必填输入, planner 无法
+        # 自动绑定的真实拒绝原因)
         "rejected": [
-            {"tool": n, "status": "UNEXECUTABLE",
-             "reason": f"需要 {len([i for i in (specs[n].inputs or []) if i.required])} 个必填输入, planner 单输入绑定无法供给"}
+            {"tool": n, "status": "MULTI_INPUT",
+             "reason": f"需要 {len([i for i in (specs[n].inputs or []) if i.required])} 个必填输入, planner 需显式绑定"}
             for n in specs
-            if _accepts(specs[n], input_format) and _bindability(n) == "UNEXECUTABLE"
+            if _accepts(specs[n], input_format) and _bindability(n) == "MULTI_INPUT"
         ][:5],
     }
 

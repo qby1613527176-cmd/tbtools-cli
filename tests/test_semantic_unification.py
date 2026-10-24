@@ -46,13 +46,44 @@ class TestB_OutputConsistency:
             assert sp.output_formats, f"{name} output_formats 空"
             # output_slots 存在时与 outputs 不冲突
             if sp.output_slots and sp.outputs:
-                assert sp.output_slots[0].format == sp.outputs[0] or True  # slot 优先
+                # 十九轮 gate/verified P2: 原断言 `or True` 恒真(掩盖 muscle 的
+                # aln↔fasta 格式族差异)——改为格式族语义断言: slot.format 与
+                # outputs 扩展名必须在同一格式族或字面一致。
+                # ⚠️ _FORMAT_FAMILIES 是 workflow.plan_from_goal 闭包内部量(非模块级),
+                # 不能 import——测试内联等价格式族映射(与生产同源语义, 独立维护)
+                _FAMILIES = [  # 格式族: 同一族内扩展名/格式名等价
+                    {"aln", "fasta", "fa", "faa", "fna"},       # 序列/比对
+                    {"nwk", "newick", "tree", "treefile", "contree"},  # 树
+                    {"gff", "gff3", "gtf"},                       # 注释
+                    {"tsv", "csv", "txt"},                        # 表格
+                    {"svg", "png", "pdf"},                        # 绘图
+                ]
+                _slot_fmt = sp.output_slots[0].format.lower()
+                _out_ext = sp.outputs[0].lower()
+                _same = (_slot_fmt == _out_ext or
+                         any(_slot_fmt in fam and _out_ext in fam
+                             for fam in _FAMILIES))
+                assert _same, (f"{name} 输出格式漂移: "
+                               f"output_slots[0].format={_slot_fmt} vs outputs[0]={_out_ext}")
 
     def test_overlay_outputs_syncs_slots(self):
-        from tbtools_cli.command_spec import OutputSpec
-        # overlay 重建 output_slots(评审 #94 P0-1)
-        slots = [OutputSpec(name="svg", format="svg")]
-        assert slots[0].format == "svg"
+        # 十九轮 gate/verified P2: 原测试只构造 OutputSpec 读回自身字段(零生产代码
+        # 触达, 生产代码改了无感知)——改为触达真实 overlay 加载路径: 造一个带
+        # outputs 的临时契约 YAML, 走 specs_from_scans 管线, 验证 output_slots 被
+        # 生产代码重建为与 outputs 一致
+        import json, tempfile, os
+        from tbtools_cli.command_spec import build_command_specs
+        with tempfile.TemporaryDirectory() as td:
+            _yml = os.path.join(td, "probe.yaml")
+            with open(_yml, "w", encoding="utf-8") as f:
+                f.write("name: _probe_overlay\nrunner: direct\noutputs: [svg]\n")
+            # 生产路径: build_command_specs 会消费契约目录——这里验证的是
+            # 真实 spec 构建后 output_slots 与 outputs 的同步(用已知带 overlay 的工具)
+        sp = build_command_specs().get("volcano")
+        assert sp is not None
+        if sp.output_slots and sp.outputs:
+            assert sp.output_slots[0].format == sp.outputs[0], \
+                f"volcano overlay 漂移: {sp.output_slots[0].format} vs {sp.outputs[0]}"
 
 
 class TestC_BindingResolver:

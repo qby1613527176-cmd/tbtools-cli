@@ -52,6 +52,8 @@ asciinema play docs/images/demo.cast
 
 统一命令模型 + 结构化 JSON 输出,Agent 可程序化发现/预检/执行/验证:
 
+> **v1.5.7 新增**：MCP `tool_run` 对有契约工具严格拒绝未知参数（`UNKNOWN_PARAMETER` + 合法参数清单，执行前拦截）；产物自动做头部启发式校验（含 `.gz` 压缩文件），校验失败阻断工作流下游；`version --json` 暴露 `full_params_verified`/`full_params_unknown`（FULL 级工具的参数审计状态拆分）。
+
 | 能力 | 命令 | 说明 |
 |---|---|---|
 | 1 Discover | `tbtools search <任务> --json` | 工具发现(多词/反向/能力;**不做规划**) |
