@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.7] - 2026-10-25
+
+### 十八轮五视角自审全闭环(GPT 全面审查)
+
+- **P1 validate_artifact 解析级校验**: FASTA(逐记录格式)/Newick(括号平衡+分号)/GFF(≥3 行 9 列)/TSV(≥2 行等宽)/SVG(svg+xml) 真实解析——此前 5 类损坏文件探针全部误判通过
+- **P1 压缩扩展名修复**: classify 剥离 .gz/.bgz/.bz2 取逻辑格式(sample.fa.gz → fasta 而非 archive) + validate_artifact gzip 读解压头校验——此前压缩产物整体绕过格式校验(bad.fa 拒收而 bad.fa.gz 放行)
+- **P2 规划器评分修正**: fmts.index 重复格式错位修(enumerate 索引绑定) + recipe_* 标记排除出 fuzzy 罚分(此前配方链白吃 -0.05/边)
+- **P2 未知参数严格拒绝**: 有契约工具传未声明参数 → UNKNOWN_PARAMETER + valid_parameters + retryable(此前静默拼 --evil-param 直透); 无契约工具保留逃生舱但响应加 warnings
+- **P2 workflow_plan 协议补齐**: 顶层补 status/schema_version(1.x 兼容路径, 不移动现有字段)
+- **P2 Bridge 备用编译返回码检查**: TB007 + sys.exit(6)(此前裸 subprocess.run 丢返回码)
+- **P3**: version --json 补 full_params_verified(8)/full_params_unknown(52) 投影 / agent-protocol §6.2 验证层级边界表 + §6.3 params_status 定义 / provenance 示例版本占位化
+- **门禁**: pytest 138+ passed / ruff 0 / mypy 0 / --check 515 surface 全同步
+
 ## [1.5.6] - 2026-10-24
 
 ### 十七轮五视角自审全闭环(GPT 两份评价)
