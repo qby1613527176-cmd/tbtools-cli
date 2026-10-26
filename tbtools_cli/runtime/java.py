@@ -204,11 +204,30 @@ def snapshot_inputs(java_args: list, output_hint: str | None = None) -> list:
                     _backed = True
             except Exception:
                 pass
+            if not _backed:
+                # 二十轮 gate P1(GPT): reflink/clonefile 失败不应直接放弃——先回退普通复制
+                # (大文件慢但可恢复); 只有 copy2 也失败(磁盘满/权限)才退到无备份路径
+                try:
+                    shutil.copy2(_a, backup)
+                    _backed = True
+                except Exception:
+                    _backed = False
             if _backed:
                 snaps.append([_a, backup, size, mtime])
             else:
-                # COW 不可用(NTFS/旧内核)→ hash+警告(无法恢复, 但破坏可检测)
-                snaps.append([_a, None, size, mtime])
+                # COW+复制均不可用→存内容摘要兜底(此前注释声称 hash+警告但实现没存 hash,
+                # 同尺寸同 mtime 改写完全检测不到=注释漂移)。sha1(头 4KB+尾 4KB) 采样,
+                # 大文件不全量 hash(性能); verify_and_restore 无备份时比对摘要检测改写。
+                import hashlib as _hl
+                try:
+                    with open(_a, "rb") as _hf:
+                        _h1 = _hf.read(4096)
+                        _hf.seek(max(0, size - 4096))
+                        _h2 = _hf.read(4096)
+                    _digest = _hl.sha1(_h1 + _h2).hexdigest()
+                except Exception:
+                    _digest = ""
+                snaps.append([_a, None, size, mtime, _digest])
             continue
         if size <= _MAX_SNAPSHOT_COPY:
             if tmpdir is None:
@@ -244,7 +263,8 @@ def verify_and_restore(snaps: list) -> list[tuple[str, str]]:
     return problems
 
 def cleanup_side_effects(t0: float, preexisting: frozenset | None = None,
-                         extra_dirs: set | None = None) -> int:
+                         extra_dirs: set | None = None,
+                         extra_preexisting: frozenset | None = None) -> int:
     """删除 CWD 下本次调用新产生的 TBtools 副作用文件（N37 族），返回删除数。
 
     P0-10 安全化: 只删**不在 t0 目录清单里**的新文件(preexisting 快照判定)——
@@ -272,7 +292,13 @@ def cleanup_side_effects(t0: float, preexisting: frozenset | None = None,
                 if preexisting is not None:
                     if os.path.dirname(os.path.abspath(fp)) == os.getcwd() and fn in preexisting:
                         continue  # t0 前已存在(P0-10: 即使被引擎修改也不删)
-                    # 非 CWD 目录无 preexisting 快照 → 用 t0 判定(只删本次新建)
+                    # 二十轮 gate P2(GPT): 非 CWD 目录(输入目录)无 preexisting 快照,
+                    # 靠 mtime 判定会把「预存在但被引擎 touch」的文件误删(实证:
+                    # .TBtools.fai 被删, CWD 内因快照幸存=保护不对称)。修复:
+                    # 非 CWD 目录也做预存在快照(调用方传 extra_preexisting)或保守不删。
+                    if fn in (extra_preexisting or frozenset()) and \
+                            os.path.dirname(os.path.abspath(fp)) != os.getcwd():
+                        continue  # 输入目录 t0 前已存在(与 CWD 同权保护)
                     if os.path.getmtime(fp) < t0 - 2:
                         continue
                 elif os.path.getmtime(fp) < t0 - 2:
@@ -399,8 +425,17 @@ def _security_check_generic(java_args: list, command_name: str | None = None) ->
         # MCP/Agent 模式默认关闭(P1-22)
         if os.environ.get("TBTOOLS_AGENT_MODE") == "1" and "allow_engine_reflection" not in sec:
             allow = False
-    except Exception:
-        allow = True
+    except Exception as _e:
+        # 二十轮 product P1(GPT): fail-open 修复——Agent/MCP 模式配置故障应 fail-closed
+        # (默认关闭的安全门在故障时失效, 且无诊断输出); human CLI 保持兼容放行但给诊断。
+        if os.environ.get("TBTOOLS_AGENT_MODE") == "1":
+            import sys as _sys
+            print(f"🚫 engine reflection 配置读取失败, Agent 模式 fail-closed: {_e}", file=_sys.stderr)
+            allow = False
+        else:
+            import sys as _sys
+            print(f"⚠️ engine reflection 配置读取异常, 默认放行(建议修复配置): {_e}", file=_sys.stderr)
+            allow = True
     if allow is False or str(allow).lower() in ("false", "0", "no"):
         cls = java_args[java_args.index("GenericCli") + 1] if "GenericCli" in java_args and java_args.index("GenericCli") + 1 < len(java_args) else "?"
         return f"🚫 engine reflection 被 config.toml [security] allow_engine_reflection=false 拒绝(类: {cls})"

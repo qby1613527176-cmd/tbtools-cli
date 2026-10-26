@@ -49,15 +49,11 @@ class TestB_OutputConsistency:
                 # 十九轮 gate/verified P2: 原断言 `or True` 恒真(掩盖 muscle 的
                 # aln↔fasta 格式族差异)——改为格式族语义断言: slot.format 与
                 # outputs 扩展名必须在同一格式族或字面一致。
-                # ⚠️ _FORMAT_FAMILIES 是 workflow.plan_from_goal 闭包内部量(非模块级),
-                # 不能 import——测试内联等价格式族映射(与生产同源语义, 独立维护)
-                _FAMILIES = [  # 格式族: 同一族内扩展名/格式名等价
-                    {"aln", "fasta", "fa", "faa", "fna"},       # 序列/比对
-                    {"nwk", "newick", "tree", "treefile", "contree"},  # 树
-                    {"gff", "gff3", "gtf"},                       # 注释
-                    {"tsv", "csv", "txt"},                        # 表格
-                    {"svg", "png", "pdf"},                        # 绘图
-                ]
+                # 二十轮 arch P2: FORMAT_FAMILIES 已提取为 workflow 模块级常量,
+                # 测试直接 import 生产源(不再内联副本——双源漂移曾致 sequence/alignment
+                # 并组差异, muscle aln↔fasta 测试放行而生产判 incompatible)
+                from tbtools_cli.workflow import FORMAT_FAMILIES as _FF
+                _FAMILIES = list(_FF.values())
                 _slot_fmt = sp.output_slots[0].format.lower()
                 _out_ext = sp.outputs[0].lower()
                 _same = (_slot_fmt == _out_ext or

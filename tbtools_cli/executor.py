@@ -39,9 +39,13 @@ def _load_state(workdir: str) -> dict:
 
 
 def _save_state(workdir: str, state: dict):
-    """原子写(评审 #70 P1-3): tmp+fsync+os.replace——中断不留半截 JSON。"""
+    """原子写(评审 #70 P1-3): tmp+fsync+os.replace——中断不留半截 JSON。
+    二十轮 gate P1(新发现): tmp 文件名 `tmp.{pid}` 同进程所有线程共享——并发线程同时
+    写同名 tmp 再 rename 竞态丢步骤(仅 stderr 警告, ~1/15 失败率, test_concurrent_merges
+    实证)。修复: tmp 名加 uuid 短缀(线程/并发安全)。"""
+    import uuid as _uuid
     p = os.path.join(workdir, ".wf_state.json")
-    tmp = p + f".tmp.{os.getpid()}"
+    tmp = p + f".tmp.{os.getpid()}.{_uuid.uuid4().hex[:8]}"
     with open(tmp, "w", encoding="utf-8") as f:
         json.dump(state, f, ensure_ascii=False, indent=1)
         f.flush()
@@ -208,6 +212,24 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             pass
     if not out and not _is_binding_path:
         out = st["args"][-1] if st["args"] else ""  # legacy args 末参回退(binding 路径禁猜)
+    # 二十轮 verified P1(GPT 两文共同): ec=0 但契约声明的输出文件未生成 → 必须报失败。
+    # 此前 step_ok 只看 exit_code, 输出验证只在文件存在时执行——「声明了输出但没落盘」
+    # 静默漏过(output=None + status=succeeded)。修复: 契约 outputs 非空且未找到文件
+    # → step_ok=False + OUTPUT_MISSING 结构化错误(与「未声明输出」的纯 stdout 工具区分)。
+    if step_ok and not out:
+        try:
+            from tbtools_cli.command_spec import build_command_specs as _bcs3
+            _osp3 = _bcs3().get(str(st["tool"]).split()[-1])
+            if _osp3 and (_osp3.outputs or _osp3.output_slots):
+                step_ok = False
+                _vwarn_missing = ("output validation failed: OUTPUT_MISSING "
+                                  "(契约声明了输出但文件未生成)")
+            else:
+                _vwarn_missing = None
+        except Exception:
+            _vwarn_missing = None
+    else:
+        _vwarn_missing = None
     # 产物语义验证(十九轮 verified/arch P1: 必须先验证后登记——此前先 register 后 validate,
     # 无效产物进全局索引且可 resolve 回坏文件路径, 与合格品不可区分)
     _vwarn = None

@@ -11,6 +11,8 @@
 - agent_ready_full: 60
 - agent_ready_partial: 144
 - agent_ready_legacy: 94
+- full_params_verified: 8
+- full_params_unknown: 52
 - execution_verified: 56
 - conformance_verified: 1
 - semantic_checked: 11

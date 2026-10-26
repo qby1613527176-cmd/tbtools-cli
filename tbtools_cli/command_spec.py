@@ -398,7 +398,10 @@ KNOWN_SCHEMAS = {
     "mcscanx": ([InputSpec("gff", format="tsv", note="chr\tgene\tstart\tend"),
                  InputSpec("blast", format="tsv", note="tab6")], ["tsv"]),
     "iqtree": ([InputSpec("aln", format="fasta")], ["nwk", "treefile"]),
-    "muscle": ([InputSpec("fasta", format="fasta")], ["aln"]),
+    # 二十轮 arch P2 附带修复: muscle 契约漂移——outputs=['aln'](扩展名)与
+    # output_slots format='fasta'(数据格式)混用两种词汇表; 格式族分立后(sequence/alignment
+    # 分族)判 incompatible。统一为数据格式名: muscle 输出的是 FASTA 格式比对文件。
+    "muscle": ([InputSpec("fasta", format="fasta")], ["fasta"]),
     "trimal": ([InputSpec("aln", format="fasta")], ["aln"]),
     "blastp": ([InputSpec("query", format="fasta"), InputSpec("db", format="fasta")], ["out"]),
     "sixframe": ([InputSpec("dna", format="fasta", note="DNA 序列输入(6-frame 翻译为蛋白)")], ["fasta"]),  # 评审 #100: 命名+note 语义修正(输入 DNA 输出蛋白,原"蛋白(输出核酸)"完全写反)

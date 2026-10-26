@@ -49,6 +49,31 @@ class TestValidateArtifactMatrix:
         ok, msg = validate_artifact(p)
         assert not ok
 
+    def test_fasta_bz2_valid(self, tmpd):
+        """二十轮 gate P3: .bz2 分支(bz2.open)零覆盖补齐"""
+        import bz2
+        p = os.path.join(tmpd, "ok.fa.bz2")
+        with bz2.open(p, "wt", encoding="utf-8") as f:
+            f.write(">seq1\nACGT\n>seq2\nTTTT\n")
+        ok, msg = validate_artifact(p)
+        assert ok and "fasta" in msg
+
+    def test_fasta_bz2_broken(self, tmpd):
+        import bz2
+        p = os.path.join(tmpd, "bad.fa.bz2")
+        with bz2.open(p, "wt", encoding="utf-8") as f:
+            f.write("garbage no header")
+        ok, msg = validate_artifact(p)
+        assert not ok
+
+    def test_newick_bz2_valid(self, tmpd):
+        import bz2
+        p = os.path.join(tmpd, "ok.nwk.bz2")
+        with bz2.open(p, "wt", encoding="utf-8") as f:
+            f.write("((A:1,B:1):1,(C:1,D:1):1);\n")
+        ok, msg = validate_artifact(p)
+        assert ok
+
     # --- Newick ---
     def test_newick_valid(self, tmpd):
         p = _w(os.path.join(tmpd, "ok.nwk"), "((A:1,B:1):1,(C:1,D:1):1);\n")

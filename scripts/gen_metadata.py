@@ -308,6 +308,11 @@ def render_commands_md(meta, out_root: str | None = None) -> set:
         counts["agent_ready_full"] = _rd.get("FULL", 0)
         counts["agent_ready_partial"] = _rd.get("PARTIAL", 0)
         counts["agent_ready_legacy"] = _rd.get("LEGACY", 0)
+        # 二十轮 docs P1(新发现): CHANGELOG v1.5.8 宣称 counts.md 补 full_params_* 但
+        # 本处(counts.md 渲染用的 counts dict)缺位——宣称要消的盲区本身仍在。
+        # 修复: full_params 子计数进 counts.md 本体 + test_doc_consistency 加守卫
+        counts["full_params_verified"] = _rd.get("FULL_params_verified", 0)
+        counts["full_params_unknown"] = _rd.get("FULL_params_unknown", 0)
         counts["execution_verified"] = _vc2().get("EXECUTION_VERIFIED", 0) + _vc2().get("CONFORMANCE_VERIFIED", 0)  # 评审 #111 P0-3: 统一口径=有真实执行证据的工具数
         counts["conformance_verified"] = _vc2().get("CONFORMANCE_VERIFIED", 0)
         # 自审 v1.4.82 verified N4(P2): semantic_checked 动态计数进权威数字——

@@ -94,6 +94,20 @@
   "category": "dependency",
   "legacy_code": "TB005_DEPENDENCY_MISSING"
  },
+ "TB401": {
+  "exit": 5,
+  "retryable": false,
+  "action": "operation rejected by policy",
+  "category": "agent",
+  "legacy_code": "TB006_POLICY_DENIED"
+ },
+ "TB202": {
+  "exit": 6,
+  "retryable": false,
+  "action": "bridge compile failed — check JDK/javac and JAR (see doctor)",
+  "category": "dependency",
+  "legacy_code": "TB007_BRIDGE_COMPILE_FAILED"
+ },
  "TB099": {
   "exit": 1,
   "retryable": true,

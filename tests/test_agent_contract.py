@@ -1,6 +1,6 @@
-"""Agent Contract 全链路测试(评审 #64 P0): FULL 工具必须全链路机器验证。
+"""Agent Contract 全链路测试(评审 #64 P0): FULL(动态) 工具必须全链路机器验证。
 
-对 8 个 FULL 工具逐一验证:
+对 N 个 FULL(动态, 见 version --json agent_ready_full) 工具逐一验证:
   1. discover(search 可发现)
   2. describe(schema 完整: inputs+outputs+parameters+capabilities)
   3. validate(tool-validate 可调用)
@@ -8,7 +8,7 @@
   5. artifact(产物语义验证)
   6. provenance(溯源文件存在且完整)
 
-任何一步失败 → 该工具不应再标 FULL(机器验证的能力等级, 非 metadata 自评)。
+任何一步失败 → 该工具不应再标 FULL(动态)(机器验证的能力等级, 非 metadata 自评)。
 """
 import json
 import os

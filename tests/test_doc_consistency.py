@@ -63,6 +63,26 @@ class TestDocConsistency:
         assert d["schema_capable"] == int(m.group(1)), \
             f"version --json({d['schema_capable']}) != counts.md({m.group(1)})"
 
+    def test_counts_md_full_params(self):
+        """counts.md 必须含 full_params_verified/full_params_unknown 字段(二十轮 docs P1:
+        CHANGELOG 宣称消三方盲区但 counts.md 本体缺位——宣称要消的盲区本身仍在,
+        需守卫钉扎)"""
+        counts = (ROOT / "docs" / "_generated" / "counts.md").read_text(encoding="utf-8")
+        assert "full_params_verified" in counts, "counts.md 缺 full_params_verified"
+        assert "full_params_unknown" in counts, "counts.md 缺 full_params_unknown"
+        # 与 version --json 三方一致
+        import json
+        import subprocess as _sp
+        _out = _sp.run(["python3", "-m", "tbtools_cli.cli", "version", "--json"],
+                       capture_output=True, text=True).stdout
+        _d = json.loads(_out[_out.index('{'):])
+        import re as _re
+        _mv = _re.search(r"full_params_verified: (\d+)", counts)
+        _mu = _re.search(r"full_params_unknown: (\d+)", counts)
+        assert _mv and _mu, "counts.md full_params 字段未解析"
+        assert int(_mv.group(1)) == _d.get("full_params_verified"), \
+            f"full_params_verified 三方不一致: counts.md={_mv.group(1)} vs version={_d.get('full_params_verified')}"
+
     def test_execution_verified_consistent(self):
         """README 权威源行 execution_verified == version --json"""
         import json

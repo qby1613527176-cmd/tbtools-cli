@@ -49,6 +49,10 @@ ERROR_TIERS = {
     "TB003_INPUT_FORMAT_ERROR": ("TB103", "input"),
     "TB004_INPUT_SCHEMA_ERROR": ("TB104", "input"),
     "TB005_DEPENDENCY_MISSING": ("TB201", "dependency"),
+    # 二十轮 product P2(GPT): TB006/TB007_BRIDGE 无映射落 TB000——归因链断裂
+    # (TB006 正是 policy 拒绝路径要用的码)。补映射: agent 层(policy)/dependency 层(编译)
+    "TB006_POLICY_DENIED": ("TB401", "agent"),
+    "TB007_BRIDGE_COMPILE_FAILED": ("TB202", "dependency"),
     "TB007_TOOL_TIMEOUT": ("TB099", "core"),  # P2-6: 分层码避撞遗留码名(TB002=文件缺失, 同号不同义误导 Agent)
     "TB008_OUT_OF_MEMORY": ("TB301", "engine"),
     "TB009_ENGINE_CRASH": ("TB302", "engine"),

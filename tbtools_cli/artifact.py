@@ -158,9 +158,13 @@ def register(art: "Artifact") -> str | None:
             idx = {}
             if os.path.isfile(p):
                 idx = json.load(open(p, encoding="utf-8"))
+            # 二十轮 verified P2(GPT): metadata.validation 此前只进内存对象不进索引——
+            # 持久化后 resolve 回来的 Artifact 丢失校验结论(与合格品不可区分)。
+            # 修复: 索引条目带 metadata(自由 dict, 含 validation 结论)
             idx[art.id] = {"path": art.path, "type": art.type, "format": art.format,
                            "sha256": art.sha256, "size": art.size,
-                           "producer": art.producer, "created_at": art.created_at}
+                           "producer": art.producer, "created_at": art.created_at,
+                           "metadata": art.metadata}
             tmp = p + f".tmp.{os.getpid()}"
             with open(tmp, "w", encoding="utf-8") as f:
                 json.dump(idx, f, ensure_ascii=False, indent=1)

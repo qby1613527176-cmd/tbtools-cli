@@ -123,6 +123,10 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
     —— dict 会展开为 CLI 参数(空格路径安全; 评审 #21 Agent-native 结构化)。
     返回纯 JSON(exit_code/artifacts/error)。
     """
+    # 二十轮 arch P0(GPT): _unknown_params_warnings 必须在 if arguments: 分支前初始化——
+    # 此前 init 在分支内(v1.5.7 起带菌发布: args=list/str/空/arguments={} falsy 全炸
+    # UnboundLocalError, 底层 _cli 已执行完才抛异常→文件落盘+Agent 收异常→重试重复计算)
+    _unknown_params_warnings: list = []
     if arguments:
         parts = list(arguments.get("inputs", []))
         # 参数 Schema-bound 翻译(评审 #56 P0-2): ParamSpec.name → cli_name(如 pval_cutoff→--pval-cutoff)
@@ -148,7 +152,23 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
         # 被静默拼成 --evil-param 直透 CLI, 错误在下游才暴露(实证 dualsyn)。修复: 有契约
         # 工具默认严格拒绝(UNKNOWN_PARAMETER + valid_parameters + retryable); 无契约工具
         # 保留逃生舱(kebab-case 回退)但响应加 warnings 字段。
-        _unknown_params_warnings = []
+        # 二十轮 arch P2(GPT): arguments 结构未校验——inputs 传字符串时
+        # list("input.fa") 逐字符展开成垃圾路径(实证); parameters 传列表时
+        # .items() 裸抛 AttributeError(违统一错误信封)。展开前结构校验:
+        if not isinstance(arguments.get("inputs", []), (list, tuple)):
+            return json.dumps({
+                "schema_version": "1.0", "status": "failed",
+                "error": {"code": "INVALID_ARGUMENTS_STRUCTURE",
+                          "field": "inputs", "expected": "list",
+                          "received": type(arguments.get("inputs")).__name__,
+                          "retryable": True}}, ensure_ascii=False, indent=1)
+        if not isinstance(arguments.get("parameters", {}), dict):
+            return json.dumps({
+                "schema_version": "1.0", "status": "failed",
+                "error": {"code": "INVALID_ARGUMENTS_STRUCTURE",
+                          "field": "parameters", "expected": "dict",
+                          "received": type(arguments.get("parameters")).__name__,
+                          "retryable": True}}, ensure_ascii=False, indent=1)
         for k, v in arguments.get("parameters", {}).items():
             _ps = _spec_map.get(k)
             if _spec_map and _ps is None and k not in _cli_map:
@@ -196,6 +216,13 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
             _w.warn("MCP args string 形式已弃用(空格路径拆错风险)——请用 args: list[str] 或 arguments: dict",
                     DeprecationWarning, stacklevel=2)
         parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
+    # 二十轮 arch P0(GPT): _unknown_params_warnings 必须在分支外初始化——
+    # args 旧路径(arguments=None)或 arguments={}(falsy)时 if 分支不执行,
+    # 后段无条件访问导致 UnboundLocalError(底层 _cli 已执行完才抛异常,
+    # 文件落盘+Agent 收异常→重试重复计算; v1.5.7 起带菌发布)
+    _unknown_params_warnings = []
+    if arguments and isinstance(arguments, dict):
+        pass  # 初始化已在上方完成; 此分支仅为保持控制流清晰
     # command 含空格(如 "expr volcano")拆分为分组+命令(评审: CLI 需要独立 token)
     cmd_parts = command.split() if " " in command else [command]
     out = _cli("tool-run", *cmd_parts, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)

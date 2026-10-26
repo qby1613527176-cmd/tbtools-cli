@@ -289,6 +289,19 @@ def _workflow_recipes() -> list:
         return []
 
 
+# 格式族权威定义(模块级, 生产/测试共用——二十轮 arch P2 提取)
+FORMAT_FAMILIES = {
+    "sequence": {"fasta", "fa", "fastq", "faa", "fna", "pep"},
+    "alignment": {"aln", "alignment", "trimmed_alignment", "clustal", "maf", "sto", "afa"},
+    "table": {"tsv", "csv", "txt", "xls", "xlsx", "count_table", "table", "tab"},
+    "tree": {"nwk", "tree", "treefile", "newick", "tre", "contree"},
+    "annotation": {"gff", "gff3", "gtf", "bed", "gxf"},
+    "graphics": {"svg", "png", "pdf"},
+    "synteny": {"collinearity", "anchors", "blast", "m8"},
+    "mapping": {"sam", "bam", "paf"},
+}
+
+
 def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                    max_steps: int = 4) -> dict:
     """目标驱动规划: 输入类型 + 目标/输出类型 → relations/capability 推导工具链。
@@ -341,16 +354,11 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
         return False
 
     # format ontology(评审 #72 P1-1): 格式族 + 三级匹配(exact/compatible/incompatible)
-    _FORMAT_FAMILIES = {
-        "sequence": {"fasta", "fa", "fastq", "faa", "fna", "pep"},
-        "alignment": {"aln", "alignment", "trimmed_alignment", "clustal", "maf", "sto", "afa"},
-        "table": {"tsv", "csv", "txt", "xls", "xlsx", "count_table", "table", "tab"},
-        "tree": {"nwk", "tree", "treefile", "newick", "tre", "contree"},
-        "annotation": {"gff", "gff3", "gtf", "bed", "gxf"},
-        "graphics": {"svg", "png", "pdf"},
-        "synteny": {"collinearity", "anchors", "blast", "m8"},
-        "mapping": {"sam", "bam", "paf"},
-    }
+    # 二十轮 arch P2(GPT): 格式族定义引用模块级常量(下方 FORMAT_FAMILIES)——
+    # 此前在 plan_from_goal 闭包内定义, 测试无法 import 被迫内联副本,
+    # 双源漂移已发生(测试并 sequence+alignment 一组, 生产分立——muscle
+    # aln↔fasta 测试放行、生产判 incompatible)。提取模块级常量统一权威。
+    _FORMAT_FAMILIES = FORMAT_FAMILIES
 
     def _fmt_level(a: str, b: str) -> str:
         """格式匹配级别: exact(1.0) / compatible(同族 0.7) / incompatible(0)。
@@ -515,11 +523,17 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 _edge_fmts = []
                 for _i in range(len(_chain) - 1):
                     _ei = _edge_info(_chain[_i], _chain[_i + 1])
-                    if _ei["type"] == "none":
-                        # 不兼容边: 标 unvalidated(降级)而非伪契约边——Agent 可见
+                    # 二十轮 verified P1-2(GPT): 边标记按 type+match 组合判定——
+                    # contract+有格式→validated(用真实格式); legacy_relation+unknown
+                    # (relations 声明的边但格式未验证)不得提升为 validated(实证:
+                    # degramdom→tree 被标 recipe_validated 拿全额 +0.4, 证据状态失真)
+                    if _ei["type"] == "contract" and _ei.get("format"):
+                        _edge_fmts.append(_ei["format"])
+                    elif _ei["type"] == "none" or _ei.get("match") == "unknown":
                         _edge_fmts.append("recipe_unvalidated")
                     else:
-                        _edge_fmts.append(_ei.get("format") or "recipe_validated")
+                        # legacy_relation 但 match 非 unknown(如 exact)——仍降级
+                        _edge_fmts.append("recipe_unvalidated")
                 plans.append((_chain, _edge_fmts))
     def _dfs(chain: list, fmts: list):
         cur = chain[-1]
@@ -536,6 +550,12 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 continue
             # 评审 #82 P0-1: MULTI_INPUT 可入选(slot resolver 绑定);无 inputs 契约才排除
             if _bindability(cand) == "MULTI_INPUT" and not (specs[cand].inputs or []):
+                continue
+            # 二十轮 verified P1-3(GPT): 语义冲突硬过滤——十九轮 protein↔dna 硬拒修对了
+            # 判定, 但结果只在 _score 扣 -0.3(可被其他加分淹没), 链仍在候选集(sixframe
+            # →longestorf 实证仍被选中)。修复: 后继扩展阶段直接拒绝 is False 冲突边。
+            # 显式转换工具不误伤(pep2codon 双输入槽含 protein 槽, slot 级配对天然兼容)。
+            if _content_compat(cur, cand) is False:
                 continue
             ef = _edge(cur, cand)
             if ef:
