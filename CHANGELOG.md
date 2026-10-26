@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.9] - 2026-10-27
+
+### 二十轮五视角自审全闭环(GPT 两份评价)
+
+- **P0 MCP UnboundLocalError 回归修复**: `_unknown_params_warnings` 初始化移到分支前+类型注解——v1.5.7 起带菌发布的回归(args=list/str/空/arguments={} 四入口全炸, 底层命令已执行完才抛异常→Agent 误以为失败重试); 新增 test_mcp_server.py 四入口矩阵钉扎
+- **P1 ec=0 无产物报 OUTPUT_MISSING**: 契约声明输出但文件未生成 → step 失败(此前静默 succeeded)
+- **P1 规划器边证据修正**: legacy_relation+unknown 不再被标为已验证 / 语义冲突(protein↔dna)后继扩展硬过滤(不再只扣分)
+- **P1 Agent 安全门 fail-closed**: 配置读取异常时 Agent/MCP 模式拒绝引擎反射(此前 fail-open 全放行无诊断)
+- **P1 大文件备份完整性**: reflink/clonefile 失败回退普通复制; 无备份时存 sha1 头尾采样摘要(破坏可检测, 修复注释漂移)
+- **P1 并发落盘竞态修复**: 工作流状态写入 tmp 名加 uuid 短缀(同进程线程共享 tmp 名导致 rename 竞态丢步骤)
+- **P2×7**: Artifact 索引持久化 validation 字段 / MCP arguments 结构校验(INVALID_ARGUMENTS_STRUCTURE) / 格式族提取模块级常量(消双源漂移)+muscle 契约修正 / TB006/TB007 错误分层映射 / 清理保护对称化(输入目录预存在快照) / 协议文档 unchecked 语义声明 / counts.md full_params 守卫
+- **门禁**: pytest 182+ passed / ruff 0 / mypy 0 / --check 515 surface 全同步
+
 ## [1.5.8] - 2026-10-27
 
 ### 十九轮五视角自审全闭环(GPT 两份评价)
