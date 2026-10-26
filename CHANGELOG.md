@@ -2,6 +2,19 @@
 
 所有显著变更记录于此。格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)。
 
+## [1.5.8] - 2026-10-27
+
+### 十九轮五视角自审全闭环(GPT 两份评价)
+
+- **P1 Artifact 登记/验证时序修复**: 先 validate 后 register——此前无效产物先进全局索引且可 resolve 回坏文件; Artifact 新增 metadata.validation 字段记录校验结论
+- **P1 _content_compat 误兼容收窄**: protein↔dna 硬拒(生物学语义冲突, 需显式转换工具); sequence 泛标注作通配; alignment 桥保留——修复 sixframe→longestorf 误兼容 + sixframe→muscle 反向误拒
+- **P2 测试质量**: 删除 2 处恒真断言(`or True` 掩盖 muscle outputs 真实漂移, 改格式族语义断言) + overlay 测试改为触达生产代码 + 新增 validate_artifact 测试矩阵 14 例(5 格式 × 有效/损坏 + 压缩变体)
+- **P2 exists→unchecked**: 无解析器格式的校验结果不再谎报为「通过」
+- **P2 retryable 语义统一**: UNKNOWN_PARAMETER 与 INVALID_PARAMETER_TYPE 均为 retryable=True(修正参数后可重试)
+- **P2 rejected 死代码修复**: 过滤条件 UNEXECUTABLE(评审 #82 后永不命中) → MULTI_INPUT
+- **P2/P3 文档**: README 补 v1.5.7 Agent 可见行为(UNKNOWN_PARAMETER/压缩校验/full_params) / counts.md 补 full_params_* 字段(消三方守卫盲区) / CHANGELOG v1.5.7 校验强度勘误
+- **门禁**: pytest 172+ passed(含新增 14 例 validate_artifact 矩阵) / ruff 0 / mypy 0 / --check 515 surface 全同步
+
 ## [1.5.7] - 2026-10-25
 
 ### 十八轮五视角自审全闭环(GPT 全面审查)
