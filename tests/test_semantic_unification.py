@@ -71,7 +71,8 @@ class TestB_OutputConsistency:
         # 触达, 生产代码改了无感知)——改为触达真实 overlay 加载路径: 造一个带
         # outputs 的临时契约 YAML, 走 specs_from_scans 管线, 验证 output_slots 被
         # 生产代码重建为与 outputs 一致
-        import json, tempfile, os
+        import tempfile
+        import os
         from tbtools_cli.command_spec import build_command_specs
         with tempfile.TemporaryDirectory() as td:
             _yml = os.path.join(td, "probe.yaml")
