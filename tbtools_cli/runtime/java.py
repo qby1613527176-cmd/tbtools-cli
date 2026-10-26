@@ -243,7 +243,11 @@ def snapshot_inputs(java_args: list, output_hint: str | None = None) -> list:
 def verify_and_restore(snaps: list) -> list[tuple[str, str]]:
     """调用后比对快照；被引擎改写的输入自动恢复。返回问题清单 [(path, 状态)]。"""
     problems = []
-    for path, backup, size, mtime in snaps:
+    # 二十一轮(GPT 审查一 P1-2): 快照记录可能是 4 字段(正常)或 5 字段(备份失败带 sha1 摘要),
+    # 直接拆包五字段记录会 ValueError 崩溃。修复: 按长度解包, 第五字段(digest)参与验证。
+    for _snap in snaps:
+        path, backup, size, mtime = _snap[0], _snap[1], _snap[2], _snap[3]
+        _digest = _snap[4] if len(_snap) > 4 else ""
         if not os.path.isfile(path):
             problems.append((path, "missing"))
             continue
@@ -516,6 +520,18 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
     # ── P0：输入快照（在原 java_args 上做，含 query 原文件，兜底验证）──
     snaps = snapshot_inputs(java_args, output_hint=output_hint)
     _wall_t0 = _time.time()
+    # 二十一轮(GPT 审查一 P1-3): extra_preexisting 参数加了但调用点没传——
+    # 输入目录预存在的副作用文件(如 .TBtools.fai)被引擎 touch 后仍可能被误删。
+    # 修复: 执行前对每个输入目录建文件名快照(保守方向: 同名跨目录保护过度无妨,
+    # 误留新文件优于误删旧文件)
+    _inp_pre: frozenset = frozenset()
+    if snaps:
+        for _d in {os.path.dirname(os.path.abspath(s[0])) for s in snaps}:
+            if _d and os.path.isdir(_d):
+                try:
+                    _inp_pre |= frozenset(os.listdir(_d))
+                except Exception:
+                    pass
     # P0-10: t0 目录清单快照(cleanup 只删清单外新文件)
     try:
         _pre_listing = frozenset(os.listdir(os.getcwd()))
@@ -548,7 +564,8 @@ def run_java(java_args: list, verbose: bool = False, quiet: bool = False,
     _problems = verify_and_restore(snaps)
     # 自审 arch F11: N37 副作用落在输入文件旁边——额外扫输入目录(防别处 cwd 永久残留)
     _inp_dirs = {os.path.dirname(os.path.abspath(s[0])) for s in snaps} if snaps else set()
-    _clean_n = cleanup_side_effects(_wall_t0, preexisting=_pre_listing, extra_dirs=_inp_dirs)
+    _clean_n = cleanup_side_effects(_wall_t0, preexisting=_pre_listing, extra_dirs=_inp_dirs,
+                                    extra_preexisting=_inp_pre)  # 二十一轮 P1-3: 接线(此前参数加了但没传)
     if _problems:
         print(file=sys.stderr)
         print(_("⚠️ 输入保护：检测到引擎修改/删除了输入文件，已自动恢复：",

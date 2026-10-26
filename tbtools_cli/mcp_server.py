@@ -209,20 +209,31 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
                     parts.append(flag)
                 continue
             parts += [flag, str(v)]
-        parts += list(arguments.get("outputs", []))
+        # 二十一轮(GPT 审查一 P2-3): outputs 缺结构校验——list("path.svg") 会逐字符
+        # 展开成垃圾参数(与 inputs 同型漏洞)。补校验:
+        _outputs = arguments.get("outputs", [])
+        if not isinstance(_outputs, (list, tuple)):
+            return json.dumps({
+                "schema_version": "1.0", "status": "failed",
+                "error": {"code": "INVALID_ARGUMENTS_STRUCTURE",
+                          "field": "outputs", "expected": "list[str]",
+                          "received": type(_outputs).__name__,
+                          "retryable": True}}, ensure_ascii=False, indent=1)
+        if not all(isinstance(x, str) for x in _outputs):
+            return json.dumps({
+                "schema_version": "1.0", "status": "failed",
+                "error": {"code": "INVALID_ARGUMENTS_STRUCTURE",
+                          "field": "outputs", "expected": "list[str](元素均为字符串)",
+                          "retryable": True}}, ensure_ascii=False, indent=1)
+        parts += list(_outputs)
     else:
         if isinstance(args, str) and args.strip():
             import warnings as _w
             _w.warn("MCP args string 形式已弃用(空格路径拆错风险)——请用 args: list[str] 或 arguments: dict",
                     DeprecationWarning, stacklevel=2)
         parts = args if isinstance(args, list) else [p.strip() for p in args.split() if p.strip()]
-    # 二十轮 arch P0(GPT): _unknown_params_warnings 必须在分支外初始化——
-    # args 旧路径(arguments=None)或 arguments={}(falsy)时 if 分支不执行,
-    # 后段无条件访问导致 UnboundLocalError(底层 _cli 已执行完才抛异常,
-    # 文件落盘+Agent 收异常→重试重复计算; v1.5.7 起带菌发布)
-    _unknown_params_warnings = []
-    if arguments and isinstance(arguments, dict):
-        pass  # 初始化已在上方完成; 此分支仅为保持控制流清晰
+    # 二十一轮 GPT P2-1: 移除二次初始化残留——它清空 for 循环收集的 warnings,
+    # 无契约工具的未知参数警告丢失(入口 init 已在 L129 完成, 此处不得再清)
     # command 含空格(如 "expr volcano")拆分为分组+命令(评审: CLI 需要独立 token)
     cmd_parts = command.split() if " " in command else [command]
     out = _cli("tool-run", *cmd_parts, *parts, "--json", "--timeout", str(timeout_s), timeout=timeout_s + 30)
@@ -248,7 +259,15 @@ def workflow_plan(goal: str, input_format: str = "", output_format: str = "") ->
     _plan = plan_from_goal(goal, input_format=input_format, output_format=output_format)
     # 十八轮 arch P2(GPT): 裸出违反协议 §3 统一包装, 但全包装是破坏性变更——
     # 走 1.x 兼容路径: 增量加 status 顶层字段(不移动现有字段)
-    _plan.setdefault("status", "success")
+    # 二十一轮(GPT 审查二 P2-3): setdefault("status","success") 让空 plan 也报成功——
+    # 违协议语义(成功=找到可执行计划, 不是规划函数没抛异常)。空 plan → NO_PLAN_FOUND。
+    if not _plan.get("plan"):
+        _plan["status"] = "failed"
+        _plan.setdefault("error", {"code": "NO_PLAN_FOUND",
+                                   "message": "未找到可执行工具链(契约图无匹配路径)",
+                                   "retryable": True})
+    else:
+        _plan.setdefault("status", "success")
     _plan.setdefault("schema_version", "1.0")
     return _json.dumps(_plan, ensure_ascii=False, indent=1)
 

@@ -259,4 +259,20 @@ def resolve_artifact(ref: str) -> "Artifact | None":
     path = resolve(ref)
     if not path:
         return None
-    return from_provenance(path) or build(path)
+    _a = from_provenance(path) or build(path)
+    # 二十一轮(GPT 审查一 P2-1): resolve_artifact 此前不从索引恢复
+    # metadata.validation——索引存了校验结论但读取时蒸发, from_provenance 重建
+    # 后元数据只有 invocation/version/exit_code 无 validation。修复: 索引条目
+    # 的 metadata 合并回 Artifact(不覆盖 provenance 已有的同名键)
+    if _a is not None:
+        try:
+            idx_p = _index_path()
+            if os.path.isfile(idx_p):
+                _idx = json.load(open(idx_p, encoding="utf-8"))
+                _entry = _idx.get(ref) or _idx.get(_a.id)
+                if _entry and _entry.get("metadata"):
+                    for _mk, _mv in _entry["metadata"].items():
+                        _a.metadata.setdefault(_mk, _mv)
+        except Exception:
+            pass
+    return _a

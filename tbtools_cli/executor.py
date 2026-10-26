@@ -64,11 +64,49 @@ def _merge_state_step(workdir: str, workflow_id: str, result: dict) -> str | Non
 
     P1-4(评审 #86): 落盘失败返回警告文案(不再静默吞——resume 可信度问题必须可见)。"""
     try:
-        state = _load_state(workdir)
-        steps = state.get("steps", [])
-        steps = [s for s in steps if s.get("id") != result["id"]]
-        steps.append(result)
-        _save_state(workdir, {"workflow": workflow_id, "status": "running", "steps": steps})
+        # 二十一轮(GPT 审查一 P2-5): 读-改-写无锁——并发进程/调用方共用同一工作目录
+        # 时, 各自读旧状态再写回各自的步骤列表, 最后一次写入覆盖另一次新增的步骤
+        # (test_concurrent_merges_no_lost 只查 len>0 不查全部步骤, 丢步骤可通过)。
+        # 修复: 状态文件加文件锁(fcntl/msvcrt 双模式, 与 artifact.register 同策略)。
+        _lock_p = os.path.join(workdir, ".wf_state.json.lock")
+        try:
+            import fcntl as _fl
+            _lock_mode = "fcntl"
+        except ImportError:
+            try:
+                import msvcrt as _fl  # type: ignore[assignment,no-redef]
+                _lock_mode = "msvcrt"
+            except ImportError:
+                _fl = None  # type: ignore[assignment]
+                _lock_mode = "none"
+        with open(_lock_p, "w", encoding="utf-8") as _lf:
+            if _fl:
+                try:
+                    if _lock_mode == "fcntl":
+                        _fl.flock(_lf.fileno(), _fl.LOCK_EX)
+                    else:
+                        _lf.write("0")
+                        _lf.flush()
+                        _fl.seek(0) if hasattr(_fl, 'seek') else _lf.seek(0)
+                        getattr(_fl, "locking")(_lf.fileno(), getattr(_fl, "LK_LOCK"), 1)
+                except Exception:
+                    pass
+            try:
+                state = _load_state(workdir)
+                steps = state.get("steps", [])
+                steps = [s for s in steps if s.get("id") != result["id"]]
+                steps.append(result)
+                _save_state(workdir, {"workflow": workflow_id, "status": "running", "steps": steps})
+            finally:
+                if _fl:
+                    try:
+                        if _lock_mode == "fcntl":
+                            _fl.flock(_lf.fileno(), _fl.LOCK_UN)
+                        else:
+                            _lf.seek(0)
+                            getattr(_fl, "locking")(_lf.fileno(), getattr(_fl, "LK_UNLCK"), 1)
+                    except Exception:
+                        pass
         return None
     except Exception as e:
         _warn = f"PERSISTENCE_WARNING: step {result.get('id')} state 落盘失败: {e}"
@@ -216,7 +254,11 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
     # 此前 step_ok 只看 exit_code, 输出验证只在文件存在时执行——「声明了输出但没落盘」
     # 静默漏过(output=None + status=succeeded)。修复: 契约 outputs 非空且未找到文件
     # → step_ok=False + OUTPUT_MISSING 结构化错误(与「未声明输出」的纯 stdout 工具区分)。
-    if step_ok and not out:
+    # 二十一轮(GPT 审查一 P1-1, 两文共同): `not out` 只查路径字符串为空,
+    # 不查文件是否存在——binding 路径(_compiled_outputs 给了已知路径)但文件
+    # 未生成时, 检查被跳过仍报 succeeded。修复: 契约声明输出且(路径为空 OR
+    # 文件不存在)均判 OUTPUT_MISSING。
+    if step_ok and (not out or not os.path.isfile(out)):
         try:
             from tbtools_cli.command_spec import build_command_specs as _bcs3
             _osp3 = _bcs3().get(str(st["tool"]).split()[-1])
@@ -282,6 +324,10 @@ def _execute_step(st: dict, workdir: str, timeout_s: int, state: dict, resume: b
             "status": "succeeded" if step_ok else "failed",
             **({"validation_warning": f"step timeout after {timeout_s}s (process tree killed)"} if _timeout_hit else {}),
             **({"validation_warning": _vwarn} if _vwarn else {}),
+            # 二十一轮(GPT 审查一 P1-1): OUTPUT_MISSING 的诊断必须进结果——
+            # 此前 _vwarn_missing 只设置局部变量没写入返回, 步骤报 failed 但
+            # Agent 看不到失败原因(结构化错误承诺未兑现)
+            **({"validation_warning": _vwarn_missing} if _vwarn_missing else {}),
             **({"register_warning": _reg_warn} if _reg_warn else {}),
             "output": out if step_ok and os.path.isfile(out) else None,
             "artifact_id": _art_id,

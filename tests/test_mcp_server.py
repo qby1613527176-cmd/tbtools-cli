@@ -4,7 +4,13 @@ P0 回归钉扎: _unknown_params_warnings UnboundLocalError(v1.5.7 起带菌发�
 另覆盖: 未知参数严格拒绝 / INVALID_ARGUMENTS_STRUCTURE / 空查询信封。
 """
 import json
+
 import pytest
+
+# 二十一轮(GPT 审查二 P1-3): mcp 是可选依赖, CI 的 requirements-ci.txt 不含——
+# 此前 CI 红灯(ModuleNotFoundError: No module named 'mcp')。importorskip 区分
+# 「框架缺失(skip 合理)」vs「业务异常(fail 不掩饰)」。
+pytest.importorskip("mcp", reason="mcp 为可选依赖, CI 未安装时跳过本模块")
 
 
 class TestMcpToolRunEntryPoints:
@@ -16,12 +22,14 @@ class TestMcpToolRunEntryPoints:
         fn = getattr(mcp_mod, "tool_run", None)
         if fn is None:
             pytest.skip("tool_run not importable")
-        # fastmcp 装饰器包装后可调用; 若不可调用则跳过
+        # 二十一轮(GPT 审查一 P2-4): 宽泛 except → pytest.skip 会把真实业务异常
+        # 吞成跳过(P0 回归可能不被发现)。收窄: 只有装饰器包装导致的不可调用
+        # (TypeError/AttributeError 签名层)才 skip; 业务异常(NameError/UnboundLocalError/
+        # ValueError 等)一律 fail——这才是回归钉扎的意义。
         try:
             return fn("volcano", **kwargs)
-        except Exception:
-            # 装饰器包装后可能需要不同调用方式——至少验证模块可导入且函数存在
-            pytest.skip("tool_run not directly callable (fastmcp wrapper)")
+        except (TypeError, AttributeError) as _e:
+            pytest.skip(f"tool_run 装饰器包装不可直接调用(框架层, 非业务 bug): {_e}")
 
     def test_args_list_no_crash(self):
         """args=list[str] 不得 UnboundLocalError(P0 回归钉扎)"""
