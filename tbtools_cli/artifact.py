@@ -93,7 +93,11 @@ def from_provenance(artifact_path: str) -> Artifact | None:
                   "exit_code": prov.get("exit_code"),
                   "timestamp": prov.get("timestamp", "")},
     )
-    register(_art)
+    # 二十一轮(GPT 审查一 P2-1, arch 实证): from_provenance 的 register() 是全量覆盖
+    # 语义且时机在 resolve_artifact 索引合并之前——索引与返回对象的 validation 双双
+    # 蒸发(探针实证)。且 tbtools artifact inspect(只读命令)也走此路径, 一次 inspect
+    # 就静默擦掉校验结论=读路径藏破坏性写副作用。修复: 移除 register 副作用
+    # (登记应由执行路径负责, 读路径只读不写)
     return _art
 
 

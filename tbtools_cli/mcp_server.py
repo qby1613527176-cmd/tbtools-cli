@@ -128,7 +128,24 @@ def tool_run(command: str, args: list[str] | str = "", arguments: dict | None = 
     # UnboundLocalError, 底层 _cli 已执行完才抛异常→文件落盘+Agent 收异常→重试重复计算)
     _unknown_params_warnings: list = []
     if arguments:
-        parts = list(arguments.get("inputs", []))
+        # 二十一轮(GPT 审查一 P2-3, product 实证): inputs 整体类型校验了但没校验元素——
+        # inputs: [123, "file.fa"] 会裸抛 TypeError 破统一错误信封(探针实证;
+        # outputs 已有元素级 str 校验, inputs 没有=不对称)。修复: 元素级校验。
+        _inputs = arguments.get("inputs", [])
+        if not isinstance(_inputs, (list, tuple)):
+            return json.dumps({
+                "schema_version": "1.0", "status": "failed",
+                "error": {"code": "INVALID_ARGUMENTS_STRUCTURE",
+                          "field": "inputs", "expected": "list[str]",
+                          "received": type(_inputs).__name__,
+                          "retryable": True}}, ensure_ascii=False, indent=1)
+        if not all(isinstance(x, str) for x in _inputs):
+            return json.dumps({
+                "schema_version": "1.0", "status": "failed",
+                "error": {"code": "INVALID_ARGUMENTS_STRUCTURE",
+                          "field": "inputs", "expected": "list[str](元素均为字符串)",
+                          "retryable": True}}, ensure_ascii=False, indent=1)
+        parts = list(_inputs)
         # 参数 Schema-bound 翻译(评审 #56 P0-2): ParamSpec.name → cli_name(如 pval_cutoff→--pval-cutoff)
         # Agent 只传 contract 名;无 cli_name 标注的参数按 kebab-case 兜底
         _cmd_name = command.split()[-1] if command else ""

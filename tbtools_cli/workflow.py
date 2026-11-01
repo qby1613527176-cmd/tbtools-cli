@@ -521,13 +521,18 @@ def plan_from_goal(goal: str, input_format: str = "", output_format: str = "",
                 _segments.append(_cur)
             for _chain in _segments:
                 _edge_fmts = []
+                # 二十一轮(GPT 审查一 P1-2, verified 实证): 配方段冲突边此前只标
+                # recipe_unvalidated 后 continue, 整条链仍无条件进 plans——语义硬过滤
+                # 名存实亡(sixframe→longestorf 配方冲突链仍是最终推荐)。修复: 任一边
+                # 语义冲突即拒绝整条链(与 _dfs 硬拒同一标准), 不再降级保留。
+                _semantic_rejected = False
                 for _i in range(len(_chain) - 1):
-                    # 二十一轮(GPT 审查一 P2-6): 配方种子链此前没套用 _dfs 的语义冲突
-                    # 硬过滤(_edge_info 只查格式+relations, 不调 _content_compat)——
-                    # 格式兼容但语义冲突的配方边可绕过。统一证据标准: 配方链也硬拒。
                     if _content_compat(_chain[_i], _chain[_i + 1]) is False:
-                        _edge_fmts.append("recipe_unvalidated")
-                        continue
+                        _semantic_rejected = True
+                        break
+                if _semantic_rejected:
+                    continue  # 整条链拒绝注入(与 _dfs 硬过滤同标准)
+                for _i in range(len(_chain) - 1):
                     _ei = _edge_info(_chain[_i], _chain[_i + 1])
                     # 二十轮 verified P1-2(GPT): 边标记按 type+match 组合判定——
                     # contract+有格式→validated(用真实格式); legacy_relation+unknown

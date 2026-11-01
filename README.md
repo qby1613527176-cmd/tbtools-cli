@@ -54,7 +54,11 @@ asciinema play docs/images/demo.cast
 
 > **v1.5.7 新增**：MCP `tool_run` 对有契约工具严格拒绝未知参数（`UNKNOWN_PARAMETER` + 合法参数清单，执行前拦截）；产物自动做头部启发式校验（含 `.gz` 压缩文件），校验失败阻断工作流下游；`version --json` 暴露 `full_params_verified`/`full_params_unknown`（FULL 级工具的参数审计状态拆分）。
 >
-> **v1.5.8 新增**：产物**先验证后登记**（无效产物不进全局索引）；规划器语义兼容收窄——protein↔dna 硬拒（需显式转换工具如 pep2codon/cds2protein），workflow-plan 推荐结果因此更准确（不再推荐语义冲突链）；ec=0 但契约声明的输出未生成 → 报 `OUTPUT_MISSING` 失败（不再静默 succeeded）；MCP `arguments` 结构校验（`inputs` 传字符串不再逐字符展开成垃圾路径）。
+> **v1.5.8 新增**：产物**先验证后登记**（无效产物不进全局索引）；规划器语义兼容收窄——protein↔dna 硬拒（需显式转换工具如 pep2codon/cds2protein），workflow-plan 推荐结果因此更准确（不再推荐语义冲突链）。
+>
+> **v1.5.9 新增**：ec=0 但契约声明的输出未生成 → 报 `OUTPUT_MISSING` 失败（不再静默 succeeded）；MCP `arguments` 结构校验（`inputs` 传字符串不再逐字符展开成垃圾路径）；MCP 未知参数拒绝回归修复（`_unknown_params_warnings` 初始化位置修正）。
+>
+> **v1.5.10 新增**：大文件备份 reflink 失败回退普通复制 + 无备份时存 sha1 摘要（同尺寸同 mtime 改写可检测）；`workflow-plan` 空计划报 `NO_PLAN_FOUND`（不再空 plan 带 success）；并发落盘竞态修复（工作流状态写入线程安全）；`resolve_artifact` 从索引恢复校验结论。
 
 | 能力 | 命令 | 说明 |
 |---|---|---|

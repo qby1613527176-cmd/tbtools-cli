@@ -268,8 +268,13 @@ class TestConcurrentStateMerge:
             t.join()
         assert not errors, f"并发 merge 异常: {errors}"
         state = _load_state(wd)
-        # 4 线程 × 5 步 = 20 步;原子写下可能少量覆盖(最后写赢)——但绝不能 JSON 损坏
-        assert isinstance(state.get("steps"), list) and len(state["steps"]) > 0
+        # 4 线程 × 5 步 = 20 步
+        assert isinstance(state.get("steps"), list), "state steps 必须是列表"
+        # 二十一轮(GPT 审查一 P2-2 延伸, gate/verified 共同): 只断言非空不足以发现丢步骤——
+        # 并发锁修复后(executor tmp 名加 uuid 短缀+文件锁), 全部 20 步必须保留。
+        # 此前「原子写下可能少量覆盖」的注释容忍了竞态丢步骤(真 bug 被当预期)
+        assert len(state["steps"]) == 20, \
+            f"并发 merge 应保留全部 20 步(丢了 {20 - len(state['steps'])} 步): {[s['id'] for s in state['steps']]}"
         # 每个 id 唯一(merge 按 id 去重)
         ids = [s["id"] for s in state["steps"]]
         assert len(ids) == len(set(ids)), "merge 后 id 应唯一"

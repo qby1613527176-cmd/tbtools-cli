@@ -12,7 +12,7 @@
 - **P0 MCP warnings 二次清空移除**: 二十轮 P0 修复留了重复 init, 清空 for 循环收集的警告; 已移除
 - **P1 OUTPUT_MISSING 扩展**: 契约声明输出且(路径为空 OR 文件不存在)均判失败(此前只查空路径, binding 给了已知路径但文件没生成仍报 succeeded); 诊断写入结果
 - **P1 workflow_plan 空计划 NO_PLAN_FOUND**: 空 plan 不再带 status=success(违协议语义)
-- **P2×6**: resolve_artifact 从索引恢复 metadata.validation / outputs 字段结构校验(防逐字符展开) / test_mcp_server 异常收窄(业务异常不再被吞成 skip) / 配方种子链套用语义硬过滤(与 DFS 同一证据标准) / 状态文件读-改-写加文件锁(跨进程并发)
+- **P2×5**: resolve_artifact 从索引恢复 metadata.validation / outputs 字段结构校验(防逐字符展开) / test_mcp_server 异常收窄(业务异常不再被吞成 skip) / 配方种子链套用语义硬过滤(与 DFS 同一证据标准) / 状态文件读-改-写加文件锁(跨进程并发)
 - **门禁**: pytest 182+ passed / ruff 0 / mypy 0 / --check 515 surface 全同步
 
 ## [1.5.9] - 2026-10-27

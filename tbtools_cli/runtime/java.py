@@ -260,7 +260,23 @@ def verify_and_restore(snaps: list) -> list[tuple[str, str]]:
                 problems.append((path, "verify-error"))
         else:
             try:
-                if (os.path.getsize(path), os.path.getmtime(path)) != (size, mtime):
+                _size_changed = (os.path.getsize(path), os.path.getmtime(path)) != (size, mtime)
+                # 二十一轮(GPT 审查一 P1-1, 两文共同): 快照存了头尾采样 SHA-1 但
+                # verify 无备份分支只比 size+mtime——内容变但 size+mtime 不变则完全
+                # 漏检(实证: 20MB 文件改头 4KB + utime 恢复 mtime → 漏检)。修复:
+                # 有 _digest 时重算当前文件采样摘要并比对, 不一致即报 modified-no-backup。
+                _digest_mismatch = False
+                if _digest:
+                    try:
+                        import hashlib as _hl2
+                        with open(path, "rb") as _cf:
+                            _ch1 = _cf.read(4096)
+                            _cf.seek(max(0, os.path.getsize(path) - 4096))
+                            _ch2 = _cf.read(4096)
+                        _digest_mismatch = _hl2.sha1(_ch1 + _ch2).hexdigest() != _digest
+                    except Exception:
+                        _digest_mismatch = False  # 摘要重算失败不阻断(降级为 size+mtime 判定)
+                if _size_changed or _digest_mismatch:
                     problems.append((path, "modified-no-backup"))
             except OSError:
                 problems.append((path, "verify-error"))

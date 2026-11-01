@@ -38,6 +38,47 @@ def _load_state(workdir: str) -> dict:
 
 
 
+def _save_state_locked(workdir: str, state: dict):
+    """带锁的状态写入(二十一轮 GPT P2-2: 终态写入与单步合并共用同一把锁,
+    防终态绕过锁保护)。锁失败给警告但不阻断(与 _merge_state_step 同策略)。"""
+    import sys as _sys3
+    _lock_p = os.path.join(workdir, ".wf_state.json.lock")
+    try:
+        import fcntl as _fl3
+        _lm = "fcntl"
+    except ImportError:
+        try:
+            import msvcrt as _fl3  # type: ignore[assignment,no-redef]
+            _lm = "msvcrt"
+        except ImportError:
+            _fl3 = None  # type: ignore[assignment]
+            _lm = "none"
+    with open(_lock_p, "w", encoding="utf-8") as _lf3:
+        if _fl3:
+            try:
+                if _lm == "fcntl":
+                    _fl3.flock(_lf3.fileno(), _fl3.LOCK_EX)
+                else:
+                    _lf3.write("0")
+                    _lf3.flush()
+                    _lf3.seek(0)
+                    getattr(_fl3, "locking")(_lf3.fileno(), getattr(_fl3, "LK_LOCK"), 1)
+            except Exception as _le3:
+                print(f"⚠️ 终态锁获取失败(无锁写入): {_le3}", file=_sys3.stderr)
+        try:
+            _save_state(workdir, state)
+        finally:
+            if _fl3:
+                try:
+                    if _lm == "fcntl":
+                        _fl3.flock(_lf3.fileno(), _fl3.LOCK_UN)
+                    else:
+                        _lf3.seek(0)
+                        getattr(_fl3, "locking")(_lf3.fileno(), getattr(_fl3, "LK_UNLCK"), 1)
+                except Exception:
+                    pass
+
+
 def _save_state(workdir: str, state: dict):
     """原子写(评审 #70 P1-3): tmp+fsync+os.replace——中断不留半截 JSON。
     二十轮 gate P1(新发现): tmp 文件名 `tmp.{pid}` 同进程所有线程共享——并发线程同时
@@ -89,8 +130,13 @@ def _merge_state_step(workdir: str, workflow_id: str, result: dict) -> str | Non
                         _lf.flush()
                         _fl.seek(0) if hasattr(_fl, 'seek') else _lf.seek(0)
                         getattr(_fl, "locking")(_lf.fileno(), getattr(_fl, "LK_LOCK"), 1)
-                except Exception:
-                    pass
+                except Exception as _le:
+                    # 二十一轮(GPT 审查一 P2-2, verified 实证): 锁获取失败 except: pass
+                    # 静默无锁写入——并发风险不可见(实证: patch flock 抛错无告警且正常写入)。
+                    # 修复: 锁失败给警告(仍继续写入, 不阻断工作流, 但风险可见)
+                    import sys as _sys2
+                    print(f"⚠️ 状态文件锁获取失败(无锁保护写入, 并发可能丢步骤): {_le}",
+                          file=_sys2.stderr)
             try:
                 state = _load_state(workdir)
                 steps = state.get("steps", [])
@@ -496,11 +542,11 @@ def run(wf: dict, workdir: str, timeout_s: int = 600, resume: bool = False) -> d
                 failed_at = st["id"]
                 break
     if failed_at:
-        _save_state(workdir, {"workflow": wf["id"], "status": "failed", "steps": results})
+        _save_state_locked(workdir, {"workflow": wf["id"], "status": "failed", "steps": results})
         return {"schema_version": WORKFLOW_SCHEMA_CURRENT, "workflow": wf["id"], "status": "failed",
                 "failed_at": failed_at, "steps": results,
                 "duration_s": round(time.time() - t0, 1)}
-    _save_state(workdir, {"workflow": wf["id"], "status": "succeeded", "steps": results})
+    _save_state_locked(workdir, {"workflow": wf["id"], "status": "succeeded", "steps": results})
     return {"schema_version": WORKFLOW_SCHEMA_CURRENT, "workflow": wf["id"], "status": "succeeded",
             "steps": results, "duration_s": round(time.time() - t0, 1),
             **({"persistence_warnings": _persistence_warnings} if _persistence_warnings else {}),

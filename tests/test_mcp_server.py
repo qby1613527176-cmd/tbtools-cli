@@ -22,13 +22,18 @@ class TestMcpToolRunEntryPoints:
         fn = getattr(mcp_mod, "tool_run", None)
         if fn is None:
             pytest.skip("tool_run not importable")
-        # 二十一轮(GPT 审查一 P2-4): 宽泛 except → pytest.skip 会把真实业务异常
-        # 吞成跳过(P0 回归可能不被发现)。收窄: 只有装饰器包装导致的不可调用
-        # (TypeError/AttributeError 签名层)才 skip; 业务异常(NameError/UnboundLocalError/
-        # ValueError 等)一律 fail——这才是回归钉扎的意义。
+        # 二十一轮(GPT 审查一 P2-4, product 实证): 收窄 except 只缩类型没缩来源——
+        # 业务代码内的 TypeError(如 inputs:[123] 栈底在 mcp_server.py)同样命中 skip。
+        # 修复: traceback 最深帧溯源——框架包装异常栈底在 fastmcp/click 层,
+        # 业务异常栈底在 mcp_server.py——用栈底位置区分, 业务异常一律 fail。
+        import traceback as _tb
         try:
             return fn("volcano", **kwargs)
         except (TypeError, AttributeError) as _e:
+            _deepest = _tb.extract_tb(_e.__traceback__)
+            _bottom_file = _deepest[-1].filename if _deepest else ""
+            if "mcp_server" in _bottom_file or "tbtools_cli" in _bottom_file:
+                raise  # 业务异常: 不吞, 直接 fail
             pytest.skip(f"tool_run 装饰器包装不可直接调用(框架层, 非业务 bug): {_e}")
 
     def test_args_list_no_crash(self):

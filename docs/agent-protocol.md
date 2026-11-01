@@ -197,7 +197,11 @@ contract_fp/env_fp 双比对, 失配即降级)。两者分叉时 details 不投�
 | 3 | input format/schema error(TB003/TB103) |
 | 4 | out of memory(TB008) |
 | 5 | policy error(engine reflection 被拒) |
-| 6 | bridge compile failed(TB_BRIDGE_COMPILE_FAILED) |
+| 6 | bridge compile failed(TB007/TB202) |
+| - | OUTPUT_MISSING: 契约声明输出但文件未生成(v1.5.9+, executor step failed) |
+| - | NO_PLAN_FOUND: workflow-plan 契约图无可执行链(v1.5.10+, MCP status=failed) |
+| - | UNKNOWN_PARAMETER: 有契约工具传未声明参数(v1.5.7+, MCP retryable=true) |
+| - | INVALID_ARGUMENTS_STRUCTURE: arguments 字段结构错误(v1.5.10+, MCP retryable=true) |
 
 ## 9. Workflow(YAML)
 
