@@ -166,7 +166,8 @@ contract_fp/env_fp 双比对, 失配即降级)。两者分叉时 details 不投�
 | `conformance_verified`(1) | 金链六步全过(执行+产物+内容) | ❌ 推广到其他工具(n=1 试验层) |
 | `readiness FULL`(60) | 输入/输出/能力/依赖契约声明完整 | ❌ 参数已审计(见 params_status) |
 | `params_status complete`(8) | 参数契约经人工审计确认 | ❌ unknown(52) 表示未审计, 非「无参数」 |
-| Artifact `metadata.validation` | 产物校验结论(validate_artifact 结果, 含层级标注) | ❌ `unchecked(...)` = 无解析器未校验, 非「已验证通过」; v1.5.8 起持久化到索引 |
+| Artifact `metadata.validation` | 产物校验结论(validate_artifact 结果, 含层级标注) | ❌ `unchecked(...)` = 无解析器未校验, 非「已验证通过」; 字段 v1.5.8 引入, 索引持久化实为 v1.5.9 |
+| `validate_artifact` 强度 | FASTA(头部 `>` 计数)/Newick(括号存在性+分号)/GFF(版本标记或特性关键词)/TSV(≥1 非空行)/SVG(svg/xml 标记)——**8KB 头部启发式, 非完整解析**; 支持 .gz/.bz2 压缩文件读解压头 | ❌ 不验证序列字符合法性/坐标范围/树拓扑/列语义/SVG 结构完整性 |
 
 ⚠️ 验证层级**不构成科学正确性背书**——执行验证只证明「跑通了」，不证明「跑对了」。
 

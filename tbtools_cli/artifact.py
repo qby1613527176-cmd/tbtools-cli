@@ -165,10 +165,18 @@ def register(art: "Artifact") -> str | None:
             # 二十轮 verified P2(GPT): metadata.validation 此前只进内存对象不进索引——
             # 持久化后 resolve 回来的 Artifact 丢失校验结论(与合格品不可区分)。
             # 修复: 索引条目带 metadata(自由 dict, 含 validation 结论)
+            # 二十二轮 arch P2-1(GPT 两文共同): register() 此前全量覆盖索引条目——
+            # from_provenance() 重建的 Artifact(无 validation)会擦掉索引中已有的校验
+            # 结论(实证: executor 登记 validation:ok → resolve_artifact 后双双蒸发;
+            # 且 `tbtools artifact inspect` 只读命令也走 from_provenance → 一次 inspect
+            # 就静默擦掉索引校验结论=读路径藏破坏性写副作用)。
+            # 修复: metadata 与既有条目合并(新键优先, 已有键不丢), 不全量覆盖。
+            _existing_meta = (idx.get(art.id) or {}).get("metadata") or {}
+            _merged_meta = {**_existing_meta, **art.metadata}  # 新键优先, 已有键保留
             idx[art.id] = {"path": art.path, "type": art.type, "format": art.format,
                            "sha256": art.sha256, "size": art.size,
                            "producer": art.producer, "created_at": art.created_at,
-                           "metadata": art.metadata}
+                           "metadata": _merged_meta}
             tmp = p + f".tmp.{os.getpid()}"
             with open(tmp, "w", encoding="utf-8") as f:
                 json.dump(idx, f, ensure_ascii=False, indent=1)

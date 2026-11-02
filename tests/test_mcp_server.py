@@ -79,7 +79,7 @@ class TestMcpErrorEnvelopes:
             d = json.loads(raw) if isinstance(raw, str) else raw
             assert "schema_version" in d, "空查询缺 schema_version"
             assert "status" in d, "空查询缺 status"
-        except Exception:
+        except (TypeError, AttributeError):
             pytest.skip("search not directly callable")
 
     def test_unknown_param_rejection_envelope(self):
@@ -95,5 +95,5 @@ class TestMcpErrorEnvelopes:
                 assert d.get("schema_version") == "1.0"
                 assert d.get("status") == "failed"
                 assert d["error"].get("code") == "UNKNOWN_PARAMETER"
-        except Exception:
+        except (TypeError, AttributeError):
             pytest.skip("tool_run not directly callable")

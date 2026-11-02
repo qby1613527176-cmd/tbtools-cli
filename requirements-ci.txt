@@ -5,4 +5,4 @@ pytest==9.0.2
 ruff==0.16.8
 mypy==1.19.1
 PyYAML==6.0.3
-pytest-cov==7.1.0
+pytest-cov==7.1.0mcp==1.29.0  # 二十二轮 gate P1: MCP 主入口测试不能建立在可选依赖上(CI 全跳过=零覆盖)
